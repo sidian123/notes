@@ -188,6 +188,7 @@ IDEA中构建的几个选项如下所示：
 ---------
 *  `Esc`:move the focus to the editor.
 * `alt+number`：打开相应的窗口。
+* `alt+insert`: 相当于右键+new, 前提是选中某一项.
 * `Shift+Esc`或`Ctrl+Shift+F12`：隐藏所有工具窗口
 ------------
 * `sout+enter`:product `System.out.println(“”)`

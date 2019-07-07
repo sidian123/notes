@@ -218,6 +218,7 @@ git version2.x中常用的命令如下：
 
 * 忽略以`#`开始的注释和空行.
 * `!`取反, 即不忽略
+* 后面的规则可
 
 例子如:
 
@@ -551,6 +552,8 @@ git tag [-a] [-m <msg>] <tagnmae> [<commit>]
 
 ```bash
 git branch --set-upstream-to=origin/test
+#或者在push的时候顺便设置关联
+git push -u origin master
 ```
 
 然后使用`git remote show <remote>`查看远程仓库内分支的状况, 或者用如下命令:
@@ -569,6 +572,18 @@ $ git branch -vv
 删除服务器中的分支: `git push <remote> --delete <branch> `
 
 > 那添加呢? push时服务器中不存在则自动添加.
+
+# 四 其他
+
+## git status乱码
+
+尽管Git使用了`UTF-8`字符编码, 但`git status`仍然乱码, 这是[core.quotePath](https://git-scm.com/docs/git-config#Documentation/git-config.txt-corequotePath)被设置了的缘故, 关闭即可:
+
+```bash
+git config --global core.quotepath false
+```
+
+
 
 # 参考
 

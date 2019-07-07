@@ -354,7 +354,7 @@
   * 在`group by`中, 两个NULL被视为相等
   * 在`order by`中, NULL被当作最小来排序
 
-* 模式匹配: 支持标准SQL模式匹配和正则表达式, 默认大小写不敏感 ,
+*   模式匹配: 支持标准SQL模式匹配和正则表达式, 默认大小写不敏感 ,
 
   * 标准SQ: 操作符使用`LIKE`或`
     NOT LIKE`, 仅当模式匹配整个字符串时true
@@ -465,7 +465,9 @@
 
 # 四 MySQL Server管理
 
-* server系统变量: 系统变量用来控制server行为, 每个系统变量都有默认值. `select`语句查看, `set`语句态修改.  具体使用暂时不会.
+* server**系统**变量: 系统变量用来控制server行为, 每个系统变量都有默认值. `select`语句查看, `set`语句态修改.  查询时加上`@@GLOBAL.`
+
+  > 变量分为系统变量和会话变量
 
 * mysqld是mysql服务端程序, 默认配置见`mysqld --verbose --help`. 配置文件读取顺序如下
   * `/etc/my.cnf`
@@ -485,10 +487,18 @@
   mysql> SHOW STATUS;
   ```
 
-* 时区
+* [时区](https://dev.mysql.com/doc/refman/8.0/en/time-zone-support.html)
+  
   * 系统时区: 默认使用操作系统的时区
-  * 会话时区: 客户端使用的时区, 默认为系统时区. 会影响 [`NOW()`](https://dev.mysql.com/doc/refman/8.0/en/date-and-time-functions.html#function_now) or[`CURTIME()`](https://dev.mysql.com/doc/refman/8.0/en/date-and-time-functions.html#function_curtime)的值, 不会影响[`UTC_TIMESTAMP()`](https://dev.mysql.com/doc/refman/8.0/en/date-and-time-functions.html#function_utc-timestamp) 和[`DATE`](https://dev.mysql.com/doc/refman/8.0/en/datetime.html), [`TIME`](https://dev.mysql.com/doc/refman/8.0/en/time.html), or [`DATETIME`](https://dev.mysql.com/doc/refman/8.0/en/datetime.html) 字段的值, 这些字段的数据类型是与时区无关的. 但会影响[`TIMESTAMP`](https://dev.mysql.com/doc/refman/8.0/en/datetime.html) 字段的值, 存储时会转化为UTC再存储, 取出时转化为会话时区再显示.
 
+  * 会话时区: 客户端使用的时区, 默认为系统时区. 会影响 [`NOW()`](https://dev.mysql.com/doc/refman/8.0/en/date-and-time-functions.html#function_now) or[`CURTIME()`](https://dev.mysql.com/doc/refman/8.0/en/date-and-time-functions.html#function_curtime)的值, 不会影响[`UTC_TIMESTAMP()`](https://dev.mysql.com/doc/refman/8.0/en/date-and-time-functions.html#function_utc-timestamp) 和[`DATE`](https://dev.mysql.com/doc/refman/8.0/en/datetime.html), [`TIME`](https://dev.mysql.com/doc/refman/8.0/en/time.html), or [`DATETIME`](https://dev.mysql.com/doc/refman/8.0/en/datetime.html) 字段的值, 这些字段的数据类型是与时区无关的. 但会影响[`TIMESTAMP`](https://dev.mysql.com/doc/refman/8.0/en/datetime.html) 字段的值, 存储时会转化为UTC再存储, 取出时转化为会话时区再显示.
+  
+  * 查看系统, 会话时区 :
+  
+    ```mysql
+    SELECT @@GLOBAL.time_zone, @@SESSION.time_zone;
+    ```
+  
 * 数据目录: mysql server管理的数据都会被存入数据目录中, 在这里为`mysql-x.x.x/data`目录, 该目录下的大致内容如下所示
   * 所有的数据库文件
   * 日记
@@ -565,13 +575,13 @@
   * 允许`unsigned`和`signed`属性(默认), 修饰在浮点数上的方式将被弃用
 * 整形数值类型
 
-    | 类型            | 位数 | 描述 |
-    | --------------- | ---- | ---- |
-    | `TINYINT`       | 1    |      |
-    | `SMALLINT`      | 2    |      |
-    | `MEDIUMINT`     | 3    |      |
-    | `INT`,`INTEGER` | 4    |      |
-    | `BIGINT`        | 8    |      |
+    | 类型            | 位数 | 最大值(unsigned)     |
+    | --------------- | ---- | -------------------- |
+    | `TINYINT`       | 1    | 255                  |
+    | `SMALLINT`      | 2    | 65535                |
+    | `MEDIUMINT`     | 3    | 16777215             |
+    | `INT`,`INTEGER` | 4    | 4294967295           |
+    | `BIGINT`        | 8    | 18446744073709551615 |
 
     > 后接`(M)`控制显示宽度, 无用且弃用.
 
@@ -642,12 +652,66 @@
 * utf8 vs. utf8mb4 : UTF-8是一种可变长编码方式, 字符可由1到4个字节编码. 但在MySQL中的UTF-8实际上最多只存3个字节, 实际上是utf8mb3, 仅涵盖BMP编码集; 而utf8mb4能够存四字节编码的字符.
 * 导入导出方法: [`LOAD DATA`](https://dev.mysql.com/doc/refman/8.0/en/load-data.html) and [`SELECT ... INTO OUTFILE`](https://dev.mysql.com/doc/refman/8.0/en/select-into.html) , 受[secure_file_priv](<https://dev.mysql.com/doc/refman/8.0/en/server-system-variables.html#sysvar_secure_file_priv>)变量影响
 
+## 变量
 
+MySQL变量分为系统变量和会话变量. 
+
+系统变量操作:
+
+* 查看所有系统变量
+
+  ```mysql
+  mysql> SHOW VARIABLES;
+  ```
+
+* 设置系统变量
+
+  ```mysql
+  SET GLOBAL time_zone = '+8:00';
+  SET GLOBAL time_zone = 'Europe/Helsinki';
+  SET @@global.time_zone = '+00:00';
+  ```
+
+* 查看系统变量
+
+  ```mysql
+  mysql> SELECT @@GLOBAL.time_zone;
+  ```
+
+会话变量操作:
+
+* 查看所有会话变量: ??? 不会
+
+* 设置会话变量
+
+  ```mysql
+  SET time_zone = 'Europe/Helsinki';
+  SET time_zone = "+00:00";
+  SET @@session.time_zone = "+00:00";
+  ```
+
+* 查看会话变量
+
+  ```mysql
+  SELECT @@SESSION.time_zone;
+  ```
 
 > 其他的以后补充了
 
+## 连接参数
 
+在编程语言中, 连接MySQL server需要提供URL, 常用URL如
+
+```url
+jdbc:mysql://localhost:3306/database_name?useSSL=false&serverTimezone=GMT%2B8&allowPublicKeyRetrieval=true
+```
+
+* `useSSL`不是安全套接字
+* `serverTimezone`设置会话时区
+* `allowPublicKeyRetrieval`不知道
 
 # 参考
 
 * [MySQL 8.0 Reference Manual](<https://dev.mysql.com/doc/refman/8.0/en/>)
+
+* 推荐阅读, 大佬MySQL笔记:https://zhuanlan.zhihu.com/p/71232689

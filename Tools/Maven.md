@@ -396,7 +396,7 @@ default lifecycle常用的phases：
 
 ### 4.1.3 dependencyManagement
 
-`dependencyManagement`用在父pom文件中，只有子pom中存在`dependencyManagement`中的依赖，才会从该依赖中继承未指定的配置，如spring boot中的版本号。
+`dependencyManagement`常用在父pom文件中，只有当子pom依赖于父pom `dependencyManagement`元素中存在的依赖时，该依赖才会从父pom中继承未指定的配置，如spring boot中的版本号。
 
 ## 4.2 资源插件
 

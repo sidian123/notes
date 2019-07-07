@@ -609,24 +609,45 @@ umask命令也可以设置默认值
 
 ### 2.10.3 chmod
 改变文件权限。
->chmod [OPTION]... MODE[,MODE]... FILE...
->chmod [OPTION]... OCTAL-MODE FILE...
+```bash
+chmod [OPTION]... MODE[,MODE]... FILE...
+chmod [OPTION]... OCTAL-MODE FILE...
+```
 
 可以通过符号表示或八进制数修改权限：
-* symbolic mode：语法形式：`[ugoa...][[+-=][perms...]...]`，其中perms为`rwxXst`中的零个或多个。u（user）、g（group）、o（other）、a（all）；+表示添加权限为；-表示删除权限位；=表示设置该三位权限，没有设置的默认无。perms中的`X`不知道是什么。。例子：
+* **symbolic mode**(符号模式)
 	
-	>$ chmod g+r file
->$ chmod o-r file
->$ chmod go+r file
->$ chmod u+s file
->$ chmod o+t file
+	语法形式：`[ugoa...][[+-=][perms...]...]`
+	
+	* 其中`perms`为`rwxXst`中的零个或多个。
+	
+	* `u`为user用户, `g`为group组, `o`为other其他人, `a`为all所有人；
+	
+	* `+`表示添加权限位；`-`表示删除权限位；`=`表示设置该三位权限，没有设置的默认无。其他三位是特殊权限位.
+	
+	* 例子：
+	
+	  ```bash
+	  $ chmod g+r file
+	  $ chmod o-r file
+	  $ chmod go+r file
+	  $ chmod u+s file
+	  $ chmod o+t file
+	  ```
+	
+* **octal-mode**(八进制模式)
 
-* octal-mode：使用四位八进制数表示，最高位为特殊权限，可以省略。三位对应一个数，因此r(4),w(2),x(1)，对于特殊权限位suid(4),sgid(2),sbit(1)。例子：
-	>chmod 664 file
-	>chmod 775 directory
-	>chmod 1775 directory  //设置了sbit位
+  * 使用四个八进制数表示，第一个设置特殊权限，可以省略不写。其他三个分别对应用户,组,其他人的权限. 每一位都是由`rwx`组成的三位二进制数的数值, 因此`rwx`的权重分别为4,2,1. 相应的, 特殊权限位的权重分别为`suid`(4),`sgid`(2),`sbit`(1)。
 
-**注意**，特殊权限位除非明确设置，否则不会被清楚或改变；貌似只有文件拥有者或root可以修改文件的权限位。
+  * 例子：
+
+    ```bash
+    chmod 664 file
+    chmod 775 directory
+    chmod 1775 directory  //设置了sbit位
+    ```
+
+  > **注意**，特殊权限位除非明确设置，否则不会被清楚或改变；貌似只有文件拥有者或root可以修改文件的权限位。
 
 ### 2.10.4 chown
 改变文件所属用户或组
@@ -675,8 +696,10 @@ tar主要是让多个文件或压缩包归为一个档案。除此之外它还�
 >* `-p`：提取文件时，保留它的文件权限。root用户默认此选项。
 
 一些例子：
->$ tar -cvzf archive.tar.gz file1 file2 directory
->$ tar -xvzf archive.tar.gz
+```bash
+$ tar -cvzf archive.tar.gz file1 file2 directory
+$ tar -xvzf archive.tar.gz
+```
 
 创建档案时，对档案后缀没有强制规定，但是最好使用常用后缀名。比如：归档不压缩，`file.tar`；归档并用gzip压缩，`file.tar.gz`等等之类。注意到一些后缀，如`.tgz`与`.gz`相同，`.taz`与`.tar.Z`相同。
 
@@ -840,6 +863,63 @@ udevadm info --query=all –-name=/dev/sda
 ### 3.6.5 lsblk
 列出所有的块设备（除了RAM disk）。实现：从sysfs文件系统中得到数据。
 
+### lspci
+
+列出所有pci设备的信息, 显卡就是该类设备.
+
+* 查看集显
+
+  ```bash
+  lspci|grep -i vga
+  ```
+
+* 查看独显
+
+  ```bash
+  lspci| grep -i nvidia
+  ```
+
+  
+
+## 实战
+
+### 找出当前使用显卡
+
+* 方法一: 使用`glxinfo`命令
+
+  1. 一般不存在, 先安装该命令
+
+     ```bash
+     sudo apt install mesa-utils
+     ```
+
+  2. 输入
+
+     ```bash
+     $ glxinfo|egrep "OpenGL vendor|OpenGL renderer"
+     OpenGL vendor string: Intel Open Source Technology Center
+     OpenGL renderer string: Mesa DRI Intel(R) Sandybridge Mobile
+     ```
+
+     表明正在使用Intel集显
+
+  3. 如果使用的是bumblebee方案, 你可强制它使用独显
+
+     ```bash
+     $ optirun glxinfo|egrep "OpenGL vendor|OpenGL renderer"
+     OpenGL vendor string: NVIDIA Corporation
+     OpenGL renderer string: GeForce GT 555M/PCIe/SSE2
+     ```
+
+* 方法二: 使用`lspci`命令, 活动的显卡会显示`[VGA controller]`信息
+
+  ```bash
+  $ lspci -v|grep '\[VGA controller\]'
+  00:02.0 VGA compatible controller: Intel Corporation Device 3ea0 (rev 02) (prog-if 00 [VGA controller])
+  ```
+
+> 参考:[How to check which GPU is active in Linux?](https://unix.stackexchange.com/questions/16407/how-to-check-which-gpu-is-active-in-linux)
+
 ##  参考
 [Managing devices in Linux](https://opensource.com/article/16/11/managing-devices-linux)
 [Device file wiki](https://en.wikipedia.org/wiki/Device_file)
@@ -858,7 +938,7 @@ udevadm info --query=all –-name=/dev/sda
 
 # 四 文件系统
 尽管我们可以直接在设备文件上对整个磁盘或分区进行读写操作，但是极其不方便，只有在特定范围内使用该方式，如备份MBR、分区等。而文件系统抽象出了文件的概念，以文件夹分层构建文件的树状命名空间，可以访问的读写数据。文件系统定义了文件和目录的存储结构，致力于高的读写性能、可靠的数据完整性和安全性等。因此会出现很多的文件系统，文件系统一般属于内核实现，但是也存在用户空间内的文件系统。linux使用[VFS][41]（Virtual File System）接口层来同一不同文件系统的调用，屏蔽文件系统的细节，开发者只需要调用VFS的系统调用即可操作数据。磁盘数据访问的模式如下：
-![在这里插入图片描述](https://img-blog.csdnimg.cn/20190308125912620.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L2pkYmRo,size_16,color_FFFFFF,t_70 =400x)
+![在这里插入图片描述](.Linux入门/20190308125912620.png)
 ## 4.1 disk
 disk有很多中，计算机中光盘、磁带已被弃用，常用硬盘（hard disk）和固态硬盘（SSD）作为存储设备。这里给出硬盘的通用结构图：
 ![在这里插入图片描述](.Linux入门/20190308133338367.png)

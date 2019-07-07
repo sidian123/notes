@@ -190,7 +190,9 @@ public class BlogApplicationTests {
 }
 ```
 
-# 五 bug
+# 五 其他
+
+## bug
 
 使用过程中发现了点spring boot的bug，就是必须添加了如下依赖后，一些功能才能使用：
 
@@ -203,6 +205,22 @@ public class BlogApplicationTests {
 ```
 
 见[issue12579](<https://github.com/spring-projects/spring-boot/issues/12579>)
+
+## 返回`List<T>`
+
+一般对象的序列化都是由Jackson完成的, 当解序列化复杂类型对象时, 需要特定的`ParameterizedTypeReference<T>`记录泛型类型信息. `RestTemplate`也刚好提供了对应方法. 使用例子如下:
+
+```java
+List<Student> students= (List<Student>) restTemplate.exchange(URI_PREFIX + "/", HttpMethod.GET, null, new ParameterizedTypeReference<List<Student>>() {}).getBody();
+```
+
+如果不想这个复杂, 可以使用数组:
+
+```java
+Student[] students = restTemplate.getForObject(URI_PREFIX + "/", Student[].class);
+```
+
+> 参考:[ClassCastException: RestTemplate returning List instead of List](https://stackoverflow.com/questions/19463372/classcastexception-resttemplate-returning-listlinkedhashmap-instead-of-listm)
 
 # 参考
 * [REST Endpoints office doc](<https://docs.spring.io/spring-framework/docs/current/spring-framework-reference/integration.html#rest-client-access>)

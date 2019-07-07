@@ -162,7 +162,12 @@ mybatis配置文件的结果如下：
 其中，优先级依次递增。还可以为属性配置默认值，默认这个功能不开启。
 
 ## 3.2 settings
-settings元素中可以配置mybatis的各种行为。值得提一下的是`jdbcTypeForNull`，默认值为other，意味着在定义映射语句时，即使传入参数可能为空，也不必执行jdbc类型了，因为有了默认值。在jdbc中，参数设置为NULL时必须指定jdbc类型的。
+settings元素中可以配置mybatis的各种行为。
+
+一些注意点如下:
+
+* `jdbcTypeForNull`，默认值为`other`，意味着在定义映射语句时，即使传入参数可能为空，也不必执行jdbc类型了，因为有了默认值。在jdbc中，参数设置为NULL时必须指定jdbc类型的。
+* `mapUnderscoreToCamelCase`, 默认`false`, 即自动映射时不使用驼峰命名的转换.
 
 ## 3.3 typeAliases
 设置别名，用于在需要类名配置的地方减少拼写。如：
@@ -323,12 +328,13 @@ mybaits提供了根据参数内容动态拼接sql语句的功能。
 </select>
 ```
 ## 5.3 trim
-trim有四个属性：prefix，prefixOverrides，suffix，suffixOverrides。对于prefix和prefixOverrides的规则如下：
-* 如果只存在prefix，则直接在内容前添加prefix的内容。
-* 如果只存在prefixOverrides，则删除内容前**存在的**prefixOverrides内容。
-* 如果都存在，则prefix取代内容前**存在的**prefixOverrides。
+`trim`有四个属性：`prefix`，`prefixOverrides`，`suffix`，`suffixOverrides`。对于`prefix`和`prefixOverrides`的规则如下：
 
-该规则对suffix和suffixOverrides同样适用。如果prefixOverrides或suffixOverrides有多个可选值，通过`|`分隔。
+* 如果只存在`prefix`，则直接在内容前添加`prefix`的内容。
+* 如果只存在`prefixOverrides`，则删除内容前**存在的**`prefixOverrides`内容。
+* 如果都存在，则`prefix`取代内容前**存在的**`prefixOverrides`; 不存在时, 则在内容前添加`prefix`。
+
+该规则对`suffix`和`suffixOverrides`同样适用。如果`prefixOverrides`或`suffixOverrides`有多个可选值，通过`|`分隔。
 
 ## 5.4 where
 `where`元素中有内容时则在前面插入`WHERE`，并去掉内容前存在的`AND`或`OR`。如：
@@ -356,7 +362,7 @@ trim有四个属性：prefix，prefixOverrides，suffix，suffixOverrides。对�
   ...
 </trim>
 ```
-注意AND和OR的空格是有用的。
+> 注意AND和OR的空格是有用的。
 
 ## 5.5 set
 `set`元素中有内容时则在前面插入`SET`，并去掉内容后存在的`,` 。如：
@@ -530,20 +536,9 @@ MapperFactoryBean需要注入SqlSessionFactory或SqlSessionTemplate都行，如�
 	  <property name="basePackage" value="org.mybatis.spring.sample.mapper" />
 	</bean>
 	```
-# 八 其他
-## 8.1 `collection`与`List<Integer>`
-当使用collection来收集id为数组时，如何办？
-```xml
-<id property="name" column="name"/>
-<collection property="ids" ofType="Integer">
-    <result column="id"/>
-</collection>
-```
->参考：[Select List of Integers as Collection inside another result Map in Mybatis](https://stackoverflow.com/a/48617170/10248407)
 
-
-# 九 映射语句-例子
-## 9.1 注意点
+# 八 映射语句-例子
+## 注意点
 
 - 在xml中，语句必须指定结果类型（resultType、resultMap），参数类型不用指定。因为在用SqlSession的selectList、selectOne等方法时，可以从参数中推断反射推断类型，但不能推断返回值的类型（泛型）。
 - 在注解中，sql语句绑定到了具体某个Dao的接口方法中，不会出现泛型，能够推断出参数、结果类型。
@@ -551,9 +546,9 @@ MapperFactoryBean需要注入SqlSessionFactory或SqlSessionTemplate都行，如�
 - 自动映射：默认`PARTIAL` ，即除了嵌套层外，只要结果类型字段与sql结果列一致，就能自动映射。因此在使用级联时，需手动设置。
 - 在resultMap中，id的使用很关键，尽管能自动映射，也要手动给出id的映射。
 
-## 9.2 例子
+## 例子
 
-### 9.2.1 查询
+### 查询
 
 - 简单查询：
 
@@ -647,7 +642,7 @@ MapperFactoryBean需要注入SqlSessionFactory或SqlSessionTemplate都行，如�
   </resultMap>
   ```
 
-### 9.2.2 插入
+### 插入
 
 - 简单插入：插入后产生的id返回到参数对象中（`useGeneratedKeys`的作用），`keyProperty`指定id赋值给参数对象的哪个字段上。
 
@@ -669,7 +664,7 @@ MapperFactoryBean需要注入SqlSessionFactory或SqlSessionTemplate都行，如�
   int insert(ChatMessage chatMessage);
   ```
 
-### 9.2.3 修改
+### 修改
 
 - xml版：使用到了mybatis提供的动态sql
 
@@ -687,7 +682,7 @@ MapperFactoryBean需要注入SqlSessionFactory或SqlSessionTemplate都行，如�
 
 - 注解版：目前没写过，因为注解不能使用动态sql，因此略。。
 
-### 9.2.4 删除
+### 删除
 
 - xml版：
 
@@ -708,7 +703,59 @@ MapperFactoryBean需要注入SqlSessionFactory或SqlSessionTemplate都行，如�
   int deleteById(int id);
   ```
 
-  
+# 九 其他
+
+## `collection`与`List<Integer>`
+
+当使用collection来收集id为数组时，如何办？
+
+```xml
+<id property="name" column="name"/>
+<collection property="ids" ofType="Integer">
+    <result column="id"/>
+</collection>
+```
+
+> 参考：[Select List of Integers as Collection inside another result Map in Mybatis](https://stackoverflow.com/a/48617170/10248407)
+
+## MyBatis-Plus
+
+来自[官网介绍](https://mybatis.plus/)
+
+> 只做增强不做改变，引入它不会对现有工程产生影响，如丝般顺滑。
+>
+> 只需简单配置，即可快速进行 CRUD 操作，从而节省大量时间。
+>
+> 热加载、代码生成、分页、性能分析等功能一应俱全。
+
+个人感觉, 尽管简单的CRUD被直接提供了, 但是对于稍微复杂的SQL语句来说, 需要将SQL拆分, 混合Java代码来构建, 反而将问题复杂化了.
+
+弃!
+
+## [MyBatisCodeHelper-Pro](https://gejun123456.github.io/MyBatisCodeHelper-Pro/#/README?id=mybatiscodehelper-pro)
+
+是idea中辅助mybatis编写的插件, 最主要的两个特点是:
+
+* 支持从数据库中生成crud代码
+* 从方法名中生成crud代码
+
+**配置**:
+
+* 配置idea中的database, 提供数据库信息给插件
+* `setting->Language & Frameworks->SQL Dialects`为MySQL, 使得xml中SQL语句正确解析
+
+**使用**:
+
+* 从数据库中生成model,dao,service代码
+  * 在database中右键数据库, 选择`Mybatis generator`, 然后指定存放位置的包.
+  * 多次生成, 会与之前的代码合并. 合并细节如下
+    * 自己的mapper方法和xml sql语句不会被删除, 自动生成的xml语句通过` @mbg generated`注释识别, 因此生成文件时一定要勾选生成注释.
+    * 实体会保留`static`,`transient`字段与方法
+* 在mapper接口中, 输入符合一定规范的方法名, 按`alt+enter->Generate mybatis sql`生成.
+  * 具体方法规范见[方法名生成sql](https://gejun123456.github.io/MyBatisCodeHelper-Pro/#/methodNameToSql)
+
+其他特性, 略.
+
 # 参考
 mybatis：http://www.mybatis.org/mybatis-3/index.html
 mybatis-spring：http://www.mybatis.org/spring/sample.html

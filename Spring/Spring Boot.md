@@ -274,6 +274,14 @@ public class Hello {
 }
 ```
 
+### 路径
+
+* 环境变量下的路径: 需加上前缀`classpath:`
+* `**`匹配多层目录
+* `*`匹配文件名中任意字符
+
+例子如`mybatis.mapper-locations: classpath:mapperxml/**/*.xml`
+
 # 四 Logging
 
 spring boot对[Java Util Logging](https://docs.oracle.com/javase/8/docs/api//java/util/logging/package-summary.html)、[Log4J2](https://logging.apache.org/log4j/2.x/) 和 [Logback](http://logback.qos.ch/)提供了**支持与默认配置**。当在classpath下发现日记jar包时，会**自动配置**这些jar包，并且对于spring boot支持的日记系统，都可以通过[应用属性](<https://docs.spring.io/spring-boot/docs/current/reference/html/common-application-properties.html>)进行配置，**即logging属性是独立于日记系统的**。
@@ -517,7 +525,7 @@ public interface UserDao {
 
 mybatis与spring boot整合后，也可以在spring boot的配置文件中配置mybatis。部分属性如下：
 
-- `mapper-locations`：Mapper xml
+- `mapper-locations`：xml Mapper的位置, 如`classpath:mapper/**/*.xml`
 
 - `type-aliases-package`：类型匿名所在位置
 - `configuration`：传给`Configuration`Bean的属性配置，见 [MyBatis reference page](http://www.mybatis.org/mybatis-3/configuration.html#settings)
