@@ -370,7 +370,7 @@ origin    git@github.com:mojombo/grit.git (push)
 
 ### 推送数据
 
-`git push <remote> <branch>`完成上传与合并的功能. 如果有tracking信息, 即与远程仓库某个分支关联时, 可直接省略两个参数. 如果未关联, 它会提示你如何关联的.
+`git push <remote> <branch>`完成上传与合并的功能. 如果有tracking信息, 即与远程仓库某个分支关联时, 可直接省略两个参数. 如果未关联, 它会提示你如何关联的, 或者见第三章远程分支.
 
 > 注意, 一次只能上传一个分支的, 如果远程仓库无该分支则会被创建.
 >

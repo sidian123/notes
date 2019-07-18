@@ -66,3 +66,163 @@
 
 以面向接口的方式简化rest接口的调用, 集成了Ribbon, 也提供了负载均衡的功能.
 
+# [学习二](https://www.baeldung.com/spring-cloud-bootstrapping)
+
+* Spring Cloud Config
+  * 用于集中管理其他微服务的通用配置, 避免因集群而导致配置增多
+  * 通常配置会被放入Git仓库中, 获得版本管理的功能
+  * 分为服务端和客户端, 客户端需要指明服务器在哪
+  * Spring Cloud程序初始化时会读入`bootstrap.properties`配置文件, 因此客户端关于服务器信息的配置的信息可以放入此处.
+* Eureka
+  * 每个服务都通过`ip/port`区分, eureka可以提供更方便定位到微服务的方式.
+  * 分为server和client
+
+* Zuul
+  * 提供反向代理功能, 避免CORS的需要.
+
+# [学习三](https://howtodoinjava.com/microservices/microservices-definition-principles-benefits/)
+
+## 微服务介绍
+
+* 每个微服务有都有自己的业务逻辑和数据库.
+* 与单体应用相比, 微服务更倾向于将整个系统的业务逻辑拆分到更小的单元.
+* 对于单个微服务的修改, 一般不会影响到其他的微服务.
+* 微服务之间通常采用轻量级协议通信, 如HTTP,REST,JMS,AMQP等.
+* 好处
+  * 给于开发更好的扩张性, 如使用不同的语言和数据库来开发单个微服务.
+  * 可方便的集群
+  * 可无顾虑的尝试新技术
+  * 更快的开发效率, 大型单体应用需要更周密的设计, 这种设计是十分昂贵的.
+
+## Config Server
+
+* 将client配置外置集中管理. 
+* 也能够在修改配置后, 不刷新client, 需要加个注解, 略.
+
+## Eureka(服务注册与发现)
+
+当服务越来越多和服务开始集群后, 直接通过`host:port`定位某个服务变得很繁琐与复杂. 如
+
+```java
+String response = restTemplate.exchange("http://localhost:8098/getStudentDetailsForSchool/abcschool",
+                                HttpMethod.GET, null, new ParameterizedTypeReference<String>() {}).getBody();
+```
+
+ 使用Eureka后, 所有的微服务都在eureka server上注册, 其他微服务只需服务名来访问该服务即可, 如
+
+```java
+String response = restTemplate.exchange("http://student-service/getStudentDetailsForSchool/{schoolname}",
+                                HttpMethod.GET, null, new ParameterizedTypeReference<String>() {}, schoolname).getBody();
+```
+
+> 其中微服务名到`host:port`的转换都是由eureka和rest template内部完成的.
+
+如果`RestTemplate`Bean被`@LoadBalanced`注解, 那么仅通过一个服务名就可以达到负载均衡地访问到该服务.
+
+## Hystrix(Circuit Breaker)
+
+当被调用的微服务出现某种问题或直接停止时, 一般会导致调用者超时或抛出异常, 造成该生态系统不够稳定. 
+
+Hystrix就是用来解决这个问题, 当一个服务出现问题时, 会将执行顺序转换到其他地方, 如fall back处理函数. 仅当检测到该服务正常了, 才恢复正确的执行顺序.
+
+本质上就是在调用其他微服务处的函数上包裹了一层Wrapper函数, 一旦出现问题就执行其他已指定的方法.
+
+## Zuul(API Gateway)
+
+提供给客户端(如浏览器)一个统一的访问API接口. Zuul是一个**边缘**服务, **代理**请求, 转发给对应的服务.
+
+Zuul也提供了过滤器, 过滤某些请求. 如
+
+![img](.Cloud/Zull-filters.jpg)
+
+## Ribbon(Load Balancer)
+
+集群后, 需要一个负载均衡器将访问请求平摊在每个服务上, 达到高可用的目的. 
+
+负载均衡分为服务端负载均衡和客户端负载均衡. 
+
+* 服务端: 即在集群的服务前放置一个负载均衡器, 由它分发流量
+* 客户端: 由请求方选择到底请求集群服务器中的哪一个
+
+Ribbon属于客户端负载均衡器, 一般与eureka一起使用, 并且被eureka client依赖. 
+
+具体实现: 都是`RestTemplate`通过服务名访问, 首先会去查询该服务对应的`host:port`, 如果是集群的, 会返回多个对应关系, ribbon则选择其中一个交给`RestTemplate`请求. Ribbon默认的算法是轮询.
+
+
+
+
+
+
+
+# [学习四](https://cloud.spring.io/spring-cloud-static/Greenwich.SR2/single/spring-cloud.html)
+
+## Spring Cloud提供的功能
+
+* Distributed/versioned configuration
+* Service registration and discovery
+* Routing
+* Service-to-service calls
+* Load balancing
+* Circuit Breakers
+* Distributed messaging
+
+## 基础
+
+### Spring Cloud Content
+
+* **介绍**: 提供有用的工具和服务, 扩展了`ApplicationContent`的功能. 如bootstrap context, encryption, refresh scope, and environment endpoints.
+
+* **容器**: Spring Cloud中额外提供了一个`Bootstrap`容器作为应用的父容器, 配置文件以`bootstrap.[yml|properties]`给出. 共享同一个`Environment`.
+
+  > 回顾下, 父容器的bean可以被子容器访问和隐藏.
+
+* **属性源**: 即配置的来源. 默认设置中, 本地配置源由`bootstrap.[yml|properties]`提供, 远程配置源由Spring Cloud Server提供. 一般情况下, 远端配置不被覆盖(隐藏), 除非远端配置源允许它, 见[Overriding the Values of Remote Properties](https://cloud.spring.io/spring-cloud-static/Greenwich.SR2/single/spring-cloud.html#overriding-bootstrap-properties); 而本地配置源可以.
+
+* **日记配置**: 日记配置放在`bootstrap.[yml | properties]`中才会作用于所有事件.
+
+  > 不能使用自定义前缀
+
+### Spring Cloud Commons
+
+* **介绍**: 微服务由一系列基础设施和服务组成, Spring Cloud Commons则提供了关于基础设施的抽象层, 如服务发现,负载均衡,断路机制等
+
+  > 简而言之, 即定义了基础设施服务的接口.
+
+* **服务注册**: Commons提供了`ServiceRegistry`接口, 用于服务注册与注销. 实现类如`ZookeeperServiceRegistry`,`EurekaServiceRegistry`,`ConsulServiceRegistry`等.
+
+  * 默认client运行服务时自动向server注册
+
+* **负载均衡客户端**: 可选择的很多, 其中有`RestTemplate`. 该bean必须手动创建, 并添加`@LoadBalanced`注解, 如
+
+  ```java
+  @LoadBalanced
+  @Bean
+  RestTemplate restTemplate() {
+      return new RestTemplate();
+  }
+  ```
+
+  `RestTemplate`在ribbon存在时, 会被自动配置好.
+
+## Spring Cloud Config
+
+* **介绍**: 分为client端和server端, Spring Cloud Config可将client端的配置外置化, 集中存储在server端中. Server端默认使用git仓库为配置文件的存储仓库.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

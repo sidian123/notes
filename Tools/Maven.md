@@ -285,7 +285,7 @@ pom之间是可以继承的, 子pom可继承的元素有:
 
 #### dependencyManagement
 
-通过该元素可以管理所有子pom的依赖信息. 它和`dependencies`不同, 子pom会从父pom中继承`dependencies`声明的依赖, 而至于`dependencyManagement`, 则子pom中存在`dependencyManagement`的依赖时, 会从该元素中获取信息, 如版本号(`version`)和作用于(`scope`), 因此子pom中可以省略这些信息. 在spring boot项目中该用法十分常见.
+通过该元素可以管理所有子pom的依赖信息. 它和`dependencies`不同, 子pom会从父pom中继承`dependencies`声明的依赖, 而至于`dependencyManagement`, 则子pom中存在`dependencyManagement`的依赖时, 会从该元素中获取其他信息, 如版本号(`version`)和作用域(`scope`), 因此子pom中可以省略这些信息. 在spring boot项目中该用法十分常见.
 
 ### 2.2.3 多模块
 

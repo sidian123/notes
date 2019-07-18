@@ -1449,6 +1449,20 @@ public class AppConfig {
 }
 ```
 
+# 十二 其他
+
+## 父子容器
+
+一个容器可以有父容器，比如springMVC中就有两个容器，一个web应用对应一个ApplicationContext容器，为父容器，每个DispatcherServlet对应一个WebApplicationContext容器，为子容器。父容器中定义的Bean都可以被子容器访问到，也可被子容器隐藏。在ApplicationContext中可以定义和业务逻辑、数据访问有关的Bean，而WebApplicationContext 中可以定义和控制器与视图解析器有关的Bean.
+
+> 参考
+>
+> * [What is the difference between spring parent context and child context?](https://stackoverflow.com/questions/43452644/what-is-the-difference-between-spring-parent-context-and-child-context)
+>
+> * [About multiple containers in spring framework](https://stackoverflow.com/questions/18578143/about-multiple-containers-in-spring-framework)
+
+
+
 # 参考
 
 * [官方文档](https://docs.spring.io/spring-framework/docs/current/spring-framework-reference/core.html#beans)
