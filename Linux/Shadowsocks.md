@@ -1,4 +1,7 @@
+[TOC]
+
 # 一 介绍
+
 **Shadowsocks**（简称**ss**）是一个开源免费的、基于socks5协议的加密代理项目。简而言之，ss能够创建sock5代理，有选择性（使用pac规则）的为你代理流量。往代理服务器转发流量时，会加密数据，但是由于ss加密的主要目的是为了混淆数据达到绕行**GFW**（great firewall）的目的，因此数据安全性不高。
 
 Shadowsocks被国内程序员clowwindy使用python语言开发，由于政策原因，仓库已被清除，但wiki还在，项目也被其他合作者备份下来了。ss还有很多语言的移植版本，如GO、C、perl等等。ShadowsocksR（简称ssr）是原项目的fork，声称会提高代理的安全和稳定性。

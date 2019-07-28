@@ -1,4 +1,7 @@
+[TOC]
+
 # 一 介绍
+
 Eclipse与Intellij IDEA哪个好？很多人支持idea，在昨日我的eclipse崩溃之后，我决定尝试下idea，发现还行吧。。
 
 # 二 IDEA配置

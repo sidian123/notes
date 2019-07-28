@@ -157,13 +157,11 @@ protected void configure(AuthenticationManagerBuilder auth) throws Exception {
 }
 ```
 
-
-
 > 注意，在Spring5中，必须定义加密器。
 
-# OAuth2 Client
+常用`UserDetailsService`提供数据库中的用户数据, `AuthenticationProvider`可定制范围更大. 
 
-## ClientRegistration
+# 过滤器
 
 # 其他
 
@@ -174,3 +172,9 @@ protected void configure(AuthenticationManagerBuilder auth) throws Exception {
 # 问题
 
 - 无加密器：[Spring Security – There is no PasswordEncoder mapped for the id “null”](<https://www.mkyong.com/spring-boot/spring-security-there-is-no-passwordencoder-mapped-for-the-id-null/>)
+
+# 推荐阅读
+
+* [OAuth 2 Developers Guide](https://projects.spring.io/spring-security-oauth/docs/oauth2.html): 关于OAuth2授权服务器的搭建
+
+* [security 教程](https://www.baeldung.com/security-spring)
