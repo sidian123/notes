@@ -874,7 +874,7 @@ console.log(bb);
 >* [MDN import](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/import)
 >* [MDN export](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/export)
 >* [MDN script](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/script)
-## 2.14 promise
+## 2.14 Promise
 
 promise相当于一个代理，表示一个**异步**操作成功或失败的结果，即使不能立马获得promise表示的值，但可以为promise附上成功或失败的回调函数。
 

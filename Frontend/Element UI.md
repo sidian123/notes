@@ -1,3 +1,5 @@
+[TOC]
+
 # 使用
 
 安装：
@@ -5,6 +7,8 @@
 ```bash
 npm i element-ui -S
 ```
+
+> `-S`表示安装为`dependencies`依赖
 
 全局使用：在入口文件中添加
 
@@ -15,7 +19,9 @@ import 'element-ui/lib/theme-chalk/index.css';
 Vue.use(ElementUI);
 ```
 
-# 基础
+> `Vue.use`用于安装插件, 该步目的是为了简化element ui组件的使用, 如避免了在vue中声明`components`组件和引入组件(`import`)的步骤.
+
+# 基础(Basic)
 
 ## Layout
 
@@ -26,7 +32,7 @@ Vue.use(ElementUI);
 - **对齐**：`el-row`设置`type="fex"后`，`justify`可指定对齐方式。
 - **响应式**：`el-col`可设置`xs`,`sm`,`md`,`lg`,`xl`
 
-# 表单
+# 表单(Form)
 
 ## Select
 
@@ -112,4 +118,44 @@ Vue.use(ElementUI);
 - **验证**：`el-form`的`rules`属性设置所有规则，`el-form-item`的`prop`属性设置某个规则对应的键值。
 
 。。。还是觉得十分不好用，还是用vue的watch来验证比较合适。
+
+# 通知(Notice)
+
+## Alert(警告)
+
+在**页面中**展示重要的**提示**信息.
+
+可以有标题, 辅助性文字, 是否可关闭, 是否显示图标, 主题颜色等属性.
+
+## Notification(通知)
+
+**悬浮**出现在页面**角落**，显示**全局**的**通知提醒**消息。
+
+Element会为`Vue.prototype`添加了全局方法`$notify`, 通过该方法, 并传入一个选项对象, 即可产生通知消息.
+
+可以设置标题, 说明文字, 显示时间, 是否可关闭等属性.
+
+## Message(消息提示)
+
+常用于**主动**操作后的**反馈提示**。与 Notification 的区别是后者更多用于系统级通知的被动提醒。
+
+> 个人看来, 就是显示位置不同而已
+
+与`Notification`基本一致, 同样在vue实例中添加了`$message`方法.
+
+可以设置消息文字, 主题, 显示时间, 是否可关闭等属性.
+
+## MessageBox
+
+**模拟系统**的消息提示框而实现的一套**模态对话框**组件，用于**消息提示**(`$alert`)、**确认消息**(`$confirm`)和**提交内容**(`$prompt`)。这些方法底层都基于`$msgbox`.
+
+> 如果要展示更复杂的内容, 则使用对话框Dialog
+
+支持Promise; 默认不区分取消和关闭, `promise`的`reject`回调和`callback`回调的参数都为`cancel`, 可修改, 此时分别为`cancel`和`close`.
+
+# 其他(Others)
+
+
+
+
 

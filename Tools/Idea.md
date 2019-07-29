@@ -177,6 +177,9 @@ IDEA中构建的几个选项如下所示：
 在跳出编辑区域、idea时都会自动保存，运行项目时也会自动保存，等等。并且保存方式为`safe write`，即：与简单的更新文件相反，safe write会写入一个临时文件，然后删除源文件，将临时文件名改成源文件名。
 
 这样方式会造成问题，如会导致webpack的热更新失败，因此最好去掉。
+
+> 在linux中, 不用取消safe write, webpack的热更新也生效.
+
 # 五 快捷键
 快捷键不用死记，一般右键或者工具栏中都有。
 * `Ctrl+space`:basic code completion.call twice ,then show more

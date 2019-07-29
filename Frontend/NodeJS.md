@@ -1,4 +1,7 @@
+[TOC]
+
 # 一 介绍
+
 Node.js是一个开源的、跨平台的JavaScript运行时环境，使JavaScript可以运行在浏览器端之外；Node.js是事件驱动的架构，支持异步IO，单线程；Node.js实现了CommonJS的模块加载功能（当然也支持ES6模块语法）。
 
 但是开发者常用Node.js制作进行前端开发的工具（如Gurnt、Gulp和Webpack），进行前端开发。
