@@ -23,8 +23,6 @@ Vue.use(ElementUI);
 
 # 基础(Basic)
 
-## Layout
-
 - **介绍**：`el-row`元素表示一行，`el-col`表示一列，一共**24**列
 - **列数**：`el-col`的`span`属性设置占用列数
 - **间隔**：`el-row`的`gutter`属性设置列间间隔
@@ -151,11 +149,23 @@ Element会为`Vue.prototype`添加了全局方法`$notify`, 通过该方法, 并
 
 > 如果要展示更复杂的内容, 则使用对话框Dialog
 
-支持Promise; 默认不区分取消和关闭, `promise`的`reject`回调和`callback`回调的参数都为`cancel`, 可修改, 此时分别为`cancel`和`close`.
+支持`Promise`; 默认不区分取消和关闭, `promise`的`reject`回调和`callback`回调的参数都为`cancel`, 可修改, 此时分别为`cancel`和`close`.
 
 # 其他(Others)
 
+## Dialog(对话框)
 
+适合制作更复杂的对话框, 用于告知用户并承载相关操作.
 
+对话框与Notice不一样, 需要在html模板中定义并隐藏, 之后控制它是否显示与否.
 
+可设置标题`title`, 是否显示`visible`, 内容`default slot`, 操作区内容`footer slot`等等.
+
+## Tooltip(文本提示)
+
+常用于展示鼠标 hover 时的提示信息。
+
+`el-tooltip`元素包裹在要提示的元素上, `content`提供提示信息, `placement`设置显示位置.
+
+> 其中`placement`值形式为`方向[-对齐位置]`; 方向可选`top`、`left`、`right`、`bottom`; 对齐位置可选`start`, `end`
 

@@ -131,11 +131,11 @@ spring boot提供了devtools，为开发带来一点方便。需要加入依赖�
 - Eclipse中，文件保存便会触发重启
   - IDEA中，需要点击`Build->Build Project`，快捷键`Ctrl+F9`
   
-  > spring boot的重启实际上是要比完全重启项目（cold restart）要快些的。
-  >
-  > 原理：spring boot使用两个类加载器来完成这些功能：**base**类加载器加载三方jar包，**restart**加载器负责加载当前开发项目的类，程序重启时，仅丢弃restart加载器加载的类并重新加载。*但此方案可能会造成类加载器问题，此时需要关闭重启功能！！*
-  >
-  > 如果还不爽，可考虑[JRebel](https://zeroturnaround.com/software/jrebel/)，它会重载（reload）的类。至于LiveReload或JVM hot swap，支持不够好也不好用。
+    > spring boot的重启实际上是要比完全重启项目（cold restart）要快些的。
+    >
+    > 原理：spring boot使用两个类加载器来完成这些功能：**base**类加载器加载三方jar包，**restart**加载器负责加载当前开发项目的类，程序重启时，仅丢弃restart加载器加载的类并重新加载。*但此方案可能会造成类加载器问题，此时需要关闭重启功能！！*
+    >
+    > 如果还不爽，可考虑[JRebel](https://zeroturnaround.com/software/jrebel/)，它会重载（reload）的类。至于LiveReload或JVM hot swap，支持不够好也不好用。
 
 >个人使用起来，感觉和JVM的热更新没啥区别，修改方法名、参数啥的照样要重新运行程序
 ### 3.1.1 与idea intellij

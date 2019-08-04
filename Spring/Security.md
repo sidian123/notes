@@ -163,6 +163,92 @@ protected void configure(AuthenticationManagerBuilder auth) throws Exception {
 
 # 过滤器
 
+# 架构与实现
+
+## 核心组件
+
+* `SecurityContextHolder`: 存储`SecurityContext`的地方, 是**线程局部**的, 即同样声明的`SecurityContext`字段, 在每个线程中使用的都是不同的, 线程结束后自动被清除.
+
+  > 变量的线程局部性是通过`ThreadLocal`实现的, 这种模式还可以更改.
+  >
+  > 不要将**线程作用域**与**会话作用域**混淆
+
+* `SecurityContext`: 含有与当前线程相关的安全信息. 实际上就是存放`Authentication`的地方.
+
+  > 通过`SecurityContextHolder`的静态方法, 可以获取属于该线程的`SecurityContext`.
+
+* `Authentication`: 已授权的凭证. 
+
+  [`AuthenticationManager.authenticate(Authentication)`](https://docs.spring.io/spring-security/site/docs/current/api/org/springframework/security/authentication/AuthenticationManager.html#authenticate-org.springframework.security.core.Authentication-)负责认证传入的对象, 如果验证成功, 则返回被**填充完整**的`Authentication`对象, 接着存入`SecurityContext`中, 表示认证成功.
+
+  初次之外, 一种显式验证的方式, 就是手动放置`Authentication`, 如:
+
+  ```java
+  SecurityContextHolder.getContext().setAuthentication(anAuthentication);
+  ```
+
+  > `isAuthenticated()`返回`true`时, 则不会被拦截器拦截, 提高效率. 并且`true`时就是表示已填充完整
+
+* `UserDetails`: 代表用户, 含用户,角色等信息.
+
+  用户信息最终会存入`Authentication`中, 然后去认证. 这个信息可以是任何`Object`对象, 只要认证器能够识别它. 但通常会用`UserDetails`表示, 同时它也是自己数据库用户类与Spring Security所需要类型的一个桥梁.
+
+  Spring Security提供了一个实现类`User`来简化该接口的使用.
+
+  >那通过什么途径将用户信息提供给Spring Security呢?
+  >
+  >实现`UserDetailsService`并注入到容器中即可. 实现它的`loadUserByUsername`函数, 通过用户名来获取`UserDetails`.
+  >
+  >> 该接口已经存在了很多实现类, 如常用的`InMemoryDaoImpl`等.
+  >>
+  >> 但还是自己实现一个比较好.
+
+* `GrantedAuthority`: 表示角色, 如`ROLE_USER`, `ROLE_ADMIN`等, 每个角色都对应一定的权限, 在构建`UserDetails`对象时须提供.
+
+  > 该权限是系统范围的, 即某一范围的人属于某种角色, 并拥有该角色的权限.
+
+----------
+
+* 小结
+
+  1. 在`UserDetailsService`中实现获取用户数据的逻辑, 并与角色`GrantedAuthority`组成`UserDetails`, 再返回该`UserDetails`对象.
+  
+  2. `UserDetails`存入`Authentication`中.
+  
+  3. `AuthenticationManager.authenticate(Authentication)`中验证`Authentication`是否通过验证
+
+  4. 验证成功则返回填充过的`Authentication`, 并存入`SecurityContextHolder`中
+
+  5. 认证成功
+  
+     > 用户认证成功, 当且仅当`SecurityContextHolder`中存在完全填充过的`Authentication`对象.
+  
+     > 疑问
+     >
+     > `SecurityContextHolder`中`Authentication`是线程局部的, 下次请求怎么办?
+  
+  之后的请求中, 可以方便的从`SecurityContextHolder`中获取用户信息, 如:
+
+  ```java
+  Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+  
+  if (principal instanceof UserDetails) {
+  String username = ((UserDetails)principal).getUsername();
+  } else {
+  String username = principal.toString();
+  }
+  ```
+  
+  
+
+
+
+
+
+
+
+
+
 # 其他
 
 - Rememver-me：`HttpSecurity`有对应函数设置，本质是使用了cookie实现的。参考[Spring Security Remember Me](<https://www.baeldung.com/spring-security-remember-me>)

@@ -321,25 +321,13 @@ spring mvc会在url模式后默认添加 .* 后缀匹配，因此模式/person�
 
 ![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
 
-- 注解对应的
-
-  请求参数
-
-  必须
-
-  存在
-
-  （请求参数为
-
-  空值
-
-  也算作存在，如“name=”）。可设置属性required=false，允许请求参数不存在。一些特殊情况如下：
+- 注解对应的**请求参数**必须**存在**（请求参数为**空值**也算作存在，如“name=”）。可设置属性required=false，允许请求参数不存在。一些特殊情况如下：
 
   - 对于Integer、Long等基本类型的包装类，请求参数为空时，方法参数为null
-  - 对于String，请求参数为空时，请求参数为空时，方法参数为""
+- 对于String，请求参数为空时，请求参数为空时，方法参数为""
   - 对于pojo，在required=true时，必须存在对象所有属性对应的请求参数，否则抛出异常；在required=false，对象属性对应请求参数可不存在。实际上，spring mvc会调用pojo的无参构造函数，通过setter方法设置属性。
-  - 对于基本类型，请求参数为空时，类型转化失败，抛出异常。
-
+- 对于基本类型，请求参数为空时，类型转化失败，抛出异常。
+  
 - 注解的value属性默认使用参数名
 
 - 简单类型，如基本类型及它的包装类、string、pojo类，可以不使用注解，但实际上还是通过该注解解析。见4.2.4小节。
@@ -804,8 +792,72 @@ headers.setContentDispositionFormData("attachment", URLEncoder.encode(name,"utf-
 headers.setCacheControl(CacheControl.maxAge(30, TimeUnit.DAYS));//设置缓存时间
 ```
 
-![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
+## 异常处理
 
+### 介绍（了解）
+
+在请求映射和控制器中抛出的异常会被`HandlerExceptionResolver` （接口）组成的链来处理。当异常不被处理，和处于错误响应状态时，servelt容器会将结果渲染到错误页面中。详情见：[Exceptions](<https://docs.spring.io/spring/docs/current/spring-framework-reference/web.html#mvc-exceptionhandlers>)
+
+`@Controller`和`@ControllerAdvice`类中，可以有一个`@ExceptionHandler` 异常处理方法。详情见：[Exceptions](<https://docs.spring.io/spring/docs/current/spring-framework-reference/web.html#mvc-ann-exceptionhandler>)
+
+> 这是`HandlerExceptionResolver`实现类`ExceptionHandlerExceptionResolver`提供的功能。
+
+### 状态码（重点）
+
+`HandlerExceptionResolver` 的实现类`ResponseStatusExceptionResolver`提供了通过异常设置返回状态码的功能。
+
+* `ResponseStatus`注解：注解到**异常类**或**控制器方法**上，返回响应时会设置为指定的状态码。
+
+  下面给出注解到方法的例子：
+
+  * 例子一
+
+      ```java
+      @PostMapping
+      @ResponseStatus(HttpStatus.CREATED)
+      public void add(@RequestBody Person person) {
+          // ...
+      }
+      ```
+
+      > 用户添加成功后，会返回状态码为201的响应
+      
+  * 例子二
+
+      ```java
+      @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+      public class AppException extends RuntimeException {
+          public AppException(String message) {
+              super(message);
+          }
+      
+          public AppException(String message, Throwable cause) {
+              super(message, cause);
+          }
+      }
+      ```
+
+      > 控制器中抛出该异常时, 状态码为500
+
+* `ResponseStatusException`：抛出该异常，直接设置状态码，如：
+
+  ```java
+  @GetMapping("/test4")
+  public String test4(@RequestParam(value = "isTrue",defaultValue = "false") boolean isTure)  {
+      if(isTure){
+          throw new ResponseStatusException(HttpStatus.NOT_FOUND, "没找到呀",new IllegalAccessException("不正常啊"));
+      }
+      return "ok";
+  }
+  ```
+
+  > 抛出异常时，状态码为404，异常的后两个参数会出现在响应消息体中。
+
+> 参考
+>
+> - [DispatacherServlet-Exceptions](https://docs.spring.io/spring/docs/current/spring-framework-reference/web.html#mvc-exceptionhandlers)
+> - [Annotated Controllers-Exceptions](https://docs.spring.io/spring/docs/current/spring-framework-reference/web.html#mvc-exceptionhandlers)
+> - [Error Handling for REST with Spring](https://www.baeldung.com/exception-handling-for-rest-with-spring)
 # [六、MVC配置](https://docs.spring.io/spring/docs/current/spring-framework-reference/web.html#mvc-config)
 
 ## [6.1、拦截器](https://docs.spring.io/spring/docs/current/spring-framework-reference/web.html#mvc-config-interceptors)

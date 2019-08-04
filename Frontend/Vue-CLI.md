@@ -229,7 +229,7 @@ css处理前：
         //配置代理
         proxy:{
           //拦截的url
-          '/api':{
+          '/api/':{
             //转发到目标服务器的url
             target:"http://localhost:8080/",
             //是否代理websockets,可选
@@ -237,13 +237,24 @@ css处理前：
             //是否修改Host头部，可选
             changeOrgin:true,
             //修改请求路径
-            pathRewrite:{'/api':''}
+            pathRewrite:{'/api/':''}
           }
         }
       }
   ```
 
   > 由于是服务器代理请求的，因此没有同源政策的限制。
+  
+  > **注意**
+  >
+  > URL最先匹配的代理规则会被使用.
+  >
+  > 如, 依顺序存在规则`/api`, `/api2`, 那么`/api2`规则永远不会被使用, 应该改成`/api/`, `/api2/`
+  
+  > 参考
+  >
+  > * [devServer.proxy](https://cli.vuejs.org/config/#devserver-proxy)
+  > * [context matching](https://github.com/chimurai/http-proxy-middleware#context-matching)
 
 ## 9.3 eslint
 
@@ -279,3 +290,8 @@ css处理前：
 	```bash
 	presets: [ [ "@vue/app", { useBuiltIns: "entry" } ] ]
 	```
+
+# 参考
+
+* [Vue Cli Guide](https://cli.vuejs.org/guide/#components-of-the-system)
+* [Vue Cli Config](https://cli.vuejs.org/config/)

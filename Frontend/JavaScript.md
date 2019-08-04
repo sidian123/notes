@@ -506,6 +506,19 @@ var a=function(){}
 
 >对象中的方法定义可以使用简写，见2.6.1小节
 
+### arrow function expression 
+
+> 在其他语言中, 被称作lambda expression
+
+它是上述函数表达式的替代品, 但写法更为的简洁, 并且不创建新的作用域, 因此该表达式中this仍指向当前函数, 如
+
+```javascript
+this.data="aaaa";
+setTimeout(()=>console.log(this.data),1000);//输出aaaa
+```
+
+> 参考: [Arrow function](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Functions/Arrow_functions)
+
 ## 2.8、对象实例化与继承
 JavaScript是基于原型（prototype）的语言，没有class语句的存在。*不过现在有了class语句了，但只是prototype的语法糖罢了，这里不介绍或以后介绍了。*
 
@@ -914,7 +927,7 @@ myAsyncFunction("localhost/api/get")
 new Promise(executor)
 ```
 
-当promise被创建时，executor函数会被立刻执行，executor函数将被传入`resolve`和`reject`方法。当executor中的异步操作结束后，需要调用`resolve`或`reject`方法表示成功或失败。一旦被调用，通过`then`方法附着在promise上的处理器(`then`的两个参数之一)会被调用。这两个函数(`resolve`和`reject`)执行时传入的参数会被处理器(同上)接收。
+当promise被创建时，executor函数会被立刻执行，executor函数将被传入`resolve`和`reject`方法。当executor中的异步操作结束后，需要调用`resolve`或`reject`方法设置解析promise成功或失败后的值。这两个方法一旦被调用，则通过`then`方法附着在promise上的处理器(`then`的两个参数之一)会被调用。这两个函数(`resolve`和`reject`)执行时传入的参数会被处理器(同上)接收。
 
 ### then
 
@@ -928,18 +941,29 @@ p.then((value) => {
 });
 ```
 
-参数：
+--------------
+
+**参数：**
 
 - `onFulfilled`：promise的executor执行resolve后执行该处理器。方法的参数为resolve执行时传入的参数。
 - `onRejected`；promise的executor执行reject后（或抛出异常）执行该处理器。方法的参数为reject执行时传入的参数（或异常）。
 
-返回值：
+----------------
+
+**返回值：**
 
 返回一个promise对象，因此可以**链式**使用`then`方法。但此时先搞懂promise代表什么值，当处理器：
 
+> 重申下, 这里的处理器指`then`的两个回调函数
+
 - 返回一个值时，promise表示该值
+
+  > 即处理器的返回值会被包裹(wrap)
+
 - 不返回值时，promise表示undefined
+
 - 抛出异常时，promise表示失败了（reject）, 值为`error`的值
+
 - 返回promise，该promise的最终结果，就是`then`返回的promise的最终结果。
 
 > 貌似一个失败了（reject）的promise不被then的`onRejected`处理器处理时~~（即onRejected不存在）~~，会继续传给下一个。
@@ -949,6 +973,112 @@ p.then((value) => {
 >- [Promise](<https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise>)
 >- [then](<https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise/then>)
 >- [catch](<https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise/catch>)
+
+## async/await
+
+### 起源
+
+当异步的`ajax`请求要同步执行时, 即异步请求结束后才执行下一语句, 一般会采取**嵌套回调**的方式. ES6后有了`promise`, 可以避免了嵌套回调的使用, 如**promise的链式写法**:
+
+```javascript
+Axios.get('/api2/')
+    .then(res=>{
+    console.log(res);
+    console.log("1")
+    setTimeout(null,1000);
+    return Axios.get("/api2/")
+})
+    .then(res=>{
+    console.log(res);
+    console.log("2");
+    setTimeout(null,1000);
+    return Axios.get("/api2/")
+})
+    .then(res=>{
+    console.log(res);
+    console.log("3");
+});
+```
+
+ES7出现了更好的方案:`async/await`, 它就是简化promise链写法的**语法糖**, 如:
+
+```javascript
+async clickBtn5(){
+    let res=await Axios.get('/api2/');
+    console.log(res);
+    console.log("1");
+
+    res=await Axios.get('/api2/');
+    console.log(res);
+    console.log("2");
+
+    res=await Axios.get("/api2/");
+    console.log(res);
+    console.log("2");
+}
+```
+
+### 语法
+
+#### async
+
+`async`必须放置在函数前, 此时该函数总是会返回一个`promise`, 返回的对象会被包裹(wrap)成`promise`对象, 也可以手动返回一个`promise`对象. 例子如下
+
+```javascript
+async function f() {
+  return 1;
+}
+
+f().then(alert); // 1
+```
+
+> 一般返回resolve类型的`promise`, 详细见下面的异常处理
+
+#### await
+
+`await`放置在`promise`之前, 使得执行被暂停, 直到`promise`的值被解析出来后恢复执行. 如
+
+```javascript
+// works only inside async functions
+let value = await promise;
+console.log(value)//成功获取值, 而非undefined
+```
+
+**注意, `await`必须存在于`async`方法中!**
+
+#### 异常处理
+
+上面的`await`的执行顺序为`promise`为`resolve`类型时的执行顺序, 那被解析为`reject`类型时怎么办? 这就是涉及到了**异常处理**.
+
+`reject`类型的`promise`值可以通过`try/catch`来捕获, 如
+
+```javascript
+async function f() {
+
+  try {
+    let response = await fetch('http://no-such-url');
+  } catch(err) {
+    alert(err); // TypeError: failed to fetch
+  }
+}
+
+f();
+```
+
+> 注意, `err`为`promise`解析出来的值, 可以是异常对象, 也可以是其他对象.
+
+ 还可以使用`promise`的`catch`方法处理, 因为`async`函数总是返回一个`promise`, 当函数内存在未处理的`reject`类型`promise`时, `async`函数返回的`promise`则为`reject`类型的. 例子如下:
+
+```javascript
+async function f() {
+  let response = await fetch('http://no-such-url');
+}
+
+// f() becomes a rejected promise
+f().catch(alert); // TypeError: failed to fetch // (*)
+```
+
+> 参考: [Async/await](https://javascript.info/async-await)
 
 # 三、浏览器相关
 ## 3.1、浏览器解析过程
