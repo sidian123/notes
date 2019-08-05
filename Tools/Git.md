@@ -583,6 +583,14 @@ $ git branch -vv
 git config --global core.quotepath false
 ```
 
+## SSL问题
+
+具体问题忘了, 但输入以下语句解决:
+
+```bash
+git config --global http.sslVerify false
+```
+
 
 
 # 参考
