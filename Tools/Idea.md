@@ -205,7 +205,7 @@ IDEA中构建的几个选项如下所示：
 *  `Alt+Insert`:generate getter and setter method.
 *  `Ctrl+W`:extend selection
 *  comment:`Ctrl+/` or `Ctrl+Shift+/` to comment while `Ctrl+Shift+/` to uncomment.
-*  `Ctrl+H`:see the hierarchy for a selected class.
+*  `Ctrl+H`: 查看类继承结构
 *  `Alt+F8`:evaluate the value of expression when debugging.
 ----------
 * `Ctrl+N`:quickly open class.first press the key and then typing the name of class.

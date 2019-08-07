@@ -218,7 +218,7 @@ git version2.x中常用的命令如下：
 
 * 忽略以`#`开始的注释和空行.
 * `!`取反, 即不忽略
-* 后面的规则可
+* 后面的规则可覆盖前面的, 即后面的优先级高
 
 例子如:
 
@@ -318,9 +318,13 @@ $ git commit --amend
 
 使用命令`git reset HEAD <file>...`
 
+全部移出`git reset HEAD .`
+
 ### 重置Modified文件
 
-注意, 是重置`Modified`状态的文件, 使用命令`git checkout -- <file>
+注意, 是重置`Modified`状态的文件, 使用命令`git checkout -- <file>`
+
+全部重置`git checkout -- .`
 
 ## 远程仓库
 
