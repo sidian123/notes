@@ -595,7 +595,33 @@ git config --global core.quotepath false
 git config --global http.sslVerify false
 ```
 
+## Http协议一直登陆
 
+可以考虑开启缓存, 暂时保存密码
+
+```bash
+$ git config --global credential.helper cache
+```
+
+默认保存15分钟, 可以设置长一点, 如保存一个月
+
+```bash
+$ git config --global credential.helper 'cache --timeout 2592000'
+```
+
+-------
+
+也可以选择长期保存, 即保存在本地文件中
+
+```bash
+$ git config --global credential.helper store
+```
+
+默认保存在 `~/.git-credentials`中, 可以设置保存在其他文件中
+
+```bash
+$ git config --global credential.helper 'store --file ~/.my-credentials'
+```
 
 # 参考
 
