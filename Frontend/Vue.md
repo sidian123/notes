@@ -90,8 +90,9 @@ vue指令以`v-`开始，用于渲染DOM或绑定数据，定义在元素或组�
     * `$el`：挂载在DOM中的html元素
 
 ## 3.3 生命周期
-![](https://imgconvert.csdnimg.cn/aHR0cHM6Ly92dWVqcy5vcmcvaW1hZ2VzL2xpZmVjeWNsZS5wbmc# =500x)
+![](.Vue/aHR0cHM6Ly92dWVqcy5vcmcvaW1hZ2VzL2xpZmVjeWNsZS5wbmc.png )
 vue允许在vue实例生命周期的某个阶段（如红色方框所示）上挂载用户自定义的函数，称为hook，如：
+
 ```javascript
 new Vue({
   data: {

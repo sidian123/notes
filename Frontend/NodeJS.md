@@ -96,6 +96,8 @@ sudo apt-get install -y nodejs
 ```
 安装时，它会自己全局安装npm包，并且该包含有可执行脚本，因此可以使用npm命令
 
+> 在deepin中, 命令安装不成功, 而是通过下载压缩包并配置环境变量安装成功的...
+
 [311]:(https://github.com/nodejs/LTS#lts-schedule1)
 [312]:https://nodejs.org/en/download/
 [313]:https://nodejs.org/en/download/package-manager/
