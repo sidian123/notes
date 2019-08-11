@@ -39,12 +39,12 @@ p {
 }
 ```
 
-## 2.1、[应用css样式表][1]
+## [应用css样式表][1]
 一共三种方法可以将样式表应用到html文档中。
 
 [1]:https://developer.mozilla.org/en-US/docs/Learn/CSS/Introduction_to_CSS/How_CSS_works#How_to_apply_your_CSS_to_your_HTML
 
-### 2.1.1、外部样式
+### 外部样式
 `head`元素中添加`<link rel="stylesheet" href="style.css">`即可。
 ```html
 <!DOCTYPE html>
@@ -61,7 +61,7 @@ p {
 </html>
 ```
 
-### 2.1.2、内部样式
+### 内部样式
 将css样式放入`<style>`元素，而`<style>`元素位于`<head>`元素中。
 ```html
 <!DOCTYPE html>
@@ -87,7 +87,7 @@ p {
 </html>
 ```
 
-### 2.1.3、内联样式
+### 内联样式
 每个元素都有`style`属性，定义只作用该元素的样式。
 ```html
 <!DOCTYPE html>
@@ -103,26 +103,26 @@ p {
 </html>
 ```
 
-## 2.2、css语法
+## css语法
 css尽管是声明式语言，语法简单，易懂，但是了解它的组成还是很重要的，即使使用时大家都不会提到接下来的概念。。
 
 所有html元素都可以通过样式**属性**赋值该改变它的样式。属性和它的值形成**声明**（declarations），多条声明形成**声明块**（declaration blocks），声明块和选择器形成完整的**css规则**（CSS rules）。css规则是**css语句**的一种，还有其他语句，比如@**开始的语句**`@media....`，**注释**等。最后一点，很多属性都存在**速写**（shorthand），如`background,font,padding,border and margin`，即一个属性可以设置很多属性的值。
 
 **注意**，如果样式写错了，浏览器会自动忽略它。
 
-### 2.2.1、css declarations
+### css declarations
 声明即为属性的键值对，冒号隔开。
 ![在这里插入图片描述](.CSS/20181121141706578.png)
 
-### 2.2.2、css declaration blocks
+### css declaration blocks
 多个声明组成的声明块，分号隔开。最后一个声明可不写分号，但是最好写上。即使块为空，语法也是正确的。
 ![在这里插入图片描述](.CSS/20181121141946893.png)
 
-### 2.2.3、css rules
+### css rules
 声明块和选择器组成了css规则。选择器很复杂，后面会介绍。选择器逗号分隔表示多个选择器共用一个样式表。
 ![在这里插入图片描述](.CSS/2018112114224940.png)
 
-### 2.2.4、at-rules
+### at-rules
 另一种css语句，用于提供元数据、条件、描述信息的，这里只提一提。语句从`@`开始，后面跟着标识符（规定该语句为何种css语句），后面为对应的语法块。每种at语句都有自己的语法。下面给出一些例子：
 1. `@charset` and `@import` (metadata)
 2. `@media` or `@document` (conditional information, also called nested statements, see below.)@media or @document (conditional information, also called nested statements, see below.)
@@ -141,10 +141,10 @@ css尽管是声明式语言，语法简单，易懂，但是了解它的组成�
 }
 ```
 
-### 2.2.5、注释
+### 注释
 注释以`/*`开始，`*/`结束，正如上面的例子所示。
 
-### 2.2.6、速写（shorthand）
+### 速写（shorthand）
 一些属性可以让多个属性值写在一行，这些属性称为**shorthand properties**，如`font`, `background`, `padding`, `border`, and `margin`。至于那些属性是速写属性，需要查阅的文档，其实也有一定规律，可以猜出是否是速写属性，自己找规律、不介绍。
 
 但是有些速写属性的属性值有一定的规律，这里提一下。下面举个例子，很多属性都适用，且有一定规律，自己挖掘去。
@@ -167,7 +167,7 @@ padding:15px 14px 13px 14px;
 
 **注意**，有些属性可以拥有多个值，但是它不是速写属性。
 
-## 2.3、选择器（selector）
+## 选择器（selector）
 css中选择器用于定位将要作用元素的位置，它的作用强大，但内容多、复杂。多个选择器同时选择到同一个时，会涉及到哪个样式将作用的问题，后面会提及到。
 
 1. **Simple selectors**: Match one or more elements based on `element type`, `class`, or `id`.
@@ -177,7 +177,7 @@ css中选择器用于定位将要作用元素的位置，它的作用强大，�
 5. **Combinators**: These are not exactly selectors themselves, but `ways of combining two or more selectors` in useful ways for very specific selections. So for example, you could select only paragraphs that are direct descendants of divs, or paragraphs that come directly after headings.**就是将多个选择器组合在一起选择元素**。
 6. **Multiple selectors**: Again, **these are not separate selectors**; the idea is that you can put multiple selectors on the same CSS rule, separated by commas, to apply a single set of declarations to all the elements selected by those selectors.**就是逗号隔开，多个选择器共用一个样式表。**
 
-### 2.3.1、简单选择器
+### 简单选择器
 简单选择器就是直接通过元素名称、class或id来选择元素。由于id在文档中只能存在一个，因此id只能选择一个元素；多个元素可以同时使用一个class，因此可以选择多个元素，但是要注意的是，一个元素也可以拥有多个class，至于样式冲突时，估计是后面class的样式覆盖前面class的样式吧。
 
 下面给出不详细的例子：
@@ -196,7 +196,7 @@ p {
   text-transform: uppercase;
 }
 ```
-#### 2.3.1.1、通用选择器
+#### 通用选择器
 `*`表示通用选择器，选择网页内所有元素。常用于设置元素盒子模型的高宽的计算方法：
 ```css
 * {
@@ -204,12 +204,12 @@ p {
 }
 ```
 
-### 2.3.2、[属性选择器][2]
+### [属性选择器][2]
 根据属性或属性值选择特定元素，语法：[]中给定属性名和可选的属性值。分为两种：**匹配确切属性值的选择器**和**匹配包含特定属性值的选择器**。
 
 [2]:https://developer.mozilla.org/en-US/docs/Learn/CSS/Introduction_to_CSS/Attribute_selectors
 
-#### 2.3.2.1、Presence and value attribute selectors
+#### Presence and value attribute selectors
 匹配确切属性值：
 1. `[attr]` : This selector will select all elements with the attribute attr, `whatever its value`.
 2. `[attr=val]` : This selector will select all elements with the attribute attr, `but only if its value is val`.
@@ -219,19 +219,19 @@ p {
 
 [3]:https://www.w3schools.com/tags/att_global_data.asp
 
-#### 2.3.2.2、Substring value attribute selectors
+#### Substring value attribute selectors
 不完全匹配，包含即可：
 1. `[attr^=val]` : This selector will select all elements with the attribute attr for which the value `starts with val`.
 2. `[attr$=val]` : This selector will select all elements with the attribute attr for which the value `ends with val`.
 3. `[attr*=val]` : This selector will select all elements with the attribute attr for which the value `contains the substring val`. (A substring is simply part of a string, e.g. "cat" is a substring in the string "caterpillar".) 
 4. `[attr|=val]`：与第一种类似，选择所有属性值以`val`或`val-`（没看错，这里有个破折号）开始的元素。主要用于匹配`lang="en"`或`lang="en-US"`之类的属性，不常用。
 
-### 2.3.3、[Pseudo-classes and pseudo-elements][4]
+### [Pseudo-classes and pseudo-elements][4]
 伪类用于匹配处于某一状态的元素；伪元素匹配元素的部分内容。
 
 [4]:https://developer.mozilla.org/en-US/docs/Learn/CSS/Introduction_to_CSS/Pseudo-classes_and_pseudo-elements
 
-#### 2.3.3.1、伪类
+#### 伪类
 `:`冒号开始，跟着一关键字，表示匹配元素的某种状态，比如鼠标是否悬停在元素上、元素是否被选中、元素是否激活、元素是否为父元素的第一个元素等等。总之内容之多，不详讲，只给出参考链接：[Pseudo-classes][5]
 
 下面给出一个例子：
@@ -263,7 +263,7 @@ a:focus {
 
 [5]:https://developer.mozilla.org/en-US/docs/Learn/CSS/Introduction_to_CSS/Pseudo-classes_and_pseudo-elements#Pseudo-classes
 
-#### 2.3.3.2、[伪元素][6]
+#### [伪元素][6]
 `::`两个冒号开始，用于选择元素的某一部分。
 ![在这里插入图片描述](.CSS/20181123184114565.png)
 
@@ -286,7 +286,7 @@ a:focus {
 
 [6]:https://developer.mozilla.org/en-US/docs/Learn/CSS/Introduction_to_CSS/Pseudo-classes_and_pseudo-elements#Pseudo-elements
 
-### 2.3.4、[Combinators and groups of selectors][7]
+### [Combinators and groups of selectors][7]
 多个选择器利用它们之间的联系，组合在一起选择元素，即combinators；多个选择器也可以共用一个样式表，即groups of selectors。
 ![在这里插入图片描述](.CSS/20181121154300815.png)
 
@@ -295,7 +295,7 @@ a:focus {
 
 [7]:https://developer.mozilla.org/en-US/docs/Learn/CSS/Introduction_to_CSS/Combinators_and_multiple_selectors#Combinators_and_groups_of_selectors
 
-## 2.4、叠层和继承
+## 叠层和继承
 当多个选择器匹配到同一个元素，且某个样式冲突时，哪个样式会生效？这个问题通过叫做叠层（Cascade）的机制解决。这也是为什么css被叫做叠层样式表的原因。当然，继承也是一个很重要的内容，顾名思义，继承就是子元素从父元素上继承样式，但只有部分属性是默认从父元素上继承的。
 
 这里先讨论叠层。这里要强调的是，**只有多个属性同时作用一个元素时才会考虑叠层的问题**！！！即使一个css规则（rule）的选择器优先级高，如果它们的属性不冲突，那么都会起作用的。只有冲突了的属性才会考虑到叠层的问题。
@@ -307,7 +307,7 @@ a:focus {
 
 通过这三条规则来解决冲突，**如果前面的已经解决了，那么就不会考虑后面的方法了**。
 
-### 2.4.1、Importance
+### Importance
 如果样式冲突后，如果某个样式被`!important`声明，那么该样式优先级高，最终生效。如果冲突的样式都有`!important`声明，那么会查看下一个因素：**Specificity**
 
 **浏览器自身也有一个默认样式**，用户也有自己的样式，通过`!important`可以提高样式重要性。总的样式重要性顺序为（重要性依次递增）：
@@ -336,7 +336,7 @@ p {
 }
 ```
 
-### 2.4.2、Specificity
+### Specificity
 如果Important不能区分后才会考虑specificity。specificity是用来衡量选择器重要性的工具，每个选择器都可以计算出一个数值，大的生效。
 
 计算方法：
@@ -353,12 +353,12 @@ p {
 注意：
 > Universal selector (*), combinators (+, >, ~, ' ') and negation pseudo-class (:not) have no effect on specificity.
 
-### 2.4.3、Source order
+### Source order
 如果前面两个方法得出的重要性都一样，那么最后只看它的先后关系了，后面的样式会被使用。
 
 **注意**，不要认为style元素内的样式一定比外部样式要近！！如果link元素位于style元素之后，那么同等重要性下，link元素对应的外部样式将生效~~。但是就近而言，style属性的样式一定是最近的！
 
-### 2.4.4、[继承][8]
+### [继承][8]
 继承控制当一个属性没有指定一个值的时候会发生什么。属性分为可继承属性（inherited property）和不可继承属性（Non-inherited property）。如`font-family`和`color`是可继承属性，`margin`、`padding`、`border`和`background-image`是不可继承属性。
 
 可继承属性在没有被指定值时会从父元素中继承值。而html作为根元素，没有父元素，只能获得浏览器赋予该属性的**初始值**了。可能会发现在`<a>`元素中即使color是可继承属性，也不能从父元素中获取值，这是因为浏览器一般会有个**默认样式**!!此时是有指定值的。
@@ -379,15 +379,15 @@ p {
 
 额外参考：[Inheritance](https://developer.mozilla.org/en-US/docs/Web/CSS/inheritance)
 
-## 2.5、值和单位
+## 值和单位
 每个属性最终都会被赋予值，但这些值可以被分为很多类。比如一些属性只接受预定义的一些值；或一些数值，这些数值有的有单位，有的没有单位；或颜色；或函数，没看错，函数也能作为属性的值；或百分比。大部分属性可以接受**很多类型**的值。在MDN上，每种类型都有对应的名称，如数值类型`<length>`，颜色`<color>`，链接`<url>`等，所有的请参考：[css basic data type][10]。下面看看MDN上的分类（部分）：
 ![在这里插入图片描述](.CSS/20181122111026180.png)
 
 [10]:https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_Types
 
-### 2.5.1、数值
+### 数值
 很多属性都需要用数值作为属性值，有的数值可以有单位，有的数值可以没有单位。
-#### 2.5.1.1、有单位数值
+#### 有单位数值
 这些单位可分为**绝对单位**和**相对单位**。使用绝对单位，不管什么设备、什么设置都是相同的大小；使用相对单位，那么这些单位都是相对于字体大小或视口大小的。
 
 **绝对单位**：
@@ -410,7 +410,7 @@ p {
 
 *知道了为什么设置浏览器字体大小，网页字体也会改变了吧？如果使用了绝对单位不能改变，那只能缩放网页了...*
 
-#### 2.5.1.2、无单位数值
+#### 无单位数值
 有些属性接收数值，但可以没有单位。
 
 比如`margin`和`padding`中，0可以不使用单位。如：
@@ -425,14 +425,14 @@ p {
 
 额外参考：[css units](https://www.w3schools.com/cssref/css_units.asp)
 
-### 2.5.2、百分数
+### 百分数
 百分数可以作为**width**、**height**的值，占用父元素content的百分比长宽。但是要注意的是，父元素没有明确规定height，那么子元素height使用百分比是没有用的。为什么？因为父元素的height是尽可能的包含子元素。
 
 **font-size**也可以使用百分数，不过是相对于父元素font-size的百分比，类似于**em**。
 
 当然，还有其他属性可以使用百分数，比如margin等等。
 
-### 2.5.3、颜色
+### 颜色
 背景色、前景色，都需要指定颜色。颜色的表示有很多种。
 
 1. **关键字**
@@ -469,10 +469,10 @@ p {
 	
 		opacity: 0.5;
 
-### 2.5.4、函数
+### 函数
 函数也能作为属性值，正如前面提到的rgb(),hsl()等等。这里只提一提。
 
-## 2.6、盒子模型
+## 盒子模型
 盒子模型是css布局的基础，每个元素都表示成一个盒子，有外边距（margin）、边框（border）、内边距（padding）和内容（context）。盒子模型有很多种，默认inline，但是默认样式（user agent styles）一般会为特定元素设置盒子模型，比如block。盒子模型类型通过`display`属性指定。
 
 盒子模型如下，通过width和height可以指定context长宽，但是还有更好的选择就是min-width,max-width,min-height,max-height；padding属性设置内边距；margin属性设置外边距；border属性设置边框。
@@ -485,7 +485,7 @@ p {
 很多情况下想通过width、height指定box真实长度（即context+left padding+right padding+left border+right border），而不是context长宽，则需要box-sizing设置一下盒子模型长宽计算方式`box-sizing:border-box`
 ![在这里插入图片描述](.CSS/20181122135340225.png)
 
-### 2.6.1 外边距坍塌
+### 外边距坍塌
 如果两个block类型的盒子模型**上下**紧挨，那么两个元素border之间的距离等于两者之间margin最大的距离，这种现象称为margin collapsing。**在float布局和position绝对布局中，不会发生坍塌**。
 
 参考[Mastering margin collapsing][9]，发现父元素和第一个、最后一个子元素也会发生坍塌。如果父元素没有border、padding等等（其他的我不认识），那么父元素的margin-top和子元素的margin-top发生坍塌或者父元素的margin-bottom和子元素的margin-bottom发生坍塌。如果子元素是inline呢？由于这种类型的盒子模型本身就决定了inline不会早会坍塌，后面详讲。
@@ -496,7 +496,7 @@ p {
 
 [9]:https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_Box_Model/Mastering_margin_collapsing
 
-### 2.6.2、盒子模型类型
+### 盒子模型类型
 通过`display`属性可以指定盒子模型的类型。最常用的是：**block、inline和inline-block**。而上面讲的所有内容都对block元素生效。所有元素默认为inline，但是默认样式通常会重置一些元素为block类型。其他类型的盒子模型和布局有关，后面解析或以后补充。现在来看看这三个的区别：
 1. **inline**：inline表现的就和文字一样，和其他的文字并排，适当位置自动换行，不会维持一个盒子的样子。它的margin和padding只能推开周围其他的inline元素或text，不会影响周围block元素的位置。一些元素比如`<img>`，即使是inline元素，但是表现的和inline-block一样....
 	
@@ -511,7 +511,7 @@ p {
 
 具体请参考4.1小结。
 
-### 2.6.3、其他相关内容
+### 其他相关内容
 这里谈及一些和盒子模型相关的一些内容：溢出、背景和outline。
 
 1. **overflow**
@@ -534,7 +534,7 @@ p {
 
 知道了语法规则后，剩下的就是熟悉一下某一类样式的各个属性。知道了属性的含义，即使不会用，查一查手册，利用已知的语法规则，立马就会了！so easy。
 
-## 3.1、[css值语法规则][13]
+## [css值语法规则][13]
 css的值的语法规则有点复杂，和正则表达式类似。值文法由三种组件组成：**types**、**combinators**和**multipliers**。每个值都有其类型（types）；多个值通过组合器（combinators）可以组合在一起；默认情况下值最多只能出现一次，multipliers可以指定值出现的次数。下面讲述中也可能把值称为实体。
 
 实体的类型分很多种：**关键字**（keywords）、**字面值**（literals）和**数据类型**（data types）。
@@ -555,7 +555,7 @@ css的值的语法规则有点复杂，和正则表达式类似。值文法由�
 [MDN css reference][11]
 [value definition syntax][13]
 
-### 3.1.1、例子一`font `
+### 例子一`font `
 [font][12]是一个速写速写属性，一个属性指定多个属性的值。其语法形式如下：
 ![在这里插入图片描述](.CSS/20181123113436918.png)
 
@@ -565,7 +565,7 @@ css的值的语法规则有点复杂，和正则表达式类似。值文法由�
 
 那值的具体含义呢？如果有些值没有指定，那它会是多少呢？这个得看它的问题说明了，都会给出默认值的。
 
-### 3.1.2、例子二`background-position`
+### 例子二`background-position`
 [background-position][34]用来设置背景图片的初始位置。初始位置由x和y轴确定。首先看它的文法规则：
 ![在这里插入图片描述](.CSS/20181123214537860.png)
 
@@ -591,7 +591,7 @@ so easy！！但是关于的具体含义，可查阅参考链接，后面也会�
 
 [34]:https://developer.mozilla.org/en-US/docs/Web/CSS/background-position
 
-### 3.1.3、例子三`background-color`
+### 例子三`background-color`
 [background-color][14]的文法规则要复杂一点点：
 ![在这里插入图片描述](.CSS/2018112313302337.png)
 
@@ -615,12 +615,12 @@ so easy！！但是关于的具体含义，可查阅参考链接，后面也会�
 [13]:https://developer.mozilla.org/en-US/docs/Web/CSS/Value_definition_syntax
 [14]:https://developer.mozilla.org/en-US/docs/Web/CSS/background-color#rgb()
 
-## 3.2、style text
+## style text
 和文字相关的属性有很多，但大致分为两类：和字体有关的样式（**font styles**），和文字布局有关的样式（**text layout styles**）。大部分样式其实是针对英文的，对于咋们中文来说很多用不上，，，因此只要知道部分，其他的粗略了解即可。
 
 *小知识，可以将文字当做inline元素来理解...*
 
-### 3.2.1、font
+### font
 [**color**][15]
 设置元素前景色的，也就是设置文字颜色。可继承属性。
 
@@ -690,7 +690,7 @@ over~~ over\~\~ 字体内容还是提多的。。。
 [22]:https://developer.mozilla.org/en-US/docs/Web/CSS/text-decoration
 [23]:https://developer.mozilla.org/en-US/docs/Web/CSS/text-shadow
 
-### 3.2.2、text layout
+### text layout
 前面讲的是和字体相关的设置，现在谈及字体之间的布局。
 
 [**text-align**][24]
@@ -702,7 +702,7 @@ over~~ over\~\~ 字体内容还是提多的。。。
 **letter-spacing**和**word-spacing**
 设置字母间距、单词间距。针对英文的，不提也罢。。
 
-### 3.2.3、其他
+### 其他
 上面只是列举了一部分，还有很多很多和字体、字体布局相关的属性没有列出来。如果不是搞编辑器相关工作的可以忽略。
 
 不过要提一点，文字如果一行填充不下，会自动换行的，当时一串很长的**单词**填充不下是直接溢出的。。。想了解相关内容参考：[Line breaking 换行][26]和[css之word-break及word-wrap(overflow-wrap)][27]
@@ -718,7 +718,7 @@ over~~ over\~\~ 字体内容还是提多的。。。
 [28]:https://developer.mozilla.org/en-US/docs/Learn/CSS/Styling_text/Fundamentals#Other_properties_worth_looking_at
 [29]:https://developer.mozilla.org/en-US/docs/Web/CSS/font
 
-## 3.3、style lists
+## style lists
 列表和`<ol>`,`<ul>`,`<li>`这几个html元素有关（还有dd、dt、dl，不谈及），其实`ol`和`ul`之间没啥子区别，就是默认样式设置不一样而已。而`li`的`diplay`为`list-item`，不同的盒子模型，因此有不一样的表现和特定的css属性。
 * list-style-type：设置列表前面的marker ，圆圈、数字啥滴
 * list-style-position：设置marker 在元素内还是元素外
@@ -740,7 +740,7 @@ ul,ol{
 
 [30]:https://developer.mozilla.org/en-US/docs/Web/CSS/list-style
 
-## 3.4、style links
+## style links
 链接的默认样式使用到了[color][31]、[cursor][32]和[text-decoration][33]三个属性，分别是text颜色、元素之上鼠标的图案、文本修饰。如果自定义链接样式都会考虑清除这三个样式的。
 
 如果自定义链接，必须按照下面的顺序写，用逗号将选择器归为一组也行（根据语义可以分为三组）：
@@ -780,7 +780,7 @@ a:active {
 [32]:https://developer.mozilla.org/en-US/docs/Web/CSS/cursor
 [33]:https://developer.mozilla.org/en-US/docs/Web/CSS/outline
 
-## 3.5、style background
+## style background
 每个元素都有前景（text）和背景，背景默认位于context、padding和border之下。背景可以是颜色（`background-color`）或图片（`background-image`）。允许存在多个**背景图片**，因此存在一个**层级关系**，高层背景覆盖底层背景。如果加上`border-image`，那么层次关系为：
 >注意，最先定义的背景图片层次要高
 >border-image > background-image（先定义）> ...  > background-image（最后定义）> background-color
@@ -909,7 +909,7 @@ where
 [42]:https://developer.mozilla.org/en-US/docs/Web/CSS/background-origin
 [43]:https://developer.mozilla.org/en-US/docs/Web/CSS/background
 
-## 3.6、style borders
+## style borders
 可以设置border的宽度（width）、样式（style）和颜色（color），可以通过速写属性[border][44]设置；还可以为border设置圆角（rounded corners），通过[border-radius][45]设置；通过[border-image][46]，我感觉暂时用不到，相关内容先空着。
 
 [**border**][44]
@@ -934,7 +934,7 @@ where
 [46]:https://developer.mozilla.org/en-US/docs/Web/CSS/border-image
 [47]:https://developer.mozilla.org/en-US/docs/Learn/CSS/Styling_boxes/Borders#Longhand_options
 
-## 3.7、style tables
+## style tables
 每个和table相关的元素几乎都有特定的`display`值，说明它的内部结合和熟知的block元素不太一样。比如下面的表格，表格单元和表格之间有间隙：
 ![在这里插入图片描述](.CSS/20181124162635442.png)
 
@@ -969,7 +969,7 @@ th {
 
 [48]:https://developer.mozilla.org/en-US/docs/Web/CSS/border-collapse
 
-## 3.8、[advanced box effects][49]
+## [advanced box effects][49]
 对于设计盒子样式还有其他的技巧，比如盒子阴影、blend modes和filters。但是除了阴影，其他的貌似用不着，所以也不深究了。
 
 [**box-shadow**][50]
@@ -988,14 +988,14 @@ where
 [50]:https://developer.mozilla.org/en-US/docs/Web/CSS/box-shadow
 [51]:https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_Box_Model/Box-shadow_generator
 
-## 3.9 其他
-### 3.9.1 object-fit
+## 其他
+### object-fit
 设置replaced元素（如img、video）的内容大小如何调整以满足容器。
 >参考：[object-fit](https://developer.mozilla.org/en-US/docs/Web/CSS/object-fit)
 # 四、布局
 上面介绍了和文字、盒子模型相关的样式属性，现在介绍一下布局。在flex、grid开始之前，都一直使用float、table来布局网页，但是float属性、table表格本意不是用来布局的，而且不太方便。随着flex、grid布局的出现，float和table都回归到了它原来的位置上。position也能够用来布局，但更多的是用来微调元素。
 
-## 4.1、display
+## display
 几乎所有的布局都能够和display属性扯上关系，因为[display][88]定义了元素的展示类型，其由两部分组成：外部的展示类型和内部的展示类型。即定义了元素的**外在表现**和**内在表现**。
 
 举个例子，就**外在表现**而言，比如block和inline元素，block元素会前后换行，width尽可能的大；而inline元素不换行，width、height都尽可能的包含content，不能设置width和height，margin和padding不被尊重（即不影响block元素布局）。这就是它们外在表现的不同，总的相关值有：
@@ -1037,7 +1037,7 @@ display: inline-grid;
 
 [88]:https://developer.mozilla.org/en-US/docs/Web/CSS/display
 
-## 4.2、flexbox layout
+## flexbox layout
 flexbox（flexible box module）被设计成**一维**的布局。通过`display:flex`或`display:inline-flex`设置**flex容器**（flex container），它的**直接子元素**成为**flex items**。成为flexbox后，容器和flex items此时有了一些和该布局相关的属性可以设置，并且已经被赋予了初始值。
 
 比如，flex布局的方向通过`flex-direction`来设置，默认水平方向（row）。通过`flex-basis`指定item基础大小（base size），布局在水平方向时，`flex-basis`则设置元素的width，否则height。
@@ -1055,7 +1055,7 @@ item通过`order`设置它自己的排列顺序。item通过`align-self`覆盖al
 ----------------------
 此时可以看出，大部分属性的功能都和**剩余空间**有关：有剩余空间，咋办？填充给items（相对于设置item大小）还是用来对齐元素？小部分和容器方向、item顺序有关。
 
-### 4.2.1、默认行为及分类
+### 默认行为及分类
 上面属性可分为：和容器有关的属性，和flex item有关的属性。如下并给出默认值：
 **容器**
 ```markup
@@ -1077,7 +1077,7 @@ align-self 单个item覆盖align-items设置 （auto，即继承容器align-item
 ```
 从上面的默认值可以看出，flex容器默认水平方向；不环绕，可能会导致溢出；items左对齐；垂直方向items拉伸填充，最终所有items和最高的item高度一致（即容器高度）；order相等则按照item定义位置排序；items不分配剩余空间；溢出时（即负剩余空间）等比例收缩；item大小auto，即宽为元素的width属性，没有width设置，则为元素的内在大小有关（和box-sizing有关）。
 
-### 4.2.2、基础概念
+### 基础概念
 在理解属性概念时需要知道一些flexbox相关的基础概念。
 ![在这里插入图片描述](.CSS/20181125173239781.png)
 
@@ -1101,7 +1101,7 @@ min-content，就是最小的内容宽度，所有可以换行的地方都软换
 ![在这里插入图片描述](.CSS/20181125193458490.png)
 这个和`flex-grow`和`flex-shrink`有关。
 
-### 4.2.3、属性详解
+### 属性详解
 [**flex-direction**][52],[**flex-wrap**][53]和[**flex-flow**][54]
 `flex-direction`指定main axis方向，水平或者垂直。row-reverse中，main start和main end位置互换，column-reverse类似。默认row，文法如下：
 	
@@ -1180,7 +1180,7 @@ flexbox这一章就此结束了，可以参考这篇教程，主要图多：<htt
 [63]:https://developer.mozilla.org/en-US/docs/Web/CSS/order
 [64]:https://developer.mozilla.org/en-US/docs/Web/CSS/align-self
 
-## 4.3、grid layout
+## grid layout
 grid layout是一个**二维**的布局，就像表格一样，有行和列。简单的说，**grid**是一组水平线和垂直线的集合，分割的单元称为**cell**，行和列分别称为**row tracks**和**column tracks**。tracks之间的空白称为**cutters**或者**gap**，它位于**线**（line）所在的位置，可以将它看做比较粗的线（line）。grid中也有两个方向：**block or column axis**和**inline or row axis**。grid布局中的元素为**grid items**，它可以占据多个cell，这几个cell连同范围内的gap被称为**grid area**。
 
 被`display:grid`和`display:inline-grid`声明的元素作为**grid容器**，它的直接子元素会被当做**grid items**。
@@ -1201,7 +1201,7 @@ grid layout是一个**二维**的布局，就像表格一样，有行和列。�
 
 最后，还可以对齐下tracks，即gap空间的分派使不同tracks对齐。比如水平对齐`justify-content`和垂直对齐`align-content`，都默认start，即位于左上角。它会导致grid-gap失效。注意tracks对齐的前提是对应方向的track长度固定，有足够剩余空间。
 
-### 4.3.1、部分属性
+### 部分属性
 [**grid-template-columns**][65] ,[**grid-template-rows**][66]
 文法复杂了点，就不给出了。这两个属性分别用来确定列、行的个数和大小。同时可以给出线名。
 
@@ -1231,7 +1231,7 @@ grid中可能会出现grid中item超过cell个数的情况，此时会产生新�
 [**order**][85]
 在auto replacement中，通过order可以改变自动放置的顺序。貌似用处不大。
 
-### 4.3.2、line-base placement
+### line-base placement
 上面设置好grid 的track（行列后），就可以通过[grid-column][70]和[grid-row][71]来指定item位置的范围了（在4条边线之间的范围）。线从1开始数起，最后一条线可以用负数表示，比如-1表示该方向上最后一条线。注意负数不能使用在implicit grid中，因为最后一条线不确定。
 
 例子：
@@ -1251,7 +1251,7 @@ grid-column: 1 / span 2;
 /*分别为grid-row-start,grid-column-start,grid-row-end,grid-column-end  。和margin类似*/
 grid-area: 1 / 3 / 3 / 4;
 ```
-### 4.3.3、grid template areas
+### grid template areas
 通过[grd-template-areas][76]在容器中为多个cell命名，如：
 ```css
 .wrapper {
@@ -1275,10 +1275,10 @@ grid-area: 1 / 3 / 3 / 4;
     grid-area: hd;
 }
 ```
-### 4.3.4、named grid lines
+### named grid lines
 上面说过grid-template-columns和grid-template-rows在定义tracks（行列）时可以同时定义线名（line name），然后在grid-row中使用。感觉用处不大，直接给出参考链接：[Layout using namd grid lines][78]
 
-### 4.3.5、对齐
+### 对齐
 [align-items][79]垂直对齐item，justify-items[80]水平对齐item。默认都为stretch，但是对于有intrinsic size的元素来说表现起来像start，比如说img。部分可选值：
 normal
 start
@@ -1327,7 +1327,7 @@ baseline
 [84]:https://developer.mozilla.org/en-US/docs/Web/CSS/justify-content
 [85]:https://developer.mozilla.org/en-US/docs/Web/CSS/order
 
-## 4.4、float
+## float
 在flex和grid布局没有出现时，float常用于创建**多列**的布局。但是float本意就是为了让图片悬浮、被文字环绕，所以不太适合用来布局。因此目前随着flex和grid的出现，float布局已成为历史。。当然`display:inline`也是可以用来做多列布局的，比float更不常用。
 
 被声明float的元素，无论原本是inline、inline-block还是block元素，都会被转化为block元素，但是表现的和inline-block元素，即前后不换行、width和height尽可能的包含context。
@@ -1394,7 +1394,7 @@ css
 
 注意，float元素之间不会发生margin坍塌，position元素也是一样，因为脱离了文档流。但position:relative元素没有脱离文档流，因为不会坍塌。
 
-## 4.5、position
+## position
 position覆盖了文档流的默认行为，多用来微调布局，常用于ui控件布局或相当于视口的绝对布局。position五种取值如下：
 1. static：所有元素都默认该值，表示元素放入文档流中正常位置。
 2. relative：元素原占据的空间保留，相对于元素原位置偏移。通过`top`,`bottom`,`left`,`right`属性指定偏移大小，下同。比如`top:30px;left:30px;`，元素在上边距离原位置30px，左边距离原位置30px。
@@ -1408,7 +1408,7 @@ position覆盖了文档流的默认行为，多用来微调布局，常用于ui�
 
 [86]:https://developer.mozilla.org/en-US/docs/Web/CSS/z-index
 
-## 4.6、multiple-column layout
+## multiple-column layout
 多列布局就是类似新闻报纸一样的布局，元素先在一列上展示内容，到达列低时从另一列开始。通过`column-count`或`column-width`指定，column-count给定列值，那么宽度自适应；column-width给定列宽度，那么列数自适应。
 
 由于样式不能单独作用某一列，所以这种布局用处不大。这里给出参考资料：[multiple-column layout][87]
@@ -1418,7 +1418,7 @@ position覆盖了文档流的默认行为，多用来微调布局，常用于ui�
 # 五、其他
 这里会添加一些其他方面的内容，包括目前支持不太好的一些样式，使用时要特别注意。
 
-## 5.1、media queries
+## media queries
 media queries可以让我们根据设备类型（比如打印机或屏幕）或特定特征（比如屏幕分辨率或视口宽度）来应用不同的样式。
 
 media queries有自己的语法规则，可以通过这三种方式来使用：
@@ -1479,7 +1479,7 @@ where
 [语法](https://developer.mozilla.org/en-US/docs/Web/CSS/Media_Queries/Using_media_queries)
 [文法](https://developer.mozilla.org/en-US/docs/Web/CSS/@media)
 
-## 5.2、transitions（过渡）
+## transitions（过渡）
 当**属性改变**时，transitions（过渡）提供了一种控制属性过渡时动画的方法。与其属性瞬间改变，还不如改变持续一段时间。
 
 但是并不是所有的属性都能够产生动画。**transition貌似也没有被完全支持，必要时需要添加前缀。**
@@ -1497,7 +1497,7 @@ where
 参考：
 [transitions](https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_Transitions)
 
-## 5.3、transforms（变换）
+## transforms（变换）
 css transforms可以让你对元素进行translate（移动）,rotate（旋转），scale（拉伸），skew（倾斜）等变换。css同时支持2d和3d变换。
 
 主要涉及到两个属性：
@@ -1524,7 +1524,7 @@ where
 * [transforms](https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_Transforms/Using_CSS_transforms)
 * [Intro to CSS 3D transform](https://3dtransforms.desandro.com/)：深度介绍了3d变换的使用，给出了几个例子
 
-## 5.4、animations
+## animations
 css能够让元素从一个样式**过渡**到另一个样式上，即为动画（animations），animation由两部分组成：描述animation的属性和keyframes（关键帧）。keyframes指定动画开始结束帧和可选的中间帧的样式。
 
 -----
@@ -1565,7 +1565,7 @@ where
 [animations](https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_Animations)
 [w3schools animations](https://www.w3schools.com/css/css3_animations.asp)
 
-## 5.5 @import
+## @import
 `@import`用于引入其他样式表的样式，该规则必须位于其他规则之前，除了`@charset`。部分语法如下：
 ```css
 @import 'custom.css';
@@ -1581,7 +1581,9 @@ where
 
 > 注意, 这些元素上的计数器还是同一个, 只是可取得的值不一样罢了
 
-多个计数器可以同名, 只是内层计数器会隐藏外层计数器罢了, 但是可以`counters()`函数获取所有嵌套的同名计数器的值.
+当创建定时器时, 发现附着的元素之间存在层级关系(父子或祖先)时, 内层的元素会自动创建一个同名定时器. 此时`counter()`只能获取最近的计数器的值, 而`counters()`可以获取所有嵌套的同名计数器的值.
+
+> 除此之外, 不能够创建多个同名计数器.
 
 ------------
 
@@ -1601,7 +1603,10 @@ where
 
 > 可以设置获取的计数器值的字符集, 暂且不会
 
-> 例子参考:[Using CSS counters](https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_Lists_and_Counters/Using_CSS_counters)
+> 参考
+>
+> * [Using CSS counters](https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_Lists_and_Counters/Using_CSS_counters): 官方文档
+> * [typora-toc-number](https://github.com/sidian123/typora-toc-number): 我为typora写的一个自动生成标题标号的css样式.
 
 # 参考
 [MDN教程](https://developer.mozilla.org/en-US/docs/Learn)
