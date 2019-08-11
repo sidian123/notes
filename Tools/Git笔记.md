@@ -8,19 +8,19 @@ Version control is a system that records changes to a file or set of files over 
 
   - 缺点：不适合多人协作
 
-  ![Local version control diagram](.Git_assets/local.png)
+  ![Local version control diagram](.Git笔记/local.png)
 
 - 集中式版本控制系统（CVCS）：通过一个服务器来保存所有版本文件，客户端取出最新文件或提交更新。
 
   - 缺点：服务器损坏时，会对所有人造成影响
 
-  ![Centralized version control diagram](.Git_assets/centralized.png)
+  ![Centralized version control diagram](.Git笔记/centralized.png)
 
 - 分布式版本控制系统（DVCS）：每个客户端拥有仓库的镜像和历史。因此服务死机时，客户端可拷贝回去。
 
   > 冗余换可靠性
 
-  ![Distributed version control diagram](.Git_assets/distributed.png)
+  ![Distributed version control diagram](.Git笔记/distributed.png)
 
 ## Git历史
 
@@ -36,11 +36,11 @@ Version control is a system that records changes to a file or set of files over 
 
 - 其他VCS：每个版本只记录被改变的部分
 
-  ![Storing data as changes to a base version of each file.](.Git_assets/deltas.png)
+  ![Storing data as changes to a base version of each file.](.Git笔记/deltas.png)
 
 - Git：对你的项目拍摄快照，存入快照的引用。如果拍摄快照时，一些文件未改变，仅存上个版本对应文件的链接。
 
-  ![Git stores data as snapshots of the project over time.](.Git_assets/snapshots.png)
+  ![Git stores data as snapshots of the project over time.](.Git笔记/snapshots.png)
 
   > 也即每个版本,Git都有改变后文件的完整快照(拷贝), 这样还是通过冗余换可靠性
   >
@@ -66,7 +66,7 @@ Version control is a system that records changes to a file or set of files over 
 >
 > 被标注的, 却被删除, 也算一种修改(`modified`), 但在`git add`命令中会被区分对待. 
 
-![The lifecycle of the status of your files.](.Git_assets/lifecycle.png)
+![The lifecycle of the status of your files.](.Git笔记/lifecycle.png)
 
 > 图中没有`committed`状态, 因为它与`Unmodified`是**不同视角**看待的**同一状态**.
 
@@ -80,7 +80,7 @@ Version control is a system that records changes to a file or set of files over 
 
   > git仓库与暂存区都位于`.git/`目录下
 
-  ![Working tree, staging area, and Git directory.](.Git_assets/areas.png)
+  ![Working tree, staging area, and Git directory.](.Git笔记/areas.png)
 
 ## 安装
 
@@ -187,7 +187,7 @@ git config --global alias.log2 'log --all --decorate --oneline --graph'
 
 git version2.x中常用的命令如下：
 
-![enter image description here](.Git_assets/KwOLu.jpg)
+![enter image description here](.Git笔记/KwOLu.jpg)
 
 > 参考：[git add](https://stackoverflow.com/a/26039014/10248407)
 
@@ -487,19 +487,19 @@ git tag [-a] [-m <msg>] <tagnmae> [<commit>]
 
 如下所示, 三个修改了的文件, 一个目录的提交:
 
-![A commit and its tree.](.Git_assets/commit-and-tree.png)
+![A commit and its tree.](.Git笔记/commit-and-tree.png)
 
 > 这里的commit对象忽略了上一个版本的commit指针
 
 当提交多次后
 
-![Commits and their parents.](.Git_assets/commits-and-parents.png)
+![Commits and their parents.](.Git笔记/commits-and-parents.png)
 
 > 这里的snapshot表示项目文件目录的整体快照
 
 而**分支**仅仅只是指向commit对象的指针, **标签Tag**也是指向commit对象的指针, **HEAD**表示当前开发的版本, 通常指向分支. 当HEAD指向标签和commit对象时, 提交会别忽略, 这也是标签和分支的区别之一.
 
-![A branch and its commit history.](.Git_assets/branch-and-history.png)
+![A branch and its commit history.](.Git笔记/branch-and-history.png)
 
 当提交时, HEAD指针和对应的分区都会指向新的版本(commit).
 
@@ -520,21 +520,21 @@ git tag [-a] [-m <msg>] <tagnmae> [<commit>]
 
 如下图所示, HEAD指向master分支, 要合并hotfix分支, 执行命令`git merge hotfix`
 
-![Hotfix branch based on `master`.](.Git_assets/basic-branching-4.png)
+![Hotfix branch based on `master`.](.Git笔记/basic-branching-4.png)
 
 因为master分支是hotfix的祖先分支, 合并只需要简单的移动master指针到hotfix即可, 属于`fast-forword`方案.
 
-![`master` is fast-forwarded to `hotfix`.](.Git_assets/basic-branching-5.png)
+![`master` is fast-forwarded to `hotfix`.](.Git笔记/basic-branching-5.png)
 
 ------
 
 复杂一点的情况, master合并iss53分支, master与iss53有一个共同祖先版本, 属于`three-way merge`, 因为要靠三个版本做参考来合并.
 
-![Three snapshots used in a typical merge.](.Git_assets/basic-merging-1.png)
+![Three snapshots used in a typical merge.](.Git笔记/basic-merging-1.png)
 
 该方案存在两个过程: 自动创建新的快照并提交, 如
 
-![A merge commit.](.Git_assets/basic-merging-2-1561905635565.png)
+![A merge commit.](.Git笔记/basic-merging-2-1561905635565.png)
 
 但是有个问题, 如果master和iss53分支都改动了相同位置的代码, git处理不了, 只能交给用户自己处理. **因此仅创建了快照, 交由用户解决冲突并提交**. 通过`git status`可以知道哪个文件冲突了, 并且git做了标志.
 
@@ -546,7 +546,7 @@ git tag [-a] [-m <msg>] <tagnmae> [<commit>]
 
 上面讲到, Git仓库commit对象记录着一个版本的快照, 而分支仅仅是指向commit对象的指针. 从远程仓库中下拉所有数据后(fetch), 所有版本信息都是以commit对象存在, 如果本地仓库已存在部分commit对象, 则不会下拉该数据. 为了区分远程分支, 远程分支名会加上仓库前缀, 如`origin/master`, 如下图所示:
 
-![1562134720900](.Git_assets/1562134720900.png)
+![1562134720900](.Git笔记/1562134720900.png)
 
 > 可以看到, 远程仓库的commit和本地的仓库的commit是不做区分的.
 

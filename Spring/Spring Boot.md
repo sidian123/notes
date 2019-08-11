@@ -10,7 +10,7 @@
 
 将产生的目录结构中的`.mvn`,`HELP.md`,`mvnw`,`mvnw.cmd`等文件或目录删除。
 
-## 2.1 pom.xml
+## pom.xml
 
 spring boot应用可以直接打包成jar，如有starter-web依赖，还会嵌入tomcat容器，可直接在命令行上启动web该程序，提供web服务。在pom.xml文件中，我们几乎不必设置版本号，由spring boot管理。等等之类的功能，可以在pom.xml文件中得到解释，默认提供的内容如下所示：
 
@@ -29,7 +29,7 @@ spring boot应用可以直接打包成jar，如有starter-web依赖，还会嵌�
   - 内置依赖解析器，自动设置依赖版本号与spring boot依赖一致。可以自行覆盖
   - 使用mvn package打包时，spring boot会执行repackge的过程（一些开发需要的jar会被排除）但**repackage**之前生成的jar仍会被提供。
 
-## 2.2 自动配置
+## 自动配置
 
 spring boot会根据classpath中jar或你已配置的Bean，然后自动配置和生成相关的Bean到spring容器中。具体配置什么Bean，spring boot已经默认设置了，基本上你不必手动配置。如果你已经配置了Bean，spring boot则不会配置该bean，让你通过一点点努力而得到更多的控制权。
 
@@ -37,7 +37,7 @@ spring boot会根据classpath中jar或你已配置的Bean，然后自动配置�
 
 如果一些自动配置的类不是自己想要的，可在注解上指定`exclude`属性。
 
-## 2.3 运行入口
+## 运行入口
 
 静态方法`SpringApplication.run`通过一个配置类，会创建一个应用**容器**，这是spring boot程序的入口。
 
@@ -59,7 +59,7 @@ public class SpringBootHelloworldApplication {
 }
 ```
 
-## 2.4 目录结构
+## 目录结构
 
 目录结构和平常使用的一样，可分层或分模块来组织代码：
 
@@ -81,7 +81,7 @@ public class SpringBootHelloworldApplication {
 - spring boot入口类一定要放在包下，否则会导致扫描所有jar包。而是放在项目的root package下。
 - 想要引入其他配置文件，无论xml、java代码配置，使用`@Import`就行了，spring ioc的内容。
 
-## 2.5 测试
+## 测试
 
 默认已经提供了test依赖（使用Junit），和一个测试类：
 
@@ -105,7 +105,7 @@ public class SpringBootHelloworldApplicationTests {
 
 # 三 深入
 
-## 3.1 devtools
+## devtools
 
 spring boot提供了devtools，为开发带来一点方便。需要加入依赖：
 
@@ -138,7 +138,7 @@ spring boot提供了devtools，为开发带来一点方便。需要加入依赖�
     > 如果还不爽，可考虑[JRebel](https://zeroturnaround.com/software/jrebel/)，它会重载（reload）的类。至于LiveReload或JVM hot swap，支持不够好也不好用。
 
 >个人使用起来，感觉和JVM的热更新没啥区别，修改方法名、参数啥的照样要重新运行程序
-### 3.1.1 与idea intellij
+### 与idea intellij
 idea对devtools提供了支持，当存在`spring-boot-devtools`模块时，可以使用它的`update`功能。如下所示：
 >实际上，经测试，devtools存不存在，`update`功能都能使用。
 >
@@ -148,13 +148,13 @@ idea对devtools提供了支持，当存在`spring-boot-devtools`模块时，可�
 >参考：
 >* [spring boot idea](https://www.jetbrains.com/help/idea/spring-boot.html)
 >* [Spring and Spring Boot in IntelliJ IDEA 2018.1](https://blog.jetbrains.com/idea/2018/04/spring-and-spring-boot-in-intellij-idea-2018-1/)
-## 3.2 其他
+## 其他
 
 - JVM热更新：spring boot程序（被打包成jar）只是一个普通的java程序，因此可以使用Jvm热更新功能。但有一定限制，完整的解决方案得用[JRebel](https://zeroturnaround.com/software/jrebel/)
 - 尽管IDE中运行的结果与mvn package不同，但IDE也执行了maven的部分生命周期吧？如compile
 - `SpringApplication`类是启动spring应用程序的一个方便的入口。它会启动一个应用容器（ApplicationContext），应用容器有很多种，产生哪种取决于classpath下的jar包。
 
-## 3.3 spring boot配置
+## spring boot配置
 
 spring boot整合了spring框架和三方库后，提供了自动配置的功能，它的默认配置通常是我们需要的。spring boot也整合了他们的配置，允许我们使用spring boot的配置文件来配置他们。
 
@@ -188,7 +188,7 @@ spring boot整合了spring框架和三方库后，提供了自动配置的功能
 
 - [通用配置](<https://docs.spring.io/spring-boot/docs/current/reference/html/common-application-properties.html>)：这使用spring boot依赖或配置三方库时需要的大部分配置属性。也能存在其他的属性配置，这取决于引入的依赖是否从spring boot环境中取出值来。
 
-### 3.3.1 YAML与properties
+### YAML与properties
 
 书写配置属性的两种方式，`@Value`也能获取yaml文件的属性。貌似yaml属性值前需要一个空格，文件后缀yml。
 
@@ -298,7 +298,7 @@ spring boot对[Java Util Logging](https://docs.oracle.com/javase/8/docs/api//jav
 
 > 补充：spring boot对Logback的支持度和耦合度高得多！！！不爽
 
-## 4.1 使用log4j2
+## 使用log4j2
 
 添加jar包
 
@@ -321,7 +321,7 @@ public class Hello{
 
 至于配置文件呢？见下面。
 
-## 4.2 配置
+## 配置
 
 ### 4.2.1默认配置
 
@@ -332,7 +332,7 @@ public class Hello{
 - 输出到console。
 - 等等
 
-### 4.2.2 通用配置
+### 通用配置
 
 spring boot也提供了常用的应用属性配置，并且这些属性是日记系统独立的：
 
@@ -364,7 +364,7 @@ spring boot也提供了常用的应用属性配置，并且这些属性是日记
 
 - 文件相关的属性：不好意思。。仅支持Logback。。不写了
 
-### 4.2.3 自定义配置
+### 自定义配置
 
 文件相关的属性，仅支持Logback，但是我们可以通过自定义日记系统自己的配置文件来支持这些属性。
 
@@ -391,7 +391,7 @@ spring boot也提供了常用的应用属性配置，并且这些属性是日记
 - `RestController`：`@ResponseBody`与`@Controller`的结合，声明为控制器且使用对象作为返回值（默认使用Jackson转化为json数据）。
 - `@RequestMapping`：将方法映射到某个http请求。可使用它的变种，如`@GetMapping`,`@PostMapping`等等。
 
-## 5.1 自动配置
+## 自动配置
 
 - Inclusion of `ContentNegotiatingViewResolver` and `BeanNameViewResolver` beans.
 - Support for serving static resources, including support for WebJars 
@@ -402,7 +402,7 @@ spring boot也提供了常用的应用属性配置，并且这些属性是日记
 - Custom `Favicon` support 
 - Automatic use of a `ConfigurableWebBindingInitializer` bean 
 
-## 5.2 HttpMessageConverters
+## HttpMessageConverters
 
 `HttpMessageConverter` 用于转化HTTP请求或响应。默认对象会被转化为JSON或XML（如果存在Jackson xml），至于什么时候转化为什么类型，见[spring mvc-Content Types](https://blog.csdn.net/jdbdh/article/details/83512464#6.2%20Content%20Types)。字符编码默认使用`UTF-8`
 
@@ -424,7 +424,7 @@ public class MyConfiguration {
 
 这应该是添加新的converter吧。。
 
-## 5.3 JSON Serializers and Deserializers
+## JSON Serializers and Deserializers
 
 对象序列化或解序列化时，使用的是Jackson的serializers或Deserializers，如果对象本身或对象的一个字段很复杂时，需要自定义serializer或deserializer，并在Jackson中注册。
 
@@ -435,7 +435,7 @@ public class MyConfiguration {
 > - [Custom JSON Serializers and Deserializers](<https://docs.spring.io/spring-boot/docs/2.1.4.RELEASE/reference/htmlsingle/#boot-features-json-components>)
 > - [Right way to write JSON deserializer in Spring or extend it](https://stackoverflow.com/questions/11376304/right-way-to-write-json-deserializer-in-spring-or-extend-it)
 
-## 5.4 静态内容
+## 静态内容
 
 看不懂。。。。
 
@@ -444,12 +444,12 @@ public class MyConfiguration {
 - 只有静态内容位置的根目录才能使用欢迎页面。
 - 当`DispatcherServlet`未能处理http请求时，会交给tomcat容器的默认servlet处理
 
-## 5.5 Path Matching and Content Negotiation
+## Path Matching and Content Negotiation
 
 - 默认禁止后缀匹配
 - 主要通过请求的`Accept`字段来返回相应MIME类型的响应。
 
-## 5.6 CORS支持
+## CORS支持
 
 通过[`@CrossOrigin`](https://docs.spring.io/spring/docs/5.1.6.RELEASE/javadoc-api/org/springframework/web/bind/annotation/CrossOrigin.html) 可以对方法或类进行局部配置，而通过注册`WebMvcConfigurer` 可以进行全局配置，如：
 
@@ -477,7 +477,7 @@ public WebMvcConfigurer corsConfigurer() {
 
 # 六 mybatis
 
-## 6.1 使用
+## 使用
 
 maven中加入依赖：
 
@@ -523,7 +523,7 @@ public interface UserDao {
 >
 > Settings - Editor - Inspections - Spring - Spring Core - Code - Autowiring for Bean Class - disable
 
-## 6.2 配置
+## 配置
 
 mybatis与spring boot整合后，也可以在spring boot的配置文件中配置mybatis。部分属性如下：
 
@@ -554,7 +554,7 @@ mybatis注册mapper接口时，也会检测同包下是否存在对应xml文件�
 
 # 七 其他
 
-## 7.1 JSON
+## JSON
 
 spring boot支持三种JSON映射库的集成：
 
@@ -564,7 +564,7 @@ spring boot支持三种JSON映射库的集成：
 
 `spring-boot-starter-json`提供Jackson，会自动生成`ObjectMapper` Bean。`spring-boot-starter-web`中，默认引入了该包。
 
-## 7.2 嵌入servlet容器支持
+## 嵌入servlet容器支持
 
 - 支持嵌入式tomcat、Jetty和Undertow。
 - 网络配置：

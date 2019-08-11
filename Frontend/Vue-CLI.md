@@ -40,14 +40,14 @@ sudo npm install -g @vue/cli
 
 # 四 基础
 
-## 4.1 快速原型设计
+## 快速原型设计
 
 ```bash
 # 为了支持快速原型设计
 sudo npm install -g @vue/cli-service-global
 ```
 
-### 4.1.1 vue serve
+### vue serve
 
 只需一个`.vue`或`.js`文件，`vue serve`直接运行文件到开发模式下，使用与`vue create`创建的项目一样的配置。
 
@@ -72,7 +72,7 @@ vue serve MyComponent.vue
 
 如果需要，还可提供`index.html`,`package.json`、安装和使用局部依赖、配合vue配置文件等等。
 
-### 4.1.2 vue build
+### vue build
 
 ```
 Usage: build [options] [entry]
@@ -90,7 +90,7 @@ Options:
 
 构建目标文件，生产可用于生产的打包文件，也可构建成library或组件。
 
-## 4.2 创建项目
+## 创建项目
 
 运行命令：
 
@@ -143,7 +143,7 @@ vue cli项目中，会同时安装可执行文件`vue-cli-service`，它是用�
   对资源文件的模块请求转化为根绝对路径时，添加前[publicPath](<https://cli.vuejs.org/config/#publicpath>)，默认`/`，可根据项目修改，或者设置为`''`或`./`，即转化为相对路径。
 
 # 八 css
-## 8.1 Vue Loader
+## Vue Loader
 - Vue Loader用于加载`.vue`文件。
 
 - `<template>`中的URL会被转化为webpack模块请求。使用规则与第七章一致，因此`dog.png`文件的URL为`./dog.png`
@@ -164,7 +164,7 @@ vue cli项目中，会同时安装可执行文件`vue-cli-service`，它是用�
 
 
 
-## 8.2 Scoped css
+## Scoped css
 当`style`元素加上`scoped`属性时，组件的css只会作用到该组件的单个实例上。它是通过**后css处理器**实现的。
 
 css处理前：
@@ -208,13 +208,13 @@ css处理前：
 * 配置文件`vue.config.js`
 * 参考：[Configuration Reference](<https://cli.vuejs.org/config/>)
 
-## 9.1 pages
+## pages
 
 构建vue成多页面模式，默认单页面。文档介绍很详细：[pages](<https://cli.vuejs.org/config/#pages>)，思路就是指定入口文件和html模板。貌似vue会为你抽离通用chuncks？？被访问过的页面会被缓存起来。
 
 
 
-## 9.2 devServer
+## devServer
 
 配置自带的devServer服务器
 
@@ -256,7 +256,7 @@ css处理前：
   > * [devServer.proxy](https://cli.vuejs.org/config/#devserver-proxy)
   > * [context matching](https://github.com/chimurai/http-proxy-middleware#context-matching)
 
-## 9.3 eslint
+## eslint
 
 `vue.config.js`中添加选项`lintOnSave: true`，可以去掉一些无意义的错误。
 
@@ -266,17 +266,17 @@ css处理前：
 
 # 十 其他
 
-## 10.1 Vue Devtools
+## Vue Devtools
 
 浏览器插件，可以查看vue组件的属性，仅在开发模式下，该插件才会生效。
 
-## 10.2 Hot Reload
+## Hot Reload
 
 当你编辑页面时，Hot Reload不是简单的重载页面，而是置换被编辑的组件（无需重载），甚至能保存被置换组件的状态。这样当你更改样式、模板时不必担心组件状态。
 
 未完待续，参考：[hot Reload](<https://vue-loader.vuejs.org/guide/hot-reload.html>)
 
-## 10.3 入口
+## 入口
 
 貌似默认main.js
 

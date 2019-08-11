@@ -55,7 +55,7 @@ I found the text foo starting at index 0 and ending at index 3.
 
 ![The string literal foo, with numbered cells and index values.](.Regular Expression/cells.gif)
 
-## 3.1 元字符
+## 元字符
 
 正则表达式有一些特殊的字符串有特殊的意义，不会匹配自己。比如`.`（小数点）会匹配任何字符串（默认不包含分解符），但是不会匹配只匹配`.`（小数点）。
 
@@ -166,7 +166,7 @@ I found the text "aaaa" starting at index 4 and ending at index 8.
 
 之前提到，量词可以修饰字面值和字符类，也提到过量词也可以修饰捕获组。捕获组是一种可以将多个字符当作一个单元的方法，这就是为什么量词可以修饰多个字符（也就是一个捕获组）的原因。捕获组使用`()`围住，比如`(dog)`，它可以匹配`dog`，和没有小括号差不多，但是捕获组还有其他独特的作用！！比如反向引用和提取被该组匹配到的字符串。比如表达式`(.)og`匹配`dog`，通过`Matcher`的方法可以提取到`d`。
 
-## 7.1 编号
+## 编号
 
 正则表达式可以有多个捕获组，每个捕获组有其自己的编号，而编号的规则是该组的左括号是从左往右数是第几个，那他的编号就是几。比如`((A)(B(C)))`有四个组：
 
@@ -179,7 +179,7 @@ I found the text "aaaa" starting at index 4 and ending at index 8.
 
 编号有啥用？通过`Matcher`的`Group（int group）`和编号可以获得上一次匹配中被该组捕获的字符串啦。
 
-## 7.2 反向引用
+## 反向引用
 
 反向引用就是说可以通过反向引用复用之前的组的表达式。比如`(\d\d)\1`，等同于`(\d\d)(\d\d)`，但是还是有点区别，就是反向引用不会增加组。下面测试一下：
 
@@ -188,6 +188,8 @@ Enter your regex: (\d\d)\1
 Enter input string to search: 1212
 I found the text "1212" starting at index 0 and ending at index 4.
 ```
+
+> VSCode中使用`$num`来引用.
 
 #  八 边界匹配（Boundary Matchers）
 
@@ -232,7 +234,7 @@ I found the text "dogblahblah" starting at index 0 and ending at index 11.
 
 `Pattern`代表编译过的正则表达式，可以通过`compile`方法产生实例，也可以直接使用静态方法`matches`对整个字符串匹配。创建`Pattern`可以设置一些标志，控制正则表达式的匹配行为。下面介绍两种方法：
 
-## 9.1 创建Pattern时设置标志
+## 创建Pattern时设置标志
 
 在通过静态方法`compile`创建`Pattern`时传入`flag`标志。下面介绍一些标志，其他的可以自己查看文档。
 
@@ -248,7 +250,7 @@ I found the text "dogblahblah" starting at index 0 and ending at index 11.
 pattern = Pattern.compile("[az]$", Pattern.MULTILINE | Pattern.UNIX_LINES);
 ```
 
-## 9.2 嵌入到正则表达式中
+## 嵌入到正则表达式中
 
 也可以嵌入到正则表达式中，下面是一张对应表：
 
@@ -272,7 +274,7 @@ I found the text "FoO" starting at index 6 and ending at index 9.
 I found the text "foO" starting at index 9 and ending at index 12.
 ```
 
-## 9.3 stackoverflow中的一个例子
+## stackoverflow中的一个例子
 
 了解到了就可以来看一下stackoverflow中的一个具体的例子：
 
@@ -288,7 +290,7 @@ auser3 home3b
 
 使用`^.*&`只会匹配到整个字符串，因此`^`和`$`不会匹配到行开始或行结束。但是在多行模式下却可以，因此表达式改为：`(?m)^.*$`
 
-## 9.4 Pattern的一些函数
+## Pattern的一些函数
 
 * `matches(String,CharSequence)`
   `Pattern`的静态方法，直接传入表达式和字符串进行匹配，如果表达式匹配**整个**字符串，则成功。
@@ -296,7 +298,7 @@ auser3 home3b
 * `split(String)`
   将表达式匹配到的子字符串作为分隔符，将输入字符分割出来。
 
-## 9.5 String中类似的方法
+## String中类似的方法
 
 ```java
 public boolean matches(String regex)
@@ -312,7 +314,7 @@ public String replace(CharSequence target,CharSequence replacement)
 
 之前说了，`Matcher`代表引擎，可以提供更多的方法，比如可以找到匹配到的子串的开始、结束位置和字符串`(group)`；通过`reset()`重置标志，重新开始匹配，也可以通过`reset(CharSequence)`直接更换输入字符串！内容太多，下面直接从官网抄写。。
 
-## 10.1 Index Methods
+## Index Methods
 
 Index methods provide useful index values that show precisely where the match was found in the input string:
 
@@ -321,7 +323,7 @@ Index methods provide useful index values that show precisely where the match wa
 * `public int end()`: Returns the offset after the last character matched.
 * `public int end(int group)`: Returns the offset after the last character of the subsequence captured by the given group during the previous match operation.
 
-## 10.2 Study Methods
+## Study Methods
 
 Study methods review the input string and return a boolean indicating whether or not the pattern is found.
 
@@ -330,7 +332,7 @@ Study methods review the input string and return a boolean indicating whether or
 * `public boolean find(int start)`: Resets this matcher and then attempts to find the next subsequence of the input sequence that matches the pattern, starting at the specified index.
 * `public boolean matches()`: Attempts to match the entire region against the pattern.
 
-## 10.3 Replacement Methods
+## Replacement Methods
 
 Replacement methods are useful methods for replacing text in an input string.
 
@@ -340,7 +342,7 @@ Replacement methods are useful methods for replacing text in an input string.
 * `public String replaceFirst(String replacement)`: Replaces the first subsequence of the input sequence that matches the pattern with the given replacement string.
 * `public static String quoteReplacement(String s)`: Returns a literal replacement String for the specified String. This method produces a String that will work as a literal replacement s in the appendReplacement method of the Matcher class. The String produced will match the sequence of characters in s treated as a literal sequence. Slashes ('\') and dollar signs ('$') will be given no special meaning.
 
-## 10.4 String中类似的方法
+## String中类似的方法
 
 * `public String replaceFirst(String regex, String replacement)`: Replaces the first substring of this string that matches the given regular expression with the given replacement. An invocation of this method of the form str.replaceFirst(regex, repl) yields exactly the same result as the expression Pattern.compile(regex).matcher(str).replaceFirst(repl)
 * `public String replaceAll(String regex, String replacement)`: Replaces each substring of this string that matches the given regular expression with the given replacement. An invocation of this method of the form str.replaceAll(regex, repl) yields exactly the same result as the expression Pattern.compile(regex).matcher(str).replaceAll(repl)
@@ -349,7 +351,7 @@ Replacement methods are useful methods for replacing text in an input string.
 
 在以后的学习过程中，如果遇到有意思的正则表达式，我便会记录于此。
 
-## 11.1 匹配空行
+## 匹配空行
 
 匹配空行，必须先理解行匹配的`^`和`$`，可以参考第八小节。现在需要匹配空行，比如如下图示中的圆圈的空行：
 

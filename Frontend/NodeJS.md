@@ -12,10 +12,10 @@ Node.js是一个开源的、跨平台的JavaScript运行时环境，使JavaScrip
 一个**package**（包）可含有一个或多个module，但只暴露某个模块（通过`package.json`中的`main`属性）。`package.json`记录该包的所有属性，如包依赖、作者等。
 
 >把package看成是module也行，毕竟只暴露一个文件的导出，在被引入时表现得像本地模块一样，
-## 2.1 module
+## module
 模块通过`module.exports`导出对象（`exports`），通过`require`获得对象(`exports`)，下面直接看模块的实现原理。
 
-### 2.1.1 module wrapper
+### module wrapper
 假设一个模块：
 
 ```javascript
@@ -44,7 +44,7 @@ wrapper函数的参数`module`不是全局的，每个模块都有一个`module`
 
 剩下的`__filename`表示当前模块文件路径；`__dirname`表示模块文件所处的目录路径；`require`是用来导入其他模块的函数。
 
-### 2.1.2 require
+### require
 使用方式如：
 ```javascript
 const fs = require('fs');
@@ -64,10 +64,10 @@ fs.readFile('./file.txt', 'utf-8', (err, data) => {
 
 >把package看成是module也行，毕竟只暴露一个文件的导出，在被引入时表现得像本地模块一样
 
-### 2.1.3 exports
+### exports
 没啥好讲的，2.1.1小节讲完了。
 
-## 2.2 package
+## package
 一个package包含多个module，使用package.json记录该package关键的信息。
 
 package.json一些字段如下：
@@ -85,7 +85,7 @@ package安装有全局安装(`npm install --global`)和局部安装（默认）�
 >之所以可以直接执行Node.js脚本，是因为在linux环境中，解析型脚本在首部添加了`#!/usr/bin/env Interpreter`，它会在执行时使用指定解析器。
 
 # 三 使用
-## 3.1 安装Node.js
+## 安装Node.js
 可从[Long Term Support (LTS) version of Node][311]中查看Node目前长期支持版本（LTS），最好选择`v10.15.3`版本的。在[download page][312]中下载Node.js；对于Linux，使用包管理器安装，参考[package manager][313]
 
 我使用的是WSL的Ubuntu，安装命令如下：
@@ -102,7 +102,7 @@ sudo apt-get install -y nodejs
 [312]:https://nodejs.org/en/download/
 [313]:https://nodejs.org/en/download/package-manager/
 
-## 3.2 npm init && node
+## npm init && node
 尽管`node`命令可以直接执行js脚本（如`node index.js`），但最好还是使用`npm init`初始化产生`package.json`，它记录包依赖关系，可以在发布时无需附带其他package，使用时再安装。
 ```bash
 npm init # 之后一直回车，使用默认选项
@@ -112,7 +112,7 @@ npm init -y
 >使用过程中，对`node_module`文件夹或`package.json`的修改都会产生`package-lock.json`文件，也记录这依赖关系，但它是为了保证重新安装依赖时版本树的一致性而存在的，因为`package.json`使用了语义版本规则。重新安装包（`npm install`）时，会安装`package-lock.json`指定的版本安装。晕=_=
 >当`package-lock.json`不存在时，重新安装依赖包，会根据语义版本规则安装：即主版本号一致，尽量安装最高的版本。
 
-## 3.3 npm install
+## npm install
 安装package，分全局和局部安装，如：
 ```bash
 # 全局
@@ -131,7 +131,7 @@ $ npm install underscore@1.9.0
 npm安装package分全局或局部安装，全局安装的package如果有可执行文件（如npm），它会被添加到环境变量中，因此可以直接执行（如`npm install underscore`）；局部安装且有可执行文件（位于`node_modules/.bin/`目录），此时可用npx来执行，它会自动寻找，如`npx cowsay "Hello"`
 
 >安装的package的版本受`package-lock.json`影响
-## 3.4 npm list
+## npm list
 实现已安装依赖形参的关系树
 ```bash
 #全局
@@ -142,23 +142,23 @@ $ npm list -g --depth=0
 $ npm list
 ```
 
-## 3.5 npm uninstall
+## npm uninstall
 卸载package
 ```bash
 $ npm uninstall underscore
 ```
-## 3.6 npm update
+## npm update
 更新包，它会同时修改package.json和package-lock.json文件，单独修改package.json是无效的。
 ```bash
 $ npm update underscore
 ```
 安装package后，再次npm install 该package，貌似也能升级，达到同样的效果。
-## 3.7 npm search
+## npm search
 在npm仓库中搜索package
 ```bash
 $ npm search mkdir
 ```
-## 3.8 npm run
+## npm run
 运行package.json中scripts字段的脚本（shell脚本），如
 ```json
 {
@@ -184,17 +184,17 @@ $ npm run
 
 >参考：[https://www.tutorialdocs.com/article/npm-scripts-tutorial.html](https://www.tutorialdocs.com/article/npm-scripts-tutorial.html)
 
-## 3.9 npm link
+## npm link
 一般情况下，全局package不能直接引入，需要npm link创建符号链接。或者直接指定绝对路径。
 
 略
 
-## 3.10 npx
+## npx
 执行局部package的可执行文件（位于`./node_modules/.bin/`目录下），如
 ```bash
 npx cowsay
 ```
-## 3.11 npm
+## npm
 上面的命令都是通过npm执行的，这里介绍的是它的帮助命令，如：
 ```bash
 # 查看npm的使用

@@ -30,7 +30,7 @@ DispatcherServlet在初始化时，会扫出描控制器，从控制器上的注
 
 要配置spring mvc的环境，首先需要配置所需的jar包，关于jar包会在另一篇博客中谈到。spring mvc的关键类为DispatcherServlet，它是一个Servlet，需要在web.xml的配置文件中配置（尽管从servlet3.0开始，可以使用注解配置web.xml的内容，但是这里不谈及）。一般spring mvc应用会存在上下文层次结构（[Context Hierarchy](https://docs.spring.io/spring/docs/current/spring-framework-reference/web.html#mvc-servlet-context-hierarchy)），即存在一个顶层容器和servlet容器。顶层容器一般含有服务层服务、数据访问层对象等，servlet容器含有控制层控制器、视图解析器、处理器映射器等。也就是说存在spring ioc的容器和spring mvc的容器，不过两个容器都是WebApplicationContext的实例。当然可以只存在spring mvc的容器，只需要不配置spring ioc。
 
-## 3.1、web.xml配置
+## web.xml配置
 
 和spring ioc配置相关的类为**ContextLoaderListener**，是一个servlet的上下文的监听器；和spring mvc配置相关的类为**DispatcherServlet**，是一个servlet。都是在web.xml中配置的，下面给出配置文件：
 
@@ -95,7 +95,7 @@ DispatcherServlet在初始化时，会扫出描控制器，从控制器上的注
 
 如果只想使用spring mvc容器，那么不必配置ContextLoaderListener。
 
-## 3.2、spring ioc配置
+## spring ioc配置
 
 在web.xml中指定了spring ioc的配置文件为applicationContext.xml，这里暂不配置任何内容，ssm总配置会在另一篇博客中谈及。
 
@@ -120,7 +120,7 @@ DispatcherServlet在初始化时，会扫出描控制器，从控制器上的注
 
 ![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
 
-## 3.3、spring mvc配置
+## spring mvc配置
 
 在web.xml中指定了spring mvc的配置文件为springmvc-config.xml，基本内容如注解所示：
 
@@ -171,7 +171,7 @@ spring mvc简化了处理请求和响应结果的过程，开发者只需要在�
 
 上面谈到控制器和处理器的关系，这里我认为将处理器理解为控制器中方法的包装更为合适。
 
-## 4.1、[@RequestMapping](https://docs.spring.io/spring/docs/current/spring-framework-reference/web.html#mvc-ann-requestmapping)
+## [@RequestMapping](https://docs.spring.io/spring/docs/current/spring-framework-reference/web.html#mvc-ann-requestmapping)
 
 通过该注解，可以将url映射到某个控制器上（即方法）。可以指定请求路径、请求方法，然后其他的作为限定项，比如请求参数、请求头、请求类型（context-type）、结果类型（accept）。该注解可以声明到类和方法上，如果类和方法都声明，则方法对应的url为两个URL的合并。
 
@@ -217,9 +217,7 @@ class PersonController {
 }
 ```
 
-![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
-
-### [4.1.1、URL匹配模式](https://docs.spring.io/spring/docs/current/spring-framework-reference/web.html#mvc-ann-requestmapping-uri-templates)
+### [URL匹配模式](https://docs.spring.io/spring/docs/current/spring-framework-reference/web.html#mvc-ann-requestmapping-uri-templates)
 
 @RequestMapping注解使用了ant样式的路径模式（[Ant-style path patterns](https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/util/AntPathMatcher.html#match-java.lang.String-java.lang.String-)），规则如下：
 
@@ -259,7 +257,7 @@ spring mvc会在url模式后默认添加 .* 后缀匹配，因此模式/person�
 
 参考：[Pattern Comparison](https://docs.spring.io/spring/docs/current/spring-framework-reference/web.html#mvc-ann-requestmapping-pattern-comparison)
 
-## [4.2、方法参数](https://docs.spring.io/spring/docs/current/spring-framework-reference/web.html#mvc-ann-arguments)
+## [方法参数](https://docs.spring.io/spring/docs/current/spring-framework-reference/web.html#mvc-ann-arguments)
 
 控制器的方法参数很灵活，可以声明自己需要的参数，spring mvc就会自动传入进来。不仅可以声明和servlet有关的参数，比如HttpSession，HttpServletRequest、请求参数等，还能声明和作用域范围（请求范围、会话范围）的属性、url中rest风格参数、请求头参数。下面的表格给出了所有控制器可以声明的参数类型（重要的会加粗、下划线）：
 
@@ -297,13 +295,13 @@ spring mvc会在url模式后默认添加 .* 后缀匹配，因此模式/person�
 
 上面一些重要的稍后会介绍，在这之前先介绍类型转换。
 
-### [4.2.1、类型转换（Type Conversion）](https://docs.spring.io/spring/docs/current/spring-framework-reference/web.html#mvc-ann-typeconversion)
+### [类型转换（Type Conversion）](https://docs.spring.io/spring/docs/current/spring-framework-reference/web.html#mvc-ann-typeconversion)
 
 如果需要基于字符串类型的参数时（比如简单的请求参数@RequestParam、路径参数@PathVariable、字段头@RequestHeader、cookie  @CookieValue等），而被注解的参数不是字符串类型，这时需要用到转换器（Converter<S,T>），比如将person字符串“tom-19-man”转化为person对象，需要实现Converter<Person,String>来对字符串进行转化。当然，如果person是一个pojo对象，可以直接传参转化为person对象（前提是请求参数名和person属性名分别对应）。
 
 而spring mvc已经自动注册了很多Converter，基本能够满足要求。至于Formmatter，也是对字符串类型进行转化的，通常用于包含日期和数字的字符串的转化，不常用。
 
-### [4.2.2、@RequestParam](https://docs.spring.io/spring/docs/current/spring-framework-reference/web.html#mvc-ann-requestparam)
+### [@RequestParam](https://docs.spring.io/spring/docs/current/spring-framework-reference/web.html#mvc-ann-requestparam)
 
 该注解用于将**请求参数**绑定到控制器**方法参数**上，如果参数pojo，则绑定到对象属性上。
 
@@ -337,7 +335,7 @@ spring mvc会在url模式后默认添加 .* 后缀匹配，因此模式/person�
 - 请求参数类似“name=”时，为请求参数为空的情况，在jquery中可传**{name:""}**或**{name:null｝**来实现
 - 请求参数中不存在该字段，为不存在的情况，在jquery中无该字段 **{}** 或值为undefined **{name:undefined}** 来实现
 
-### [4.2.3、@ModelAttribute](https://docs.spring.io/spring/docs/current/spring-framework-reference/web.html#mvc-ann-modelattrib-method-args)
+### [@ModelAttribute](https://docs.spring.io/spring/docs/current/spring-framework-reference/web.html#mvc-ann-modelattrib-method-args)
 
 @ModelAttribute注解被用来从模型中找到属性并注入方法参数，如果不存在则实例化该属性然后注入。如果被注入的属性名与请求参数名相同，那么该属性会被覆盖。比如一个pojo对象有个name属性，然后也有同名请求参数，那么pojo对象的name属性会被覆盖。
 
@@ -354,13 +352,13 @@ spring mvc会在url模式后默认添加 .* 后缀匹配，因此模式/person�
 >
 > 如果方法参数不用注解，且不是简单类型，那么会被当做@ModelAttribute解析。注意，它可以被请求参数覆盖，因此仍然可通过@ModelAttribute获取参数值，如果类型太复杂，可以注册自己的Converter实例。
 
-### 4.2.4、无注解参数
+### 无注解参数
 
 无注解参数，其实上面已经谈及过了。无注解的参数如果是简单类型，则会被当作@RequesParam解析，如果不是简单类型，则会被当作@ModelAttribute解析。简单类型由 [BeanUtils#isSimpleProperty](https://docs.spring.io/spring-framework/docs/5.1.2.RELEASE/javadoc-api/org/springframework/beans/BeanUtils.html#isSimpleProperty-java.lang.Class-)给出，比如 a primitive, a String or other CharSequence, a Number, a Date, a URI, a URL, a Locale, a Class, or a corresponding array都是简单类型。
 
 无注解参数都可以为空（除了基本类型，考虑用包装类），然后都有一些默认值。一些简单类型为空时，值为null；pojo参数为空时时，会创建默认pojo对象；非简单类型为空时，参考上一节的解析过程。
 
-### 4.2.5、@SessionAttributes和@SessionAttribute
+### @SessionAttributes和@SessionAttribute
 
 @SessionAttributes用于将模型属性存入session中。只能注解在controller类上，在注解属性上指定属性名或者属性的类型：
 
@@ -380,13 +378,13 @@ public class EditPetForm {
 
 @SessionAttribute的作用很简单，就是从session中获得属性，默认不为空，可以省略value，使用参数名。
 
-### 4.2.6、@RequestAttribute
+### @RequestAttribute
 
 从请求范围内获取属性，默认不为空，可以省略value，使用参数名。在其他控制器或者servlet、jsp使用RequestDispatcher转发请求时，可以使用该注解获取请求范围内的属性。
 
 为什么没有@RequestAttributes来设置请求范围属性呢？因为Model在处理器执行完后最终会被放入到请求范围的，也就是没有使用@RequestAttributes的必要了。
 
-### 4.2.7、@RequestBody
+### @RequestBody
 
 根据请求中**content-Type**指定的MIME类型，找到对应的**HttpMessageConverter**将**请求消息体**反序列化成一个**对象**。
 
@@ -405,13 +403,13 @@ public void addMember(@RequestBody Member member) {
 
 ![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
 
-### 4.2.8、其他
+### 其他
 
 还有很多重要的，但是表格中已经明确给出，所以不必详细介绍。
 
 Map、Model、ModelMap代表模型，用于存储数据到模型中。
 
-## [4.3、返回值](https://docs.spring.io/spring/docs/current/spring-framework-reference/web.html#mvc-ann-return-types)
+## [返回值](https://docs.spring.io/spring/docs/current/spring-framework-reference/web.html#mvc-ann-return-types)
 
 spring mvc支持很多中控制器方法的返回值。有很多种，我都不认识。。下面给出全部允许的返回值，但只强调常用的。其中，注解写在方法上。
 
@@ -436,7 +434,7 @@ spring mvc支持很多中控制器方法的返回值。有很多种，我都不�
 
 这里说明下，上面的command object指的是model中的请求参数，因为请求参数被传入控制器时也被加入到了model中。4.2.2小结有提到过。command object估计指这个：`@ModelAttribute`
 
-### [4.3.1、@ResponseBody](https://docs.spring.io/spring/docs/current/spring-framework-reference/web.html#mvc-ann-responsebody)
+### [@ResponseBody](https://docs.spring.io/spring/docs/current/spring-framework-reference/web.html#mvc-ann-responsebody)
 
 根据请求的**accept**头字段，选择对应**HttpMessageConverter**将控制器的**返回值**序列化到**响应消息体**中。返回值一般是Map对象或者pojo对象。
 
@@ -460,7 +458,7 @@ public Map<...> addMember(Member member) {
 
 > 如果注解上没有指定produces时，使用哪个转换器呢？见6.2 Content-Type
 
-### 4.3.2、String
+### String
 
 可以返回一个视图名，这个视图名会被ViewResolver解析找到对应视图，然后渲染。如：
 
@@ -477,7 +475,7 @@ public Map<...> addMember(Member member) {
 
 如果字符串含有redirect:或forward:前缀，那么会执行重定向、请求转发，后面介绍。
 
-### 4.3.3、ModelAndView
+### ModelAndView
 
 代表模型和视图，通过该注解可以直接返回视图和模型。如果用的是逻辑视图，那么存在视图解析的过程，只需要返回视图名和模型即可。如：
 
@@ -514,11 +512,11 @@ public Map<...> addMember(Member member) {
 
 # 五、其他
 
-## [5.1、Model和请求、会话范围](https://www.intertech.com/Blog/understanding-spring-mvc-model-and-session-attributes/)
+## [Model和请求、会话范围](https://www.intertech.com/Blog/understanding-spring-mvc-model-and-session-attributes/)
 
 在控制器开发中，可以在方法参数中传入模型，然后对模型添加数据。也可以方法内创建ModelAndView，添加数据后返回该对象。一般控制器生成视图后，会将model中的属性放入到请求范围内，供视图访问。通过@SessionAttribute声明的属性，此时也会从model拷贝到session作用范围内。
 
-## 5.2、重定向
+## 重定向
 
 spring mvc框架中，重定向同时也可以传递参数，一共有两种方法，一是通过在url后添加参数，二是将参数临时保留在session中，重定向后将其清除。
 
@@ -564,7 +562,7 @@ public ModelAndView showRoleJsonInfo(Role role){
 
 关于RedirectAttribute，请参考4.2的表格
 
-## 5.3、数据模型
+## 数据模型
 
 控制器为模型添加数据时，ModelAndView、ModelMap、Model和Map都能够添加数据到模型中，那它们的关联呢？看看一下类图：
 
@@ -572,7 +570,7 @@ public ModelAndView showRoleJsonInfo(Role role){
 
 实际上，spring创建的是BindingAwareModelMap，因此它们之间都可以相互转化，都可以添加模型数据。
 
-## 5.4、解决中文乱码
+## 解决中文乱码
 
 在tomcat中，默认使用iso-8859-1解码参数，而一般参数是以utf-8发送的，这样就造成了控制器乱码的现象。可以在web.xml中配置过滤器，为每个请求指定解码编码。spring已经提供了这样的编码过滤器，不必自己写一个，只需在web.xml中添加如下代码：
 
@@ -600,13 +598,13 @@ public ModelAndView showRoleJsonInfo(Role role){
 
 ![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
 
-## 5.5、自定义转换器（Converter）
+## 自定义转换器（Converter）
 
 在请求参数传入到控制器参数时，涉及到参数解析的过程，通过HttpMessageConverter、Converter、Fomatter完成。这里只讲Converter，spring mvc中已经定义了很多的Converter，能够满足一般要求。但是如果没有对应的Converter进行转换时，则需要自己定义Converter。好了介绍到这里，以后有缘再补充，，，或参考：https://docs.spring.io/spring/docs/current/spring-framework-reference/web.html#mvc-config-conversion
 
 。。。
 
-## 5.6、静态资源访问
+## 静态资源访问
 
 一般将DispatcherServlet的url配置成"/"，这样会覆盖默认servlet。我们知道，默认servlet能够处理静态资源，比如css、js、html。但是默认servlet被DispatcherServlet覆盖后仍然能够让客户端访问到静态资源，需要配置了一个`DefaultServletHttpRequestHandler（见5.6.2）` 。它映射到URL:/**，但拥有最低的优先级，也就是找不到匹配的后端控制器时，就将请求交给了servlet容器的默认servlet处理了。
 
@@ -615,7 +613,7 @@ public ModelAndView showRoleJsonInfo(Role role){
 > - 如果DispatcherServlet的url配置成“/*”，那么访问jsp的请求也被拦截，如果没有对应的后端控制器，那么会被交给servlet容器的默认servlet处理，它会直接将jsp源码发出来，而不是解析生成的html数据（jsp是通过名为jsp的jsp引擎解析的）。关于这些内容可以参考我的另一篇博客：[servlet映射](https://blog.csdn.net/jdbdh/article/details/85257370)
 > - *如果不能正常访问静态资源，可以检查下是不是被拦截器拦截了请求哦~*
 
-### [5.6.1、配置静态资源](https://docs.spring.io/spring/docs/current/spring-framework-reference/web.html#mvc-config-static-resources)
+### [配置静态资源](https://docs.spring.io/spring/docs/current/spring-framework-reference/web.html#mvc-config-static-resources)
 
 在spring mvc中通过mvc:resources可以配置静态资源，其中mapping指静态资源对应的URL，location值静态资源的实际路径，可以相对于web根路径，classpath路径。cache-period指定静态资源过期时间，对于缓存服务器和客户端都会缓存该静态资源，尤其是缓存服务器，用处极大。关于url匹配模式参考4.1.1小结。
 
@@ -629,7 +627,7 @@ public ModelAndView showRoleJsonInfo(Role role){
 
 估计该url下的资源会被servlet容器的默认servlet处理吧， 没有找到相关资料。
 
-### [5.6.2、配置默认servlet](https://docs.spring.io/spring/docs/current/spring-framework-reference/web.html#mvc-default-servlet-handler)
+### [配置默认servlet](https://docs.spring.io/spring/docs/current/spring-framework-reference/web.html#mvc-default-servlet-handler)
 
 配置了`DefaultServletHttpRequestHandler`  后，不能被控制器匹配的url会被默认servlet处理。配置如下
 
@@ -647,7 +645,7 @@ public ModelAndView showRoleJsonInfo(Role role){
 
 ![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
 
-### 5.6.3、配置web.xml
+### 配置web.xml
 
 servlet-mapping配置的url映射有先后关系，后面的可以覆盖前面的，因此web.xml后面为容器的默认servlet追加几条servlet-mapping映射，可以直接让默认servlet来处理静态资源：
 
@@ -665,7 +663,7 @@ servlet-mapping配置的url映射有先后关系，后面的可以覆盖前面�
 
 ![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
 
-## 5.7、文件上传
+## 文件上传
 
 文件上传需要配置**MultipartResolver** Bean，**bean名字必须为multipartResolver**。当一个content-type为multipart/form-data的post请求到来时，解析器解析消息体并包裹HttpServletRequest为**MultipartHttpServletRequest**。multipart/form-data类型数据由多个part组成，每个part就是表单中的一个字段，在spring mvc中被表示为**MultipartFile**类。通过该类，可以获得上传文件信息、保存文件等。
 
@@ -739,7 +737,7 @@ CommonsMultipartResolver常用[属性](https://docs.spring.io/spring-framework/d
 [Multipart Resolver](https://docs.spring.io/spring/docs/current/spring-framework-reference/web.html#mvc-multipart)
 [multipart/form-data](https://blog.csdn.net/jdbdh/article/details/83932406#multipartformdata_534)
 
-## 5.8、文件下载
+## 文件下载
 
 文件的下载主要由Content-Disposition头字段控制，该字段会让浏览器将消息体保存在文件中，需要指定文件名。还需要指定文件MIME类型，一般设置为application/octet-stream。
 
@@ -860,7 +858,7 @@ headers.setCacheControl(CacheControl.maxAge(30, TimeUnit.DAYS));//设置缓存�
 > - [Error Handling for REST with Spring](https://www.baeldung.com/exception-handling-for-rest-with-spring)
 # [六、MVC配置](https://docs.spring.io/spring/docs/current/spring-framework-reference/web.html#mvc-config)
 
-## [6.1、拦截器](https://docs.spring.io/spring/docs/current/spring-framework-reference/web.html#mvc-config-interceptors)
+## [拦截器](https://docs.spring.io/spring/docs/current/spring-framework-reference/web.html#mvc-config-interceptors)
 
 spring mvc启动期间会通过@RequestMapping注解和配置文件找到和URI对应的处理器与拦截器，构建一条执行链（HandlerExecutionChain对象）。其中，拦截器需要实现HandlerIntercept接口：
 
@@ -901,7 +899,7 @@ preHandler1-->preHandler2-->preHandler3-->handler-->postHandler3-->postHanlder2-
 
 path路径参考4.1.1小结。
 
-## [6.2 Content Types](https://docs.spring.io/spring/docs/current/spring-framework-reference/web.html#mvc-config-content-negotiation)
+## [Content Types](https://docs.spring.io/spring/docs/current/spring-framework-reference/web.html#mvc-config-content-negotiation)
 
 spring mvc通过media类型来决定使用何种HttpMessageConverter来解析或生成消息体，但必须有对应的jar包位于classpath下。判断过程如下：
 

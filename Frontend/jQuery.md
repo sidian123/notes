@@ -24,7 +24,7 @@ jQuery的选择器包含了**大部分**css3选择器，用法和css一样。可
 [2]:https://api.jquery.com/
 [4]:https://blog.csdn.net/jdbdh/article/details/84317656
 
-## 2.1、引入jQuery
+## 引入jQuery
 js在DOM树构建完成前执行是很不安全的，在我的[js入门][1]中介绍了一些解决方法。但在jquery中，也有它自己的办法。如：
 ```javascript
 $( document ).ready(function() {
@@ -67,14 +67,14 @@ $( window ).on( "load", function() {
 	</script>
 	```
 
-## 2.2、操作DOM
+## 操作DOM
 jQuery对象提供了一些列操作DOM元素的方法。
 
 参考：
 [Manipulation](https://api.jquery.com/category/manipulation/)
 [Manipulating Elements](https://learn.jquery.com/using-jquery-core/manipulating-elements/)
 
-### 2.2.1、getting和setting
+### getting和setting
 下面的一些方法都可以获得元素对应的信息，也可以设置元素的内容。当获得信息是，一般是获得元素集中第一个元素的信息，除了例外`.text`（它将所有元素的文本拼接而成）；当设置信息时，会分别对元素集中所有元素设置。
 * `.html()` – Get or set the HTML contents.
 * `.text()` – Get or set the text contents; HTML will be stripped.
@@ -86,7 +86,7 @@ jQuery对象提供了一些列操作DOM元素的方法。
 * `.val()` – Get or set the value of form elements.
 
 >jquery 1.6+后，`.attr()`方法不能再设置property了，所谓property就是元素内部的属性（或字段）。一些boolean attribute，如`checked`可以初始化property，但之后不能改变它，因此使用`.attr()`方法设置checkbox类型的input的选中状态已经没用了，只能使用`.prop()`方法。参考：[.prop](https://api.jquery.com/prop/)
-### 2.2.2、adding
+### adding
 下面的方法可以添加或者移动元素。
 
 `.append()`,`.appendTo()`,`.prepend()`,`.prependTo()`分别可以将元素添加到元素**内**的前端或后端。
@@ -99,17 +99,17 @@ $( "#myList li:first" ).clone().appendTo( "#myList" );
 ```
 通过`$()`可以方便的创建新的元素，然后通过上面的方法将元素放入DOM树中。
 
-### 2.2.3、removing
+### removing
 `.remove()`,`.detach()`都可以删除元素，然后返回对应jQuery对象。但是前者在删除元素后不会保存关联的数据和事件处理器，后者保存。`.detach()`可以方便的恢复被删除的元素。
 
 `.empty()`可以删除元素内所有子元素（包括文字）。
 
-### 2.2.4、attributes
+### attributes
 `.attr()`可以获得或者设置属性。
 
 还有一些设置类属性的方法：[class attrubte](https://api.jquery.com/category/manipulation/class-attribute/)
 
-### 2.2.5、styles
+### styles
 `.css()`方法用于设置和获得样式。虽然支持样式名字含有“-”符号（js中不支持），最好使用驼峰命名法。
 
 还有一些属性可以获得或者设置元素的尺寸，但提倡使用css获得它的长宽：
@@ -117,7 +117,7 @@ $( "#myList li:first" ).clone().appendTo( "#myList" );
 
 参考：[Style Properties](https://api.jquery.com/category/manipulation/style-properties/)
 
-## 2.3、Traversing DOM
+## Traversing DOM
 遍历元素的方法大致分为两类：
 1. 过滤以匹配的元素集合，如`.eq()`,`.first()`,`.last()`等等。
 2. 遍历DOM树的方法，可以遍历父元素、子元素和兄弟元素。
@@ -126,7 +126,7 @@ $( "#myList li:first" ).clone().appendTo( "#myList" );
 
 参考：[Traversing](https://api.jquery.com/category/traversing/)
 
-## 2.4、获得元素
+## 获得元素
 通过`$(selector)`可以得到jQuery对象，并且它提供的方法不仅跨浏览器还很方便，但是在某些特殊情况下还是需要操作元素对象时，可以通过`.get()`方法或者下标`[]`来获得元素对象（`Element`）。
 
 当想使用jQuery的方法时，可以将元素对象转化为jQuery对象：`$(element)`
@@ -159,7 +159,7 @@ ajax可以让浏览器和服务器之间**异步**交换数据，而不是重新
 
 jQuery最底层的`$.ajax()`方法提供了执行异步http请求的功能。也提供了简化一点的ajax方法，如`$.get()`,`$.post()`,`$.getJSON()`,`$.load()`等方法，这只不过是对`$.ajax()`的简单封装罢了。因此，最主要的还是了解`$.ajax()`的使用。
 
-## 4.1、$.ajax()
+## $.ajax()
 一般使用该方法的[第二种形式][5]：`jQuery.ajax( [settings ] )`
 
 settings是一个包含键值对的普通对象，这里列出一些有用的属性：
@@ -180,7 +180,7 @@ settings是一个包含键值对的普通对象，这里列出一些有用的属
 
 [5]:http://api.jquery.com/jQuery.ajax/#jQuery-ajax-settings
 
-## 4.2、其他
+## 其他
 `$.ajax()`看着复杂了点，其实一点也不复杂，但是jQuery也提供了一些简便的方法，对`$.ajax()`进行封装。
 
 如`$.get()`的一种调用形式：`jQuery.get( url [, data ] [, success ] [, dataType ] )`，看起来简单了很多，其实等于：
@@ -232,10 +232,10 @@ CORS跨域开发需要配置前后端，现在通过`$.ajaxSetup`进行前端配
      console.log(data);
  })
 ```
-## 4.3、JSONP
+## JSONP
 jsonp用于跨域名**获取**json数据，需要server端配合，提供相应的api。
 
-### 4.3.1、原理
+### 原理
 由于cross-origin policy，浏览器不允许跨域名传输数据，但是服务端脚本却没有这种限制。同源网页通过**协议、域名和端口号**确定，但是即使通过jsonp，https的网页上由于安全政策也不能获得http协议传输的json数据，反之可以。
 
 jsonp是通过`<script>`元素实现的，因此脚本元素可以跨域名传输。**需要服务器配合**，将json数据写入到**方法调用**中，通过ajax将脚本加载进入，然后执行该调用。因此需要保证该网页上存在此函数。如[json文件][6]（含有方法调用），然后通过ajax获取json数据：
@@ -251,7 +251,7 @@ $.ajax({
 });
 ```
 
-### 4.3.2、使用
+### 使用
 现在看看`$.ajax()`具体如何使用，只有它的简便函数不谈，因为实现原理很简单。如果jsonp被指定，`$.ajax()`将自动在url后默认添加参数`callback=?`，然后加载脚本，并执行脚本中的方法调用。
 
 callback有什么用？其他他就是个约定，约定将json数据传入哪个函数。如果服务端，没有提供这功能，那自然没有用；在[github api][7]中，它会根据callback参数自动生成对应方法调用。
@@ -280,7 +280,7 @@ $.getJSON("https://api.github.com/users/jeresig?callback=?",function(json){
 });
 ```
 
-### 4.3.3、其他方法
+### 其他方法
 使用jsonp还是有一定缺陷的，需要服务器提供这样的接口才行。当然还有其他的方法可以跨域获取json数据，不过也是有点小问题的。
 
 * 代理：服务端是没有同源政策约束的，因此可以让服务器从其他网站上获取json数据再返回给客户端的json请求。

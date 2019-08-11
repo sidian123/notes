@@ -1,3 +1,5 @@
+[TOC]
+
 # 一、介绍
 
 Spring Framework是Ioc容器的实现，ioc容器根据**元数据配置**来**实例化、装配**（根据依赖关系）Bean，甚至管理Bean的**生命周期**（prototype的Bean实例化配置完整后的生命周期不归容器管理）。元数据配置定义了Bean的定义和依赖关系。bean与类相似，是一个模板，用来产生对象，每个bean都有自己的生命周期。一个类可以对应多个Bean。
@@ -78,11 +80,11 @@ List<String> userList = service.getUsernameList();
 | Initialization method    | [Initialization Callbacks](https://docs.spring.io/spring-framework/docs/current/spring-framework-reference/core.html#beans-factory-lifecycle-initializingbean) |
 | Destruction method       | [Destruction Callbacks](https://docs.spring.io/spring-framework/docs/current/spring-framework-reference/core.html#beans-factory-lifecycle-disposablebean) |
 
-## 3.1、Bean命名
+## Bean命名
 
 每个Bean都可以有多个标识符，这些标识符在容器内必须是唯一的。一个Bean可以有多个标识符，如果标识符多余一个，其他的都是别名。在基于xml的配置中，可以使用Bean标签的id和name属性来指定标识符。id只能指定一个标识符，name可以指定多个标识符，多个标识符通过逗号（，）、分号（；）或空格分隔。如果没有提供name和id值，那么容器会自己为bean产生一个唯一的标识符。如果使用@Component注解Bean，且没有提供名字，那么会将类名的第一个字母转化为小写，然后作为Bean的标识符。如果使用@Bean注解方法，会使用方法名作为Bean的标识符。
 
-### 3.1.1、Bean定义外为Bean设置别名
+### Bean定义外为Bean设置别名
 
 在Bean定义的同时可以直接定义多个标识符，互为别名。在Bean定义之外也可以为Bean定义别名。
 
@@ -96,11 +98,11 @@ List<String> userList = service.getUsernameList();
 
 其中，name为一个Bean的标识符，alias指定别名。
 
-## 3.2、实例化Beans
+## 实例化Beans
 
 Bean定义就是一个模板，根据该Bean的定义来产生一个或多个对象。需要指定类的全限定名class，如果该类是静态内部类，则必须使用内部类的二进制名，也就是：外部类全限定名+$+内部类名。下面的三个构造方法如果需要注入依赖，都可以通过子标签constructor-arg来注入。
 
-### 3.2.1、通过构造函数实例化
+### 通过构造函数实例化
 
 直接使用如下形式，会直接调用无参构造函数，如果需要通过构造函数注入依赖。
 
@@ -112,7 +114,7 @@ Bean定义就是一个模板，根据该Bean的定义来产生一个或多个对
 
 ![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
 
-### 3.2.2、通过静态工厂方法实例化
+### 通过静态工厂方法实例化
 
 需要给静态工厂返回的对象配置一个Bean定义，但class属性不是返回值对应的类。
 
@@ -143,7 +145,7 @@ public class ClientService {
 
 class指定含有静态工厂的类，factory-method指定静态工厂方法，不用给出返回类型，因为通过反射可以得到。id为静态工厂返回的对象的标识符，不是class的标识符。注意，scope默认为singleton，因此该方法只会调用一次，维护一个单实例。注意，class指定的类一般不会实例化，因为它不是bean。
 
-### 3.2.3、通过实例工厂实例化
+### 通过实例工厂实例化
 
 同样需要给工厂方法返回的对象配置一个Bean定义，但是不需要指定class属性。
 
@@ -208,13 +210,13 @@ public class DefaultServiceLocator {
 
 # [四、依赖](https://docs.spring.io/spring-framework/docs/current/spring-framework-reference/core.html#beans-dependencies)
 
-## 4.1、依赖注入
+## 依赖注入
 
 依赖注入（DI）是一个过程，在这个过程中，对象定义它的依赖，这个依赖通过构造函数参数、给工厂方法的参数、setter方法参数（在实例化后）来注入的。DI可分为两类：基于构造函数的依赖注入和基于setter方法的依赖注入。其中工厂方法的注入和构造函数的依赖注入类似。基于setter方法的注入在Bean实例化后进行。两种注入方法可以一起使用。
 
 一般情况下，使用构造函数注入**必需**的依赖，使用setter方法注入**可选**的依赖。
 
-### 4.1.1、基于构造方法的依赖注入
+### 基于构造方法的依赖注入
 
 就是通过构造函数的参数传递依赖。在xml配置中，通过`<constructor-arg/>` 指定依赖。下面有四种注入方式，前两种不推荐。
 
@@ -278,7 +280,7 @@ public class DefaultServiceLocator {
 
 最后文档说到，要使用参数名匹配参数，需要编译时设置debug标志，然后spring才能够查看参数名。我在eclipse中没有使用debug模式运行时也能成功运行。不知是不是我理解错了。
 
-### 4.1.2、基于setter的依赖注入
+### 基于setter的依赖注入
 
 在Bean实例化后，会调用setter进行依赖注入。通过<property>标签来指定依赖。
 
@@ -297,7 +299,7 @@ public class DefaultServiceLocator {
 
 ![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
 
-### 4.1.3、依赖解析过程
+### 依赖解析过程
 
 通过元数据配置，创建和初始化ApplicationContext，在加载元数据配置时，会检测引用是否指向了不存在的bean和**循环依赖**。由于默认Bean为singleton作用域和预初始化，因此之后立马实例化所有的Bean。实例化后，spring会尽可能慢地解析和注入依赖（保证没有循环依赖的情况下能够正常注入依赖，不会出现要注入依赖时，依赖对象还没有实例化）。而在注入依赖时，依赖必须被**完整配置（**包括调用callbacks回调函数吧？**）**。
 
@@ -305,11 +307,11 @@ public class DefaultServiceLocator {
 
 如果Bean不预初始化，那么运行程序很久之后，初次使用了该bean，但是发现丢失或无效的属性，那么抛出异常。因此spring才会默认Bean预初始化，因为在容器加载元数据配置时就可以找出错误。
 
-## 4.2、详细依赖配置
+## 详细依赖配置
 
 4.1节中讲到了依赖注入的两种方法和注入过程。依赖通过标签*<constructor-arg/>*或*<property/>*的属性value或ref指定。如果依赖是简单类型，则可以使用value直接赋值；如果依赖是Bean对象，则通过ref指定bean。除了使用**value和ref属性**指定依赖，还可以使用**子标签**来给出依赖。
 
-### 4.2.1、简单值（基本类型、字符串等等）
+### 简单值（基本类型、字符串等等）
 
 简单的值可以通过value属性给出：
 
@@ -369,7 +371,7 @@ public class DefaultServiceLocator {
 
 ![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
 
-### 4.2.2、对Bean的引用
+### 对Bean的引用
 
 如果依赖为其他的Bean，则需要使用ref属性指定依赖。同时可以使用<ref/>标签指定依赖，这样在容器加载时会验证该bean是否存在（即使不是singleton的作用域）。
 
@@ -405,7 +407,7 @@ public class DefaultServiceLocator {
 
 ![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
 
-### 4.2.3、内部Bean
+### 内部Bean
 
 如果一个Bean只作为一个且仅一个Bean的依赖，此时可以直接将该Bean定义为内部bean。内部Bean的id会被忽略，不用给出。内部Bean的scope对Bean的创建没有作用，内部Bean会随着外部Bean创建而创建。内部bean创建时会调用他的生命周期方法。scope作用域会影响内部bean销毁函数的调用。这是非常少见的使用场景。。
 
@@ -423,7 +425,7 @@ public class DefaultServiceLocator {
 
 ![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
 
-### 4.2.4、集合
+### 集合
 
 如果依赖是集合，则可以使用子标签`<list/>`, `<set/>`, `<map/>`, and `<props/>设置集合的属性，分别对应java集合类型：List`, `Set`, `Map`, and `Properties。`
 
@@ -546,7 +548,7 @@ public class SomeClass {
 
 容器会将key当做String，value转化为Float类型。
 
-### 4.2.5、null和空字符串
+### null和空字符串
 
 注入空字符串
 
@@ -570,11 +572,11 @@ public class SomeClass {
 
 ![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
 
-### 4.2.6、其他
+### 其他
 
 一些没多大用处的，只是便于使用的内容，比如使用p-namespace和c-namespace来简化xml配置，什么复杂的属性名注入，学多了头疼。下面给出链接：https://docs.spring.io/spring-framework/docs/current/spring-framework-reference/core.html#beans-p-namespace
 
-## 4.3、depends-on
+## depends-on
 
 depends-on强制一个或多个bean先于使用了depends-on属性的Bean初始化，无论是否需要depends-on指定的bean作为依赖注入。在下面的例子中，就算test2为原型作用域或者lazy-initialized，也要先于test初始化。
 
@@ -587,7 +589,7 @@ depends-on强制一个或多个bean先于使用了depends-on属性的Bean初始�
 
 在Bean销毁时，Bean也要优先于deponds-on的Beans，**但是仅限于为singleton的Bean！！千万注意。**
 
-## 4.4、懒初始化
+## 懒初始化
 
 默认Bean是singleton单实例和预加载的，但是lazy-init属性可以实现懒加载
 
@@ -607,7 +609,7 @@ depends-on强制一个或多个bean先于使用了depends-on属性的Bean初始�
 
 ![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
 
-## 4.5、自动装配
+## 自动装配
 
 如果Bean和依赖关系太多了，手动注入依赖太麻烦了，因此spring提供自动装配的功能。在基于xml的配置中，可以通过设置<bean/>元素的autowire属性来设置自动装配模式。下面列出了四种装配模式：
 
@@ -624,7 +626,7 @@ depends-on强制一个或多个bean先于使用了depends-on属性的Bean初始�
 
 因为byName和byType模式下，如果没有匹配成功的，又因为byName和byType对属性有效（setter方法注入），因此不会抛出异常，也没有成功注入，因此自动装配过后最好进行依赖核查，看有没有注入成功。注意哦，使用<property/>元素指定时没有找到匹配会报错的。
 
-### 4.5.1、自动装配的限制和缺点
+### 自动装配的限制和缺点
 
 - 显示使用<property/>和<constructor-arg/>设置总是会覆盖自动装配的结果
 - 自动装配不太精确
@@ -638,7 +640,7 @@ depends-on强制一个或多个bean先于使用了depends-on属性的Bean初始�
 - 设置一个<bean/>的属性primary为true，那么多个匹配的Bean中该bean会被注入（优先权高）。
 -  通过使用注解得到更加细粒度的控制。
 
-### 4.5.2、从自动装配中排除Bean
+### 从自动装配中排除Bean
 
 <bean/>元素的属性autowire-candidate有三种值：default、false、true。当设置bean的autowire-candidate为false时，该bean不会作为其他Bean依赖的匹配项的考虑范围（也不作为注解@Autowired的考虑范围）。autowire-candidate只影响**基于类型**的自动装配，不影响**基于名字**的自动装配。
 
@@ -646,13 +648,13 @@ depends-on强制一个或多个bean先于使用了depends-on属性的Bean初始�
 
 即使一个Bean设置了*autowire-candidate*为false，但是他本身可以使用自动装配。
 
-## 4.6、方法注入
+## 方法注入
 
 方法注入可以解决Bean之间有依赖关系但生命周期不一致的问题。比如Bean A作用域为singleton，而Bean B作用域为prototype，A的一个方法每次调用时都需要一个Bean B的对象。而容器只会创建一次Bean A，因此Bean A只有一次注入依赖的机会，容器不会为Bean A在每次使用Bean B时都创建一个新的Bean B实例。
 
 [一个牺牲一定IOC的解决方案](https://docs.spring.io/spring-framework/docs/current/spring-framework-reference/core.html#beans-factory-method-injection)：可以通过实现`ApplicationContextAware` 接口获得容器实例，再通过容器的getBean方法得到新的Bean B实例。
 
-### 4.6.1、查询方法注入
+### 查询方法注入
 
 查询方法注入就是通过CGLIB动态产生类的子类，子类覆盖（或实现）要注入的方法，返回查询到的容器中其他Bean的结果（在上面的例子中，就是返回Bean B的新实例）。
 
@@ -728,7 +730,7 @@ public abstract class CommandManager {
 
 如果@Lookup不提供名字，则默认通过方法返回类型查看Bean。如果使用包扫描则一定要给出方法实现！！！空实现也行。上面没有给出实现，是因为类CommandManager的定义还是通过xml文件给出的。
 
-### 4.6.2、任意方法替代
+### 任意方法替代
 
 就是能够任意替换Bean中的方法，听起来好像spring无所不能，，，，但是他就是有这功能，但不常用，这里只给出链接：https://docs.spring.io/spring-framework/docs/current/spring-framework-reference/core.html#beans-factory-arbitrary-method-replacement
 
@@ -747,7 +749,7 @@ scope到底是什么，我也不清楚，感觉像生存范围吧。一个有6�
 
 貌似request、session、application会存在对应的类中，比如ServletRequest、HttpSession、ServletContext中。
 
-## 5.1、Singleton和Prototype作用域
+## Singleton和Prototype作用域
 
 singleton范围的Bean，在一个容器中只会产生一个实例。是Bean的默认作用域。
 
@@ -755,7 +757,7 @@ prototype作用域的Bean在来一个请求就会创建一个Bean实例。于其
 
 当用一个singleton Bean，注入一个prototype的依赖时，由于singleton的bean只会进行一次实例化和依赖注入，而如果每次需要一个新的prototype的Bean，依赖注入则不能完成此任务。因此需要使用方法注入，如4.6小节所示。
 
-## 5.2、request、session、application作用域
+## request、session、application作用域
 
 和web相关的作用域，需要使用WebApplicationContext容器。为了支持这些作用域，定义Bean之前小小的配置是需要的。在SpringMVC中，你可以web应用中的web.xml文件中声明`DispatcherServlet`, `RequestContextListener`, 或 `RequestContextFilter其中的任意一个都行，这几个。。东西都做了同一件事，就是绑定http请求对象到处理该请求的线程中（我懵懂中。。）。`
 
@@ -819,7 +821,7 @@ public class AppPreferences {
 
 ![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
 
-## 5.3、Scoped Beans作为依赖
+## Scoped Beans作为依赖
 
 短生命周期的作为长生命周期的Bean的依赖，总会出现点问题的。除了使用方法注入，还可以使用AOP代理。通过AOP代理，同样会产生代理类，然后需要注入的Bean都是对代理类操作，代理类会在相应的作用域中取出真正的Bean实例，然后将方法传给真实对象。我猜想不同作用域中的Bean的生命周期都是由容器管理的，因此代理类每次取出都是正确作用域的Bean。
 
@@ -941,7 +943,7 @@ FactoryBean（不要和BeanFactory混淆）可以控制容器的实例化逻辑�
 
 该注解默认开启bean post-processor，包括 AutowiredAnnotationBeanPostProcessor, CommonAnnotationBeanPostProcessor, PersistenceAnnotationBeanPostProcessor, and RequiredAnnotationBeanPostProcessor。关于BeanPostProcessor，第八小节有提到过。注意！！！<context:annotation-config/>只会查看同**一个容器**中的bean的注解。
 
-## 9.1、@Required
+## @Required
 
 @Required注解到setter方法上，表示该属性必须要被注入依赖。
 
@@ -961,7 +963,7 @@ public class SimpleMovieLister {
 
 ![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
 
-## 9.2、@Autowired
+## @Autowired
 
 @Autowired可以注解到属性、任意参数方法、构成函数上，通过类型注入，拥有着比xml配置更加细腻度的控制。并且默认将被@Autowire注解的字段、方法、构造函数视为必须的依赖！如果没有匹配成功则抛出异常。
 
@@ -1100,7 +1102,7 @@ public class SimpleMovieLister {
 
 ![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
 
-## 9.3、通过@Primary微调自动注入
+## 通过@Primary微调自动注入
 
 @Autowired通过类型自动注入依赖，但是类型匹配成功的Bean太多，可以使用@Primary注解指定一个Bean具有优先权，该Bean会被注入。
 
@@ -1146,7 +1148,7 @@ public class MovieConfiguration {
 
 ![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
 
-## 9.4、通过@Qualifier微调@Autowired
+## 通过@Qualifier微调@Autowired
 
 如果有多个匹配，那么限定名符合@Qualifier指定的限定名的Bean会被注入，Bean定义的限定名可以重复，因此@Qualifier只是缩小了匹配的Bean的范围。如果Bean没有定义限定名，那么他的Bean标识符会被当做默认限定名。@Qualifier还有很多默认行为，不想多说。如果向指定一个唯一的Bean标识符作为依赖注入，应该考虑@Resource，而不是@Autowired。
 
@@ -1199,7 +1201,7 @@ xml可以配置限定名：
 
 相应的还有component的配置方式、基于java代码的配置方式。
 
-## 9.5、@Resource
+## @Resource
 
 @Resource通过名字注入，只能注解在字段和setter方法上。默认使用@Resource时没有给出Bean名，则会使用属性名
 
@@ -1298,7 +1300,7 @@ public class FactoryMethodComponent {
 
 在基于java的容器配置中需要使用到@Configuration和@Bean。@Configuration表明这是一个配置类，里面被@Bean注释的方法会产生Bean实例。尽管@Bean可以在@Component中使用，但是最主要的还是配合@Configuration使用。@Configuration被@Component注解过，因此也可被当做一个Bean定义。在@Configuration注解的类会被CGIB动态继承该类，重写@Bean注解的方法，该方法每次只返回该作用域内的Bean，维护了Bean的作用域，而在@Component中就是个普通方法。因此使用@Configuration注解，可以在一个@Bean方法内调用其他@Bean方法。
 
-## 11.1、@Configuration和容器实例化
+## @Configuration和容器实例化
 
 ```java
 @Configuration
@@ -1355,7 +1357,7 @@ public class AppConfig  {
 
 @Bean注解的方法的返回值为Bean的类型，Bean名字和方法名一致。对@Bean方法注入依赖时就和构造函数注入依赖一致。等等等等等功能，参考链接：https://docs.spring.io/spring-framework/docs/current/spring-framework-reference/core.html#beans-java-bean-annotation
 
-## 11.3、@Import
+## @Import
 
 @Import可以导入其他配置类的Bean定义：
 
@@ -1382,11 +1384,11 @@ public class ConfigB {
 
 ![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
 
-## 11.4、java和xml混合配置
+## java和xml混合配置
 
 @Configuraion类并不会100%替代xml配置，相反，他们可以相互配合使用。
 
-### 11.4.1、xml配置中使用@Configuration类
+### xml配置中使用@Configuration类
 
 首先有一个configuration配置类：
 
@@ -1437,7 +1439,7 @@ public class AppConfig {
 
 ![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
 
-### 11.4.2、@Configuration类中使用xml
+### @Configuration类中使用xml
 
 通过@ImportResource可以导入xml文件定义的Bean
 

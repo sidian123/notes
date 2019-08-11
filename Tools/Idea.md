@@ -5,7 +5,7 @@
 Eclipse与Intellij IDEA哪个好？很多人支持idea，在昨日我的eclipse崩溃之后，我决定尝试下idea，发现还行吧。。
 
 # 二 IDEA配置
-## 2.1 安装
+## 安装
 idea自带jre1.8以支持idea运行，但是我们安装idea之前还是需要安装JDK用以开发，JDK要配置好环境变量。
 
 idea分为[旗舰版][1]和社区版，虽说前者收费但对于学生来说还是免费的。因此，首先在idea官网上注册个账号（随便个邮箱），然后用学生邮箱认证。安装idea旗舰版时便可以登录该账号免费使用。如果不是学生，则参考网上破解教程。
@@ -15,7 +15,7 @@ idea分为[旗舰版][1]和社区版，虽说前者收费但对于学生来说�
 ![在这里插入图片描述](.Idea/20190222233906921.png)
 最后会进入该界面，在这个界面可以进行**全局配置**。
 ![在这里插入图片描述](.Idea/20190222234424712.png)
-## 2.2 配置Maven
+## 配置Maven
 idea自带maven，但不是最新版本，也不好配置它，因此最好自己配置一个。
 
 首先在[官网][2]上下载最新版本，然后解压。不用设置环境变量，可直接在idea中配置：
@@ -38,10 +38,10 @@ Maven的Runner界面可以选择Maven构建项目使用的JRE，默认使用项�
     <url>http://maven.aliyun.com/nexus/content/groups/public</url>
 </mirror>
 ```
-## 2.3 配置tomcat
+## 配置tomcat
 下载最新版[tomcat9.0][3]，不用配置环境变量，可直接在idea中配置。同样在全局配置的setting中配置：
 ![在这里插入图片描述](.Idea/20190222235749550.png)
-## 2.4 解决乱码
+## 解决乱码
 乱码是由于不同地方编码不同意造成的，解决乱码的思路是整个项目中哪里用到编码，就设置哪里的编码，如：
 * 运行idea用到了jvm，需要设置编码；
 * maven用于构建项目，需要设置编码，但在`pom.xml`中设置；
@@ -60,7 +60,7 @@ Maven的Runner界面可以选择Maven构建项目使用的JRE，默认使用项�
 配置tomcat运行配置，填入`-Dfile.encoding=UTF-8`
 ![在这里插入图片描述](.Idea/20190303164851321.png)
 其他的乱码问题就是代码问题了，极力推荐博客：[IntelliJ IDEA 使用 TOMCAT 中文乱码的各种问题](https://blog.csdn.net/u012611878/article/details/80723491)
-## 2.5 其他配置
+## 其他配置
 鼠标移至元素上时显示document（javadoc）：
 ![在这里插入图片描述](.Idea/20190223001228785.png)
 每个字母都提示且不区分大小写：
@@ -75,7 +75,7 @@ JDK没有源码的情况下，想要`Shift+F1`（用浏览器打开帮助文件�
 [3]:https://tomcat.apache.org/download-90.cgi
 
 # 三 maven web项目
-## 3.1 创建项目
+## 创建项目
 点击create new project
 ![在这里插入图片描述](.Idea/20190223001426916.png)
 ![在这里插入图片描述](.Idea/20190223001606284.png)
@@ -86,7 +86,7 @@ JDK没有源码的情况下，想要`Shift+F1`（用浏览器打开帮助文件�
 ![在这里插入图片描述](.Idea/20190223002456652.png)
 ![在这里插入图片描述](.Idea/2019022300274264.png)
 >也可直接创建好目录，然后右键项目-->maven-->reimport
-## 3.2 配置Run/Debug
+## 配置Run/Debug
 项目如何运行？运行的方式需要我们自己配置，但好在提供了模板：
 ![在这里插入图片描述](.Idea/20190223003030835.png)
 ![在这里插入图片描述](.Idea/20190223003100955.png)
@@ -99,17 +99,17 @@ JDK没有源码的情况下，想要`Shift+F1`（用浏览器打开帮助文件�
 # 四 必懂的知识
 即使成功运行了，也是云里雾里的，这里来进行介绍。
 
-## 4.1 project和module
+## project和module
 一个project可以有多个module，project能够方便的管理modules和在它们之间共享配置，如sdk、languge、compile等配置，详细打开`File|Project Structure`。
 
 module与project一同被创建出来，每个module都是个独立的实体，可以拥有自己的设置，可以被配置用于开发框架相关的应用。modules之间可以相互应用（依赖）。
 
 在这里想说的是，tomcat的配置可以随意更改，并不会影响到其他module，tomcat的配置也不会影响module，除非在`run Configurations`中配置。
 
-## 4.2 全局或项目配置
+## 全局或项目配置
 每个新项目创建时会从全局配置中获取配置，进入项目后可以更改配置，但不会影响其他的项目。（并不是所有配置都这样）
 
-## 4.3 本地，远程运行配置
+## 本地，远程运行配置
 可以为server进行本地或远程配置。通常为安装在本地的server设置local配置，这些配置包括server如何启动。当执行本地配置时，idea会启动server。而远程配置不会启动server，它只会连接server，然后发布、调试artifact（项目）。
 
 因此，是否使用本地或远程配置的取决于server是否允许重启，而不是它的物理位置。
@@ -122,7 +122,7 @@ module与project一同被创建出来，每个module都是个独立的实体，�
 
 参考：[Working with Server Run/Debug Configurations](https://www.jetbrains.com/help/idea/creating-run-debug-configuration-for-application-server.html)
 
-## 4.4 热部署
+## 热部署
 这里所谓的热部署就是，修改的部分程序直接加载到内存，并替换旧的部分程序。然而idea的热部署功能有一定限制。在`run configuration`可以进行相关配置：
 ![在这里插入图片描述](.Idea/2019022313182695.png)
 * `On update action`：当点击update按钮后，会执行相应的更新动作。
@@ -148,7 +148,7 @@ module与project一同被创建出来，每个module都是个独立的实体，�
 [Updating Applications on Application Servers](https://www.jetbrains.com/help/idea/updating-applications-on-application-servers.html)
 [Run/Debug Configuration: Tomcat Server](https://www.jetbrains.com/help/idea/run-debug-configuration-tomcat-server.html)
 
-## 4.5 idea内部工作流程
+## idea内部工作流程
 在idea中，配置好后直接点击运行Debug或Run就可以运行程序看到效果了。那它背后又做了什么？Maven项目是由Maven构建的，又如何体现？
 
 Maven项目中，项目的构建自然交给了Maven来完成，一些配置也交给了Maven来配置（pom.xml），因此idea中自己的一些项目配置是不需要的（或者无用的，并且可能会冲突），可以使用maven-->reimport将maven配置更新到idea中。
@@ -174,7 +174,7 @@ IDEA中构建的几个选项如下所示：
 >* [Deployment tab](https://www.jetbrains.com/help/idea/run-debug-configuration-tomcat-server.html#deployment)
 >* [Debug maven application in Intellij Idea](https://stackoverflow.com/questions/22571037/debug-maven-application-in-intellij-idea)
 
-## 4.6 文件保存
+## 文件保存
 在使用idea时，几乎不用手动`ctrl+s`保存文件，它会自动为你保存。默认设置在`Appearance & Behavior-->System Settings`中可以看到，如下图所示：
 ![在这里插入图片描述](.Idea/20190520162304710.png)
 在跳出编辑区域、idea时都会自动保存，运行项目时也会自动保存，等等。并且保存方式为`safe write`，即：与简单的更新文件相反，safe write会写入一个临时文件，然后删除源文件，将临时文件名改成源文件名。
@@ -239,17 +239,17 @@ IDEA中构建的几个选项如下所示：
 [61]:https://plugins.jetbrains.com/plugin/7007-liveedit
 [62]:https://chrome.google.com/webstore/detail/jetbrains-ide-support/hmhgeddbohgjknpmjagkdomcpobmllji?hl=en
 
-## 6.1 与tomcat结合
+## 与tomcat结合
 在tomcat运行配置界面，勾选`with JavaScript debugger`时，在配合LiveEdit使用，java web项目也能修改前端代码时，实时预览了！
 ![在这里插入图片描述](.Idea/20190504182019853.png)
-## 6.2 不足
+## 不足
 * 在使用过程中，发现LiveEdit对css反应不是智能，有时修改还需手动保存才能更新
 * js脚本名为index.js时不能设置断点，并且控制台不是很好用。
 * 控制台和打了马赛克似的（和idea配置有关）
 #  七 其他
-## 7.1 清除缓存
+## 清除缓存
 idea会缓存很多文件，如果系统运行错误了，则需要清除缓存，如`File | Invalidate Caches/Restart`
-## 7.2 模板文件
+## 模板文件
 mybatis的xml映射文件经常被使用，如果不安装插件，则需要自己配置模板文件：
 1. File-->New-->Edit File Templates...
 2. 在File标签页中，新建一模板，模板名：`Mybatis Mapper File`，后缀：`xml`
@@ -263,7 +263,7 @@ mybatis的xml映射文件经常被使用，如果不安装插件，则需要自�
 
 	</mapper>
 	```
-## 7.2 解决markdown字体模糊
+## 解决markdown字体模糊
 主要是因为idea自带markdown插件（`markdown support`）太垃圾，禁用，然后下载插件`markdown navigator`就好了。
 
 ## Line Ending

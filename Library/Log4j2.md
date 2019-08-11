@@ -14,7 +14,7 @@
 除此之外，log4j2还有很多特性，如异步输出（降低io负担），自动加载配置（避免重启应用），自定义日记级别（感觉不常用）等等。
 
 # 二 架构
-## 2.1 主要组件
+## 主要组件
 log4j中使用的类大致如下：
 ![在这里插入图片描述](.Log4j2/20190228122226519.png)
 >如果看不懂UML，请参考[UML类图](https://blog.csdn.net/jdbdh/article/details/82493183)
@@ -35,18 +35,18 @@ appender只关心如何将LogEvent送到目的地，而**Layout**负责格式化
 
 至于LoggerContext和Configuration。LoggerContext是真正产生Logger的地方，在日记系统中扮演很重要的角色。Configuration是一个配置类，如果没有给出配置，则会使用默认Configuration。如果有配置文件，并且在运行时改变该配置文件，log4j会检测到，并生成新的Configuration，所有的Logger都被重定向到新Configuration中的内容，老的Configuration被丢弃。
 
-## 2.2 层次结构
+## 层次结构
 每个Logger都有自己的名字，通常使用Logger所处类的全限定名作为Logger的名字。LoggerConfig也是一个命名的实体，通常名字与Logger对应。因此log4j中有两个名字层级结构。
 
 如果两者完全匹配，则Logger关联到匹配的LoggerConfig上，使用它的配置。如果没有完全匹配的，Logger会在名字空间上寻找最近匹配的LoggerConfig，并关联它。
 
 在log4j中必定存在root LoggerConfig，即使没有手动配置，也会使用默认的，保证Logger能够关联到LoggerConfig。
 
-## 2.3 日记级别
+## 日记级别
 LoggerConfig需要配置日记级别，用于筛选某个范围的所有日记。下面给出每种级别的日记是否能够通过不同LoggerConfig的表格：
 ![在这里插入图片描述](.Log4j2/20190228153551621.png)
 # 三 配置
-## 3.1 查找配置
+## 查找配置
 log4j在初始化时会自动查找配置，然后配置自己。支持各种方式、各种类型的配置，[检查过程][1]如下：
 >1. 系统属性`log4j.configurationFile`指定的文件 
 >2. classpath下`log4j2-test.properties` 
@@ -57,7 +57,7 @@ log4j在初始化时会自动查找配置，然后配置自己。支持各种方
 
 [1]:https://logging.apache.org/log4j/2.x/manual/configuration.html#AutomaticConfiguration
 
-## 3.2 简单配置
+## 简单配置
 如果不配置时，log4j会使用默认配置，**默认配置**对应的xml配置如下：
 ```xml
 <?xml version="1.0" encoding="UTF-8"?>
@@ -99,7 +99,7 @@ log4j在初始化时会自动查找配置，然后配置自己。支持各种方
 
 [2]:https://logging.apache.org/log4j/2.x/manual/configuration.html#XML
 
-## 3.3 Configuration
+## Configuration
 Configuration元素一些重要的属性如下：
 * `status`：log4j框架内部要输出到console的LogEvent的级别。可选值：trace", "debug", "info", "warn", "error" and "fatal"。貌似默认warn。
 * `dest`：输出到console具体的流。可选值："err","out",文件或url。默认out。
@@ -107,7 +107,7 @@ Configuration元素一些重要的属性如下：
 
 参考：[Configuration](https://logging.apache.org/log4j/2.x/manual/configuration.html#ConfigurationSyntax)
 
-## 3.4 其他配置链接
+## 其他配置链接
 配置方式官方文档说的很详细，这里直接贴出链接。。。阅读时记住，xml配置的语法很松懈。
 
 [ConsoleAppender][3]是比较常用的appender
@@ -149,7 +149,7 @@ java.lang.Exception: 出现异常
 	at com.luo.WXShop.test.WXTest.test(WXTest.java:27) [test-classes/:?]
 ```
 # 五 其他
-## 5.1 日记级别使用情景
+## 日记级别使用情景
 * `ALL` 最低等级的，用于打开所有日志记录。
 * `TRACE` 很低的日志级别，一般不会使用。
 * `DEBUG` 指出细粒度信息事件对调试应用程序是非常有帮助的，主要用于开发过程中打印一些运行信息。

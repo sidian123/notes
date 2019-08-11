@@ -32,12 +32,12 @@ javascript是一种面向对象、动态类型、函数式编程等等等语言�
 参考：
 [A re-introduction to JavaScript (JS tutorial)](https://developer.mozilla.org/en-US/docs/Web/JavaScript/A_re-introduction_to_JavaScript)
 
-## 2.1、变量
+## 变量
 变量是用来存储数据的容器，可以是**任何类型数据**。javascript是**动态类型语言**（也称弱类型语言），声明变量时不需要指定数据类型，但通过操作符`typeof`可以打印变量类型。
 
 变量必须被声明才能被使用，否则报错。声明变量没有赋初始值时，则默认`undefined`。
 
-### 2.1.1、变量命名
+### 变量命名
 javascript支持unicode字符集，变量也可以使用中文来命名。但是命名最好还是要符合一定规范，下面给出的不是强制的，但最好准守：
 1. 使用数字（0-9）、字母（a-z，A-Z）和下划线命名。
 2. 不要以下划线、数字开头。下划线开始的变量名有特殊意义。
@@ -46,7 +46,7 @@ javascript支持unicode字符集，变量也可以使用中文来命名。但是
 
 大小写敏感。
 
-### 2.1.2、变量声明
+### 变量声明
 javascript中使用`var`、`let`和`const`来定义变量。
 
 `var`声明的变量
@@ -109,7 +109,7 @@ for(let i=0;i<10;i++)｛
 [1]:https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/block
 [2]:https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/var#var_hoisting
 
-## 2.2、类型
+## 类型
 大致分为如下：
 * Six data types that are primitives:
 	* Boolean
@@ -133,7 +133,7 @@ for(let i=0;i<10;i++)｛
 ```
 注意，typeof null;//"object"  。。。
 
-### 2.2.1、Numbers
+### Numbers
 根据说明书，数值都是用双精度浮点数表示的，但是实际上整数还是被当做32位int。但也不用担心`3/2=1`问题的出现，并且整数可以使用按位运算。
 
 一些内置函数可以将字符转化为Number，如`parseInt()`,`parseFloat()`。`+`，`Number()`也可以将字符转化为数值。如：
@@ -156,7 +156,7 @@ parseInt('hello', 10); // NaN
 参考：
 [Number](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number)
 
-### 2.2.2、Strings
+### Strings
 使用utf-16的code units编码，因此一个字符1或2个code units编码，并且length属性以code unit为单位。
 
 字符串用单引号或双引号围起来，单引号内可以存在双引号，反之亦然。特殊字符也可以通过转义，成为普通字符。+可以连接字符串与字符串，字符串与数值。Number()函数可将字符串转化为数值。数值变量的toString()方法可将数值转化为字符串。
@@ -172,7 +172,7 @@ parseInt('hello', 10); // NaN
 参考：
 [String](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String)
 
-### 2.2.3、其他类型
+### 其他类型
 `null`表示**故意设置**的、不存在的值；`undefined`表示变量还未初始化，函数没有返回值时也会返回undefined。
 
 **任何值**都可以被转化为布尔值，根据如下规则：
@@ -181,7 +181,7 @@ parseInt('hello', 10); // NaN
 
 Boolean()可以显示转化值为布尔值，但是很少使用，因为会自动转化（java中不会）。
 
-## 2.3、操作符
+## 操作符
 完整操作符内容可以参考：[Expressions and operators][3]
 
 `+`可以用来做字符串连接：
@@ -213,7 +213,7 @@ Boolean()可以显示转化值为布尔值，但是很少使用，因为会自�
 
 [3]:https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Expressions_and_Operators
 
-## 2.4、控制语句
+## 控制语句
 完整控制语句参考：[Loops and iteration][4]
 语句有：if else、while、do-while、for、switch。
 
@@ -240,7 +240,7 @@ condition ? exprT : exprF
 ```
 [4]:https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Loops_and_iteration#do...while_statement
 
-## 2.5、Arrays
+## Arrays
 数组是一个可以存入多个任意类型值的对象。下标访问、赋值，从0开始。
 ```javascript
 //create array
@@ -266,7 +266,7 @@ random[2][2];
 * unshift()和shift()方法分别在数组前端添加和删除数组。
 * `splice`用于在某个索引上添加或删除元素。
 * `Array.from`：浅拷贝
-## 2.6、Objects
+## Objects
 对象是一组属性和方法的集合。其实对象就是**键值对**的集合，键是名字，值可以是任意类型，比如函数、对象、数组等。
 
 对象可以通过构造函数或对象字面值（object literal）创建。如：
@@ -307,7 +307,7 @@ var obj = {
 	person[propName]=....
 	```
 
-### 2.6.1、literal
+### literal
 上面已经谈到过了对象字面值，这里深入一下。
 
 literal由零个或多个键值对的列表组成，被花括号包含起来。属性名可以是标识符、数字或字符串，值可以是任意类型对象或其字面值。
@@ -362,7 +362,7 @@ var obj = {
 参考：
 [Object literals](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Grammar_and_Types#Object_literals)
 
-### 2.6.2、JSON
+### JSON
 尽管JSON已经不是Object的内容了，但是由于JSON是基于Object literal表示法的，因此很有必要在这里谈一下。
 
 JSON的完整语法可以参考：[Full JSON syntax][5]
@@ -389,7 +389,7 @@ JSON和literal的一些区别如下：
 
 [5]:https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/JSON#Full_JSON_syntax
 
-### 2.6.3 解构(Destructuring)
+###  解构(Destructuring)
 解构，即将数组的元素或对象的属性赋值到单个变量中。数组按位置赋值，对象按变量名赋值，如下所示：
 ```javascript
 //数据安装位置赋值
@@ -415,8 +415,8 @@ console.log(rest); // {c: 30, d: 40}
 ```
 >参考：[Destructuring assignment](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Destructuring_assignment)
 
-### 2.6.4 其他
-#### 2.6.4.1 Object.assign()
+###  其他
+####  Object.assign()
 将源对象的可遍历属性拷贝给目标对象，如果目标对象有相同属性，则被覆盖。属于浅拷贝。
 **语法**：
 ```javascript
@@ -428,7 +428,7 @@ Object.assign(target, ...sources)
 
 **返回值**：
 >* 目标对象
-## 2.7、Functions
+## Functions
 简单的一个函数：
 ```javascript
 function add(x, y) {
@@ -472,7 +472,7 @@ var avg=function(){...};
 [7]:https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Functions/rest_parameters
 [8]:https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Spread_operator
 
-### 2.7.1 apply()和call()
+###  apply()和call()
 >预备知识：2.8.1 this
 
 都是**Function.prototype**的方法，即所有函数可调用。这两个可以方法指定`this`和`arguments`来调用函数。`apply()`和`call()`在于，`apply()`的`arguments`参数接收array-like对象。
@@ -489,7 +489,7 @@ function.apply([thisArg, [argsArray]])
 
 >参考：[Search Function.prototype.apply()](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function/apply)
 
-### 2.7.2 函数声明
+###  函数声明
 函数有两种方法定义：函数声明和函数表达式
 
 函数声明：
@@ -519,12 +519,12 @@ setTimeout(()=>console.log(this.data),1000);//输出aaaa
 
 > 参考: [Arrow function](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Functions/Arrow_functions)
 
-## 2.8、对象实例化与继承
+## 对象实例化与继承
 JavaScript是基于原型（prototype）的语言，没有class语句的存在。*不过现在有了class语句了，但只是prototype的语法糖罢了，这里不介绍或以后介绍了。*
 
 除了对象字面值可以直接建立对象，还可以通过构造函数来实例化对象。构造函数实例化的方式很复杂，首先先理解几个概念。
 
-### 2.8.1、this
+### this
 `this`关键词，在函数中通常为`undefined`，当然也可以使用`call()`、`apply()`方法手动设置`this`值；在对象方法中指向该对象。由于**自动包装**(auto box)的存在，`undefined`或`null`值将被替换为全局对象（如`window`），`primitive`值被包装成对象。但在**strict mode**下，不会发生自动包装。
 
 下面看看两个非strict模式下自动包装的例子：
@@ -552,7 +552,7 @@ function test(){
 test();
 ```
 >参考：[Does javascript autobox?](https://stackoverflow.com/a/17216967/10248407)
-### 2.8.2、prototype
+### prototype
 每个对象都有一个**prototype object**（原型对象），被存入到对象的__proto__属性中。prototype object的所有属性和方法都会被该对象继承。而prototype object对象源自于构造函数（constructor function）的prototype属性，该属性也是一个对象，Object。prototype object中有个属性constructor，指向它的构造函数。
 
 对象调用属性或方法的过程，以调用方法为例：
@@ -589,7 +589,7 @@ person1.fullName();//"Simon Willsion"
 
 前面的例子是一个很好的模板，不建议在构造函数中为构造函数的prototype属性添加方法，如果这样，那么每次实例化对象都会创建新的方法然后覆盖原方法上，影响效率。
 
-### 2.8.3、继承
+### 继承
 javascript中的继承是**对象之间**的继承，即一个对象继承另一个对象所有属性，作为对象的属性；而原型方法（即构造函数prototype属性中定义的方法）则构成一个prototype chain。
 
 一般对象是通过构造函数来创建的，因此对象之间的继承通过改写构造函数来完成。用到了几个方法：
@@ -624,7 +624,7 @@ Teacher.prototype....=function(...)...
 ```
 看不懂？呵呵。。我觉得我过几天自己都看不懂。。。
 
-## 2.9、闭包
+## 闭包
 函数中还可以定义函数，而且可以访问外部函数的变量。如：
 ```javascript
 function parentFunc() {
@@ -658,7 +658,7 @@ y(7); // ?
 x(6); // returns 11
 y(7); // returns 27
 ```
-## 2.10 strict mode
+##  strict mode
 strict mode限制了一些javascript语法的使用，并且赋予了普通代码新的含义。strict mode的一些规则或作用：
 1. 一些错误（silent errors）会被忽视，但strict mode抛出该错误
 2. 更好的优化效率
@@ -675,7 +675,7 @@ strict mode限制了一些javascript语法的使用，并且赋予了普通代�
 >* [Transitioning to strict mode](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Strict_mode/Transitioning_to_strict_mode)
 >* [Strict mode](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Strict_mode)
 
-## 2.11 class
+##  class
 类只是javascript原型继承链的语法糖，并没有引入新的对象继承模型。因此可以参考2.8小节来理解。
 
 * **类定义**：类实际上是一个特殊的函数，因此可以与函数一样，通过class声明、class表达式定义。但定义的class没有hoisting现象。
@@ -760,8 +760,8 @@ strict mode限制了一些javascript语法的使用，并且赋予了普通代�
 是否注意到了，class中方法定义的不同？class中方法定义使用简写方式，见2.6.1，且只能这样定义！
 >参考：[Classes](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Classes)
 
-## 2.12、其他
-### 2.12.1、注释
+## 其他
+### 注释
 1. 单行注释
     ```javascript
     // I am a comment
@@ -773,7 +773,7 @@ strict mode限制了一些javascript语法的使用，并且赋予了普通代�
       a comment
     */
     ```
-### 2.12.2 模板字符串(Template literals)
+###  模板字符串(Template literals)
 模板字符串（Template）允许在字符串中嵌入表达式，语法如下：
 ```javascript
 `string text`
@@ -792,7 +792,7 @@ tag `string text ${expression} string text`
 tag函数编写，略！
 >参考：[Template literals](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Template_literals)
 
-## 2.13 模块
+##  模块
 模块（module）和脚本（script）类似，都是一个含有JavaScript代码的文件，但还有一些不同。
 
 * 模块中只有被`export`（导出）的部分，才能在其他模块`import`（导入）并使用，`import()`可以动态导入。
@@ -806,7 +806,7 @@ tag函数编写，略！
 
 [2131]:https://blog.csdn.net/jdbdh/article/details/84770324#33javascript_764
 
-### 2.13.1 模块导出(export)
+###  模块导出(export)
 模块写好后，需要使用`export`导出允许其他模块使用的部分。部分语法如下：
 ```javascript
 //导出变量、方法、类，指定名字
@@ -837,7 +837,7 @@ export function shout(string) {
 }
 export default "aaa";
 ```
-### 2.13.2 模块导入(import)
+###  模块导入(import)
 使用`import`导入其他模块export的部分。部分语法如下：
 ```javascript
 import defaultExport from "module-name";//导入模块默认export部分，defaultExport是赋予该默认部分的名字。
@@ -868,7 +868,7 @@ console.log(shout('Modules in action'));
 console.log(bb);
 ```
 
-### 2.13.3 html中引入
+###  html中引入
 模块最后需要在html引入，如下所示：
 ```html
 <script type="module" src="main.mjs"></script>
@@ -887,7 +887,7 @@ console.log(bb);
 >* [MDN import](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/import)
 >* [MDN export](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/export)
 >* [MDN script](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/script)
-## 2.14 Promise
+##  Promise
 
 promise相当于一个代理，表示一个**异步**操作成功或失败的结果，即使不能立马获得promise表示的值，但可以为promise附上成功或失败的回调函数。
 
@@ -1081,7 +1081,7 @@ f().catch(alert); // TypeError: failed to fetch // (*)
 > 参考: [Async/await](https://javascript.info/async-await)
 
 # 三、浏览器相关
-## 3.1、浏览器解析过程
+## 浏览器解析过程
 浏览器有三个解析器：html parser，javascript parser 和 css parser。
 
 html解析器最先开始运行，可以调用其他两个解析器。**从上到下按照顺序解析每个元素标记**，生成元素、注册到DOM名字空间中、属性添加到dom元素节点上。
@@ -1092,7 +1092,7 @@ html解析器最先开始运行，可以调用其他两个解析器。**从上�
 
 参考：<https://stackoverflow.com/questions/1795438/load-and-execution-sequence-of-a-web-page>
 
-## 3.2、引入javascript
+## 引入javascript
 在html中引入javascript中有三种方式：
 1. internal javascript
     ```
@@ -1108,7 +1108,7 @@ html解析器最先开始运行，可以调用其他两个解析器。**从上�
     ```
     <button onclick="createParagraph()">Click me!</button>
     ```
-## 3.3、javascript加载问题
+## javascript加载问题
 **问题**：
 1. javascript在加载并解析时会导致html解析器停止运行，导致网页的加载性能下降。
 2. javascript在加载并运行时，html元素并未全部被解析，因此js操作元素会出错。
@@ -1122,7 +1122,7 @@ html解析器最先开始运行，可以调用其他两个解析器。**从上�
 
 参考：<https://flaviocopes.com/javascript-async-defer/>
 
-## 3.4、DOM
+## DOM
 DOM（Document Object Model）是一个用于操作HTML或XML文档的编程**接口**。DOM将文档的内容当作**节点以树的方式**表示文档。并且是与语言无关的，DOM只定义了每个接口的内容。
 
 DOM接口大致分为两类：DOM核心接口和与html元素相关的接口。DOM核心接口定义了一些主要和DOM文档操作、事件相关的接口。其中`Node`接口代表节点，`Element`接口继承Node，代表元素；而其他接口定义了和html元素相关的接口，含有对应元素特定的属性。其中`HTMLELement`代表html元素，然后是继承该接口的其他更具体的接口，比如`HTMLTableElement`。
@@ -1156,14 +1156,14 @@ DOM接口大致分为两类：DOM核心接口和与html元素相关的接口。D
 参考：
 [Document Object Model (DOM)](https://developer.mozilla.org/en-US/docs/Web/API/Document_Object_Model)
 
-### 3.4.1 Window
+###  Window
 Window接口表示一个包含了DOM文档的窗口，在浏览器中具体表现为一个标签页。Window接口的对象window含有所有和窗口相关的内容，也是JavaScript的运行环境，JavaScript中的全局变量、函数就是该window对象的属性或方法；除了DOM和脚本外，还涉及其他对象，如location（代表链接）、History（代表理事）等等。
 
 >具体使用参考
 >* [Window MDN](https://developer.mozilla.org/en-US/docs/Web/API/Window)
 >* [Wndow w3schools](https://www.w3schools.com/jsref/obj_window.asp)
-## 3.5、事件
-### 3.5.1、介绍
+## 事件
+### 介绍
 **事件**是系统（browser）中某个动作或事件的发生，系统会产生一个信号（**event**），这个信号含有关于该事件的信息。随着信号的产生，**事件处理器或监听器**会采取一定动作处理该事件。这种事件处理机制称为**事件模型**。事件模型不是javascript特有的，不同的上下文中会有不同的**事件模型**，即事件模型的实现机制不太一样，比如web api、插件、Node.js等等上下文。
 
 这里讲的事件模型是DOM相关的，所有的事件都在DOM中发生，比如用户产生的（鼠标、键盘事件），或者被API产生（动画结束、视频暂停等）。也能够通过代码触发事件，如`HTMLElement.click()`模拟点击事件；或者自定义事件，通过`EventTarget.dispatchEvent()`发送给某个元素。`Event`是最泛化的事件接口，其他接口都继承该接口。
@@ -1174,7 +1174,7 @@ Window接口表示一个包含了DOM文档的窗口，在浏览器中具体表�
 
 参考：https://developer.mozilla.org/en-US/docs/Web/API/Event
 
-### 3.5.2、使用
+### 使用
 一共有三种方法可以使用事件：
 1. **Event handler properties**：html元素对应的javascript对象存在一些用于执行事件处理器的属性。
 	```javascript
@@ -1201,7 +1201,7 @@ Window接口表示一个包含了DOM文档的窗口，在浏览器中具体表�
 [所有event](https://developer.mozilla.org/en-US/docs/Web/Events)
 [事件的所有键值key](https://developer.mozilla.org/en-US/docs/Web/API/KeyboardEvent/key/Key_Values)
 
-### 3.5.3、Event object
+### Event object
 事件发生后，会同时产生event对象，通过该对象可以获得关于事件的信息，比如Event.target指定具体产生event的对象。
 
 事件处理器都可以接收event对象，只要函数定义时指定参数即可：
@@ -1221,7 +1221,7 @@ button.addEventListener('click',function(event){
 5.  event.stopImmediatePropagation()：停止事件横向、纵向传播。
 6. event.defaultPrevented()：阻止默认行为。注意，在html元素的事件处理属性中`return false`也能阻止默认行为，但是在其他地方行不通，因此不建议使用。
 
-### 3.5.4、Event bubbling and capture
+### Event bubbling and capture
 当事件发生时，event对象会传播给目标对象，执行处理器。但是这个过程分为三个阶段：
 1. Capturing phase – the event goes down to the element.
 2. Target phase – the event reached the target element.
@@ -1233,12 +1233,12 @@ addEventListener的第三个参数为true时（默认false）注册在capturing�
 
 target阶段不能单独存在，而是包含在其他两个阶段内。比如，capturing阶段最后一个处理器和budding阶段第一个处理器就发生在该阶段。
 
-### 3.5.5、事件代理
+### 事件代理
 这里的代理就是指父类来处理子类的事件。比如点击`li`，但监听器设置在`ul`上，通过event.target就知道具体哪个元素被点击，于是可以方便其代为处理该事件。利用事件传播原理。
 
 参考：<https://javascript.info/bubbling-and-capturing>
 
-## 3.6 存储
+##  存储
 html5后引入了web storage（本地储存），比cookies更好用。本地存储分两类：
 * `window.localStorage` - stores data with no expiration date
 * `window.sessionStorage` - stores data for one session (data is lost when the browser tab is closed)
@@ -1247,7 +1247,7 @@ html5后引入了web storage（本地储存），比cookies更好用。本地存
 
 >参考：[HTML5 Web Storage](https://www.w3schools.com/html/html5_webstorage.asp)
 # 四、其他
-## 4.1、一些概念
+## 一些概念
 * javascript：语言
 * Browser APIs：内置在浏览器的api
 * Third party APIs：构建在三方平台上的api。

@@ -34,16 +34,16 @@ vps实例创建好后可以看到它的ip地址和root账号密码：
 使用与centos7，其他发行版参考[github][3]
 
 [3]:https://github.com/shadowsocksr-backup/shadowsocksr
-## 3.1 安装pip
+## 安装pip
 python仓库中含有shadowsocks，因此可以使用pip安装，如果pip不存在，则安装pip：
 ```bash
 yum install python-setuptools && easy_install pip
 ```
-## 3.2 安装shadowsocks
+## 安装shadowsocks
 ```bash
 pip install shadowsocks
 ```
-## 3.3 配置防火墙
+## 配置防火墙
 在vps服务商提供的vps中，一般含有两层防火墙：系统自带的防火墙和系统外vps提供的防火墙。对于我来说，我不太熟悉系统防火墙命令，也认为只要使用一层防火墙就够了，于是我选择关闭和禁用系统防火墙。（实践中，我发现阿里云主机的系统防火墙已经默认被关闭了）
 
 先**关闭**和**禁用**系统防火墙：
@@ -58,9 +58,9 @@ systemctl disable firewalld.service
 
 [4]:https://my.vultr.com/firewall/
 
-## 3.4 运行ssserver
+## 运行ssserver
 ssserver是ss服务的进程，ss服务的配置有两种方式：json配置和命令行上提供选项。注意命令行上的配置可以覆盖json配置。
-### 3.4.1 命令配置
+### 命令配置
 输入`ssserver -h`可以查看选项介绍：
 ```bash
 [root@I ~]# server -h
@@ -104,7 +104,7 @@ ssserver -p 8111 -k 123456 -m aes-256-cfb -d start
 #关闭ss服务进程
 ssserver -d stop
 ```
-### 3.4.2 json配置
+### json配置
 json对象每个字段含义如下：
 | Name          | Explanation                                |
 | :------------ | :----------------------------------------- |
@@ -141,7 +141,7 @@ ssserver -c /etc/shadowsocks.json -d start
 #关闭ss服务
 ssserver -d stop
 ```
-## 3.4.3 配置多个用户
+## 配置多个用户
 配置多个用户实际上就是一个用户一个端口配置。github上提供了配置方式：[Configure Multiple Users][5]，一个ss服务配置多个端口，而我测试失败了。因此使用第二种方案，一个ss服务对应一个端口配置。进程之间pid唯一，为了不让多个ss进程冲突，需要指定它的pid文件：
 ```bash
 #第一个ss服务
@@ -213,7 +213,7 @@ bash tcp_nanqinlang-1.3.2.sh
 [9]:https://ssr.tools/674
 
 # 六 其他
-## 6.1 加密算法
+## 加密算法
 简单算法容易被墙，据[介绍](https://github.com/shadowsocks/shadowsocks/wiki/Encryption)，`salsa20`和`chacha20`很不错，但需要依赖软件，有简单的[安装方法](https://github.com/shadowsocksrr/shadowsocks-rss/wiki/libsodium)：
 ```bash
 yum install epel-release

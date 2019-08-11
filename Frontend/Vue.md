@@ -24,7 +24,7 @@ vue指令以`v-`开始，用于渲染DOM或绑定数据，定义在元素或组�
 # 三 组件
 * **组件本质上是一个vue实例，含有预定义好的选项**。但有些选项是特定于根组件的,如（`el`），根组件只能使用`new`创建。
 
-## 3.1 组件实例
+## 组件实例
 * 组件实例化有三种方式：
     * **html元素**：在html，则将组件名当作新的html标签，然后创建该元素。但这种实例方式不能作为根组件，需要放入额外一个Vue实例下。
 	    >注意，组件作为`<ul>`的子元素实例化会出现问题，因此需使用`is`，如：
@@ -83,13 +83,13 @@ vue指令以`v-`开始，用于渲染DOM或绑定数据，定义在元素或组�
     ```
 * 组件之间数据作用域是隔开的，父子组件通过`props`通信
 
-## 3.2 Data and Methods
+## Data and Methods
 * vue实例被创建时，会将`data`对象的属性添加到vue实例上和响应式系统中，即这些属性改变，视图也会改变。而之后vue实例添加的属性不会存在于响应式系统中。
 * 除了选项对象提供的`data`,`methods`，vue实例也有一些有用的属性和方法，以`$`为开头。部分如下：
     * `$data`：选项对象中的data
     * `$el`：挂载在DOM中的html元素
 
-## 3.3 生命周期
+## 生命周期
 ![](.Vue/aHR0cHM6Ly92dWVqcy5vcmcvaW1hZ2VzL2xpZmVjeWNsZS5wbmc.png )
 vue允许在vue实例生命周期的某个阶段（如红色方框所示）上挂载用户自定义的函数，称为hook，如：
 
@@ -110,9 +110,9 @@ new Vue({
 * 即html模板，允许你声明式的绑定渲染后的DOM到vue实例的数据上。
 * vue会编译模板到虚拟DOM渲染函数中。结合响应式系统，当vue实例状态改变时，vue会智能地计算最少的组件去渲染和应用最少的DOM操作。
 
-## 4.1 插值
+## 插值
 即将vue实例的数据插入到模板中，也称为数据绑定。
-### 4.1.1 文本插值
+### 文本插值
 数据被双花括号围绕`{{data}}`。如
 ```html
 <span>Message: {{ msg }}</span>
@@ -124,31 +124,31 @@ new Vue({
 <span>Message: {{ msg }}</span>
 ```
 
-### 4.1.2 Raw HTML
+### Raw HTML
 插入生的html，不被vue解析。如
 ```html
 <span v-html="rawHtml"></span>
 ```
 此时`span`的`innerHTML`使用属性rawHtml替换。
 
-### 4.1.3 属性
+### 属性
 使用指令`v-bind`,在需要插入数据的html属性上加上该指令。
 
-### 4.1.4 表达式
+### 表达式
 前面都是绑定一些简单的属性值，也可以绑定表达式。表达式可以使用一些vue规定的全局变量如`Math`、`Date`，不能是自定义的全局变量。
 
 
-## 4.2 指令
+## 指令
 指定是特殊的属性，以`v-`开头。指令属性值期待一个js表达式（除了for）。指令的作用是当表达式值改变时，运用这些副作用（DOM的改变）到DOM中。
 
-### 4.2.1 参数
+### 参数
 指令是有参数的，指令与参数冒号分隔，如
 ```html
 <a v-bind:href="url"> ... </a>
 ```
 `v-bind`指令的参数是`href`，即将`url`绑定到`href`属性上。
 
-### 4.2.2 动态参数
+### 动态参数
 指定的参数可以是动态给出的，以`[]`为标识，js表达式给出参数值，如：
 ```html
 <a v-bind:[attributeName]="url"> ... </a>
@@ -157,7 +157,7 @@ new Vue({
 
 限制：`[]`内不能存在`spaces, quotes, <, >, / or =`
 
-### 4.2.3 Modifiers
+### Modifiers
 modifiers是指令的特殊后缀，以`.`表示，指示指令绑定的一些行为。如：
 ```html
 <form v-on:submit.prevent="onSubmit"> ... </form>
@@ -166,7 +166,7 @@ modifiers是指令的特殊后缀，以`.`表示，指示指令绑定的一些�
 
 貌似可以叠加多个Modifiers
 
-## 4.3 缩写
+## 缩写
 有的指令有缩写，如
 * `v-bind`的缩写：`:`
 * `v-on`的缩写：`@`
@@ -236,7 +236,7 @@ modifiers是指令的特殊后缀，以`.`表示，指示指令绑定的一些�
 
 # 六 class和style数据绑定
 html的class和style都是属性，因此可以使用`v-bind`来绑定vue属性，并且不仅string、还可以绑定object or array到html属性上。
-## 6.1 class数据绑定
+## class数据绑定
 * 文本绑定：
     ```html
     <div v-bind:class="activeClass"></div>
@@ -278,7 +278,7 @@ html的class和style都是属性，因此可以使用`v-bind`来绑定vue属性�
     ```
     这里绑定的是父组件的实例属性。并且该class会被添加到组件模板的根元素上。
 
-## 6.2 styles数据绑定
+## styles数据绑定
 * 对象绑定语法  
     ```html
     <div v-bind:style="{ color: activeColor, fontSize: fontSize + 'px' }"></div>
@@ -294,7 +294,7 @@ html的class和style都是属性，因此可以使用`v-bind`来绑定vue属性�
 * 一些样式的属性也有前缀，但需要自己手动添加，略。
 
 # 七 条件性渲染
-## 7.1 v-if
+## v-if
 * 含有`v-if`指令的元素，只有在属性值为true时才会被渲染。
 * 如果需要一个`v-if`指令条件渲染多个html元素，可使用`template`包裹起来：
     ```html
@@ -317,11 +317,11 @@ html的class和style都是属性，因此可以使用`v-bind`来绑定vue属性�
     </template>
     ```
     但label还是会被复用
-## 7.2 v-show
+## v-show
 含`v-show`的元素还是会被渲染到dom中，但会条件性的选择是否显示它，使用了css的`display`属性。因此隐藏或显示后，事件监听器还是存在的。
 
 # 八 list渲染
-## 8.1 v-for与数组
+## v-for与数组
 使用方式如下
 * `v-for`可以将数组映射为Elements，最基本形式如下：
 	```html
@@ -340,7 +340,7 @@ html的class和style都是属性，因此可以使用`v-bind`来绑定vue属性�
 	```html
 	<div v-for="item of items"></div>
 	```
-## 8.2 v-for与对象
+## v-for与对象
 * 基本形式：
 	```html
 	  <li v-for="value in object">
@@ -366,14 +366,14 @@ html的class和style都是属性，因此可以使用`v-bind`来绑定vue属性�
 	  <span v-for="n in 10">{{ n }} </span>
 	</div>
 	```
-## 8.3 key
+## key
 这里再次强调一下，虚拟DOM应用到DOM时会patch/reuse元素，达到对DOM的最少操作。元素（如input）或组件的内部状态可能会被保存，使用`key`属性可以将防止这种优化，如：
 ```html
 <div v-for="item in items" :key="item.id">
   <!-- content -->
 </div>
 ```
-## 8.4 数组中元素改变探测
+## 数组中元素改变探测
 >对下面的话，做个总结：简而言之，vue检测不到`data`中数组属性中元素的修改，需要其他手段。对于对象也是同样的道理
 
 我们知道，选项对象的`data`中的属性会被添加到响应式系统，这些属性的改变会造成视图的重新渲染。但如果`data`中存在**数组属性**，对**数组元素**的修改不会造成数据本身引用地址的改变（参考c++引用），因此vue不能通过数组属性检查数组元素是否改变。检测方法如下：
@@ -397,19 +397,19 @@ html的class和style都是属性，因此可以使用`v-bind`来绑定vue属性�
 		```
 		它在删除元素的同时也在对应位置添加了`newValue`
 
-## 8.5 对象中属性更改检测
+## 对象中属性更改检测
 理由同上，解决方法
 * 使用`set`方法
 * 覆盖原对象
 
-## 8.6 其他
+## 其他
 * `v-for`也可以使用`<template>`元素聚合html元素块。
 * 当`v-for`与`v-if`一起作用到同一个元素中，`v-for`优先级高
 * 当`v-for`与组件搭配使用时，`key`属性必须加上，保证组件的更改随视图更新而更新。组件之间的数据作用域是隔开的，如果父组件想将`v-for`的索引值传入子组件，需绑定子组件的属性，子组件的属性由选项对象的`props`设置。
 
 # 九 事件处理
 `v-on`绑定的事件在虚拟DOM删除（real-DOM中reuse），事件也会被清除。
-## 9.1 事件处理器
+## 事件处理器
 `v-on`指令监听DOM事件，事件触发时执行js代码。
 * 指令值为js代码：
 	```html
@@ -424,12 +424,12 @@ html的class和style都是属性，因此可以使用`v-bind`来绑定vue属性�
 	```
 * 指令值为方法名，方法原型可以直接接受event
 
-## 9.2 事件modifiers
+## 事件modifiers
 之前说了，一些指令拥有modifier，`v-on`也有。
 
 >参考：[Event modifiers](https://vuejs.org/v2/guide/events.html#Event-Modifiers)
 
-## 9.3 键值modifiers
+## 键值modifiers
 当只监听某个键值时，可以使用key modifiers。如：
 ```html
 <!-- only call `vm.submit()` when the `key` is `Enter` -->
@@ -471,7 +471,7 @@ html的class和style都是属性，因此可以使用`v-bind`来绑定vue属性�
 * 组件注册：全局和局部。全局组件通过`Vue.component()`注册。全局组件可以作为根组件
 * `props`是组件的自定义属性，组件实例后会作为实例的属性而存在
 
-## 11.1 自定义事件与监听
+## 自定义事件与监听
 子组件中使用`vm.$emit( eventName, […args] )`自定义事件并发出，arg是伴随事件的额外数组参数。
 ```html
 <!--位于组件blog-post中，点击发送事件，带着参数-->
@@ -503,7 +503,7 @@ methods: {
 ```
 事件处理器的参数可以有多个，与`$emit()`方法的参数一一对应。
 
-## 11.2 v-model与组件
+## v-model与组件
 上面谈到过
 ```html
 <customer-input v-model="searchText"></customer-input>
@@ -552,7 +552,7 @@ Vue.component('base-checkbox', {
 <base-checkbox v-model="lovingVue"></base-checkbox>
 ```
 
-## 11.3 slots
+## slots
 html中，组件中含有内容时，组件可通过`<slot>`获取。如：
 ```html
 <alert-box>
@@ -570,7 +570,7 @@ Vue.component('alert-box', {
 })
 ```
 
-## 11.4 动态组件
+## 动态组件
 动态切换组件，使用`is`属性，如：
 ```html
 <div id="app">
@@ -608,7 +608,7 @@ Vue.component('alert-box', {
 </keep-alive>
 ```
 
-## 11.5 DOM模板解析问题
+## DOM模板解析问题
 在html元素中，`ul`,`ol`,`table`,`select`规定了什么元素能够存在，如`li`,`tr`,`option`。解决办法是使用`is`属性。
 
 但在其他模板中无这种问题：
@@ -618,13 +618,13 @@ Vue.component('alert-box', {
 
 
 # 十二 组件注册
-## 12.1 全局注册
+## 全局注册
 ```javascript
 Vue.component('my-component-name', { /* ... */ })
 ```
 第一个参数为组件名，第二个参数为选项对象。全局注册的组件，可以直接在其他组件中使用。
 
-## 12.2 局部注册
+## 局部注册
 创建Vue实例时，可将组件传给选项对象的components数组，如：
 ```javascript
 //选项对象
@@ -641,7 +641,7 @@ new Vue({
 })
 ```
 并且该组件只能在注册的父组件中使用。
-## 12.3 组件名
+## 组件名
 * kebab-case（推荐）：注册组件名如`my-component-name`，可以在html和模板中直接使用。
 * PascalCase：注册组件名如`MyComponentName`，此时在html中只能使用对应的kebab-case命令，但在模板中两则都可使用。(即存在自动转换过程)
 
@@ -782,7 +782,7 @@ Vue.component('base-input', {
 * `v-slot:`的缩写为`#`，使用时后面必须存在参数。
 
 # 十六 例子
-## 16.1 指令与vue实例
+## 指令与vue实例
 ```html
 <div id="app-5">
   <p>{{ message }}</p>
@@ -807,12 +807,12 @@ var app5 = new Vue({
 })
 ```
 # 十七 其他
-## 17.1 获取元素
+## 获取元素
 * `$root`：访问组件的根实例
 * `$parent`：访问子组件的父组件
 * `$refs`：子元素或子组件上添加`ref`属性，指定引用id，可通过`$refs`来获取该DOM元素或组件实例。
 * 	`$el`：组件的根DOM元素
-## 17.2 .sync
+## .sync
 用于双向绑定属性的，与`v-model`类似。
 
 如父组件绑定到子组件的`title`属性上，当子组件发出`update:title`事件时：

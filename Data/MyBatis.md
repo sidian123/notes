@@ -13,7 +13,7 @@ MyBatis是一个持久层框架，消除了大部分JDBC代码，包括手动设
 
 mybatis中最核心的是SqlSession接口，通过该接口可以执行sql语句，处理事务，也可以绑定mapper接口到映射语句上。myabtis中SqlSession实现就是对jdbc中Connection进行了简单的封装。
 
-## 2.1 导入jar包
+## 导入jar包
 只需导入mybatis-x.x.x.jar，如果使用日记，还需导入log4j的jar包。
 ```xml
 <dependency>
@@ -22,11 +22,11 @@ mybatis中最核心的是SqlSession接口，通过该接口可以执行sql语句
   <version>x.x.x</version>
 </dependency>
 ```
-## 2.2 配置mybatis
+## 配置mybatis
 单独使用mybatis，至少需要配置事务管理器、数据源和映射文件的位置（即注册mapper文件）。
 >如果和spring整合，那么事务管理器和数据源的配置就交给了spring，映射文件可以通过专门的Bean扫描。
 
-### 2.2.1 通过xml配置
+### 通过xml配置
 首先定义xml配置文件，里面配置了事务管理器、数据源和映射文件位置（注册）。
 ```xml
 <?xml version="1.0" encoding="UTF-8" ?>
@@ -59,7 +59,7 @@ SqlSessionFactory sqlSessionFactory =
 ```
 >mybatis提供了Resources类，方便从classpath下获得资源文件。Resources本质上是对ClassLoader的包装。
 
-### 2.2.2 通过java配置
+### 通过java配置
 或直接在java代码中配置mybatis：
 ```java
 DataSource dataSource = BlogDataSourceFactory.getBlogDataSource();
@@ -74,9 +74,9 @@ SqlSessionFactory sqlSessionFactory = new SqlSessionFactoryBuilder().build(confi
 由于注解的限制和一些映射的复杂性，mybatis还会加载与接口对应的映射文件，如注册com.example.BlogMapper.class接口，还会尝试加载com.example包下的BlogMapper.xml文件。**因此注解和xml可以混合用**，注解中给出简单的映射语句，xml中定义复杂的映射语句。
 
 >如果在idea的maven项目中，报错说找不到xml文件，则参考：[maven之允许src目录下xml文件输出到target目录](https://blog.csdn.net/jdbdh/article/details/89068289)
-## 2.3 映射语句
+## 映射语句
 映射语句可以在xml映射文件中创建，也可以在接口的注解中创建。
-### 2.3.1 xml映射文件
+### xml映射文件
 ```xml
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper
@@ -90,7 +90,7 @@ SqlSessionFactory sqlSessionFactory = new SqlSessionFactoryBuilder().build(confi
 ```
 一个映射文件中可以含有多个映射语句。`namespace`唯一标识映射文件，为了使用时绑定接口，一般以包名的形式存在，而映射语句的`id`则对应接口的方法名。当然，执行映射语句，也可以不绑定接口，可以直接使用`namespace`直接执行。
 
-### 2.3.2 注解定义
+### 注解定义
 ```java
 package org.mybatis.example;
 public interface BlogMapper {
@@ -99,7 +99,7 @@ public interface BlogMapper {
 }
 ```
 >注解定义很是方便，参考：[java api](http://www.mybatis.org/mybatis-3/java-api.html)。注解定义没有xml映射灵活，但会更方便。如有不便，可以看看注解`@options`
-## 2.4 使用
+## 使用
 mybatis中最重要的类就是SqlSession了，可以通过namespace+id指定映射语句并执行：
 ```java
 Blog blog = session.selectOne(
@@ -115,7 +115,7 @@ Blog blog = mapper.selectBlog(101);
 
 >**千万注意**！！！！
 >使用之前是需要在mybatis中注册的，可以手动在mybatis配置文件中注册，获得spring-mybatis项目中使用自动扫描，等等。
-## 2.5 作用域
+## 作用域
 每个对象都有自己的作用域和生命周期：
 * **SqlSessionFactoryBuilder**：通过配置，用于创建SqlSessionFactory，用完后即可丢弃，因此为**方法作用域（method scope）**。
 * **SqlSessionFactory**：用于创建SqlSession，一旦被创建就应该存在于应用程序的整个生命周期，因为为**应用作用域（application scope）**。
@@ -139,7 +139,7 @@ mybatis配置文件的结果如下：
 			* dataSource：数据源
 	* databaseIdProvider：数据库标识，拥有多个数据库供应商时使用
 	* mappers：指出映射文件或含映射语句的接口的位置
-## 3.1 properties
+## properties
 配置属性键值对，在其他元素中可以通`${propertyName}`取出。如：
 ```xml
 <properties resource="org/mybatis/example/config.properties">
@@ -161,7 +161,7 @@ mybatis配置文件的结果如下：
 
 其中，优先级依次递增。还可以为属性配置默认值，默认这个功能不开启。
 
-## 3.2 settings
+## settings
 settings元素中可以配置mybatis的各种行为。
 
 一些注意点如下:
@@ -169,7 +169,7 @@ settings元素中可以配置mybatis的各种行为。
 * `jdbcTypeForNull`，默认值为`other`，意味着在定义映射语句时，即使传入参数可能为空，也不必执行jdbc类型了，因为有了默认值。在jdbc中，参数设置为NULL时必须指定jdbc类型的。
 * `mapUnderscoreToCamelCase`, 默认`false`, 即自动映射时不使用驼峰命名的转换.
 
-## 3.3 typeAliases
+## typeAliases
 设置别名，用于在需要类名配置的地方减少拼写。如：
 ```xml
 <typeAliases>
@@ -189,7 +189,7 @@ settings元素中可以配置mybatis的各种行为。
 ```
 mybatis为常用的基本类型设置了别名，详细参考官网。
 
-## 3.4 environments
+## environments
 可以配置多个环境，但每个`SqlSessionFactory`只能使用一个。一个配置如下：
 ```xml
 <environments default="development">
@@ -216,7 +216,7 @@ mybatis提供了三种数据源实现：
 * **JNDI**：配置JNDI上下文中的数据源一起使用。
 >仅mybatis项目中想使用其他数据源，就需要实现它的DataSourceFactory接口。
 
-## 3.5 mappers
+## mappers
 定义好映射文件或含映射语句的接口后，需要注册它们，让mybatis知道如何找到它。
 ```xml
 <!-- Using classpath relative resources -->
@@ -255,14 +255,14 @@ mybatis最强大的功能就是映射语句，配置好映射文件后，就可�
 * delete – A mapped DELETE statement.
 * select – A mapped SELECT statement.
 
-## 4.1 参数
+## 参数
 在编写映射语句时，不必指出参数类型，因为mybatis可以推断出，但是参数为Map时，必须给出参数类型，即map。
 * 当参数是基本类型时，sql语句中占位符名可以任意。
 * 当参数是pojo或javaBean时，占位符名为对象属性。
 * 当参数是map是（此时参数类型必须给出），占位符名为map的key。
 * 当参数有多个时，每个参数的占位符名为`#{paramN}`；如果编译时，启用了`-Parameter`选项，占位符名就是参数名；还可以通过`@Param`注解指定参数名。
 
-## 4.2 联级
+## 联级
 将结果集映射到简单对象时不需要联级，但是有时候对象中属性不简单时，就需要联级。mybatis有三种联级：`association`、`collection`、`discriminator`。当属性对象和对象有一对一的关系时，使用association定义映射关系；当属性对象是个集合时，使用collection定义映射关系；当需要根据结果集某个属性映射不同的属性时，使用discrimination。
 
 有两种方式实现association和collection：
@@ -271,7 +271,7 @@ mybatis最强大的功能就是映射语句，配置好映射文件后，就可�
 
 mybatis在处理联级时，都是先建立属性对象，最后才创建最外层的对象。在建立属性对象的过程中需要进行对象间的比较，判断属性对象属于哪个外层对象，因此**联级中设置id元素是十分重要的**，能够大大提高效率。如果没有该元素，也许mybatis能够正常工作，但也极有可能报错。。。
 
-## 4.3 自动映射
+## 自动映射
 mybatis的一个强大功能就是自动映射，只要结果对象属性名与结果集的列名相同（忽略大小写），mybatis就会自动映射过去。如果列名对应不上，可以通过sql的`as`语句更改列名，或者手动映射。
 
 在mybatis的全局配置中，`autoMappingBehavior`控制mybatis的自动映射行为，有三种取值：
@@ -281,20 +281,20 @@ mybatis的一个强大功能就是自动映射，只要结果对象属性名与�
 
 默认值partial，嵌套结果不会自动映射，这事有原因的，主要为了防止不被期待的结果出现。如果想要映射嵌套结果，则设置对应元素的autoMapping属性。
 
-## 4.4 缓存
+## 缓存
 mybatis中含有两级缓存，局部缓存一直被开启，一个局部缓存对应一个SqlSession。二级缓存默认不开启，用于事务管理。通过下列配置可开启二级缓存：
 ```xml
 <cache/>
 ```
 默认情况下，insert、update、delete会刷新局部和二级缓存。
 
-## 4.5 ${}
+## ${}
 mybatis使用`#{}`作为sql语句的占位符，而`${}`用于字符串拼接，因此使用`${}`时可能会导致sql注入攻击的问题。
 
 # 五 动态sql
 mybaits提供了根据参数内容动态拼接sql语句的功能。
 
-## 5.1 if
+## if
 根据一定条件判断是否添加sql片段：
 ```xml
 <select id="findActiveBlogLike"
@@ -308,7 +308,7 @@ mybaits提供了根据参数内容动态拼接sql语句的功能。
   </if>
 </select>
 ```
-## 5.2 choose,when,otherwise
+## choose,when,otherwise
 条件满足时只应用一个sql片段，类似java中的switch：
 ```xml
 <select id="findActiveBlogLike"
@@ -327,7 +327,7 @@ mybaits提供了根据参数内容动态拼接sql语句的功能。
   </choose>
 </select>
 ```
-## 5.3 trim
+## trim
 `trim`有四个属性：`prefix`，`prefixOverrides`，`suffix`，`suffixOverrides`。对于`prefix`和`prefixOverrides`的规则如下：
 
 * 如果只存在`prefix`，则直接在内容前添加`prefix`的内容。
@@ -336,7 +336,7 @@ mybaits提供了根据参数内容动态拼接sql语句的功能。
 
 该规则对`suffix`和`suffixOverrides`同样适用。如果`prefixOverrides`或`suffixOverrides`有多个可选值，通过`|`分隔。
 
-## 5.4 where
+## where
 `where`元素中有内容时则在前面插入`WHERE`，并去掉内容前存在的`AND`或`OR`。如：
 ```xml
 <select id="findActiveBlogLike"
@@ -364,7 +364,7 @@ mybaits提供了根据参数内容动态拼接sql语句的功能。
 ```
 > 注意AND和OR的空格是有用的。
 
-## 5.5 set
+## set
 `set`元素中有内容时则在前面插入`SET`，并去掉内容后存在的`,` 。如：
 ```xml
 <update id="updateAuthorIfNecessary">
@@ -378,7 +378,7 @@ mybaits提供了根据参数内容动态拼接sql语句的功能。
   where id=#{id}
 </update>
 ```
-## 5.6 foreach
+## foreach
 用于遍历集合的情况：
 ```xml
 <select id="selectPostIn" resultType="domain.blog.Post">
@@ -463,14 +463,14 @@ mybatis的事务管理器和数据源配置全都交给了spring配置，因此m
 
 之后通过依赖注入Mapper到Dao对象中。
 
-## 7.1 SqlSessionFactoryBean
+## SqlSessionFactoryBean
 之前说了，使用`SqlSessionFactoryBean`只是因为它更适合在spring中配置mybatis罢了。该类实现了`FactoryBean`，实际上会产生`SqlSessionFactory`。数据源和事务管理器的配置都交给了spring来配置，但还需要传入数据源`dataSource`，并且与spring事务管理器使用的数据源要一致。
 
 该类的另一个常用的属性为`mapperLocations`，用于指定xml映射文件的位置。因为mybatis-spring提供注册Mappers的方法是针对于Mapper接口的，只有接口对应的xml文件存在于同一包下才会加载xml文件。如果xml文件在其他的位置时，需要该属性给出。
 
 还可以配置其他的属性，几乎消除了对mybatis配置文件的使用。
 
-## 7.2 SqlSession
+## SqlSession
 mybatis中`SqlSession`的实现类是`DefaultSession`，它含有一个事务管理器，事务管理器含有一个数据源。`DefaultSession`每次执行sql语句时，会向事务管理器申请一个`Connection`，而事务管理器会检查`SqlSession`是否已经打开了一个连接并返回，如果没有则想数据源申请一个新的连接。`DefaultSession`的事务操作、连接申请和关闭都是通过事务管理器实现的。
 
 但在spring，提供的事务管理功能更为的强大，但`DefaultSession`不能参与spring的事务管理功能，并且是线程不安全的。因此，mybatis-spring实现了新的`SqlSession`实现类：`SqlSessionTemplate`。该类将事务管理、连接的获取和关闭都交给了spring的事务管理器处理，能够使用上spring的强大事务功能，比如 `@Transactional`注解和 AOP风格的配置都支持。因此不要去手动关闭、提交和回滚`SqlSessionTemplate`，这样会抛出异常。
@@ -483,11 +483,11 @@ mybatis中`SqlSession`的实现类是`DefaultSession`，它含有一个事务管
 
 将`SqlSessionFactory`转入`SqlSessionTemplate`的构造函数中便可以生成`SqlSessionTemplate`对象，而直接使用`SqlSessionFactory.builder`方法生成的是`DefaultSession`对象。
 
-## 7.3 注册Mapper
+## 注册Mapper
 注入Mapper到Dao类中之前，需要在mybatis中注册Mapper和生成Mapper bean。mybatis-spring项目提供了MapperFactoryBean来完成这两项任务。spring容器中不能有接口？没问题，mybatis会使用动态代理生成Mapper接口代理类。
 >注意，这里注册Mapper的方法是通过扫描Mapper接口，xml映射文件需要与接口对应，否则参考7.1
 
-### 7.3.1 注册一个Mapper
+### 注册一个Mapper
 ```xml
 <bean id="userMapper" class="org.mybatis.spring.mapper.MapperFactoryBean">
   <property name="mapperInterface" value="org.mybatis.spring.sample.mapper.UserMapper" />
@@ -496,7 +496,7 @@ mybatis中`SqlSession`的实现类是`DefaultSession`，它含有一个事务管
 ```
 MapperFactoryBean需要注入SqlSessionFactory或SqlSessionTemplate都行，如果都存在，则使用SqlSessionTemplate，因为最终目的还是调用`SqlSessionTemplate`的`addMapper`方法。
 
-### 7.3.2 扫描Mappers
+### 扫描Mappers
 通过扫描包下的mappers，将所有的Mapper都注册，底层方法还是通过MapperFactoryBean实现的，它的属性会被自动注入进去。有三种方式可以扫描Mappers：
 * `<mybatis:scan/>`：用于xml配置
 	```xml

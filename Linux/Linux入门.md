@@ -10,7 +10,7 @@ Simplified history of Unix-like operating systems
 # 二 基础
 这里介绍和Unix相关的命令和工具，因此所有unix-like的操作系统都可以使用这些命令，如linux、BSD和Solaris等等。
 
-## 2.1 Shell
+## Shell
 shell是一个用于访问操作系统服务的用户接口，分为两类：CLI shell（command-line interface）和GUI shell（graphical user interface）。由于CLI shell功能的强大，即使在基于GUI的操作系统中也会提供CLI shell。
 
 不过shell只是特殊的应用程序而已，容易被替代。最初的shell为Bourne shell，之后出现了很多基于Bourne shell的shell。而linux默认使用Bourne shell的增强版本：**bash shell**。
@@ -19,7 +19,7 @@ shell是一个用于访问操作系统服务的用户接口，分为两类：CLI
 
 bash有很多特性，比如自动补全、别名、通配符、流的重定向、脚本语言等等。
 
-### 2.1.1 通配符
+### 通配符
 shell在执行命令时，会有一个globbing-->expansion的过程：
 1. **globbing**：含有通配符的参数匹配文件或目录名。如果没有匹配，则通配符视作字面值，转3。
 2. **expansion**：匹配的多个名字以空格分隔的方式替换原有的参数（含有通配符）
@@ -45,10 +45,10 @@ shell在执行命令时，会有一个globbing-->expansion的过程：
 
 注意，**只对参数有效**，对option无效，比如-name fil	ename，这个option没有globbing的过程。
 
-### 2.1.2 Dot Files
+### Dot Files
 点文件或点目录的名字以`.`开始，一般用作配置文件。点文件和普通文件没有什么区别，只是一些程序默认不显示它们罢了。globbing过程也不匹配点文件，除非显示指定，如`.*`
 
-### 2.1.3 环境和shell变量
+### 环境和shell变量
 shell变量是shell存储的临时变量，存储字符串值。
 >赋值或创建shell变量：
 >$ STUFF=blah
@@ -63,14 +63,14 @@ shell变量是shell存储的临时变量，存储字符串值。
 ------
 环境变量和shell变量的**主要区别**在于：操作系统会将shell的所有环境变量**拷贝**给shell运行的程序，因此shell运行的程序不能访问shell变量，除了环境变量。
 
-### 2.1.4 PATH
+### PATH
 PATH是一个特殊的环境变量，含有一些命名路径，通过分号（：）分隔。shell在执行命令时会根据PATH指定的目录查找命令所在位置，如果程序在多个地方存在，则运行第一个匹配的程序。
 
 命令在多个路径下存在时，先找到的优先使用。
 >$ echo $PATH
 >/usr/local/bin:/usr/bin:/usr/local/sbin:/usr/sbin
 
-### 2.1.5 input、output和redirect
+### input、output和redirect
 所有进程都是通过**io流**对数据读入和写入的。io流分为两种：输入流和输出流。内核为进程提供了**标准输入流**、**标准输出流**和**标准错误流**，标准输出流和标准错误流都属于输出流。一般情况下，三者都被连接在terminal上。
 
 还可以重定向标准流，而不是连接在terminal上：
@@ -98,8 +98,8 @@ PATH是一个特殊的环境变量，含有一些命名路径，通过分号（�
 	
 	>$ head < /proc/cpuinfo
 
-## 2.2 基本命令
-### 2.2.1 ls
+## 基本命令
+### ls
 `ls`命令列出目录中的全部内容（不包括以前缀`.`开始的文件）。默认显示当前目录。
 >ls [OPTION]... [FILE]...
 >* `ls -l`	显示文件的详细信息，不同类型的文件显示不同的颜色
@@ -122,7 +122,7 @@ PATH是一个特殊的环境变量，含有一些命名路径，通过分号（�
 
 链接个数：指向文件的引用，包括`.` , `..` 和hard link，不包括symbolic link
 
-### 2.2.2 cp
+### cp
 拷贝文件，主要有两种形式：
 >cp SOURCE DEST    如cp file1 file2
 >cp SOURCE... DIRECTORY  如 cp file1 ... fileN dir
@@ -138,7 +138,7 @@ source也可以为目录，但是需要`-r`;cp被别名为`cp -i`，由于别名
 
 [1]:https://stackoverflow.com/a/8488293/10248407
 
-### 2.2.3 type
+### type
 从上面看到了，bash shell提供了别名功能，比如`ls`，`ll`，`cp`都被别名。type用来查看输入的命令是如何解析的，比如是内部命令、外部命令，还是别名，`-a`可以打印更多信息，比如命令位置。
 >type [-a] name
 
@@ -148,13 +148,13 @@ source也可以为目录，但是需要`-r`;cp被别名为`cp -i`，由于别名
 >ls is aliased to `ls --color=auto'
 >ls is /usr/bin/ls
 
-### 2.2.4 cat
+### cat
 cat用来合并多个文件，然后输出。
 >cat [OPTION]... [FILE]...
 >* `-n`：编号所有行
 >* `-A`：显示所有特殊字符，相当于`-vET`，其中`E`显示`\n`为`$`，`T`显示`\t`为`^I`，`v`用`^`和`M`显示其他特殊字符（貌似非ascii都被当做特殊字符了）
 
-### 2.2.5 mv
+### mv
 移动（或重命名）文件。
 >mv [OPTION]... [-T] SOURCE DEST
 >mv [OPTION]... SOURCE... DIRECTORY
@@ -164,27 +164,27 @@ cat用来合并多个文件，然后输出。
 
 source可以为目录，无需`-r`；同样mv别名为`mv -i`；注意与cp的不同。
 
-### 2.2.6 touch
+### touch
 创建文件，如果已存在，则仅更新文件的`修改时间`（可通过`ls -l`查看）。
 >$ touch file
 
-### 2.2.7 rm
+### rm
 删除文件或目录。默认不删除目录，需要加`-rf`，慎用。
 >rm [OPTION]... FILE...
 
-### 2.2.8 echo
+### echo
 显示字符串参数到标准输出。常用于流的重定向、输出shell变量等。
 >echo "a string" >> filename
 >echo $HOME
 
-## 2.3 目录相关
+## 目录相关
 unix的目录体系结构从`/`开始，即根目录。
 * 绝对路径：以`/`开始的路径，如`/usr/lib`
 * 相对路径：不以`/`开始的路径，如`dir/file`
 * `..`：指向父目录
 * `.`：指向当前目录
 
-### 2.3.1 cd
+### cd
 更改**当前工作目录**，即当前进程运行的目录。默认`HOME`变量，即无参数时跳到家目录。
 >$ cd dir
 >无参数，默认家目录：
@@ -194,23 +194,23 @@ unix的目录体系结构从`/`开始，即根目录。
 >`-`等于`$OLDPWD`，即上一个目录
 >$ cd -
 
-### 2.3.2 mkdir
+### mkdir
 创建新目录
 >`mkdir dir`
 >
 >* `-p`：如果父目录不存在则创建
 
-### 2.3.3 rmdir
+### rmdir
 删除**空**目录，`-p`删除目录即祖先，如`rmdir -p a/b/c` 等于 `rmdir a/b/c a/b a`
 
 *有必要可以尝试`rm -rf dir`*
 
-### 2.3.3 pwd
+### pwd
 pwd（print working directory）打印当前工作目录。
 >`-P`：避免所有的符号链接，即打印文件真正位置所在。
 
-## 2.4 Intermediate Commands
-### 2.4.1 grep
+## Intermediate Commands
+### grep
 打印在文件或者输入流中**含有**被正则表达式匹配内容的**行**。
 >grep [OPTIONS] PATTERN [FILE...]
 >* `-i`：忽略大小写
@@ -221,7 +221,7 @@ pwd（print working directory）打印当前工作目录。
 
 [2]:https://blog.csdn.net/jdbdh/article/details/82702285
 
-### 2.4.2 less
+### less
 查看文件内容，一次一屏幕，more的增强版。less开始时不会读取全部文件内容，因此比vim、cat更快。
 
 阅读文件时一些方便的命令：
@@ -235,7 +235,7 @@ pwd（print working directory）打印当前工作目录。
 >**h：显示命令的总结（重要，必记）**
 >v：使用默认编辑器编辑该文件
 
-### 2.4.3 head and tail
+### head and tail
 快速浏览文件或数据流的部分内容。
 >head file 默认显示前10行
 >`-n k`：显示前k行
@@ -246,21 +246,21 @@ pwd（print working directory）打印当前工作目录。
 小技巧：显示第16到第20行：
 >$ cat -n filename | head -n 20 | tail -n 5
 
-### 2.4.4 file
+### file
 **猜测**文件类型，通常很准确。
 >$ file file
 
-### 2.4.5 diff
+### diff
 一行一行的比较两个文件
 >$ diff file1 file2
 
-### 2.4.6 sort
+### sort
 Write sorted concatenation of all FILE(s) to standard output.
 
 和cat类似。
 
-## 2.5 文件查找
-### 2.5.1 find
+## 文件查找
+### find
 在以给定目录为根的目录树中，搜索文件。该命令比较复杂，先给出最简形式，以后补充：
 ```bash
 $ find dir -name fileBaseName -print
@@ -273,7 +273,7 @@ $ find dir -regex fullPath -print
 * `-regex` 匹配文件的全路径名, 可以使用正则表达式
 * `-print`打印找到的文件的全名（full file name）。
 
-### 2.5.2 locate
+### locate
 在系统内建的数据库中查找文件，因此速度更快。该数据库会周期性的更新，如果一个文件在更新前添加进来，locate则不能找到该文件。
 >locate pattern
 >pattern含有通配符，匹配整个字符串；如果没有，相当于\*pattern\*
@@ -285,54 +285,54 @@ $ find dir -regex fullPath -print
 >例子（匹配/usr/bin/cp）：
 >$ locate -r .*/cp$
 
-### 2.5.3 whereis
+### whereis
 查找$PATH目录下的文件，定位含有name的文件名
 >$ whereis name
 
-### 2.5.4 which
+### which
 在$PATH目录下查找命令的全路径名
 >$ which programname
 
 除此之外，`type -a`能够查找一些命令所在位置。
 
-## 2.6 Miscellaneous
-### 2.6.1 passwd
+## Miscellaneous
+### passwd
 passwd用来改变密码。需要输入旧密码和新密码两次。通过调用Linux-PAM和Libuser API接口实现该命令。
 
-### 2.6.2 chsh
+### chsh
 改变你的登录shell，默认使用bash。
 >* chsh -s shell ：设置新的shell，必须存在于/etc/shells。shell可以为全路径名，或者可执行文件名。
 >* chsh -l ：打印/etc/shells中的所有shell。
 
-### 2.6.3 sleep
+### sleep
 延迟一定时间
 >sleep NUMBER[SUFFIX]...
 >suffix默认s，可选m、h、d
 
-### 2.6.4 cal
+### cal
 显示日历（calendar），默认显示当月
 >cal [options] [[[day] month] year]
 
-### 2.6.5 date
+### date
 打印或设置日期。这里不展开
 >$ date
 >Wed Dec 19 18:19:46 CST 2018
 
-### 2.6.6 groups
+### groups
 显示当前用户所属组
 
-### 2.6.7 dmesg
+### dmesg
 显示系统缓存（日记）。
 
-### 2.6.8 lsb_release
+### lsb_release
 打印特定于发行版的信息，如`lsb_release -a`
 
-## 2.7 Vim
+## Vim
 vim是一个非常强大的编辑器，也是linux默认的命令行编辑器。源于vi，而如今linux上的vi命令成了vim的别名。vim功能即使强大，但太繁杂了，这里只给出必要内容。
 
 参考：https://www.tutorialspoint.com/vim/index.htm
 
-### 2.7.1 vim模式
+### vim模式
 * **Command mode**：进入vim后的默认模式。该模式下，可以使用很多命令，如拷贝、粘贴、删除、查找等等。
 * **Insert mode**：Command模式下，很多方法可以进入该模式，如`i`（insert插入），`a`（append添加）等。该模式下可以进行内容编辑。按`ESC`退回Command模式。
 * **Command line mode**：Command模式下，键入`:`进入该模式。该模式下可以执行一些命令，如保存、退出等等。按`ESC`退回Command模式。
@@ -340,7 +340,7 @@ vim是一个非常强大的编辑器，也是linux默认的命令行编辑器。
 
 有时候这些模式不用特意区分，因为界限有点模糊。
 
-### 2.7.2 navigating
+### navigating
 在Command和Command line模式下，都可以通过命令移动光标：
 * `h`：向左移一位
 * `l`：向右移一位
@@ -357,7 +357,7 @@ vim是一个非常强大的编辑器，也是linux默认的命令行编辑器。
 * `ctr+b`：上滚一屏
 * `:n`：跳到第n行
 
-### 2.7.3 editing
+### editing
 从Command进入insert模式有很多中方法，下面给出有用的：
 * `i`：插入文本在光标前
 * `I`：插入文本在行首
@@ -379,18 +379,18 @@ vim是一个非常强大的编辑器，也是linux默认的命令行编辑器。
 * `u`：撤销
 * `ctrl+r`：重做
 
-### 2.7.4 搜索
+### 搜索
 * `/expression`：向下搜索，不存在正则。
 * `?expression`：向上搜索。
 * `n`：查找下一个
 * `N`：查找上一个
 
-### 2.7.5 Buffer和Swap
+### Buffer和Swap
 打开文件时，文件内容会被读入**Buffer**中，如果文件不存在，则Buffer为空。buffer位于RAM。在写入时，才将buffer中的内容写入到真正的文件中，如果文件不存在则创建。
 
 为了防止意外发生，导致buffer未及时写入文件中（即编辑过程中断电）。vim会周期性地将buffer写入到对应的**swap**文件中。通过比对文件和swap文件时间可以查出是否发生异常，然后利用swap文件恢复。
 
-### 2.7.6 其他
+### 其他
 * `:w`：保存文件
 * `:q`：离开
 
@@ -403,8 +403,8 @@ vim是一个非常强大的编辑器，也是linux默认的命令行编辑器。
 >set nu //设置文本内容
 >:wq //保存
 
-## 2.8 获得帮助
-### 2.8.1 man
+## 获得帮助
+### man
 通过man可以查阅相关命令指南（manual pages），但是内容很多，不会告诉你重点，也不适合作为教程。man手册是通过`less`命令显示的，因此less的快捷键能够使用。
 
 manual pages被分为了很多部分，如：
@@ -445,19 +445,19 @@ man手册的语法：
 
 一般使用第一种。
 
-### 2.8.2 其他帮助
+### 其他帮助
 * info：内容比man更多，更复杂
 * `--help`或`-h`：一些命令自带简单帮助，通过该option可打印。
 * /usr/share/doc：一些帮助文档会被放入此处
 * Internert：网络上要啥有啥
 
-### 2.8.3 man页面安装
+### man页面安装
 在`/usr/share/man/`和`/usr/local/shar/man/`下有很多子文件夹，每一个子文件夹存放一类的man页面。如果有额外的man页面，则应该放入`/usr/local/share/man/`下对应的子文件夹中，然后执行`mandb`以更新man的内部数据库，便能使用`man command`查看命令手册了。
 >实际上，man page就是个文本，可直接用less查看。
 
-## 2.9 进程管理
+## 进程管理
 
-### 2.9.1 ps
+### ps
 显示当前进程信息。常用BSD风格的选项（option）：
 | 命令     | 描述                                                      |
 | -------- | :-------------------------------------------------------- |
@@ -493,7 +493,7 @@ stat第一个字符表示总的状态，其他字符表示额外的信息：
 | l        | is multi-threaded (using CLONE_THREAD, like NPTL pthreads do) |
 | +        | is in the foreground process group                           |
 
-### 2.9.2 kill
+### kill
 让内核发送一个**信号**给进程，常用于结束进程。
 >kill [-s signal] pid...  
 >或者kill [-signal] pid...
@@ -527,7 +527,7 @@ stat第一个字符表示总的状态，其他字符表示额外的信息：
 
 *那`ctrl+D`会发出信号吗？不会，它只是在terminal的标准输入中表示文件结束（EOF）。*
 
-### 2.9.3 Job Control
+### Job Control
 job control是shell提供的一个功能。job就是一行命令的抽象概念，这个命令可以是管道，因此一个job可以是多个命令的组合。在操作系统中job被表示成**进程组**（process group），每个job都有个**job ID**。
 
 **job控制**就是暂停、恢复或结束job（进程组）中的所有进程。更复杂的操作可以通过发送信号（kill命令）实现。
@@ -545,7 +545,7 @@ job control是shell提供的一个功能。job就是一行命令的抽象概念�
 https://en.wikipedia.org/wiki/Job_control_(Unix) 
 http://www.aboutlinux.info/2005/05/job-control-in-linux.html
 
-### 2.9.4 top
+### top
 top类似ps，用来显示进程，但能够动态显示进程，并且默认按cpu利用率排序。
 
 一些单词描述：
@@ -569,8 +569,8 @@ top类似ps，用来显示进程，但能够动态显示进程，并且默认按
 杀死进程：
 键入k和进程的pid
 
-## 2.10 文件
-### 2.10.1 文件权限
+## 文件
+### 文件权限
 `ls -l`输出的第一列为**file mode**，由四部分组成：文件类型、user权限、group权限和other权限。如：
 ![在这里插入图片描述](.Linux入门/20181219140507506.png)
 这些权限都有三位权限位组成，分别是`r`、`w`、`x`。
@@ -595,7 +595,7 @@ top类似ps，用来显示进程，但能够动态显示进程，并且默认按
 * 文件设置不可写，为何vim还能强制写入？因为vim写入时，是通过新文件（swap）替换旧文件实现的，是对目录操作，和目录权限有关！！！同理，文件不可读时，vim是真的没有读取文件，创建了个空Buffer。
 * 文件所属者（user），可以使用组身份（group）或者其他人身份（other）吗？不能！！即使other权限比user权限大。同理组成员不能使用other身份。
 
-### 2.10.2 umask
+### umask
 umask和文件、目录建立时的权限默认值有关。也就是文件或目录初始值减去umask。先看umask默认值
 >$ umask
 >0002
@@ -610,7 +610,7 @@ umask命令也可以设置默认值
 >umask octal-mode
 >4位八进制，可以省略最高位特殊权限
 
-### 2.10.3 chmod
+### chmod
 改变文件权限。
 ```bash
 chmod [OPTION]... MODE[,MODE]... FILE...
@@ -652,14 +652,14 @@ chmod [OPTION]... OCTAL-MODE FILE...
 
   > **注意**，特殊权限位除非明确设置，否则不会被清楚或改变；貌似只有文件拥有者或root可以修改文件的权限位。
 
-### 2.10.4 chown
+### chown
 改变文件所属用户或组
 >chown [OPTION]... [OWNER][:[GROUP]] FILE...
 >
 >* `-R`：递归更改
 
 
-### 2.10.5 链接文件
+### 链接文件
 创建链接文件后，对链接文件操作相当于对源文件操作。链接文件分为：硬链接文件（hard link）和符号链接文件（symbolic link）。
 
 hard link是一个直接指向源文件的文件，即I-Node与源文件一致；symbolic link是一个间接指向源文件的文件，即该文件含有源文件路径的文本。
@@ -668,8 +668,8 @@ hard link是一个直接指向源文件的文件，即I-Node与源文件一致�
 >
 >* `-s`表示创建符号链接，目标文件可以不存在；否则创建硬链接，目标文件必须存在
 
-## 2.11 归档及压缩
-### 2.11.1 压缩
+## 归档及压缩
+### 压缩
 `gzip`是最常用的一个压缩命令，将文件压缩，并自动为名字添加后缀：`.gz`。`gunzip`是对应解压命令，将文件解压，去掉后缀。压缩和解压后源文件都会消失。除此之外，还有其他同类工具，如下表格：
 
 | 压缩命令 | 解压命令 | 默认后缀 | 压缩率 | 速度 | 备注                         |
@@ -679,7 +679,7 @@ hard link是一个直接指向源文件的文件，即I-Node与源文件一致�
 | xz       | unxz     | `.xz`    | 最高   | 最慢 |                              |
 | zip      | unzip    | `zip`    | ？     | ？   | 主要为了兼容windows的zip档案 |
 
-### 2.11.2 tar--归档
+### tar--归档
 tar主要是让多个文件或压缩包归为一个档案。除此之外它还可以使用上面的压缩工具对档案压缩或解压。
 >tar [OPTION...] [FILE]...
 >file可以是文件或者目录
@@ -706,7 +706,7 @@ $ tar -xvzf archive.tar.gz
 
 创建档案时，对档案后缀没有强制规定，但是最好使用常用后缀名。比如：归档不压缩，`file.tar`；归档并用gzip压缩，`file.tar.gz`等等之类。注意到一些后缀，如`.tgz`与`.gz`相同，`.taz`与`.tar.Z`相同。
 
-## 2.12 目录结构
+## 目录结构
 linux的发行版都准守Filesystem Hierarchy Standard（FHS），每个目录都有自己的含义。但会FHS也有一些模糊的地方，因此不同的发行版的目录结构会有一定的不同。
 ![在这里插入图片描述](.Linux入门/201812192235513.png)
 注意：
@@ -722,8 +722,8 @@ linux的发行版都准守Filesystem Hierarchy Standard（FHS），每个目录�
 [wiki fhs](https://en.wikipedia.org/wiki/Filesystem_Hierarchy_Standard#cite_ref-/opt_6-0)
 [fhs geeksforgeeks](https://www.geeksforgeeks.org/linux-file-hierarchy-structure/)
 
-## 2.13 root权限运行命令
-### 2.13.1 sudo
+## root权限运行命令
+### sudo
 运行命令时以其他用户身份运行。默认以root身份运行。它会同时设置`euid`和`ruid`, 见6.1小节
 >$ sudo groups
 >root
@@ -732,7 +732,7 @@ linux的发行版都准守Filesystem Hierarchy Standard（FHS），每个目录�
 
 使用时, 可能会碰到命令不存在的问题, 这是因为sudo只会在特定目录下寻找命令, 与用户或root的`PATH`变量无关. 由`/etc/sudoers`的`secure_path`决定, 可自行修改它.
 
-### 2.13.2 su
+### su
 开启**新shell**，以其他用户身份登录。默认root登录。
 >su [options...] [-] [user [args...]]
 >* `su`：root身份登录，不改变当前目录，仅改变环境变量：HOME、SHELL、USER、LOGNAME
@@ -752,7 +752,7 @@ linux的发行版都准守Filesystem Hierarchy Standard（FHS），每个目录�
 
 设备文件分为块设备和字符设备，他们的区别在于读写方式的不同。设备文件也可以对应虚拟设备，只要有对应的驱动程序。*貌似管道文件也是设备文件？*
 
-## 3.1 /dev与/sys
+## /dev与/sys
 设备文件都被存于`/dev`下，为了通过对设备文件操作直接作用到设备中，`/dev`会被挂载到专门的文件系统`devtmpfs`中（不要与`tmpfs`混淆）。
 
 `ll /dev`会显示所有的设备文件，权限前的第一个字符表示文件类型，`b`表示块设备，`c`表示字符设备等等。日期前的两个数字分别表示**主和次设备号**，相似的设备通常拥有相同的主设备号，如sda3和sdb1。通过主次设备号用于标识设备。
@@ -770,7 +770,7 @@ linux的发行版都准守Filesystem Hierarchy Standard（FHS），每个目录�
 
 [3]:https://en.wikipedia.org/wiki/Virtual_file
 
-## 3.2 命名约定
+## 命名约定
 系统加入设备后，udev给设备命名的规范：
 * `SCSI driver`, also used by libATA (modern PATA/SATA driver), USB, IEEE 1394, etc.即使底层使用的设备和驱动不一样，但是这些设备最顶层的驱动还是scsi。然而真正的SCSI设备已经被淘汰了，但SCSI协议由于它的适用性被保留了下来。
 	* `sd`: mass-storage driver
@@ -789,13 +789,13 @@ linux的发行版都准守Filesystem Hierarchy Standard（FHS），每个目录�
 * 并行端口`lp*`
 * 等等
 
-## 3.3 terminal、console、shell
+## terminal、console、shell
 **terminal**（终端）和**console**（控制台）都是字符设备，功能上并没有什么区别，都是与你的显示器和键盘交互的。启动linux但没有启动xwindow的屏幕就是console，而进入xwindow后打开的terminal就是terminal，通过ssh连接打开的终端也是terminal。
 
 [shell][4]不是一种设备，而是程序，一个与操作系统服务交互的用户接口。因此shell分两种：使用命令行接口（**command-line interface**）的Text(CLI) shell，和图形用户接口（**graphical user interface**）的Graphical shell。CLI shell提供命令解析的功能，通过命令与系统交互，gui shell提供图形化的操作与系统交互。
 >不要以为gui程序只能在gui shell中运行，几乎只要有diplay server和它的客户端client就能运行，即使在CLI shell下。参考：[ssh 第四章][5]或尝试运行该命令：`xinit /usr/bin/firefox`
 
-### 3.3.1 与设备文件的关系
+### 与设备文件的关系
 console在很多linux发行版中被实现为7个virtual console，分别用设备文件`tty1`、`tty2`...`tty7`表示。一般桌面环境运行在第7个virtual console，用`tty7`表示。通过`ctrl+alt+F*`切换。
 
 terminal则被表示为除了`tty1`...`tty7`之外的`tty*`或`pts/*`，`pts/*`是伪终端的设备文件，GUI shell打开的终端和ssh连接打开的终端都是伪终端。剩下的`tty*`是干什么用的呢？连接什么终端呢？我不知道。。
@@ -805,14 +805,14 @@ terminal则被表示为除了`tty1`...`tty7`之外的`tty*`或`pts/*`，`pts/*`�
 * `tty0`：是当前（或前台）virtual console的引用，可以是`tty1...`或`tty7`
 * `console`：系统控制台（system console），默认指向`tty0`。这也是为什么开机后会输出很多系统信息的原因。
 
-## 3.4 特殊设备文件
+## 特殊设备文件
 除了3.3.1中的特殊终端文件外，还有一些特殊的伪终端文件：
 * `/dev/null` – accepts and discards all input; produces no output (always returns an end-of-file indication on a read)
 * `/dev/zero` – accepts and discards all input; produces a continuous stream of NUL (zero value) bytes
 * `/dev/full` – produces a continuous stream of NUL (zero value) bytes when read, and returns a "disk full" message when written to
 * `/dev/random` and `/dev/urandom` – they produce a variable-length stream of pseudo-random numbers.
 
-## 3.5 例子
+## 例子
 命令`/etc/resolv.conf`的一个可能的数据流程如下：
 >hard disk-->SATA driver-->SCSI driver-->`/dev/sda1`(分区设备文件)-->`cat /etc/resolv.conf`(命令或进程)-->`/dev/pts/1`(终端设备文件)-->终端设备驱动-->终端
 ----------
@@ -825,8 +825,8 @@ terminal则被表示为除了`tty1`...`tty7`之外的`tty*`或`pts/*`，`pts/*`�
 -----------
 打开virtual console1和virtual console2（ctrl+alt+F2），在console2上输入`echo "hello world" > /dev/tty1`，然后会发现console1出现了`hello world`。
 
-## 3.6 相关命令
-### 3.6.1 dd
+## 相关命令
+### dd
 dd从文件或stdin读取数据，并写入数据到文件或stdout，这个过程中可能会做一些编码转换。
 >* `if=file`：输入文件，默认stdin
 >* `of=file`：输出文件，默认stdout
@@ -847,23 +847,23 @@ dd从文件或stdin读取数据，并写入数据到文件或stdout，这个过�
 	```
 其中，noerror表示读取出错后继续；sync表示，如果读取字节不够，填充NULL（即数值0）。一般情况下sync无用，只有配合noerror在读取失败时才会填充。这样保证及时镜像文件部分损坏，但可用。
 
-### 3.6.2 mknod
+### mknod
 当设备文件意外丢失或想要创建命名的管道文件时，可以使用mknod创建。但需要事先知道主次设备号。如：
 ```bash
  mknod /dev/sda1 b 8 2
 ```
 b为块状设备，主次设备号分别为8，2。
 
-### 3.6.3 udevadm
+### udevadm
 udevadm用于管理守护进程udev，因此可以查出设备文件的全部信息：
 ```bash
 udevadm info --query=all –-name=/dev/sda
 ```
 
-### 3.6.4 lsscsi
+### lsscsi
 列出所有的scsi设备
 
-### 3.6.5 lsblk
+### lsblk
 列出所有的块设备（除了RAM disk）。实现：从sysfs文件系统中得到数据。
 
 ### lspci
@@ -942,7 +942,7 @@ udevadm info --query=all –-name=/dev/sda
 # 四 文件系统
 尽管我们可以直接在设备文件上对整个磁盘或分区进行读写操作，但是极其不方便，只有在特定范围内使用该方式，如备份MBR、分区等。而文件系统抽象出了文件的概念，以文件夹分层构建文件的树状命名空间，可以访问的读写数据。文件系统定义了文件和目录的存储结构，致力于高的读写性能、可靠的数据完整性和安全性等。因此会出现很多的文件系统，文件系统一般属于内核实现，但是也存在用户空间内的文件系统。linux使用[VFS][41]（Virtual File System）接口层来同一不同文件系统的调用，屏蔽文件系统的细节，开发者只需要调用VFS的系统调用即可操作数据。磁盘数据访问的模式如下：
 ![在这里插入图片描述](.Linux入门/20190308125912620.png)
-## 4.1 disk
+## disk
 disk有很多中，计算机中光盘、磁带已被弃用，常用硬盘（hard disk）和固态硬盘（SSD）作为存储设备。这里给出硬盘的通用结构图：
 ![在这里插入图片描述](.Linux入门/20190308133338367.png)
 可以看出，硬盘拥有多个盘片（platter），每个盘片有两个面，对应两个读写头（head）。读写头固定在arm assembly上，可以伸长或缩短，当盘片围绕轴心（spindle）旋转时即可扫描全部数据。一个head扫面过的圆称为磁道（track），磁道可划分为多个扇区（sector），**扇区是磁盘驱动读取数据的最小单位**（以前一个扇区512KB，现在4K）。所有head
@@ -952,10 +952,10 @@ disk有很多中，计算机中光盘、磁带已被弃用，常用硬盘（hard
 
 >**块（block）是操作系统读取disk数据的最小单位**。为了分离对底层的依赖，操作系统不使用扇区作为读写单位，而是抽象了**块**的概念。一般块大小是扇区的整数倍，可以自己设置，如格式化时可以设置。参考：[电脑中常用的“扇区”、“簇”、“块”、“页”等概念](https://blog.csdn.net/jdbdh/article/details/88350421)
 
-## 4.2 文件系统实现
+## 文件系统实现
 每个文件系统的实现都不同，这里介绍linux中常用的实现。
 
-### 4.2.1 文件系统布局
+### 文件系统布局
 在LBA寻址模式中，disk被视作线性空间，一个**可能的**文件系统布局如下：
 ![在这里插入图片描述](.Linux入门/2019030815472333.png)
 MBR占512KB，储存开机引导程序（446字节），目前基本淘汰，使用[GPT][45]。MBR后66个字节（**分区表**）最多只能存4个**主分区**，想要更多的分区，只能新建一个**扩展分区**，扩展分区中可以建立多个**逻辑分区**。分区仅仅只记录分区在disk中的边界，其中一个分区会被标记为**活动分区**，引导程序会执行活动分区中的Boot block。
@@ -969,7 +969,7 @@ MBR之后是分区，或者没有建立分区的空余储存空间。每个基�
 [45]:https://blog.csdn.net/jdbdh/article/details/87189717#39_MBRGPT_238
 [46]:https://en.wikipedia.org/wiki/Partition_type
 
-### 4.2.2 文件实现
+### 文件实现
 文件是操作系统中一个抽象的概念，就像进程、地址空间一样。文件的实现就是记录哪个块地址属于哪个文件。一般有三种实现方式：Contiguous Allocation、Linked List Allocation和I-nodes，linux中常用的是I-nodes，因此这里介绍I-nodes。一个i-node例子如下：
 ![在这里插入图片描述](.Linux入门/20190308165217703.png)
 over。。。
@@ -978,12 +978,12 @@ over。。。
 >* i-node存在于i-nodes表中，i-node通过指针指向Files and directories中的块数据。
 >* 文件的属性存在于i-node的头部
 
-### 4.2.3 目录实现
+### 目录实现
 目录本身也是被表示为I-node，i-node指向的数据块，仅仅存储着目录下文件或子目录的名字和i-node number，被称为entry。一般目录都会存在指向自己或父目录的entry，如`.`和`..`，除了根目录外（只有`.`）。因为文件名是可变的，因此有两种存储文件名的方法：固定最大长度或可变长度：
 ![在这里插入图片描述](.Linux入门/20190308172244425.png)
 >注意，我认为上图不太对，因为entry不会存储文件属性的，文件属性只会存在于它自己的i-node上，避免增加冗余。其他的上同。
 
-## 4.3 文件系统类型
+## 文件系统类型
 列举常用文件系统：
 * `ext*`：linux本土文件系统，目前使用ext4。ext2改自unix的传统文件系统，ext3增加了日记，ext4支持更大的文件、更多的目录。
 * `iso9660`：CD-ROM使用的文件系统，只可读。
@@ -996,8 +996,8 @@ over。。。
 * `sysfs`：Mounted on `/sys`. 和设备相关的数据，见3.1小节
 * `tmpfs`： Mounted on `/run` and other locations. With tmpfs, you can use your physical memory and swap space as temporary storage. For example, you can mount tmpfs where you like, using the size and nr_blocks long options to control the maximum size. However, be careful not to constantly pour things into a tmpfs because your system will eventually run out of memory and programs will start to crash. (For years, Sun Microsystems used a version of tmpfs for /tmp that caused problems on long-running systems.)就是将内存（包括虚拟内存）当做文件系统。
 
-## 4.4 常见操作
-### 4.4.1 操作分区
+## 常见操作
+### 操作分区
 有四种常用的分区操作工具：
 * **parted** ：A text-based tool that supports both MBR and GPT.
 * **gparted** ：A graphical version of parted.
@@ -1010,7 +1010,7 @@ over。。。
 * `parted -l`：打印所有块设备的分区表
 * MBR格式的分区只能建立四个主分区（包括扩张分区），扩张分区上可以建立多个逻辑分区。GPT无限制。
 
-### 4.4.2 创建文件系统
+### 创建文件系统
 分区创建后，还需在分区上创建文件系统，类似于windows上的格式化：
 >方式一
 >mkfs [-t  type] device
@@ -1022,7 +1022,7 @@ over。。。
 
 通过`ll /sbin/mkfs.*`可以列出所有可用文件系统。
 
-### 4.4.3 挂载文件系统
+### 挂载文件系统
 文件系统只有被挂载后才能使用。将文件系统挂载到linux目录下的一个文件夹后，可以通过该文件夹访问被挂载的文件系统。
 >mount [-t type] device dir
 >将设备文件（含文件系统）挂载到目录dir上
@@ -1037,7 +1037,7 @@ mount无参数时列出所有挂载的文件系统：
 >....
 >第一项为特殊文件系统名或设备文件（含文件系统），on后为挂载点，type后文件系统类型，最后为挂载选项。
 
-#### 4.4.3.1 使用UUID
+#### 使用UUID
 使用设备名挂载有一定缺陷，因为设备命名取决于内核找到设备的顺序，因此设备名可能会改变。但是创建文件系统时，mkfs会同时为文件系统创建一个唯一的**UUID**，可以通过uuid来替代设备文件挂载。
 
 使用`blkid`获得块设备（含文件系统）的UUID，然后挂载：
@@ -1047,7 +1047,7 @@ mount无参数时列出所有挂载的文件系统：
 
 > mount UUID=a9011c2b-1c03-4288-b3fe-8ba961ab0898 /home/extra
 
-#### 4.4.3.2 自动挂载
+#### 自动挂载
 在自启期间内，linux会读取`/etc/fstab`的配置，然后自动挂载（貌似是执行了`mount -a`）。只要按照它的格式写就配置自动挂载自己的文件系统。`/etc/fstab`中的内容如下：
 ```unknow
 proc /proc proc nodev,noexec,nosuid 0 0
@@ -1058,7 +1058,7 @@ UUID=592dcfd1-58da-4769-9ea8-5f412a896980 none swap sw 0 0
 第一项为设备文件（含文件系统）或其UUID或特殊文件名；第二项为挂载点（对于swap填none）；第三项为文件系统类型；第四项为逗号分隔的挂载选项；第五项和备份信息有关，填0禁止就对了；第六项为是否自启时用fsck检查文件系统完整性，一般自己挂载的都填0。
 
 使用`mount -a`几乎可以挂载`/etc/fstab`中所有的文件系统；或者使用`mount /dir`，会挂载`fstab`文件中对应的挂载点的文件系统。
-#### 4.4.3.3 mount选项
+#### mount选项
 无论手动挂载和自动挂载，都会用到`mount`命令的选项。mount选项（也即参数）分为两类，短选项，如`-r`；长选项，放在`-o`后面，逗号分隔，如`-o ro,conv=auto`。而长选项又分为独立与文件系统的选项，和特定于某一具体文件系统的选项。自动挂载只能使用长选线吧。
 
 这里只介绍文件系统独立的选项，其中一些只适用于自动挂载：
@@ -1072,10 +1072,10 @@ UUID=592dcfd1-58da-4769-9ea8-5f412a896980 none swap sw 0 0
 * `noauto`：只能显示挂载，即`mount -a`不起作用。（仅适用自动挂载）
 * `defualts`：默认使用`rw`, `suid`,`dev`, `exec`, `auto`, `nouser`, 和 `async`，其他特定于文件系统的选项默认值取决于该文件系统。最常用！（仅适用自动挂载）
 
-### 4.4.4 swap space
+### swap space
 并不是所有的分区都含有一个文件系统，swap space（置换空间，又称虚拟内存）不需要。置换空间将磁盘空间当做RAM，用于将不活动的程序或活动程序的部分内存放入置换空间内，从而允许它运行更多的活动程序。通过`free`可以查看物理和置换空间的使用情况。
 
-#### 4.4.4.1 分区作为swap space
+#### 分区作为swap space
 1. 存在一个分区，最好空的
 2. 将置换标志写入到分区：`mkswap device`
 3. 手动注册到内核中：`swapon device`
@@ -1084,7 +1084,7 @@ UUID=592dcfd1-58da-4769-9ea8-5f412a896980 none swap sw 0 0
 ```unknow
 /dev/sda5 none swap sw 0 0
 ```
-#### 4.4.4.2 文件作为swap space
+#### 文件作为swap space
 与上面同理：
 1. 创建文件：`dd if=/dev/zero of=swap_file bs=1024k count=num_mb`
 2. 写入置换标志：`mkswap swap_file`
@@ -1092,34 +1092,34 @@ UUID=592dcfd1-58da-4769-9ea8-5f412a896980 none swap sw 0 0
 
 为了禁止使用置换空间，使用`swapoff`，具体方法请查询man手册。
 
-### 4.4.5 其他命令
-#### 4.4.5.1 sync
+### 其他命令
+#### sync
 对disk的读写是异步的，写文件时不会立刻刷新到disk中，但可以使用sync手动刷新缓存。
 
-#### 4.4.5.2 df
+#### df
 默认输出已挂载文件系统的磁盘使用情况。其中文件系统已使用量不包含大约5%的保留空间。
 
-#### 4.4.5.3 du
+#### du
 默认打印当前目录及其所有子目录总大小
 >du [FILE]...
 >FILE默认指向当前目录，如果指定文件，则仅打印该文件大小
 >* `-a`:同时也打印目录内的文件的大小
 >* `-s`:仅打印FILE的总大小，使用`du -s *`打印当前目录中所有文件和文件夹大小（不打印文件夹中的内容）
 
-#### 4.4.5.4 fsck
+#### fsck
 检查文件系统是否有不正确的地方，并给出解决方案。不怎么会用。
 
-#### 4.4.5.5 free
+#### free
 打印物理和置换内存的使用情况。
 
-#### 4.4.5.6 ls -i 和 stat
+#### ls -i 和 stat
 `ls -i`同时打印inode number；stat打印文件的相关属性。
 ## 参考
 [File Systems](https://download.csdn.net/download/jdbdh/11006201)
 [电脑中常用的“扇区”、“簇”、“块”、“页”等概念](https://blog.csdn.net/jdbdh/article/details/88350421)
 
 # 五 内核启动过程
-## 5.1 介绍
+## 介绍
 linux启动过程涉及很多阶段，如固件初始化，引导程序执行，内核镜像加载和启动，各种守护进程和脚本的运行。每一步都有不同的不同的方法。
 
 开机后，会执行主板上固件（firmware）里的程序，它会枚举硬件并正确的初始化，然后从配置的启动设备中加载引导程序。
@@ -1138,8 +1138,8 @@ linux启动过程涉及很多阶段，如固件初始化，引导程序执行，
 
 init是所有进程的父进程，由内核执行，负责所有进程的启动和关闭。init在linux有很多种实现，如SysV、systemd、upstart。sysv是很老的方法，目前systemd已成为主流，同时也兼容sysv。尽管有了内核后，但没有用户进程，不能进行太多的操作，因此init进程需要启动大量的程序，让系统达到可能的地步。所有的linux发行版的区别就在于此。可以将系统启动到援救模式、单人默认、多用户模式、图形模式，因此出现了运行级别（sysv中）、target（systemd中）的概念，这些模式的区别在于运行着不同的程序。
 
-## 5.2 systemd
-### 5.2.1 介绍
+## systemd
+### 介绍
 内核启动后，systemd主要用于启动各种服务、守护进程、挂载其他目录等任务，达到用户可用的状态。systemd对所有的任务提供了一个抽象的概念：**unit**。一共有12中类型的unit，unit之间有**依赖关系**，也即启动一个unit的同时会造成其他unit**同时**启动，这些通过依赖联系的unit位于同一个**事务**中。systemd会维护事务，通过去掉不必要的jobs（也即进程）解决它们的依赖冲突，然后启动事务中全部进程，事务结束。
 
 所有的unit类型如下：
@@ -1160,7 +1160,7 @@ starting them as well.
 
 >其中，我们经常配置或使用的是service unit和target unit。内核启动后，systemd会启动default.target，它一般是一个指向multi-user.target或graphical.targer的符号链接，即启动程序到出现命令行或图形界面的地步。
 
-### 5.2.2 配置
+### 配置
 unit一般的状态：active、inactive、中间态(activing,deactivating)，fail。unit通过配置文件来配置，配置文件放置的目录如下（同名文件，前面的优先级高）：
 * `/etc/systemd/system`
 * `/run/systemd/system`
@@ -1169,7 +1169,7 @@ unit一般的状态：active、inactive、中间态(activing,deactivating)，fai
 配置文件语法很简单，所有的unit都通用的选项被配置在`[Unit]`或`[Install]` section中，其他的选项特定于对应类型unit的section中。还有一些选项适用于service、socket、mount、swap，请查看`systemd.exec`、`systemd.swap`的手册。
 
 空行，以`#`和`;`开始的行会被忽略。
-#### 5.2.2.1 [Unit]
+#### [Unit]
 `[Unit]` section中含有所有unit都通用的选项，下面列出常用的：
 * `Description`：一段描述unit的字符串。
 * `Requires`：配置该unit的依赖，多个依赖空格分隔。该unit被启动时，依赖也会被**同时**启动，加入到事务中；如果依赖结束或启动失败，该unit也会结束，事务失败。
@@ -1179,13 +1179,13 @@ unit一般的状态：active、inactive、中间态(activing,deactivating)，fai
 	
 	>关机时，unit之间结束的顺序相反
 >After常被设置为：`After=network.target local-fs.target remote-fs.target`
-#### 5.2.2.2 [Install]
+#### [Install]
 [Install] section的选项并不会被systemd解析，而是被systemctl的enable或disable命令使用的：
 * `WantedBy`，`RequiredBy`：空格分隔的unit列表。使用了systemctl enable命令后，会在列表依赖的`unit_name.wants/`或`unit_name.requireds/`目录下建立该unit的符号链接。使用disable命令则删除符号链接。
 	
 	>unit对应的wants、requires目录隐式称为该unit的Wants或Requires依赖。这样的好处是不用修改其他的配置文件，就能成为其他unit的依赖。
 
-#### 5.2.2.3 [Service]
+#### [Service]
 [Service] section的选项仅适用于service类型的unit配置文件，注意文件以`.service`结尾。默认隐含有对于basic.target的Requires和After依赖，和对shutdown.target的Conflicts和Before依赖。保证service在基本系统初始化后运行，系统关闭之前结束。
 * `Type`：服务进程启动类型，可选值simple、forking、oneshot、dbus、notify、idle。
 	* `simple`：无Type和BusName，仅有ExecStart情况下的默认类型。systemd认为ExecStart上运行的进程为主进程，一旦启动就会执行接下来的units。
@@ -1202,7 +1202,7 @@ unit一般的状态：active、inactive、中间态(activing,deactivating)，fai
 * `ExecReload`：服务需要重新加载时所执行的命令。如果没有设置，systemd会发送HUP信号重启服务。
 * `User`，`Group`：设置进程用户或组，默认root。systemd.exec中的内容
 
-#### 5.2.2.4 其他
+#### 其他
 **target**类型的配置文件没有多余的选项，因为它仅仅只是作为一个同步点而存在的。比如假设systemd默认启动`graphical.target`，则最终系统会将所有图形界面环境运行起来，相关的依赖大多会在其他unit文件中的[Install]中配置。
 ```configuration
 #  This file is part of systemd.
@@ -1223,12 +1223,12 @@ AllowIsolate=yes
 ```
 配置其他类型unit，如**socket**、**timer**，会在一定条件下，触发对应名字的service unit的执行。等等之类，请查看man手册。具体例子请看`man systemd.service`下最后一节内容。
 
-#### 5.2.2.5 systemd参数
+#### systemd参数
 systemd也是有参数的，不过systemd是内核执行的，因此可以在GRUB2的开始菜单中修改内核参数达到设置systemd启动参数的目的，因此内核不认识的参数会传给init进程。部分参数如下：
 * `systemd.unit=`：设置启动的unit，默认default.target。
 * ...：没了？？。。是的，你没看错。
 
-### 5.2.3 systemctl
+### systemctl
 用于控制systemd系统和服务的管理器。命令如下：
 * `list-units`：列出所有已知的units。
 * `start`：启动unit
@@ -1241,7 +1241,7 @@ systemd也是有参数的，不过systemd是内核执行的，因此可以在GRU
 * `get-default`：获得自启时默认的default target，即返回default.target指向的unit名。
 * `set-default`：设置自启时默认的default target，即修改符号链接default.target。
 
-### 5.2.4 关机
+### 关机
 关机命令很多，但实现原理一致，通过init进程关机，init进程阻止其他非root用户登陆，然后在systemd中会启动shutdown unit，它会关闭所有程序，最后通知内核结束自己。
 >`shutdown`用于停止、关机、重启主机，还可定时、发送警告给所有用户。
 >`shutdown [OPTIONS...] [TIME] [WALL...]`
@@ -1257,22 +1257,22 @@ systemd也是有参数的，不过systemd是内核执行的，因此可以在GRU
 * [systemd forking vs simple?](https://superuser.com/questions/1274901/systemd-forking-vs-simple/1274913)
 
 # 六 进阶命令
-## 6.1 用户
-### 6.1.1 介绍
+## 用户
+### 介绍
 linux是一个多用户的系统，有用户、组的概念。不同的用户、组对于不同的文件（夹）有着不同的访问权限（在文件inode中定义），见[linux入门 2.10小结][61]。一个用户有一个primary group，用户也可以加入其它组。每个用户、组都有对应的ID，内核中只使用ID，用户名只在用户空间中使用。
 
 运行的进程会记录用户ID，但有很多中ID，常见的如下：
 * **有效用户ID（euid）**：它给与了进程对应的访问权限；如`passwd`运行时将euid换成root，因此可以访问`/etc/shadow`，修改密码。
 * **真实用户ID（ruid）**：指定了可以操作进程的用户；`passwd`即使修改了euid，用户也可以`kill`它，如果`sudo`运行命令，非root用户不能`kill`它，因为sudo同时修改了euid和ruid。
 
-### 6.1.2 登录过程
+### 登录过程
 注意，这块内容并不一定对，纯属个人猜想
 * 在主机前登录，getty会连接终端，启动login程序进行用户验证，成功后为你打开shell。
 * 远程ssh登录，终端连接、用户验证都由ssh server完成，然后打开shell。
 * 桌面环境登录，由其他软件（不知道啥子）进行用户验证，然后就如桌面系统（可看做为GUI shell）。
 
 [61]:https://blog.csdn.net/jdbdh/article/details/85038340#210__545
-### 6.1.3 配置文件
+### 配置文件
 `/etc/passwd`中每一行存储了一个用户的账号，每个字段如下：
 ![在这里插入图片描述](.Linux入门/2019031513453198.png)
 其中
@@ -1288,8 +1288,8 @@ linux是一个多用户的系统，有用户、组的概念。不同的用户、
 `/etc/group`中每一条每一个组，组的用户除了passwd对应的用户，还有最后一个字段指定的所有用户。
 ![在这里插入图片描述](.Linux入门/20190315143530103.png)
 
-### 6.1.4 命令
-#### 6.1.4.1 useradd
+### 命令
+#### useradd
 用户添加用户（通过修改和用户相关的配置文件实现）。默认行为：创建用户的同时创建对应的组，默认bash shell，没有过期时间，无密码且不能登录，需要使用`passwd`修改密码。
 >useradd [options] LOGIN
 >因为默认行为很好的满足了需求，因此没有给出完整选项
@@ -1300,22 +1300,22 @@ linux是一个多用户的系统，有用户、组的概念。不同的用户、
 
 >默认欣慰在`/etc/default/useradd`和`/etc/login.defs`中配置。
 
-#### 6.1.4.2 userdel
+#### userdel
 删除用户（实现同上）
 >userdel [options] LOGIN
 >默认仅删除账户和用户组
 >* `-r`：同时删除家目录的文件和邮件。其他地方的文件需要手动删除
 >* `-f`：同上，但强制删除，即使该用户在登录状态。
 
-#### 6.1.4.3 passwd
+#### passwd
 修改密码
 
-#### 6.1.4.4 chsh
+#### chsh
 修改shell
-## 6.2 top
+## top
 top能够动态显示系统总的cpu、内存使用状态和各个进程的资源使用情况。
 
-### 6.2.1 字段含义
+### 字段含义
 第一行分别表示目前的时钟、系统已运行时间、用户个数和分别为1、5、15分钟的平均负载。
 >平均负载是对运行队列的长度的一种度量。单核下，0.5表示cpu一半时间是空闲的，1表示cpu是时刻负载的，1.5表示1/3进程在等待cpu；假设4核，则4表示所有的核刚好负载。当负载很高时，很有可能内存不足，导致时刻发生对内存的置换（swap）。[load average](https://unix.stackexchange.com/a/303703)
 
@@ -1354,7 +1354,7 @@ top能够动态显示系统总的cpu、内存使用状态和各个进程的资�
 * `TIME+`：进程已运行时间
 * `COMMAND`：运行该进程使用的命令
 
-### 6.2.2 快捷键
+### 快捷键
 * `h`：**最常用！！！内容必看**
 * `L`，`&`：L查找进程，&搜索下一个
 * `<`，`>`：切换排序字段
@@ -1367,23 +1367,23 @@ top能够动态显示系统总的cpu、内存使用状态和各个进程的资�
 * `W`：设置好后，按W保存设置到配置文件中。**有用！！！**
 * `q`：离开。
 
-## 6.3 时间
+## 时间
 在Linux中有**硬件时钟**与**系统时钟**等两种时钟。硬件时钟是指主机板上的时钟设备，也就是通常可在BIOS画面设定的时钟；系统时钟则是指kernel中 的时钟；所有Linux相关指令与函数都是读取系统时钟的设定。当Linux启动时，系统时钟会去读取硬件时钟的设定，之后系统时钟即独立运作。
 
 >至于网络时间，以后补充
-### 6.3.1 date
+### date
 查看或设置系统时钟
 >`date` 查看本时区当前时钟
 >`date -s "2018-11-2 22:30"` 设置系统时钟，但重启后失效
 >`date -u` 显示UTC时区的时钟
 
-### 6.3.2 hwclock
+### hwclock
 查询或者设置硬件时钟
 
 >`hwclock`   查询硬件时钟
 >`hwclock -w` 将系统时间写入硬件时间
 
-### 6.3.2 时区
+### 时区
 默认时区由`/etc/localtime`给出，它是一个指向`/usr/share/zoneinfo`中文件的一个符号链接。可以通过拷贝其他文件，来永久修改时区。或者修改环境变量`TZ`为当前shell会话设置临时时区，如：
 ```bash
 [root@localhost Desktop]# date
@@ -1394,9 +1394,9 @@ Fri Mar 15 22:00:54 CDT 2019
 ```
 >如果不知道时区名字，可以参考`/usr/share/zoneinfo`目录或执行`tzselect`命令
 
-## 6.4 计划任务
+## 计划任务
 >计划任务有望被init进程（如systemd）取代，但目前远没有那么强大。
-### 6.4.1 cron
+### cron
 cron是一个守护进程，用于在规定时间点上执行任务（job）。任务在配置文件中配置，一行为一条任务。cron每分钟都会被唤醒，检查配置文件是否被更新。任务的标准输出会以邮件的形式记录，可以被修改。cron任务分为两类：
 * 系统cron任务：以root用户执行，常用于执行系统维护。需在`/etc/crontab`中配置。
 	
@@ -1405,7 +1405,7 @@ cron是一个守护进程，用于在规定时间点上执行任务（job）。�
 	
 	>为什么系统cron任务不用crontab命令创建？因为格式稍有不同，且anacron更适合系统cron任务，见下。
 
-#### 6.4.1.1 系统cron任务
+#### 系统cron任务
 直接在`/etc/crontab`中添加一行，格式如下：
 ![在这里插入图片描述](.Linux入门/20190316112911405.png)
 每个字段空格分隔。`*`表示匹配所有可能的值；`,`分隔的项表示匹配已列的值；`-`匹配范围内的值
@@ -1416,7 +1416,7 @@ cron是一个守护进程，用于在规定时间点上执行任务（job）。�
 
 参考：[Schedule jobs with cron](https://geek-university.com/linux/schedule-jobs-with-cron/)
 
-#### 6.4.1.2 用户cron任务
+#### 用户cron任务
 `crontab`命令用户安装、展示、删除对应用户的cron任务。使用命令安装而不是直接修改对应配置文件的好处在于，在任意地点建立自己配置文件后，使用crontab安装的同时会检测语法是否正确，然后提示修改或安装到`/var/spool/cron`中。
 ![在这里插入图片描述](.Linux入门/20190316134732292.png)
 >可以看出，用户配置少了user-name
@@ -1428,7 +1428,7 @@ cron是一个守护进程，用于在规定时间点上执行任务（job）。�
 
 参考：[User cron jobs](https://geek-university.com/linux/user-cron-jobs/)
 
-### 6.4.2 anacron
+### anacron
 与cron不同，如果任务自从上次更新时间超过了某个时间间隔，则执行任务。任务只在`/etc/anacrontab`中配置，每个字段如下：
 ![在这里插入图片描述](.Linux入门/20190316140439800.png)
 * `period`：命令执行的频率，单位：天。
@@ -1441,7 +1441,7 @@ anacron运行过程
 
 参考：[Schedule jobs with anacron](https://geek-university.com/linux/schedule-jobs-with-anacron/)
 
-### 6.4.3 at
+### at
 在某个时间点只执行一次。
 >* `at time`：从标准输入中获得要执行的命令，按`ctrl+d`退出。表示在time时执行命令。
 >* `at -f file time`：同上，不过此时命令通过文件给出
@@ -1452,15 +1452,15 @@ anacron运行过程
 * `HH:MM [YY-MM-DD]`：如果只给出HH:MM并且过期，则认作明天
 * `now + count time-units`：time-units可以是minutes，hours，days 或weeks。例子：`at now +2 hours`
 
-## 6.5 其他
-### 6.5.1 nohup
+## 其他
+### nohup
 运行指定的命令，并让该命令忽略掉停止信号，以至于**后台**应用能够在用户登出时继续运行
 >* `nohup COMMAND`：标准输入流重定向到`/dev/null`，标准输出流重定向到nohup.out，标准错误流重定向到标准输出。
 >* `nohup COMMAND > FILE`：标准输出流重定向到文件。
 
 一些进程能够自我守护进程化，即自动后台运行并与控制终端脱离，因此当前会话结束不会关闭守护进程。如果进程不能自我守护进程化，则需要nohup的帮助，如：`nohup COMMAND &`
 
-### 6.5.2 time
+### time
 测试命令所花掉的时间
 >`time command`
 >其中
@@ -1480,7 +1480,7 @@ sys	    0m0.004s
 ```
 
 # 七 网络基础
-## 7.1 介绍
+## 介绍
 ![在这里插入图片描述](.Linux入门/20190322161040387.png)
 关于防火墙，这里在做补充。先看一幅图
 ![在这里插入图片描述](.Linux入门/20190322161359967.png)
@@ -1493,8 +1493,8 @@ firewalld中，**zone**是一系列规则的集合（类似iptables命令中的c
 规则分为运行时规则和永久规则，其实就是保存为内存中副本的规则为运行时规则，保存文件中的规则为永久规则。只不过`firewall-cmd`一次只能保存一个地方，内存或文件。
 
 网卡具体使用什么zone由NetworkManager确定，如果没有明确指定，会使用firewalld的默认zone，一般为public，但可以通过`public-cmd`修改。
-## 7.2 命令
-### 7.2.1 ip
+## 命令
+### ip
 ip命令功能很强大，常用于查看、修改、设置网卡ip、路由表、设备等功能。配置不会被保存。
 >代替了ifconfig、route、arp等老工具的使用
 
@@ -1507,7 +1507,7 @@ ip命令功能很强大，常用于查看、修改、设置网卡ip、路由表�
 
 
 
-### 7.2.2 ss
+### ss
 用于查看sockets信息。
 >代替了老工具netstat的使用
 
@@ -1525,10 +1525,10 @@ ip命令功能很强大，常用于查看、修改、设置网卡ip、路由表�
 >* `-n`：显示端口而不是服务名
 >* `-p`：显示使用socket的进程
 
-### 7.2.3 nmtui
+### nmtui
 NetworkManager提供的，用于配置网络的字符界面工具。如配置网卡ip、掩码、网关、DNS服务器，并且配置会被保存下来。
 
-### 7.2.4 firewall-cmd
+### firewall-cmd
 * 检测防火墙状态
 	```bash
 	sudo firewall-cmd --state
@@ -1572,8 +1572,8 @@ NetworkManager提供的，用于配置网络的字符界面工具。如配置网
 
 参考：[Introduction to FirewallD on CentOS](https://www.linode.com/docs/security/firewalls/introduction-to-firewalld-on-centos/)
 
-## 7.3 网络进阶
-### 7.3.1 curl
+## 网络进阶
+### curl
 >已重新学习curl，详细见[curl](https://blog.csdn.net/jdbdh/article/details/90911383)
 
 curl用于与服务间传输数据，支持各种协议。但我只用http协议
@@ -1598,7 +1598,7 @@ curl -F media=@test.jpg "https://api.weixin.qq.com/cgi-bin/media/upload?access_t
 ```
 >同类工具还有wget，但curl更强大
 >最全教程：[Using curl to automate HTTP jobs](https://curl.haxx.se/docs/httpscripting.html)
-### 7.3.2 Unix Domain Sockets
+### Unix Domain Sockets
 socket有很多中，我们常用的是network socket，linux也提供了unix socket，它表现起来像TCP或UDP，但它只用作内部进程交流的途径，因此更高校。
 
 ## 参考
@@ -1615,10 +1615,10 @@ socket有很多中，我们常用的是network socket，linux也提供了unix so
 [Linux命令之ip](http://www.cnblogs.com/diantong/p/9511072.html)
 
 # 八 bash
-## 8.1 介绍
+## 介绍
 bash shell是一个与sh兼容的命令行解析器，是用户与系统内核交互的接口。通过bash，可以执行命令（程序），bash本身就内置了很多常用的命令。可以将一些常用的命令写入脚本中，让bash运行，用以实现简化和自动化日常的任务。对于其他比较复杂的任务，如字符串操作、算术、数据访问、更强的函数等功能，尽管bash也提供了对应的语法（也有函数！！），但还是应该选择使用其他脚本（python）或编译语言（c）。因此，这里只记录比较常用的bash语法。
 
-## 8.2 启动
+## 启动
 shel按照启动方式的不同，可分为`login`、`non-login`、`interactive`、`non-interactive` shell。`login shell`表示该shell用来登录；`interactive shell`的标准输入输出都连接到终端上，即可与用户交互。
 
 shell在启动时会读取配置文件，不同的shell读取的文件都不同。下面是bash shell在不同启动方式下，与执行的配置文件的关系：
@@ -1632,8 +1632,8 @@ shell在启动时会读取配置文件，不同的shell读取的文件都不同�
 
 配置文件中会定义一些和用户使用相关的环境变量和shell变量，如PATH、命令提示符（prompt）、命令别名（alias）、权限掩码、默认编辑器等配置。
 
-## 8.3 语法
-## 8.3.1 简单命令
+## 语法
+## 简单命令
 一条简单的bash命令，以要执行的**命令**开始，接着给出空格分隔的**参数**，最后以**控制操作符**结束，执行结束后，会返回一个**状态码**。执行一条命令类似于其他语言中调用一个函数。
 >不要将状态码和命令的标准输出混淆，状态码可以通过`$?`获得，bash中很多复合命令可以检查到命令放回的状态码而执行响应的动作。
 
@@ -1642,7 +1642,7 @@ shell在启动时会读取配置文件，不同的shell读取的文件都不同�
 其中控制操作符可以是`&`，`;`，`换行`。以`&`结束的命令语句，会在后台运行，bash不会等待命令的完成，而是直接执行下一条语句；以`;`或`换行`结束的命令语句，bash会顺序执行，等待其完成。
 
 多条由管道、控制操作数、&&、|| 等符号隔开的命令序列称为**list**。执行list后，会返回list中最后一条被执行的命令的状态码。
-### 8.3.2 复合命令
+### 复合命令
 复合命令是bash提供的更为复杂的命令。书写命令时要注意符号间的空格
 * `(list)`  :list会在子shell环境中运行，因此list中的命令就算修改了环境变量，也不会影响当前shell的环境变量。
 	
@@ -1666,13 +1666,13 @@ bash还提供了关于流程控制相关的命令：
 
 其他的请查看`man bash`手册。
 
-### 8.3.3 字面值
+### 字面值
 shell只有一种类型，字符串。shell在执行命令之前，会查找变量、通配符、其他替换符号，然后替换，最终执行命令并传入处理过的参数。通过引号可以阻止这种行为：
 * **无引号**：shell会执行替换过程。多个参数空格分隔，不能出现单、双引号，可以用`\'`  `\"`替代。
 * **单引号**：引号内的所有字符不被替换且视为一个参数。但 `'` 不能出现在里面
 * **双引号**：与单引号类似，但里面的变量可被替换。 `"` 不能出现在里面
 
-### 8.3.4 特殊变量
+### 特殊变量
 shell变量用于存储字面值、参与计算。bash为我们提供了一些特殊变量，用以获取相关的值，如当前shell的参数、进程号等等，但这些特殊变量不能被改变：
 * 脚本参数:`$1,$2,...`
 	运行脚本时传入的参数，$1对应第一个参数，$2对应第二个，等等。`shift`可以删除第一个参数，其他参数前进补齐，即$2移入$1，$3移入$2，等等
@@ -1686,7 +1686,7 @@ shell变量用于存储字面值、参与计算。bash为我们提供了一些�
 * exit code：`$?`
 	上一条命令的exit code。在脚本中，exit code一般为最后一条命令的exit code。也可以通过命令`exit num`，手动返回exit code，并结束当前shell。如果num不给出，默认上一条命令的exit code
 
-### 8.3.5 算术表达式
+### 算术表达式
 3.2小节提到了`((expression))`可以计算算术表达式，下面给出所有的操作符：
 * `id++` `id--` 
 	variable post-increment and post-decrement
@@ -1712,10 +1712,10 @@ shell变量用于存储字面值、参与计算。bash为我们提供了一些�
 * `expr1 , expr2`
               comma
 
-### 8.3.6 条件表达式
+### 条件表达式
 复合命令 `[[ ]]` 与bash内置`[ ]`命令作用基本一致，可以进行文件测试、字符串测试、算术测试。部分功能与8.3.5小节重叠，具体参数参考`man test`
 
-### 8.3.7 命令替换
+### 命令替换
 `${COMMAND}`允许命令的标准输出替换为命令行参数。如下面例子所示，`echo 23`的输出`23`替换了`${echo 23}`
 ```bash
 [root@sidian Desktop]# echo 23
@@ -1724,7 +1724,7 @@ shell变量用于存储字面值、参与计算。bash为我们提供了一些�
 [root@sidian Desktop]# echo $a
 23
 ```
-### 8.3.8 算术替换
+### 算术替换
 在使用`((expression))`时，该复合命令只会返回状态码，没有标准输出输出结果，可以使用`$((expression))`获得它的值。
 ```bash
 [root@sidian Desktop]# a=$((23+3))
@@ -1737,7 +1737,7 @@ shell变量用于存储字面值、参与计算。bash为我们提供了一些�
 [root@sidian Desktop]# echo $b
 56
 ```
-## 8.4 脚本
+## 脚本
 * 脚本就是bash命令的集合，并且脚本执行时开启了新的bash shell。
 * 运行脚本前需要赋予它可执行权限。
 * 运行脚本时，不明确给出脚本路径，则从PATH路径下查找
