@@ -263,9 +263,15 @@ JDK5后, 基本类型与包装类之间会**自动装箱**(Auto Boxing), 即有�
 
 ### 介绍
 
-注解（annotation），一种元数据，提供一些关于程序的数据，但不是程序的一部分，对程序的执行没有**直接**的影响。
+**注解**（annotation），一种元数据，提供一些关于程序的数据，但不是程序的一部分，对程序的执行没有**直接**的影响。
 
-注解有三种用处：提供信息给编译器，指导编译器行为；提供构建信息给构建工具，这些工具有Ant、Mavent等，构建工具会根据这些注解产生源码或其他文件；运行时提供信息，可以通过[反射](https://blog.csdn.net/jdbdh/article/details/82431858)来获得这些注解信息。
+注解有三种用处：
+
+* 提供信息给编译器，指导编译器行为；
+* 提供构建信息给构建工具，这些工具有ant、mavent等，构建工具会根据这些注解产生源码或其他文件；
+* 运行时提供信息，可以通过反射来获得这些注解信息。
+
+> 通过某些API, 程序本身可以参与构建时期的注解处理.
 
 定义的注解默认继承于`java.lang.annotation.Annotation`接口，因此你可以继承该注解，但是没多大的实际用处。
 
@@ -284,7 +290,7 @@ JDK5后, 基本类型与包装类之间会**自动装箱**(Auto Boxing), 即有�
 }
 ```
 
-注解声明与接口类似，多了个@。注解中的元素声明与接口方法类似，元素也可以赋予默认值，通过default实现。注解的元素类型只能是基本类型、数组、字符串、枚举、注解、Class。定义该注解时可以被其他**元注解**注释，如上面的@Retention，该注解说明自定义的注解ClassPreamble可以保存到运行时。
+注解声明与接口类似，多了个@。注解中的元素声明与接口方法类似，元素也可以赋予默认值，通过default实现。~~注解的元素类型只能是基本类型、数组、字符串、枚举、注解、Class~~。定义该注解时可以被其他**元注解**注释，如上面的@Retention，该注解说明自定义的注解ClassPreamble可以保存到运行时。
 
 ### 注解使用
 
@@ -355,171 +361,176 @@ java se api中已经定义了一些注解，可以用于编译器和用于其他
 
 #### 被编译器使用的注解
 
-* `@Deprecated`
+##### @Deprecated
 
-  告诉编译器被注解的元素是被弃用的，使用会被编译器警告。
+告诉编译器被注解的元素是被弃用的，使用会被编译器警告。
 
-  ```java
-  @Documented
-  @Retention(RetentionPolicy.RUNTIME)
-  @Target(value={CONSTRUCTOR, FIELD, LOCAL_VARIABLE, METHOD, PACKAGE, PARAMETER, TYPE})
-  public @interface Deprecated {
-  }
-  ```
+```java
+@Documented
+@Retention(RetentionPolicy.RUNTIME)
+@Target(value={CONSTRUCTOR, FIELD, LOCAL_VARIABLE, METHOD, PACKAGE, PARAMETER, TYPE})
+public @interface Deprecated {
+}
+```
 
-  可以看出，@Deprecated可以被使用到很多地方，不局限于方法、类、字段。可以配合javadoc的@deprecated标签使用，通过该标签解释下为何弃用。
+可以看出，`@Deprecated`可以被使用到很多地方，不局限于方法、类、字段。可以配合javadoc的@deprecated标签使用，通过该标签解释下为何弃用。
 
-  ```java
-     // Javadoc comment follows
-      /**
-       * @deprecated
-       * explanation of why it was deprecated
-       */
-      @Deprecated
-      static void deprecatedMethod() { }
-  }
-  ```
+```java
+   // Javadoc comment follows
+    /**
+     * @deprecated
+     * explanation of why it was deprecated
+     */
+    @Deprecated
+    static void deprecatedMethod() { }
+}
+```
 
-* `@Override`
+##### @Override
 
-  通知编译器被注释的方法必须覆盖父类方法。
+通知编译器被注释的方法必须覆盖父类方法。
 
-  ```java
-  @Target(ElementType.METHOD)
-  @Retention(RetentionPolicy.SOURCE)
-  public @interface Override {
-  }
-  ```
+```java
+@Target(ElementType.METHOD)
+@Retention(RetentionPolicy.SOURCE)
+public @interface Override {
+}
+```
 
-* `@SuppressWarnings`
+##### @SuppressWarnings
 
-  用于抑制警告
+用于抑制警告
 
-  ```java
-  @Target({TYPE, FIELD, METHOD, PARAMETER, CONSTRUCTOR, LOCAL_VARIABLE})
-  @Retention(RetentionPolicy.SOURCE)
-  public @interface SuppressWarnings {
-      String[] value();
-  }
-  ```
+```java
+@Target({TYPE, FIELD, METHOD, PARAMETER, CONSTRUCTOR, LOCAL_VARIABLE})
+@Retention(RetentionPolicy.SOURCE)
+public @interface SuppressWarnings {
+    String[] value();
+}
+```
 
-  还有其他的如@SafeVarargs、@FunctionalInterface。
+还有其他的如`@SafeVarargs`、`@FunctionalInterface`。
 
 #### 用于其他注解的注解
 
-此注解被称为元注解。
+用于注释其他注解的注解称为元注解。
 
-* `@Retention`
+##### @Retention
 
-  指定被标记的注解如何被存储，比如存在源码中、字节码中、运行时中。如果@Retention不存在，则默认使用`RetentionPolicy.CLASS`策略，就是存在字节码中。
+指定被标记的注解如何被存储，比如存在源码中、字节码中、运行时中。如果`@Retention`不存在，则默认使用`RetentionPolicy.CLASS`策略，就是存在字节码中。
 
-    * `RetentionPolicy.SOURCE` – The marked annotation is retained only in the source level and is ignored by the compiler.
-    * `RetentionPolicy.CLASS` – The marked annotation is retained by the compiler at compile time, but is ignored by the Java Virtual Machine (JVM).
-    * `RetentionPolicy.RUNTIME` – The marked annotation is retained by the JVM so it can be used by the runtime environment.
+* `RetentionPolicy.SOURCE` – The marked annotation is retained only in the source level and is ignored by the compiler.
 
-  ```java
-  @Documented
-  @Retention(RetentionPolicy.RUNTIME)
-  @Target(ElementType.ANNOTATION_TYPE)
-  public @interface Retention {
-      /**
-       * Returns the retention policy.
-       * @return the retention policy
-       */
-      RetentionPolicy value();
-  }
-  ```
+* `RetentionPolicy.CLASS` – The marked annotation is retained by the compiler at compile time, but is ignored by the Java Virtual Machine (JVM).
 
-* `@Documented`
+* `RetentionPolicy.RUNTIME` – The marked annotation is retained by the JVM so it can be used by the runtime environment.
 
-  被`@Document`注释的注解在其他地方被使用时，可以显示在Javadoc导出的文档中。
+```java
+@Documented
+@Retention(RetentionPolicy.RUNTIME)
+@Target(ElementType.ANNOTATION_TYPE)
+public @interface Retention {
+/**
 
-  ![img](.Java Language/2018091611492297.png)
+- Returns the retention policy.
+@return the retention policy
+*/
+RetentionPolicy value();
+}
+```
 
-  ```java
-  @Documented
-  @Retention(RetentionPolicy.RUNTIME)
-  @Target(ElementType.ANNOTATION_TYPE)
-  public @interface Documented {
-  }
-  ```
+##### @Documented
 
-* `@Target`
+被`@Document`注释的注解在其他地方被使用时，可以显示在javadoc导出的文档中。
 
-  指定注解可以使用在哪种java元素上：
+![img](.注解/2018091611492297.png)
 
-    * `ElementType.ANNOTATION_TYPE` can be applied to an annotation type.
-    * `ElementType.CONSTRUCTOR` can be applied to a constructor.
-    * `ElementType.FIELD` can be applied to a field or property.
-    * `ElementType.LOCAL_VARIABLE` can be applied to a local variable.
-    * `ElementType.METHOD` can be applied to a method-level annotation.
-    * `ElementType.PACKAGE` can be applied to a package declaration.
-    * `ElementType.PARAMETER` can be applied to the parameters of a method.
-    * `ElementType.TYPE` can be applied to any element of a class.
+```java
+@Documented
+@Retention(RetentionPolicy.RUNTIME)
+@Target(ElementType.ANNOTATION_TYPE)
+public @interface Documented {
+}
+```
 
-  ```java
-  @Documented
-  @Retention(RetentionPolicy.RUNTIME)
-  @Target(ElementType.ANNOTATION_TYPE)
-  public @interface Target {
-      ElementType[] value();
-  }
-  ```
+##### @Target
 
-* `@Inherited`
+指定注解可以使用在哪种java元素上：
 
-  指示注解可以被继承。假设被`@Inherited`注释的注解为`@A`，如果父类被`@A`注释，子类便可以继承这个注解。但是并不完全对，因为通过反射，子类不能找到`@A`。
+* `ElementType.ANNOTATION_TYPE` can be applied to an annotation type.
+* `ElementType.CONSTRUCTOR` can be applied to a constructor.
+* `ElementType.FIELD` can be applied to a field or property.
+* `ElementType.LOCAL_VARIABLE` can be applied to a local variable.
+* `ElementType.METHOD` can be applied to a method-level annotation.
+* `ElementType.PACKAGE` can be applied to a package declaration.
+* `ElementType.PARAMETER` can be applied to the parameters of a method.
+* `ElementType.TYPE` can be applied to any element of a class.
 
-  ```java
-  @Documented
-  @Retention(RetentionPolicy.RUNTIME)
-  @Target(ElementType.ANNOTATION_TYPE)
-  public @interface Inherited {
-  }
-  ```
+```java
+@Documented
+@Retention(RetentionPolicy.RUNTIME)
+@Target(ElementType.ANNOTATION_TYPE)
+public @interface Target {
+    ElementType[] value();
+}
+```
 
-* `@Repeatable`
+##### @Inherited
 
-  被@Repeatable注解的注解可以在一个地方使用多次，比如下面的@Schedule可以使用多次：
+指示注解可以被继承。假设被`@Inherited`注释的注解为`@A`，如果父类被`@A`注释，子类便可以继承这个注解。但是并不完全对，因为通过反射，子类不能找到`@A`。
 
-  ```java
-  @Schedule(dayOfMonth="last")
-  @Schedule(dayOfWeek="Fri", hour="23")
-  public void doPeriodicCleanup() { ... }
-  ```
+```java
+@Documented
+@Retention(RetentionPolicy.RUNTIME)
+@Target(ElementType.ANNOTATION_TYPE)
+public @interface Inherited {
+}
+```
 
-  但是由于兼容原因，repeatable注解（就是被@Repeatable注释过的注解）需要被存入容器注解（container annotation）。也就是说定义repeatable注解时还需要定义容器注解。下面声明repeatable注解：
+##### @Repeatable
 
-  ```java
-  @Repeatable(Schedules.class)
-  public @interface Schedule {
-    String dayOfMonth() default "first";
-    String dayOfWeek() default "Mon";
-    int hour() default 12;
-  }
-  ```
+被`@Repeatable`注解的注解可以在一个地方使用多次，比如下面的`@Schedule`可以使用多次：
 
-  @Repeatable中需要指定容器注解，容器注解的定义为：
+```java
+@Schedule(dayOfMonth="last")
+@Schedule(dayOfWeek="Fri", hour="23")
+public void doPeriodicCleanup() { ... }
+```
 
-  ```java
+但是由于兼容原因，`repeatable`注解（就是被`@Repeatable`注释过的注解）需要被存入容器注解（container annotation）。也就是说定义`repeatable`注解时还需要定义容器注解。下面声明`repeatable`注解：
+
+```java
+@Repeatable(Schedules.class)
+public @interface Schedule {
+  String dayOfMonth() default "first";
+  String dayOfWeek() default "Mon";
+  int hour() default 12;
+}
+```
+
+`@Repeatable`中需要指定容器注解，容器注解的定义为：
+
+```java
 public @interface Schedules {
-      Schedule[] value();
-  }
-  ```
-  
-  注意，容器注解的元素value数组中的类型一定要为repeatable注解类型。很拗口吧，但是既然要存入repeatable注解（也就是Schedule），当然要定义它的数组（Schedule[]）。
+    Schedule[] value();
+}
+```
+
+注意，容器注解的元素value数组中的类型一定要为repeatable注解类型。很拗口吧，但是既然要存入repeatable注解（也就是Schedule），当然要定义它的数组（Schedule[]）。
 
 ### 其他
 
-一些注解可以用于**类型的使用**上，被称为类型注解（type annotation），通常被用于类型检测。
+一些注解可以用于类型的使用上，被称为类型注解（type annotation），通常被用于类型检测。
 
 ### 参考
 
 * https://docs.oracle.com/javase/tutorial/java/annotations/index.html
-* http://tutorials.jenkov.com/java/annotations.html
-* https://www.developer.com/java/other/article.php/10936_3556176_3/An-Introduction-to-Java-Annotations.htm
-* https://blog.usejournal.com/how-much-do-you-actually-know-about-annotations-in-java-b999e100b929
 
+* http://tutorials.jenkov.com/java/annotations.html
+
+* https://www.developer.com/java/other/article.php/10936_3556176_3/An-Introduction-to-Java-Annotations.htm
+
+* https://blog.usejournal.com/how-much-do-you-actually-know-about-annotations-in-java-b999e100b929
 
 
 # 其他
@@ -545,3 +556,4 @@ public @interface Schedules {
 # 参考
 
 * [Java Language Tutorial jenkov.com](http://tutorials.jenkov.com/java/index.html)
+* [Java Tutorial Oracle.com](https://docs.oracle.com/javase/tutorial/index.html)

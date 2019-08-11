@@ -12,19 +12,14 @@
 
 # 自定义CSS样式
 
-## 目标
+Typora加载CSS文件的顺序如下:
 
-一级标题序号不显示, 之后显示标题序号, 如下图所示
+1. Typora’s basic styles.
+2. CSS for current theme.
+3. `base.user.css` under theme folder.
+4. `{current-theme}.user.css` under theme folder. If you choose `Github` as your theme, then `github.user.css` will also be loaded.
 
-> 一级标题很关键, 运用场景很多, 所以将设置交给用户.
->
-> 如, 此文章中写日记, 标题是日期, 此时并不需要序号
+一般都是编写`base.user.css`来修改css样式的. 主题目录可以在设置中找到.
 
-## 实现
+> 参考: [Add Custom CSS](https://support.typora.io/Add-Custom-CSS/)
 
-含标题的三块区域定位:
-
-* 正文: `#write`
-* `[TOC]`目录树: `.md-toc-content` 
-
-* 侧边大纲: `.outline-content`
