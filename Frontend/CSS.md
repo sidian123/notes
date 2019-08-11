@@ -1575,6 +1575,34 @@ where
 可以使用`<string>`或`<url>`指定引入的样式表的位置，应该都是url地址吧。看以看出，`@import`可以进行媒体查询，以确定是否引入。
 
 >参考：[@import](https://developer.mozilla.org/en-US/docs/Web/CSS/@import)
+## 计数器
+
+定义一个计数器, 通过css选择器附着在多个元素上, 通过`counter-increment`可以让不同的元素获得不同的计数值. 
+
+> 注意, 这些元素上的计数器还是同一个, 只是可取得的值不一样罢了
+
+多个计数器可以同名, 只是内层计数器会隐藏外层计数器罢了, 但是可以`counters()`函数获取所有嵌套的同名计数器的值.
+
+------------
+
+设置计数器和增加计数值的方法
+
+* [counter-set](https://developer.mozilla.org/en-US/docs/Web/CSS/counter-set): 赋值一个值给计数器(默认0), 如果该计数器不存在则创建
+* [counter-reset](https://developer.mozilla.org/en-US/docs/Web/CSS/counter-reset): 重置计数器到指定值(默认0), 如果不存在则创建
+* [counter-increment](https://developer.mozilla.org/en-US/docs/Web/CSS/counter-increment): 每次都增加计数器一个值(默认1, 可以为负数)
+* [@counter-style](https://developer.mozilla.org/en-US/docs/Web/CSS/@counter-style): 设置计数器显示其他字符. 没咋看懂
+
+> `counter-set`和`counter-set`都可以创建计数器. 注意, 是在含该计数器声明的元素上产生计数器, 如果css匹配的元素有多个, 则会创建多个计数器.
+
+获取计数器值的函数
+
+* [counter(name)](https://developer.mozilla.org/en-US/docs/Web/CSS/counter): 向上查找最近的含指定计数器的祖先元素,(含父元素) 并获取该计数器值
+* [counters(name,string)](https://developer.mozilla.org/en-US/docs/Web/CSS/counters): 向上查找到**所有**含指定计数器的祖先元素(含父元素), 从最外存计数器开始, 合并他们的值, 以参数`string`作为分隔符.
+
+> 可以设置获取的计数器值的字符集, 暂且不会
+
+> 例子参考:[Using CSS counters](https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_Lists_and_Counters/Using_CSS_counters)
+
 # 参考
 [MDN教程](https://developer.mozilla.org/en-US/docs/Learn)
 [w3schools.com教程](https://www.w3schools.com/css/default.asp)

@@ -1,3 +1,5 @@
+[TOC]
+
 # 一 介绍
 
 构建一个项目通常由多个任务组成, 如下载依赖,放入classpath下,编译源码,运行测试,打包,部署等. 而maven则是一个自动化这些任务的工具.
@@ -360,45 +362,121 @@ default lifecycle常用的phases：
 
 ![在这里插入图片描述](.Maven/20190617225058525.png)
 
-# 四 其他
 
-## 4.1 父、子POM(废弃)
 
-> 该小节冗余, 将废弃, 但是不忍心删除这些内容
+# 四 依赖进阶
 
-一个项目可以由多个相对独立的模块（小项目）组成，每个模块可以存在一个pom文件。为了防止模块之间冗余，父pom抽离子pom间的公共部分，由子pom继承父pom配置，使项目更容易维护。
+- 项目依赖除了来源于pom文件中声明的依赖外, 还有从父依赖继承的依赖, 依赖的传递依赖.  因此这里将依赖区分为: **直接依赖**, **继承依赖**, **传递依赖**
+- 依赖间可能会出现依赖版本冲突的问题.
 
-> 当父、子pom中属性或依赖冲突时，子pom优先级高。
+## 冲突解决
 
-### 4.1.1 定义
+1. **最近选择**: 当**传递依赖**冲突时, 依赖树中离项目最近的依赖的版本被选择
 
-- 父pom：通过在pom中定义`<packaging>pom</packaging>`来声明；
+   ![在这里插入图片描述](.Maven/20190618162431133.png)
 
-- 子pom：pom中添加`parent`元素，如：
+   > 最终会使用1.0版本的D依赖
 
-  ```xml
-      <parent>
-          <groupId>top.sidian123.demo</groupId>
-          <artifactId>MavenExamples</artifactId>
-          <version>0.0.1-SNAPSHOT</version>
-      </parent>
-  ```
+   我们也可以声明直接依赖来解决冲突问题.
 
-  `parent`元素中可定义`relativePath`元素，表明父pom相对于当前子pom的位置。默认`../pom.xml`，如果不填，则从仓库中查找。
+2. **依赖管理**(见2.2.2小节): 依赖管理除了可以指定**未声明版本的直接依赖**的版本外, **传递依赖**的版本可以通过`dependencyManagement`**强制**确定.
 
-### 4.1.2 依赖查找
+   > 注意, 该项目的**直接依赖**和**继承依赖**不能被依赖管理影响.
 
-1. 先在父pom中查找依赖
-2. 在本地仓库中查找
-3. 最后查找远程仓库
+3. **排除依赖**(见2.2.1小节): 通过`exclusion`元素可以排除依赖, 如A->B->D, 可以在A中排除D依赖.
 
-> 参考：[Maven – Parent and Child POM Example](<https://howtodoinjava.com/maven/maven-parent-child-pom-example/>)
+4. **依赖作用域**(`scope`): 声明直接依赖时可以指定它的作用域, `scope`不仅影响该依赖, 还影响该依赖的传递依赖的**有效作用域**. 具体规则如下所示:
 
-### 4.1.3 dependencyManagement
+   |          | compile    | provided | runtime  | test |
+   | -------- | ---------- | -------- | -------- | ---- |
+   | compile  | compile(*) | -        | runtime  | -    |
+   | provided | provided   | -        | provided | -    |
+   | runtime  | runtime    | -        | runtime  | -    |
+   | test     | test       | -        | test     | -    |
 
-`dependencyManagement`常用在父pom文件中，只有当子pom依赖于父pom `dependencyManagement`元素中存在的依赖时，该依赖才会从父pom中继承未指定的配置，如spring boot中的版本号。
+   > 行表示依赖的`scope`, 列表示传递依赖的`scope`, 值为传递依赖的有效作用域
 
-## 4.2 资源插件
+   设置直接依赖的不同`scope`, 来影响传递依赖的有效`scope`来达到解决冲突的目录, 但是**因为不太直观, 因此不建议使用该方法.**
+
+## 引入版本管理
+
+`dependencyManagement`元素主要用于管理依赖的版本, 以至于声明依赖时不用写版本号. 通过我们会通过父pom来集中管理依赖, 然后子pom通过**继承**来获取该元素.
+
+当有多个版本管理pom文件需要引入时会出现问题, 因为父pom只能存在一个. 可以通过`scope`元素的`import`值引入, 如下所示:
+
+```xml
+project ...>
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>baeldung</groupId>
+    <artifactId>Test</artifactId>
+    <version>0.0.1-SNAPSHOT</version>
+    <packaging>pom</packaging>
+    <name>Test</name>
+     
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>baeldung</groupId>
+                <artifactId>Baeldung-BOM</artifactId>
+                <version>0.0.1-SNAPSHOT</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+</project>
+```
+
+`import`只能在`dependencyManagement`元素使用, 并且引入的依赖为`pom`类型. 上面的例子中引入了`Baeldung-BOM`的`dependencyManagement`元素来进行依赖管理.
+
+这种方法还是和继承有区别的, `import`方法仅"继承"`dependencyManagement`元素.
+
+## 有效依赖版本
+
+当依赖在多个地方声明版本时, 到低使用哪个版本呢? 下面给出答案, 优先级由高到低:
+
+1. 声明直接依赖时指定的版本号
+2. 继承依赖的版本号
+3. 引入(`import`)pom的版本号, 也考虑引入pom间的顺序
+4. 传递依赖的最近选择算法确定(见5.1)
+
+
+
+# 五 其他
+
+## 安装与配置
+
+1. 首先安装了JDK, 并且设置环境变量`JAVA_HOME`
+
+   ```shell
+   export JAVA_HOME=/home/sidian/Software/jdk-11.0.3
+   ```
+
+2. 官网上下载最新版Maven并解压
+
+3. 将Maven的`bin`目录添加到环境变量中.
+
+4. 运行`mvn --version`进行测试
+
+----------
+
+将远程仓库配置为阿里Maven仓库, 可以提高下载速度. 在配置文件的`mirrors`元素中添加`mirror`元素：
+
+```xml
+<mirror>
+ 
+    <id>nexus-aliyun</id>
+ 
+    <mirrorOf>*</mirrorOf>
+ 
+    <name>Nexus aliyun</name>
+ 
+    <url>http://maven.aliyun.com/nexus/content/groups/public</url>
+ 
+</mirror>
+```
+
+## 资源插件
 
 maven默认资源插件负责将项目中资源拷贝到输出目录中。默认资源放在`src/main/resources`中。
 
@@ -499,104 +577,48 @@ maven默认资源插件负责将项目中资源拷贝到输出目录中。默认
 
 > 参考：[Apache Maven Resources Plugin](<https://maven.apache.org/plugins/maven-resources-plugin/index.html>)
 
-## 4.3 插件
+## 插件
 
 总的，插件可以被归为两类：
 
 - Build plugins：在项目构建时执行；在pom的`<build/>`元素中配置
 - Reporting plugins：在生成文档时被执行；在pomr的`<reporting/>`元素中配置
 
-## 4.4 安装
+## 父、子POM(废弃)
 
-1. 首先安装了JDK, 并且设置环境变量`JAVA_HOME`
+> 该小节冗余, 将废弃, 但是不忍心删除这些内容
 
-   ```shell
-   export JAVA_HOME=/home/sidian/Software/jdk-11.0.3
-   ```
+一个项目可以由多个相对独立的模块（小项目）组成，每个模块可以存在一个pom文件。为了防止模块之间冗余，父pom抽离子pom间的公共部分，由子pom继承父pom配置，使项目更容易维护。
 
-2. 官网上下载最新版Maven并解压
-3. 将Maven的`bin`目录添加到环境变量中.
-4. 运行`mvn --version`进行测试
+> 当父、子pom中属性或依赖冲突时，子pom优先级高。
 
-# 五 依赖进阶
+### 定义
 
-- 项目依赖除了来源于pom文件中声明的依赖外, 还有从父依赖继承的依赖, 依赖的传递依赖.  因此这里将依赖区分为: **直接依赖**, **继承依赖**, **传递依赖**
-- 依赖间可能会出现依赖版本冲突的问题.
+- 父pom：通过在pom中定义`<packaging>pom</packaging>`来声明；
 
-## 5.1 冲突解决
+- 子pom：pom中添加`parent`元素，如：
 
-1. **最近选择**: 当**传递依赖**冲突时, 依赖树中离项目最近的依赖的版本被选择
+  ```xml
+      <parent>
+          <groupId>top.sidian123.demo</groupId>
+          <artifactId>MavenExamples</artifactId>
+          <version>0.0.1-SNAPSHOT</version>
+      </parent>
+  ```
 
-   ![在这里插入图片描述](.Maven/20190618162431133.png)
+  `parent`元素中可定义`relativePath`元素，表明父pom相对于当前子pom的位置。默认`../pom.xml`，如果不填，则从仓库中查找。
 
-   > 最终会使用1.0版本的D依赖
+### 依赖查找
 
-   我们也可以声明直接依赖来解决冲突问题.
+1. 先在父pom中查找依赖
+2. 在本地仓库中查找
+3. 最后查找远程仓库
 
-2. **依赖管理**(见2.2.2小节): 依赖管理除了可以指定**未声明版本的直接依赖**的版本外, **传递依赖**的版本可以通过`dependencyManagement`**强制**确定.
+> 参考：[Maven – Parent and Child POM Example](<https://howtodoinjava.com/maven/maven-parent-child-pom-example/>)
 
-   > 注意, 该项目的**直接依赖**和**继承依赖**不能被依赖管理影响.
+### dependencyManagement
 
-3. **排除依赖**(见2.2.1小节): 通过`exclusion`元素可以排除依赖, 如A->B->D, 可以在A中排除D依赖.
-
-4. **依赖作用域**(`scope`): 声明直接依赖时可以指定它的作用域, `scope`不仅影响该依赖, 还影响该依赖的传递依赖的**有效作用域**. 具体规则如下所示:
-
-   |          | compile    | provided | runtime  | test |
-   | -------- | ---------- | -------- | -------- | ---- |
-   | compile  | compile(*) | -        | runtime  | -    |
-   | provided | provided   | -        | provided | -    |
-   | runtime  | runtime    | -        | runtime  | -    |
-   | test     | test       | -        | test     | -    |
-
-   > 行表示依赖的`scope`, 列表示传递依赖的`scope`, 值为传递依赖的有效作用域
-
-   设置直接依赖的不同`scope`, 来影响传递依赖的有效`scope`来达到解决冲突的目录, 但是**因为不太直观, 因此不建议使用该方法.**
-
-## 5.2 引入版本管理
-
-`dependencyManagement`元素主要用于管理依赖的版本, 以至于声明依赖时不用写版本号. 通过我们会通过父pom来集中管理依赖, 然后子pom通过**继承**来获取该元素.
-
-当有多个版本管理pom文件需要引入时会出现问题, 因为父pom只能存在一个. 可以通过`scope`元素的`import`值引入, 如下所示:
-
-```xml
-project ...>
-    <modelVersion>4.0.0</modelVersion>
-    <groupId>baeldung</groupId>
-    <artifactId>Test</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
-    <packaging>pom</packaging>
-    <name>Test</name>
-     
-    <dependencyManagement>
-        <dependencies>
-            <dependency>
-                <groupId>baeldung</groupId>
-                <artifactId>Baeldung-BOM</artifactId>
-                <version>0.0.1-SNAPSHOT</version>
-                <type>pom</type>
-                <scope>import</scope>
-            </dependency>
-        </dependencies>
-    </dependencyManagement>
-</project>
-```
-
-`import`只能在`dependencyManagement`元素使用, 并且引入的依赖为`pom`类型. 上面的例子中引入了`Baeldung-BOM`的`dependencyManagement`元素来进行依赖管理.
-
-这种方法还是和继承有区别的, `import`方法仅"继承"`dependencyManagement`元素.
-
-## 5.3 有效依赖版本
-
-当依赖在多个地方声明版本时, 到低使用哪个版本呢? 下面给出答案, 优先级由高到低:
-
-1. 声明直接依赖时指定的版本号
-2. 继承依赖的版本号
-3. 引入(`import`)pom的版本号, 也考虑引入pom间的顺序
-4. 传递依赖的最近选择算法确定(见5.1)
-
-
-
-
+`dependencyManagement`常用在父pom文件中，只有当子pom依赖于父pom `dependencyManagement`元素中存在的依赖时，该依赖才会从父pom中继承未指定的配置，如spring boot中的版本号。
 
 # 参考
 
