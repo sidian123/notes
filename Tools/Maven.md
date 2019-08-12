@@ -464,17 +464,30 @@ project ...>
 
 ```xml
 <mirror>
- 
     <id>nexus-aliyun</id>
- 
-    <mirrorOf>*</mirrorOf>
- 
+    <mirrorOf>*</mirrorOf> 
     <name>Nexus aliyun</name>
- 
-    <url>http://maven.aliyun.com/nexus/content/groups/public</url>
- 
+  <url>http://maven.aliyun.com/nexus/content/groups/public</url>
 </mirror>
 ```
+
+## 使用
+
+* 生成一个简单的Maven项目
+
+  ```bash
+  mvn archetype:generate
+  ```
+
+  然后按照提示输入项目坐标等参数即可.
+
+* 其他的操作如编译, 和声明周期有关, 如
+
+  ```bash
+  mvn compile #编译
+  mvn package #打包
+  ...
+  ```
 
 ## 资源插件
 
@@ -583,6 +596,61 @@ maven默认资源插件负责将项目中资源拷贝到输出目录中。默认
 
 - Build plugins：在项目构建时执行；在pom的`<build/>`元素中配置
 - Reporting plugins：在生成文档时被执行；在pomr的`<reporting/>`元素中配置
+
+## 指定编译版本
+
+### javac
+先从`javac`的编译选项`-source`,`-target`说起：
+* `-source`：指定使用什么版本的JDK语法编译源代码。java语法总是向后兼容的，为何需要设置呢？不晓滴
+* `-target`：指定生成特定于某个JDK版本的class文件。高版本的class文件不被低版本支持，因此需要该项。注意，最好设置`-bootclasspath`指定对应JDK版本的boot classes文件，否则即使设置了`-target`也不能在指定版本上运行class文件
+
+一般情况下，`-target`与`-source`设置一致，可以不用设置`-target`，但最好设置它。
+
+### maven
+maven中可以指定JDK**编译版本**，还需要确定一下IDE中JDK的**使用版本**。
+
+在最新的maven中，默认编译版本为1.6，所以需要自己设置为指定版本。
+
+设置有两种方式：
+```xml
+<properties>
+    <maven.compiler.source>1.8</maven.compiler.source>
+    <maven.compiler.target>1.8</maven.compiler.target>
+</properties>
+```
+或
+```xml
+<plugins>
+    <plugin>    
+        <artifactId>maven-compiler-plugin</artifactId>
+        <configuration>
+            <source>1.8</source>
+            <target>1.8</target>
+        </configuration>
+    </plugin>
+</plugins>
+```
+两种一致，都是使用`maven-compiler-plugin`实现的，插件会在编译时添加`source`,`target`选项。通过插件可以配置更多的选项。
+
+在Java 9后，新增了选项`release`，同时指定编译和输出时的JDK版本。也能配置插件，但这里仅给出方便的方式：
+```xml
+<properties>
+    <maven.compiler.release>9</maven.compiler.release>
+</properties>
+```
+在spring boot中，有独属于它自己的配置方式，它也是通过插件实现的（spring boot项目默认添加了）：
+```xml
+<properties>
+     <java.version>1.8</java.version>
+</properties>   
+```
+
+### 参考
+* [Specifying java version in maven - differences between properties and compiler plugin](https://stackoverflow.com/questions/38882080/specifying-java-version-in-maven-differences-between-properties-and-compiler-p/38883073)
+* [Setting the Java Version in Maven](https://www.baeldung.com/maven-java-version)
+* [javac source and target options](https://stackoverflow.com/questions/15492948/javac-source-and-target-options)
+* [man javac](https://docs.oracle.com/javase/6/docs/technotes/tools/windows/javac.html)
+* [How to cross-compile for older platform versions](https://blogs.oracle.com/darcy/how-to-cross-compile-for-older-platform-versions)
 
 ## 父、子POM(废弃)
 
