@@ -1594,14 +1594,13 @@ where
 * [counter-increment](https://developer.mozilla.org/en-US/docs/Web/CSS/counter-increment): 每次都增加计数器一个值(默认1, 可以为负数)
 * [@counter-style](https://developer.mozilla.org/en-US/docs/Web/CSS/@counter-style): 设置计数器显示其他字符. 没咋看懂
 
-> `counter-set`和`counter-set`都可以创建计数器. 注意, 是在含该计数器声明的元素上产生计数器, 如果css匹配的元素有多个, 则会创建多个计数器.
-
 获取计数器值的函数
 
-* [counter(name)](https://developer.mozilla.org/en-US/docs/Web/CSS/counter): 向上查找最近的含指定计数器的祖先元素,(含父元素) 并获取该计数器值
-* [counters(name,string)](https://developer.mozilla.org/en-US/docs/Web/CSS/counters): 向上查找到**所有**含指定计数器的祖先元素(含父元素), 从最外存计数器开始, 合并他们的值, 以参数`string`作为分隔符.
+* [counter(name,[style])](https://developer.mozilla.org/en-US/docs/Web/CSS/counter): 向上查找最近的含指定计数器的祖先元素,(含父元素) 并获取该计数器值
 
-> 可以设置获取的计数器值的字符集, 暂且不会
+  > 除了获取数字外, 还可以通过`style`获取其他字符. 如设置为`simp-chinese-informal`时, 获取的是中文字符一,二三等.
+
+* [counters(name,string)](https://developer.mozilla.org/en-US/docs/Web/CSS/counters): 向上查找到**所有**含指定计数器的祖先元素(含父元素), 从最外存计数器开始, 合并他们的值, 以参数`string`作为分隔符.
 
 > 参考
 >
