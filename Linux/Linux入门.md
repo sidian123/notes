@@ -659,7 +659,9 @@ chmod [OPTION]... OCTAL-MODE FILE...
 
 ### chown
 改变文件所属用户或组
+>```bash
 >chown [OPTION]... [OWNER][:[GROUP]] FILE...
+>```
 >
 >* `-R`：递归更改
 

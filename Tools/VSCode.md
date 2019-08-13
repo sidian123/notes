@@ -56,3 +56,11 @@
 * `settings.json`: vscode相关的局部配置项
 
 > 参考: [Java in Visual Studio Code](https://code.visualstudio.com/docs/languages/java)
+
+## 插件
+
+* `Remote-WSL`: 使code能够编辑WSL中的文件.
+
+  > 在WSL中, Windows是不能够编辑WSL文件的, 否则会造成WSL系统的损坏.
+  >
+  > 该插件本质是通过在WSL开启一个远程server, 而Win上的VSCode作为client, 来实现的.

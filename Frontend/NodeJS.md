@@ -86,7 +86,7 @@ package安装有全局安装(`npm install --global`)和局部安装（默认）�
 
 # 三 使用
 ## 安装Node.js
-可从[Long Term Support (LTS) version of Node][311]中查看Node目前长期支持版本（LTS），最好选择`v10.15.3`版本的。在[download page][312]中下载Node.js；对于Linux，使用包管理器安装，参考[package manager][313]
+可从[Long Term Support (LTS) version of Node](https://github.com/nodejs/LTS#lts-schedule1)中查看Node目前长期支持版本（LTS），最好选择`v10.15.3`版本的。在[download page][312]中下载Node.js；对于Linux，使用包管理器安装，参考[package manager][313]
 
 我使用的是WSL的Ubuntu，安装命令如下：
 ```bash
@@ -98,7 +98,6 @@ sudo apt-get install -y nodejs
 
 > 在deepin中, 命令安装不成功, 而是通过下载压缩包并配置环境变量安装成功的...
 
-[311]:(https://github.com/nodejs/LTS#lts-schedule1)
 [312]:https://nodejs.org/en/download/
 [313]:https://nodejs.org/en/download/package-manager/
 
@@ -220,3 +219,5 @@ npm help install
 * [How to use or execute a package installed using npm](https://flaviocopes.com/how-to-use-npm-package/)
 * [What's the difference between dependencies, devDependencies and peerDependencies in npm package.json file?](https://stackoverflow.com/questions/18875674/whats-the-difference-between-dependencies-devdependencies-and-peerdependencies)
 * [NPM5, What is the difference of package-lock.json with package.json?](https://stackoverflow.com/questions/48456236/npm5-what-is-the-difference-of-package-lock-json-with-package-json)
+
+[https://github.com/nodejs/LTS#lts-schedule1]: 
