@@ -70,6 +70,10 @@ JDK没有源码的情况下，想要`Shift+F1`（用浏览器打开帮助文件�
 为java文件头添加javadoc注解：
 ![在这里插入图片描述](.Idea/20190224142939600.png)
 
+如果喜欢unix风格的换行符:
+
+![1565702433628](.Idea/1565702433628.png)
+
 [1]:https://www.jetbrains.com/idea/download/#section=windows
 [2]:http://maven.apache.org/download.cgi
 [3]:https://tomcat.apache.org/download-90.cgi
