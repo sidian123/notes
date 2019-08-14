@@ -583,3 +583,20 @@ public @interface Schedules {
 
 * [Java Language Tutorial jenkov.com](http://tutorials.jenkov.com/java/index.html)
 * [Java Tutorial Oracle.com](https://docs.oracle.com/javase/tutorial/index.html)
+
+
+
+
+
+
+
+
+
+
+
+I'm a paragraph
+
+I'm a new paragraph
+By a soft line break , you can still in the same paragraph. No `<br/>` , and no extra line spacing.
+
+to do this , you can press `Shift+Enter`

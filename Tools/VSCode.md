@@ -64,3 +64,5 @@
   > 在WSL中, Windows是不能够编辑WSL文件的, 否则会造成WSL系统的损坏.
   >
   > 该插件本质是通过在WSL开启一个远程server, 而Win上的VSCode作为client, 来实现的.
+  
+  > 然而, 在WSL中打开Windows软件, 也会被该插件接管, 效率不太行, 故删除.

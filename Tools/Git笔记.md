@@ -623,6 +623,24 @@ $ git config --global credential.helper store
 $ git config --global credential.helper 'store --file ~/.my-credentials'
 ```
 
+## 换行符转换
+
+有三种方式:
+
+1. `core.autocrlf=true`
+
+   checkout时, 转化为`CRLF`; commit时, 转化为`LF`
+
+2. `core.autocrlf=input`
+
+   checkout时, 无操作; commit时, 转化为`LF`
+
+3. `core.autocrlf=false`
+
+   不做任何转化
+
+> checkout只的是从仓库中获取数据时, 该仓库可以是远程仓库, `git pull`也算是一种checkout的过程.
+
 # 参考
 
 - [书](https://git-scm.com/book/en/v2)

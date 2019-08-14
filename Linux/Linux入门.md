@@ -191,13 +191,17 @@ unix的目录体系结构从`/`开始，即根目录。
 
 ### cd
 更改**当前工作目录**，即当前进程运行的目录。默认`HOME`变量，即无参数时跳到家目录。
->$ cd dir
->无参数，默认家目录：
->$ cd  
->`~`也表示家目录
->$ cd ~ 
->`-`等于`$OLDPWD`，即上一个目录
->$ cd -
+
+```bash
+#跳转到目录
+$ cd dir
+#无参数，默认家目录：
+$ cd  
+# ~ 也表示家目录
+$ cd ~ 
+# - 等于$OLDPWD，即上一个目录
+$ cd -
+```
 
 ### mkdir
 创建新目录
@@ -332,7 +336,21 @@ passwd用来改变密码。需要输入旧密码和新密码两次。通过调�
 ### lsb_release
 打印特定于发行版的信息，如`lsb_release -a`
 
+### alias
+
+给命令起别名, 如
+
+```bash
+#简化git操作
+alias push="git add . && git commit -m '补充' && git push"
+#取消ls匿名
+alias ls=ls
+```
+
+> 通过覆盖, `ls`可以取消高亮
+
 ## Vim
+
 vim是一个非常强大的编辑器，也是linux默认的命令行编辑器。源于vi，而如今linux上的vi命令成了vim的别名。vim功能即使强大，但太繁杂了，这里只给出必要内容。
 
 参考：https://www.tutorialspoint.com/vim/index.htm
@@ -1506,8 +1524,12 @@ ip命令功能很强大，常用于查看、修改、设置网卡ip、路由表�
 >代替了ifconfig、route、arp等老工具的使用
 
 >ip [ OPTIONS ] OBJECT { COMMAND | help }
->* `OBJECT`：表示ip具体的某个子功能，常用的为`addr`（设置ip）、`route`（路由表）、`neighbour`（arp缓存）
+>* `OBJECT`：表示ip具体的某个子功能，常用的为`addr`（设置ip）、`route`（路由表）、`neighbour`（arp缓存）. 
+>
+>  > 可使用简写.
+>
 >* `COMMAND`：每个object的动作都不一样，可以查询、修改、添加对应实体，但如果没有给出则默认查询
+>
 >* `help`：通过help可查询对应object具体用法
 
 用法参考：[Linux命令之ip](http://www.cnblogs.com/diantong/p/9511072.html)
@@ -1746,9 +1768,19 @@ shell变量用于存储字面值、参与计算。bash为我们提供了一些�
 ```
 ## 脚本
 * 脚本就是bash命令的集合，并且脚本执行时开启了新的bash shell。
+
 * 运行脚本前需要赋予它可执行权限。
+
+  > 未有可执行权限时, 可以如下方式运行
+  >
+  > ```bash
+  > bash script.sh
+  > ```
+
 * 运行脚本时，不明确给出脚本路径，则从PATH路径下查找
+
 * `. script`或`source script`会在当前shell中导入并执行脚本中的命令
+
 * bash脚本必须以`#!/bin/sh`作为首行。
 
 # 参考
