@@ -130,6 +130,15 @@ $ npm install underscore@1.9.0
 npm安装package分全局或局部安装，全局安装的package如果有可执行文件（如npm），它会被添加到环境变量中，因此可以直接执行（如`npm install underscore`）；局部安装且有可执行文件（位于`node_modules/.bin/`目录），此时可用npx来执行，它会自动寻找，如`npx cowsay "Hello"`
 
 >安装的package的版本受`package-lock.json`影响
+
+> 如果觉得安装慢, 可以使用`cnpm`代替`npm`, 它仅仅只是将仓库源改成了淘宝的, 本质上与`npm`无差别. 安装如下:
+>
+> ```bash
+> npm install -g cnpm
+> ```
+>
+> 
+
 ## npm list
 实现已安装依赖形参的关系树
 ```bash
