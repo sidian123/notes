@@ -75,7 +75,7 @@ jQuery对象提供了一些列操作DOM元素的方法。
 [Manipulating Elements](https://learn.jquery.com/using-jquery-core/manipulating-elements/)
 
 ### getting和setting
-下面的一些方法都可以获得元素对应的信息，也可以设置元素的内容。当获得信息是，一般是获得元素集中第一个元素的信息，除了例外`.text`（它将所有元素的文本拼接而成）；当设置信息时，会分别对元素集中所有元素设置。
+下面的一些方法都可以获得元素对应的信息，也可以设置元素的内容。当获得信息时，一般是获得元素集中第一个元素的信息，除了例外`.text`（它将所有元素的文本拼接而成）；当设置信息时，会分别对元素集中所有元素设置。
 * `.html()` – Get or set the HTML contents.
 * `.text()` – Get or set the text contents; HTML will be stripped.
 * `.attr()` – Get or set the value of the provided attribute.

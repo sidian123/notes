@@ -428,6 +428,32 @@ object instanceof Class
 #### 控制语句
 
 ##### if
+```
+if (<expression>)
+	statement
+[else
+	statement]
+```
+
+注意
+
+* `<expression>`要返回`boolean`类型值
+* `statement`是一条语句, 多条时可用语句块.
+* `else`语句可选
+* `if`语句也是`statement`, 因此可以嵌套使用`if`语句
+
+##### switch
+
+```
+switch (<expression>){
+	case <label> : statements
+	case <label> : statements
+	...
+	default : statements
+}
+```
+
+* `<expression>`最终值可以为基本类型, 其包装类, 枚举类型, 和`String`
 
 
 
@@ -443,6 +469,9 @@ object instanceof Class
 
   * **声明语句**: 声明变量时的语句
   * **控制语句**: 能够改变执行顺序的语句, 如`return`,`for`等.
+
+  
+* 语句块: 由0到多个语句组成,  用`{}`围绕起来. **可以被视作一个语句**
 
 ## 类与对象
 
@@ -758,10 +787,3 @@ public @interface Schedules {
 
 
 
-
-I'm a paragraph
-
-I'm a new paragraph
-By a soft line break , you can still in the same paragraph. No `<br/>` , and no extra line spacing.
-
-to do this , you can press `Shift+Enter`
