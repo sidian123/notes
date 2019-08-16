@@ -303,7 +303,24 @@ int[] ints4=new int[]{1,2,3};//此时不能使用字面值.也不需要制定数
 
 #### 操作
 
+`Arrays`提供了操作数据的方法
+
 * Array与Collection之间的转化
+
+  * `Arrays.asList`: 将数组转化为只读的`List`
+  * `Collection.toArray`: 返回**新的**,安全的数组
+
+* `equals` 判断两个函数是否相等, 即元素个数和对应元素是否相等.
+
+* `fill`将一个数据填充到整个数组中.
+
+* `sort`按照其元素的自然顺序排序.
+
+  > 对象的自然顺序由它实现的`Comparable`接口给出.
+  >
+  > JDK8引入了`parallelSort`方法, 在多处理器系统中拥有更高的速度.
+
+* `stream`提供了流的操作.
 
 ### 字符串
 
@@ -319,9 +336,113 @@ int[] ints4=new int[]{1,2,3};//此时不能使用字面值.也不需要制定数
 
 #### 变量操作
 
+##### 优先级规则
 
+* 高优先级的操作符先运算
+* 同等优先级的操作数先计算左边的. 其中`=`是例外, 从右边开始计算.
+* 然而优先级是可以通过`()`改变的,`()`的优先级最高
+
+| Operators            | Precedence                               |
+| -------------------- | ---------------------------------------- |
+| postfix              | `expr++ expr--`                          |
+| unary                | `++expr --expr +expr -expr ~ !`          |
+| multiplicative       | `* / %`                                  |
+| additive             | `+ -`                                    |
+| shift                | `<< >> >>>`                              |
+| relational           | `< > <= >= instanceof`                   |
+| equality             | `== !=`                                  |
+| bitwise AND          | `&`                                      |
+| bitwise exclusive OR | `^`                                      |
+| bitwise inclusive OR | `|`                                      |
+| logical AND          | `&&`                                     |
+| logical OR           | `||`                                     |
+| ternary              | `? :`                                    |
+| assignment           | `= += -= *= /= %= &= ^= |= <<= >>= >>>=` |
+
+##### 赋值操作符
+
+略
+
+##### 算数操作符
+
+| Operator | Description                                            |
+| -------- | ------------------------------------------------------ |
+| `+`      | Additive operator (also used for String concatenation) |
+| `-`      | Subtraction operator                                   |
+| `*`      | Multiplication operator                                |
+| `/`      | Division operator                                      |
+| `%`      | Remainder operator                                     |
+
+> 不同类型的整数运算时, 都会先转化为位数多的整数类型后再运算.
+
+##### 一元操作符
+
+| Operator | Description                                                  |
+| -------- | ------------------------------------------------------------ |
+| `+`      | Unary plus operator; indicates positive value (numbers are positive without this, however) |
+| `-`      | Unary minus operator; negates an expression                  |
+| `++`     | Increment operator; increments a value by 1                  |
+| `--`     | Decrement operator; decrements a value by 1                  |
+| `!`      | Logical complement operator; inverts the value of a boolean  |
+
+##### 比较操作符
+
+| `==` | equal to                 |
+| ---- | ------------------------ |
+| `!=` | not equal to             |
+| `>`  | greater than             |
+| `>=` | greater than or equal to |
+| `<`  | less than                |
+| `<=` | less than or equal to    |
+
+##### 逻辑操作符
+
+* `&&`逻辑与
+* `||`逻辑或
+
+##### 类型比较
+
+```
+object instanceof Class
+```
+
+左对象, 右类, 若类型符合, 则`true`, 否则`false`
+
+##### 按位操作符
+
+对整数类型的变量的每一位做逻辑运算
+
+* `&`按位做AND运算
+* `^`按位做OR运算
+* `|`按位做XOR运算
+
+##### 位移操作符
+
+对整数类型变量做整体移动的运算
+
+* `<<`逻辑左移, 最右补0
+* `>>`逻辑右移, 最左位取决于本身符号. 如负数补1, 整数补0
+* `<<<`算数左移, 最右补0
+* `>>>`算数右移, 最左补0
 
 #### 控制语句
+
+##### if
+
+
+
+### 表达式,语句,语句块
+
+* **表达式**: 由变量,操作符和方法调用按照语法规则组成, **最终计算得到一个值**. 最终结果的类型也却决于这三个因素.
+
+* **语句**: 语句是一个执行的完整单元. 以`;`为语句结束符. 语句有三种 类型:
+
+  * **表达式语句**: 表达式仅加上`;`组成的语句.
+
+    > 只有部分表达式才能做大
+
+  * **声明语句**: 声明变量时的语句
+  * **控制语句**: 能够改变执行顺序的语句, 如`return`,`for`等.
 
 ## 类与对象
 
