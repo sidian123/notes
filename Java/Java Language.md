@@ -323,6 +323,39 @@ int[] ints4=new int[]{1,2,3};//此时不能使用字面值.也不需要制定数
 
 #### 控制语句
 
+##### if
+
+```
+if (<expression>)
+	statement
+[else
+	statement]
+```
+
+注意
+
+* `<expression>`要返回`boolean`类型值
+* `statement`是一条语句, 多条时可用语句块.
+* `else`语句可选
+* `if`语句也是`statement`, 因此可以嵌套使用`if`语句
+
+##### switch
+
+```
+switch (<expression>){
+	case <label> : statements
+	case <label> : statements
+	...
+	default : statements
+}
+```
+
+* `<expression>`最终值可以为基本类型, 其包装类, 枚举类型, 和`String`
+
+### 表达式,语句,语句块
+
+* 语句块: 由0到多个语句组成,  用`{}`围绕起来. **可以被视作一个语句**
+
 ## 类与对象
 
 ## 类
@@ -637,10 +670,3 @@ public @interface Schedules {
 
 
 
-
-I'm a paragraph
-
-I'm a new paragraph
-By a soft line break , you can still in the same paragraph. No `<br/>` , and no extra line spacing.
-
-to do this , you can press `Shift+Enter`
