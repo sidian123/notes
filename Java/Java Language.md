@@ -105,7 +105,17 @@ java -cp classes myfirstapp.MyJavaApp
 ```
 
 * `-cp`告诉JVM你所有的class文件在哪. 未给出时默认当前目录, 即`.`
+
 * 最后一个指定含入口方法`main`的类的全限定名, 即包名+类名. 这样JVM才能从classpath路径下找到主类并运行.
+
+  >`main`方法是执行Java程序的入口, 一般声明形式如下:
+  >
+  >```java
+  >public static void main(String[] args) {
+  >
+  >}
+  >```
+  >> 并且入口可以有多个, 但是一次JVM只能运行一个.
 
 > 问题来了, 项目依赖的第三方jar怎么指定? 可以用通配符`*`, 如下面即指定项目编译的class文件和所有三方jar
 >
@@ -122,15 +132,20 @@ java -cp classes myfirstapp.MyJavaApp
 必备要求:
 
 * Java源文件必须以`.java`为后缀
-* 文件中的`public`类,接口等类型的声明时, 名字必须与文件名一致.
 
-Java源文件中含有以下元素:
+* ~~文件中必须存在一个且仅此一个`public`(无其他修饰符)类或接口, 并且类型名要与文件名一致.~~
+
+* 如果有一个顶层类, 被`public`修饰时, 那么类名必须与文件名一致.
+
+  > 其中枚举, 注解是特殊的类
+
+Java源文件中一般含有以下元素:
 
 - Package declaration
   - 必须位于第一行
   - 必须与实际的package位置一致
 - Import statement**s**
-- Type declaration**s**: 必须存在一个`public`类或接口.
+- Type declaration**s**: ~~必须存在一个`public`类或接口.~~
   - Fields
   - Class initializers
   - Constructors
@@ -144,7 +159,7 @@ Java源文件中含有以下元素:
   * 每个变量都对应一个**数据类型**, 数据类型决定了变量可以存储何种类型的数据, 以及可对该数据进行何种**操作**.
   * 每种变量都有它自己的作用域.
 
-  > 变量, 字段, 对象, 这些概念大致相同, 本文可能会混淆的使用这些概念.
+  > 变量, 字段, 对象(实例), 这些概念大致相同, 本文可能会混淆的使用这些概念.
   >
   > 但是变量主要侧重于指栈中的变量和堆中对象的字段, 对象则侧重于堆中的对象.
   >
@@ -189,6 +204,12 @@ Java源文件中含有以下元素:
 ```
 VarType varName [=initialValue];
 ```
+
+> 在基本变量中, 类型指的就是变量本身的类型; 在引用类型中, 类型指的是所引用对象的类型.
+
+> 字段即使未初始化, 在对象被创建时也会为字段分配空间, 因此可以有默认值; 但是局部变量仅声明时, 则不会分配空间, 不会有默认值, 直接访问它会报错.
+>
+> > 但可以写入, 写入字面值时, 即在编译时就分配了空间; 写入对象, 则在运行时分配的空间. 不管哪种方式, 都是分配了空间.
 
 #### 分类
 
@@ -258,6 +279,8 @@ Java语言定义了8中基本类型:
 其他的都是引用类型的变量, 指向堆中的对象. 对象也是有类型的, 即它的类, 你也可以自己定义类, 即定义了新的数据类型.
 
 JDK5后, 基本类型与包装类之间会**自动装箱**(Auto Boxing), 即有必要时, 基本类型会自动转化为包装类, 反之亦然.
+
+> 基本类型自动包装时调用了包装类的`valueOf()`方法，自动拆箱时调用了包装类的`xxxValue()`方法, 如`intValue()`, `charValue()`等。
 
 #### 字面值
 
@@ -385,6 +408,8 @@ int[] ints4=new int[]{1,2,3};//此时不能使用字面值.也不需要制定数
 | `--`     | Decrement operator; decrements a value by 1                  |
 | `!`      | Logical complement operator; inverts the value of a boolean  |
 
+其中, `i++`自增, 但返回自增前的值; `++i`自增, 返回自增后的值. `--`也类似.
+
 ##### 比较操作符
 
 | `==` | equal to                 |
@@ -427,7 +452,12 @@ object instanceof Class
 
 #### 控制语句
 
-##### if
+> 下面一定要注意, `statement`加`s`表示允许存在多个语句.
+
+##### 条件分支语句
+
+###### if
+
 ```
 if (<expression>)
 	statement
@@ -442,7 +472,7 @@ if (<expression>)
 * `else`语句可选
 * `if`语句也是`statement`, 因此可以嵌套使用`if`语句
 
-##### switch
+###### switch
 
 ```
 switch (<expression>){
@@ -454,8 +484,111 @@ switch (<expression>){
 ```
 
 * `<expression>`最终值可以为基本类型, 其包装类, 枚举类型, 和`String`
+* `<lable>`为对应类型的一个常量, 用于匹配.
+* `default`: 如果没有`case`语句匹配, 则执行`default`的语句
+* `case`匹配后, 会执行之后的语句. 如果没有遇到`break`, **会一直执行下去**, 即可能会执行接下来的`case`语句. `default`语句也是一样.
 
+##### 循环语句
 
+###### while
+
+有两种形式, 先判断后执行:
+
+```java
+while (expression)
+	statement
+```
+
+先执行一次, 再判断:
+
+```java
+do
+     statement
+while (expression);
+```
+
+> 只有当`expression`为`false`时才退出循环
+
+###### for
+
+```java
+for (initialization; termination; increment)
+    statement
+```
+
+* `initialization`: 循环开始前执行, 仅执行一次.
+* `termination`: 每次一轮循环前执行, 返回`true`时继续执行, 否则结束
+* `increment`: 每次一轮循环结束后执行
+
+----
+
+还有一种增强型`for`循环, 用于遍历**集合**和**数组**
+
+```java
+public static void main(String[] args){
+    int[] numbers = 
+    {1,2,3,4,5,6,7,8,9,10};
+    for (int item : numbers) {
+        System.out.println("Count is: " + item);
+    }
+}
+```
+
+##### 跳转语句
+
+###### break
+
+用于结束`switch`, `for`, `while`或`do-while`语句, 有两种形式:
+
+* unlabeled break: 只结束最内层上述语句
+
+  ```java
+  for (i = 0; i < arrayOfInts.length; i++) {
+      if (arrayOfInts[i] == searchfor) {
+          foundIt = true;
+          break;
+      }
+  }
+  ```
+
+* labeled break: 结束label指定的上述语句
+
+  ```java
+  //执行break后, 结束最外层for循环
+  search:
+  for (i = 0; i < arrayOfInts.length; i++) {
+      for (j = 0; j < arrayOfInts[i].length;
+           j++) {
+          if (arrayOfInts[i][j] == searchfor) {
+              foundIt = true;
+              break search;
+          }
+      }
+  }
+  ```
+
+###### continue
+
+跳过`for`, `while`或`do-while`本轮循环的**循环体**, 同样两种形式:
+
+* unlabeled continue: 跳过最内层循环体
+* labeled continue: 跳过lablel执行的循环体
+
+###### return
+
+结束当前函数, 执行函数后的语句. 有两种形式:
+
+* 有返回值
+
+  ```java
+  return ++count;
+  ```
+
+* 无返回值
+
+  ```java
+  return;
+  ```
 
 ### 表达式,语句,语句块
 
@@ -470,14 +603,452 @@ switch (<expression>){
   * **声明语句**: 声明变量时的语句
   * **控制语句**: 能够改变执行顺序的语句, 如`return`,`for`等.
 
-  
-* 语句块: 由0到多个语句组成,  用`{}`围绕起来. **可以被视作一个语句**
+* **语句块**: 由0到多个语句组成,  用`{}`围绕起来. **可以被视作一个语句**
 
 ## 类与对象
 
-## 类
+### 类
+
+#### 类声明
+
+```java
+<modifiers> class ClassName [extends ParentClass] [implements Interface[,...]]{
+ 	//field,constructor,initial block and method declaration 
+}
+```
+
+* `<modifiers>`如`public`,`private`等修饰符, 可以有多个. 主要用于控制类的访问权限.
+* 可以有且最多只有一个父类.
+* 可以实现多个接口, 以`,`分割
+* 构造函数`constructor`或初始化块`initial block`用于初始化新对象; 字段`field`声明**类和对象**拥有的状态; 方法`method`给出**类和对象**拥有的行为.
+
+#### 字段声明
+
+主要由四部分组成:
+
+```java
+<modifiers> <type> fieldName [= <initial value>];
+```
+
+* 修饰符`modifiers`: 有多种类型, 可搭配使用
+
+  * 访问修饰符, 如`public`,`private`等等.
+
+  * `static`
+    * 无`static`则为实例变量, 每个对象都有一份
+    * 有则为类变量, 一个类仅此一份, 可被类和对象访问.
+    
+  * `final`变量是否可修改
+  
+  > 即使引用变量的值(地址)不可修改的, 但仍可修改它指向的对象.
+  
+* 其他的分别是**类型**, **字段名**和**初始值**, 暂时略.
+
+#### 方法声明
+
+```java
+<modifiers> <return type> methodName [throws <exceptions>](<param type> paramName[,...]){
+    //statements to do the calculation here
+    statements
+}
+```
+
+由六部分组成:
+
+* 修饰符: 其中, `final`修饰的方法不能被覆盖.
+* 返回值
+* 方法名
+* 参数列表
+* 方法体
+
+其中**方法签名**由方法名和参数列表组成. 方法签名是编译器区分方法的方法, 因此可以有同名的函数, 但参数列表不一致, 这种机制叫**方法重载overload**
+
+> 参数列表不一致指参数个数或参数类型不一致
+
+#### 构造函数声明
+
+```java
+<access modifier> className [throws <exceptions>](<param type> paramName[,...]){
+	statements
+}
+```
+
+构造函数声明与方法声明类似, 但
+
+* 只能使用访问修饰符
+* 无返回值
+* 名字必须与类名一致
+
+构造函数用于在创建对象时初始化. 未给出构造函数时, 编译器会默认提供一个无参构造函数, **默认构造函数**中会调用父类的无参构造函数.
+
+> 其实, 若未显示调用父类构造函数时, 会默认调用父类的无参构造函数.
+
+#### 初始化块
+
+声明字段时, 可以同时赋初始值, 如
+
+```java
+public class BedAndBreakfast {
+
+    // initialize to 10
+    public static int capacity = 10;
+
+    // initialize to false
+    private boolean full = false;
+}
+```
+
+但是初始化语句不止一行时, 该如何? 这里用到了初始化块
+
+##### 静态初始化块
+
+类被加载时会用来初始化静态字段.
+
+```java
+static {
+    // whatever code is needed for initialization goes here
+}
+```
+
+如果有多条静态初始化块, 则会被依次执行.
+
+> 还有种可选方案, 即调用静态方法初始化静态字段.
+
+##### 实例初始化块
+
+对象被创建时用来初始化对象
+
+```java
+{
+    // whatever code is needed for initialization goes here
+}
+```
+
+编译器会将代码拷贝到每个构造函数中去, 使得代码块被共享.
+
+> 可选方案: 调用`final`方法初始化, 非`final`方法会报错.
+
+### 对象
+
+#### 创建
+
+```java
+<type> objectReference=new <constructorName>(...);
+```
+
+* 类型`<type>`是变量所指向的对象的类型
+* `new`在堆中分配空间, 并调用类的构造函数来初始化这片空间
+
+#### 使用
+
+通过对象可以访问对象和类的字段,方法, 以`.`分隔. 如
+
+```java
+System.out.println(rectangle.height);//得到字段:高度
+System.out.println(rectangle.area());//调用方法,得到面积
+```
+
+> 类的字段也可以通过类来访问.
+
+> 访问字段方法时要注意访问权限.
+
+> 在类的方法声明中, 可通过`this`来访问当前调用方法的对象的字段. 也可以不使用`this`, 只要字段的作用域未被隐藏.
+
+#### 垃圾回收器
+
+`new`既然分配了空间, 当对象不在使用时, 就要回收占用的内存.
+
+当没有引用变量指向对象时, 该对象可以被回收. 垃圾回收器会周期性地挑选适当的时间点来清理这些对象.
+
+对象失去引用变量指向的情况有:
+
+* 超出变量作用域, 回收了栈中该变量的空间
+* 手动设置引用变量为`null`
+
+### 方法
+
+#### 传值
+
+方法定义时的变量叫**形参**`Parameter`, 方法调用时传入的变量叫**实参**`Argument`. 为啥这样区分? 忘了
+
+* **传引用**, 即传入的是引用变量时, 则实参与该变量指向同一个对象, 方法内可修改该对象.
+* **传值**, 即传入的是基本变量时, 则实参与该变量拥有不同的拷贝, 方法内的修改不会传递到方法外.
+
+#### 作用域
+
+变量存在作用域, 在此作用域内, 通过变量名可访问该变量.
+
+ 变量还可以**隐藏Shadow**其他同名变量的作用域. 如参数或局部变量可以隐藏字段的作用域. 子类字段可以隐藏父类的字段作用域.
+
+方法也是, 如父类的静态不会被子类覆盖, 而是隐藏
+
+#### this和super
+
+作用域被隐藏时, 可用`this`和`super`显示指定要访问的字段和方法. 
+
+`this`指向当前对象, `super`指向当前对象的父类对象.
+
+> 对象中还有父类对象?? 可以这么理解, 把对象非父类的字段, 方法剔除, 就是一个完整的父类对象...
+>
+> 你说继承后, 子类覆盖了父类方法?...想多了, 在内部实现中, 对象仅含数据, 无代码, 仅仅在对象中标注下父类和子类方法在哪里而已. 覆盖只是**看似**覆盖而已.
+
+----
+
+`this`和`super`可以用来调用构造函数. 
+
+默认子类构造函数中无显示调用构造函数时`super()`, 会默认调用父类的无参构造函数.
+
+可以显示调用父类或子类构造函数, 但必须:
+
+* 位于构造函数中第一行
+* 不能同时出现`this()`和`super()`, 否则相当于初始化对象了两次.
+* 不能通过`this()`造成循环调用构造函数的现象, 编译器会报错的.
+
+#### 可变参数Varargs
+
+可变参数可以接受0到多个参数，在方法体中被当做数组使用; 函数外传值时, 可传入多个参数, 或者一个数组. 但可变参数只能存在一个, 且必须位于最后一个参数.
+
+例子：
+
+```java
+int nums(int a, float b, double … c){
+	for(double t:c){
+        System.out.println(t);
+    }     
+}
+//...省略
+nums(1,2,4.2,43,2,3,23);
+//或者
+nums(1,2,new double[]{1,23,23.23,2345,34.234});
+//...省略
+```
+
+> 参考：[Variable Arguments (Varargs) in Java](<https://www.geeksforgeeks.org/variable-arguments-varargs-in-java/>)
+
+### 多态,继承
+
+
+
+### 嵌套类
+
+#### 静态内部类
+
+在字段的位置上声明, 含有`static`修饰的类, 属于类成员, 因此
+
+* 可以被Member Level的访问修饰符修饰
+
+* 静态内部类中只能访问外部类的静态成员
+
+* 外部类外实例化时, 需要通过外部类来调用构造函数
+	```java
+	OuterClass.StaticNestedClass nestedObject =new OuterClass.StaticNestedClass();
+	```
+
+#### 内部类
+
+在字段的位置上声明, 无`static`修饰的类, 属于实例成员, 因此
+
+- 可以被Member Level的访问修饰符修饰
+
+*  只能访问外部类的所有成员, 但不能定义静态成员
+
+* 外部类外实例化时, 需要先存在外部类实例对象
+
+  ```java
+  OuterClass.InnerClass innerObject = outerObject.new InnerClass();
+  ```
+
+#### 局部类
+
+在局部变量位置上声明的类, 因此
+
+* 不能被访问修饰符修饰
+
+* 可以访问外部内的所有成员, 和局部变量与参数(必须是`final`修饰或effectively final)
+
+  >effectively final指的是没有被final修饰，但也不会被修改的局部变量和参数.
+
+* 不能声明静态成员, 但可以有运行时常量
+
+* 局部类位于静态初始块上时, 只能访问外部类的静态成员
+
+  > 仍不能声明静态成员.
+
+#### 匿名类
+
+在局部变量位置上声明的类, **不给出类名**, 继承类或实现接口的同时创建子类对象并返回. 适合只用一次类的情景.
+
+* 声明匿名类是一个表达式, 被创建的对象就是它的返回值
+* 匿名类继承类时, 可以给父构造函数传入参数. 但是匿名类自己不能声明构造函数, 因为它没有名字...
+* 其他的与局部类一样, 略...
+
+来个例子吧:
+
+```java
+public class App {
+    public static void main(String[] arg) {
+        new Human("Hello") {
+            void say() {
+                System.out.println("World");
+            }
+        }.say();
+}
+
+class Human{
+	public Human(String s) {
+		// TODO Auto-generated constructor stub
+		System.out.print(s);
+	}
+}
+```
+
+ ———————————————— 
+版权声明：本文为CSDN博主「千霜」的原创文章，遵循CC 4.0 by-sa版权协议，转载请附上原文出处链接及本声明。
+原文链接：https://blog.csdn.net/jdbdh/article/details/82930547
+
+#### Lambda表达式
+
+Lambda表达式就是匿名类的简化形式, **但仅适用于接口只有一个方法的情况下**. 如上一个例子的简化版如下所示
+
+```java
+public class App {
+ 
+	public static void main(String[] arg) {
+		method(()->System.out.println("hello human"));
+	}
+	static void method(Human human) {
+		human.say();
+	}
+	interface Human{
+		void say() ;
+	}
+}
+```
+
+表达式由参数, `->`, 函数体组成.
+
+参数由`,`分割, 无需给出参数类型. 只有一个参数时, 可省略括号, 如
+
+```java
+p -> p.getGender() == Person.Sex.MALE 
+    && p.getAge() >= 18
+    && p.getAge() <= 25
+```
+
+函数体为单个**表达式**或者**语句块**. 
+
+* 如果为表达式, 表达式的值就是函数体的返回值; 
+
+  > 返回值为`void`的方法调用也算是表达式吧? 
+
+* 为语句块时, 需要有`return`语句, 如
+
+  ```java
+  p -> {
+      return p.getGender() == Person.Sex.MALE
+          && p.getAge() >= 18
+          && p.getAge() <= 25;
+  }
+  ```
+
+最后, Lambda表达式不会引入新的作用域, 因此Lambda的参数和函数体处于外部作用域中.
+
+其他的与局部类类似
+
+Lambda表达式具体代表的类的类型? 由编译器推断出.
+
+#### 方法引用
+
+如果创建lambda表达式只是为了调用已存在的方法，那么lambda表达式也不够简洁。因此出现了方法引用, 将已有方法剥离成lambda表达式的形式:
+
+```java
+Arrays.sort(rosterAsArray, Person::compareByAge);
+```
+
+方法引用有四种形式:
+
+Kind	|Example
+---------|----
+Reference to a static method	|`ContainingClass::staticMethodName`
+Reference to an instance method of a particular object| `containingObject::instanceMethodName` 
+Reference to an instance method of an arbitrary object of a particular type	|`ContainingType::methodName`
+Reference to a constructor	|`ClassName::new`
+
+### 其他
+
+#### 类与实例
+
+- 字段
+
+  - 类字段(`static`): 属于类的字段, 一个类仅此一份, 可通过类或对象来调用
+  - 实例字段(无`static`): 属于实例的字段, 每个实例都有一个数据, 只能通过对象来调用.
+
+- 方法: 与上述类似, 略. 但要注意, 无论方法是何种类型, 一个类中仅存一份. 
+
+  > 在实例方法中, `this`会指向不同的调用对象, 以此来区分对象.
+
+#### 访问权限
+
+访问权限分为两个级别:
+
+* top level--`public`, 无修饰符
+
+  用于限制顶层类的访问权限
+
+* member level--`public`,`private`,`protected`,无修饰符
+
+  用于限制成员`member`的访问权限. 当局部类作为成员`member`时, 也可以用member level来修饰.
+
+修饰符的作用如下:
+
+| 访问权限     | 本类 | 本包的类 | 子类 | 非子类的外包类 |
+| :----------- | :--- | :------- | :--- | :------------- |
+| public       | 是   | 是       | 是   | 是             |
+| protected    | 是   | 是       | 是   | 否             |
+| (无,default) | 是   | 是       | 否   | 否             |
+| private      | 是   | 否       | 否   | 否             |
+
+> 这里的**子类**可以与父类不同package, 但可访问父类的`protected`字段
+
+
+
+#### 覆盖,重载,隐藏和修饰符
+
+- **override(覆盖)**：子类覆盖父类方法后, 无论是使用子类还是父类类型的引用变量, 调用的仍是子类方法.
+
+- **overload(重载)**：类的所有方法（包括继承的方法）, 仅方法名相同, 但方法签名不同, 便是重载。通过改变参数列表, 便可使用同一个方法名调用不同的方法.
+
+- **hide(隐藏)**：子类继承但没有覆盖方法，只是子类作用域中隐藏了该方法，称为隐藏。可以使用父类类型的引用变量来调用被隐藏的父类的方法.
+
+  > 如父类字段、静态方法被子类隐藏了，通过父类引用跳出子类作用域，然后调用这些方法、字段。
+
+- **修饰符**：覆盖时, 一般修饰符要保持一致, 但也可扩大它, 如`protect`扩大成`public`. 否则父类方法会被隐藏, 
+
+  > 注意, 父类的`private`方法不会被子类访问到, 更不用谈及隐藏了.
+
+#### 常量
+
+`static`结合`final`, 用于定义常量, 如
+
+```java
+static final double PI = 3.141592653589793;
+```
+
+常量一旦定义后, 便不能被修改. 如果常量指向一个对象, 该对象还是能够被修改的.
+
+常量可分类为:
+
+* 编译时常量
+
+  如果常量是基本类型或`String`, 那么编译时, 该常量就会在编译时替换掉常量被使用的地方.
+
+* 运行时常量
+
+  就是初始化发生在运行时.
 
 ## 接口
+
+## 枚举
 
 ## 注解
 
@@ -752,8 +1323,9 @@ public @interface Schedules {
 
 * https://blog.usejournal.com/how-much-do-you-actually-know-about-annotations-in-java-b999e100b929
 
-
 # 其他
+
+* `System.out.printf("%s: %d, %s%n", name, idnum, address);`
 
 * 包名必须全小写? 
 

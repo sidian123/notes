@@ -159,7 +159,27 @@ Reply from 2600:1409:a:5a2::747: time=2ms
 $ notepad.exe "C:\temp\foo.txt"
 $ notepad.exe C:\\temp\\foo.txt
 ```
+# 四 其他
+
+## 配置
+
+在`.bashrc`中配置
+
+```shell
+# 环境变量
+export sidian=/mnt/c/Users/sidian #设置Windows家目录的环境变量
+export hosts_home=/mnt/c/Windows/System32/drivers/etc #配置hosts环境变量
+export notes=$sidian/Documents/notes-all/notes
+
+## 当打开终端并且位于Linux家目录时,则切换到Windows的家目录中.这里考虑到了作为VSCode默认终端的情况.
+[[ $PWD == $HOME ]] && cd $sidian
+
+## 取消ls高亮
+alias ls=ls
+```
+
 # 参考
+
 * [微软官方文档](https://docs.microsoft.com/zh-cn/windows/wsl/about)：介绍了安装、使用
 * [Learn About Windows Console & Windows Subsystem For Linux (WSL)](https://devblogs.microsoft.com/commandline/learn-about-windows-console-and-windows-subsystem-for-linux-wsl/)：介绍了wsl原理
 * [wsl wiki](https://en.wikipedia.org/wiki/Windows_Subsystem_for_Linux)

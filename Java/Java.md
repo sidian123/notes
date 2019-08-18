@@ -1,15 +1,4 @@
-# 可变长参数Varargs
 
-- 可变长参数可以接受0个或多个参数，在方法体中被当做数组使用; 也可以直接传入一个数组.
-- 方法定义中，只能存在一个可变长参数，且位于最后一个参数。
-
-例子：
-
-```java
- int nums(int a, float b, double … c)
-```
-
-> 参考：[Variable Arguments (Varargs) in Java](<https://www.geeksforgeeks.org/variable-arguments-varargs-in-java/>)
 
 # JVM hot swapping
 
