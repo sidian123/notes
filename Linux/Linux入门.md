@@ -1323,7 +1323,7 @@ linux是一个多用户的系统，有用户、组的概念。不同的用户、
 >* `-p`：设置密码，不建议使用，因为没有加密。建议使用`passwd`命令。
 >* `-r,--system`：创建系统账户，默认不创建家目录
 
->默认欣慰在`/etc/default/useradd`和`/etc/login.defs`中配置。
+>默认行为在`/etc/default/useradd`和`/etc/login.defs`中配置。
 
 #### userdel
 删除用户（实现同上）
