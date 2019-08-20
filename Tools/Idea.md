@@ -189,15 +189,19 @@ IDEA中构建的几个选项如下所示：
 
 # 五 快捷键
 快捷键不用死记，一般右键或者工具栏中都有。
-* `Ctrl+space`:basic code completion.call twice ,then show more
-* `Ctrl+Shift+space`:intelligently suggestions.call twice ,then show more
-* `Ctrl+P`:parameter prompt.
-* `Alt+Enter`:快速修复问题
+
+* **问题提示及修复**
+  * `Ctrl+space`:basic code completion.call twice ,then show more
+  * `Ctrl+Shift+space`:intelligently suggestions.call twice ,then show more
+  * `Ctrl+P`:parameter prompt.
+  * `Alt+Enter`:快速修复问题
 ------------
-* `Ctrl+Q`:查看类或方法的文档
-* `Shfit+F1`:在浏览器中查看文档
-* `Ctrl+B`:navigate to the declaration of a class,method or variable at caret.
-* `Ctrl+鼠标左键`：与`Ctrl+B`类似，但极其好用
+* **查看,定位文档或源码**
+  * `Ctrl+Q`:查看类或方法的文档
+  * `Shfit+F1`:在浏览器中查看文档
+  * `Ctrl+B`:navigate to the declaration of a class,method or variable at caret.
+  * `Ctrl+鼠标左键`：与`Ctrl+B`类似，但极其好用
+  * `Ctrl+Shift+F`: 全局搜索代码
 ---------
 *  `Esc`:move the focus to the editor.
 * `alt+number`：打开相应的窗口。
@@ -213,6 +217,7 @@ IDEA中构建的几个选项如下所示：
 *  `Ctrl+W`:extend selection
 *  comment:`Ctrl+/` or `Ctrl+Shift+/` to comment while `Ctrl+Shift+/` to uncomment.
 *  `Ctrl+H`: 查看类继承结构
+*  快捷进入实现类: `Ctrl+Alt+左键`
 *  `Alt+F8`:evaluate the value of expression when debugging.
 ----------
 * `Ctrl+N`:quickly open class.first press the key and then typing the name of class.

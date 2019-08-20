@@ -1181,10 +1181,12 @@ Window接口表示一个包含了DOM文档的窗口，在浏览器中具体表�
 	var btn = document.querySelector('button');
 	btn.onclick = function() {...};
 	```
+	
 2. **Inline event handlers**：不建议使用。html元素的一些属性可以指定事件处理的javascript**代码块**。
 	```javascript
 	<button onclick="alert('Hello, this is my old-fashioned event handler!');">Press me</button>
 	```
+	
 3. **addEventListener() and removeEventListener()**：前者可以为事件注册事件监听器**且同时能注册多个**，后者能够删除事件监听器。
 	```javascript
 	//add handler
@@ -1196,10 +1198,12 @@ Window接口表示一个包含了DOM文档的窗口，在浏览器中具体表�
 	myElement.addEventListener('click', functionB);
 
 	```
-参考：
-[全局事件处理器](https://developer.mozilla.org/en-US/docs/Web/API/GlobalEventHandlers)
-[所有event](https://developer.mozilla.org/en-US/docs/Web/Events)
-[事件的所有键值key](https://developer.mozilla.org/en-US/docs/Web/API/KeyboardEvent/key/Key_Values)
+> 如果2,3都存在时, 先执行2
+
+> 参考：
+> [全局事件处理器](https://developer.mozilla.org/en-US/docs/Web/API/GlobalEventHandlers)
+> [所有event](https://developer.mozilla.org/en-US/docs/Web/Events)
+> [事件的所有键值key](https://developer.mozilla.org/en-US/docs/Web/API/KeyboardEvent/key/Key_Values)
 
 ### Event object
 事件发生后，会同时产生event对象，通过该对象可以获得关于事件的信息，比如Event.target指定具体产生event的对象。
