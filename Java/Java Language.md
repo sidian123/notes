@@ -133,8 +133,6 @@ java -cp classes myfirstapp.MyJavaApp
 
 * Java源文件必须以`.java`为后缀
 
-* ~~文件中必须存在一个且仅此一个`public`(无其他修饰符)类或接口, 并且类型名要与文件名一致.~~
-
 * 如果有一个顶层类, 被`public`修饰时, 那么类名必须与文件名一致.
 
   > 其中枚举, 注解是特殊的类
@@ -145,7 +143,7 @@ Java源文件中一般含有以下元素:
   - 必须位于第一行
   - 必须与实际的package位置一致
 - Import statement**s**
-- Type declaration**s**: ~~必须存在一个`public`类或接口.~~
+- Type declaration**s**: 
   - Fields
   - Class initializers
   - Constructors
@@ -1050,6 +1048,94 @@ static final double PI = 3.141592653589793;
 
 ## 枚举
 
+### 简单形式
+
+枚举是一堆**预定义常量**的集合，枚举类型隐式继承`java.lang.Enum`，因此枚举类型不能够继承其他的类.
+
+最简单的枚举定义如下：
+
+```java
+public enum Day {
+    SUNDAY, MONDAY, TUESDAY, WEDNESDAY,
+    THURSDAY, FRIDAY, SATURDAY 
+}
+```
+
+### 原理
+
+实际上, 枚举最终会被编译成类, 每个枚举值, 就是一个该枚举类型的静态常量. 除此之外, 编译器还主动加上了一些方法, 构造函数. 如下所示:
+
+```java
+//以下是我猜测的，但大致思路便是如此
+public class Day extends Enum<Day>{
+    public static final Day SUNDAY=new Day();
+    public static final Day MONDAY=new Day();
+    ....
+    static Day[] values(){...}//编译器自动添加的方法
+    ....
+    private Day(){...}//必须private或包私有访问权限
+}
+```
+
+> * 因此使用枚举值时可以向使用静态变量一样使用：`Day day=Day.SUNDAY;`
+> * 但是在`switch`的`<label>`中, 使用枚举值不必写出类型前缀`Day`。
+
+从上面可以看出，编译器会自动给枚举类型添加一个函数`values()`，它返回所有的枚举值，用于遍历枚举值。
+
+又因为继承自`Enum`，因为可以通过该类的`name`和`ordinary`方法获得枚举值的名字和定义顺序。
+
+### 复杂例子
+
+正是因为枚举就是一个特殊的类, 因此复杂的枚举定义可以有字段和方法，而**枚举值必须写在最前面，指定传给构造函数参数的值，最后通过分号结束枚举值定义**。编译器会自动根据参数调用构造函数构造枚举值常量的。如下面的例子：
+
+```java
+public enum Planet {
+    //枚举常量，由后面的构造函数生成. 注意枚举常量必须在类最开始处定义
+    MERCURY (3.303e+23, 2.4397e6),
+    VENUS   (4.869e+24, 6.0518e6),
+    EARTH   (5.976e+24, 6.37814e6),
+    MARS    (6.421e+23, 3.3972e6),
+    JUPITER (1.9e+27,   7.1492e7),
+    SATURN  (5.688e+26, 6.0268e7),
+    URANUS  (8.686e+25, 2.5559e7),
+    NEPTUNE (1.024e+26, 2.4746e7);
+ 
+    private final double mass;   // in kilograms
+    private final double radius; // in meters
+    //构造函数必须是包私有或私有访问，由编译器创建枚举值
+    Planet(double mass, double radius) {
+        this.mass = mass;
+        this.radius = radius;
+    }
+    //枚举值对象也是可以调用方法的
+    private double mass() { return mass; }
+    private double radius() { return radius; }
+ 
+    // universal gravitational constant  (m3 kg-1 s-2)
+    public static final double G = 6.67300E-11;
+ 
+    double surfaceGravity() {
+        return G * mass / (radius * radius);
+    }
+    double surfaceWeight(double otherMass) {
+        return otherMass * surfaceGravity();
+    }
+    public static void main(String[] args) {
+        if (args.length != 1) {
+            System.err.println("Usage: java Planet <earth_weight>");
+            System.exit(-1);
+        }
+        double earthWeight = Double.parseDouble(args[0]);
+        double mass = earthWeight/EARTH.surfaceGravity();
+        for (Planet p : Planet.values())
+           System.out.printf("Your weight on %s is %f%n",
+                             p, p.surfaceWeight(mass));
+    }
+}
+```
+
+
+
 ## 注解
 
 ### 介绍
@@ -1064,7 +1150,7 @@ static final double PI = 3.141592653589793;
 
 > 通过某些API, 程序本身可以参与构建时期的注解处理.
 
-定义的注解默认继承于`java.lang.annotation.Annotation`接口，因此你可以继承该注解，但是没多大的实际用处。
+定义的注解隐式继承于`java.lang.annotation.Annotation`接口.
 
 ### 注解声明
 
@@ -1081,11 +1167,18 @@ static final double PI = 3.141592653589793;
 }
 ```
 
-注解声明与接口类似，多了个@。注解中的元素声明与接口方法类似，元素也可以赋予默认值，通过default实现。~~注解的元素类型只能是基本类型、数组、字符串、枚举、注解、Class~~。定义该注解时可以被其他**元注解**注释，如上面的@Retention，该注解说明自定义的注解ClassPreamble可以保存到运行时。
+* **注解声明**与接口类似，多了个`@`。
+* 注解中的**元素声明**与接口方法类似. 其元素可以是任意类型; 可以赋予默认值，位于`default`后。
+
+* 定义该注解时可以被其他**元注解**注释
+
+  > 如上面的`@Retention`，该注解说明自定义的注解`ClassPreamble`可以保存到运行时。
 
 ### 注解使用
 
-注解一般可以使用在类、方法、字段等java元素上，这是在定义注解时声明的通过Target设置的。如：
+注解一般作用于**声明**上, 如类,字段,方法和其他类型的声明.
+
+> 其实, 注解具体能够作用在哪些声明, 还需受`@Target`注解的影响.
 
 ```java
 @Author(
@@ -1145,6 +1238,10 @@ class C{
 	String[] name() default "bbb";
 }
 ```
+
+-----------
+
+一些注解可以用于**类型的使用**上，被称为**类型注解**（type annotation），通常被用于类型检测。略...
 
 ### 预定义的注解类型
 
@@ -1309,21 +1406,11 @@ public @interface Schedules {
 
 注意，容器注解的元素value数组中的类型一定要为repeatable注解类型。很拗口吧，但是既然要存入repeatable注解（也就是Schedule），当然要定义它的数组（Schedule[]）。
 
-### 其他
-
-一些注解可以用于类型的使用上，被称为类型注解（type annotation），通常被用于类型检测。
-
-### 参考
-
-* https://docs.oracle.com/javase/tutorial/java/annotations/index.html
-
-* http://tutorials.jenkov.com/java/annotations.html
-
-* https://www.developer.com/java/other/article.php/10936_3556176_3/An-Introduction-to-Java-Annotations.htm
-
-* https://blog.usejournal.com/how-much-do-you-actually-know-about-annotations-in-java-b999e100b929
-
 # 其他
+
+## 流
+
+## 其他
 
 * `System.out.printf("%s: %d, %s%n", name, idnum, address);`
 
