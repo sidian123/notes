@@ -802,6 +802,15 @@ System.out.println(rectangle.area());//调用方法,得到面积
 * 不能同时出现`this()`和`super()`, 否则相当于初始化对象了两次.
 * 不能通过`this()`造成循环调用构造函数的现象, 编译器会报错的.
 
+-------
+
+当父类方法, 接口默认方法之间, 方法名冲突时, 可以在`super`前加上类名前缀加以区分:
+
+```java
+FlyCar.super.startEngine(key);
+OperateCar.super.startEngine(key);
+```
+
 #### 可变参数Varargs
 
 可变参数可以接受0到多个参数，在方法体中被当做数组使用; 函数外传值时, 可传入多个参数, 或者一个数组. 但可变参数只能存在一个, 且必须位于最后一个参数.
@@ -823,9 +832,47 @@ nums(1,2,new double[]{1,23,23.23,2345,34.234});
 
 > 参考：[Variable Arguments (Varargs) in Java](<https://www.geeksforgeeks.org/variable-arguments-varargs-in-java/>)
 
-### 多态,继承
+### 继承
 
+#### 介绍
 
+- 仅可以继承一个类, 但可以实现多个接口. 如果没有显式继承类时, 会默认继承`Object`类.
+- 所有对象都直接或间接的继承于`Object`对象.
+- 子类可以继承父类所有的`public`和`protected`成员(无论是否同包), 和同包下的**包私有**成员.
+
+#### 子类操作
+
+子类可以对继承的成员进行四种操作:
+
+* 直接使用
+
+* 覆盖: 与继承的成员方法同方法原型
+
+  > 其中访问权限可以微调
+  >
+  > 返回类型可以是被继承方法返回类型的子类
+
+* 重载: 与继承的成员方法同方法名, 但参数列表不同
+
+* 隐藏: 其他的同名情况都是隐藏
+
+  > 注意, 不能声明与父类实例方法同名的静态方法, 反之亦然.
+
+其中, 覆盖和重载都是对象多态的体现.
+
+小结如下:
+
+![1566376991716](.Java%20Language/1566376991716.png)
+
+> 详细见**[语法/类与对象/其他/覆盖,重载,隐藏]**
+
+#### 同名冲突
+
+子类可以隐藏,重载,覆盖继承的同名成员. 但如果继承的类与实现的多个接口之间方法声明同名了呢? 有些情况编译器可以解决, 有些只能用户自己解决
+
+* 编译器出手: 定义了两条规则
+
+  
 
 ### 嵌套类
 
@@ -1010,7 +1057,7 @@ Reference to a constructor	|`ClassName::new`
 
 
 
-#### 覆盖,重载,隐藏和修饰符
+#### 覆盖,重载,隐藏
 
 - **override(覆盖)**：子类覆盖父类方法后, 无论是使用子类还是父类类型的引用变量, 调用的仍是子类方法.
 
@@ -1018,7 +1065,9 @@ Reference to a constructor	|`ClassName::new`
 
 - **hide(隐藏)**：子类继承但没有覆盖方法，只是子类作用域中隐藏了该方法，称为隐藏。可以使用父类类型的引用变量来调用被隐藏的父类的方法.
 
-  > 如父类字段、静态方法被子类隐藏了，通过父类引用跳出子类作用域，然后调用这些方法、字段。
+  > 如父类字段、静态方法被子类隐藏了，可以通过父类的引用变量跳出子类作用域，便能调用这些隐藏的方法、字段。
+
+-----
 
 - **修饰符**：覆盖时, 一般修饰符要保持一致, 但也可扩大它, 如`protect`扩大成`public`. 否则父类方法会被隐藏, 
 
@@ -1044,7 +1093,91 @@ static final double PI = 3.141592653589793;
 
   就是初始化发生在运行时.
 
+#### 类型转化
+
+引用变量的类型可以隐式转化为父(祖先)类型
+
+```java
+Object obj = new MountainBike();
+```
+
+但转化为子类类型时, 必须强制转化
+
+```java
+MountainBike myBike = (MountainBike)obj;
+```
+
+但运行中转化失败时, 会抛出异常, 为了防止这种错误, 可以先判断下类型
+
+```java
+if (obj instanceof MountainBike) {
+    MountainBike myBike = (MountainBike)obj;
+}
+```
+
+#### 变量,对象的类型
+
+对象可以有很多类型, 实例化对象的类的类型, 接口的类型.
+
+变量也有类型, 符合对象类型或其父类类型的引用变量才能指向对象.
+
 ## 接口
+
+### 介绍
+
+仅规定不同模块交互的接口, 不必给出实现, 而是交给其他的人, 体现了高内聚, 低耦合的思想.
+
+### 接口定义
+
+接口定义大致与类定义差不多. 接口仅可以包含常量, 抽象方法, 默认方法, 静态方法和嵌套类.
+
+* 常量隐式为`public static final`类型的, 可省略
+* 抽象方法可省略`abstract`修饰符, 默认方法须有`default`修饰符, 静态须有`static`修饰符
+* 所有方法都隐式为`public`, 可省略
+
+接口也可以多继承`extends`其他接口, 多个接口以`,`分隔.
+
+一个简单的接口定义如下
+
+```java
+Defining an interface is similar to creating a new class:
+
+public interface OperateCar {
+
+   // constant declarations, if any
+
+   // method signatures
+   
+   // An enum with values RIGHT, LEFT
+   
+   //method signatures
+   int turn(Direction direction,
+            double radius,
+            double startSpeed,
+            double endSpeed);
+   int changeLanes(Direction direction,
+                   double startSpeed,
+                   double endSpeed);
+   int signalTurn(Direction direction,
+                  boolean signalOn);
+   int getRadarFront(double distanceToCar,
+                     double speedOfCar);
+   int getRadarRear(double distanceToCar,
+                    double speedOfCar);
+         ......
+   // more method signatures
+}
+```
+
+### 使用
+
+接口不能被实例化, 仅仅被类实现`implements`或被其他接口继承`extends`. 接口实现类必须覆盖接口所有的方法.
+
+接口类型的引用变量可以指向接口实现类的对象.
+
+定义了接口后, 一般是不允许更改抽象方法的, 否则会造成不兼容. 可以提供默认和静态方法.
+
+当继承或实现的接口有默认方法时, 可以重新声明它为抽象方法, 或者覆盖它; 如果是静态方法, 可以隐藏它.
 
 ## 枚举
 
