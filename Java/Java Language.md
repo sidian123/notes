@@ -279,6 +279,8 @@ Java语言定义了8中基本类型:
 JDK5后, 基本类型与包装类之间会**自动装箱**(Auto Boxing), 即有必要时, 基本类型会自动转化为包装类, 反之亦然.
 
 > 基本类型自动包装时调用了包装类的`valueOf()`方法，自动拆箱时调用了包装类的`xxxValue()`方法, 如`intValue()`, `charValue()`等。
+>
+> 编译器会在编译时添加这些代码.
 
 #### 字面值
 
@@ -799,7 +801,11 @@ System.out.println(rectangle.area());//调用方法,得到面积
 可以显示调用父类或子类构造函数, 但必须:
 
 * 位于构造函数中第一行
+
 * 不能同时出现`this()`和`super()`, 否则相当于初始化对象了两次.
+
+  > 构造函数调用, 最终会调用`Object`的构造函数, 调用两次就相当于构造了两次.
+
 * 不能通过`this()`造成循环调用构造函数的现象, 编译器会报错的.
 
 -------
@@ -872,8 +878,9 @@ nums(1,2,new double[]{1,23,23.23,2345,34.234});
 
 * 编译器出手: 定义了两条规则
 * 父类的实例方法优先级高于接口的默认方法, 也可以覆盖父接口的抽象方法.
-  * 类(接口)之间, 被覆盖过的方法会被忽略
-
+  
+* 类(接口)之间, 被覆盖过的方法会被忽略
+  
 * 用户出手: 其他情况只能交由用户解决, 通过覆盖父类(接口)的方法来决定具体的实现.
 
   > 注意, 可以使用`ClassName.super`的形式, 调用其他一个父类(接口)的实现.
@@ -881,6 +888,79 @@ nums(1,2,new double[]{1,23,23.23,2345,34.234});
 > 注意的是, 接口的静态方法是不会被继承的.
 
 > 可能有点抽象, 详细例子见[Overriding and Hiding Methods](https://docs.oracle.com/javase/tutorial/java/IandI/override.html)
+
+#### 多态
+
+体现在两点
+
+* 覆盖: 即使用父类的引用变量调用, 也是执行被子类覆盖的方法
+* 重载: 同样的方法名, 参数不同, 会有不同的行为.
+
+总之, 都是体现在同名不同行为上.
+
+#### Object
+
+##### clone()
+
+调用该方法的子类必须实现`Cloneable`接口, 表示允许克隆, 否则会抛出异常.
+
+它的默认行为是浅拷贝, 深拷贝需要自己重写该方法.
+
+##### equals()
+
+判断两个变量是否相等.
+
+> 对于基本类型, 能够正确判断; 对于引用类型, 比较的是对象的地址.
+
+在某些环境下, 我们想判断对象内容是否相同, 此时需要重写该方法. 
+
+> 如果重写了`equals()`方法, 那也应该重写`hashCode()`方法
+
+##### hashCode()
+
+该方法默认返回对象的内存地址.
+
+语义上, 如果两个对象相等, 那么他们的hash值必须相等. 因此当你重写了`equals()`方法时
+
+> 可以使用IDE自动生成
+
+##### finalize()
+
+当垃圾回收器回收对象时调用, 用于释放资源.
+
+但是这是一个**不靠谱**的方法, 它是否真的被调用是个未知数.
+
+##### toString()
+
+返回对象的字符串描述
+
+##### getClass()
+
+不允许重写, 返回一个`Class`对象, 可以获得类信息, 常用于**反射**.
+
+##### 其他
+
+其他的用于多线程同步, 将在其他地方解释, 略.
+
+- `public final void notify()`
+- `public final void notifyAll()`
+- `public final void wait()`
+- `public final void wait(long timeout)`
+- `public final void wait(long timeout, int nanos)`
+
+#### final类和方法
+
+`final`方法不能够被覆盖, `final`类不能被继承
+
+#### abstract类和方法
+
+* 抽象类不能被实例化, 只能被继承. 
+
+* 抽象类可以有0到多个抽象方法
+
+* 抽象类被继承后必须实现所有抽象方法, 否则子类需要重新声明为抽象类.
+
+  > 继承接口也是一样, 当不想实现所有接口的抽象方法时, 需要将实现类声明为抽象类.
 
 ### 嵌套类
 
@@ -1547,6 +1627,124 @@ public @interface Schedules {
 
 注意，容器注解的元素value数组中的类型一定要为repeatable注解类型。很拗口吧，但是既然要存入repeatable注解（也就是Schedule），当然要定义它的数组（Schedule[]）。
 
+# 数字与字符串
+
+## 数字
+
+### 相关类
+
+数值相关的类都继承于`Number`
+
+![The class hierarchy of Number.](.Java%20Language/objects-numberHierarchy.gif)
+
+> 还有四种`Number`子类未列出:
+>
+> * `BigDecimal`和`BigInteger`用于高精度数值计算
+> * `AtomicInteger`和`AtomicLong`用于多线程中 
+
+这些类都有些有用的方法:
+
+* 得到基本类型值:`xxxValue()`
+* 比较: `compareTo(XXX)`
+* 判断是否相等:`equals(XXX)`
+
+以及与字符串相互转换的方法:
+
+* 解析字符串到数字, 字符串可以是不同进制
+  * `decode`
+  * `parseXXX`
+  * `valueOf`
+* 转化为字符串
+  * `toString`
+
+### 自动拆装箱
+
+详细见**[语法/数据类型/基本类型]**
+
+### 运算Math
+
+除了基本的算数操作外, `Math`提供了静态方法和常量, 可以进行更多的运算.
+
+#### 常量和基本方法
+
+常量:
+
+- `Math.E`, which is the base of natural logarithms, and
+- `Math.PI`, which is the ratio of the circumference of a circle to its diameter.
+
+基本方法:
+
+* 绝对值`abs`
+* 近似值
+  * `double ceil(...)`返回大于或等于参数的最小整数
+  * `double floor(...)`返回小于或等于参数的最大整数
+  * `double rint(...)`返回最接近整数的
+  * `round`
+
+## Strings
+
+### 格式化输出(精简版)
+
+很多类提供了格式化输出的功能, 如
+
+* `PrintStream.format(String format, Object... args)`和`PrintStream.printf(String format, Object... args)`
+
+  > 其中, `System.out`就是该类型的对象
+
+* `String.format(String format, Object... args)`
+
+> `format`是带有格式限定符的字符串, `args`是将填充到字符串中的参数
+
+格式限定符中的一种形式如下:
+
+```java
+ %[flags][width][.precision]conversion
+```
+
+* `flags`:控制参数显示的标识符
+* `width`: 输出数字的最小个数. 浮点数中指整数和小数部分, 不包括小数点.
+* `.presision`: 浮点数中小数部分精度, 貌似默认6位
+* `conversion`: 参数如何被格式化, 取决于该参数的类型
+
+-----
+
+常用Conversion有:
+
+* 字符
+  * `s`字符串
+  * `c`字符
+* 整形数字
+  * `d`十进制整形数字
+  * `o`八进制整形数字
+  * `x`十六进制数字
+
+* 浮点数
+  * `f`浮点数
+  * `e`科学记数法表示的浮点数
+
+* 其他
+  * `%`该符号的字面值
+  * `n`特定平台的换行符
+
+-----
+
+常用flags有:
+
+* `-`左对齐
+* `+`总是包含符号
+
+例子见[ormatting Numeric Print Output](https://docs.oracle.com/javase/tutorial/java/data/numberformat.html)
+
+> 详细用法见[Formatter](https://docs.oracle.com/javase/8/docs/api/java/util/Formatter.html)
+
+
+
+# package
+
+* 静态引入
+
+
+
 # 其他
 
 ## 流
@@ -1572,11 +1770,13 @@ public @interface Schedules {
 
   > 并且入口可以有多个, 但是一次JVM只能运行一个.
 
-
 # 参考
 
-* [Java Language Tutorial jenkov.com](http://tutorials.jenkov.com/java/index.html)
 * [Java Tutorial Oracle.com](https://docs.oracle.com/javase/tutorial/index.html)
+
+* [Java Language Tutorial jenkov.com](http://tutorials.jenkov.com/java/index.html)
+
+  
 
 
 
