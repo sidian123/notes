@@ -49,19 +49,31 @@ shell在执行命令时，会有一个globbing-->expansion的过程：
 点文件或点目录的名字以`.`开始，一般用作配置文件。点文件和普通文件没有什么区别，只是一些程序默认不显示它们罢了。globbing过程也不匹配点文件，除非显示指定，如`.*`
 
 ### 环境和shell变量
+
+#### 介绍
+
 shell变量是shell存储的临时变量，存储字符串值。
->赋值或创建shell变量：
->$ STUFF=blah
->通过$STUFF访问变量，如：
->$ echo $STUFF
+```bash
+# 赋值或创建shell变量：
+$ STUFF=blah
+# 访问变量时需加上前缀$
+$ echo $STUFF
+```
 
----------
 环境变量类似于shell变量，但不特定于任何一个shell。**所有进程都有一个环境变量存储区**。通过export可声明一个环境变量：
->STUFF=blah
->export STUFF
 
-------
+```bash
+STUFF=blah
+export STUFF
+```
+
+#### 区别
+
 环境变量和shell变量的**主要区别**在于：操作系统会将shell的所有环境变量**拷贝**给shell运行的程序，因此shell运行的程序不能访问shell变量，除了环境变量。
+
+#### 相关命令
+
+* `printenv`打印所有环境变量
 
 ### PATH
 `PATH`是一个特殊的环境变量，含有一些命名路径，通过分号`:`分隔。shell在执行命令时会根据PATH指定的目录查找命令所在位置，如果程序在多个地方存在，则运行第一个匹配的程序。

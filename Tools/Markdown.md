@@ -265,7 +265,22 @@ row 2 col 1 | row 2 col 2
 [^number]:text
 ```
 
+## 上下标
+
+下标H~2~0
+
+```markdown
+H~2~O
+```
+
+上标X^2^
+
+```markdown
+X^2^
+```
+
 # 参考
+
 介绍最为详细：
 <https://daringfireball.net/projects/markdown/syntax>
 中文版翻译：

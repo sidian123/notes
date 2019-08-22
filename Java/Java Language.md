@@ -607,6 +607,10 @@ public static void main(String[] args){
 
 ## 类与对象
 
+类的抽象，使得代码可复用，降低编程复杂性
+
+对象，提供一定的封装，让代码更好理解
+
 ### 类
 
 #### 类声明
@@ -1675,13 +1679,142 @@ public @interface Schedules {
 基本方法:
 
 * 绝对值`abs`
+
 * 近似值
   * `double ceil(...)`返回大于或等于参数的最小整数
+  
   * `double floor(...)`返回小于或等于参数的最大整数
-  * `double rint(...)`返回最接近整数的
-  * `round`
+  
+  * `double rint(...)`返回最接近参数值的整数
+  
+  * `long|int round(...)`返回最接近参数值的整形.
+  
+    > 看起来好像与`rint`类似, 要注意返回类型, 除了`round`, 其他的都是`double`类型.
+  
+* 最值
+
+  * 最小值`min`
+  * 最大值`max`
+
+#### 指数与对数方法
+
+* `exp(double a)`以e为底, 参数a为指数, 做幂运算e^a^
+* `log(double a)`以e为底, 参数a为真数, 求对数lna
+* `pow(double base, double exponent)`: 以base为底, exponent为指数, 做幂运算base^exponent^
+* `sqrt`求参数的平方根
+
+#### 三角方法
+
+下面的三角函数运算传入的参数为**弧度**, 可以使用`toRadians`方法将角度转化为弧度.
+
+> 因为高中学过, 所以解释略
+
+* `sin`
+
+* `cos`
+
+* `tan`
+
+* `asin`
+
+* `acos`
+
+* `atan`
+
+* `atan2`
+
+  ------
+
+* `toDegrees`将弧度转化为角度
+* `toRadians`将角度转化为弧度
+
+#### 随机数字
+
+`random()`返回一个符合正态分布的随机数, 取值范围`[0.0,1.0)`
+
+内部实现: 第一次调用该方法时, 生成`java.util.Random`对象, 之后都是通过该对象产生随机数. 
+
+该方法是线程安全的.
+
+> 每次重启程序获得的随机数序列都是不同的, 因为每次方法内部传入的种子`seed`都不同.
 
 ## Strings
+
+字符串由字符组成, 是不可变的, 因此对字符串的修改会产生新的字符串.
+
+### 操作
+
+#### 基本操作
+
+* 创建对象
+
+  * 使用字面值
+
+    ```java
+    String greeting = "Hello world!";
+    ```
+
+  * 使用构造函数
+  * 由其他类型转化而来
+    * 其他类型的`toString()`方法
+    * `String.valueOf(...)`方法
+
+* 字符长度`length()`
+
+* 连接字符串
+
+  * 使用`concat()`方法
+  * 使用`+`
+
+* 格式化字符串: `format()`
+
+#### 进阶操作
+
+* 得到字符或子串
+  * `charAt()`获得某个索引的字符
+  * `substring()`获得子串
+
+* 分割字符串`split()`
+* 修整字符串
+  * `trim()`去掉两边多余空格
+  * `toLowerCase()`和`toUpperCase`: 全大写或全小写
+* 查找字符或字符串
+  * `indexOf()`查找第一个匹配的字符或字符串
+  * `lastIndexOf()`查找到最后一个匹配的字符或字符串
+  * `contains()`判断是否存在指定字符串
+* 替换字符或子串
+  * `replace()`替换所有匹配的字符
+  * `replaceAll()`替换所有匹配的字符串
+  * `replaceFirst()`替换第一个匹配的字符串
+
+#### 字符串比较
+
+太多了, 我直接粘贴复制过来...
+
+| Method                                                       | Description                                                  |
+| ------------------------------------------------------------ | ------------------------------------------------------------ |
+| `boolean endsWith(String suffix)boolean startsWith(String prefix)` | Returns `true` if this string ends with or begins with the substring specified as an argument to the method. |
+| `boolean startsWith(String prefix, int offset)`              | Considers the string beginning at the index `offset`, and returns `true` if it begins with the substring specified as an argument. |
+| `int compareTo(String anotherString)`                        | Compares two strings lexicographically. Returns an integer indicating whether this string is greater than (result is > 0), equal to (result is = 0), or less than (result is < 0) the argument. |
+| `int compareToIgnoreCase(String str)`                        | Compares two strings lexicographically, ignoring differences in case. Returns an integer indicating whether this string is greater than (result is > 0), equal to (result is = 0), or less than (result is < 0) the argument. |
+| `boolean equals(Object anObject)`                            | Returns `true` if and only if the argument is a `String` object that represents the same sequence of characters as this object. |
+| `boolean equalsIgnoreCase(String anotherString)`             | Returns `true` if and only if the argument is a `String` object that represents the same sequence of characters as this object, ignoring differences in case. |
+| `boolean regionMatches(int toffset, String other, int ooffset, int len)` | Tests whether the specified region of this string matches the specified region of the String argument.Region is of length `len` and begins at the index `toffset` for this string and `ooffset` for the other string. |
+| `boolean regionMatches(boolean ignoreCase, int toffset, String other, int ooffset, int len)` | Tests whether the specified region of this string matches the specified region of the String argument.Region is of length `len` and begins at the index `toffset` for this string and `ooffset` for the other string.The boolean argument indicates whether case should be ignored; if true, case is ignored when comparing characters. |
+| `boolean matches(String regex)`                              | Tests whether this string matches the specified regular expression. Regular expressions are discussed in the lesson titled "Regular Expressions." |
+
+### 转义字符
+
+| Escape Sequence | Description                                                |
+| --------------- | ---------------------------------------------------------- |
+| `\t`            | Insert a tab in the text at this point.                    |
+| `\b`            | Insert a backspace in the text at this point.              |
+| `\n`            | Insert a newline in the text at this point.                |
+| `\r`            | Insert a carriage return in the text at this point.        |
+| `\f`            | Insert a formfeed in the text at this point.               |
+| `\'`            | Insert a single quote character in the text at this point. |
+| `\"`            | Insert a double quote character in the text at this point. |
+| `\\`            | Insert a backslash character in the text at this point.    |
 
 ### 格式化输出(精简版)
 
@@ -1737,7 +1870,14 @@ public @interface Schedules {
 
 > 详细用法见[Formatter](https://docs.oracle.com/javase/8/docs/api/java/util/Formatter.html)
 
+### StringBuild,StringBuffer
 
+* `String`是一个不可变的字符串, 而`StringBuilder`和`StringBuffer`是可变的
+
+  > 因此字符串修改操作比较耗性能时, 尽量不要用`String`
+
+* `StringBuffer`是线程安全的, 而`StringBuilder`不是. 但`StringBuilder`比`StringBuffer`操作速度更快
+* 字符串的合并操作符`+`内部是使用`StringBuilder`完成的.
 
 # package
 
@@ -1748,6 +1888,10 @@ public @interface Schedules {
 # 其他
 
 ## 流
+
+## 命令
+
+* `javap`反汇编class文件
 
 ## 其他
 

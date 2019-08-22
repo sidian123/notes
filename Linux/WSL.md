@@ -36,7 +36,7 @@ linux中正常的启动过程是引导程序载入内核，内核初始化后载
 >* 支持linux符号链接，为windows可执行文件创建符号链接时，注意添加后缀`.exe`。不要与windows的快捷方式混淆，它们目的一致，但结构不一致，不能在linux中使用。
 
 ## 禁忌
-不要在任何情况下，使用windows工具访问、创建、修改linux发行版的文件。再安装了WSL后，可以在C盘中找到它的根目录，含有linux标准目录结构，但千万不要修改它。
+不要在任何情况下，使用windows工具访问、创建、修改linux发行版的文件。在安装了WSL后，可以在C盘中找到它的根目录，含有linux标准目录结构，但千万不要修改它。
 
 linux和windows文件系统的数据存放形式是不同的，为了支持linux文件系统，wsl实现了VolFs。VolFs本质上还是使用了windows的NTFS的文件格式（因此你能够找到它），只是将Linux文件的元数据放入[NTFS文件的扩展属性][24]中。因此linux文件系统可以正常执行，而在windows看来，它的文件不存在或者空；而使用windows修改它的文件时，不会保留它的扩展属性，导致在linux中看起来不正常。
 
@@ -163,6 +163,16 @@ $ notepad.exe C:\\temp\\foo.txt
 
 ## 配置
 
+为了实现一下目的:
+
+* 方便访问Windows家目录
+
+* 打开终端时, 智能cd到Windows家目录
+
+  > 当打开wsl时被设置了初始路径, 则不做任何动作
+
+* 取消`ls`高亮
+
 在`.bashrc`中配置
 
 ```shell
@@ -177,6 +187,10 @@ export notes=$sidian/Documents/notes-all/notes
 ## 取消ls高亮
 alias ls=ls
 ```
+
+## 环境变量
+
+WSL仅共享了Windows的`PATH`变量, 因此可以访问Windows的命令. 而其他的环境变量并没有被共享.
 
 # 参考
 
