@@ -2374,7 +2374,7 @@ class OpenDoor implements AutoCloseable {
 ```
 
 
-## 使用
+## 常用异常使用
 
 在编写自己的**公有方法**时，会时常抛出**运行时异常**，表明用户错误地使用API。比如传入的参数不正确，会抛出IllegalArgumentException异常。一些常用的运行时异常如下：
 
@@ -2438,6 +2438,15 @@ Caused by: BException: B异常抛出
 	at Untitled.aMethod(Untitled.java:7)
 	... 1 more
 ```
+
+## 其他
+
+### 子类方法的异常抛出
+
+子类覆盖父类的方法可以不用抛出异常，即使父类方法有异常抛出列表；但父类引用子类对象且父类方法有异常抛出时，需要try来处理异常。
+
+> 参考:https://stackoverflow.com/questions/9036016/inheritance-method-signature-method-overriding-and-throws-clause
+
 
 
 # 参考
