@@ -187,7 +187,22 @@ IDEA中构建的几个选项如下所示：
 
 > 在linux中, 不用取消safe write, webpack的热更新也生效.
 
+## 关于Maven
+
+Maven是一个构建项目的工具, IDEA自身也有构建项目的功能. 
+
+普通项目会用到IDEA自带的构建功能, 在`Run/Debug Configurations`配置它的构建配置.
+
+Maven项目中, IDEA会用Maven来构建项目, 但不会完全交由Maven构建.
+
+> 如IDEA通过Maven构建项目时并不会执行Maven完整的生命周期, 如测试.
+
+构建配置仍由IDEA管理, 但是POM文件中的构建配置可以反映到IDEA中, 通过`reimport`按钮.
+
+> 或者在settings中配置自动reimport
+
 # 五 快捷键
+
 快捷键不用死记，一般右键或者工具栏中都有。
 
 * **问题提示及修复**
@@ -231,6 +246,11 @@ IDEA中构建的几个选项如下所示：
 *  `Ctrl+Alt+B`:navigate to the implementation of an abstract method at caret.
 
 # 六 纯前端项目
+
+## 传统方式
+
+### 无服务器
+
 通过`New-->Project...-->Static Web`，可以看到很多项目类型，我们选择`Static Web`，其他的只不过已经预置了相应的库而已。
 
 与上面操作一致，我们需要配置`Run/Debug Configuration`，我们有两种选择，运行在tomcat服务器中，或通过JavaScript Debug运行。当然，纯前端项目使用JavaScript Debug就好了，并且也不用手动配置，直接在想要运行html的窗口中直接右键，点击Run或Debug选项，它会自己配置好Configuration，并打开默认浏览器。
@@ -248,13 +268,18 @@ IDEA中构建的几个选项如下所示：
 [61]:https://plugins.jetbrains.com/plugin/7007-liveedit
 [62]:https://chrome.google.com/webstore/detail/jetbrains-ide-support/hmhgeddbohgjknpmjagkdomcpobmllji?hl=en
 
-## 与tomcat结合
-在tomcat运行配置界面，勾选`with JavaScript debugger`时，在配合LiveEdit使用，java web项目也能修改前端代码时，实时预览了！
+### 使用tomcat服务器
+在tomcat运行配置界面，勾选`with JavaScript debugger`时，再配合LiveEdit使用，java web项目也能修改前端代码时，实时预览了！
 ![在这里插入图片描述](.Idea/20190504182019853.png)
-## 不足
+
+### LiveEdit不足
 * 在使用过程中，发现LiveEdit对css反应不是智能，有时修改还需手动保存才能更新
 * js脚本名为index.js时不能设置断点，并且控制台不是很好用。
 * 控制台和打了马赛克似的（和idea配置有关）
+## Vue项目
+
+Vue提供了Vue-CLI工具, 已经提供编译和构建功能. IDEA仅作为一个编辑器, 提供语法自动补全,提示功能.
+
 #  七 其他
 ## 清除缓存
 idea会缓存很多文件，如果系统运行错误了，则需要清除缓存，如`File | Invalidate Caches/Restart`
