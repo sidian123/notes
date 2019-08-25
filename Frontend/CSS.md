@@ -702,6 +702,22 @@ over~~ over\~\~ 字体内容还是提多的。。。
 **letter-spacing**和**word-spacing**
 设置字母间距、单词间距。针对英文的，不提也罢。。
 
+### 空白,溢出,break
+
+* [white-space](https://www.w3schools.com/cssref/pr_text_white-space.asp): 空白在元素内如何被处理
+
+  * `normal`(默认): 多个空格被当作一个空格, 必要时换行(包括软,硬换行)
+
+  * `nowrap`: 多个空格被当作一个空格, 但从不换行(包括软,硬换行).
+
+  * `pre`: 空格被保留, 不软换行. 
+
+    > `pre`元素默认该值
+
+* **word-break**: 一般的软换行很容易解决, 但是一个单词太长了怎么办? 这里就要靠`word-break`制定软换行的具体方式了, 详细介绍见[css之word-break及word-wrap(overflow-wrap)](https://blog.csdn.net/jdbdh/article/details/83687049 )
+
+* [text-overflow](https://developer.mozilla.org/en-US/docs/Web/CSS/text-overflow): 无论何种情况, 文字溢出了, 我还可以直接省略溢出的部分.
+
 ### 其他
 上面只是列举了一部分，还有很多很多和字体、字体布局相关的属性没有列出来。如果不是搞编辑器相关工作的可以忽略。
 

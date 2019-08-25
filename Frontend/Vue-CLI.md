@@ -236,7 +236,7 @@ css处理前：
             ws:true,
             //是否修改Host头部，可选
             changeOrgin:true,
-            //修改请求路径
+            //修改请求路径,支持正则
             pathRewrite:{'/api/':''}
           }
         }

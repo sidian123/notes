@@ -89,6 +89,7 @@ JDK没有源码的情况下，想要`Shift+F1`（用浏览器打开帮助文件�
 创建后文件夹基本是缺少的，于是需要创建这些文件，打开项目配置对话框：
 ![在这里插入图片描述](.Idea/20190223002456652.png)
 ![在这里插入图片描述](.Idea/2019022300274264.png)
+
 >也可直接创建好目录，然后右键项目-->maven-->reimport
 ## 配置Run/Debug
 项目如何运行？运行的方式需要我们自己配置，但好在提供了模板：
@@ -205,39 +206,61 @@ Maven项目中, IDEA会用Maven来构建项目, 但不会完全交由Maven构建
 
 快捷键不用死记，一般右键或者工具栏中都有。
 
-* **问题提示及修复**
-  * `Ctrl+space`:basic code completion.call twice ,then show more
-  * `Ctrl+Shift+space`:intelligently suggestions.call twice ,then show more
-  * `Ctrl+P`:parameter prompt.
-  * `Alt+Enter`:快速修复问题
-------------
-* **查看,定位文档或源码**
-  * `Ctrl+Q`:查看类或方法的文档
-  * `Shfit+F1`:在浏览器中查看文档
-  * `Ctrl+B`:navigate to the declaration of a class,method or variable at caret.
-  * `Ctrl+鼠标左键`：与`Ctrl+B`类似，但极其好用
-  * `Ctrl+Shift+F`: 全局搜索代码
+## 问题提示及修复
+
+* `Ctrl+space`(不知道怎么用): basic code completion.call twice ,then show more
+* `Ctrl+Shift+space`: 方法调用时智能提示. intelligently suggestions.call twice ,then show more
+* `Ctrl+P`:参数提示
+* `Alt+Enter`:快速修复问题
+
+## 查看,定位或跳转
+
+* `Ctrl+Q`:查看类或方法的JavaDoc文档
+
+* `Shfit+F1`:在浏览器中查看JavaDoc文档
+
+* `Ctrl+B`或`Ctrl+LMouse`：导航到类,方法,变量声明处.
+
+* `Ctrl+Alt+LMouse`: 快捷进入实现类
+
+* `Alt+F7`或`Ctrl+LMouse`: 找到变量,方法和类被用到的地方
+
+* `Ctrl+H`: 查看类继承结构
+
+* `Ctrl+Alt+Arrow`: 历史跳转
+
+  > 如`Ctrl+LMouse`跳转到方法声明处, `Ctrl+Alt+<--`跳回去.
+
+* `Ctrl+Shift+F`: 全局搜索代码
+
 ---------
+## 窗口
+
 *  `Esc`:move the focus to the editor.
 * `alt+number`：打开相应的窗口。
-* `alt+insert`: 相当于右键+new, 前提是选中某一项.
 * `Shift+Esc`或`Ctrl+Shift+F12`：隐藏所有工具窗口
+* 关闭当前Tab: `Ctrl+F4`
+
 ------------
+## 便捷操作
+
 * `sout+enter`:product `System.out.println(“”)`
-* `Ctrl+Alt+L`：重新格式化代码
------------
-* `Ctrl+Alt+O`:Optimize imports.
+* 代码格式重排: `Ctrl+Alt+L`
+* 注释:`Ctrl+/` 或`Ctrl+Shift+/`
+* 优化引入: `Ctrl+Alt+O`
+* 新建内容:`alt+insert`
+  - 编辑区: 相当于`generate...`
+  - 其他窗口: 相当于右键+new, 前提是选中某一项.
+
+## 其他
+
 *  `Ctrl+O`:override methods of the base class.
 *  `Alt+Insert`:generate getter and setter method.
 *  `Ctrl+W`:extend selection
-*  comment:`Ctrl+/` or `Ctrl+Shift+/` to comment while `Ctrl+Shift+/` to uncomment.
-*  `Ctrl+H`: 查看类继承结构
-*  快捷进入实现类: `Ctrl+Alt+左键`
 *  `Alt+F8`:evaluate the value of expression when debugging.
 ----------
 * `Ctrl+N`:quickly open class.first press the key and then typing the name of class.
 * `Ctrl+Shift+N`:open any file in your project in a similar way.
-* `Alt+F7`:find all places of class,method or variable at caret.
 ----------
 * `Ctrl+F12`:navigate in the currently edited file.
 *  `Shift+F6`:rename classes,methods and variables of all places.
@@ -306,7 +329,20 @@ mybatis的xml映射文件经常被使用，如果不安装插件，则需要自�
 
 `Editor`->`Code Style`->`Line separator`, 然后设置.
 
+## 配置Windows Defender
+
+再Idea进行大量文件操作时, Windows Defender会实时扫描, 造成Idea构建速度变慢. 因此, 可将相关目录添加至非扫描目录中.
+
+步骤如下:
+
+1. 按`Win`键, 输入**安全性概览**
+2. 点击**病毒和威胁防护**
+3. 点击**"病毒和威胁防护"设置**下的**管理设置**
+4. 找到排除项, 点击**添加或删除排除项**
+5. 然后将项目目录添加进去即可.
+
 # 参考
+
 * [idea download][1]
 * [maven download][2]
 * [tomcat download][3]

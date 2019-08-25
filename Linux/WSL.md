@@ -165,13 +165,13 @@ $ notepad.exe C:\\temp\\foo.txt
 
 为了实现一下目的:
 
-* 方便访问Windows家目录
+* 设置环境变量, 方便访问Windows家目录
 
 * 打开终端时, 智能cd到Windows家目录
 
   > 当打开wsl时被设置了初始路径, 则不做任何动作
 
-* 取消`ls`高亮
+* 配置`ls`, 取消高亮区分文件类型, 使用后缀方式
 
 在`.bashrc`中配置
 
@@ -184,8 +184,10 @@ export notes=$sidian/Documents/notes-all/notes
 ## 当打开终端并且位于Linux家目录时,则切换到Windows的家目录中.这里考虑到了作为VSCode默认终端的情况.
 [[ $PWD == $HOME ]] && cd $sidian
 
-## 取消ls高亮
-alias ls=ls
+# 取消ls高亮,改用后缀方式
+alias ls="ls --file-type"
+# 配置ll
+alias ll="ls -l --file-type"
 ```
 
 ## 环境变量
