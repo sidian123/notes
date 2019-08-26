@@ -2447,7 +2447,28 @@ Caused by: BException: B异常抛出
 
 > 参考:https://stackoverflow.com/questions/9036016/inheritance-method-signature-method-overriding-and-throws-clause
 
+# 其他
 
+## JavaDoc注释
+
+字段,方法,类的JavaDoc注释, 在它的声明上添加
+
+```java
+/**
+* 你的注释在这里
+*/
+```
+
+包本身的JavaDoc注释, 需写在当前包下的`package-info.java`文件的包声明上, 如:
+
+```java
+/**
+ * 你的注释在这里
+ */
+package package_name;
+```
+
+> 注意, 该文件内不要有其他的内容了.
 
 # 参考
 
