@@ -15,9 +15,9 @@
 
 浏览器支持程度如下:
 
-| ![Chrome](.axios/chrome_48x48.png) | ![Firefox](.axios/firefox_48x48.png) | ![Safari](.axios/safari_48x48.png) | ![Opera](.axios/opera_48x48.png) | ![Edge](.axios/edge_48x48.png) | ![IE](.axios/internet-explorer_9-11_48x48.png) |      |
+| ![Chrome](.axios/chrome_48x48.png) | ![Firefox](.axios/firefox_48x48.png) | ![Safari](.axios/safari_48x48.png) | ![Opera](.axios/opera_48x48.png) | ![Edge](.axios/edge_48x48.png) | ![IE](.axios/internet-explorer_9-11_48x48.png) |
 | ---------------------------------- | ------------------------------------ | ---------------------------------- | -------------------------------- | ------------------------------ | ---------------------------------------------- | ---- |
-| Latest ✔                           | Latest ✔                             | Latest ✔                           | Latest ✔                         | Latest ✔                       | 11 ✔                                           |      |
+| Latest ✔                           | Latest ✔                             | Latest ✔                           | Latest ✔                         | Latest ✔                       | 11 ✔                                           |
 
 # 二 安装
 

@@ -89,6 +89,7 @@ JDK没有源码的情况下，想要`Shift+F1`（用浏览器打开帮助文件�
 创建后文件夹基本是缺少的，于是需要创建这些文件，打开项目配置对话框：
 ![在这里插入图片描述](.Idea/20190223002456652.png)
 ![在这里插入图片描述](.Idea/2019022300274264.png)
+
 >也可直接创建好目录，然后右键项目-->maven-->reimport
 ## 配置Run/Debug
 项目如何运行？运行的方式需要我们自己配置，但好在提供了模板：
@@ -187,42 +188,79 @@ IDEA中构建的几个选项如下所示：
 
 > 在linux中, 不用取消safe write, webpack的热更新也生效.
 
+## 关于Maven
+
+Maven是一个构建项目的工具, IDEA自身也有构建项目的功能. 
+
+普通项目会用到IDEA自带的构建功能, 在`Run/Debug Configurations`配置它的构建配置.
+
+Maven项目中, IDEA会用Maven来构建项目, 但不会完全交由Maven构建.
+
+> 如IDEA通过Maven构建项目时并不会执行Maven完整的生命周期, 如测试.
+
+构建配置仍由IDEA管理, 但是POM文件中的构建配置可以反映到IDEA中, 通过`reimport`按钮.
+
+> 或者在settings中配置自动reimport
+
 # 五 快捷键
+
 快捷键不用死记，一般右键或者工具栏中都有。
 
-* **问题提示及修复**
-  * `Ctrl+space`:basic code completion.call twice ,then show more
-  * `Ctrl+Shift+space`:intelligently suggestions.call twice ,then show more
-  * `Ctrl+P`:parameter prompt.
-  * `Alt+Enter`:快速修复问题
-------------
-* **查看,定位文档或源码**
-  * `Ctrl+Q`:查看类或方法的文档
-  * `Shfit+F1`:在浏览器中查看文档
-  * `Ctrl+B`:navigate to the declaration of a class,method or variable at caret.
-  * `Ctrl+鼠标左键`：与`Ctrl+B`类似，但极其好用
-  * `Ctrl+Shift+F`: 全局搜索代码
+## 问题提示及修复
+
+* `Ctrl+space`(不知道怎么用): basic code completion.call twice ,then show more
+* `Ctrl+Shift+space`: 方法调用时智能提示. intelligently suggestions.call twice ,then show more
+* `Ctrl+P`:参数提示
+* `Alt+Enter`:快速修复问题
+
+## 查看,定位或跳转
+
+* `Ctrl+Q`:查看类或方法的JavaDoc文档
+
+* `Shfit+F1`:在浏览器中查看JavaDoc文档
+
+* `Ctrl+B`或`Ctrl+LMouse`：导航到类,方法,变量声明处.
+
+* `Ctrl+Alt+LMouse`: 快捷进入实现类
+
+* `Alt+F7`或`Ctrl+LMouse`: 找到变量,方法和类被用到的地方
+
+* `Ctrl+H`: 查看类继承结构
+
+* `Ctrl+Alt+Arrow`: 历史跳转
+
+  > 如`Ctrl+LMouse`跳转到方法声明处, `Ctrl+Alt+<--`跳回去.
+
+* `Ctrl+Shift+F`: 全局搜索代码
+
 ---------
+## 窗口
+
 *  `Esc`:move the focus to the editor.
 * `alt+number`：打开相应的窗口。
-* `alt+insert`: 相当于右键+new, 前提是选中某一项.
 * `Shift+Esc`或`Ctrl+Shift+F12`：隐藏所有工具窗口
+* 关闭当前Tab: `Ctrl+F4`
+
 ------------
+## 便捷操作
+
 * `sout+enter`:product `System.out.println(“”)`
-* `Ctrl+Alt+L`：重新格式化代码
------------
-* `Ctrl+Alt+O`:Optimize imports.
+* 代码格式重排: `Ctrl+Alt+L`
+* 注释:`Ctrl+/` 或`Ctrl+Shift+/`
+* 优化引入: `Ctrl+Alt+O`
+* 新建内容:`alt+insert`
+  - 编辑区: 相当于`generate...`
+  - 其他窗口: 相当于右键+new, 前提是选中某一项.
+
+## 其他
+
 *  `Ctrl+O`:override methods of the base class.
 *  `Alt+Insert`:generate getter and setter method.
 *  `Ctrl+W`:extend selection
-*  comment:`Ctrl+/` or `Ctrl+Shift+/` to comment while `Ctrl+Shift+/` to uncomment.
-*  `Ctrl+H`: 查看类继承结构
-*  快捷进入实现类: `Ctrl+Alt+左键`
 *  `Alt+F8`:evaluate the value of expression when debugging.
 ----------
 * `Ctrl+N`:quickly open class.first press the key and then typing the name of class.
 * `Ctrl+Shift+N`:open any file in your project in a similar way.
-* `Alt+F7`:find all places of class,method or variable at caret.
 ----------
 * `Ctrl+F12`:navigate in the currently edited file.
 *  `Shift+F6`:rename classes,methods and variables of all places.
@@ -231,6 +269,11 @@ IDEA中构建的几个选项如下所示：
 *  `Ctrl+Alt+B`:navigate to the implementation of an abstract method at caret.
 
 # 六 纯前端项目
+
+## 传统方式
+
+### 无服务器
+
 通过`New-->Project...-->Static Web`，可以看到很多项目类型，我们选择`Static Web`，其他的只不过已经预置了相应的库而已。
 
 与上面操作一致，我们需要配置`Run/Debug Configuration`，我们有两种选择，运行在tomcat服务器中，或通过JavaScript Debug运行。当然，纯前端项目使用JavaScript Debug就好了，并且也不用手动配置，直接在想要运行html的窗口中直接右键，点击Run或Debug选项，它会自己配置好Configuration，并打开默认浏览器。
@@ -248,13 +291,18 @@ IDEA中构建的几个选项如下所示：
 [61]:https://plugins.jetbrains.com/plugin/7007-liveedit
 [62]:https://chrome.google.com/webstore/detail/jetbrains-ide-support/hmhgeddbohgjknpmjagkdomcpobmllji?hl=en
 
-## 与tomcat结合
-在tomcat运行配置界面，勾选`with JavaScript debugger`时，在配合LiveEdit使用，java web项目也能修改前端代码时，实时预览了！
+### 使用tomcat服务器
+在tomcat运行配置界面，勾选`with JavaScript debugger`时，再配合LiveEdit使用，java web项目也能修改前端代码时，实时预览了！
 ![在这里插入图片描述](.Idea/20190504182019853.png)
-## 不足
+
+### LiveEdit不足
 * 在使用过程中，发现LiveEdit对css反应不是智能，有时修改还需手动保存才能更新
 * js脚本名为index.js时不能设置断点，并且控制台不是很好用。
 * 控制台和打了马赛克似的（和idea配置有关）
+## Vue项目
+
+Vue提供了Vue-CLI工具, 已经提供编译和构建功能. IDEA仅作为一个编辑器, 提供语法自动补全,提示功能.
+
 #  七 其他
 ## 清除缓存
 idea会缓存很多文件，如果系统运行错误了，则需要清除缓存，如`File | Invalidate Caches/Restart`
@@ -281,7 +329,20 @@ mybatis的xml映射文件经常被使用，如果不安装插件，则需要自�
 
 `Editor`->`Code Style`->`Line separator`, 然后设置.
 
+## 配置Windows Defender
+
+再Idea进行大量文件操作时, Windows Defender会实时扫描, 造成Idea构建速度变慢. 因此, 可将相关目录添加至非扫描目录中.
+
+步骤如下:
+
+1. 按`Win`键, 输入**安全性概览**
+2. 点击**病毒和威胁防护**
+3. 点击**"病毒和威胁防护"设置**下的**管理设置**
+4. 找到排除项, 点击**添加或删除排除项**
+5. 然后将项目目录添加进去即可.
+
 # 参考
+
 * [idea download][1]
 * [maven download][2]
 * [tomcat download][3]

@@ -1631,7 +1631,7 @@ public @interface Schedules {
 
 注意，容器注解的元素value数组中的类型一定要为repeatable注解类型。很拗口吧，但是既然要存入repeatable注解（也就是Schedule），当然要定义它的数组（Schedule[]）。
 
-# 数字与字符串
+# 四 数字与字符串
 
 ## 数字
 
@@ -1879,40 +1879,575 @@ public @interface Schedules {
 * `StringBuffer`是线程安全的, 而`StringBuilder`不是. 但`StringBuilder`比`StringBuffer`操作速度更快
 * 字符串的合并操作符`+`内部是使用`StringBuilder`完成的.
 
-# package
+# 五 泛型
 
-* 静态引入
+> 我的入门泛型教程参考:[java 泛型](https://blog.csdn.net/jdbdh/article/details/82851667)
 
+## 介绍
 
+在某些数据结构中, 如容器, 里面元素的类型不重要, 可以是任意类型. 在传统的做法中, 是将元素声明为`Object`类型. 但是在使用时又必须将之转化为想要的类型. 
 
-# 其他
+如果类型转化错误呢? **那么运行时会抛出异常**.
 
-## 流
+而泛型只是语法糖, 在实例化的过程中就告诉了编译器元素的类型. 编译器便会为你严格把关, 接手类型转化的问题, **在编译时就会进行类型检查**
 
-## 命令
+**即泛型将运行时类型检查迁移到了编译时检查**, 大大提交了程序的可读性和健壮性.
 
-* `javap`反汇编class文件
+## 原理
+
+### 概述
+
+<span style="color:red;">本质上</span>就是编译器**接手(消除)了类型转化(cast)的处理(使用)**, 不必程序员手动类型转化, **并检查保证类型安全**. 属于编译器提供的语法糖, 最终有泛型的代码会转化为无泛型化(类型擦除).
+
+> 类型安全指, 在编译时没有Unchecked Cast异常, 那运行时也不会抛出类型转化异常.
+>
+> 也就是说, 没有手动`cast`, 而是间接依靠泛型, 那肯定不会出现类型异常的!!!
+
+> 类型, 方法声明的泛型信息在编译过程会被擦除, 其他变量声明却保留了, 如字段声明, 参数声明等. 这也是为什么反射可以获得泛型信息的原因.
+
+类型擦除后, 类型参数会被它的上界替代(通常是`Object`), 然后该类型变量会在类型,方法声明外被使用的地方, 进行适当的类型转化(cast).
+
+### 编译器行为
+
+声明和使用过程中, 编译器做了什么?
+
+#### 声明
+
+声明中, 声明的参数类型(假设为`T`), 限制了`T`类型的对象在泛型类(方法)中可以进行的操作. 
+
+泛型**形参**不仅指某一个类型, 还可以是一种范围:
+
+1. 某种类型, 如
+
+    ```java
+    class A<T>...
+    ```
+
+    `T`代表任意类型, 它的上界为`Object` , 编译后也会被`Object`替代, 可以当作`Object`使用
+
+2. 有上界, 如
+
+    ```java
+    class A<T extends Number>...
+    ```
+    
+    `T`代表`Number`即其子类, 它的上界为`Number`, 编译后也会被`Number`替代, 可以当作`Number`使用
+    
+3. 下界呢? 没有, 下界的情况与第一种是一样的, 编译后会被`Object`替代.
+
+#### 使用
+
+泛型类实例化, 泛型变量声明和函数调用时都需要传入类型实参,  它有何用呢?
+
+在类型擦除后, 泛型类只有一份, 为了保证泛型类方法中使用的类型不一样, 还是会在出入口(对象外)添加`cast`语句, 完成类型转化.
+
+除此之外, 类型实参也是可以有范围的, 并且变量,对象相互赋值时需考虑兼容性问题:
+
+1. 具体的类型
+
+   * 会在出口中将形参的上界转化为实参类型. 
+
+   * `List<Integer>`变量不能赋值给`List<Number>`变量.
+
+     > 理由, 如果能, 那么可以通过`List<Number>`变量存入一个`String`类型的变量, 造成运行时类型转化失败. 不是类型安全的
+
+2. 任意类型
+
+   * 表示任意类型, 如`List<?>`
+
+   * 只能获取元素当作`Object`访问, 只能插入`null`
+
+     > 理由, 任意类型都是`Object`的子类, 因此可以使用`Object`的方法. 存入任何类型都可能造成类型转换失败, 除了`null`, 因为`null`可以为任意类型对象赋值.
+
+3. 上界
+
+   * 如`List<? extends Number>`, 表示`Number`及其子类, 可以取出当作`Number`使用, 但不能存入`Number`及其子类对象
+
+     > 理由, 不能保证类型是所有`?`的子类, 因此不能存入.
+
+   * 可以将`List<? extends Integer>`赋值给`List<? extends Number>`
+
+     > 理由, 后一个的通配符`?`类型范围包含前一个的范围.
+
+4. 下界
+
+   * 如`List<? super Integer>`, 表示`Integer`及其父类, 可以存入`Integer`及其子类, 只能取出`Object`
+
+     > 理由, `Integer`及其子类都属于`Integer`及其父类的子类(或本身), 可以用父类引用.
+     >
+     > 至于取出... 略
+
+   * 可将`List<? super Number>`赋值给`List<? super Integer>`
+
+     > 同理, 后一个的类型范围要广一点.
+
+#### 小结
+
+- 声明时类型形参的作用: 
+  - 临时充当一个类型: 并且可以表示一定范围的类型, 如表示任意类型
+  - 限制内部操作: 声明中的类型参数(假设`T`), 限制了声明中该类型`T`的对象可有的操作, 该对象可以当作它的上界来使用.
+- 使用时类型实参的作用:
+  - 执行类型转化: 泛型类实例化后的类型实参, 规定了声明外`T`类型对象`cast`的类型.
+  - 保证类型安全: 有了类型实参的信息, 可以检查泛型变量之间如何赋值, 保证运行时不出错.
+
+## 语法
+
+### 声明与使用
+
+> 下面只给出了最基本的形式, 详细的见**[原理]**一节
+
+#### 泛型类
+
+```java
+class ClassName<T1, T2, ..., Tn> { /* ... */ }
+```
+
+实例化时, 其类型实参可以省略, 由编译器自行推断, 但变量声明的类型实参不能省
+
+```java
+ClassName<String,Integer,....,Object> objectName=new ClassName<String,Integer,....,Object>();//显示参数类型参数
+ClassName<String,Integer,....,Object> objectName=new ClassName<>();//由编译器推断
+```
+
+#### 泛型方法
+
+```java
+public class Util {
+    public static <K, V> boolean compare(Pair<K, V> p1, Pair<K, V> p2) {
+        return p1.getKey().equals(p2.getKey()) &&
+               p1.getValue().equals(p2.getValue());
+    }
+}
+```
+
+调用时需传入类型实参, 同样可由编译器推断类型
+
+```java
+boolean same = Util.<Integer, String>compare(p1, p2);//显示传入类型参数
+boolean same = Util.compare(p1, p2);//编译器推断
+```
+
+### 类型推断
+
+类实例化和函数调用时, 不必手动传入类型实参, 可有编译器自动推断. 编译器会根据所有有用的信息, 如方法参数类型, 目标参数类型, 返回参数类型等等, 来推断出**最具体**但**符合所有参数要求**的类型.
+
+> `<>`不能省略
 
 ## 其他
 
-* `System.out.printf("%s: %d, %s%n", name, idnum, address);`
+### 遗留代码
 
-* 包名必须全小写? 
+在JDK5之后出现了泛型, 但为了兼容性, 泛型类未传入的类型实参的类型称为**raw type**, 有别于参数化类型. 如`List`, 而不是`List<?>`
 
-* `main`方法是运行Java程序的入口, 在启动时需指定含`main`方法的类文件.
+两者之间有些区别:
+
+* 参数化类型变量可以赋值给raw type, 反之亦然, 编译器仅仅给出了UnChecked警告
+* 参数化类型的变量之间的相互赋值是有限制的, 赋值错误会报错.
+* 使用泛型, 无需手动cast, 同时也消除了运行时类型转化异常.
+
+### 泛型限制
+
+* 类型参数不能为基本类型
+
+* 不能使用类型参数来创建对象
+
+  > 那`ArrayList`是如何实现的呢? 它内部通过`Object[]`来存如对象的... 
+  >
+  > 那获取元素时不需要先转化为类型形参类型? 见[原理]一节, 类型擦除后, 类型形参被它的上界取代了, 不存在类型转化的问题. 并且类型检查发生在使用阶段, 而不是声明阶段.
+
+  但可以通过反射创建
 
   ```java
-  package myjavacode;
-  
-  public class MyClass {
-  
-      public static void main(String[] args) {
-  
-      }
+  public static <E> void append(List<E> list, Class<E> cls) throws Exception {
+      E elem = cls.newInstance();   // OK
+      list.add(elem);
   }
   ```
 
-  > 并且入口可以有多个, 但是一次JVM只能运行一个.
+* 静态成员中不能使用类的类型参数, 可以声明泛型方法.
+
+  > 从外部看, 泛型类的不同参数化类型好像是不同的类型, 实则是同一个类. 如果允许定义静态泛型字段, 岂不是所有参数化类型都共享了这个字段? 所以不允许.
+
+* 通配符`?`和raw type不一样.
+
+  > 不一样, `?`是类型实参, 赋值给其他参数化类型变量时可能会报错, 如`List<?>`变量不能赋值给`List<Number>`; 而raw type可以, 仅仅有UnChecked警告而已.
+
+* 不能实例化泛型数组, 可以声明泛型数组(鸡肋)
+
+  > 你说不能就不能.
+
+* 不能对类型形参进行cast, `instanceof`操作
+
+  > 因为编译时类型被擦除了, 运行时找不到类型了.
+
+* 参数化类型不被判定是否为重载方法的依据
+
+  > 因为类型被擦除了, 你我长的都一样, 如
+  >
+  > ```java
+  > public class Example {
+  >     //错误!!1
+  >     public void print(Set<String> strSet) { }
+  >     public void print(Set<Integer> intSet) { }
+  > }
+  > ```
+
+* 等等... 限制是真的多... 我看Bug要满天飞!
+
+### 原理进阶之继承
+
+观察下面代码
+
+```java
+public class Node<T> {
+ 
+    public T data;
+ 
+    public Node(T data) { this.data = data; }
+ 
+    public void setData(T data) {
+        System.out.println("Node.setData");
+        this.data = data;
+    }
+}
+ 
+public class MyNode extends Node<Integer> {
+    public MyNode(Integer data) { super(data); }
+ 
+    public void setData(Integer data) {
+        System.out.println("MyNode.setData");
+        super.setData(data);
+    }
+}
+```
+
+问题来了, 类型擦除后, 子类与父类方法原型不一致了, 还能够实现覆盖, 实现多态吗? 
+
+编译器当然考虑到了该问题, 并提供了一个桥接方法, 如
+
+```java
+class MyNode extends Node {
+ 
+    //编译器自动生成的一个桥接方法 
+    public void setData(Object data) {
+        setData((Integer) data);
+    }
+ 
+    public void setData(Integer data) {
+        System.out.println("MyNode.setData");
+        super.setData(data);
+    }
+ 
+    // ...
+}
+```
+
+Perfectly!!!
+
+### 术语
+
+* 类型参数: 将类型当作参数
+  * 类型形参(Type Parameter): 声明时指定类型参数
+  * 类型实参(Type Argument): 泛型类(方法)实例化(调用)时传入的参数类型.
+* 参数化类型(Parameterized Type): 传入了类型实参的类型, 如`List<String>`
+
+# 六 Package
+
+## 介绍
+
+创建了名字空间, 类由包名+类名(全限定名)唯一确定.
+
+> 实际上, 名字空间先被类加载器划分, 才由包名划分.
+
+* 优点
+  * 相关联的类型在同一包下, 容易找到
+  * 避免名字冲突
+  * 方便进行访问权限控制
+
+## 使用
+
+### 声明
+
+一个Java文件**最多**有一个`package`语句, 且必须位于第一行. 形式如下
+
+```java
+package packageName;
+
+//type declaration
+...
+```
+
+一个Java文件**最多**有一个类型定义为`public`, 能够在保外被访问, 否则为包私有. 并且`public`类型的名字须与文件名一致
+
+-----
+
+命名
+
+* 全小写
+* 支持字母,点`.`,下划线`_`,数字
+* 建议使用倒置的域名作为包名
+
+-----
+
+一般类的全限定名会反映在目录结构上, 与目录结构一致.
+
+### 引入
+
+* 引入相同包的成员
+
+  同包下成员无需引入, 可直接通过类型名来访问
+
+* 通过全限定名
+
+  无需引入, 直接写全名字即可, 如
+
+  ```java
+  oom.graphics.Rectangle myRect = new com.graphics.Rectangle();
+  ```
+
+* 引入包下的某个成员
+
+  通过`import`引入具体的某个类, 然后便可以通过类名来访问该类.
+
+  `import`语句必须位于`package`语句及类型定义之间
+
+  ```java
+  import graphics.Rectangle;
+  ```
+
+* 引入整个包
+
+  之后, 可以仅通过类型名便可访问该包下所有成员.
+
+  ```java
+  import graphics.*;
+  ```
+
+  > 注意, `*`仅引入包下的所有类型, 不包括**子包**. 如`import java.awt.*`并不会引入`java.awt.color.*`
+
+* 静态引入`import static`: 引入某个类型的所有静态成员
+
+  如引入`Math`的静态成员
+
+  ```java
+  import static java.lang.Math.*;
+  ```
+
+  然后调用时无需加上类名前缀:
+
+  ```java
+  double r = cos(PI * theta);
+  ```
+
+引入多个包后, 类型名冲突了怎么办?
+ 可以通过全限定名来区分它们.
+
+# 七 异常
+
+异常很有用，能够将错误处理代码从“常规”代码中分离出来。
+
+## 异常层次结构
+
+所有异常都是java.lang.Exceptions的子类，而Exception又是Throwable的子类，Throwable还有一个子类为Errors。如图所示。
+
+![1566640938674](.Java%20Language/1566640938674.png)
+
+## 三种异常
+
+* **检查型异常**：异常必须要被处理，比如使用try捕获异常或者在方法上抛出异常。通常是一些用户可以**预测到和期待修改**的异常。除了Error、RuntimeException及其子类，其他的都是检查型异常。
+* **运行型异常**：运行时异常可以不用被处理，如果发生运行时异常，通常表明对应的**api使用不正确**。运行时异常包括RuntiemException及它的子类。
+* **错误**：错误通常是由硬件或系统故障导致的，因此用户也不必捕获该异常，但是为了通知用户此类异常的方法，也可以选择捕获该异常。错误包含Error和它的子类。
+
+## try-catch-finally
+
+下面是一个捕获异常的例子，在try语句中的语句用来检测异常，catch捕获异常，finally语句块中代码不管是否try发生异常都会执行。
+
+```java
+public void writeList() {
+    PrintWriter out = null;
+
+    try {
+        System.out.println("Entering" + " try statement");
+
+        out = new PrintWriter(new FileWriter("OutFile.txt"));
+        for (int i = 0; i < SIZE; i++) {
+            out.println("Value at: " + i + " = " + list.get(i));
+        }
+    } catch (IndexOutOfBoundsException e) {
+        System.err.println("Caught IndexOutOfBoundsException: "
+                           +  e.getMessage());
+                                 
+    } catch (IOException e) {
+        System.err.println("Caught IOException: " +  e.getMessage());
+                                 
+    } finally {
+        if (out != null) {
+            System.out.println("Closing PrintWriter");
+            out.close();
+        } 
+        else {
+            System.out.println("PrintWriter not open");
+        }
+    }
+}
+```
+
+一个catch也可以同时捕获多个异常，通过|分隔，但是异常类型隐式final：
+
+```java
+catch (IOException|SQLException ex) {
+    logger.log(ex);
+    throw ex;
+}
+```
+
+
+> - 即使try中有return，finally也会别执行。在return语句执行之前，finally语句块会被执行。
+> - catch和finally，两者可以省略一个。
+
+## try-with-resources
+
+在try-with-resources的try块中**声明**的资源在try语句块结束后可以自动关闭，不用手动使用finally关闭了。
+
+```java
+public class App 
+{
+	public static void main(String[] arg) {
+	    try (BufferedReader br =new BufferedReader(new FileReader("D:\\A.java"))) {
+	    	 br.readLine();
+		 } catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+}
+```
+
+
+需要在try的括号中声明资源，资源对应的类需要实现java.lang.AutoCloseable接口。当try语句执行完或抛出异常时会立刻关闭资源，如果close方法抛出异常，则该异常会被**抑制**。然后才是捕获异常的步骤。
+
+如果异常被抑制了，可以在catch语句中通过Throwabl的getSuppressed方法获得被抑制的异常，可以看看下面的例子：
+
+```java
+public class TryWithResources {
+
+	public static void main(String[] args) throws Exception {
+
+		try ( OpenDoor door = new OpenDoor() ) {
+			door.swing(); //this throws a SwingExecption
+		}
+		catch (Exception e) { 
+			System.out.println("Is there a draft? " + e.getClass());
+			int suppressedCount = e.getSuppressed().length;
+			for (int i=0; i<suppressedCount; i++){
+				System.out.println("Suppressed: " + e.getSuppressed()[i]);
+			}
+		}
+		finally {
+			System.out.println("I'm putting a sweater on, regardless. ");
+		}
+	}
+}
+
+class OpenException extends Exception {}
+class SwingException extends Exception {}
+class CloseException extends Exception {}
+
+class OpenDoor implements AutoCloseable {
+
+	public OpenDoor() throws Exception {
+		System.out.println("The door is open.");
+	}
+	public void swing() throws Exception {
+		System.out.println("The door is becoming unhinged.");
+		throw new SwingException();
+	}
+
+	public void close() throws Exception {
+		System.out.println("The door is closed.");
+		throw new CloseException(); // throwing CloseException 
+	}
+}
+```
+
+
+## 常用异常使用
+
+在编写自己的**公有方法**时，会时常抛出**运行时异常**，表明用户错误地使用API。比如传入的参数不正确，会抛出IllegalArgumentException异常。一些常用的运行时异常如下：
+
+1. IllegalArgumentException
+2. IllegalStateException
+3. NullPointerException
+4. IndexOutOfBoundsException
+5. ConcurrentModificationException
+6. UnsupportedOperationException
+
+如果不满足使用，可以自定义异常。
+
+对于**非公有**方法，这些方法一般是提供给自己使用的，因此可以不抛出异常，只需要添加注释约定方法的使用方式。
+
+## 异常链
+
+一个异常导致另一个异常，于是组成了异常链，最后抛出的异常链通常包裹着造成该异常的异常。只需要将内部异常传入外部异常构造函数即可。
+
+例子：
+
+```java
+class Untitled {
+	public static void main(String[] args) throws AException{
+		aMethod();
+	}
+	static public void aMethod() throws AException {
+        try {
+            throw new BException("B异常抛出");
+        } catch (BException e) {
+            throw new AException("A异常抛出;内部异常："+e.getMessage(),e);
+        }
+    }
+}
+class AException extends Exception{
+    public AException(String message) {
+        super(message);
+    }
+
+    public AException(String message, Throwable cause) {
+        super(message, cause);
+    }
+}
+class BException extends  Exception{
+    public BException(String message) {
+        super(message);
+    }
+
+    public BException(String message, Throwable cause) {
+        super(message, cause);
+    }
+}
+```
+
+输出：
+
+```
+Exception in thread "main" AException: A异常抛出;内部异常：B异常抛出
+	at Untitled.aMethod(Untitled.java:9)
+	at Untitled.main(Untitled.java:3)
+Caused by: BException: B异常抛出
+	at Untitled.aMethod(Untitled.java:7)
+	... 1 more
+```
+
+## 其他
+
+### 子类方法的异常抛出
+
+子类覆盖父类的方法可以不用抛出异常，即使父类方法有异常抛出列表；但父类引用子类对象且父类方法有异常抛出时，需要try来处理异常。
+
+> 参考:https://stackoverflow.com/questions/9036016/inheritance-method-signature-method-overriding-and-throws-clause
+
+
 
 # 参考
 
