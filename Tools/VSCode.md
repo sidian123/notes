@@ -6,6 +6,7 @@
   * On Windows `Shift + Alt + F`
   * On Mac `Shift + Option + F`
   * On Ubuntu `Ctrl + Shift + I`
+  * 列选择`Ctrl+Alt+下移光标`
 
 # 搜索
 
