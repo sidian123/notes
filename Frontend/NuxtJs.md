@@ -104,14 +104,6 @@ Nuxt.js脚手架包含下列内容:
 
 * `plugins/`Vue实例运行前的插件(函数)
 
-# Assets
-
-# 配置
-
-
-
-----------
-
 nuxtjs提供了方便访问这些目录的别名(仅用于模块请求)
 
 别名|目录
@@ -166,9 +158,54 @@ NuxtJs中所谓的插件就是在页面的Vue实例生成之前, 执行的一段
 
    > 只有在这声明了才会被使用
 
+# 配置
+
+## 代理
+
+通过代理解决跨域问题.
+
+首先安装依赖
+
+```bash
+npm i @nuxtjs/axios @nuxtjs/proxy -D
+```
+
+在`nuxt.config.js`文件中
+
+```java
+modules: [
+    '@nuxtjs/axios',
+    '@nuxtjs/proxy'
+],
+proxy: {
+    '/api': {
+        target: 'http://example.com',
+        pathRewrite: {
+            '^/api' : '/'
+        }
+    }
+}
+```
+
+>注意点
+>
+>* 以下选项默认为`true`
+>  * `changeOrigin`: 是否设置`host`头字段为target url
+>  * `ws`: 是否代理websockets
+>  * `pathRewrite`的key可以使用正则
+>
+>* 匹配问题
+>  * 顺序匹配, 先匹配的有效. 即`/api`后的`/api2`永远不会被匹配.
+>  * 注意重写, `'/api'`最好重写为`''`, `'/api/'`重写为`'/'`
+
 # 其他
 
 ## 元数据head
+
+* 在配置文件`nuxt.config.js`中配置`head`属性, 作用域所有页面
+* 在`pages/`下的单个Vue文件中配置`head`属性, 仅作用于当前页面.
+
+> 还有其他tricks, 略.
 
 ## 抽离公共模块
 
