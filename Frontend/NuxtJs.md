@@ -94,11 +94,96 @@ npm run dev
 
   > 因此它的样式可以影响所有页面的样式
 
+----------
+
+nuxtjs提供了方便访问这些目录的别名(仅用于模块请求)
+
+别名|目录
+----|-----
+`~`或`@`|`srcDir`
+`~~`或`@@`|`rootDir`
+
+默认`srcDir`与`rootDir`一样, 指向项目根路径, 可以自行配置.
+
+# 资源访问
+
+## 模块依赖
+
+NuxtJs会自动处理样式和Vue模板中的url, 解析为模块依赖, 由对应的loader加载.
+
+> 如`<img src="...">`,`background:url(...)`,`@import`中的url会被处理
+
+一般的模块依赖在Webpack打包时, 会打包到一块去. 对于较小的二进制文件也会被打包到一个文件中, 大文件则只能放到文件中.
+
+> 如`<img src="~/assets/image.png">`或转化为`<img src=""/_nuxt/img/image.0c61159.png">`
+
+一般资源文件放入`assets/`目录下.
+
+## static/
+
+指向`static/`目录中资源文件的url不会被当作模块依赖. 打包时会被移到根目录下, 因此可以通过根路径来访问.
+
+# 插件
+
+NuxtJs中所谓的插件就是在页面的Vue实例生成之前, 执行的一段代码.
+
+使用步骤:
+
+1. 在`plugins/`下建立Js文件, 如
+
+   ```javascript
+   import Vue from 'vue';
+   import ElementUI from 'element-ui';
+   //样式也可以在配置文件的css属性中配置,都一样
+   import 'element-ui/lib/theme-chalk/index.css';
+   
+   Vue.use(ElementUI);
+   ```
+
+2. 在`nuxt.config.js`的`plugins`中指定插件位置. 如
+
+   ```JavaScript
+   plugins: [
+       '@/plugins/element-ui'
+   ]
+   ```
+
+   > 只有在这声明了才会被使用
+
 # 其他
+
+## 元数据head
+
+## 抽离公共模块
+
+对于模块依赖, Webpack打包时会将通用的公共部分抽离出来, 有利于浏览器缓存.
+
+当自动抽离不如人意时,  如分离外部模块, 可以手动抽离.
+
+1. 将文件移入`static/`目录下
+
+   > 为了避免被当作模块依赖而被打包
+
+2. 在`nuxt.config.js`配置全局`head`, 或在`pages/`下的Vue文件中为单个页面配置`head`. 链接到所使用的模块, 如css:
+
+   ```javascript
+   head: {
+       title: 'MyWork',
+       link: [
+           {rel: 'stylesheet', href:   '/semantic.css'}
+       ]
+   }
+   ```
 
 ## 全局和Scoped样式
 
 布局`layouts/`的样式只在使用该布局的页面中共享, 全局的样式可以在所有布局中共享, 在配置文件的`css`属性中配置.
+
+## 单页面
+
+Vue-CLI中的单页面需要服务器的配置, 将所有Url的路由引向单页面.
+
+而NuxtJs的实现不同, 它构建出了多页面, 但使用**同样的Js入口**. 这样无需服务器的配合了.
 
 # 参考
 
