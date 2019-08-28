@@ -913,7 +913,7 @@ spring mvc通过media类型来决定使用何种HttpMessageConverter来解析或
 
 下面通过xml配置，关闭步骤一的行为，设置默认Content-Type为application/json：
 
-```
+```xml
     <mvc:annotation-driven content-negotiation-manager="contentNegotiationManager">
     	<!-- 不使用后缀匹配 -->
     	<mvc:path-matching suffix-pattern="false"/>

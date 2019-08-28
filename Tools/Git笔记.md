@@ -639,7 +639,7 @@ $ git config --global credential.helper 'store --file ~/.my-credentials'
 
    不做任何转化
 
-> checkout只的是从仓库中获取数据时, 该仓库可以是远程仓库, `git pull`也算是一种checkout的过程.
+> checkout指的是从仓库中获取数据时, 该仓库可以是远程仓库, `git pull`也算是一种checkout的过程.
 
 # 参考
 

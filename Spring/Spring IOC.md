@@ -917,8 +917,6 @@ Bean的定义是可以继承和覆盖的，但有些属性不会被继承，有�
 </bean>
 ```
 
-![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
-
 如上面所示，子Bean通过parent属性指定父bean，父bean貌似可以不设置abstract，但是没有指定class属性时必须设置abstract，如果不设置那么父bean也会被初始化。
 
 # [八、容器扩展](https://docs.spring.io/spring-framework/docs/current/spring-framework-reference/core.html#beans-factory-extension)

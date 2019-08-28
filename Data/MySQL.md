@@ -707,7 +707,11 @@ jdbc:mysql://localhost:3306/database_name?useSSL=false&serverTimezone=GMT%2B8&al
 ```
 
 * `useSSL`不是安全套接字
+
 * `serverTimezone`设置会话时区
+
+  > 由于url不允许存在`+`, 因此需要实现进行urlencode编码.
+
 * `allowPublicKeyRetrieval`不知道
 
 # 参考

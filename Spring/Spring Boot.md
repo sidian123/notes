@@ -128,7 +128,8 @@ spring boot提供了devtools，为开发带来一点方便。需要加入依赖�
 
   > 注意，静态资源（位于`/resources`, `/static`, `/public`, or `/templates`等等）的更改不会触发程序重启，但确实已被重载（reload）了。
   
-- Eclipse中，文件保存便会触发重启
+  - Eclipse中，文件保存便会触发重启
+    
   - IDEA中，需要点击`Build->Build Project`，快捷键`Ctrl+F9`
   
     > spring boot的重启实际上是要比完全重启项目（cold restart）要快些的。
