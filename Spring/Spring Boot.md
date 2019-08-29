@@ -243,8 +243,19 @@ spring boot整合了spring框架和三方库后，提供了自动配置的功能
             - another.example.com
     ```
 
+    > `@Value()`获取不到, 考虑使用`,`分割的形式, 如
+  >
+    > ```yaml
+    > my:
+    >     servers: dev.example.com, another.example.com
+    > ```
+    >
+    > 
+    >
+    > 
+  
   - properties:
-
+  
     ```properties
     my.servers[0]=dev.example.com
     my.servers[1]=another.example.com

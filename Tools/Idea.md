@@ -341,6 +341,12 @@ mybatis的xml映射文件经常被使用，如果不安装插件，则需要自�
 4. 找到排除项, 点击**添加或删除排除项**
 5. 然后将项目目录添加进去即可.
 
+## 不能识别Maven模块
+
+找到Maven模块的`pom.xml`文件, 右键`as maven project`
+
+
+
 # 参考
 
 * [idea download][1]

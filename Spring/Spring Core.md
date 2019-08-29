@@ -4,3 +4,5 @@
 
 `ResourceLoader`会自动检查url是指向文件`file://C:/test.dat`还是classpath下`classpath:test.dat`
 
+> 常用`ResourceLoader`的实现类`DefaultResourceLoader`
+

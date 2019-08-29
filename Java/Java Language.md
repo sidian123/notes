@@ -2470,6 +2470,10 @@ package package_name;
 
 > 注意, 该文件内不要有其他的内容了.
 
+# 坑
+
+* 局部匿名类中不能抛出异常, 只能捕获.
+
 # 参考
 
 * [Java Tutorial Oracle.com](https://docs.oracle.com/javase/tutorial/index.html)
