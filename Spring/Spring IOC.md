@@ -28,7 +28,7 @@ ioc是通过元数据配置初始化容器的，容器的实现有很多种，�
 ApplicationContext context = new ClassPathXmlApplicationContext("services.xml", "daos.xml");
 ```
 
-![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
+
 
 可以传入一个或多个配置文件，也可以在传入一个配置文件，但是这个配置文件中导入了其他配置文件，通过import标签来实现，resource指定的地址是相对于使用import标签的配置文件而言的。
 
@@ -43,7 +43,7 @@ ApplicationContext context = new ClassPathXmlApplicationContext("services.xml", 
 </beans>
 ```
 
-![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
+
 
 可以通过getBean方法使用得到bean的实例
 
@@ -58,7 +58,7 @@ PetStoreService service = context.getBean("petStore", PetStoreService.class);
 List<String> userList = service.getUsernameList();
 ```
 
-![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
+
 
 但是spring文档并不建议这样使用，因为这会导致spring api侵入了你的程序，而是建议通过使用依赖注入功能，比如注解@Autowired。
 
@@ -94,7 +94,7 @@ List<String> userList = service.getUsernameList();
 <alias name="fromName" alias="toName"/>
 ```
 
-![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
+
 
 其中，name为一个Bean的标识符，alias指定别名。
 
@@ -112,7 +112,7 @@ Bean定义就是一个模板，根据该Bean的定义来产生一个或多个对
 <bean name="anotherExample" class="examples.ExampleBeanTwo"/>
 ```
 
-![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
+
 
 ### 通过静态工厂方法实例化
 
@@ -131,7 +131,7 @@ public class ClientService {
 }
 ```
 
-![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
+
 
 通过如下方法实例化：
 
@@ -141,7 +141,7 @@ public class ClientService {
     factory-method="createInstance"/>
 ```
 
-![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
+
 
 class指定含有静态工厂的类，factory-method指定静态工厂方法，不用给出返回类型，因为通过反射可以得到。id为静态工厂返回的对象的标识符，不是class的标识符。注意，scope默认为singleton，因此该方法只会调用一次，维护一个单实例。注意，class指定的类一般不会实例化，因为它不是bean。
 
@@ -168,7 +168,7 @@ public class DefaultServiceLocator {
 }
 ```
 
-![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
+
 
 配置文件：
 
@@ -186,7 +186,7 @@ public class DefaultServiceLocator {
     factory-method="createAccountServiceInstance"/>
 ```
 
-![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
+
 
 其中，factory-bean指定含有工厂方法的类的标识符，factory-method指定工厂方法，bean可由反射得知。上面三个bean都会被实例化。
 
@@ -204,7 +204,7 @@ public class DefaultServiceLocator {
 	</bean>
 ```
 
-![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
+
 
 由于SqlSessionFactoryBean实现了FactoryBean，因此该Bean是一个工厂。如果查看该类对FactoryBean的实现会发现，该工厂是用来生产SqlSessionFactory的，且为单实例。因此，通过id的值SqlSessionFactory可以获得该类（SqlSessionFactory）的对象。如果要获得工厂本身而不是生产的Bean，则需要在id前加个前缀“&”，即可获得工厂Bean。
 
@@ -237,7 +237,7 @@ public class DefaultServiceLocator {
 </beans>
 ```
 
-![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
+
 
 **参数类型匹配**
 
@@ -250,7 +250,7 @@ public class DefaultServiceLocator {
 </bean>
 ```
 
-![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
+
 
 **参数索引**
 
@@ -263,7 +263,7 @@ public class DefaultServiceLocator {
 </bean>
 ```
 
-![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
+
 
 **参数名字**
 
@@ -276,7 +276,7 @@ public class DefaultServiceLocator {
 </bean>
 ```
 
-![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
+
 
 最后文档说到，要使用参数名匹配参数，需要编译时设置debug标志，然后spring才能够查看参数名。我在eclipse中没有使用debug模式运行时也能成功运行。不知是不是我理解错了。
 
@@ -297,7 +297,7 @@ public class DefaultServiceLocator {
 </bean>
 ```
 
-![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
+
 
 ### 依赖解析过程
 
@@ -325,7 +325,7 @@ public class DefaultServiceLocator {
 </bean>
 ```
 
-![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
+
 
 或者使用<value/>子标签
 
@@ -337,7 +337,7 @@ public class DefaultServiceLocator {
 </bean>
 ```
 
-![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
+
 
 <value/>标签有一个非常好的功能，就是可以为java.util.Properties对象赋值：
 
@@ -355,7 +355,7 @@ public class DefaultServiceLocator {
 </bean>
 ```
 
-![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
+
 
 如果依赖为其他bean的标识符，则可以使用<idref/>标签，该标签可以在容器加载阶段验证id所属的bean是否存在（在scope不是sintleton时很有用），下面的相当于 <property name="targetName" value="theTargetBean"/>
 
@@ -369,7 +369,7 @@ public class DefaultServiceLocator {
 </bean>
 ```
 
-![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
+
 
 ### 对Bean的引用
 
@@ -381,7 +381,7 @@ public class DefaultServiceLocator {
 <ref bean="someBean"/>
 ```
 
-![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
+
 
 通过parent属性指定**父容器**中的Bean：
 
@@ -392,7 +392,7 @@ public class DefaultServiceLocator {
 </bean>
 ```
 
-![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
+
 
 ```xml
 <!-- in the child (descendant) context -->
@@ -405,7 +405,7 @@ public class DefaultServiceLocator {
 </bean>
 ```
 
-![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
+
 
 ### 内部Bean
 
@@ -423,7 +423,7 @@ public class DefaultServiceLocator {
 </bean>
 ```
 
-![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
+
 
 ### 集合
 
@@ -463,7 +463,7 @@ public class DefaultServiceLocator {
 </bean>
 ```
 
-![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
+
 
 map的键值或set的值可以是如下元素（标签）：
 
@@ -471,7 +471,7 @@ map的键值或set的值可以是如下元素（标签）：
 bean | ref | idref | list | set | map | props | value | null
 ```
 
-![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
+
 
 **集合合并**
 
@@ -499,7 +499,7 @@ bean | ref | idref | list | set | map | props | value | null
 <beans>
 ```
 
-![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
+
 
 下面子Bean的adminEmails属性的内容如下：
 
@@ -509,7 +509,7 @@ bean | ref | idref | list | set | map | props | value | null
 > support=support@example.co.uk
 > ```
 >
-> ![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
+> 
 
 上面的所有集合都可以合并，但是`<list/>`特殊点，因为list是有序的，因此，后面子Bean的集合会插入到父Bean集合的后面。
 
@@ -528,7 +528,7 @@ public class SomeClass {
 }
 ```
 
-![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
+
 
 ```
 <beans>
@@ -544,7 +544,7 @@ public class SomeClass {
 </beans>
 ```
 
-![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
+
 
 容器会将key当做String，value转化为Float类型。
 
@@ -558,7 +558,7 @@ public class SomeClass {
 </bean>
 ```
 
-![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
+
 
 注入null
 
@@ -570,7 +570,7 @@ public class SomeClass {
 </bean>
 ```
 
-![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
+
 
 ### 其他
 
@@ -585,7 +585,7 @@ depends-on强制一个或多个bean先于使用了depends-on属性的Bean初始�
 	<bean id="test2" class="com.luo.main.Test2" scope="prototype"></bean>
 ```
 
-![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
+
 
 在Bean销毁时，Bean也要优先于deponds-on的Beans，**但是仅限于为singleton的Bean！！千万注意。**
 
@@ -597,7 +597,7 @@ depends-on强制一个或多个bean先于使用了depends-on属性的Bean初始�
 <bean id="lazy" class="com.something.ExpensiveToCreateBean" lazy-init="true"/>
 ```
 
-![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
+
 
 在<beans/>标签中使用default-lazy-init可以设置**该元素**中的bean默认为懒加载
 
@@ -607,7 +607,7 @@ depends-on强制一个或多个bean先于使用了depends-on属性的Bean初始�
 </beans>
 ```
 
-![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
+
 
 ## 自动装配
 
@@ -666,7 +666,7 @@ depends-on强制一个或多个bean先于使用了depends-on属性的Bean初始�
 <public|protected> [abstract] <return-type> theMethodName(no-arguments);
 ```
 
-![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
+
 
 举个例子，如下面的类：
 
@@ -690,7 +690,7 @@ public abstract class CommandManager {
 }
 ```
 
-![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
+
 
 然后注入方法：
 
@@ -706,7 +706,7 @@ public abstract class CommandManager {
 </bean>
 ```
 
-![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
+
 
 name指定方法的名字，bean指定方法要返回的Bean，要和方法返回值一致。这样，每次类的process需要用到bean commandProcessor时都会产生新的实例，而不是采用被spring框架侵入的方式。
 
@@ -726,7 +726,7 @@ public abstract class CommandManager {
 }
 ```
 
-![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
+
 
 如果@Lookup不提供名字，则默认通过方法返回类型查看Bean。如果使用包扫描则一定要给出方法实现！！！空实现也行。上面没有给出实现，是因为类CommandManager的定义还是通过xml文件给出的。
 
@@ -767,7 +767,7 @@ request作用域中的Bean每来一个请求时会被创建，不同请求中Bea
 <bean id="loginAction" class="com.something.LoginAction" scope="request"/>
 ```
 
-![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
+
 
 或
 
@@ -779,7 +779,7 @@ public class LoginAction {
 }
 ```
 
-![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
+
 
 session作用域的Bean在会话开启时被创建，不同会话之间互不相扰，会话结束后Bean销毁。通过如下配置：
 
@@ -787,7 +787,7 @@ session作用域的Bean在会话开启时被创建，不同会话之间互不相
 <bean id="userPreferences" class="com.something.UserPreferences" scope="session"/>
 ```
 
-![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
+
 
 或
 
@@ -799,7 +799,7 @@ public class UserPreferences {
 }
 ```
 
-![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
+
 
 一个application作用域的Bean在一个web应用中只有一个实例，被存入ServletContext中作为属性。如下配置：
 
@@ -807,7 +807,7 @@ public class UserPreferences {
 <bean id="appPreferences" class="com.something.AppPreferences" scope="application"/>
 ```
 
-![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
+
 
 或
 
@@ -819,7 +819,7 @@ public class AppPreferences {
 }
 ```
 
-![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
+
 
 ## Scoped Beans作为依赖
 
@@ -837,7 +837,7 @@ public class AppPreferences {
 </bean>
 ```
 
-![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
+
 
 注意，AOP代理默认使用的CGIB，CGIB代理只会拦截public的方法。
 
@@ -854,7 +854,7 @@ public class AppPreferences {
 </bean>
 ```
 
-![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
+
 
 我猜想。。jdk代理会实现userPreferences接口，而他的实现类则作为调用处理器。。。
 
@@ -862,7 +862,7 @@ public class AppPreferences {
 
 不同阶段会调用不同的方法，下面的回调方法Bean不一定全有，如果有的话就会被调用。图片来源：[Spring Bean Life Cycle Tutorial](https://www.concretepage.com/spring/spring-bean-life-cycle-tutorial)
 
-![img](.Spring IOC/20190223193524552.jpg)![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
+![img](.Spring IOC/20190223193524552.jpg)
 
 要注意，BeanPostProcessor的方法是针对所有的Bean而言的。回调方法也不止这些，还有一些其他的aware接口的方法。
 
@@ -894,7 +894,7 @@ public final class Boot {
 }
 ```
 
-![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
+
 
 什么Aware接口，继承后可以通过接口方法获得一些对象，比如容器本身啥的。
 
@@ -937,7 +937,7 @@ FactoryBean（不要和BeanFactory混淆）可以控制容器的实例化逻辑�
 <context:annotation-config/>
 ```
 
-![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
+
 
 该注解默认开启bean post-processor，包括 AutowiredAnnotationBeanPostProcessor, CommonAnnotationBeanPostProcessor, PersistenceAnnotationBeanPostProcessor, and RequiredAnnotationBeanPostProcessor。关于BeanPostProcessor，第八小节有提到过。注意！！！<context:annotation-config/>只会查看同**一个容器**中的bean的注解。
 
@@ -959,8 +959,6 @@ public class SimpleMovieLister {
 }
 ```
 
-![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
-
 ## @Autowired
 
 @Autowired可以注解到属性、任意参数方法、构成函数上，通过类型注入，拥有着比xml配置更加细腻度的控制。并且默认将被@Autowire注解的字段、方法、构造函数视为必须的依赖！如果没有匹配成功则抛出异常。
@@ -981,8 +979,6 @@ public class MovieRecommender {
 }
 ```
 
-![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
-
 注释setter方法：
 
 ```java
@@ -998,8 +994,6 @@ public class SimpleMovieLister {
     // ...
 }
 ```
-
-![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
 
 注释方法，任意参数都行：
 
@@ -1021,8 +1015,6 @@ public class MovieRecommender {
 }
 ```
 
-![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
-
 注释字段，尽管是**private**！！！同时还可以**和构造函数注入混合使用**：
 
 ```java
@@ -1042,7 +1034,7 @@ public class MovieRecommender {
 }
 ```
 
-![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
+> 但是, 构造函数执行结束后才注入字段. 因此, 在构造函数中拿不到字段值.
 
 如果是数组，那么所有类型匹配成功的Bean都会被注入，集合也是一样：
 
@@ -1062,7 +1054,7 @@ public class MovieRecommender {
 }
 ```
 
-![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
+
 
 map实例也可以自动注入，需要key类型为String，那么所有匹配的Bean会作为map的value，bean标识符作为key值：
 
@@ -1080,8 +1072,6 @@ public class MovieRecommender {
 }
 ```
 
-![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
-
 默认被@Autowired注解的方法、构造函数、字段是必须的，可以设置为不必须的：
 
 ```java
@@ -1097,8 +1087,6 @@ public class SimpleMovieLister {
     // ...
 }
 ```
-
-![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
 
 ## 通过@Primary微调自动注入
 
@@ -1121,7 +1109,7 @@ public class MovieConfiguration {
 }
 ```
 
-![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
+
 
 配置xml中的Bean：
 
@@ -1131,7 +1119,7 @@ public class MovieConfiguration {
     </bean>
 ```
 
-![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
+
 
 配置包扫描到的Bean：
 
@@ -1144,7 +1132,7 @@ public class MovieConfiguration {
  }
 ```
 
-![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
+
 
 ## 通过@Qualifier微调@Autowired
 
@@ -1163,7 +1151,7 @@ public class MovieRecommender {
 }
 ```
 
-![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
+
 
 ```java
 public class MovieRecommender {
@@ -1183,7 +1171,7 @@ public class MovieRecommender {
 }
 ```
 
-![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
+
 
 xml可以配置限定名：
 
@@ -1195,7 +1183,7 @@ xml可以配置限定名：
     </bean>
 ```
 
-![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
+
 
 相应的还有component的配置方式、基于java代码的配置方式。
 
@@ -1215,7 +1203,7 @@ public class SimpleMovieLister {
 }
 ```
 
-![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
+
 
 默认使用属性名movieFinder：
 
@@ -1231,7 +1219,7 @@ public class SimpleMovieLister {
 }
 ```
 
-![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
+
 
 # [十、classpath扫描和component管理](https://docs.spring.io/spring-framework/docs/current/spring-framework-reference/core.html#beans-classpath-scanning)
 
@@ -1251,7 +1239,7 @@ public class AppConfig  {
 }
 ```
 
-![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
+
 
 如果是xml方式：
 
@@ -1270,7 +1258,7 @@ public class AppConfig  {
 </beans>
 ```
 
-![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
+
 
 *<context:component-scan>隐式使能<context:annotation-config>的功能。*
 
@@ -1292,7 +1280,7 @@ public class FactoryMethodComponent {
 }
 ```
 
-![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
+
 
 # [十一、基于java的容器配置](https://docs.spring.io/spring-framework/docs/current/spring-framework-reference/core.html#beans-java)
 
@@ -1311,7 +1299,7 @@ public class AppConfig {
 }
 ```
 
-![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
+
 
 通过AnnotationConfigApplicationContext建立容器，传入配置类：
 
@@ -1323,7 +1311,7 @@ public static void main(String[] args) {
 }
 ```
 
-![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
+
 
 `AnnotationConfigApplicationContext` 不局限于@Configuration类，还可以是@Componet：
 
@@ -1335,7 +1323,7 @@ public static void main(String[] args) {
 }
 ```
 
-![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
+
 
 @Configuration类可以配置包扫描：
 
@@ -1347,7 +1335,7 @@ public class AppConfig  {
 }
 ```
 
-![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
+
 
 一般web应用时通过xml文件配置的，可以通过java代码配置，参考：[Support for Web Applications with AnnotationConfigWebApplicationContext](https://docs.spring.io/spring-framework/docs/current/spring-framework-reference/core.html#beans-java-instantiating-container-web)
 
@@ -1380,7 +1368,7 @@ public class ConfigB {
 }
 ```
 
-![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
+
 
 ## java和xml混合配置
 
@@ -1409,7 +1397,7 @@ public class AppConfig {
 }
 ```
 
-![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
+
 
 可以将该类作为Bean在xml声明，需要通过<context:annotation-config/>开启注释，容器会识别注解，执行注解的逻辑。
 
@@ -1423,7 +1411,7 @@ public class AppConfig {
 </beans>
 ```
 
-![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
+
 
 因为@Configuration被@Conmponent注释过的，因此可以开启包扫描扫描该配置类：
 
@@ -1435,7 +1423,7 @@ public class AppConfig {
 </beans>
 ```
 
-![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
+
 
 ### @Configuration类中使用xml
 
@@ -1458,8 +1446,9 @@ public class AppConfig {
 > 参考
 >
 > * [What is the difference between spring parent context and child context?](https://stackoverflow.com/questions/43452644/what-is-the-difference-between-spring-parent-context-and-child-context)
->
-> * [About multiple containers in spring framework](https://stackoverflow.com/questions/18578143/about-multiple-containers-in-spring-framework)
+>* [About multiple containers in spring framework](https://stackoverflow.com/questions/18578143/about-multiple-containers-in-spring-framework)
+
+## 好像构造函数注入了, 字段就不再注入
 
 
 
