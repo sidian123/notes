@@ -74,7 +74,7 @@ DispatcherServlet在初始化时，会扫出描控制器，从控制器上的注
 </web-app>
 ```
 
-![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
+
 
 这里配置了spring ioc容器和spring mvc容器，它们的配置文件通过contextConfigLocation参数值指定（不过两者都有默认值，这里不谈及了），路径可以相对于classpath路径或者web应用中WEB-INF目录，如下所示，给出了多个配置文件的路径：
 
@@ -89,7 +89,7 @@ DispatcherServlet在初始化时，会扫出描控制器，从控制器上的注
 </context-param>
 ```
 
-![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
+
 
 *注意：web应用中的WEB-INF/classes和WEB-INF/lib是classpath路径，而WEB-INF不是。*
 
@@ -118,7 +118,7 @@ DispatcherServlet在初始化时，会扫出描控制器，从控制器上的注
 </beans>
 ```
 
-![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
+
 
 ## spring mvc配置
 
@@ -163,7 +163,7 @@ DispatcherServlet在初始化时，会扫出描控制器，从控制器上的注
 </beans>
 ```
 
-![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
+
 
 # 四、控制器开发
 
@@ -235,7 +235,7 @@ public void handle(@PathVariable String version, @PathVariable String ext) {
 }
 ```
 
-![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
+
 
 *注意：请勿和web.xml中url pattern的\*混淆*
 
@@ -253,7 +253,7 @@ spring mvc会在url模式后默认添加 .* 后缀匹配，因此模式/person�
     </mvc:annotation-driven>
 ```
 
-![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
+
 
 参考：[Pattern Comparison](https://docs.spring.io/spring/docs/current/spring-framework-reference/web.html#mvc-ann-requestmapping-pattern-comparison)
 
@@ -317,7 +317,7 @@ spring mvc会在url模式后默认添加 .* 后缀匹配，因此模式/person�
     }
 ```
 
-![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
+
 
 - 注解对应的**请求参数**必须**存在**（请求参数为**空值**也算作存在，如“name=”）。可设置属性required=false，允许请求参数不存在。一些特殊情况如下：
 
@@ -372,7 +372,7 @@ public class EditPetForm {
 }
 ```
 
-![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
+
 
 @SessionAttributes处理过程：每当**处理器执行完毕后**，如果模型中有@SessionAttributes注解指定的属性，那么该属性会被**拷贝**到session中。通过SessionStatus的setComplete方法可以清除session中被注解指定的属性。
 
@@ -401,7 +401,7 @@ public void addMember(@RequestBody Member member) {
 }
 ```
 
-![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
+
 
 ### 其他
 
@@ -454,7 +454,7 @@ public Map<...> addMember(Member member) {
 }
 ```
 
-![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
+
 
 > 如果注解上没有指定produces时，使用哪个转换器呢？见6.2 Content-Type
 
@@ -471,7 +471,7 @@ public Map<...> addMember(Member member) {
 	}
 ```
 
-![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
+
 
 如果字符串含有redirect:或forward:前缀，那么会执行重定向、请求转发，后面介绍。
 
@@ -492,7 +492,7 @@ public Map<...> addMember(Member member) {
 	}
 ```
 
-![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
+
 
 如果是非逻辑视图，没有视图解析的过程，需要指定视图和模型。比如指定json视图和模型，那么最终会返回json结果：
 
@@ -508,7 +508,7 @@ public Map<...> addMember(Member member) {
     }  
 ```
 
-![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
+
 
 # 五、其他
 
@@ -539,7 +539,7 @@ public ModelAndView showRoleJsonInfo(Long id,String roleName,String note){
 }
 ```
 
-![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
+
 
 如果传递的参数是对象，那么url不能够有效的以字符串传递参数了，那么要使用到会话：
 
@@ -558,7 +558,7 @@ public ModelAndView showRoleJsonInfo(Role role){
 }
 ```
 
-![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
+
 
 关于RedirectAttribute，请参考4.2的表格
 
@@ -566,7 +566,7 @@ public ModelAndView showRoleJsonInfo(Role role){
 
 控制器为模型添加数据时，ModelAndView、ModelMap、Model和Map都能够添加数据到模型中，那它们的关联呢？看看一下类图：
 
-![img](.Spring MVC/20181031100516116.png)![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
+![img](.Spring MVC/20181031100516116.png)
 
 实际上，spring创建的是BindingAwareModelMap，因此它们之间都可以相互转化，都可以添加模型数据。
 
@@ -596,7 +596,7 @@ public ModelAndView showRoleJsonInfo(Role role){
 	</filter-mapping>
 ```
 
-![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
+
 
 ## 自定义转换器（Converter）
 
@@ -623,7 +623,7 @@ public ModelAndView showRoleJsonInfo(Role role){
     cache-period="31556926" />
 ```
 
-![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
+
 
 估计该url下的资源会被servlet容器的默认servlet处理吧， 没有找到相关资料。
 
@@ -635,7 +635,7 @@ public ModelAndView showRoleJsonInfo(Role role){
 <mvc:default-servlet-handler/>
 ```
 
-![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
+
 
 该元素有个属性default-servlet-name可以指定默认servlet的名字，每个servlet容器的默认servlet名字都不相同，但是spring mvc使用一个常用的默认servlet名字**列表**来尝试检测默认serlvet。如果自己把默认servlet名字改了，可以显示指出，如：
 
@@ -643,7 +643,7 @@ public ModelAndView showRoleJsonInfo(Role role){
 <mvc:default-servlet-handler default-servlet-name="myCustomDefaultServlet"/>
 ```
 
-![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
+
 
 ### 配置web.xml
 
@@ -661,7 +661,7 @@ servlet-mapping配置的url映射有先后关系，后面的可以覆盖前面�
 </servlet-mapping>
 ```
 
-![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
+
 
 ## 文件上传
 
@@ -693,7 +693,7 @@ CommonsMultipartResolver用到了如下jar包：
 	</dependency>
 ```
 
-![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
+
 
 然后在spring mvc中配置MultipartResolver：
 
@@ -703,7 +703,7 @@ CommonsMultipartResolver用到了如下jar包：
     </bean>
 ```
 
-![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
+
 
 CommonsMultipartResolver常用[属性](https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/web/multipart/commons/CommonsFileUploadSupport.html)：
 
@@ -731,7 +731,7 @@ CommonsMultipartResolver常用[属性](https://docs.spring.io/spring-framework/d
 	}
 ```
 
-![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
+
 
 参考：
 [Multipart Resolver](https://docs.spring.io/spring/docs/current/spring-framework-reference/web.html#mvc-multipart)
@@ -748,7 +748,7 @@ response.setContentType("application/pdf");
 response.setHeader("Content-Disposition", "attachment; filename=\"somefile.pdf\""); 
 ```
 
-![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
+
 
 这里讲spring mvc的方法，在4.3小节中，`ResponseEntity可以作为返回值直接写入到消息体中，并且能够传入头字段、状态码信息。使用例子如下：`
 
@@ -774,7 +774,7 @@ response.setHeader("Content-Disposition", "attachment; filename=\"somefile.pdf\"
 	@Reque
 ```
 
-![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
+
 
 http协议头部中只能存在ascii字符，Content-Disposition中文件名含有其他编码方式的字符，会显示乱码。因此使用之前需要对文件名进行url编码（url encoding，见[html4.2小节](https://blog.csdn.net/jdbdh/article/details/83932406#42url_473)），如下所示：
 
@@ -782,7 +782,7 @@ http协议头部中只能存在ascii字符，Content-Disposition中文件名含�
 headers.setContentDispositionFormData("attachment", URLEncoder.encode(name,"utf-8"));
 ```
 
-![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
+
 
 一般文件下载最好允许被缓存：
 
@@ -870,7 +870,7 @@ spring mvc启动期间会通过@RequestMapping注解和配置文件找到和URI�
 
 单个拦截器执行过程：
 
-![img](.Spring MVC/20181031094538654.png)![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
+![img](.Spring MVC/20181031094538654.png)
 
 多个拦截器执行过程：
 
@@ -895,11 +895,7 @@ preHandler1-->preHandler2-->preHandler3-->handler-->postHandler3-->postHanlder2-
 </mvc:interceptors>
 ```
 
-![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
-
-path路径参考4.1.1小结。
-
-## [Content Types](https://docs.spring.io/spring/docs/current/spring-framework-reference/web.html#mvc-config-content-negotiation)
+![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)ork-reference/web.html#mvc-config-content-negotiation)
 
 spring mvc通过media类型来决定使用何种HttpMessageConverter来解析或生成消息体，但必须有对应的jar包位于classpath下。判断过程如下：
 
@@ -909,12 +905,7 @@ spring mvc通过media类型来决定使用何种HttpMessageConverter来解析或
 
 通过配置[ContentNegotiationManagerFactoryBean](https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/web/accept/ContentNegotiationManagerFactoryBean.html#setMediaTypes-java.util.Properties-)可以更改它的默认行为，如下所示：
 
-![img](.Spring MVC/20190226143027977.png)![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
-
-下面通过xml配置，关闭步骤一的行为，设置默认Content-Type为application/json：
-
-```xml
-    <mvc:annotation-driven content-negotiation-manager="contentNegotiationManager">
+![img](.Spring MVC/20190226143027977.png)![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)ent-negotiation-manager="contentNegotiationManager">
     	<!-- 不使用后缀匹配 -->
     	<mvc:path-matching suffix-pattern="false"/>
     </mvc:annotation-driven>
@@ -932,9 +923,6 @@ spring mvc通过media类型来决定使用何种HttpMessageConverter来解析或
 ```
 
 ![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
-
-> 如果在浏览器中测试发现，即使设置默认使用json，也返回xml，请检查下请求的头字段。在chrome中，默认会发送接收xml的accept。本人在linux中使用curl测试正确。
-
 # 参考
 
 * 《Java EE 互联网轻量级框架整合开发 --SSM框架和Redis实现》 杨开振
@@ -949,3 +937,5 @@ spring mvc通过media类型来决定使用何种HttpMessageConverter来解析或
 * json示例：http://sb33060418.iteye.com/blog/2374518
 * servlet映射：https://blog.csdn.net/jdbdh/article/details/83039387
 
+
+```
