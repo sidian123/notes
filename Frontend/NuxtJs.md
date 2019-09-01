@@ -131,7 +131,9 @@ NuxtJs会自动处理样式和Vue模板中的url, 解析为模块依赖, 由对�
 
 指向`static/`目录中资源文件的url不会被当作模块依赖. 打包时会被移到根目录下, 因此可以通过根路径来访问.
 
-# 插件
+# 核心
+
+## Plugins
 
 NuxtJs中所谓的插件就是在页面的Vue实例生成之前, 执行的一段代码.
 
@@ -158,9 +160,27 @@ NuxtJs中所谓的插件就是在页面的Vue实例生成之前, 执行的一段
 
    > 只有在这声明了才会被使用
 
+## Modules
+
+模块(Modules)是用以扩展NuxtJs功能的插件. 
+
+有如下特点:
+
+* 模块是Nuxt**启动时**执行的一个简单的**函数**, 可以挂载再Nuxt生命周期的某个点上, 可以定制Nuxt的任何方面.
+* 模块可以被组织成npm包, 方便分享.
+
+NuxtJs提供了官方模块:
+
+- [@nuxt/http](https://http.nuxtjs.org/): Light and universal way to make HTTP requests, based on [ky-universal](https://github.com/sindresorhus/ky-universal)
+- [@nuxtjs/axios](https://axios.nuxtjs.org/): Secure and Easy Axios integration with Nuxt.js to make HTTP requests
+- [@nuxtjs/pwa](https://pwa.nuxtjs.org/): Supercharge Nuxt with a heavily tested, updated and stable PWA solution
+- [@nuxtjs/auth](https://auth.nuxtjs.org/): Authentication module for Nuxt.js, offering different schemes and strategies
+
 # 配置
 
 ## 代理
+
+> 我信你个鬼
 
 通过代理解决跨域问题.
 
@@ -178,10 +198,10 @@ modules: [
     '@nuxtjs/proxy'
 ],
 proxy: {
-    '/api': {
+    '/api/': {
         target: 'http://example.com',
         pathRewrite: {
-            '^/api' : '/'
+            '^/api/' : '/'
         }
     }
 }
@@ -189,14 +209,91 @@ proxy: {
 
 >注意点
 >
->* 以下选项默认为`true`
->  * `changeOrigin`: 是否设置`host`头字段为target url
->  * `ws`: 是否代理websockets
->  * `pathRewrite`的key可以使用正则
+>1. 以下选项默认为`true`
 >
->* 匹配问题
->  * 顺序匹配, 先匹配的有效. 即`/api`后的`/api2`永远不会被匹配.
->  * 注意重写, `'/api'`最好重写为`''`, `'/api/'`重写为`'/'`
+>	 * `changeOrigin`: 是否设置`host`头字段为target url
+>	 * `ws`: 是否代理websockets
+>
+>2. `pathRewrite`的key可以使用正则
+>
+>3. 匹配问题
+>
+> 	* 顺序匹配, 先匹配的有效. 即`/api`后的`/api2`永远不会被匹配.
+> 	* 注意重写, `'/api'`最好重写为`''`, `'/api/'`重写为`'/'`
+
+## CSS
+
+### 配置
+
+- 布局`layouts/`的样式只在使用该布局的页面中共享
+- 全局的样式可以在所有布局中共享, 在配置文件的`css`属性中配置.
+
+----
+
+如果需要使用预处理器`sass`, 先安装依赖:
+
+``` bash
+npm install --save-dev node-sass sass-loader
+```
+
+然后在Vue文件的`style`元素上添加`lang`属性
+
+```html
+<style lang="scss">
+/* write SCSS here */
+</style>
+```
+
+----------
+
+### Scoped
+
+当`style`元素加上`scoped`属性时，组件的css只会作用到该组件的单个实例上。它是通过**后css处理器**实现的。
+
+css处理前：
+```html
+<style scoped>
+.example {
+  color: red;
+}
+</style>
+
+<template>
+  <div class="example">hi</div>
+</template>
+```
+处理后：
+```html
+<style>
+.example[data-v-f3f3eg9] {
+  color: red;
+}
+</style>
+
+<template>
+  <div class="example" data-v-f3f3eg9>hi</div>
+</template>
+```
+可以看出，它改动了两点：
+1. html元素上添加了一个该组件实例唯一标识的属性`data-v-f3f3eg9`
+2. css选择器上添加了属性选择器，让css选择唯唯一时，还加重了它的[重要性](https://blog.csdn.net/jdbdh/article/details/84317656#242Specificity_335)
+
+因此父组件想影响有`scoped`的子组件的样式时，需要设法加重选择器的重要性，比如`!important`
+
+注意：
+* 组件的不同的实例的css样式都不重复，会导致解析速度下降。
+* 对于动态生产的组件不会起作用，因为scoped是在打包时作用的。
+* 编写容器组件（包括含`<slot>`的组件）时，容器组件的根class不要与子组件的根class同名，因为子组件的根class仍会拥有容器组件的唯一标识属性，导致子组件样式被覆盖。因此，最好容器组件的class唯一或选择器唯一。
+
+>参考：[Scoped CSS](https://vue-loader.vuejs.org/guide/scoped-css.html#mixing-local-and-global-styles)
+
+
+
+
+
+
+
+
 
 # 其他
 
@@ -228,9 +325,15 @@ proxy: {
    }
    ```
 
-## 全局和Scoped样式
+## CSS
 
-布局`layouts/`的样式只在使用该布局的页面中共享, 全局的样式可以在所有布局中共享, 在配置文件的`css`属性中配置.
+### 全局
+
+
+
+### Scoped
+
+
 
 ## 单页面
 

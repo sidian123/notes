@@ -250,9 +250,6 @@ spring boot整合了spring框架和三方库后，提供了自动配置的功能
     >     servers: dev.example.com, another.example.com
     > ```
     >
-    > 
-    >
-    > 
   
   - properties:
   
@@ -260,6 +257,8 @@ spring boot整合了spring框架和三方库后，提供了自动配置的功能
     my.servers[0]=dev.example.com
     my.servers[1]=another.example.com
     ```
+
+### 使用
 
 一个例子，获取上面的数组属性：
 
@@ -286,6 +285,29 @@ public class Hello {
     @Value("${my.servers[1]}")
     String server2;
 }
+```
+
+-------
+
+给`@Value`设置默认值
+
+```java
+//基本类型
+@Value("${some.key:})"//字符串
+private String stringWithBlankDefaultValue;
+       
+@Value("${some.key:true}")//布尔
+private boolean booleanWithDefaultValue;
+
+@Value("${some.key:42}")//数值
+private int intWithDefaultValue;
+
+//数组
+@Value("${some.key:one,two,three}")//字符串数组
+private String[] stringArrayWithDefaults;
+
+@Value("${some.key:1,2,3}")//int数组
+private int[] intArrayWithDefaults;
 ```
 
 ### 路径
