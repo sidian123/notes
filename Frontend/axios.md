@@ -96,20 +96,15 @@ axios('/user/12345');
 除了上述基本API, 还提供便捷的API, 也即Wrapper方法.
 
 * `axios.request(config)`
-
 * `axios.get(url[, config])`
-
 * `axios.delete(url[, config])`
-
 * `axios.head(url[, config])`
-
 * `axios.options(url[, config])`
-
 * `axios.post(url[, data[, config]])`
-
 * `axios.put(url[, data[, config]])`
-
 * `axios.patch(url[, data[, config]])`
+
+> 即将`url`,`method`和`data`属性从`config`外置到了方法参数上.
 
 > When using the alias methods `url`, `method`, and `data` properties don't need to be specified in config.
 
@@ -173,17 +168,57 @@ These are the available config options for making requests. Only the `url` is re
 
 ```js
 {
-  // `url` is the server URL that will be used for the request
+  //请求的url地址
   url: '/user',
 
-  // `method` is the request method to be used when making the request
+  // 请求方法
   method: 'get', // default
+      
+  //作为请求消息体发送, 仅用于PUT,POST,PATCH方法.
+  //无transformRequest来解析消息体时, data必须为以下类型:
+  // - string, plain object, ArrayBuffer, ArrayBufferView, URLSearchParams
+  // - Browser only: FormData, File, Blob
+  // - Node only: Stream, Buffer
+  data: {
+    firstName: 'Fred'
+  },
+      
+  //URL上的参数, params必须为 plain对象或URLSearchParams对象
+  params: {
+    ID: 12345
+  },
 
-  // `baseURL` will be prepended to `url` unless `url` is absolute.
-  // It can be convenient to set `baseURL` for an instance of axios to pass relative URLs
-  // to methods of that instance.
+  //当url为相对地址时, 将添加baseURL前缀. 注意, 根相对地址也是相对地址
   baseURL: 'https://some-domain.com/api/',
+      
+  //请求头字段, 可以发送自定义头字段
+  headers: {'X-Requested-With': 'XMLHttpRequest'},
+      
+  // `withCredentials` indicates whether or not cross-site Access-Control requests
+  // should be made using credentials
+  withCredentials: false, // default
+      
+  // `validateStatus` defines whether to resolve or reject the promise for a given
+  // HTTP response status code. If `validateStatus` returns `true` (or is set to `null`
+  // or `undefined`), the promise will be resolved; otherwise, the promise will be
+  // rejected.
+  validateStatus: function (status) {
+    return status >= 200 && status < 300; // default
+  },
+      
+  // 好像用来测试的, 不真正的请求, 而是返回自己给的假数据
+  // `adapter` allows custom handling of requests which makes testing easier.
+  // Return a promise and supply a valid response (see lib/adapters/README.md).
+  adapter: function (config) {
+    /* ... */
+  },
+      
+  // `responseType` indicates the type of data that the server will respond with
+  // options are: 'arraybuffer', 'document', 'json', 'text', 'stream'
+  //   browser only: 'blob'
+  responseType: 'json', // default
 
+  //主要用于处理请求数据
   // `transformRequest` allows changes to the request data before it is sent to the server
   // This is only applicable for request methods 'PUT', 'POST', 'PATCH' and 'DELETE'
   // The last function in the array must return a string or an instance of Buffer, ArrayBuffer,
@@ -194,7 +229,8 @@ These are the available config options for making requests. Only the `url` is re
 
     return data;
   }],
-
+  
+  //主要用于处理响应数据
   // `transformResponse` allows changes to the response data to be made before
   // it is passed to then/catch
   transformResponse: [function (data) {
@@ -203,14 +239,6 @@ These are the available config options for making requests. Only the `url` is re
     return data;
   }],
 
-  // `headers` are custom headers to be sent
-  headers: {'X-Requested-With': 'XMLHttpRequest'},
-
-  // `params` are the URL parameters to be sent with the request
-  // Must be a plain object or a URLSearchParams object
-  params: {
-    ID: 12345
-  },
 
   // `paramsSerializer` is an optional function in charge of serializing `params`
   // (e.g. https://www.npmjs.com/package/qs, http://api.jquery.com/jquery.param/)
@@ -218,29 +246,11 @@ These are the available config options for making requests. Only the `url` is re
     return Qs.stringify(params, {arrayFormat: 'brackets'})
   },
 
-  // `data` is the data to be sent as the request body
-  // Only applicable for request methods 'PUT', 'POST', and 'PATCH'
-  // When no `transformRequest` is set, must be of one of the following types:
-  // - string, plain object, ArrayBuffer, ArrayBufferView, URLSearchParams
-  // - Browser only: FormData, File, Blob
-  // - Node only: Stream, Buffer
-  data: {
-    firstName: 'Fred'
-  },
 
   // `timeout` specifies the number of milliseconds before the request times out.
   // If the request takes longer than `timeout`, the request will be aborted.
   timeout: 1000, // default is `0` (no timeout)
 
-  // `withCredentials` indicates whether or not cross-site Access-Control requests
-  // should be made using credentials
-  withCredentials: false, // default
-
-  // `adapter` allows custom handling of requests which makes testing easier.
-  // Return a promise and supply a valid response (see lib/adapters/README.md).
-  adapter: function (config) {
-    /* ... */
-  },
 
   // `auth` indicates that HTTP Basic auth should be used, and supplies credentials.
   // This will set an `Authorization` header, overwriting any existing
@@ -251,11 +261,6 @@ These are the available config options for making requests. Only the `url` is re
     username: 'janedoe',
     password: 's00pers3cret'
   },
-
-  // `responseType` indicates the type of data that the server will respond with
-  // options are: 'arraybuffer', 'document', 'json', 'text', 'stream'
-  //   browser only: 'blob'
-  responseType: 'json', // default
 
   // `responseEncoding` indicates encoding to use for decoding responses
   // Note: Ignored for `responseType` of 'stream' or client-side requests
@@ -279,14 +284,6 @@ These are the available config options for making requests. Only the `url` is re
 
   // `maxContentLength` defines the max size of the http response content in bytes allowed
   maxContentLength: 2000,
-
-  // `validateStatus` defines whether to resolve or reject the promise for a given
-  // HTTP response status code. If `validateStatus` returns `true` (or is set to `null`
-  // or `undefined`), the promise will be resolved; otherwise, the promise will be
-  // rejected.
-  validateStatus: function (status) {
-    return status >= 200 && status < 300; // default
-  },
 
   // `maxRedirects` defines the maximum number of redirects to follow in node.js.
   // If set to 0, no redirects will be followed.
@@ -329,6 +326,8 @@ These are the available config options for making requests. Only the `url` is re
   })
 }
 ```
+
+> 如果觉得自定义配置仍不能满足需求, 可以选择使用拦截器
 
 ##　Response对象
 
@@ -425,7 +424,7 @@ axios.get('/user/12345', {
 
 You can specify config defaults that will be applied to every request.
 
-### Global axios defaults
+### 全局默认值
 
 ```js
 axios.defaults.baseURL = 'https://api.example.com';
@@ -433,7 +432,7 @@ axios.defaults.headers.common['Authorization'] = AUTH_TOKEN;
 axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded';
 ```
 
-### Custom instance defaults
+### 实例默认值
 
 ```js
 // Set config defaults when creating the instance
@@ -445,9 +444,14 @@ const instance = axios.create({
 instance.defaults.headers.common['Authorization'] = AUTH_TOKEN;
 ```
 
-### Config order of precedence
+### 配置的优先级
 
-Config will be merged with an order of precedence. The order is library defaults found in [lib/defaults.js](https://github.com/axios/axios/blob/master/lib/defaults.js#L28), then `defaults` property of the instance, and finally `config` argument for the request. The latter will take precedence over the former. Here's an example.
+优先级从高到底排序如下:
+
+* 发起请求时的`config`参数
+* 实例的`defaults`属性
+* `Axios`的`defaults`属性
+* [lib/defaults](https://github.com/axios/axios/blob/master/lib/defaults.js#L28)中定义的默认值.
 
 ```js
 // Create an instance using the config defaults provided by the library

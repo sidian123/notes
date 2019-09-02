@@ -697,6 +697,7 @@ strict mode限制了一些javascript语法的使用，并且赋予了普通代�
           }
         }
         ```
+    
     * **私有字段**：类外使用不被允许，且不被看到。但必须在body内前端声明，否则之后再创建也会被认作普通属性。
         ```javascript
         class Rectangle {
