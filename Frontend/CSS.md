@@ -1056,11 +1056,11 @@ display: inline-grid;
 ## flexbox layout
 flexbox（flexible box module）被设计成**一维**的布局。通过`display:flex`或`display:inline-flex`设置**flex容器**（flex container），它的**直接子元素**成为**flex items**。成为flexbox后，容器和flex items此时有了一些和该布局相关的属性可以设置，并且已经被赋予了初始值。
 
-比如，flex布局的方向通过`flex-direction`来设置，默认水平方向（row）。通过`flex-basis`指定item基础大小（base size），布局在水平方向时，`flex-basis`则设置元素的width，否则height。
+比如，flex布局的**方向**通过`flex-direction`来设置，默认水平方向（row）。通过`flex-basis`指定item基础大小（base size），布局在水平方向时，`flex-basis`则设置元素的width，否则height。
 
 如果item放入容器后，并且有**剩余空间**，此时我们可以选择将空间填充到items中，通过`flex-grow`指定剩余空间分配比例；但是也可以不填充（默认不填充），而是通过`justify-content`调整items间的剩余空间，使items在默认方向上（main axis）**对齐**。
 
-如果items总的大小（加上margin）超过了容器大小，通过`flex-shrink`设置items收缩比例，使得items能够填充到容器中，默认比例1；不设置则溢出，但是即使设置了，如果元素实在腾不出空间了，也会导致溢出。也可以通过`flex-flow`设置环绕，即溢出时则跳到新行，此时可以看做**两个flex容器**。
+如果items总的大小（加上margin）超过了容器大小，通过`flex-shrink`设置items**收缩比例**，使得items能够填充到容器中，默认比例1；不设置则溢出，但是即使设置了，如果元素实在腾不出空间了，也会导致溢出。也可以通过`flex-flow`设置环绕，即溢出时则跳到新行，此时可以看做**两个flex容器**。
 
 容器cross axis方向（一般为垂直反向）如何处理剩余空间？也是填充到元素中或者对齐。通过`align-items`设置，默认stretch，即拉伸，占据所有空间，此时所有元素高度一致，以最高的元素为准（因为该方向上容器默认要尽可能包裹所有元素）；设置center，会居中items，使用它item默认高度。
 
@@ -1075,12 +1075,12 @@ item通过`order`设置它自己的排列顺序。item通过`align-self`覆盖al
 上面属性可分为：和容器有关的属性，和flex item有关的属性。如下并给出默认值：
 **容器**
 ```markup
-	flex-direction 方向（row）
-	flex-wrap 是否环绕 （nowrap）
-	flex-flow 前两个的速写属性
-	justify-content 水平对齐items  （flex-start）
-	align-items 垂直对齐item  （stretch）
-	align-content 垂直对齐多行的“容器”   （stretch）
+flex-direction 方向（row）
+flex-wrap 是否环绕 （nowrap）
+flex-flow 前两个的速写属性
+justify-content 水平对齐items  （flex-start）
+align-items 垂直对齐item  （stretch）
+align-content 垂直对齐多行的“容器”   （stretch）
 ```
 **flex item**
 ```markup

@@ -181,38 +181,38 @@ modifiers是指令的特殊后缀，以`.`表示，指示指令绑定的一些�
     * 一个例子：
     ```javascript
     var vm = new Vue({
-      el: '#demo',
-      data: {
-        firstName: 'Foo',
-        lastName: 'Bar'
-      },
-      computed: {
-        fullName: function () {
-          return this.firstName + ' ' + this.lastName
+        el: '#demo',
+        data: {
+            firstName: 'Foo',
+            lastName: 'Bar'
+        },
+        computed: {
+            fullName: function () {
+                return this.firstName + ' ' + this.lastName
+            }
         }
-      }
     })
     ```
     * 含有set方法的computed中属性例子：
     ```javascript
     // ...
     computed: {
-      fullName: {
-        // getter
-        get: function () {
-          return this.firstName + ' ' + this.lastName
-        },
-        // setter
-        set: function (newValue) {
-          var names = newValue.split(' ')
-          this.firstName = names[0]
-          this.lastName = names[names.length - 1]
+        fullName: {
+            // getter
+            get: function () {
+                return this.firstName + ' ' + this.lastName
+            },
+            // setter
+            set: function (newValue) {
+                var names = newValue.split(' ')
+                this.firstName = names[0]
+                this.lastName = names[names.length - 1]
+            }
         }
-      }
     }
-// ...
+    // ...
     ```
-* **方法**：模板中也可以执行方法，达到和computed属性同样的效果。但computed属性会根据它用到的依赖缓存起来，只有依赖改变时才重新计算。而方法在每一次re-rende发生时会执行。
+* **方法**：模板中也可以执行方法，达到和computed属性同样的效果。但computed属性会根据它用到的依赖缓存起来，只有依赖改变时才重新计算。而方法在每一次re-render发生时会执行。
 * `watch`：监听vue实例属性，改变时调用回调函数。`data`中一些属性的改变是基于其他属性的，可在`watch`中配置，如：
     ```javascript
     var vm = new Vue({
