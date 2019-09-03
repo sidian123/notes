@@ -345,7 +345,9 @@ mybatis的xml映射文件经常被使用，如果不安装插件，则需要自�
 
 找到Maven模块的`pom.xml`文件, 右键`as maven project`
 
+## JavaScript语言版本
 
+`settings/Language&Frameworks/JavaScript`中将语言版本修改成ES6
 
 # 参考
 

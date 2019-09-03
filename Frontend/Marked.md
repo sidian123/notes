@@ -26,13 +26,21 @@ npm install marked
 
 # 三 使用
 
-> ```javascript
-> marked(markdownString [,options] [,callback])
-> ```
+> * 解析Markdown字符串
 >
-> * `markdownString(string)`: 待编译的markdown字符串
-> * `options(object)`: 选项对象
-> * `callback(function)`: 解析结束后的回调函数.
+> 	 ```javascript
+> 	 marked(markdownString [,options] [,callback])
+> 	```
+>
+> 	 * `markdownString(string)`: 待编译的markdown字符串
+> 	 * `options(object)`: 选项对象
+> 	 * `callback(function)`: 解析结束后的回调函数.
+> 	
+>  * 设置默认选项
+>
+>    ```javascript
+>    marked.setOptions(options);
+>    ```
 
 选项很多, 这里给出部分有意思的:
 
