@@ -114,11 +114,11 @@ npm init -y
 ## npm install
 安装package，分全局和局部安装，如：
 ```bash
-# 全局
+# 全局依赖
 $ npm install uglify-js --global
-# 局部
+# 局部依赖
 $ npm install uglify-js
-# 根据配置文件安装所有局部依赖
+# 根据配置文件安装所有局部依赖(包括开发依赖)
 $ npm install
 # 安装局部依赖为开发依赖
 $ npm install uglify-js --save-dev
@@ -163,7 +163,10 @@ $ npm list
 ```bash
 $ npm uninstall underscore
 ```
+> 貌似删除dev依赖, 仍需要加`--save-dev`
+
 ## npm update
+
 更新包，它会同时修改package.json和package-lock.json文件，单独修改package.json是无效的。
 ```bash
 $ npm update underscore
