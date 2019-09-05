@@ -415,7 +415,36 @@ console.log(rest); // {c: 30, d: 40}
 ```
 >参考：[Destructuring assignment](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Destructuring_assignment)
 
+### Spread语法
+
+Spread语法允许将数组或对象的元素或属性展开到需要很多参数或属性的地方.
+
+调用方式如下:
+
+* 函数调用
+
+  ```javascript
+  myFunction(...iterableObj);
+  ```
+
+* 数组
+
+  ```javascript
+  [...iterableObj, '4', 'five', 6];
+  ```
+
+* 对象
+
+  ```javascript
+  let objClone = { ...obj };
+  ```
+
+都是将元素拆分的过程.
+
+> 参考:[Spread syntax](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Spread_syntax)
+
 ###  其他
+
 ####  Object.assign()
 将源对象的可遍历属性拷贝给目标对象，如果目标对象有相同属性，则被覆盖。属于浅拷贝。
 **语法**：
