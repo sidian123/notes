@@ -1623,6 +1623,32 @@ where
 > * [Using CSS counters](https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_Lists_and_Counters/Using_CSS_counters): 官方文档
 > * [typora-toc-number](https://github.com/sidian123/typora-toc-number): 我为typora写的一个自动生成标题标号的css样式.
 
+## 自定义属性(变量)
+
+自定义属性也是一个变量, 以`--`开始定义, 通过`var()`获取, 用以给其他属性赋值.
+
+```css
+var( <custom-property-name> , <declaration-value>? )
+```
+
+* first参数, 变量的名字
+* second参数, 变量无值时则使用该值
+
+使用例子:
+
+```css
+:root {
+  --main-bg-color: pink;
+}
+
+body {
+  background-color: var(--main-bg-color);
+}
+```
+
+> 参考[Using CSS custom properties (variables)](https://developer.mozilla.org/en-US/docs/Web/CSS/Using_CSS_custom_properties)
+
+
 # 参考
 [MDN教程](https://developer.mozilla.org/en-US/docs/Learn)
 [w3schools.com教程](https://www.w3schools.com/css/default.asp)

@@ -240,6 +240,7 @@ Maven项目中, IDEA会用Maven来构建项目, 但不会完全交由Maven构建
 * `alt+number`：打开相应的窗口。
 * `Shift+Esc`或`Ctrl+Shift+F12`：隐藏所有工具窗口
 * 关闭当前Tab: `Ctrl+F4`
+* 查看所有窗口和最近使用文件`Ctr+E`
 
 ------------
 ## 便捷操作
