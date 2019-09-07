@@ -42,7 +42,9 @@ Nuxt.js脚手架包含下列内容:
     npx create-nuxt-app <project_name>
     ```
 
-    > 每次执行都会下载`create-nuxt-app`, 见[NodeJS/npx]
+    > * 每次执行都会下载`create-nuxt-app`, 见[NodeJS/npx]
+    >
+    > * `<project_name>`可省略, 此时以当前目录作为项目根目录.
 
 * 开发运行
 

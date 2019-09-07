@@ -4,13 +4,24 @@
 与JQuery相比，Vue可以方便的进行组件开发。Vue组件相当于扩展的html元素，使用十分方便。
 
 * vue能够操作文本、属性和结果，也提供了在元素被vue插入、更新、删除时的过渡效果(transition effects)
+
 * 在vue中，我们并不直接操纵DOM，而是修改vue实例数据，让vue来修改dom。
+
 * 模板中的数据绑定，一般可以绑定vue实例的大部分属性，只要这个属性不太复杂，vue会使用`stringify()`将之转化为string
+
 * vue中重要关键词：数据绑定、虚拟DOM、响应式系统、响应式对象、DOM template、String template
+
 * 虚拟DOM在应用到DOM时，会使用patch/reuse的算法减少DOM的操作。这种行为在你的输出结果不考虑子组件或DOM状态（如input值）时最合适。使用`key`属性指定唯一值可以取消这种行为。
+
 * template和对应的html都存在时，template优先级高。
+
 * 组件必须只存在一个根元素
+
 * `v-bind`不使用指令参数，且值为对象，会将对象属性绑定到元素（组件上）
+
+* 单向数据流
+
+  ![img](.Vue/flow.png)
 # 二 指令(directive)
 vue指令以`v-`开始，用于渲染DOM或绑定数据，定义在元素或组件上。
 * `{{message}}`：绑定vue实例数据`data`到文本上。（非指令，占位符）
@@ -831,5 +842,10 @@ this.$emit('update:title', newTitle)
 <text-document v-bind:title.sync="doc.title"></text-document>
 ```
 >可以发现，`.sync`与`v-model`监督的事件不同，`.sync`监听的事件前有`update:`前缀，`v-model`默认监听`input`事件。
+## 插件
+
+* `Vue.use()`注册插件
+
 # 参考
+
 * [vue api](https://vuejs.org/v2/api/#Options-Data)

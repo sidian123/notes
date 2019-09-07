@@ -156,11 +156,22 @@ ssserver --pid-file=ss-8111.pid -d stop
 [5]:https://github.com/shadowsocks/shadowsocks/wiki/Configure-Multiple-Users
 
 # 四 使用ss
-所有客户端：[Ports and Clients][6]，主要介绍windows客户端：[Shadowsocks for Windows][7]。
 
-主要原理：很多应用自动使用系统代理，而系统代理就是IE代理，ss客户端只要配置好IE代理，大部分应用的流量就可以通过ss来代理了。参考：[零碎知识4.9小节][1]。
+使用很简单, 但是不同的客户端有不同的实现.
 
-全局代理模式和pac代理模式：全局代理就是交个ss代理的流量统统走ss代理服务器；而pac代理则是有选择的代理流量，符合pac规则的走代理，否则直连。pac定义代理规则，我们不必自己设置，ss客户端会自带。还可以从github上的GFW列表更新pac。
+## Windows上
+
+常用客户端[Shadowsocks for Windows][7], 它连接到ss服务器后, 会在本地提供**sockets代理**, 所有代理的流量会走向它.
+
+该客户端同时会配置**系统代理**使用sockets代理, 因此默认使用系统代理的软件会被ss代理流量, 如chrome浏览器, 但firefox浏览器需要自己配置.
+
+代理分为**全局代理**和**PAC代理**模式:
+
+* 全局代理: 所有流经ss的代理流量都被代理
+
+* PAC代理: 流经ss的符合条件的流量走代理. 文件默认规则是国内流量不代理, 国外流量代理.
+
+  > 代理规则记录在pac文件中.
 
 配置如下：
 
@@ -169,11 +180,14 @@ ssserver --pid-file=ss-8111.pid -d stop
 配置后，就可以打开youtub测试了。或者在全局代理模式下，通过如下方式测试：
 ![](.ShadowSocks/20190218130026377.png)
 
---------------------
+## 安卓上
+
 安卓客户端配置，先安装客户端：[shadowsocks-android][8]。一个配置的例子：
 
 <img src=".ShadowSocks/20190218130248650.png" width="300">
 路由使用GFW列表就好，其他默认。
+
+>* 所有客户端：[Ports and Clients][6]
 
 [6]:https://github.com/shadowsocks/shadowsocks/wiki/Ports-and-Clients
 [7]:https://github.com/shadowsocks/shadowsocks-windows/releases

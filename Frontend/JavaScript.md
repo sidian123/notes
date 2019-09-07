@@ -443,6 +443,53 @@ Spread语法允许将数组或对象的元素或属性展开到需要很多参�
 
 > 参考:[Spread syntax](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Spread_syntax)
 
+### set & get
+
+* `set`: 绑定对象属性到函数上, 访问该属性时会返回函数的返回值
+
+  ```JavaScript
+  {get prop() { ... } }
+  {get [expression]() { ... } }
+  ```
+
+  * `prop`属性名
+  * `expression`通过计算表达式来获取属性名
+
+* `get`绑定对象属性到函数上, 对该属性赋值时会调用函数
+
+  ```javascript
+  {set prop(val) { . . . }}
+  {set [expression](val) { . . . }}
+  ```
+
+  * 属性名同上
+  * `val`待赋的值
+
+例子
+
+```javascript
+var obj = {
+  log: ['a', 'b', 'c'],
+  get latest() {
+    if (this.log.length == 0) {
+      return undefined;
+    }
+    return this.log[this.log.length - 1];
+  },
+  set current(name) {
+    this.log.push(name);
+  }
+}
+
+console.log(obj.latest);
+// expected output: "c"
+
+language.current = 'EN';
+language.current = 'FA';
+console.log(language.log);
+// expected output: Array ["a", "b", "c", "EN", "FA"]
+```
+
 ###  其他
 
 ####  Object.assign()

@@ -304,7 +304,36 @@ Maven项目中, IDEA会用Maven来构建项目, 但不会完全交由Maven构建
 
 Vue提供了Vue-CLI工具, 已经提供编译和构建功能. IDEA仅作为一个编辑器, 提供语法自动补全,提示功能.
 
-#  七 其他
+
+
+# 七 热更新
+
+热部署有很多中方法, 其中JVM热更新是Idea默认支持的, 只要运行中重新构建项目就能触发热更新. 但也有局限性, 只能修改方法内的代码, 修改方法原型, 类字段什么的, 就会失败.
+
+这里介绍**JRebel插件**, 它**几乎没有限制**, 修改代码后便可热更新.
+
+[使用步骤](https://jrebel.com/software/jrebel/quickstart/intellij/?run=ide#!/installation):
+
+1. 安装: 在`plugins`中安装`JRebel for Intellij`
+
+2. 注册: 见博客[JRebel无限制版](https://blog.csdn.net/lawsonjin/article/details/76422807), 关注其公众号**不太污君**,并回复**jrebel认证服务器**, 获取url并填入, 邮箱随意填
+
+3. 项目配置: 打开`JRebel Panel`, 勾选加载模式, 会生成`rebel.xml`文件
+
+   > 貌似不用配置也行, `settings`中也配置了
+
+4. 启动: 以`Run|Debug with JRebel`的方式启动应用, 它会添加一个代理为你热更新.
+
+5. 热更新代码: 重新构建项目后,便可以触发
+
+   > 据说[Enable automatic compilation](https://jrebel.com/software/jrebel/quickstart/intellij/enable-automatic-compilation-in-intellij-idea/)后能提升体验感? 暂时没感觉
+
+注意点
+
+* 发现, 如果当前函数正在运行, 同时热更新该函数,**该函数**会更新失败. 
+
+#  其他
+
 ## 清除缓存
 idea会缓存很多文件，如果系统运行错误了，则需要清除缓存，如`File | Invalidate Caches/Restart`
 ## 模板文件
