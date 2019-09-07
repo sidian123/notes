@@ -1,20 +1,3 @@
-* 安装
-
-  * 下载包
-
-    ```bash
-    npm install vuex --save
-    ```
-
-  * 注册为Vue插件
-
-    ```javascript
-    import Vue from 'vue'
-    import Vuex from 'vuex'
-    
-    Vue.use(Vuex)
-    ```
-
 # 介绍
 
 ## 引言
@@ -55,6 +38,25 @@
 
 ![vuex](.Vuex/vuex.png)
 
+## 安装
+
+* 安装
+
+  * 下载包
+
+    ```bash
+    npm install vuex --save
+    ```
+
+  * 注册为Vue插件
+
+    ```javascript
+    import Vue from 'vue'
+    import Vuex from 'vuex'
+    
+    Vue.use(Vuex)
+    ```
+
 # 使用
 
 ## Vuex.Store
@@ -94,14 +96,6 @@
     
 
 注意, 并不能直接通过`store`来执行方法, 而是通过特定方式. 如
-
-
-
-
-
-Vue实例使用`store`选项, 可以免去所有子组件都需要引入`store`对象的过程, 子组件可通过`this.$store`获取该对象.
-
-map功能都是插件提供的.
 
 ## state
 

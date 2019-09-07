@@ -178,6 +178,40 @@ NuxtJs提供了官方模块:
 - [@nuxtjs/pwa](https://pwa.nuxtjs.org/): Supercharge Nuxt with a heavily tested, updated and stable PWA solution
 - [@nuxtjs/auth](https://auth.nuxtjs.org/): Authentication module for Nuxt.js, offering different schemes and strategies
 
+## Vuex
+
+### 激活
+
+Nuxt.js will look for the `store` directory, if it exists, it will:
+
+1. Import Vuex,
+2. Add the `store` option to the root Vue instance.
+
+### 模块
+
+every `.js` file inside the `store` directory is transformed as a [namespaced module](http://vuex.vuejs.org/en/modules.html) (`index` being the root module). 
+
+总之, 一个Js文件就是一个模块. 例子如下
+
+```javascript
+export const state = () => ({
+  counter: 0
+})
+
+export const mutations = {
+  increment (state) {
+    state.counter++
+  }
+}
+```
+
+> 注意点:
+>
+> * 模块的每个部分直接导出即可, 不能组装一个完整的`module`
+> * `state`最好返回一个函数, 避免在SSR应用状态被多个页面共享.
+
+之后, NuxtJs会按照规则将所有模块拼接成一个完整的`store`
+
 # 配置
 
 ## 代理
