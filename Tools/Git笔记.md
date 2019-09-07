@@ -326,6 +326,26 @@ $ git commit --amend
 
 全部重置`git checkout -- .`
 
+### 回退提交
+
+```bash
+git reset <mode> <commit>
+```
+
+ `mode`的三种模式:
+
+* `--soft`:所有改变移出到本地仓库和暂存区
+* `--mixed`(默认): 所有改变移出本地仓库, 到暂存区中
+* `--hard`: 所有改变丢弃
+
+场景: 如何将远程仓库中的一个commit删除
+
+>方法:
+>
+>* `git reset --hard <commit>`本地删除
+>
+>* `git push origin HEAD --force`强制推送
+
 ## 远程仓库
 
 当多人合作开发项目时, 需要存在一个远程仓库. 开发者从远程仓库`fetch`(获取)数据与特定分支合并,  开发完后`push`(推送)到远程仓库和特定分支合并. 并且`push`时, 要推送的本地分支是从最新的远程仓库分支中`fetch`的, 否则需要先fetch在本地合并, 再push.
