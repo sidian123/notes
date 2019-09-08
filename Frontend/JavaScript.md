@@ -214,7 +214,6 @@ Boolean()可以显示转化值为布尔值，但是很少使用，因为会自�
 [3]:https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Expressions_and_Operators
 
 ## 控制语句
-完整控制语句参考：[Loops and iteration][4]
 语句有：if else、while、do-while、for、switch。
 
 要注意，block语句（即｛｝）可以看做一个语句。
@@ -238,7 +237,10 @@ switch中，表达式和case值之间是通过`===`来比较的。
 ```javascript
 condition ? exprT : exprF 
 ```
-[4]:https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Loops_and_iteration#do...while_statement
+> 参考:
+>
+> * [循环语句](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Loops_and_iteration#do...while_statement )
+> * [条件语句](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Control_flow_and_error_handling)
 
 ## Arrays
 数组是一个可以存入多个任意类型值的对象。下标访问、赋值，从0开始。
