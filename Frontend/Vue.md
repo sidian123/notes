@@ -826,7 +826,7 @@ var app5 = new Vue({
 ## .sync
 用于双向绑定属性的，与`v-model`类似。
 
-如父组件绑定到子组件的`title`属性上，当子组件发出`update:title`事件时：
+如, 父组件绑定到子组件的`title`属性上，当子组件发出`update:title`事件时：
 ```javascript
 this.$emit('update:title', newTitle)
 ```

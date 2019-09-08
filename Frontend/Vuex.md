@@ -82,20 +82,37 @@
 
   * 普通方式: 直接使用`store`对象访问状态和方法, 
 
-    ```javascript
-    store.commit('increment')
-    
-    console.log(store.state.count) // -> 1
-    ```
+    * 获取对应属性: `store.state.XXX`,`store.getters.XXX`
+  
+    * 修改状态:
+  
+      * 同步修改
 
+        ```javascript
+      //参数为action方法名
+        store.commit("increment");
+        ```
+
+      * 异步修改
+  
+        ```javascript
+        //参数同上
+        store.dispatch("increment");
+        ```
+  
+    * 例子
+  
+        ```javascript
+        store.commit('increment')
+
+        console.log(store.state.count) // -> 1
+        ```
+  
   * 根组件启动`store`选项
-
+  
     * 可以免去所有子组件都需要引入`store`对象的过程, 子组件可通过`this.$store`获取该对象.
     * 使用`mapXXX`函数简化状态方法的映射过程.
-
-    
-
-注意, 并不能直接通过`store`来执行方法, 而是通过特定方式. 如
+  
 
 ## state
 
