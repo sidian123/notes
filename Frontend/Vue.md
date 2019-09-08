@@ -258,7 +258,7 @@ html的class和style都是属性，因此可以使用`v-bind`来绑定vue属性�
     ```html
     <div v-bind:class="{ active: isActive }"></div>
     ```
-    对象的key为class名，对象的vlue为boolean值，true则class存在。这里的value值是vue对应的属性值。注意指令的值是表达式，可以计算的。
+    对象的key为class名，对象的value为boolean值，true则class存在。这里的value值是vue对应的属性值。注意指令的值是表达式，可以计算的。
     * 例子二
     可以与HTML的class混合使用
     ```html
