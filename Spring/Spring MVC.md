@@ -856,21 +856,23 @@ headers.setCacheControl(CacheControl.maxAge(30, TimeUnit.DAYS));//设置缓存�
 > - [DispatacherServlet-Exceptions](https://docs.spring.io/spring/docs/current/spring-framework-reference/web.html#mvc-exceptionhandlers)
 > - [Annotated Controllers-Exceptions](https://docs.spring.io/spring/docs/current/spring-framework-reference/web.html#mvc-exceptionhandlers)
 > - [Error Handling for REST with Spring](https://www.baeldung.com/exception-handling-for-rest-with-spring)
-# [六、MVC配置](https://docs.spring.io/spring/docs/current/spring-framework-reference/web.html#mvc-config)
+
+# [六 MVC配置](https://docs.spring.io/spring/docs/current/spring-framework-reference/web.html#mvc-config)
 
 ## [拦截器](https://docs.spring.io/spring/docs/current/spring-framework-reference/web.html#mvc-config-interceptors)
 
 spring mvc启动期间会通过@RequestMapping注解和配置文件找到和URI对应的处理器与拦截器，构建一条执行链（HandlerExecutionChain对象）。其中，拦截器需要实现HandlerIntercept接口：
 
-| Modifier and Type | Method and Description                                       |
-| ----------------- | ------------------------------------------------------------ |
-| `default boolean` | `preHandle(HttpServletRequest request, HttpServletResponse response, java.lang.Object handler)`处理器执行之前执行。返回true，让剩下的拦截器或处理器执行；false则表明已经处理了响应，不在继续执行 |
-| `default void`    | `postHandle(HttpServletRequest request, HttpServletResponse response, java.lang.Object handler, ModelAndView modelAndView)`处理器结束后执行。 |
-| `default void`    | `afterCompletion(HttpServletRequest request, HttpServletResponse response, java.lang.Object handler, java.lang.Exception ex)`Callback after completion of request processing, that is, after rendering the view.处理请求结束后，一般在渲染了视图之后执行。 |
+|Modifier and Type|	Method and Description|
+|---|--|
+|`default boolean`|	`preHandle(HttpServletRequest request, HttpServletResponse response, java.lang.Object handler)`处理器执行之前执行。返回true，让剩下的拦截器或处理器执行；false则表明已经处理了响应，不在继续执行 |
+| `default void`	|`postHandle(HttpServletRequest request, HttpServletResponse response, java.lang.Object handler, ModelAndView modelAndView)`处理器结束后执行. |
+| `default void`	|`afterCompletion(HttpServletRequest request, HttpServletResponse response, java.lang.Object handler, java.lang.Exception ex)`Callback after completion of request processing, that is, after rendering the view.处理请求结束后，一般在渲染了视图之后执行。|
+
 
 单个拦截器执行过程：
 
-![img](.Spring MVC/20181031094538654.png)
+![img](.Spring%20MVC/20181031094538654-1568130707491.png)
 
 多个拦截器执行过程：
 
@@ -878,7 +880,7 @@ preHandler1-->preHandler2-->preHandler3-->handler-->postHandler3-->postHanlder2-
 
 拦截器配置：
 
-```
+```xml
 <mvc:interceptors>
 	<!-- 全局拦截器配置 -->
     <bean class="org.springframework.web.servlet.i18n.LocaleChangeInterceptor"/>
@@ -895,36 +897,44 @@ preHandler1-->preHandler2-->preHandler3-->handler-->postHandler3-->postHanlder2-
 </mvc:interceptors>
 ```
 
-![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)ork-reference/web.html#mvc-config-content-negotiation)
+path路径参考4.1.1小结。
 
+## [Content Types](https://docs.spring.io/spring/docs/current/spring-framework-reference/web.html#mvc-config-content-negotiation)
 spring mvc通过media类型来决定使用何种HttpMessageConverter来解析或生成消息体，但必须有对应的jar包位于classpath下。判断过程如下：
 
 1. 首先检查URL的路径扩展，如xxx.json,xxx.xml,xxx.rss等等。
+
 2. 然后才检查Accept头字段。
+
 3. 最后使用默认Content-Type。默认为第一个找到的与HttpMessageConverter相关的ar包
 
-通过配置[ContentNegotiationManagerFactoryBean](https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/web/accept/ContentNegotiationManagerFactoryBean.html#setMediaTypes-java.util.Properties-)可以更改它的默认行为，如下所示：
+ 通过配置[ContentNegotiationManagerFactoryBean](https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/web/accept/ContentNegotiationManagerFactoryBean.html#setMediaTypes-java.util.Properties-)可以更改它的默认行为，如下所示：
 
-![img](.Spring MVC/20190226143027977.png)![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)ent-negotiation-manager="contentNegotiationManager">
-    	<!-- 不使用后缀匹配 -->
-    	<mvc:path-matching suffix-pattern="false"/>
-    </mvc:annotation-driven>
+![img](.Spring%20MVC/20190226143027977-1568130800542.png)
 
-    <!--配置Content Type解析行为-->
-    <bean id="contentNegotiationManager" class="org.springframework.web.accept.ContentNegotiationManagerFactoryBean">
-        <property name="favorPathExtension" value="false"/><!--关闭url路径扩展-->
-        <property name="defaultContentType"><!--配置默认Content Type-->
-            <bean class="org.springframework.http.MediaType">
-                <constructor-arg value="application"/>
-                <constructor-arg value="json"/>
-            </bean>
-        </property>
-    </bean>
+下面通过xml配置，关闭步骤一的行为，设置默认`Content-Type`为`application/json`：
+
+```xml
+<mvc:annotation-driven content-negotiation-manager="contentNegotiationManager">
+	<!-- 不使用后缀匹配 -->
+	<mvc:path-matching suffix-pattern="false"/>
+</mvc:annotation-driven>
+
+<!--配置Content Type解析行为-->
+<bean id="contentNegotiationManager" class="org.springframework.web.accept.ContentNegotiationManagerFactoryBean">
+    <property name="favorPathExtension" value="false"/><!--关闭url路径扩展-->
+    <property name="defaultContentType"><!--配置默认Content Type-->
+        <bean class="org.springframework.http.MediaType">
+            <constructor-arg value="application"/>
+            <constructor-arg value="json"/>
+        </bean>
+    </property>
+</bean>
 ```
 
-![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
-# 参考
+> 如果在浏览器中测试发现，即使设置默认使用json，也返回xml，请检查下请求的头字段。在chrome中，默认会发送接收xml的accept。本人在linux中使用curl测试正确。
 
+# 参考
 * 《Java EE 互联网轻量级框架整合开发 --SSM框架和Redis实现》 杨开振
 * 《Java EE 企业级应用开发教程》黑马程序员
 * spring mvc官网：https://docs.spring.io/spring/docs/current/spring-framework-reference/web.html#mvc
@@ -937,5 +947,3 @@ spring mvc通过media类型来决定使用何种HttpMessageConverter来解析或
 * json示例：http://sb33060418.iteye.com/blog/2374518
 * servlet映射：https://blog.csdn.net/jdbdh/article/details/83039387
 
-
-```

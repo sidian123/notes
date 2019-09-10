@@ -264,7 +264,7 @@ a:focus {
 [5]:https://developer.mozilla.org/en-US/docs/Learn/CSS/Introduction_to_CSS/Pseudo-classes_and_pseudo-elements#Pseudo-classes
 
 #### [伪元素][6]
-`::`两个冒号开始，用于选择元素的某一部分。
+`::`两个冒号开始，用于选择**元素的某一部分**. 当伪元素前没有选择器时, 则选择所有元素的一部分.
 ![在这里插入图片描述](.CSS/20181123184114565.png)
 
 
@@ -1003,6 +1003,24 @@ where
 [49]:https://developer.mozilla.org/en-US/docs/Learn/CSS/Styling_boxes/Advanced_box_effects
 [50]:https://developer.mozilla.org/en-US/docs/Web/CSS/box-shadow
 [51]:https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_Box_Model/Box-shadow_generator
+
+## style scrollbar
+
+> 强调, 这是伪元素
+
+* `::-webkit-scrollbar`表示滚动条, 常用于设置滚动条厚度
+  * `width`设置竖向滚动条的厚度
+  * `hight`设置横向滚动条的厚度
+
+* `::-webkit-scrollbar-thumb`表示handle(把手), 常用于设置其形状,颜色
+* `::-webkit-scrollbar-track`表示handle的轨道(track), 即handle之外的部分.
+* ...
+
+例子:
+
+
+
+> 浏览器对其支持度不高
 
 ## 其他
 ### object-fit

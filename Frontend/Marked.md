@@ -68,6 +68,9 @@ marked.setOptions({
 console.log(marked(markdownString));
 ```
 
+> * `highlight`选项的第二个参数为代码语言.
+> * 高亮库的`highlightAuto()`方法会自动判断代码语言, 也可以使用`highlight()`方法指定语言.
+
 效果如下:
 
 ![1565357045981](.Marked/1565357045981.png)
