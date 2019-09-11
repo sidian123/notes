@@ -30,6 +30,7 @@ jackson用于在java对象与JSON之间映射。jackson有三种处理JSON的处
 主要使用`ObjectMapper`类，通过`readValue`方法解析JSON，可以从网络（`URL`）、文件或字符串上获得JSON，使用时需要传入对应的java类型；通过`writeValue`方法生成JSON，可以写入到字符串、文件中。
 
 JSON类型和java类型的对应关系：
+
 | JSON Type         | Java Type                   |
 | ---------------- |  -------------------------- |
 | object            | Map或Pojo甚至复杂对象       |
