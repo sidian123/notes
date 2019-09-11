@@ -31,7 +31,7 @@ jackson用于在java对象与JSON之间映射。jackson有三种处理JSON的处
 
 JSON类型和java类型的对应关系：
 | JSON Type         | Java Type                   |
-| :---------------- | :-------------------------- |
+| ---------------- |  -------------------------- |
 | object            | Map或Pojo甚至复杂对象       |
 | array             | List                        |
 | string            | String                      |
@@ -42,7 +42,7 @@ JSON类型和java类型的对应关系：
 
 对于object类型的JSON，可以使用Map、pojo，或者更复杂的对象。如果复杂对象和Map混用，需要用到泛型，由于编译后类型信息丢失，我们需要`TypeReference`类保存泛型信息。
 
-## 3.1 POJO与JSON
+## POJO与JSON
 假设有POJO类：
 ```java
 // Note: can use getters/setters as well; here we just use public fields directly:
@@ -72,7 +72,7 @@ byte[] jsonBytes = mapper.writeValueAsBytes(myResultObject);
 // or:
 String jsonString = mapper.writeValueAsString(myResultObject);
 ```
-## 3.2 Map,List与JSON
+## Map,List与JSON
 如果JSON类型比较简单，则不用传入java泛型信息：
 ```java
 //如果JSON为数值
@@ -92,7 +92,7 @@ Map<String, ResultValue> results = mapper.readValue(jsonSource,
 // why extra work? Java Type Erasure will prevent type detection otherwise
 ```
 # 四 注解
-## 4.1 更改属性名
+## 更改属性名
 使用`@JsonProperty`：
 ```java
 class Student{
@@ -104,8 +104,27 @@ class Student{
 	...
 }
 ```
-## 4.2 忽略属性
-`@JsonIgnore`作用于当个属性上，`@JsonIgnoreProperties`注解在类上：
+## 忽略属性
+
+### 默认规则
+
+序列化规则:
+
+* 有`getXXX`方法视作存在`XXX`属性
+* 共有字段视作存在属性
+
+当私有字段存在setter,getter方法时, 注解可直接写到字段上.
+
+### 简单方式
+
+* `@JsonIgnore`可以作用到字段, setter, getter方法上, 都生效, 会忽略属性的**读和写**.
+
+  > * 官网说`@JsonProperty`可以重置`@JsonIgnore`的读或写. 经测试, 无效!
+
+* `@JsonIgnoreProperties`注解在类上, 功能类似, 除此之外, 能够允许解析时忽略未知的属性.
+
+例子
+
 ```java
 @JsonIgnoreProperties({ "age", "school" })
 class Student{
@@ -119,7 +138,15 @@ class Student{
 	...
 }
 ```
-## 4.3 date相关
+### View
+
+未完待续
+
+* https://github.com/FasterXML/jackson-databind/
+* http://www.cowtowncoder.com/blog/archives/2011/02/entry_443.html
+
+## date相关
+
 * 序列化`LocalDateTime`
 	需要先引入包
 	```xml

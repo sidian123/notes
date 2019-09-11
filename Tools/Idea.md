@@ -253,6 +253,11 @@ Maven项目中, IDEA会用Maven来构建项目, 但不会完全交由Maven构建
   - 编辑区: 相当于`generate...`
   - 其他窗口: 相当于右键+new, 前提是选中某一项.
 
+## 书签
+
+* `F11`设置或取消书签
+* `Shift+F11`查看书签
+
 ## 其他
 
 *  `Ctrl+O`:override methods of the base class.
