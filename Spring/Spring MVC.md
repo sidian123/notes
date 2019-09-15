@@ -748,8 +748,6 @@ response.setContentType("application/pdf");
 response.setHeader("Content-Disposition", "attachment; filename=\"somefile.pdf\""); 
 ```
 
-
-
 这里讲spring mvc的方法，在4.3小节中，`ResponseEntity可以作为返回值直接写入到消息体中，并且能够传入头字段、状态码信息。使用例子如下：`
 
 ```java
@@ -771,18 +769,13 @@ response.setHeader("Content-Disposition", "attachment; filename=\"somefile.pdf\"
 			return new ResponseEntity<byte[]>(HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
-	@Reque
 ```
-
-
 
 http协议头部中只能存在ascii字符，Content-Disposition中文件名含有其他编码方式的字符，会显示乱码。因此使用之前需要对文件名进行url编码（url encoding，见[html4.2小节](https://blog.csdn.net/jdbdh/article/details/83932406#42url_473)），如下所示：
 
 ```java
 headers.setContentDispositionFormData("attachment", URLEncoder.encode(name,"utf-8"));
 ```
-
-
 
 一般文件下载最好允许被缓存：
 

@@ -252,6 +252,7 @@ Maven项目中, IDEA会用Maven来构建项目, 但不会完全交由Maven构建
 * 新建内容:`alt+insert`
   - 编辑区: 相当于`generate...`
   - 其他窗口: 相当于右键+new, 前提是选中某一项.
+- 收起代码块:`ctrl+.`
 
 ## 书签
 

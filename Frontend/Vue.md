@@ -186,7 +186,11 @@ modifiers是指令的特殊后缀，以`.`表示，指示指令绑定的一些�
 此时不需要冒号分隔指令与参数。
 
 # 五 computed、watch
-* **computed**：`computed`中的属性是`data`中属性进过计算后得到的属性。
+
+> 响应式属性指`data`,`computed`,`props`中的属性
+
+* **computed**：`computed`中的属性是响应式属性进过计算后得到的属性。
+    
     * `computed`中属性是一个`get`方法，也可以额外设置`set`方法。
     * `computed`中属性会放入vue实例中。
     * 一个例子：
@@ -225,6 +229,7 @@ modifiers是指令的特殊后缀，以`.`表示，指示指令绑定的一些�
     ```
 * **方法**：模板中也可以执行方法，达到和computed属性同样的效果。但computed属性会根据它用到的依赖缓存起来，只有依赖改变时才重新计算。而方法在每一次re-render发生时会执行。
 * `watch`：监听vue实例属性，改变时调用回调函数。`data`中一些属性的改变是基于其他属性的，可在`watch`中配置，如：
+    
     ```javascript
     var vm = new Vue({
       el: '#demo',
@@ -347,7 +352,7 @@ html的class和style都是属性，因此可以使用`v-bind`来绑定vue属性�
 		{{ index }} - {{ item.message }}
 	  </li>
 	```
-* 使用`of`，而不是`in`
+* 除了关键字`in`, 还可使用`of`, 然并无本质区别
 	```html
 	<div v-for="item of items"></div>
 	```
@@ -845,6 +850,16 @@ this.$emit('update:title', newTitle)
 ## 插件
 
 * `Vue.use()`注册插件
+
+# 遇到的bug
+
+## 组件名与原生Html元素冲突
+
+我写了个组件, 叫`article`, 会报如下错误
+
+> [Vue warn]: Do not use built-in or reserved HTML elements as component id:
+
+因为就存在一个该元素, 换成大写就好了`Article`
 
 # 参考
 

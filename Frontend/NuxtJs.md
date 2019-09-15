@@ -367,7 +367,12 @@ Vue-CLI中的单页面需要服务器的配置, 将所有Url的路由引向单�
 
 而NuxtJs的实现不同, 它构建出了多页面, 但使用**同样的Js入口**. 这样无需服务器的配合了.
 
+## 与Vue实例生命周期
+
+SSR模式下, Vue**实例**生命周期中的`beforeCreate()`和`created`方法会同时在服务端和客户端运行一遍...这是初学者会遇到的一个大坑.
+
 # 参考
 
 * [入门视频](https://vueschool.io/courses/nuxtjs-fundamentals): 马马虎虎, 也就那样吧.
+* [官网guide](https://nuxtjs.org/guide)
 

@@ -109,16 +109,22 @@ class Student{
 
 ### 默认规则
 
-序列化规则:
+即`DEFAULT_VIEW_INCLUSION`, 表示没有被显式注解的属性都将参与到序列化与解析的过程中.
+
+Jackson可识别的属性:
 
 * 有`getXXX`方法视作存在`XXX`属性
 * 共有字段视作存在属性
 
-当私有字段存在setter,getter方法时, 注解可直接写到字段上.
+> 当私有字段存在setter,getter方法时, 注解可直接写到字段上.
 
-### 简单方式
+可以显示声明属性, 如上面的`@JsonProperty`不传参数; 可显式忽略属性, 如下面的`@JsonIgnore`
 
-* `@JsonIgnore`可以作用到字段, setter, getter方法上, 都生效, 会忽略属性的**读和写**.
+### 静态忽略
+
+即使用时, 将序列化的属性已经固定死了, 用于微调默认行为. 常用的注解如下:
+
+* `@JsonIgnore`可以作用到字段, setter, getter方法上, 都生效, 会忽略属性的**序列化和解析**过程.
 
   > * 官网说`@JsonProperty`可以重置`@JsonIgnore`的读或写. 经测试, 无效!
 
@@ -139,12 +145,99 @@ class Student{
 	...
 }
 ```
-### View
+### 动态忽略-view
 
-未完待续
+`@JsonView`可定义好不同的视图, 有不同的序列化和解析规则. 使用时可指定不同的view, 即可实现动态解析.
 
-* https://github.com/FasterXML/jackson-databind/
-* http://www.cowtowncoder.com/blog/archives/2011/02/entry_443.html
+如何使用?
+
+1. 定义好接口或类, 作为视图的**标志**.
+
+   > 不需要其他成员
+
+2. 在实体类的字段上, 用`@JsonView`配上标志类(接口), 为View指定不同的属性.
+
+3. 使用时, 需要关闭默认规则`DEFAULT_VIEW_INCLUSION`, 然后指定View, 即执行解析与序列化规则.
+
+   > 在Spring Boot中, 控制器上用到`@JsonView`的地方会自动关闭默认行为.
+
+> 注意
+>
+> * 关闭默认规则, 则未标注的将不会被序列化或解析. 
+> * Spring Boot中其他未使用该注解的控制器还是使用默认规则
+
+除此之外, `@JsonView`的标志类(接口), 还支持继承.
+
+-----
+
+例子:
+
+定义视图
+
+```java
+public class Views {
+    interface Public {
+    }
+ 
+    interface Internal extends Public {
+    }
+}
+```
+
+实体类上指定视图包含的属性
+
+```java
+public class Item {
+  
+    @JsonView(Views.Public.class)
+    public int id;
+ 
+    @JsonView(Views.Public.class)
+    public String itemName;
+ 
+    @JsonView(Views.Internal.class)
+    public String ownerName;
+}
+```
+
+> 注意, `public`视图只有两个属性; 由于继承, `internal`视图有三个属性
+
+Spring Boot中使用的例子:
+
+```java
+@RestController
+public class ItemController {
+
+	@Autowired
+	private ItemService itemService;
+
+	@JsonView(View.Public.class)
+	@RequestMapping("/")
+	public List<Item> getAllItems() {
+		return itemService.getAll();
+	}
+
+	@RequestMapping("/{id}")
+	public Item getItem(@PathVariable Long id) {
+		return itemService.get(id);
+	}
+}
+```
+
+
+
+> 参考
+>
+> * https://www.baeldung.com/jackson-json-view-annotation
+> * https://spring.io/blog/2014/12/02/latest-jackson-integration-improvements-in-spring
+>
+> - https://github.com/FasterXML/jackson-databind/
+> - http://www.cowtowncoder.com/blog/archives/2011/02/entry_443.html
+
+## 序列化或解析方式
+
+* `@JsonDeserialize`用于配置某个属性解析的方式
+* `@JsonSerialize`用于配置某个属性序列化的方式.
 
 ## date相关
 
@@ -167,6 +260,9 @@ class Student{
 	```java
 		@DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
 	```
+	
+	> 因为一般参数是Url encode格式的, 而不是Json格式的
+
 >以后参考：[Jackson Date](https://www.baeldung.com/jackson-serialize-dates)
 # 五 XML
 **jackson-dataformat-xml**项目是Jackson JSON处理器的扩展，用于在java对象与XML之间转换。

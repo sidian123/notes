@@ -468,6 +468,7 @@ Spread语法允许将数组或对象的元素或属性展开到需要很多参�
   * `val`待赋的值
 
 * 注意
+  
   * `get`和`set`的函数名是一个**伪属性**, 不能存在一个真正的同名属性, 否则`get`,`set`不生效.
 
 例子
@@ -1250,6 +1251,15 @@ Window接口表示一个包含了DOM文档的窗口，在浏览器中具体表�
 >具体使用参考
 >* [Window MDN](https://developer.mozilla.org/en-US/docs/Web/API/Window)
 >* [Wndow w3schools](https://www.w3schools.com/jsref/obj_window.asp)
+### Location
+
+* 其对象`location`是`window`对象的属性, 代表当前url
+* 提供了一些属性用以访问url
+* 提供了跳转的方法
+  * `reload()`重新加载
+  * `replace()`替换当前页面, 无历史记录
+  * `assign()`加载新页面, 有历史记录, 即可以会退到上一页面.
+
 ## 事件
 ### 介绍
 **事件**是系统（browser）中某个动作或事件的发生，系统会产生一个信号（**event**），这个信号含有关于该事件的信息。随着信号的产生，**事件处理器或监听器**会采取一定动作处理该事件。这种事件处理机制称为**事件模型**。事件模型不是javascript特有的，不同的上下文中会有不同的**事件模型**，即事件模型的实现机制不太一样，比如web api、插件、Node.js等等上下文。
