@@ -147,6 +147,8 @@ npm安装package分全局或局部安装，全局安装的package如果有可执
 * 开发依赖
   * `-D`, `--save-dev`
 
+> 好像必须选项, `package.json`才会改变
+
 ## npm list
 实现已安装依赖形参的关系树
 ```bash

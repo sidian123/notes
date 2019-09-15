@@ -184,6 +184,7 @@ These are the available config options for making requests. Only the `url` is re
   },
       
   //URL上的参数, params必须为 plain对象或URLSearchParams对象
+  //请求体中如何编码url参数? 见6.3小节
   params: {
     ID: 12345
   },
