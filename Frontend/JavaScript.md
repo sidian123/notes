@@ -1348,6 +1348,54 @@ html5后引入了web storage（本地储存），比cookies更好用。本地存
 使用`setItem`保存键值对，`getItem`获得键值对。注意，键值对被存为字符串形式，因此存入和取出时做好转化。
 
 >参考：[HTML5 Web Storage](https://www.w3schools.com/html/html5_webstorage.asp)
+## 元素大小与位置
+
+主要为了理清各种大小和位置属性之间的关系, 下面直接看三幅图
+
+![Vertical sizing and positioning values for a child element](.JavaScript/hh781509.ie9_positioning1(en-us,vs.85).png)
+
+> 红色为一个元素, 蓝色是它的父元素, 处于视窗内
+
+一些属性的解释:
+
+* `getComputedStyle().height`元素内容的高
+* `clientHeight`元素的高, 包括`padding`
+* `clientTop`或`getComputedStyle().borderTopWidth`表示元素上边的边高
+* `offsetHight`或`getBoundingClientRect().height`表示元素的高, 包括`border`
+* `scrollHeight`元素的高, 包括未显示的内容高度.
+* `scrollTop`元素已显示的padding上边, 距离未显示内容padding边缘的距离
+* `getBoundingClientRect().top`元素上方`border`边缘距离视窗上方边缘的距离.
+* ...
+
+其他方向的属性类似, 略
+
+--------
+
+接着看下一幅图
+
+![Vertical sizing and mouse coordinate positions affected by CSS transforms](.JavaScript/hh781509.ie9_positioning2(en-us,vs.85).png)
+
+主要看`layerY`和`offsetY`的区别:
+
+* 两者都时与鼠标事件相关的属性
+
+* css transforms作用时, `offsetY`的坐标轴会跟着改变, 而`layerY`则不会
+* `offsetY`不考虑`border`, `layerY`包含了`border`大小
+
+-----------
+
+![All vertical mouse coordinates and viewport offsets on an untransformed element](.JavaScript/hh781509.ie9_positioning3(en-us,vs.85).png)
+
+这里也是和鼠标事件相关的属性:
+
+* `offsetY`离元素padding边缘的距离
+* `layerY`离元素border边缘的距离
+* `clienty`离视窗边缘的距离
+* `pageY`离整个页面的距离
+* `window.pageYOffset`视窗离页面的距离
+
+> 参考[Measuring Element Dimension and Location with CSSOM in Windows Internet Explorer 9](https://docs.microsoft.com/en-us/previous-versions//hh781509(v=vs.85)?redirectedfrom=MSDN&Accept-Language=zh-cn)
+
 # 四、其他
 ## 一些概念
 * javascript：语言
