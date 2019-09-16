@@ -184,11 +184,11 @@ reverse cache位于一个或多个web服务器和互联网之间，用于加速�
 
 通常http缓存被限制于get请求方式。缓存的主键由请求方法和URI组成。而Vary字段也可以作为次键。
 
-## [6.1、Freshness（新鲜）](https://developer.mozilla.org/en-US/docs/Web/HTTP/Caching#Freshness)
+## [Freshness（新鲜）](https://developer.mozilla.org/en-US/docs/Web/HTTP/Caching#Freshness)
 
 响应消息通过设置Cache-Control:max-age或Expires告诉cache响应可以被缓存多久。未过期之前是新鲜的，因此下一次对此资源请求时不用访问服务器，直接从缓存中获取。如果过期了也不会立马清除该项缓存，而是向服务器询问该缓是否真的过期。通过在请求消息中添加If-Match和If-Modified-Since字段用于验证。如果源文件没有被修改，缓存还是新的，此时服务器返回状态字304。
 
-## [6.2、Cache validation](https://developer.mozilla.org/en-US/docs/Web/HTTP/Caching#Cache_validation)
+## [Cache validation](https://developer.mozilla.org/en-US/docs/Web/HTTP/Caching#Cache_validation)
 
 响应消息中含有Cache-control:must-revalidate时，该资源被缓存，但是每次客户端请求时代理服务器必须向服务器验证缓存的文档是否过时。验证分为强验证和弱验证，使用ETags验证时为强验证，在请求消息中通过If-Match字段传递ETags。使用Last-Modified验证时为弱验证，在请求消息中通过If-Modified-Since字段传递。
 
