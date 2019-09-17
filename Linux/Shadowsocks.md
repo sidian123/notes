@@ -234,7 +234,12 @@ yum install epel-release
 yum install libsodium
 ```
 
+## 一键脚本
+
+通过一键脚本可以帮我们一步到位, 它的原理与上面所讲一致. 见[ss-fly](https://github.com/sidian123/ss-fly), 其使用方法见它的源码...
+
 # 参考
+
 [shadowsocks github](https://github.com/shadowsocksr-backup/shadowsocksr)
 [Configuration via Config File](https://github.com/shadowsocks/shadowsocks/wiki/Configuration-via-Config-File)
 [Ports and Clients](https://github.com/shadowsocks/shadowsocks/wiki/Ports-and-Clients)

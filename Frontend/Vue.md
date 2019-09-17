@@ -472,7 +472,7 @@ html的class和style都是属性，因此可以使用`v-bind`来绑定vue属性�
 	  Submit
 	</button>
 	```
-* 指令值为方法名，方法原型可以直接接受event
+* 指令值为方法名，方法原型可以直接接收event
 
 ## 事件modifiers
 之前说了，一些指令拥有modifier，`v-on`也有。
