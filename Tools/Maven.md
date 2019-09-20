@@ -440,9 +440,40 @@ project ...>
 3. 引入(`import`)pom的版本号, 也考虑引入pom间的顺序
 4. 传递依赖的最近选择算法确定(见5.1)
 
+# 五 插件
+
+打成jar包的同时配置主清单, 将其中的`mainClass`替换成自己的.
+
+```xml
+<plugin>
+    <artifactId>maven-assembly-plugin</artifactId>
+    <executions>
+      <execution>
+        <phase>package</phase>
+        <goals>
+          <goal>single</goal>
+        </goals>
+      </execution>
+    </executions>
+    <configuration>
+      <archive>
+        <manifest>
+          <addClasspath>true</addClasspath>
+          <mainClass>com.package.MainClass</mainClass>
+        </manifest>
+      </archive>
+      <descriptorRefs>
+        <descriptorRef>jar-with-dependencies</descriptorRef>
+      </descriptorRefs>
+    </configuration>
+  </plugin> 
+```
 
 
-# 五 其他
+
+
+
+# 六 其他
 
 ## 安装与配置
 
