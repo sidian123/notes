@@ -517,7 +517,7 @@ git tag [-a] [-m <msg>] <tagnmae> [<commit>]
 
 > 这里的snapshot表示项目文件目录的整体快照
 
-而**分支**仅仅只是指向commit对象的指针, **标签Tag**也是指向commit对象的指针, **HEAD**表示当前开发的版本, 通常指向分支. 当HEAD指向标签和commit对象时, 提交会别忽略, 这也是标签和分支的区别之一.
+而**分支**仅仅只是指向commit对象的指针, **标签Tag**也是指向commit对象的指针, **HEAD**表示当前开发的版本, 通常指向分支. 当HEAD指向标签和commit对象而非分支时, 提交会别忽略, 这也是标签和分支的区别之一.
 
 ![A branch and its commit history.](.Git笔记/branch-and-history.png)
 
@@ -530,9 +530,22 @@ git tag [-a] [-m <msg>] <tagnmae> [<commit>]
 - 查看分支: 
   - `git branch`或`git branch -v`
   - 还是使用`git log`命令, 加上`--decorate`选项.
+  
 - 创建分支: `git branch <branchName>`
+
+  > 默认是在当前commit上新增分支指针, 也可在创建分支时强制移动分支节点,如:
+  >
+  > ```bash
+  > git checkout -b <new_branch> [<start point>]
+  > ```
+  >
+  > 此时新分支指向`<start point>`
+
 - 切换分支: `git checkout <branchName>` ,通过移动HEAD指针实现. 加上选项`-b`可以创建并切换到该分区.
+
 - 删除分支: `git branch -d <branchName>`
+
+- 移动分支指针?
 
 ## 合并分支
 

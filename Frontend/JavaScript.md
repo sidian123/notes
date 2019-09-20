@@ -1299,9 +1299,11 @@ Window接口表示一个包含了DOM文档的窗口，在浏览器中具体表�
 > 如果2,3都存在时, 先执行2
 
 > 参考：
-> [全局事件处理器](https://developer.mozilla.org/en-US/docs/Web/API/GlobalEventHandlers)
-> [所有event](https://developer.mozilla.org/en-US/docs/Web/Events)
-> [事件的所有键值key](https://developer.mozilla.org/en-US/docs/Web/API/KeyboardEvent/key/Key_Values)
+>
+> * [全局事件处理器](https://developer.mozilla.org/en-US/docs/Web/API/GlobalEventHandlers)
+> * [所有事件](https://developer.mozilla.org/en-US/docs/Web/Events)
+> * [event接口](https://developer.mozilla.org/en-US/docs/Web/API/Event)
+> * [事件的所有键值key](https://developer.mozilla.org/en-US/docs/Web/API/KeyboardEvent/key/Key_Values)
 
 ### Event object
 事件发生后，会同时产生event对象，通过该对象可以获得关于事件的信息，比如Event.target指定具体产生event的对象。
@@ -1316,12 +1318,12 @@ button.addEventListener('click',function(event){
 `Event`对象是一个泛型类，含有事件通用的方法和属性。每个具体的事件还有它特有的属性方法。
 
 下面是`Event`的有用的属性和方法：
-1. event.target – the deepest element that originated the event.
-2. event.currentTarget (=this) – the current element that handles the event (the one that has the handler on it)
-3. event.eventPhase – the current phase (capturing=1, bubbling=3).
-4. event.stopPropagation()：事件停止向上传播，但在当前元素内可以纵向传播给同一事件的其他处理器。
-5.  event.stopImmediatePropagation()：停止事件横向、纵向传播。
-6. event.defaultPrevented()：阻止默认行为。注意，在html元素的事件处理属性中`return false`也能阻止默认行为，但是在其他地方行不通，因此不建议使用。
+1. `event.target` – the deepest element that originated the event.
+2. `event.currentTarget (=this)` – the current element that handles the event (the one that has the handler on it)
+3. `event.eventPhase` – the current phase (capturing=1, bubbling=3).
+4. `event.stopPropagation()`：事件停止向上传播，但在当前元素内可以纵向传播给同一事件的其他处理器。
+5.  `event.stopImmediatePropagation()`：停止事件横向、纵向传播。
+6. `event.defaultPrevented()`：阻止默认行为。注意，在html元素的事件处理属性中`return false`也能阻止默认行为，但是在其他地方行不通，因此不建议使用。
 
 ### Event bubbling and capture
 当事件发生时，event对象会传播给目标对象，执行处理器。但是这个过程分为三个阶段：
@@ -1340,7 +1342,32 @@ target阶段不能单独存在，而是包含在其他两个阶段内。比如�
 
 参考：<https://javascript.info/bubbling-and-capturing>
 
+### 键盘事件
+
+有三种与键盘相关的事件
+
+* [keydown](https://developer.mozilla.org/en-US/docs/Web/Events/keydown)按下键时触发
+* [keypress](https://developer.mozilla.org/en-US/docs/Web/Events/keypress)键值可打印时触发
+* [keyup](https://developer.mozilla.org/en-US/docs/Web/Events/keyup)松开按键时触发
+
+事件触发后, 都由[KeyboardEvent](https://developer.mozilla.org/en-US/docs/Web/API/KeyboardEvent)对象表示.
+
+触发顺序也同上. 如果长按时, 其事件触发顺序为:
+
+`keydown`->`keypress`->`keydown`->`keypress`->`keydown`->...->`keyup`
+
+`keyboardEvent`对象有用的属性如下:
+
+* `ctrlKey`是否按下control键
+* `altKey`是否按下alt键
+* `shiftKey`是否按下shift键
+* `code`按键完整的名字, 如`ControlLeft`,`KeyA`
+* `key`按键的简称, 如`Control`,`a`
+
+> 参考:[KeyboardEvent](https://developer.mozilla.org/en-US/docs/Web/API/KeyboardEvent)
+
 ##  存储
+
 html5后引入了web storage（本地储存），比cookies更好用。本地存储分两类：
 * `window.localStorage` - stores data with no expiration date
 * `window.sessionStorage` - stores data for one session (data is lost when the browser tab is closed)

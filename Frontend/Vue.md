@@ -472,7 +472,10 @@ html的class和style都是属性，因此可以使用`v-bind`来绑定vue属性�
 	  Submit
 	</button>
 	```
+	
 * 指令值为方法名，方法原型可以直接接收event
+
+> [所有事件](https://developer.mozilla.org/en-US/docs/Web/Events)
 
 ## 事件modifiers
 之前说了，一些指令拥有modifier，`v-on`也有。
@@ -487,11 +490,20 @@ html的class和style都是属性，因此可以使用`v-bind`来绑定vue属性�
 ```
 
 * 键值来自[KeyboardEvent.key](https://developer.mozilla.org/en-US/docs/Web/API/KeyboardEvent/key/Key_Values)。并且使用**kebab-case**格式，如`PageDown`写成`page-down`。
+
 * 由于兼容性问题，vue提供（覆盖）了一些键名，如`.enter`
+
 * modifiers还可用`keyCode`，如监听回车事件：
 	```html
 	<input v-on:keyup.13="submit">
 	```
+	
+	> `keyCode`可通过如下方式获取
+	>
+	> ```javascript
+	> 'c'.charCodeAt(0)
+	> ```
+	
 * 系统键值modifiers、鼠标按键modifers：[System Modifier Keys](https://vuejs.org/v2/guide/events.html#System-Modifier-Keys)
 
 # 十 Form Input绑定
