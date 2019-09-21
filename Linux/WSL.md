@@ -48,37 +48,54 @@ linux和windows文件系统的数据存放形式是不同的，为了支持linux
 
 # 三 使用
 ## 安装
+
 wsl需要系统支持，安装之前最好将系统更新到最新版。
 1. 开启linux子系统（WSL），使用管理员权限打开PowerShell，运行：
 	```powershell
 	Enable-WindowsOptionalFeature -Online -FeatureName Microsoft-Windows-Subsystem-Linux
 	```
+	
 2. 重启
+
 3. 安装发行版，这里使用Ubuntu。打开应用商店，然后下载
 	![在这里插入图片描述](.WSL/2019031910040214.png)
-4. 按win键，找到ubuntu，点击运行，它会进行初始化。然后提示输入普通用户名和密码，这是默认登录用户。ubuntu中默认root用户不能登录。
-![在这里插入图片描述](.WSL/20190319100716598.png)
-5. 进入Ubuntu后，更新发行版
-	```bash
-	sudo apt update && sudo apt upgrade
-	```
 	
-	> 建议更新发行版之前, 先换源. 我下的Ubuntu18.04LTS版, 因此对应的阿里源如下:
+	> 也可以不通过应用商店, 通过如下链接下载安装包
 	>
-	> ```
-	> deb http://mirrors.aliyun.com/ubuntu/ bionic main restricted universe multiverse
-	> deb http://mirrors.aliyun.com/ubuntu/ bionic-security main restricted universe multiverse
-	> deb http://mirrors.aliyun.com/ubuntu/ bionic-updates main restricted universe multiverse
-	> deb http://mirrors.aliyun.com/ubuntu/ bionic-proposed main restricted universe multiverse
-	> deb http://mirrors.aliyun.com/ubuntu/ bionic-backports main restricted universe multiverse
-	> deb-src http://mirrors.aliyun.com/ubuntu/ bionic main restricted universe multiverse
-	> deb-src http://mirrors.aliyun.com/ubuntu/ bionic-security main restricted universe multiverse
-	> deb-src http://mirrors.aliyun.com/ubuntu/ bionic-updates main restricted universe multiverse
-	> deb-src http://mirrors.aliyun.com/ubuntu/ bionic-proposed main restricted universe multiverse
-	> deb-src http://mirrors.aliyun.com/ubuntu/ bionic-backports main restricted universe multiverse
-	> ```
+	> - Debian: `https://aka.ms/wsl-debian-gnulinux`
+	> - Ubuntu 18.04: `https://aka.ms/wsl-ubuntu-1804`
+	> - Ubuntu 16.04: `https://aka.ms/wsl-ubuntu-1604`
+	> - openSUSE: `https://aka.ms/wsl-opensuse-42`
+	> - SLES: `https://aka.ms/wsl-sles-12`
+	> - Kali: `https://aka.ms/wsl-kali-linux`
+	>
+	> 下载后解压, 并运行其中的安装软件即可
+	
+4. 按win键，找到ubuntu，点击运行，它会进行初始化。然后提示输入普通用户名和密码，这是默认登录用户。ubuntu中默认root用户不能登录。
+  ![在这里插入图片描述](.WSL/20190319100716598.png)
+
+5. 进入Ubuntu后，更新发行版
+  ```bash
+  sudo apt update && sudo apt upgrade
+  ```
+
+  > 建议更新发行版之前, 先换源. 我下的Ubuntu18.04LTS版, 因此对应的阿里源如下:
+  >
+  > ```
+  > deb http://mirrors.aliyun.com/ubuntu/ bionic main restricted universe multiverse
+  > deb http://mirrors.aliyun.com/ubuntu/ bionic-security main restricted universe multiverse
+  > deb http://mirrors.aliyun.com/ubuntu/ bionic-updates main restricted universe multiverse
+  > deb http://mirrors.aliyun.com/ubuntu/ bionic-proposed main restricted universe multiverse
+  > deb http://mirrors.aliyun.com/ubuntu/ bionic-backports main restricted universe multiverse
+  > deb-src http://mirrors.aliyun.com/ubuntu/ bionic main restricted universe multiverse
+  > deb-src http://mirrors.aliyun.com/ubuntu/ bionic-security main restricted universe multiverse
+  > deb-src http://mirrors.aliyun.com/ubuntu/ bionic-updates main restricted universe multiverse
+  > deb-src http://mirrors.aliyun.com/ubuntu/ bionic-proposed main restricted universe multiverse
+  > deb-src http://mirrors.aliyun.com/ubuntu/ bionic-backports main restricted universe multiverse
+  > ```
 
 ## 用户账户和权限
+
 WSL与Windows有一定隔离性，WSL的用户对Linux文件、进程的权限与Linux一致。但对于`/mnt/c`下Windows的最高访问权限取决于运行`Base.exe`（或`Ubuntu.exe`）的拥有者的权限。
 
 > 即, 即使普通Windows用户以root身份运行WSL, 也不能随意删除、访问、修改c盘文件。
