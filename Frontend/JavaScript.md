@@ -1430,14 +1430,16 @@ html5后引入了web storage（本地储存），比cookies更好用。本地存
 
   * `scrollHeight`元素的高, 包括未显示的所有内容高度.
 
+  > 注意, `getComputedStyle()`是`window`的方法
+  
 * 元素位置相关
   * `scrollTop`元素已**滚动**内容的距离
 
     > 注意, 该内容可滚动
 
-  * `offsetTop`元素相对于**最近positionnal父元素**的距离
+  * `offsetTop`元素相对于**最近positional父元素**的距离
 
-    >貌似有滚动内容的元素也是positional的
+    >最好给父元素添加个`position`css属性
 
   > 因此, 要滚动元素内容时, 可让父元素的`scroll Top`等于滚动到的元素的`offsetTop`值.
 
