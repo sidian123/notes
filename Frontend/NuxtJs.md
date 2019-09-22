@@ -323,22 +323,28 @@ css处理前：
 
 >参考：[Scoped CSS](https://vue-loader.vuejs.org/guide/scoped-css.html#mixing-local-and-global-styles)
 
+## Server
 
+`nuxt.config.js`中配置监听地址和端口
 
-
-
-
-
-
+```javascript
+export default {
+  server: {
+    port: 8000, // default: 3000
+    host: '0.0.0.0', // default: localhost,
+    timing: false
+  }
+}
+```
 
 # 其他
 
 ## 元数据head
 
-* 在配置文件`nuxt.config.js`中配置`head`属性, 作用域所有页面
-* 在`pages/`下的单个Vue文件中配置`head`属性, 仅作用于当前页面.
+* 在配置文件`nuxt.config.js`中配置`head`属性, 作用于所有页面
+* 在`pages/`下的单个Vue文件中配置`head`方法, 仅作用于当前页面.
 
-> 还有其他tricks, 略.
+> 貌似这是在服务端渲染的, 因此不许一开始就能够确定值
 
 ## 抽离公共模块
 

@@ -366,10 +366,10 @@ p {
 不可继承属性在没有被指定值时会获得浏览器赋予该属性的**初始值**。
 
 但是css提供了控制继承的属性值：
-1. inherit：属性值继承父元素属性值。
-2. initial：属性值为浏览器的默认属性值，如果没有则被设置成inherit（我觉得这种情况不会存在，请忽略）
-3. unset：重置该属性为**自然值**（what？？），其实就是相当于该属性没有被设置一样，那么如果是可继承属性，会继承父元素属性值，相当于inherit；如果是不可继承属性，会获得该属性的**初始值**，相当于initial。
-4. revert：如果属性没有被赋予值，那么会将该属性值置为它曾有过的值，用户定义的或者该元素的默认样式值。不太了解，不深究。
+1. `inherit`：属性值继承父元素属性值。
+2. `initial`：属性值为浏览器的默认属性值，如果没有则被设置成inherit（我觉得这种情况不会存在，请忽略）
+3. `unset`：重置该属性为**自然值**（what？？），其实就是相当于该属性没有被设置一样，那么如果是可继承属性，会继承父元素属性值，相当于inherit；如果是不可继承属性，会获得该属性的**初始值**，相当于initial。
+4. `revert`：如果属性没有被赋予值，那么会将该属性值置为它曾有过的值，用户定义的或者该元素的默认样式值。不太了解，不深究。
 
 说了这么多**初始值**，我这里强调了一下，每个属性都有且只有一个初始值，不会因为html元素而改变，浏览器规定的。至于html元素，每个元素都有一个**默认样式**（user agent stylesheet），覆盖了初始值。
 
@@ -1458,19 +1458,26 @@ media queries可以让我们根据设备类型（比如打印机或屏幕）或�
 media queries有自己的语法规则，可以通过这三种方式来使用：
 1. 在@media或@import中使用
 2. 在`<link>`,`<source>`或其他html元素中使用
-3. 在js的Window.matchMedia()和MediaQuaryList.addListener()方法中使用。
+3. 在js的`Window.matchMedia()`和`MediaQuaryList.addListener()`方法中使用。
 
 ------
 
-media type有自己的文法，有点小复杂，主要由三部分组成：media type，media features表达式和逻辑运算符。
+media type有自己的文法，有点小复杂，主要由三部分组成：**Media Type**，**Media Features表达式**和**逻辑运算符**。
 
-media type就是指定何种设备：
-![在这里插入图片描述](.CSS/20181128142100606.png)
+* Media Type就是指定何种设备：
+  ![在这里插入图片描述](.CSS/20181128142100606.png)
 
-media features描述设备的一些特征，表达式必须被小括号围住。我觉得我用的上的就只有视口长宽了：
-![在这里插入图片描述](.CSS/2018112814233140.png)
+* Media Features表达式描述设备的一些特征。我觉得我用的上的就只有视口长宽了：
 
-逻辑表达式由：not，and和only。not取反操作数，and要求操作数同时true才true，only防止老浏览器在不认识媒体类型直接应用样式。
+  * `width`视窗的宽度
+  * `height`视窗的高度
+
+  >表达式必须被小括号围住
+
+* 逻辑表达式有
+  * `not`取反
+  * `and`逻辑与
+  * `only`防止老浏览器在不认识媒体类型直接应用样式。
 
 语法有点小复杂，需要直接看文法才能够直接掌握语法规则，部分文法：
 ```markup
@@ -1509,18 +1516,23 @@ where
 ```
 奇怪上面给出的media features中没有min-width？其实min-width就是width的内容，可以自己去翻阅下面给出的资料。
 
-参考：
-[语法](https://developer.mozilla.org/en-US/docs/Web/CSS/Media_Queries/Using_media_queries)
-[文法](https://developer.mozilla.org/en-US/docs/Web/CSS/@media)
+> 参考：
+>
+> * [语法](https://developer.mozilla.org/en-US/docs/Web/CSS/Media_Queries/Using_media_queries)
+> * [文法](https://developer.mozilla.org/en-US/docs/Web/CSS/@media)
 
 ## transitions（过渡）
 当**属性改变**时，transitions（过渡）提供了一种控制属性过渡时动画的方法。与其属性瞬间改变，还不如改变持续一段时间。
 
 但是并不是所有的属性都能够产生动画。**transition貌似也没有被完全支持，必要时需要添加前缀。**
 
-`transition-property`属性指定应用transitions的属性；`transition-duration`指定transitions持续多久；`transition-timing-function`指定过渡的快慢，一般是线性变化，即匀速；`transition-delay`指定transition开始前的延迟。
+* `transition-property`属性指定应用transitions的属性；
+* `transition-duration`指定transitions持续多久；
+* `transition-timing-function`指定过渡的快慢，一般是线性变化，即匀速；
+* `transition-delay`指定transition开始前的延迟。
 
 `transition`是前面4个属性的速写属性，真正实际用到的属性。部分文法如下：
+
 ```markup
 <single-transition>#
 where 
