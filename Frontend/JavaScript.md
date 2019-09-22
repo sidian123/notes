@@ -1260,6 +1260,34 @@ Window接口表示一个包含了DOM文档的窗口，在浏览器中具体表�
   * `replace()`替换当前页面, 无历史记录
   * `assign()`加载新页面, 有历史记录, 即可以会退到上一页面.
 
+### History
+
+代表浏览器的会话历史, 通过该接口, 可以后退前进来浏览历史, 和添加或替换新历史记录.
+
+> 注意, 添加或替换历史记录不会造成浏览器重新加载
+>
+> 更改`Location.hash`也可达到创建新历史记录而不加载的目的, 但是限制较多.略
+
+浏览历史的三个方法:
+
+* [`back()`](https://developer.mozilla.org/en-US/docs/Web/API/History/back)后退
+* [`forward()`](https://developer.mozilla.org/en-US/docs/Web/API/History/forward)前进
+* [`go()`](https://developer.mozilla.org/en-US/docs/Web/API/History/go)从指定历史记录中加载页面
+
+修改历史:
+
+* [`pushState(state,title,url)`](https://developer.mozilla.org/en-US/docs/Web/API/History/pushState)添加历史记录
+  * `state`关联到历史记录的一个对象, 存数据用的. 可传空对象`{}`
+  * `title`标题. 可传空字符串`""`
+  * `URL`新历史记录的url,不会被加载, 可以为相对地址, 如`?page=1`, `#a23`, `index.html`等等
+* [`replaceState(state,title,url)`](https://developer.mozilla.org/en-US/docs/Web/API/History/replaceState)替换历史记录, 参数同上
+
+------
+
+**可能会遇到的bug:**
+
+通过`pushState`设置历史记录, 如果设置后仍处于同一页面, 那么`back()`或点击浏览器按钮, 仅修改历史, 不重载, 但会发送[popstate](https://developer.mozilla.org/en-US/docs/Web/API/Window/popstate_event)事件, 通过[window.onpopstate](https://developer.mozilla.org/en-US/docs/Web/API/WindowEventHandlers/onpopstate)捕获
+
 ## 事件
 ### 介绍
 **事件**是系统（browser）中某个动作或事件的发生，系统会产生一个信号（**event**），这个信号含有关于该事件的信息。随着信号的产生，**事件处理器或监听器**会采取一定动作处理该事件。这种事件处理机制称为**事件模型**。事件模型不是javascript特有的，不同的上下文中会有不同的**事件模型**，即事件模型的实现机制不太一样，比如web api、插件、Node.js等等上下文。
@@ -1381,16 +1409,40 @@ html5后引入了web storage（本地储存），比cookies更好用。本地存
 
 ![Vertical sizing and positioning values for a child element](.JavaScript/hh781509.ie9_positioning1(en-us,vs.85).png)
 
-> 红色为一个元素, 蓝色是它的父元素, 处于视窗内
+> 红色为一个元素, 蓝色是它的父元素, 处于视窗内. 其中红色元素有滚动条
 
 一些属性的解释:
 
-* `getComputedStyle().height`元素内容的高
-* `clientHeight`元素的高, 包括`padding`
-* `clientTop`或`getComputedStyle().borderTopWidth`表示元素上边的边高
-* `offsetHight`或`getBoundingClientRect().height`表示元素的高, 包括`border`
-* `scrollHeight`元素的高, 包括未显示的内容高度.
-* `scrollTop`元素已显示的padding上边, 距离未显示内容padding边缘的距离
+* 元素自身模型大小
+  * `getComputedStyle().height`元素内容的高
+
+  * `getComputedStyle().paddingTop`元素的padding高
+
+  * `getComputedStyle().borderTopWidth`或`clientTop`元素的border高
+
+  * `getComputedStyle().marginTop`元素的边距高
+
+    -------
+
+  * `clientHeight`元素的高, 包括`padding`
+
+  * `offsetHight`或`getBoundingClientRect().height`元素的高, 包括`border`
+
+  * `scrollHeight`元素的高, 包括未显示的所有内容高度.
+
+  > 注意, `getComputedStyle()`是`window`的方法
+  
+* 元素位置相关
+  * `scrollTop`元素已**滚动**内容的距离
+
+    > 注意, 该内容可滚动
+
+  * `offsetTop`元素相对于**最近positional父元素**的距离
+
+    >最好给父元素添加个`position`css属性
+
+  > 因此, 要滚动元素内容时, 可让父元素的`scroll Top`等于滚动到的元素的`offsetTop`值.
+
 * `getBoundingClientRect().top`元素上方`border`边缘距离视窗上方边缘的距离.
 * ...
 
@@ -1435,6 +1487,12 @@ html5后引入了web storage（本地储存），比cookies更好用。本地存
 错误大致类型：语法错误和逻辑错误。console.log()函数用于输出数据到控制台。
 
 * javascript单线程，异步
+
+## 调试
+
+* 元素获取: 在Chrome控制台中,`$()`是`document.querySeletor()`的别名, `$$()`是`document.querySelectorAll()`的别名
+
+  > 千万不要用这个,我发现是个大坑
 
 # 参考
 * [A re-introduction to JavaScript (JS tutorial)](https://developer.mozilla.org/en-US/docs/Web/JavaScript/A_re-introduction_to_JavaScript)
