@@ -72,7 +72,7 @@ wsl需要系统支持，安装之前最好将系统更新到最新版。
 	> 下载后解压, 并运行其中的安装软件即可
 	
 4. 按win键，找到ubuntu，点击运行，它会进行初始化。然后提示输入普通用户名和密码，这是默认登录用户。ubuntu中默认root用户不能登录。
-  ![在这里插入图片描述](.WSL/20190319100716598.png)
+    ![在这里插入图片描述](.WSL/20190319100716598.png)
 
 5. 进入Ubuntu后，更新发行版
   ```bash
@@ -180,6 +180,8 @@ $ notepad.exe C:\\temp\\foo.txt
 
 ## 配置
 
+### 配置bash
+
 为了实现一下目的:
 
 * 设置环境变量, 方便访问Windows家目录
@@ -205,6 +207,31 @@ export notes=$sidian/Documents/notes-all/notes
 alias ls="ls --file-type"
 # 配置ll
 alias ll="ls -l --file-type"
+```
+
+> 当在Idea或VSCode中使用时, 请选择`wsl`作为默认终端
+
+### 换源
+
+对于Ubuntu18.04, 备份并清空`/etc/apt/sources.list`, 添加以下内容
+
+```
+deb http://mirrors.aliyun.com/ubuntu/ bionic main restricted universe multiverse
+deb http://mirrors.aliyun.com/ubuntu/ bionic-security main restricted universe multiverse
+deb http://mirrors.aliyun.com/ubuntu/ bionic-updates main restricted universe multiverse
+deb http://mirrors.aliyun.com/ubuntu/ bionic-proposed main restricted universe multiverse
+deb http://mirrors.aliyun.com/ubuntu/ bionic-backports main restricted universe multiverse
+deb-src http://mirrors.aliyun.com/ubuntu/ bionic main restricted universe multiverse
+deb-src http://mirrors.aliyun.com/ubuntu/ bionic-security main restricted universe multiverse
+deb-src http://mirrors.aliyun.com/ubuntu/ bionic-updates main restricted universe multiverse
+deb-src http://mirrors.aliyun.com/ubuntu/ bionic-proposed main restricted universe multiverse
+deb-src http://mirrors.aliyun.com/ubuntu/ bionic-backports main restricted universe multiverse
+```
+
+然后更新
+
+```bash
+sudo apt update && sudo apt upgrade
 ```
 
 ## 环境变量

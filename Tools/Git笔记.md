@@ -141,6 +141,14 @@ git config --global alias.log2 'log --all --decorate --oneline --graph'
   git config user.name
   ```
 
+### 删除配置
+
+加个`--unset`即可
+
+```bash
+git config --global --unset user.name
+```
+
 ## 获取帮助
 
 - 详细帮助：
