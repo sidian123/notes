@@ -1394,6 +1394,27 @@ target阶段不能单独存在，而是包含在其他两个阶段内。比如�
 
 > 参考:[KeyboardEvent](https://developer.mozilla.org/en-US/docs/Web/API/KeyboardEvent)
 
+### 触碰事件
+
+在触碰敏感的平面上, 触碰状态改变时, 会触发触碰事件[TouchEvent](https://developer.mozilla.org/en-US/docs/Web/API/TouchEvent) .每个触碰点被描述为[Touch](https://developer.mozilla.org/en-US/docs/Web/API/Touch)对象,含有位置,大小,形状,压力等信息.
+
+> 该平面可以是触摸屏或触摸板
+
+触碰事件分为四种:
+
+* `touchstart`用户触碰时触发
+* `touchend`离开触碰面时触发
+* `touchmove`移动触碰点时触发
+* `touchcancel`触碰点被破坏??? 略
+
+> 好像电脑上触发不了该事件
+
+事件上有用的属性:
+
+* `targetTouches`: 同时被触碰且触碰到同一个元素上的`Touch`对象集合
+
+> `Touch`上可通过`clientX`,`clientY`获取其位置
+
 ##  存储
 
 html5后引入了web storage（本地储存），比cookies更好用。本地存储分两类：
@@ -1488,11 +1509,13 @@ html5后引入了web storage（本地储存），比cookies更好用。本地存
 
 * javascript单线程，异步
 
-## 调试
+## DevTools
 
-* 元素获取: 在Chrome控制台中,`$()`是`document.querySeletor()`的别名, `$$()`是`document.querySelectorAll()`的别名
+* **元素获取**: 在Chrome控制台中,`$()`是`document.querySeletor()`的别名, `$$()`是`document.querySelectorAll()`的别名
 
-  > 千万不要用这个,我发现是个大坑
+  > 千万不要用这个赋值,我发现是个大坑
+
+* **搜索文件**`Ctrl+P`
 
 # 参考
 * [A re-introduction to JavaScript (JS tutorial)](https://developer.mozilla.org/en-US/docs/Web/JavaScript/A_re-introduction_to_JavaScript)
