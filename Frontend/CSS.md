@@ -1540,8 +1540,13 @@ where
 ```
 第一个time是持续时间，第二个是延迟。
 
-参考：
-[transitions](https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_Transitions)
+常用
+
+```css
+transition:all 1s
+```
+
+> 参考：[transitions](https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_Transitions)
 
 ## transforms（变换）
 css transforms可以让你对元素进行translate（移动）,rotate（旋转），scale（拉伸），skew（倾斜）等变换。css同时支持2d和3d变换。
