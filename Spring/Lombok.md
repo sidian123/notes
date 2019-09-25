@@ -14,9 +14,25 @@
 
   > 但是在使用JavaBean的setter,getter方法时, 会报错, 但能成功运行. 因为未编译前, ide看不到将被添加的方法, **因此需要下载Lombok插件**.
   
-* **使用**: 这里只关注最主要的注解使用, `@Data`注解在类上, 会生成getter, setter, 无参构造函数, toString, hashcode, equals等方法. 如下所示:
+* **使用**: 这里只关注最主要的注解使用, 
 
-  ![1562342321632](.Lombok/1562342321632.png)
+  * `@Data`注解在类上, 会生成getter, setter, 无参构造函数, toString, hashcode, equals等方法. 如下所示:
+  
+    ![1562342321632](.Lombok/1562342321632.png)
+    
+  * `@Slf4j`在类上加上后, 可以直接使用日记对象
+  
+    ```java
+    @Slf4j
+    public class UserServiceImpl {
+    
+        static {
+            log.info("hi, log..");
+        }
+    }
+    ```
+  
+    > 是否如此, 未测试
 
 > 参考: [Lombok介绍、使用方法、工作原理和总结](http://www.yuanrengu.com/index.php/20180324.html)
 
