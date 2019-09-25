@@ -282,8 +282,19 @@ pwd（print working directory）打印当前工作目录。
 >tail file 默认显示后10行
 >`-n k`：显示后k行
 
-小技巧：显示第16到第20行：
->$ cat -n filename | head -n 20 | tail -n 5
+小技巧!
+
+* 显示第16到第20行：
+
+    ```bash
+    $ cat -n filename | head -n 20 | tail -n 5
+    ```
+
+* 实时输出
+
+  ```bash
+  tail -f filename
+  ```
 
 ### file
 **猜测**文件类型，通常很准确。
