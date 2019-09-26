@@ -283,6 +283,29 @@ ssh服务端的配置文件会放入`/etc/ssh/`中，该文件夹中含有`sshd`
 
 over~~
 
+# 其他
+
+## 防止连接自动断开
+
+当ssh客户端长时间未发送消息时, ssh服务端会自动断开连接. 可以在配置客户端或服务端, 让其在一定间隔内发送信息, 保持活性.
+
+这里使用SSH客户端配置的方案, 打开`$HOME/.ssh/config`文件, 添加
+
+```
+ServerAliveInterval 60
+```
+
+> 单位秒, 上述中, 超过一分钟未发送信息时, SSH客户端会自动发送信息.
+
+## Bad Owner Or Permissions
+
+配置文件的权限和使用有规定, 可修改如下
+
+```bash
+chown $USER ~/.ssh/config
+chmod 644 ~/.ssh/config
+```
+
 # 参考
 [SSH COMMAND](https://www.ssh.com/ssh/command/#sec-Configuring-port-forwarding)
 [秘钥与数字证书][1]
