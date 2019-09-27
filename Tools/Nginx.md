@@ -156,21 +156,84 @@
 
   * 注解: 以`#`开始的行为注解
 
-## 静态内容映射
+## 资源映射
 
+* 指令层次结构
+  * 一个`http`可含有多个`server`, 即可监听多个端口
+  * 一个`server`可含有多个`location`, 即多个路径匹配, 资源可存多个地方
+  * 一个`location`含一个`root`或`proxy_pass`
+    * `root`表示资源文件的根路径, `root`路径+请求路径=资源的实际路径
+    * 资源也可来自其他URL, 通过`proxy_pass`指定, `proxy_pass`的url+请求路径=资源的实际路径
+
+* `http`: 仅仅只是上下文, 分隔环境
+
+* `server`: 代表一个虚拟服务器, 可以有多个时, 该使用哪个配置? 可通过服务名和IP:Port选择
+
+  * `listen`指定监听的地址和端口, ip可省略
+
+  * `server_name`: 指定域名
+
+  * 匹配规则: 当请求到来时
+
+    * 找出IP和端口一致的`server`
+    * 再将请求的`Host`与`server_name`比较, 成功匹配则使用该规则, 否则使用默认`server`
+
+    > 一般第一个`server`指令即为默认`server`, 可以通过`default_server`参数修改默认`server`, 该参数位于端口号后
+
+* `location`: 匹配HTTP请求的路径, 即`path`
+
+  * 语法
+
+      ```
+      Syntax:	location [ = | ~ | ~* | ^~ ] uri { ... }
+              location @name { ... }
+      Default:	—
+      Context:	server, location
+      ```
+
+  * 匹配模式: 第一个参数定义匹配方式:
   
+      >大致分为前缀和后缀匹配
+  
+      * 空: 前缀匹配
+        
+      * `~`: 使用正则进行后缀匹配, 大小写敏感
+  
+      * `~*`: 使用正则进行后缀匹配, 大小写不敏感
+  
+      * `^~` 前缀匹配, 同时不使用后缀匹配过程.
+  
+          > 即影响下面的匹配规则
+  
+      * `=`: 准确匹配, 同样也无后缀匹配过程
+  
+  * 匹配规则: 当`server`收到请求时
+  
+    * 先前缀匹配  选择并记住前缀最长的`location`
+    * 再匹配后缀, 选中第一个成功匹配的后缀并**结束**, 使用该`location`的配置
+    * 如果后缀匹配不成功, 则使用之前记住的最长前缀的`location`配置
+  
+  * 例子, 见文档[location](http://nginx.org/en/docs/http/ngx_http_core_module.html#location)
+  
+  > 注意, 前缀匹配的字符串以`/`结尾时, 请求会被cgi程序处理, 这些都是用来处理动态资源的, 如php. 如果请求匹配该字符串, 除了没有`/`, 则会被重定向到该前缀上来.
 
+* `root`: 指定请求资源的根目录, 如
 
+  ```
+  location /i/ {
+      root /data/w3;
+  }
+  ```
 
+  `/i/top.gif`的请求将访问`/data/w3/i/top.gif`文件, 即文件路径=`root`+请求的`path`
 
+* `proxy_pass`: 不仅可以访问本地的资源, 还可以访问其他URL提供的资源, 这就是反向代理...
 
+  使用时只需将`root`替换成`proxy_pass`即可, 参数为URL(可以含路径), 最终资源的路径计算与`root`一致
 
+# 参考
 
-
-
-
-
-
+* [所有指令](http://nginx.org/en/docs/http/ngx_http_core_module.html)
 
 
 
