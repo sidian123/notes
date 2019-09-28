@@ -293,6 +293,8 @@ git add
 
 `git checkout -b <branchName> `该命令创建分支时同时切换过去(移动`HEAD`指针)
 
+> 当chekout到commit上时, 此时处于`detatched HEAD`状态, 修改不能被提交
+
 ## 查看提交历史
 
 `git log`按照时间逆序显示所有版本信息, 最先显示的最近提交的版本.

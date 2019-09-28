@@ -45,6 +45,10 @@
 
   > 一般使用该方法的其他变种
 
+## 弃坑
+
+限制终究是太多了, 见[Why does Runtime.exec(String) work for some but not all commands?](https://stackoverflow.com/questions/31776546/why-does-runtime-execstring-work-for-some-but-not-all-commands)
+
 # ThreadLocal
 
 - 介绍
