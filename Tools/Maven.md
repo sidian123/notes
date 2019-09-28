@@ -364,6 +364,12 @@ default lifecycle常用的phases：
 
 ![在这里插入图片描述](.Maven/20190617225058525.png)
 
+> 运行某个生命周期时, 前面的都会被执行, 如下命令跳过test阶段
+>
+> ```bash
+> mvn -Dmaven.test.skip=true package
+> ```
+
 
 
 # 四 依赖进阶
@@ -444,6 +450,13 @@ project ...>
 
 # 五 插件
 
+总的，插件可以被归为两类：
+
+- Build plugins：在项目构建时执行；在pom的`<build/>`元素中配置
+- Reporting plugins：在生成文档时被执行；在pomr的`<reporting/>`元素中配置
+
+## 单文件打包
+
 打成jar包的同时配置主清单, 将其中的`mainClass`替换成自己的.
 
 ```xml
@@ -471,56 +484,7 @@ project ...>
   </plugin> 
 ```
 
-
-
-
-
-# 六 其他
-
-## 安装与配置
-
-1. 首先安装了JDK, 并且设置环境变量`JAVA_HOME`
-
-   ```shell
-   export JAVA_HOME=/home/sidian/Software/jdk-11.0.3
-   ```
-
-2. 官网上下载最新版Maven并解压
-
-3. 将Maven的`bin`目录添加到环境变量中.
-
-4. 运行`mvn --version`进行测试
-
-----------
-
-将远程仓库配置为阿里Maven仓库, 可以提高下载速度. 在配置文件的`mirrors`元素中添加`mirror`元素：
-
-```xml
-<mirror>
-    <id>nexus-aliyun</id>
-    <mirrorOf>*</mirrorOf> 
-    <name>Nexus aliyun</name>
-  <url>http://maven.aliyun.com/nexus/content/groups/public</url>
-</mirror>
-```
-
-## 使用
-
-* 生成一个简单的Maven项目
-
-  ```bash
-  mvn archetype:generate
-  ```
-
-  然后按照提示输入项目坐标等参数即可.
-
-* 其他的操作如编译, 和声明周期有关, 如
-
-  ```bash
-  mvn compile #编译
-  mvn package #打包
-  ...
-  ```
+> 多模块打包时, 请用`install`, 确保其他模块的更新被包含进来
 
 ## 资源插件
 
@@ -623,12 +587,52 @@ maven默认资源插件负责将项目中资源拷贝到输出目录中。默认
 
 > 参考：[Apache Maven Resources Plugin](<https://maven.apache.org/plugins/maven-resources-plugin/index.html>)
 
-## 插件
+# 六 其他
 
-总的，插件可以被归为两类：
+## 安装与配置
 
-- Build plugins：在项目构建时执行；在pom的`<build/>`元素中配置
-- Reporting plugins：在生成文档时被执行；在pomr的`<reporting/>`元素中配置
+1. 首先安装了JDK, 并且设置环境变量`JAVA_HOME`
+
+   ```shell
+   export JAVA_HOME=/home/sidian/Software/jdk-11.0.3
+   ```
+
+2. 官网上下载最新版Maven并解压
+
+3. 将Maven的`bin`目录添加到环境变量中.
+
+4. 运行`mvn --version`进行测试
+
+----------
+
+将远程仓库配置为阿里Maven仓库, 可以提高下载速度. 在配置文件的`mirrors`元素中添加`mirror`元素：
+
+```xml
+<mirror>
+    <id>nexus-aliyun</id>
+    <mirrorOf>*</mirrorOf> 
+    <name>Nexus aliyun</name>
+  <url>http://maven.aliyun.com/nexus/content/groups/public</url>
+</mirror>
+```
+
+## 使用
+
+* 生成一个简单的Maven项目
+
+  ```bash
+  mvn archetype:generate
+  ```
+
+  然后按照提示输入项目坐标等参数即可.
+
+* 其他的操作如编译, 和声明周期有关, 如
+
+  ```bash
+  mvn compile #编译
+  mvn package #打包
+  ...
+  ```
 
 ## 指定编译版本
 
