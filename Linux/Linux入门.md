@@ -115,6 +115,12 @@ export STUFF
 	
 	>$ head < /proc/cpuinfo
 
+### navigation
+
+* `Ctrl+a`去行首
+* `Ctrl+e`去行尾
+* `Ctrl+l`清屏
+
 ## 基本命令
 ### ls
 `ls`命令列出目录中的全部内容（不包括以前缀`.`开始的文件）。默认显示当前目录。

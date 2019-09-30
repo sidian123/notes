@@ -94,7 +94,9 @@
 
   * `ps aux|grep nginx`查看所有nginx进程
 
-  
+* 文件
+  * 日志目录`/usr/local/nginx/logs` 或 `/var/log/nginx`.
+  * 配置文件`/etc/nginx/nginx.conf`
 
 # 配置
 
@@ -176,8 +178,11 @@
   * 匹配规则: 当请求到来时
 
     * 找出IP和端口一致的`server`
+    
+    > ip和端口都由`listen`给出
+    
     * 再将请求的`Host`与`server_name`比较, 成功匹配则使用该规则, 否则使用默认`server`
-
+    
     > 一般第一个`server`指令即为默认`server`, 可以通过`default_server`参数修改默认`server`, 该参数位于端口号后
 
 * `location`: 匹配HTTP请求的路径, 即`path`
@@ -230,6 +235,23 @@
 * `proxy_pass`: 不仅可以访问本地的资源, 还可以访问其他URL提供的资源, 这就是反向代理...
 
   使用时只需将`root`替换成`proxy_pass`即可, 参数为URL(可以含路径), 最终资源的路径计算与`root`一致
+
+# 其他
+
+## 403 forbidden
+
+403说明我们的访问受限, 很多种原因都可造成403, 这里只谈及我遇到的.
+
+原因:
+
+虽然我们是通过`root`用户运行的Nginx, 但是在它的配置文件中, 指定了工作进程使用`nginx`用户来运行. 因此不能访问`root`用户的文件.
+
+解决方案:
+
+1. 在配置文件中指定工作进程以`root`身份运行, 但不安全
+2. 改变文件所属者为`nginx`, 给与目录访问权限即可. (推荐)
+
+> 参考:[Nginx出现403 forbidden](https://blog.csdn.net/qq_35843543/article/details/81561240)
 
 # 参考
 
