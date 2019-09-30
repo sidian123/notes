@@ -89,9 +89,15 @@ jQuery对象提供了一些列操作DOM元素的方法。
 ### adding
 下面的方法可以添加或者移动元素。
 
-`.append()`,`.appendTo()`,`.prepend()`,`.prependTo()`分别可以将元素添加到元素**内**的前端或后端。
+* 在元素内添加
+  * `.append()`将右边元素添加到左边元素的后端
+  * `.appendTo()`将左边元素添加到右边元素的后端
+  * `.prepend()`将右边元素添加到左边元素的前端
+  * `.prependTo()`将左边元素添加到右边元素的前端
 
-`.after()`,`.insertAfter()`,`.before()`,`.insertBefore()`分别可以将元素添加到元素的前面或后面。
+* 元素前后添加: 略
+
+  `.after()`,`.insertAfter()`,`.before()`,`.insertBefore()`分别可以将元素添加到元素的前面或后面。
 
 一般移动DOM元素时，原来的元素位置会改变。如果我只想克隆该元素到其他地方呢？则可以使用`.clone()`
 ```javascript
