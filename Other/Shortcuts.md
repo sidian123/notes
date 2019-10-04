@@ -1,18 +1,38 @@
 # 一 Windows
 
 * 打开文件管理器：win+E
+
 * 打开功能面板：win+x
+
 * 关机：win+x -->U -->U
+
 * 打开任务管理器：win+x -->T 或者 ctrl+shift+esc
+
 * 切换应用：alt+tab
+
 * 回到桌面：win+D
+
 * 窗口大小调整：win+方向键
+
 * 窗口方向：win+ctrl+方向键
+
 * 切换应用：alt+tab（反方向加shift）
+
 * 打开任务栏上某个应用：win+数字
+
 * 关闭当前程序：alt+F4
+
 * **锁屏**: `Win`+`L`
+
 * 打开设备连接: `Win+K`
+
+* 打开Windows Ink工作区: `Win+W`
+
+* **截图**: `Win+Shift+S`
+
+  > 默认保存到剪贴板
+
+* **符号输入**: 微软拼音下, 输入`u`就会用了
 
 # 二 程序通用
 

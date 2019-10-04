@@ -622,7 +622,15 @@ $ git branch -vv
 
 # 四 其他
 
-## git status乱码
+## 分支管理
+
+![img](.Git%E7%AC%94%E8%AE%B0/v2-aef704a4c112eaaf5e8637587ee17df3_hd.jpg)
+
+> 参考[实际项目中如何使用Git做分支管理](https://zhuanlan.zhihu.com/p/38772378)
+
+## 问题
+
+### git status乱码
 
 尽管Git使用了`UTF-8`字符编码, 但`git status`仍然乱码, 这是[core.quotePath](https://git-scm.com/docs/git-config#Documentation/git-config.txt-corequotePath)被设置了的缘故, 关闭即可:
 
@@ -630,7 +638,7 @@ $ git branch -vv
 git config --global core.quotepath false
 ```
 
-## SSL问题
+### SSL问题
 
 具体问题忘了, 但输入以下语句解决:
 
@@ -638,7 +646,7 @@ git config --global core.quotepath false
 git config --global http.sslVerify false
 ```
 
-## Http协议一直登陆
+### Http协议一直登陆
 
 可以考虑开启缓存, 暂时保存密码
 
@@ -666,7 +674,7 @@ $ git config --global credential.helper store
 $ git config --global credential.helper 'store --file ~/.my-credentials'
 ```
 
-## 换行符转换
+### 换行符转换
 
 有三种方式:
 
