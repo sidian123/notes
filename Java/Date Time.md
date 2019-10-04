@@ -112,6 +112,7 @@ java8之前，时间类是由`java.util.Date`, `java.util.Calendar`和`java.util
 3. 使用模式字符（pattern letters），如uuuu-MMM-dd。使用`ofPattern`方法产生实例。
 
 这里详细介绍第三种方式。所有字母都保留，用作模式字符，标点符号不是。一些有用的符号如下：
+
 | Symbol | Meaning                     | Presentation | Examples                       |
 | ------ | :-------------------------- | :----------- | :----------------------------- |
 | u      | year                        | year         | 2004; 04                       |
