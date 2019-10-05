@@ -44,11 +44,13 @@ npm install marked
 
 选项很多, 这里给出部分有意思的:
 
-* `breaks(boolean)`: 默认false, true时则软换行时会换行...
-* `xhtml(boolean)`: 默认false, true时, HTML元素必须有结束标签, 如`<br/>`, `<img/>`.
-* `silent(boolean)`: 默认false, true时解析器不会抛出任何异常.
-* `highlight(function)`: 默认null. 用于高亮代码块的函数.
-* `renderer(object)`: 默认`new marked.Renderer()`. 该对象含有渲染token到html的函数, 即比较底层的渲染器.
+* `gfm:boolean`: 默认true, true时则支持Github的Markdown语法
+
+* `breaks:boolean`: 默认false, true时则软换行时会换行...
+* `xhtml:boolean`: 默认false, true时, HTML元素必须有结束标签, 如`<br/>`, `<img/>`.
+* `silent:boolean`: 默认false, true时解析器不会抛出任何异常.
+* `highlight:Function`: 默认null. 用于高亮代码块的函数.
+* `renderer:Object`: 默认`new marked.Renderer()`. 该对象含有渲染token到html的函数, 即比较底层的渲染器.
 
 ## 高亮
 
