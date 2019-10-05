@@ -178,7 +178,7 @@ settings是一个包含键值对的普通对象，这里列出一些有用的属
 * **success**：指定请求成功时的回调函数。
 * **error**：指定请求失败时的回调函数。
 * **complete**：指定请求结束时的回调函数，无论请求是否成功，在success和error回调函数之后执行。
-* **async**：异步请求还是同步请求，默认异步请求。
+* **async**：异步请求还是同步请求，默认异步请求。跨越请求和Jsonp请求中不能使用同步请求, 且同步临时锁住浏览器, 因此不建议使用.
 * **cache**：是否缓存，默认true，false for dataType 'script' and 'jsonp'
 * **context**：指定回调函数中this指向的对象，默认ajax setting。
 
