@@ -310,9 +310,9 @@ Maven项目中, IDEA会用Maven来构建项目, 但不会完全交由Maven构建
 
 Vue提供了Vue-CLI工具, 已经提供编译和构建功能. IDEA仅作为一个编辑器, 提供语法自动补全,提示功能.
 
+# 七 工具
 
-
-# 七 热更新
+## 热更新
 
 热部署有很多中方法, 其中JVM热更新是Idea默认支持的, 只要运行中重新构建项目就能触发热更新. 但也有局限性, 只能修改方法内的代码, 修改方法原型, 类字段什么的, 就会失败.
 
@@ -337,6 +337,31 @@ Vue提供了Vue-CLI工具, 已经提供编译和构建功能. IDEA仅作为一�
 注意点
 
 * 发现, 如果当前函数正在运行, 同时热更新该函数,**该函数**会更新失败. 
+
+## JShell Console
+
+一个可以实时计算Java代码片段并返回结果的工具, 类似浏览器的Console, 但功能远没有浏览器强大. 运行JShell, 需要JDK9的支持.
+
+使用:
+
+1. 打开JShell, 选择`Tools | JShell Console`
+
+2. 输入代码
+3. `Ctrl+Enter`运行
+
+不知道它运行机制是怎么样的, 将就着用.
+
+JShell可以使用项目依赖的库, 如果还想访问自身项目的类, 需要将项目的输出Jar包添加到自身的 library 下, 操作如下:
+
+1. Open the **Project Structure** dialog Ctrl+Shift+Alt+S and select **Libraries** in the left part.
+2. Click ![the New Project Library button](https://www.jetbrains.com/help/img/idea/2019.2/icons.general.add.svg@2x.png), select **Java**, and specify the location of the output classes of your project.
+3. Click **OK** to apply the changes.
+
+> 小评
+>
+> 自动补全体验差, 还没有`Main()`函数方法, 差评!
+>
+> 自动补全功能差, 
 
 #  其他
 
