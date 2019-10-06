@@ -2452,7 +2452,7 @@ Caused by: BException: B异常抛出
 
 子类覆盖父类的方法可以不用抛出异常，即使父类方法有异常抛出列表；但父类引用子类对象且父类方法有异常抛出时，需要try来处理异常。
 
-> 参考:https://stackoverflow.com/questions/9036016/inheritance-method-signature-method-overriding-and-throws-clause
+> 参考: [Inheritance , method signature , method overriding and throws clause](https://stackoverflow.com/questions/9036016/inheritance-method-signature-method-overriding-and-throws-clause)
 
 # 其他
 
@@ -2476,10 +2476,6 @@ package package_name;
 ```
 
 > 注意, 该文件内不要有其他的内容了.
-
-# 坑
-
-* 局部匿名类中不能抛出异常, 只能捕获.
 
 # 参考
 
