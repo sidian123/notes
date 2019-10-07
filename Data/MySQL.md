@@ -1,5 +1,3 @@
-
-
 # 一 介绍
 
 * 数据库: 是数据的结构化集合.
@@ -73,7 +71,7 @@
 4. **解压**: 解压后, 可以凭自己喜好存于某个位置
 
    ```bash
-   tar -xJvf Downloads/mysql-8.0.16-linux-glibc2.12-x86_64.tar.xz
+   tar -xJvf mysql-8.0.16-linux-glibc2.12-x86_64.tar.xz
    ```
 
 5. **创建mysql用户**: 官网建议, 以非root用户运行mysqld, 有助于安全性. 这里创建了`mysql`用户
@@ -120,6 +118,8 @@
    ALTER USER 'root'@'localhost' IDENTIFIED BY 'root-password';
    ```
 
+   > 此时mysql的`root`用户只能在服务器上登陆, 若向从其他主机上登陆呢? 见第五章-[权限控制]
+   >
    > 修改完后请关闭msyqld, 怎么关? 思路是使用`ps`的到进程号, `kill`杀死它
 
 9. **增加安全性**(可选) : mysql提供了`mysql_secure_installation`脚本来配置msyqld安全方面的配置, 功能如

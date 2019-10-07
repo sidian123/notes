@@ -797,11 +797,13 @@ linux的发行版都准守Filesystem Hierarchy Standard（FHS），每个目录�
 [wiki fhs](https://en.wikipedia.org/wiki/Filesystem_Hierarchy_Standard#cite_ref-/opt_6-0)
 [fhs geeksforgeeks](https://www.geeksforgeeks.org/linux-file-hierarchy-structure/)
 
-## root权限运行命令
+## 权限转换
 ### sudo
 运行命令时以其他用户身份运行。默认以root身份运行。它会同时设置`euid`和`ruid`, 见6.1小节
->$ sudo groups
->root
+```bash
+$ sudo groups
+root
+```
 
 首次运行sudo时，需要输入当前用户密码，然后默认持续5分钟不用再次输入密码。你没看错，不是输入root用户密码，如果需要，可以使用`visudo`命令修改`/etc/sudoers`文件，参考：https://superuser.com/a/1134306
 
@@ -809,12 +811,15 @@ linux的发行版都准守Filesystem Hierarchy Standard（FHS），每个目录�
 
 ### su
 开启**新shell**，以其他用户身份登录。默认root登录。
->su [options...] [-] [user [args...]]
->* `su`：root身份登录，不改变当前目录，仅改变环境变量：HOME、SHELL、USER、LOGNAME
->* `su -`：root身份登录，启动shell为login shell，和真实登录的环境一致。即环境差不多都改变了。
->* `su - user`：以其他用户身份登录了。
 
-如果要退出，可以使用`exit`命令。
+>```bash
+>su [options...] [-] [user [args...]]
+>```
+>
+>* `user`：登陆用户, 默认以root身份登录, 不改变当前目录，仅改变环境变量：HOME、SHELL、USER、LOGNAME
+>* `-`: 不存在时, 仅改变部分环境变量, 如`PATH`,`HOME`,`SHELL`,`USER`,`LOGNAME`. 存在时, 与用户登陆时的环境基本一致.
+
+> `exit`命令将退出当前shell
 
 ## 待补充
 * top命令
@@ -1365,15 +1370,36 @@ linux是一个多用户的系统，有用户、组的概念。不同的用户、
 
 ### 命令
 #### useradd
-用户添加用户（通过修改和用户相关的配置文件实现）。默认行为：创建用户的同时创建对应的组，默认bash shell，没有过期时间，无密码且不能登录，需要使用`passwd`修改密码。
+用户添加用户（通过修改和用户相关的配置文件实现）。
+
+默认行为：
+
+* 创建用户的同时创建对应的组
+
+* 默认bash shell
+
+* 没有过期时间
+
+* 无密码且不能登录，需要使用`passwd`修改密码。
+
+* 应该有家目录
+
+  > 实际测试, 无, 需要手动创建
+
+>默认行为在`/etc/default/useradd`和`/etc/login.defs`中配置。
+
+----
+
+>```bash
 >useradd [options] LOGIN
+>```
+>
 >因为默认行为很好的满足了需求，因此没有给出完整选项
+>
 >* `-c`：passwd中的注释
 >* `-s`：登录的shell，默认bash
 >* `-p`：设置密码，不建议使用，因为没有加密。建议使用`passwd`命令。
 >* `-r,--system`：创建系统账户，默认不创建家目录
-
->默认行为在`/etc/default/useradd`和`/etc/login.defs`中配置。
 
 #### userdel
 删除用户（实现同上）
@@ -1728,7 +1754,7 @@ shell在启动时会读取配置文件，不同的shell读取的文件都不同�
 
 ## 语法
 
-## 简单命令
+### 简单命令
 一条简单的bash命令，以要执行的**命令**开始，接着给出空格分隔的**参数**，最后以**控制操作符**结束，执行结束后，会返回一个**状态码**。执行一条命令类似于其他语言中调用一个函数。
 >不要将状态码和命令的标准输出混淆，状态码可以通过`$?`获得，bash中很多复合命令可以检查到命令放回的状态码而执行响应的动作。
 
