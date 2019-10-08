@@ -49,6 +49,27 @@ x表示不兼容
 
 [4]:https://en.wikipedia.org/wiki/Two-phase_locking
 
+# 命名
+
+* 表名代表表中的一行
+
+  > 如学生表, 表中每一行都代表一名学生, 表是学生的集合
+
+* 表名应为名词, 单数.
+
+* 前后缀
+
+  * 同一模块中的表要有前缀
+  * 除表外, 其他的用加后缀, 如
+    * `_V` View (with the main `TableName` in front, of course)
+    * `_fk` Foreign Key (the constraint name, not the column name)
+    * `_cac` Cache
+    * `_seg` Segment
+    * `_tr` Transaction (stored proc or function)
+    * `_fn` Function (non-transactional), etc.
+
+> 参考[Relational table naming convention ](https://stackoverflow.com/questions/4702728/relational-table-naming-convention)
+
 # 其他
 
 * `union [all]`连接两个集合, 每项字段类型需一致, 无`all`时会去重

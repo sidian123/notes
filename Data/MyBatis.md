@@ -746,6 +746,7 @@ MapperFactoryBean需要注入SqlSessionFactory或SqlSessionTemplate都行，如�
 * 配置idea中的`database`, 提供数据库信息给插件
 * `setting->Language & Frameworks->SQL Dialects`为MySQL, 使得xml中SQL语句正确解析
 * 插件的`database`也配置成MySQL, 指导xml中SQL生成.
+* 然后插件设置中, 配置与CRUD生成相关的细节
 
 **使用**
 
