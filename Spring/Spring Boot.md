@@ -523,6 +523,8 @@ maven中加入依赖：
 </dependency>
 ```
 
+> 没看错, 确实有版本号
+
 该依赖也加入了spring boot自动配置的功能：
 
 - 从spring容器中自动检测已存在的`DataSource`

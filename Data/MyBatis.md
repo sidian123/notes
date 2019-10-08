@@ -166,7 +166,10 @@ settings元素中可以配置mybatis的各种行为。
 
 一些注意点如下:
 
-* `jdbcTypeForNull`，默认值为`other`，意味着在定义映射语句时，即使传入参数可能为空，也不必执行jdbc类型了，因为有了默认值。在jdbc中，参数设置为NULL时必须指定jdbc类型的。
+* `jdbcTypeForNull`，为值为`null`的参数指定其JDBC类型, 默认`OTHER`
+
+  > 在JDBC中, 值为`null`的参数, 是需要指定它的JDBC类型的, 该设置就为你指定了
+
 * `mapUnderscoreToCamelCase`, 默认`false`, 即自动映射时不使用驼峰命名的转换.
 
 ## typeAliases
@@ -261,6 +264,8 @@ mybatis最强大的功能就是映射语句，配置好映射文件后，就可�
 * 当参数是pojo或javaBean时，占位符名为对象属性。
 * 当参数是map是（此时参数类型必须给出），占位符名为map的key。
 * 当参数有多个时，每个参数的占位符名为`#{paramN}`；如果编译时，启用了`-Parameter`选项，占位符名就是参数名；还可以通过`@Param`注解指定参数名。
+
+> JDBC规定, 如果参数传入`null`时, 必须指定其JDBC类型, 见[setNull](https://docs.oracle.com/en/java/javase/11/docs/api/java.sql/java/sql/PreparedStatement.html#setNull(int,int)). 而JDBC已经为我们设置了`OTHER`作为默认值, 见3.2小节
 
 ## 联级
 将结果集映射到简单对象时不需要联级，但是有时候对象中属性不简单时，就需要联级。mybatis有三种联级：`association`、`collection`、`discriminator`。当属性对象和对象有一对一的关系时，使用association定义映射关系；当属性对象是个集合时，使用collection定义映射关系；当需要根据结果集某个属性映射不同的属性时，使用discrimination。
@@ -747,6 +752,14 @@ MapperFactoryBean需要注入SqlSessionFactory或SqlSessionTemplate都行，如�
 * `setting->Language & Frameworks->SQL Dialects`为MySQL, 使得xml中SQL语句正确解析
 * 插件的`database`也配置成MySQL, 指导xml中SQL生成.
 * 然后插件设置中, 配置与CRUD生成相关的细节
+
+---
+
+下面是我的配置:
+
+![1570543145100](.MyBatis/1570543145100.png)
+
+![1570542632327](.MyBatis/1570542632327.png)
 
 **使用**
 
