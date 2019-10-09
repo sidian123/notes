@@ -1532,6 +1532,8 @@ html5后引入了web storage（本地储存），比cookies更好用。本地存
 * **元素获取**: 在Chrome控制台中,`$()`是`document.querySeletor()`的别名, `$$()`是`document.querySelectorAll()`的别名
 
   > 千万不要用这个赋值,我发现是个大坑
+  >
+  > 好像可直接输入ID, 直接获取DOM元素
 
 * **搜索文件**`Ctrl+P`
 

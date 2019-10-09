@@ -858,7 +858,7 @@ public class AppPreferences {
 
 我猜想。。jdk代理会实现userPreferences接口，而他的实现类则作为调用处理器。。。
 
-# [六、Bean生命周期](https://docs.spring.io/spring-framework/docs/current/spring-framework-reference/core.html#beans-factory-nature)
+# 六、Bean生命周期
 
 不同阶段会调用不同的方法，下面的回调方法Bean不一定全有，如果有的话就会被调用。图片来源：[Spring Bean Life Cycle Tutorial](https://www.concretepage.com/spring/spring-bean-life-cycle-tutorial)
 
@@ -897,6 +897,8 @@ public final class Boot {
 
 
 什么Aware接口，继承后可以通过接口方法获得一些对象，比如容器本身啥的。
+
+> 参考[Bean生命周期](https://docs.spring.io/spring-framework/docs/current/spring-framework-reference/core.html#beans-factory-nature)
 
 # [七、Bean定义继承](https://docs.spring.io/spring-framework/docs/current/spring-framework-reference/core.html#beans-child-bean-definitions)
 
