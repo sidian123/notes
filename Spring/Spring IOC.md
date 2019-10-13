@@ -860,21 +860,31 @@ public class AppPreferences {
 
 # 六、Bean生命周期
 
-不同阶段会调用不同的方法，下面的回调方法Bean不一定全有，如果有的话就会被调用。图片来源：[Spring Bean Life Cycle Tutorial](https://www.concretepage.com/spring/spring-bean-life-cycle-tutorial)
+Bean不同的生命周期中会执行不同的方法:
 
 ![img](.Spring IOC/20190223193524552.jpg)
 
-要注意，BeanPostProcessor的方法是针对所有的Bean而言的。回调方法也不止这些，还有一些其他的aware接口的方法。
+>图片来源：[Spring Bean Life Cycle Tutorial](https://www.concretepage.com/spring/spring-bean-life-cycle-tutorial)
+>
+>注意点
+>
+>1. Bean不一定含有上述全部的回调函数
+>
+>2. 一个`BeanPostProcessor`的方法将作用于所有的Bean, 并且还有一些`aware`方法.
+>
+>3. `init-method和destroy-method`只能通过xml注解指定. 
+>
+>   > 如通过`<beans/>`的`default-init-method`和`default-destroy-method`属性可设置该元素下所有Bean的默认初始和销毁函数，可被`<bean/>`元素的`init-method`和`destroy-method`属性覆盖
+>
+>4. 注解方式只能使用`@PostConstruct`和`@PreDestroy`了
 
-通过<beans/>的default-init-method和default-destroy-method属性可以设置该beans元素下所有的Bean的默认初始和销毁函数，但是可以在<bean/>元素上使用init-method和destroy-method属性覆盖默认属性，显式定义默认初始化和销毁函数。
-
-下面三种行为可以控制Bean的生命周期：
+下面三种生命周期常用于初始化
 
 - The [`InitializingBean`](https://docs.spring.io/spring-framework/docs/current/spring-framework-reference/core.html#beans-factory-lifecycle-initializingbean) and [`DisposableBean`](https://docs.spring.io/spring-framework/docs/current/spring-framework-reference/core.html#beans-factory-lifecycle-disposablebean) callback interfaces
 - Custom `init()` and `destroy()` methods
 - The [`@PostConstruct` and `@PreDestroy` annotations](https://docs.spring.io/spring-framework/docs/current/spring-framework-reference/core.html#beans-postconstruct-and-predestroy-annotations). You can combine these mechanisms to control a given bean.
 
-如果不同生命周期方法调用不同的函数，那么会以一定顺序执行。如果不同生命周期方法调用相同函数，比如init()，那么该方法只会被调用一次。
+> 如果不同生命周期方法调用不同的函数，那么会以一定顺序执行。如果不同生命周期方法调用相同函数，比如`init()`，那么该方法只会被调用一次。
 
 在WebApplicationContext应用中，已经能够优雅的关闭ioc，而非web应用需要自己注册个关闭钩子（shutdown hook），否则有些Bean的生命周期不被调用：
 
@@ -894,9 +904,7 @@ public final class Boot {
 }
 ```
 
-
-
-什么Aware接口，继承后可以通过接口方法获得一些对象，比如容器本身啥的。
+还有什么Aware接口，继承后可以通过接口方法获得一些对象，比如容器本身啥的。
 
 > 参考[Bean生命周期](https://docs.spring.io/spring-framework/docs/current/spring-framework-reference/core.html#beans-factory-nature)
 
