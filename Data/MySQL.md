@@ -708,13 +708,15 @@ MySQL变量分为系统变量和会话变量.
 jdbc:mysql://localhost:3306/database_name?useSSL=false&serverTimezone=GMT%2B8&allowPublicKeyRetrieval=true
 ```
 
-* `useSSL`不是安全套接字
+* `useSSL`是否使用安全套接字
 
 * `serverTimezone`设置会话时区
 
   > 由于url不允许存在`+`, 因此需要实现进行urlencode编码.
 
 * `allowPublicKeyRetrieval`不知道
+
+> <span style="color:red">注意</span>, 如果出现链接错误, 可能是`useSSL`造成的, 其他选项可以不用, 仅设置时区也行.
 
 # 参考
 

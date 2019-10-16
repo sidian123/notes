@@ -67,6 +67,32 @@
 
 > 参考: [ThreadLocal<T>](https://docs.oracle.com/javase/8/docs/api/java/lang/ThreadLocal.html)
 
+# 平台环境
+
+## System Properties
+
+Jvm会维护所处环境的信息, 称之为系统属性, 可通过`System`类获取.
+
+比较重要的系统属性如下
+
+| Key                 | Meaning                                                      |
+| ------------------- | :----------------------------------------------------------- |
+| `"file.separator"`  | Character that separates components of a file path. This is "`/`" on UNIX and "`\`" on Windows. |
+| `"java.class.path"` | Path used to find directories and JAR archives containing class files. Elements of the class path are separated by a platform-specific character specified in the `path.separator` property. |
+| `"java.home"`       | Installation directory for Java Runtime Environment (JRE)    |
+| `"java.vendor"`     | JRE vendor name                                              |
+| `"java.vendor.url"` | JRE vendor URL                                               |
+| `"java.version"`    | JRE version number                                           |
+| `"line.separator"`  | Sequence used by operating system to separate lines in text files |
+| `"os.arch"`         | Operating system architecture                                |
+| `"os.name"`         | Operating system name                                        |
+| `"os.version"`      | Operating system version                                     |
+| `"path.separator"`  | Path separator character used in `java.class.path`           |
+| `"user.dir"`        | User working directory                                       |
+| `"user.home"`       | User home directory                                          |
+| `"user.name"`       | User account name                                            |
+
 # 参考
 
 * [java.lang](https://docs.oracle.com/javase/8/docs/api/)
+
