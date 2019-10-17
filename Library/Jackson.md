@@ -157,7 +157,7 @@ class Student{
 
 2. 在实体类的字段上, 用`@JsonView`配上标志类(接口), 为View指定不同的属性.
 
-3. 使用时, 需要关闭默认规则`DEFAULT_VIEW_INCLUSION`, 然后指定View, 即执行解析与序列化规则.
+3. 使用时, 需要关闭默认规则`DEFAULT_VIEW_INCLUSION`, 然后指定View, 即通过View更改解析与序列化的规则.
 
    > 在Spring Boot中, 控制器上用到`@JsonView`的地方会自动关闭默认行为.
 
