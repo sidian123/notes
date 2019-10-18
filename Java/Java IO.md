@@ -74,8 +74,9 @@
   * 与Legacy API--`File`互操作
 
 * 部分操作
-  * 使用`Paths`创建`Path`
-
+  
+* 使用`Paths`创建`Path`
+  
 * 其他注意
 
   * 该Package的API能够识别符号链接了, 如
