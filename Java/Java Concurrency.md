@@ -239,6 +239,10 @@ hello 世界
 
 未完待续...
 
+# 其他
+
+  不可变的对象, 一旦被构建, 它的使用便是线程安全的. 
+
 # 参考
 
 * [oracle tutorial](https://docs.oracle.com/javase/tutorial/essential/concurrency/index.html)

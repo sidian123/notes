@@ -915,3 +915,7 @@ this.$emit('update:title', newTitle)
 # 参考
 
 * [vue api](https://vuejs.org/v2/api/#Options-Data)
+
+# 推荐阅读
+
+* [React.js与Vue.js：流行框架的比较](https://baijiahao.baidu.com/s?id=1608099200125495014&wfr=spider&for=pc)

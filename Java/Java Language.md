@@ -302,7 +302,7 @@ String[] myStringArray = {"a", "b", "c"};
 >
 > ```java
 > method({"aa","bb","cc"});//错误
-> method(new String[]{"aa","bb","cc"});//正确
+> method(new String[]{"aa","bb","cc"});//非字面值, 因此正确
 > ```
 
 ### 数组
@@ -318,8 +318,8 @@ String[] strs;
 String[][] strs2;
 //声明时同时初始化
 int[] ints2={1,2,3,4};//字面值
-int[] ints3=new int[10];//默认初始化为0
-String[] strs3={"aa","bb","cc"};
+int[] ints3=new int[10];//默认初始化为0, 如果是引用类型数组,则调用元素默认构造函数初始化.
+String[] strs3={"aa","bb","cc"};//字面值
 //分两步
 int[] ints4=new int[]{1,2,3};//此时不能使用字面值.也不需要制定数量
 ```
@@ -526,7 +526,7 @@ for (initialization; termination; increment)
 
 ----
 
-还有一种增强型`for`循环, 用于遍历**集合**和**数组**
+还有一种增强型`for`循环, 也叫`for-each`, 用于遍历**集合**和**数组**
 
 ```java
 public static void main(String[] args){
@@ -537,6 +537,8 @@ public static void main(String[] args){
     }
 }
 ```
+
+> 若要自己实现的类也实现[Iterable](https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Iterable.html)接口. 注意, 该接口提供了`forEach()`默认方法
 
 ##### 跳转语句
 
@@ -1117,6 +1119,8 @@ Reference to a static method	|`ContainingClass::staticMethodName`
 Reference to an instance method of a particular object| `containingObject::instanceMethodName` 
 Reference to an instance method of an arbitrary object of a particular type	|`ContainingType::methodName`
 Reference to a constructor	|`ClassName::new`
+
+> 感觉功能挺强的, 与上面相比, 限制比较少 
 
 ### 其他
 
