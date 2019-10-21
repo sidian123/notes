@@ -137,22 +137,18 @@ const instance = axios.create({
 The available instance methods are listed below. **The specified config will be merged with the instance config.** 实例自身config的优先级要高.
 
 * `axios#request(config)`
-
 * `axios#get(url[, config])`
-
 * `axios#delete(url[, config])`
-
 * `axios#head(url[, config])`
-
 * `axios#options(url[, config])`
-
 * `axios#post(url[, data[, config]])`
-
 * `axios#put(url[, data[, config]])`
-
 * `axios#patch(url[, data[, config]])`
-
 * `axios#getUri([config])`
+
+## 结果处理
+
+怎么结果才算正确? 才能使用`.then()`处理呢? 见配置对象的`validateStatus`属性, 默认`[200,300)`之间的状态码视为正确
 
 # 四 参数
 

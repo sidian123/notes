@@ -978,7 +978,7 @@ public class SimpleMovieLister {
 
 ## @Autowired
 
-@Autowired可以注解到属性、任意参数方法、构成函数上，通过类型注入，拥有着比xml配置更加细腻度的控制。并且默认将被@Autowire注解的字段、方法、构造函数视为必须的依赖！如果没有匹配成功则抛出异常。
+`@Autowired`可以注解到属性、任意参数方法、构成函数上，通过类型注入，拥有着比XML配置更加细腻度的控制。并且默认将被`@Autowire`注解的字段、方法、构造函数视为必须的依赖！如果没有匹配成功则抛出异常。
 
 注释构造函数，任意参数都行：
 
@@ -1244,11 +1244,11 @@ public class SimpleMovieLister {
 
 第九节讲的是和自动注入相关的注解，尽管这也是元数据配置的一部分，但是没有介绍如何使用注解得到Bean定义。接下来便会将到。
 
-stereotype注解包含: `@Component`, `@Service、``@Repository`, and `@Controller。被注解的类会被扫面成Bean定义。@Component是最泛化的概念，而@Repository`, `@Service`, and `@Controller拥有比较具体的语义，分别用于持久层、服务层和控制层。使用这些注解时可以提供Bean的名字，如果没有提供，会将类名的第一个字母转为小写后作为Bean名字。通过@Scope可以设置作用域。通过@Qualifier可以提供限定名。`
+stereotype注解包含: `@Component`, `@Service`、`@Repository`, and `@Controller`。被注解的类会被扫面成Bean定义。`@Component`是最泛化的概念，而`@Repository`, `@Service`, and `@Controller`拥有比较具体的语义，分别用于持久层、服务层和控制层。使用这些注解时可以提供Bean的名字，如果没有提供，会将类名的第一个字母转为小写后作为Bean名字。通过@Scope可以设置作用域。通过@Qualifier可以提供限定名。
 
-spring提供的很多注解都是元注解，因为可以组合多个注解构造新的注解。比如@Service定义中被@Component注解过，因此包扫描时会将@Service注解的类扫描成Bean定义。又如@RestController是`@Controller` and `@ResponseBody的组合。组合注解也可以自定义元注解，暴露元注解的部分属性，比如SessionScope，可查阅相关内容。`
+spring提供的很多注解都是元注解，因为可以组合多个注解构造新的注解。比如`@Service`定义中被`@Component`注解过，因此包扫描时会将`@Service`注解的类扫描成Bean定义。又如`@RestController`是`@Controller` 和 `@ResponseBody`的组合。组合注解也可以自定义元注解，暴露元注解的部分属性，比如`SessionScop`e，可查阅相关内容。
 
-通过包扫面可以找到@Component注解的Bean定义，如果使用基于java代码的方式提供元数据，可以通过如下方法开启包扫描：
+通过包扫面可以找到`@Component`注解的Bean定义，如果使用基于java代码的方式提供元数据，可以通过如下方法开启包扫描：
 
 ```java
 @Configuration
@@ -1258,9 +1258,7 @@ public class AppConfig  {
 }
 ```
 
-
-
-如果是xml方式：
+如果是XML方式：
 
 ```
 <?xml version="1.0" encoding="UTF-8"?>
@@ -1277,9 +1275,7 @@ public class AppConfig  {
 </beans>
 ```
 
-
-
-*<context:component-scan>隐式使能<context:annotation-config>的功能。*
+> `<context:component-scan>`隐式使能`<context:annotation-config>`的功能。
 
 可以通过Component提供Bean定义，也就是在@Component注解的类中通过@Bean提供Bean元数据。@Bean注解的方法类似于3.2小节中的方法工厂，也可以注解静态方法，则为静态工厂，静态工厂不会造成类的实例化。@Bean默认使用类型匹配的注入方法，如果有多个匹配项，可以通@Qualifier和@Primary解决。对方法的注入相当于对构造函数的注入一样。在@component中使用@Bean不会进行代理处理，因此最好不要在工厂方法中调用另一个工厂方法，参考[这篇博客](https://blog.csdn.net/jdbdh/article/details/82795049)。下面是一个简单例子：
 

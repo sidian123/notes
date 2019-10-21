@@ -47,21 +47,30 @@
 
 ## Collection
 
-* 转化构造函数: 让一个新的集合从任意类型的集合中构造出来. 如
+集合的基本操作:
 
-  ```java
-  List<String> list = new ArrayList<>(c);
-  ```
+* **转化**
 
-* 转化为数组` toArray `
+  * 为构造函数: 让一个新的集合从任意类型的集合中构造出来. 如
 
-* 添加元素或集合`add`,`addAll`
+      ```java
+      List<String> list = new ArrayList<>(c);
+      ```
 
-* 判断是否存在元素`contains(Object o)`, 通过`Objects.equals`方法比较
+  * 为数组` toArray() `
 
-* 获取流`steam()`,`parallelStream()`
+* **添加**元素或集合`add`,`addAll`
 
-* 遍历
+* 获取**流**`steam()`,`parallelStream()`
+
+* **查找**
+
+  * 查找元素位置 [indexOf](https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/List.html#indexOf(java.lang.Object)) 
+  * 是否包含元素 [contains(Object o)](https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/Collection.html#contains(java.lang.Object)) 
+
+  > 使用`Objects.equals`判断元素是否相等
+
+* **遍历**
 
   * 使用流(推荐)
 
@@ -76,7 +85,7 @@
   > * 想删除当前元素, 其他方式可能会出现问题
   > * 想同时遍历多个集合
 
-* `Collections`提供更多操纵集合的静态方法
+* **常用算法**: `Collections`提供更多操纵集合的静态方法
 
 ## Set
 
@@ -92,7 +101,7 @@
     >
   
 > 查看其源码, 会发现, `Set`都是通过对应`Map`来实现的, 将`Map`的`Value`置为了一个固定的对象.
-  
+
 * 常用于集合间去重, `LinkedHashSet`可以在去重的同时保留其他排序关系
 
 ## List
@@ -121,6 +130,7 @@
   > 操作失败时的提示方式不同.
 
 * 实现类
+  
   * `LinkedList`
 
 ### Deque
@@ -144,7 +154,7 @@
   * [`TreeMap`](https://docs.oracle.com/javase/8/docs/api/java/util/TreeMap.html)
   * [`LinkedHashMap`](https://docs.oracle.com/javase/8/docs/api/java/util/LinkedHashMap.html) 
 
-* 相等, 当且仅当`Key`的`equals`和`hashcode`值一致
+* ~~相等, 当且仅当`Key`的`equals`和`hashcode`值一致~~
 * 集合视图
   * `keySet` — the `Set` of keys contained in the `Map`.
   * `values` — The `Collection` of values contained in the `Map`. This `Collection` is not a `Set`, because multiple keys can map to the same value.
@@ -156,6 +166,13 @@
 
   > 简而言之, 流就是一个流经管道的元素流, 在管道的每个节点 (中间操作) 上加工处理, 最终得到一个结果 (结束操作) .
 
+* 区别于集合的特性
+  * **No storage**. A stream is not a data structure that stores elements; **instead, it conveys elements from a source** such as a data structure, an array, a generator function, or an I/O channel, **through a pipeline of computational operations.**
+  * **Functional in nature**. An operation on a stream produces a result, **but does not modify its source**. For example, filtering a `Stream` obtained from a collection produces a new `Stream` without the filtered elements, rather than removing elements from the source collection.
+  * **Laziness-seeking.** Many stream operations, such as filtering, mapping, or duplicate removal, can be implemented lazily, exposing opportunities for optimization. For example, "find the first `String` with three consecutive vowels" need not examine all the input strings. Stream operations are divided into intermediate (`Stream`-producing) operations and terminal (value- or side-effect-producing) operations. **Intermediate operations are always lazy.**
+  * **Possibly unbounded.** While collections have a finite size, streams need not. Short-circuiting operations such as `limit(n)` or `findFirst()` can **allow computations on infinite streams to complete in finite time.**
+  * **Consumable**. The elements of a stream are only visited once during the life of a stream. Like an [`Iterator`](https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/Iterator.html), a new stream must be generated to revisit the same elements of the source.
+
 * 组成
 
   * 一个**数据源**: 可以是集合, 数组,  generator 函数或 IO 通道
@@ -164,11 +181,13 @@
 
     > 如`filter()`过滤, 得到新的流; `map()`将流映射为其他形式的流; 等等
     >
-    > 中间操作是Lazy的, 只有用到了该元素才会去处理它
-
+    
   * 一个**结束操作**: 不返回流
 
     > 如`forEach()`,仅处理流, 不产生新的流.
+
+  >* 中间操作是Lazy的, 只有执行结束操作时才执行;
+  >* 并且不是所有的元素都会被用到, 如`findFirst()`找到第一个流就结束了. 避免性能浪费.
 
 * 操作
 
@@ -190,6 +209,17 @@
         > 使用有点小复杂, 因此提供了 [Collectors](https://docs.oracle.com/javase/8/docs/api/java/util/stream/Collectors.html) 类, 含有提供常用聚合操作的静态方法.
 
     * 遍历`forEach()`
+    
+    * 获取元素
+    
+      * `findFirst()`找到流中第一个元素
+      * `findAny()`流中找任意一个
+    
+    * 判断是否匹配
+    
+      * `anyMatch()`
+      * `allMatch()`
+      * `noneMatch()`
 
 * 平行流: 将流分成子流, 每个子流在单独的线程中执行所有操作, 然后再组合所有子流的结果.
 
@@ -256,6 +286,7 @@
 
 * [oracle tutorial](https://docs.oracle.com/javase/tutorial/collections/TOC.html)
 * [Stream API](https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/stream/Stream.html#peek(java.util.function.Consumer))
+* [package info](https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/stream/package-summary.html)
 
 
 

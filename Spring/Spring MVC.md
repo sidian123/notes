@@ -163,15 +163,17 @@ DispatcherServlet在初始化时，会扫出描控制器，从控制器上的注
 </beans>
 ```
 
-
-
 # 四、控制器开发
 
-spring mvc简化了处理请求和响应结果的过程，开发者只需要在方法定义中声明自己所需的参数（参数类型有一定限制，不是想要什么就有什么），spring mvc就能根据参数类型正确的传入参数。方法返回时，开发者只需要放回ModelAndView，或者视图名，或者一个pojo对象，spring mvc都会正确的生成响应结果。关于控制器支持的参数类型和返回值类型，参考：https://docs.spring.io/spring/docs/current/spring-framework-reference/web.html#mvc-ann-arguments
+spring mvc简化了处理请求和响应结果的过程，开发者只需要在方法定义中声明自己所需的参数（参数类型有一定限制，不是想要什么就有什么），spring mvc就能根据参数类型正确的传入参数。方法返回时，开发者只需要放回ModelAndView，或者视图名，或者一个pojo对象，spring mvc都会正确的生成响应结果。
 
-上面谈到控制器和处理器的关系，这里我认为将处理器理解为控制器中方法的包装更为合适。
+> 关于控制器支持的参数类型和返回值类型，参考：[Method Arguments](https://docs.spring.io/spring/docs/current/spring-framework-reference/web.html#mvc-ann-arguments)
 
-## [@RequestMapping](https://docs.spring.io/spring/docs/current/spring-framework-reference/web.html#mvc-ann-requestmapping)
+> 上面谈到控制器和处理器的关系，这里我认为将处理器理解为控制器中方法的包装更为合适。
+
+## URL映射
+
+### @RequestMapping
 
 通过该注解，可以将url映射到某个控制器上（即方法）。可以指定请求路径、请求方法，然后其他的作为限定项，比如请求参数、请求头、请求类型（context-type）、结果类型（accept）。该注解可以声明到类和方法上，如果类和方法都声明，则方法对应的url为两个URL的合并。
 
@@ -217,7 +219,10 @@ class PersonController {
 }
 ```
 
-### [URL匹配模式](https://docs.spring.io/spring/docs/current/spring-framework-reference/web.html#mvc-ann-requestmapping-uri-templates)
+> 参考[@RequestMapping](https://docs.spring.io/spring/docs/current/spring-framework-reference/web.html#mvc-ann-requestmapping)
+
+
+### URL匹配模式
 
 @RequestMapping注解使用了ant样式的路径模式（[Ant-style path patterns](https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/util/AntPathMatcher.html#match-java.lang.String-java.lang.String-)），规则如下：
 
@@ -235,9 +240,7 @@ public void handle(@PathVariable String version, @PathVariable String ext) {
 }
 ```
 
-
-
-*注意：请勿和web.xml中url pattern的\*混淆*
+>*注意：请勿和web.xml中url pattern的\*混淆*
 
 ------
 
@@ -253,21 +256,31 @@ spring mvc会在url模式后默认添加 .* 后缀匹配，因此模式/person�
     </mvc:annotation-driven>
 ```
 
+> 参考
+>
+> * [Pattern Comparison](https://docs.spring.io/spring/docs/current/spring-framework-reference/web.html#mvc-ann-requestmapping-pattern-comparison)
+> * [URL匹配模式](https://docs.spring.io/spring/docs/current/spring-framework-reference/web.html#mvc-ann-requestmapping-uri-templates)
 
+## 方法参数
 
-参考：[Pattern Comparison](https://docs.spring.io/spring/docs/current/spring-framework-reference/web.html#mvc-ann-requestmapping-pattern-comparison)
+控制器的方法参数很灵活，可以声明自己需要的参数，Spring MVC就会自动传入进来。
 
-## [方法参数](https://docs.spring.io/spring/docs/current/spring-framework-reference/web.html#mvc-ann-arguments)
+可以声明的参数大致如下:
 
-控制器的方法参数很灵活，可以声明自己需要的参数，spring mvc就会自动传入进来。不仅可以声明和servlet有关的参数，比如HttpSession，HttpServletRequest、请求参数等，还能声明和作用域范围（请求范围、会话范围）的属性、url中rest风格参数、请求头参数。下面的表格给出了所有控制器可以声明的参数类型（重要的会加粗、下划线）：
+* Servlet有关的参数，如`HttpSession`，`HttpServletRequest`等
+* 请求参数
+* 请求头参数
+* 作用域范围内（请求范围、会话范围）的属性
+* URL中REST风格参数
+* ...
 
-> 注意，如果是注解的话，指的是被注解的参数
+所有控制器可以声明的参数类型如下 :
 
 | Controller method argument                                   | Description                                                  |
 | ------------------------------------------------------------ | ------------------------------------------------------------ |
 | `WebRequest`, `NativeWebRequest`                             | Generic access to request parameters and request and session attributes, without direct use of the Servlet API. |
-| `javax.servlet.**ServletRequest**`, `javax.servlet.**ServletResponse**` | Choose any specific request or response type — for example, `ServletRequest`, `HttpServletRequest`, or Spring’s `MultipartRequest`, `MultipartHttpServletRequest`. |
-| `javax.servlet.http.**HttpSession**`                         | Enforces the presence of a session. As a consequence, such an argument is never `null`. Note that session access is not thread-safe. Consider setting the`RequestMappingHandlerAdapter` instance’s `synchronizeOnSession` flag to `true` if multiple requests are allowed to concurrently access a session. |
+| `javax.servlet.ServletRequest`, `javax.servlet.ServletResponse` | Choose any specific request or response type — for example, `ServletRequest`, `HttpServletRequest`, or Spring’s `MultipartRequest`, `MultipartHttpServletRequest`. |
+| `javax.servlet.http.HttpSession`                             | Enforces the presence of a session. As a consequence, such an argument is never `null`. Note that session access is not thread-safe. Consider setting the`RequestMappingHandlerAdapter` instance’s `synchronizeOnSession` flag to `true` if multiple requests are allowed to concurrently access a session. |
 | `javax.servlet.http.PushBuilder`                             | Servlet 4.0 push builder API for programmatic HTTP/2 resource pushes. Note that, per the Servlet specification, the injected `PushBuilder` instance can be null if the client does not support that HTTP/2 feature. |
 | `java.security.Principal`                                    | Currently authenticated user — possibly a specific `Principal` implementation class if known. |
 | `HttpMethod`                                                 | The HTTP method of the request.                              |
@@ -275,25 +288,29 @@ spring mvc会在url模式后默认添加 .* 后缀匹配，因此模式/person�
 | `java.util.TimeZone` + `java.time.ZoneId`                    | The time zone associated with the current request, as determined by a `LocaleContextResolver`. |
 | `java.io.InputStream`, `java.io.Reader`                      | For access to the raw request body as exposed by the Servlet API. |
 | `java.io.OutputStream`, `java.io.Writer`                     | For access to the raw response body as exposed by the Servlet API. |
-| `@**PathVariable**`                                          | For access to URI template variables. See [URI patterns](https://docs.spring.io/spring/docs/current/spring-framework-reference/web.html#mvc-ann-requestmapping-uri-templates). |
+| `@PathVariable`                                              | For access to URI template variables. See [URI patterns](https://docs.spring.io/spring/docs/current/spring-framework-reference/web.html#mvc-ann-requestmapping-uri-templates). |
 | `@MatrixVariable`                                            | For access to name-value pairs in URI path segments. See [Matrix Variables](https://docs.spring.io/spring/docs/current/spring-framework-reference/web.html#mvc-ann-matrix-variables). |
-| `@**RequestParam**`                                          | For access to the Servlet request parameters, including multipart files. Parameter values are converted to the declared method argument type. See [`@RequestParam`](https://docs.spring.io/spring/docs/current/spring-framework-reference/web.html#mvc-ann-requestparam)as well as [Multipart](https://docs.spring.io/spring/docs/current/spring-framework-reference/web.html#mvc-multipart-forms).*Note that use of* `*@RequestParam*` *is optional for simple parameter values. See “Any other argument”, at the end of this table.* |
-| `@**RequestHeader**`                                         | For access to request headers. Header values are converted to the declared method argument type. See [`@RequestHeader`](https://docs.spring.io/spring/docs/current/spring-framework-reference/web.html#mvc-ann-requestheader). |
-| `@**CookieValue**`                                           | For access to cookies. Cookies values are converted to the declared method argument type. See [`@CookieValue`](https://docs.spring.io/spring/docs/current/spring-framework-reference/web.html#mvc-ann-cookievalue). |
-| `@**RequestBody**`                                           | For access to the HTTP request body. Body content is converted to the declared method argument type *by using* `*HttpMessageConverter*` *implementations.* See [`@RequestBody`](https://docs.spring.io/spring/docs/current/spring-framework-reference/web.html#mvc-ann-requestbody). |
+| `@RequestParam`                                              | For access to the Servlet request parameters, including multipart files. Parameter values are converted to the declared method argument type. See [`@RequestParam`](https://docs.spring.io/spring/docs/current/spring-framework-reference/web.html#mvc-ann-requestparam)as well as [Multipart](https://docs.spring.io/spring/docs/current/spring-framework-reference/web.html#mvc-multipart-forms).*Note that use of* `@RequestParam` *is optional for simple parameter values. See “Any other argument”, at the end of this table.* |
+| `@RequestHeader`                                             | For access to request headers. Header values are converted to the declared method argument type. See [`@RequestHeader`](https://docs.spring.io/spring/docs/current/spring-framework-reference/web.html#mvc-ann-requestheader). |
+| `@CookieValue`                                               | For access to cookies. Cookies values are converted to the declared method argument type. See [`@CookieValue`](https://docs.spring.io/spring/docs/current/spring-framework-reference/web.html#mvc-ann-cookievalue). |
+| `@RequestBody`                                               | For access to the HTTP request body. Body content is converted to the declared method argument type *by using* `HttpMessageConverter` *implementations.* See [`@RequestBody`](https://docs.spring.io/spring/docs/current/spring-framework-reference/web.html#mvc-ann-requestbody). |
 | `HttpEntity<B>`                                              | For access to request headers and body. The body is converted with an `HttpMessageConverter`. See [HttpEntity](https://docs.spring.io/spring/docs/current/spring-framework-reference/web.html#mvc-ann-httpentity). |
 | `@RequestPart`                                               | For access to a part in a `multipart/form-data` request, converting the part’s body with an `HttpMessageConverter`. See [Multipart](https://docs.spring.io/spring/docs/current/spring-framework-reference/web.html#mvc-multipart-forms). |
-| `java.util.**Map**`, `org.springframework.ui.**Model**`, `org.springframework.ui.**ModelMap**` | For access to the model that is used in HTML controllers and exposed to templates as part of view rendering.通过这些类，可以将数据填充到模型中，最终这些数据会被放入请求范围内 |
-| **RedirectAttributes**                                       | Specify attributes to use in case of a redirect (that is, to be appended to the query string) and flash attributes to be stored temporarily until the request after redirect. See [Redirect Attributes](https://docs.spring.io/spring/docs/current/spring-framework-reference/web.html#mvc-redirecting-passing-data) and [Flash Attributes](https://docs.spring.io/spring/docs/current/spring-framework-reference/web.html#mvc-flash-attributes).用于在重定向两个请求之间传数据的，简单属性就附加在url上，复杂的就通过session临时存储。 |
-| `@**ModelAttribute**`                                        | For access to an existing attribute in the model (instantiated if not present) with data binding and validation applied. See [`@ModelAttribute`](https://docs.spring.io/spring/docs/current/spring-framework-reference/web.html#mvc-ann-modelattrib-method-args) as well as [Model](https://docs.spring.io/spring/docs/current/spring-framework-reference/web.html#mvc-ann-modelattrib-methods) and [`DataBinder`](https://docs.spring.io/spring/docs/current/spring-framework-reference/web.html#mvc-ann-initbinder).*Note that use of* `*@ModelAttribute*` *is optional (for example, to set its attributes). See “Any other argument” at the end of this table.* |
+| `java.util.Map`, `org.springframework.ui.Model`, `org.springframework.ui.ModelMap` | For access to the model that is used in HTML controllers and exposed to templates as part of view rendering.通过这些类，可以将数据填充到模型中，最终这些数据会被放入请求范围内 |
+| RedirectAttributes                                           | Specify attributes to use in case of a redirect (that is, to be appended to the query string) and flash attributes to be stored temporarily until the request after redirect. See [Redirect Attributes](https://docs.spring.io/spring/docs/current/spring-framework-reference/web.html#mvc-redirecting-passing-data) and [Flash Attributes](https://docs.spring.io/spring/docs/current/spring-framework-reference/web.html#mvc-flash-attributes).用于在重定向两个请求之间传数据的，简单属性就附加在url上，复杂的就通过session临时存储。 |
+| `@ModelAttribute`                                            | For access to an existing attribute in the model (instantiated if not present) with data binding and validation applied. See [`@ModelAttribute`](https://docs.spring.io/spring/docs/current/spring-framework-reference/web.html#mvc-ann-modelattrib-method-args) as well as [Model](https://docs.spring.io/spring/docs/current/spring-framework-reference/web.html#mvc-ann-modelattrib-methods) and [`DataBinder`](https://docs.spring.io/spring/docs/current/spring-framework-reference/web.html#mvc-ann-initbinder).*Note that use of* `*@ModelAttribute*` *is optional (for example, to set its attributes). See “Any other argument” at the end of this table.* |
 | `Errors`, `BindingResult`                                    | For access to errors from validation and data binding for a command object (that is, a `@ModelAttribute` argument) or errors from the validation of a `@RequestBody`or `@RequestPart` arguments. You must declare an `Errors`, or `BindingResult`argument immediately after the validated method argument. |
-| `SessionStatus` + class-level `@**SessionAttributes**`       | For marking form processing complete, which triggers cleanup of session attributes declared through a class-level `@SessionAttributes` annotation. See[`@SessionAttributes`](https://docs.spring.io/spring/docs/current/spring-framework-reference/web.html#mvc-ann-sessionattributes) for more details.用来从model中设置会话范围属性的 |
+| `SessionStatus` + class-level `@SessionAttributes`           | For marking form processing complete, which triggers cleanup of session attributes declared through a class-level `@SessionAttributes` annotation. See[`@SessionAttributes`](https://docs.spring.io/spring/docs/current/spring-framework-reference/web.html#mvc-ann-sessionattributes) for more details.用来从model中设置会话范围属性的 |
 | `UriComponentsBuilder`                                       | For preparing a URL relative to the current request’s host, port, scheme, context path, and the literal part of the servlet mapping. See [URI Links](https://docs.spring.io/spring/docs/current/spring-framework-reference/web.html#mvc-uri-building). |
-| `@**SessionAttribute**`                                      | For access to any session attribute, in contrast to model attributes stored in the session as a result of a class-level `@SessionAttributes` declaration. See[`@SessionAttribute`](https://docs.spring.io/spring/docs/current/spring-framework-reference/web.html#mvc-ann-sessionattribute) for more details. |
-| `@**RequestAttribute**`                                      | For access to request attributes. See [`@RequestAttribute`](https://docs.spring.io/spring/docs/current/spring-framework-reference/web.html#mvc-ann-requestattrib) for more details. |
-| **Any other argument**                                       | If a method argument is not matched to any of the earlier values in this table and it is a simple type (as determined by [BeanUtils#isSimpleProperty](https://docs.spring.io/spring-framework/docs/5.1.2.RELEASE/javadoc-api/org/springframework/beans/BeanUtils.html#isSimpleProperty-java.lang.Class-), it is a resolved as a `@RequestParam`. Otherwise, it is resolved as a `@ModelAttribute`. |
+| `@SessionAttribute`                                          | For access to any session attribute, in contrast to model attributes stored in the session as a result of a class-level `@SessionAttributes` declaration. See[`@SessionAttribute`](https://docs.spring.io/spring/docs/current/spring-framework-reference/web.html#mvc-ann-sessionattribute) for more details. |
+| `@RequestAttribute`                                          | For access to request attributes. See [`@RequestAttribute`](https://docs.spring.io/spring/docs/current/spring-framework-reference/web.html#mvc-ann-requestattrib) for more details. |
+| Any other argument                                           | If a method argument is not matched to any of the earlier values in this table and it is a simple type (as determined by [BeanUtils#isSimpleProperty](https://docs.spring.io/spring-framework/docs/5.1.2.RELEASE/javadoc-api/org/springframework/beans/BeanUtils.html#isSimpleProperty-java.lang.Class-), it is a resolved as a `@RequestParam`. Otherwise, it is resolved as a `@ModelAttribute`. |
+
+>注意，如果是注解，则指的是被注解的参数
 
 上面一些重要的稍后会介绍，在这之前先介绍类型转换。
+
+> 参考[方法参数](https://docs.spring.io/spring/docs/current/spring-framework-reference/web.html#mvc-ann-arguments)
 
 ### [类型转换（Type Conversion）](https://docs.spring.io/spring/docs/current/spring-framework-reference/web.html#mvc-ann-typeconversion)
 
@@ -303,37 +320,47 @@ spring mvc会在url模式后默认添加 .* 后缀匹配，因此模式/person�
 
 ### [@RequestParam](https://docs.spring.io/spring/docs/current/spring-framework-reference/web.html#mvc-ann-requestparam)
 
-该注解用于将**请求参数**绑定到控制器**方法参数**上，如果参数pojo，则绑定到对象属性上。
+该注解用于将**请求参数**绑定到控制器**方法参数**上，如果参数是POJO，则绑定到对象属性上。
 
-如下面的代码所示，通过get方法，如果请求参数名为petId，则解析为对应类型并传给该参数：
+如下例子中, 请求参数`petId`将传入到方法参数`petId`上:
 
 ```java
-    //官网上copy下来的，它没有给出url路径，会怎么样？我不晓滴
-    @GetMapping
-    public String setupForm(@RequestParam("petId") int petId, Model model) { 
-        Pet pet = this.clinic.loadPet(petId);
-        model.addAttribute("pet", pet);
-        return "petForm";
-    }
+@GetMapping
+public String setupForm(@RequestParam("petId") int petId, Model model) { 
+    Pet pet = this.clinic.loadPet(petId);
+    model.addAttribute("pet", pet);
+    return "petForm";
+}
 ```
 
+- 注解对应的**请求参数**必须**存在**, 可设置属性`required=false`，允许请求参数不存在。
 
-
-- 注解对应的**请求参数**必须**存在**（请求参数为**空值**也算作存在，如“name=”）。可设置属性required=false，允许请求参数不存在。一些特殊情况如下：
-
-  - 对于Integer、Long等基本类型的包装类，请求参数为空时，方法参数为null
-- 对于String，请求参数为空时，请求参数为空时，方法参数为""
-  - 对于pojo，在required=true时，必须存在对象所有属性对应的请求参数，否则抛出异常；在required=false，对象属性对应请求参数可不存在。实际上，spring mvc会调用pojo的无参构造函数，通过setter方法设置属性。
-- 对于基本类型，请求参数为空时，类型转化失败，抛出异常。
+  >请求参数值为**空值**也算作存在，如`name=`
   
-- 注解的value属性默认使用参数名
+  空值时, 不同类型获得的值不一样: 
+  
+  - 对于`Integer`、`Long`等基本类型的包装类，请求参数为空值时，方法参数为`null`
+  
+  - 对于`String`，请求参数为空值时，方法参数为`""`
+  
+  - 对于POJO
+  
+    - 在`required=true`时，必须存在对象所有属性对应的请求参数，否则抛出异常
+  
+    - 在`required=false`，对象属性对应请求参数可不存在。
+  
+      > 实际上，Spring MVC会调用POJO的无参构造函数，通过Setter方法设置属性。
+  
+  - 对于基本类型，请求参数为空值时，类型转化失败，抛出异常。
+  
+- 注解的`value`属性默认使用参数名
 
-- 简单类型，如基本类型及它的包装类、string、pojo类，可以不使用注解，但实际上还是通过该注解解析。见4.2.4小节。
+- 简单类型，如基本类型及它的包装类、String、POJO类，可以不使用注解，但实际上还是通过该注解解析。见4.2.4小节。
 
 仔细探讨请求参数存在与不存在的情况：
 
-- 请求参数类似“name=”时，为请求参数为空的情况，在jquery中可传**{name:""}**或**{name:null｝**来实现
-- 请求参数中不存在该字段，为不存在的情况，在jquery中无该字段 **{}** 或值为undefined **{name:undefined}** 来实现
+- 请求参数类似`name=`时，是请求参数为空值的情况，在JQuery中可传`{name:""}`或`{name:null}`来实现
+- 请求参数中不存在该字段，为不存在的情况，在JQuery中无该字段 `{}` 或值为`undefined`, 如 `{name:undefined}` 来实现
 
 ### [@ModelAttribute](https://docs.spring.io/spring/docs/current/spring-framework-reference/web.html#mvc-ann-modelattrib-method-args)
 
@@ -400,8 +427,6 @@ public void addMember(@RequestBody Member member) {
     //code
 }
 ```
-
-
 
 ### 其他
 
@@ -507,6 +532,73 @@ public Map<...> addMember(Member member) {
         return view;  
     }  
 ```
+
+## 异常处理
+
+### 介绍(了解)
+
+在请求映射和控制器中抛出的异常会被`HandlerExceptionResolver` （接口）组成的链来处理。当异常不被处理，和处于错误响应状态时，servelt容器会将结果渲染到错误页面中。详情见：[Exceptions](<https://docs.spring.io/spring/docs/current/spring-framework-reference/web.html#mvc-exceptionhandlers>)
+
+`@Controller`和`@ControllerAdvice`类中，可以有一个`@ExceptionHandler` 异常处理方法。详情见：[Exceptions](<https://docs.spring.io/spring/docs/current/spring-framework-reference/web.html#mvc-ann-exceptionhandler>)
+
+> 这是`HandlerExceptionResolver`实现类`ExceptionHandlerExceptionResolver`提供的功能。
+
+### 状态码(重点)
+
+`HandlerExceptionResolver` 的实现类`ResponseStatusExceptionResolver`提供了通过异常设置返回状态码的功能。
+
+* `ResponseStatus`注解：注解到**异常类**或**控制器方法**上，返回响应时会设置为指定的状态码。
+
+  下面给出注解到方法的例子：
+
+  * 例子一
+
+      ```java
+      @PostMapping
+      @ResponseStatus(HttpStatus.CREATED)
+      public void add(@RequestBody Person person) {
+          // ...
+      }
+      ```
+
+      > 用户添加成功后，会返回状态码为201的响应
+      
+  * 例子二
+
+      ```java
+      @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+      public class AppException extends RuntimeException {
+          public AppException(String message) {
+              super(message);
+          }
+      
+          public AppException(String message, Throwable cause) {
+              super(message, cause);
+          }
+      }
+      ```
+
+      > 控制器中抛出该异常时, 状态码为500
+
+* `ResponseStatusException`：抛出该异常时，状态码被设置，如：
+
+  ```java
+  @GetMapping("/test4")
+  public String test4(@RequestParam(value = "isTrue",defaultValue = "false") boolean isTure)  {
+      if(isTure){
+          throw new ResponseStatusException(HttpStatus.NOT_FOUND, "没找到呀",new IllegalAccessException("不正常啊"));
+      }
+      return "ok";
+  }
+  ```
+
+  > 抛出异常时，状态码为404，异常的后两个参数会出现在响应消息体中。
+
+> 参考
+>
+> - [DispatacherServlet-Exceptions](https://docs.spring.io/spring/docs/current/spring-framework-reference/web.html#mvc-exceptionhandlers)
+> - [Annotated Controllers-Exceptions](https://docs.spring.io/spring/docs/current/spring-framework-reference/web.html#mvc-exceptionhandlers)
+> - [Error Handling for REST with Spring](https://www.baeldung.com/exception-handling-for-rest-with-spring)
 
 
 
@@ -783,72 +875,6 @@ headers.setContentDispositionFormData("attachment", URLEncoder.encode(name,"utf-
 headers.setCacheControl(CacheControl.maxAge(30, TimeUnit.DAYS));//设置缓存时间
 ```
 
-## 异常处理
-
-### 介绍（了解）
-
-在请求映射和控制器中抛出的异常会被`HandlerExceptionResolver` （接口）组成的链来处理。当异常不被处理，和处于错误响应状态时，servelt容器会将结果渲染到错误页面中。详情见：[Exceptions](<https://docs.spring.io/spring/docs/current/spring-framework-reference/web.html#mvc-exceptionhandlers>)
-
-`@Controller`和`@ControllerAdvice`类中，可以有一个`@ExceptionHandler` 异常处理方法。详情见：[Exceptions](<https://docs.spring.io/spring/docs/current/spring-framework-reference/web.html#mvc-ann-exceptionhandler>)
-
-> 这是`HandlerExceptionResolver`实现类`ExceptionHandlerExceptionResolver`提供的功能。
-
-### 状态码（重点）
-
-`HandlerExceptionResolver` 的实现类`ResponseStatusExceptionResolver`提供了通过异常设置返回状态码的功能。
-
-* `ResponseStatus`注解：注解到**异常类**或**控制器方法**上，返回响应时会设置为指定的状态码。
-
-  下面给出注解到方法的例子：
-
-  * 例子一
-
-      ```java
-      @PostMapping
-      @ResponseStatus(HttpStatus.CREATED)
-      public void add(@RequestBody Person person) {
-          // ...
-      }
-      ```
-
-      > 用户添加成功后，会返回状态码为201的响应
-      
-  * 例子二
-
-      ```java
-      @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
-      public class AppException extends RuntimeException {
-          public AppException(String message) {
-              super(message);
-          }
-      
-          public AppException(String message, Throwable cause) {
-              super(message, cause);
-          }
-      }
-      ```
-
-      > 控制器中抛出该异常时, 状态码为500
-
-* `ResponseStatusException`：抛出该异常，直接设置状态码，如：
-
-  ```java
-  @GetMapping("/test4")
-  public String test4(@RequestParam(value = "isTrue",defaultValue = "false") boolean isTure)  {
-      if(isTure){
-          throw new ResponseStatusException(HttpStatus.NOT_FOUND, "没找到呀",new IllegalAccessException("不正常啊"));
-      }
-      return "ok";
-  }
-  ```
-
-  > 抛出异常时，状态码为404，异常的后两个参数会出现在响应消息体中。
-
-> 参考
->
-> - [DispatacherServlet-Exceptions](https://docs.spring.io/spring/docs/current/spring-framework-reference/web.html#mvc-exceptionhandlers)
-> - [Annotated Controllers-Exceptions](https://docs.spring.io/spring/docs/current/spring-framework-reference/web.html#mvc-exceptionhandlers)
-> - [Error Handling for REST with Spring](https://www.baeldung.com/exception-handling-for-rest-with-spring)
 
 # [六 MVC配置](https://docs.spring.io/spring/docs/current/spring-framework-reference/web.html#mvc-config)
 

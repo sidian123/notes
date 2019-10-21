@@ -253,12 +253,12 @@ public class ItemController {
 	```
 	然后在属性上添加注解
 	```java
-		@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
-		@JsonSerialize(using=LocalDateTimeSerializer.class)
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
+	@JsonSerialize(using=LocalDateTimeSerializer.class)
 	```
 * 解序列化，这里暂时使用spring的注解
 	```java
-		@DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+	@DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
 	```
 	
 	> 因为一般参数是Url encode格式的, 而不是Json格式的

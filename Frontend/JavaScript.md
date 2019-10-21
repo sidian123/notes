@@ -976,9 +976,12 @@ console.log(bb);
 >* [MDN import](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/import)
 >* [MDN export](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/export)
 >* [MDN script](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/script)
+
 ##  Promise
 
 promise相当于一个代理，表示一个**异步**操作成功或失败的结果，即使不能立马获得promise表示的值，但可以为promise附上成功或失败的回调函数。
+
+成功后将回调`.then(callback)`参数中的回调函数, 失败则回调`.catch(callback)`参数中的回调函数.
 
 ### 例子
 
