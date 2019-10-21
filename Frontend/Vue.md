@@ -715,6 +715,9 @@ new Vue({
 >注意，html中元素和属性名都大小写不敏感。
 
 # 十三 Props
+
+> props在挂载后才初始化
+
 props选项属性定义组件作为html元素收到的属性。属性的命令规则同上。
 
 属性可以为数组或对象。对象可以额外设置属性类型、默认值、是否必须、验证函数。
@@ -724,6 +727,7 @@ props选项属性定义组件作为html元素收到的属性。属性的命令�
 如果在组件上使用props未定义的属性，那么属性会被添加到组件的根元素上。如果根元素已定义该属性，则被覆盖；`style`,`class`属性除外，它会被合并在一起。
 
 `inheritAttrs: false`会阻止未定义属性作用在组件根元素上的行为，而`$attrs`接收未定义属性的赋值，因此此时可以将它手动绑定到组件中的一个元素上，如：
+
 ```javascript
 Vue.component('base-input', {
   inheritAttrs: false,
@@ -902,7 +906,7 @@ this.$emit('update:title', newTitle)
 
 * `Vue.use()`注册插件
 
-# 遇到的bug
+# 踩过的坑
 
 ## 组件名与原生Html元素冲突
 
@@ -911,6 +915,12 @@ this.$emit('update:title', newTitle)
 > [Vue warn]: Do not use built-in or reserved HTML elements as component id:
 
 因为就存在一个该元素, 换成大写就好了`Article`
+
+## 关于初始化顺序
+
+好像是`data`->`watch`->`computed`->`props`, 至于和生命周期的顺序, 未测试.
+
+然后我用`props`来初始化`data`....一直报错
 
 # 参考
 

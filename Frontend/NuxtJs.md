@@ -342,7 +342,10 @@ export default {
 ## 元数据head
 
 * 在配置文件`nuxt.config.js`中配置`head`属性, 作用于所有页面
+
 * 在`pages/`下的单个Vue文件中配置`head`方法, 仅作用于当前页面.
+
+  > 参考[ The head Method ](https://nuxtjs.org/api/pages-head#the-head-method)
 
 > 貌似这是在服务端渲染的, 因此不许一开始就能够确定值
 
