@@ -82,21 +82,28 @@ List<String> userList = service.getUsernameList();
 
 ## Bean命名
 
-每个Bean都可以有多个标识符，这些标识符在容器内必须是唯一的。一个Bean可以有多个标识符，如果标识符多余一个，其他的都是别名。在基于xml的配置中，可以使用Bean标签的id和name属性来指定标识符。id只能指定一个标识符，name可以指定多个标识符，多个标识符通过逗号（，）、分号（；）或空格分隔。如果没有提供name和id值，那么容器会自己为bean产生一个唯一的标识符。如果使用@Component注解Bean，且没有提供名字，那么会将类名的第一个字母转化为小写，然后作为Bean的标识符。如果使用@Bean注解方法，会使用方法名作为Bean的标识符。
+每个Bean都可以有多个标识符，且标识符在容器中是唯一的。
 
-### Bean定义外为Bean设置别名
+> 同一bean之间的标识符互为别名
 
-在Bean定义的同时可以直接定义多个标识符，互为别名。在Bean定义之外也可以为Bean定义别名。
+在基于xml的配置中，可以使用`Bean`标签的`id`和`name`属性来指定标识符。
 
-在xml的配置中，可以这么做：
+* `id`只能指定一个标识符，`name`可以指定多个标识符，多个标识符通过`，`,`;`或空格分隔。
+* 如果没有提供`name`和`id`值，那么容器会自己为bean产生一个未知的, 唯一的标识符.
+* 如果使用`@Component`注解Bean，且不指定名字，那么会将类名的第一个字母转化为小写，然后作为Bean的标识符。
+* 如果使用@Bean注解方法，会使用方法名作为Bean的标识符。
+
+### Bean定义外设置别名
+
+在`Bean`元素定义的同时可以直接定义多个标识符，互为别名; 在Bean定义之外也可以为Bean定义别名。
+
+XML配置:
 
 ```
 <alias name="fromName" alias="toName"/>
 ```
 
-
-
-其中，name为一个Bean的标识符，alias指定别名。
+其中，`name`为一个Bean的标识符，`alias`指定别名。
 
 ## 实例化Beans
 
@@ -939,17 +946,17 @@ BeanFactoryPostProcessor操作元数据配置，就是说BeanFactoryPostProcesso
 
 FactoryBean（不要和BeanFactory混淆）可以控制容器的实例化逻辑，实现该接口的类会被spring当做工厂bean，可以生产其他bean。当对象构造十分复杂，适合使用java代码而不是xml配置时，可以采用该方法定义工厂，然后生产该对象。请查阅本博文3.2.4小结对FactoryBean使用的介绍。
 
-# [九、基于注解的容器配置](https://docs.spring.io/spring-framework/docs/current/spring-framework-reference/core.html#beans-annotation-config)
+# 九 基于注解的容器配置
 
 下面讲的主要是关于依赖注入的注解，和bean定义有关的注解在后面会提到。如果要在xml配置中使用注解的功能，需要开启注解的处理器
 
-```
+```xml
 <context:annotation-config/>
 ```
 
+该注解默认开启bean post-processor，包括 AutowiredAnnotationBeanPostProcessor, CommonAnnotationBeanPostProcessor, PersistenceAnnotationBeanPostProcessor, and RequiredAnnotationBeanPostProcessor。关于BeanPostProcessor，第八小节有提到过。注意！！！`<context:annotation-config/>`只会查看同**一个容器**中的bean的注解。
 
-
-该注解默认开启bean post-processor，包括 AutowiredAnnotationBeanPostProcessor, CommonAnnotationBeanPostProcessor, PersistenceAnnotationBeanPostProcessor, and RequiredAnnotationBeanPostProcessor。关于BeanPostProcessor，第八小节有提到过。注意！！！<context:annotation-config/>只会查看同**一个容器**中的bean的注解。
+> 参考[基于注解的容器配置](https://docs.spring.io/spring-framework/docs/current/spring-framework-reference/core.html#beans-annotation-config)
 
 ## @Required
 
@@ -1146,56 +1153,58 @@ public class MovieConfiguration {
 
 ## 通过@Qualifier微调@Autowired
 
-如果有多个匹配，那么限定名符合@Qualifier指定的限定名的Bean会被注入，Bean定义的限定名可以重复，因此@Qualifier只是缩小了匹配的Bean的范围。如果Bean没有定义限定名，那么他的Bean标识符会被当做默认限定名。@Qualifier还有很多默认行为，不想多说。如果向指定一个唯一的Bean标识符作为依赖注入，应该考虑@Resource，而不是@Autowired。
+### 介绍
 
-@Qualifier可以注解到字段和参数上：
+`@Autowired`注入, 且多个Bean类型与之匹配时, `@Qualifier`将再次根据**限定名**筛选符合匹配的Bean.
 
-```java
-public class MovieRecommender {
+* 因为Bean的限定名可以重复, 因此`@Qualifier`只是缩小了匹配的Bean的范围
+* 如果Bean没有定义限定名，那么他的Bean标识符会被当做默认限定名。
 
-    @Autowired
-    @Qualifier("main")
-    private MovieCatalog movieCatalog;
+> 如果向指定一个唯一的Bean标识符作为依赖注入，应该考虑`@Resource`，而不是`@Autowired`。
 
-    // ...
-}
-```
+### 使用
 
+* 微调
+  * 注解到字段上
+  	```java
+    public class MovieRecommender {
 
+        @Autowired
+        @Qualifier("main")
+        private MovieCatalog movieCatalog;
 
-```java
-public class MovieRecommender {
-
-    private MovieCatalog movieCatalog;
-
-    private CustomerPreferenceDao customerPreferenceDao;
-
-    @Autowired
-    public void prepare(@Qualifier("main")MovieCatalog movieCatalog,
-            CustomerPreferenceDao customerPreferenceDao) {
-        this.movieCatalog = movieCatalog;
-        this.customerPreferenceDao = customerPreferenceDao;
+        // ...
     }
+    ```
+  * 注解到参数上
+  	```java
+    public class MovieRecommender {
 
-    // ...
-}
-```
+        private MovieCatalog movieCatalog;
 
+        private CustomerPreferenceDao customerPreferenceDao;
 
+        @Autowired
+        public void prepare(@Qualifier("main")MovieCatalog movieCatalog,
+                CustomerPreferenceDao customerPreferenceDao) {
+            this.movieCatalog = movieCatalog;
+            this.customerPreferenceDao = customerPreferenceDao;
+        }
 
-xml可以配置限定名：
-
-```
+        // ...
+    }
+    ```
+* 配置限定名
+  * XML
+  	```xml
     <bean class="example.SimpleMovieCatalog">
         <qualifier value="main"/> 
 
         <!-- inject any dependencies required by this bean -->
     </bean>
-```
-
-
-
-相应的还有component的配置方式、基于java代码的配置方式。
+    ```
+  
+  * Java: 这个不知道
 
 ## @Resource
 
