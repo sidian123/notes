@@ -248,7 +248,21 @@ npm help install
 
 ## 编译node-sass失败
 
- https://github.com/nodejs/node-gyp/issues/629#issuecomment-153196245 
+`install`或`update` `node-sass`时, 会编译该package, 如果运行环境中缺少对应的工具, 将报错.
+
+我在Windows中遇到了 **Microsoft Build Tools** 版本太低的问题, 可考虑以下步骤解决
+
+* 从[Microsoft Build Tools](https://www.microsoft.com/en-us/download/details.aspx?id=48159)中下载构架工具并安装
+
+* 在npm中全局配置使用该工具
+
+  ```shell
+  npm config set msvs_version 2015 --global
+  ```
+
+  > 避免每次`install`, 需加后缀, 如`npm install [package name] --msvs_version=2015`
+
+> 参考 https://github.com/nodejs/node-gyp/issues/629 
 
 # 参考
 * [Getting started with Node.js modules: require, exports, imports and beyond](https://adrianmejia.com/blog/2016/08/12/getting-started-with-node-js-modules-require-exports-imports-npm-and-beyond/)
