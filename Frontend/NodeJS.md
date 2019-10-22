@@ -149,6 +149,8 @@ npm安装package分全局或局部安装，全局安装的package如果有可执
 
 > 好像必须加选项, `package.json`才会改变
 
+> 有些package安装时会自动编译, 如果环境中没有对应的工具, 将报错.
+
 ## npm list
 实现已安装依赖形参的关系树
 ```bash
@@ -174,6 +176,7 @@ $ npm uninstall underscore
 $ npm update underscore
 ```
 安装package后，再次npm install 该package，貌似也能升级，达到同样的效果。
+
 ## npm search
 在npm仓库中搜索package
 ```bash
@@ -240,6 +243,12 @@ npm help install
 
 ##  3.12 缓存
 安装过的package会被缓存起来。
+
+# 踩坑
+
+## 编译node-sass失败
+
+ https://github.com/nodejs/node-gyp/issues/629#issuecomment-153196245 
 
 # 参考
 * [Getting started with Node.js modules: require, exports, imports and beyond](https://adrianmejia.com/blog/2016/08/12/getting-started-with-node-js-modules-require-exports-imports-npm-and-beyond/)

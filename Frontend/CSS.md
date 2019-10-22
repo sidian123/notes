@@ -1516,6 +1516,8 @@ where
 ```
 奇怪上面给出的media features中没有min-width？其实min-width就是width的内容，可以自己去翻阅下面给出的资料。
 
+> 屏幕与大小: 手机<576px<=平板<768px<=笔记本
+
 > 参考：
 >
 > * [语法](https://developer.mozilla.org/en-US/docs/Web/CSS/Media_Queries/Using_media_queries)

@@ -135,6 +135,7 @@ vue指令以`v-`开始，用于渲染DOM或绑定数据，定义在元素或组�
     * `$el`：挂载在DOM中的html元素
 
 ## 生命周期
+
 ![](.Vue/aHR0cHM6Ly92dWVqcy5vcmcvaW1hZ2VzL2xpZmVjeWNsZS5wbmc.png )
 vue允许在vue实例生命周期的某个阶段（如红色方框所示）上挂载用户自定义的函数，称为hook，如：
 
@@ -150,6 +151,9 @@ new Vue({
 })
 // => "a is: 1"
 ```
+
+补充:
+![1571706907009](.Vue/1571706907009.png)
 
 # 四 模板语法
 * 即html模板，允许你声明式的绑定渲染后的DOM到vue实例的数据上。
@@ -315,7 +319,7 @@ html的class和style都是属性，因此可以使用`v-bind`来绑定vue属性�
     ```html
     <div v-bind:class="[activeClass, errorClass]"></div>
     ```
-    数组中元素都是vue实例属性，class属性值；想要类不存在，修改属性为`""`即可：
+    数组中元素都是vue实例属性，class为属性值；想要类不存在，修改属性值为`""`即可：
     ```html
     <div v-bind:class="[isActive ? activeClass : '', errorClass]"></div>
     <!--或者混合上面的对象绑定语法-->
@@ -915,12 +919,6 @@ this.$emit('update:title', newTitle)
 > [Vue warn]: Do not use built-in or reserved HTML elements as component id:
 
 因为就存在一个该元素, 换成大写就好了`Article`
-
-## 关于初始化顺序
-
-好像是`data`->`watch`->`computed`->`props`, 至于和生命周期的顺序, 未测试.
-
-然后我用`props`来初始化`data`....一直报错
 
 # 参考
 

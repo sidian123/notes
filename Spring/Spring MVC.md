@@ -118,8 +118,6 @@ DispatcherServlet在初始化时，会扫出描控制器，从控制器上的注
 </beans>
 ```
 
-
-
 ## spring mvc配置
 
 在web.xml中指定了spring mvc的配置文件为springmvc-config.xml，基本内容如注解所示：
