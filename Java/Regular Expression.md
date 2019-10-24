@@ -478,7 +478,13 @@ No match found.
 - https://www.regular-expressions.info/refrepeat.html
 - 在甲骨文官网上介绍了量词及贪婪、非贪婪、占有量词之间的区别：https://docs.oracle.com/javase/tutorial/essential/regex/quant.html
 
- 
+ # 其他(补充)
+
+## 操作符优先级
+
+`()` > Closure > Concatenation > Alternation
+
+至于名词意思, 见`fundamental/Compile` 2.4小节
 
 # 参考
 
