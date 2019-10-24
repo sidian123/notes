@@ -24,13 +24,13 @@
 Using npm:
 
 ```bash
-$ npm install axios
+$ npm install axios --save
 ```
 
 Using bower:
 
 ```bash
-$ bower install axios
+$ bower install axios 
 ```
 
 Using yarn:

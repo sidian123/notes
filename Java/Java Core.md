@@ -92,6 +92,19 @@ Jvm会维护所处环境的信息, 称之为系统属性, 可通过`System`类�
 | `"user.home"`       | User home directory                                          |
 | `"user.name"`       | User account name                                            |
 
+# UUID
+
+`java.util.UUID`代表不变的全局唯一标识符, UUID由128位标识.
+
+UUID存在不同的变体( variant ), 不管哪种变体, 都有4中版本, 而JDK提供了 Leach-Salz 类型的UUID.
+
+方法:
+
+*  **[randomUUID](https://docs.oracle.com/javase/8/docs/api/java/util/UUID.html#randomUUID--)**() 获取`v4` 版的uuid
+* ...
+
+> 参考[UUID](https://docs.oracle.com/javase/8/docs/api/java/util/UUID.html?is-external=true)
+
 # 参考
 
 * [java.lang](https://docs.oracle.com/javase/8/docs/api/)

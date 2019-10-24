@@ -910,6 +910,20 @@ this.$emit('update:title', newTitle)
 
 * `Vue.use()`注册插件
 
+## 动态Vue实例与销毁
+
+1. 首先有一个Vue子类, 通过`Vue.extend()`创建
+
+   > `Vue.component()`也会返回Vue子类, 因为内部也调用了`Vue.extend()`
+
+2. 挂载到DOM中, [vm.$mount](https://vuejs.org/v2/api/#vm-mount)
+
+3. 销毁[vm.$destroy()](https://vuejs.org/v2/api/#vm-destroy)
+
+   > 仅销毁组件, DOM中已存在的元素需手动删除.
+
+> 动态创建Element UI的组件? 它的每个组件可直接传入`Vue.extend()`中
+
 # 踩过的坑
 
 ## 组件名与原生Html元素冲突

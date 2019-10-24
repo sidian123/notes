@@ -259,6 +259,7 @@ Maven项目中, IDEA会用Maven来构建项目, 但不会完全交由Maven构建
 
 * `Shift+Enter`跳转并新增下一行
 * `Ctrl+Alt+Enter`跳转并新增上一行
+* `Shift+F6`标识符重命名
 
 ## 书签
 

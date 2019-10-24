@@ -18,3 +18,33 @@
 
 > 常用`ResourceLoader`的实现类`DefaultResourceLoader`
 
+# util
+
+Spring的`util`包下, 含有各种工具类, 如
+
+*  [Base64Utils](http://localhost:63342/Blog/spring-core-5.1.9.RELEASE-javadoc.jar/org/springframework/util/Base64Utils.html) : A simple utility class for Base64 encoding and decoding. 
+*  [StringUtils](http://localhost:63342/Blog/spring-core-5.1.9.RELEASE-javadoc.jar/org/springframework/util/StringUtils.html) : Miscellaneous [`String`](https://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true) utility methods. 
+*  [DigestUtils](http://localhost:63342/Blog/spring-core-5.1.9.RELEASE-javadoc.jar/org/springframework/util/DigestUtils.html) : Miscellaneous methods for calculating digests.
+* ...
+
+> 参考[Package org.springframework.util](https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/util/package-summary.html)
+
+# beans
+
+含与Bean相关的接口与类
+
+*  [BeanUtils](https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/beans/BeanUtils.html) : Static convenience methods for JavaBeans: for instantiating beans, checking bean property types, copying bean properties, etc. 
+  * `copyProperties()`: bean间拷贝属性
+
+> 参考[Package org.springframework.beans](https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/beans/package-summary.html)
+
+
+
+
+
+
+
+
+
+
+
