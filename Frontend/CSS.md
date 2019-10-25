@@ -714,6 +714,9 @@ over~~ over\~\~ 字体内容还是提多的。。。
 
     > `pre`元素默认该值
 
+  * `pre-line`: 删除多余空格, 有软换行
+  * `pre-wrap`: 保留空格, 有软换行
+
 * **word-break**: 一般的软换行很容易解决, 但是一个单词太长了怎么办? 这里就要靠`word-break`制定软换行的具体方式了, 详细介绍见[css之word-break及word-wrap(overflow-wrap)](https://blog.csdn.net/jdbdh/article/details/83687049 )
 
 * [text-overflow](https://developer.mozilla.org/en-US/docs/Web/CSS/text-overflow): 无论何种情况, 文字溢出了, 我还可以直接省略溢出的部分.

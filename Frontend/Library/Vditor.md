@@ -10,7 +10,7 @@
 
   ```javascript
   import Vditor from 'vditor'
-  import "vditor/src/assets/scss/classic" // 或者使用 dark
+  import "vditor/src/assets/scss/classic.scss" // 或者使用 dark
   
   const vditor = new Vditor(id, {options...})
   vditor.focus()

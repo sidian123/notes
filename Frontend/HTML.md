@@ -498,6 +498,26 @@ url传输时只能是通过ascii码传输，非ascii字符会被编码，通过�
 
 [emoji](https://en.wikipedia.org/wiki/Emoji)
 
+-------
+
+当使用`innerHTML`属性赋值字符串时, 如果不想被解析成元素, 可将以下字符转义:
+
+* `&lt;` <=> `<`
+
+* `&gt;` <=> `>`
+
+* `&amp;` <=> `&`
+
+* `&quot;` <=> `"`
+
+* `&nbsp;` <=> ` `
+
+  > 这个不是必须的, 但是为了保证格式一直, 最好转义
+
+> 注意, 最好`&`先转义, 否则实体将不生效. 含实体的字符串给`innerHTML`属性赋值时才生效
+
+> 参考[Entity](https://developer.mozilla.org/en-US/docs/Glossary/Entity)
+
 ## MIME类型
 MIME（Multipurpose Internet Mail Extensions）是一种指定文件类型的标准，广泛使用在web数据传输上，告诉对方数据组织的格式，便于对方解析。
 
@@ -596,17 +616,19 @@ Simple file.
 * `pre`会保留空格,并不软换行.
 * 元素上添加`contenteditable="true"` 会根据输入字符串的格式和所处环境, 生成对应的子元素.
 
-上述三种实现原理各不相同, 最契合编辑器和更够提供最大灵活度的方法就是第三种. 然而, 暂未有资料详细介绍其特性. 
+上述三种实现原理各不相同, 最契合编辑器和更够提供最大灵活度的方法就是第三种, 详细用法见[Editor.md](./Editor.md)
 
 > 观察typora, 其即时渲染功能是通过第三种实现的, 其源码编辑模式的即时高亮是通过三方库codeMirror实现的.
 
 # 参考
-[html5教程](https://www.w3schools.com/html/default.asp)
-[html参考](https://www.w3schools.com/tags/default.asp)
-[url](https://en.wikipedia.org/wiki/URL)
-[\<base\ tag with root relative url>](https://stackoverflow.com/questions/51619597/html5-base-tag-with-root-relative-url)
-[relative vs. absolute urls and seo](http://www.dirigodev.com/blog/seo-web-best-practices/relative-vs-absolute-urls-seo/)
-[emoji](https://en.wikipedia.org/wiki/Emoji)
-[字符编码](https://blog.csdn.net/jdbdh/article/details/83651915)
-[http协议](https://blog.csdn.net/jdbdh/article/details/83021497)
-[viewport meta](https://blog.csdn.net/jdbdh/article/details/81329822)
+* [html5教程](https://www.w3schools.com/html/default.asp)
+* [html参考](https://www.w3schools.com/tags/default.asp)
+* [url](https://en.wikipedia.org/wiki/URL)
+* [\<base\ tag with root relative url>](https://stackoverflow.com/questions/51619597/html5-base-tag-with-root-relative-url)
+* [relative vs. absolute urls and seo](http://www.dirigodev.com/blog/seo-web-best-practices/relative-vs-absolute-urls-seo/)
+* [emoji](https://en.wikipedia.org/wiki/Emoji)
+* [字符编码](https://blog.csdn.net/jdbdh/article/details/83651915)
+* [http协议](https://blog.csdn.net/jdbdh/article/details/83021497)
+* [viewport meta](https://blog.csdn.net/jdbdh/article/details/81329822)
+
+* [兼容性查看](https://caniuse.com/)

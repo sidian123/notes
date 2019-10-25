@@ -1235,10 +1235,20 @@ DOM接口大致分为两类：DOM核心接口和与html元素相关的接口。D
 * Node.removeChild()
 -----------
 * Element.innerHTML
+
 * Node.textContent
+
+  > `innerHTML`与`textContent`相比
+  >
+  > * `innerHTML`会额外将样式考虑进去, 区别见[textContent](https://developer.mozilla.org/en-US/docs/Web/API/Node/textContent)
+  > * `innerHTML`会decode HTML实体, 如 `&gt;` => `>` ; 而`textContent`会encode 保留字符, 如 `>` => `&gt;`
+
 * element.style.left
+
 * element.setAttribute()
+
 * element.getAttribute()
+
 * element.addEventListener()
 ----------
 * window.content
