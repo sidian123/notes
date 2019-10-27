@@ -413,14 +413,16 @@ html5提供了很多元素，它没有特殊的作用，除了拥有鲜明的语
 ### script
 `<script>`元素中可以写javascrpit代码，或者直接指向外部的js文件，如：
 
-	js写在script中：
-	<script>
-	function myFunction() {
-	   document.getElementById("demo").innerHTML = "Paragraph changed.";
-	}
-	</script>
-	链接外部js：
-	<script src="myScript1.js"></script>
+```java
+<!-- js写在script中：-->
+<script>
+function myFunction() {
+   document.getElementById("demo").innerHTML = "Paragraph changed.";
+}
+</script>
+链接外部js：
+<script src="myScript1.js"></script>
+```
 
 要注意的是，如果src属性存在，`<script>`元素必须为空。
 
@@ -610,15 +612,23 @@ Simple file.
 
 ## 编辑器
 
-如果通过HTML元素作为编辑器, 该如何? 目前我已知的如下
+如果通过HTML元素作为编辑器, 该如何? 
+
+首先看HTML原生提供的可作为编辑器的内容:
 
 * `textarea`: 是一个表单元素, 该元素提供一个多行文本框, 输入的字符串的格式会被保存下来
-* `pre`会保留空格,并不软换行.
 * 元素上添加`contenteditable="true"` 会根据输入字符串的格式和所处环境, 生成对应的子元素.
 
-上述三种实现原理各不相同, 最契合编辑器和更够提供最大灵活度的方法就是第三种, 详细用法见[Editor.md](./Editor.md)
+然后, 上述方式并不满足一般应用的需要. 所以这里介绍一些现场的编辑器.
 
-> 观察typora, 其即时渲染功能是通过第三种实现的, 其源码编辑模式的即时高亮是通过三方库codeMirror实现的.
+主要有两种编辑器: 富文本编辑器和通用文本编辑器
+
+* 富文本编辑器
+  * [ProseMirror](http://prosemirror.net/): 构建富文本所需的工具, 比较底层
+  * [tiptap](https://github.com/scrumpy/tiptap): 基于ProseMirror编写的富文本编辑器.
+  * ...
+* 通用文本编辑器
+  * [CodeMirror](https://github.com/codemirror/codemirror)
 
 # 参考
 * [html5教程](https://www.w3schools.com/html/default.asp)

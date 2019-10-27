@@ -67,12 +67,18 @@ fs.readFile('./file.txt', 'utf-8', (err, data) => {
 ### exports
 没啥好讲的，2.1.1小节讲完了。
 
+### import ?
+
+`exports`的内容能够被`import`吗? 经测试, 能! 
+
+为什么? 这好像是webpack提供的模块加载功能, 允许多种加载方式.
+
 ## package
 一个package包含多个module，使用package.json记录该package关键的信息。
 
 package.json一些字段如下：
 * `main`：指定该package的入口文件，当`require(packageName)`时，会导出package入口文件的`exports`。
-  * `scripts`：定义脚本命令，通过`npm run`来执行。
+* `scripts`：定义脚本命令，通过`npm run`来执行。
 * `dependencies`：该package依赖的其他包
 * `devDependencies`：开发时需要的依赖包。
 

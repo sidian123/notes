@@ -1449,6 +1449,24 @@ target阶段不能单独存在，而是包含在其他两个阶段内。比如�
 
 > 参考[MouseEvent](https://developer.mozilla.org/en-US/docs/Web/API/MouseEvent)
 
+### 剪贴板事件
+
+`ClipboardEvent`代表剪贴板事件, 含有`clipboardData`属性, 能够获取和设置剪贴板内容. 以下都是`ClipboardEvent`的实例
+
+* `paste`粘贴事件
+  * 当`paste`事件发生且光标处于可编辑元素中时, 默认行为是将剪贴板中内容插入到文档中( 会带有格式 ).
+* `cut`
+* `copy`
+
+----
+
+`clipboardData`属性是一个[DataTransfer](https://developer.mozilla.org/en-US/docs/Web/API/DataTransfer)实例, `getData()`和`setData()`可操作剪贴板, 需要传入MIME类型, 指定其数据格式
+
+> 参考
+>
+> * [Element: paste event](https://developer.mozilla.org/en-US/docs/Web/API/Element/paste_event)
+> * [ClipboardEvent](https://developer.mozilla.org/en-US/docs/Web/API/ClipboardEvent)
+
 ##  存储
 
 html5后引入了web storage（本地储存），比cookies更好用。本地存储分两类：
