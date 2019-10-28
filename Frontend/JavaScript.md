@@ -51,7 +51,7 @@ javascript中使用`var`、`let`和`const`来定义变量。
 
 `var`声明的变量
 1. 没有[block scope][1]（块作用域）,只有function scope；
-2. 并且**声明**有[hoisting][2]现象，但**初始化**没有该现象；
+2. **声明**有[hoisting][2]现象，但**初始化**没有该现象；
 3. 可以多次声明变量。
 
 hoisting表示任何地方的变量声明都会被放到作用域内最顶端。例子如下：
@@ -558,7 +558,11 @@ var avg=function(){...};
 ###  apply()和call()
 >预备知识：2.8.1 this
 
-都是**Function.prototype**的方法，即所有函数可调用。这两个可以方法指定`this`和`arguments`来调用函数。`apply()`和`call()`在于，`apply()`的`arguments`参数接收array-like对象。
+> 都是`Function.prototype`的方法，即所有函数可调用。
+
+绑定`this`和`arguments`的值, 并调用函数。
+
+`apply()`和`call()`的区别在于，`apply()`的`arguments`参数接收array-like对象。
 
 语法：
 ```javascript
@@ -570,7 +574,11 @@ function.apply([thisArg, [argsArray]])
 
 >`bind()`方法返回该函数的拷贝，除了`this`指针指向被指定的值。
 
->参考：[Search Function.prototype.apply()](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function/apply)
+>参考
+>
+>* [Search Function.prototype.apply()](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function/apply)
+>
+>* [bind()](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function/bind)
 
 ###  函数声明
 函数有两种方法定义：函数声明和函数表达式
