@@ -1244,11 +1244,13 @@ DOM接口大致分为两类：DOM核心接口和与html元素相关的接口。D
 -----------
 * Element.innerHTML
 
-* Node.textContent
+* `HTMLElement.innerText`
 
-  > `innerHTML`与`textContent`相比
+* `Node.textContent`
+
+  > `innerXXX`与`textContent`相比
   >
-  > * `innerHTML`会额外将样式考虑进去, 区别见[textContent](https://developer.mozilla.org/en-US/docs/Web/API/Node/textContent)
+  > * `innerXXX`会额外将样式考虑进去, 区别见[textContent](https://developer.mozilla.org/en-US/docs/Web/API/Node/textContent)
   > * `innerHTML`会decode HTML实体, 如 `&gt;` => `>` ; 而`textContent`会encode 保留字符, 如 `>` => `&gt;`
 
 * element.style.left
@@ -1454,6 +1456,24 @@ target阶段不能单独存在，而是包含在其他两个阶段内。比如�
 * `click`在`mousedown`和`mouseup`事件触发后触发, 即点击了元素.
 
 > 参考[MouseEvent](https://developer.mozilla.org/en-US/docs/Web/API/MouseEvent)
+
+### 剪贴板事件
+
+`ClipboardEvent`代表剪贴板事件, 含有`clipboardData`属性, 能够获取和设置剪贴板内容. 以下都是`ClipboardEvent`的实例
+
+* `paste`粘贴事件
+  * 当`paste`事件发生且光标处于可编辑元素中时, 默认行为是将剪贴板中内容插入到文档中( 会带有格式 ).
+* `cut`
+* `copy`
+
+----
+
+`clipboardData`属性是一个[DataTransfer](https://developer.mozilla.org/en-US/docs/Web/API/DataTransfer)实例, `getData()`和`setData()`可操作剪贴板, 需要传入MIME类型, 指定其数据格式
+
+> 参考
+>
+> * [Element: paste event](https://developer.mozilla.org/en-US/docs/Web/API/Element/paste_event)
+> * [ClipboardEvent](https://developer.mozilla.org/en-US/docs/Web/API/ClipboardEvent)
 
 ##  存储
 
