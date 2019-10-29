@@ -1272,6 +1272,12 @@ DOM接口大致分为两类：DOM核心接口和与html元素相关的接口。D
 ###  Window
 Window接口表示一个包含了DOM文档的窗口，在浏览器中具体表现为一个标签页。Window接口的对象window含有所有和窗口相关的内容，也是JavaScript的运行环境，JavaScript中的全局变量、函数就是该window对象的属性或方法；除了DOM和脚本外，还涉及其他对象，如location（代表链接）、History（代表理事）等等。
 
+* 获取窗体大小
+  * ` window.innerWidth `窗体内容宽度
+  * `window.innerHeight`窗体内容高度
+  * `window.outerWidth`窗体总的宽度,包含工具栏,滚动条
+  * `window.outerHeight`窗体总的高度,包含工具栏,滚动条
+
 >具体使用参考
 >* [Window MDN](https://developer.mozilla.org/en-US/docs/Web/API/Window)
 >* [Wndow w3schools](https://www.w3schools.com/jsref/obj_window.asp)
@@ -1312,7 +1318,23 @@ Window接口表示一个包含了DOM文档的窗口，在浏览器中具体表�
 
 通过`pushState`设置历史记录, 如果设置后仍处于同一页面, 那么`back()`或点击浏览器按钮, 仅修改历史, 不重载, 但会发送[popstate](https://developer.mozilla.org/en-US/docs/Web/API/Window/popstate_event)事件, 通过[window.onpopstate](https://developer.mozilla.org/en-US/docs/Web/API/WindowEventHandlers/onpopstate)捕获
 
+### Screen
+
+`screen`对象含有与访问者屏幕相关的信息, 如
+
+| Property                                                     | Description                                                  |
+| :----------------------------------------------------------- | :----------------------------------------------------------- |
+| [availHeight](https://www.w3schools.com/jsref/prop_screen_availheight.asp) | Returns the height of the screen (excluding the Windows Taskbar) |
+| [availWidth](https://www.w3schools.com/jsref/prop_screen_availwidth.asp) | Returns the width of the screen (excluding the Windows Taskbar) |
+| [colorDepth](https://www.w3schools.com/jsref/prop_screen_colordepth.asp) | Returns the bit depth of the color palette for displaying images |
+| [height](https://www.w3schools.com/jsref/prop_screen_height.asp) | Returns the total height of the screen                       |
+| [pixelDepth](https://www.w3schools.com/jsref/prop_screen_pixeldepth.asp) | Returns the color resolution (in bits per pixel) of the screen |
+| [width](https://www.w3schools.com/jsref/prop_screen_width.asp) | Returns the total width of the screen                        |
+
+> 貌似不准确, 请用`window.innerWidth`和`window.innerHeight`
+
 ## 事件
+
 ### 介绍
 **事件**是系统（browser）中某个动作或事件的发生，系统会产生一个信号（**event**），这个信号含有关于该事件的信息。随着信号的产生，**事件处理器或监听器**会采取一定动作处理该事件。这种事件处理机制称为**事件模型**。事件模型不是javascript特有的，不同的上下文中会有不同的**事件模型**，即事件模型的实现机制不太一样，比如web api、插件、Node.js等等上下文。
 
