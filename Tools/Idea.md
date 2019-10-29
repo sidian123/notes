@@ -423,6 +423,17 @@ mybatis的xml映射文件经常被使用，如果不安装插件，则需要自�
 
 `settings/Language&Frameworks/JavaScript`中将语言版本修改成ES6
 
+## 调试器栈溢出
+
+默认的, 如果对象有实现`toString()`方法时, 则会在变量旁打印`toString()`输出值, 很有可能是该方法造成的溢出.
+
+如, 我写了个节点`Node`,含指向父节点的指针, 形成了回路, 造成调试器一直栈递归, 直到溢出.
+
+解决方案:
+
+1. 右键调试的数据查看视图, 选择`Customize Data Views...`, 取消`Enable toString() object view`的勾选
+2. 或者, 重写类的`toString()`方法, 防止递归调用.
+
 # 参考
 
 * [idea download][1]

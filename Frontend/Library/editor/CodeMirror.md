@@ -91,7 +91,9 @@ CodeMirror中存在多种对象可以发送事件
 
 设置了`theme`属性后, 如`theme:"hello"`, 那么CodeMirror的根元素将附有类`cm-s-hello`. 根据这个规则去覆盖CodeMirror原有样式即可.
 
+# 其他
 
+* CodeMirror只部分渲染在视窗内的内容, 因此效率较高.
 
 # 参考
 
