@@ -692,6 +692,16 @@ $ git config --global credential.helper 'store --file ~/.my-credentials'
 
 > checkout指的是从仓库中获取数据时, 该仓库可以是远程仓库, `git pull`也算是一种checkout的过程.
 
+### error: gnutls_handshake() failed
+
+认证时, ` gnutls `包工作有问题, 可关闭校验
+
+```shell
+git config --global http.sslVerify false
+```
+
+可能会受到中间人攻击, 但是我不关了它我就`push`不上了, 无可奈何呀....
+
 # 参考
 
 - [书](https://git-scm.com/book/en/v2)
