@@ -1,6 +1,9 @@
 # 引言
 
-* 介绍: 以Key-Value存储数据的高性能NoSQL内存数据库
+## 介绍
+
+以Key-Value存储数据的高性能NoSQL内存数据库
+
 * 特性
   * 高性能Key-Value数据库
   
@@ -31,6 +34,30 @@
   *  hyperloglogs 
   *  geospatial indexes  with radius queries 
   *  streams 
+
+## 安装
+
+`Ubuntu`下,
+
+1.  安装
+
+   ```shell
+   sudo apt install redis
+   ```
+
+2. 启动服务
+
+   ```shell
+   redis-server &
+   ```
+
+3. 启动客户端
+
+   ```shell
+   redis-cli
+   ```
+
+
 
 # 命令
 

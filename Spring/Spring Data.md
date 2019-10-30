@@ -79,94 +79,78 @@ Spring Data Redis 将Redis与Spring集合, 并简化了Redis的使用. 它同时
 
 * [Redis Sentinel](https://docs.spring.io/spring-data/data-redis/docs/current/reference/html/#redis:sentinel) and [Redis Cluster](https://docs.spring.io/spring-data/data-redis/docs/current/reference/html/#cluster) support.
 
-* 
+* ...
 
-## Low-Level Connection
+## 配置
 
-* 连接Redis
+SpringBoot会自动配置并注入所有所需的Bean, 只需引入对应starter jar包即可.
 
-  * `RedisConnection` & ` RedisConnectionFactory `
+可以通过Java配置方式配置细节设置, 但推荐通过SpringBoot配置文件来配置.
 
-  * 配置Lettuce连接器
+自动注入的其中有`RedisTemplate`, `StringRedisTemplate`
 
-    ```java
-    @Configuration
-    class AppConfig {
-    
-      @Bean
-      public LettuceConnectionFactory redisConnectionFactory() {
-    
-        return new LettuceConnectionFactory(new RedisStandaloneConfiguration("server", 6379));
-      }
-    }
-    ```
+## 连接Redis
 
-  * 配置Jedis连接器
+* `RedisConnection` & ` RedisConnectionFactory `
 
-    ```java
-    @Configuration
-    class RedisConfiguration {
-    
-      @Bean
-      public JedisConnectionFactory redisConnectionFactory() {
-    
-        RedisStandaloneConfiguration config = new RedisStandaloneConfiguration("server", 6379);
-        return new JedisConnectionFactory(config);
-      }
-    }
-    ```
-
-  * 主写, 从读配置
-
-    ```java
-    @Configuration
-    class WriteToMasterReadFromReplicaConfiguration {
-    
-      @Bean
-      public LettuceConnectionFactory redisConnectionFactory() {
-    
-        LettuceClientConfiguration clientConfig = LettuceClientConfiguration.builder()
-          .readFrom(SLAVE_PREFERRED)
-          .build();
-    
-        RedisStandaloneConfiguration serverConfig = new RedisStandaloneConfiguration("server", 6379);
-    
-        return new LettuceConnectionFactory(serverConfig, clientConfig);
-      }
-    }
-    ```
-
-* 哨兵模式支持
+* 配置Lettuce连接器
 
   ```java
-  /**
-   * Jedis
-   */
-  @Bean
-  public RedisConnectionFactory jedisConnectionFactory() {
-    RedisSentinelConfiguration sentinelConfig = new RedisSentinelConfiguration()
-    .master("mymaster")
-    .sentinel("127.0.0.1", 26379)
-    .sentinel("127.0.0.1", 26380);
-    return new JedisConnectionFactory(sentinelConfig);
-  }
+  @Configuration
+  class AppConfig {
   
-  /**
-   * Lettuce
-   */
-  @Bean
-  public RedisConnectionFactory lettuceConnectionFactory() {
-    RedisSentinelConfiguration sentinelConfig = new RedisSentinelConfiguration()
-    .master("mymaster")
-    .sentinel("127.0.0.1", 26379)
-    .sentinel("127.0.0.1", 26380);
-    return new LettuceConnectionFactory(sentinelConfig);
+    @Bean
+    public LettuceConnectionFactory redisConnectionFactory() {
+  
+      return new LettuceConnectionFactory(new RedisStandaloneConfiguration("server", 6379));
+    }
+  }
+  ```
+
+* 配置Jedis连接器
+
+  ```java
+  @Configuration
+  class RedisConfiguration {
+  
+    @Bean
+    public JedisConnectionFactory redisConnectionFactory() {
+  
+      RedisStandaloneConfiguration config = new RedisStandaloneConfiguration("server", 6379);
+      return new JedisConnectionFactory(config);
+    }
+  }
+  ```
+
+  > 运行会报错, 建议用Lettuce
+
+* 主写, 从读配置
+
+  ```java
+  @Configuration
+  class WriteToMasterReadFromReplicaConfiguration {
+  
+    @Bean
+    public LettuceConnectionFactory redisConnectionFactory() {
+  
+      LettuceClientConfiguration clientConfig = LettuceClientConfiguration.builder()
+        .readFrom(SLAVE_PREFERRED)
+        .build();
+  
+      RedisStandaloneConfiguration serverConfig = new RedisStandaloneConfiguration("server", 6379);
+  
+      return new LettuceConnectionFactory(serverConfig, clientConfig);
+    }
   }
   ```
 
 ## High-Level Template
 
-` RedisConnection `仅接收和返回二进制值 (`byte`数组) , 而`template`负责数据的序列化, 连接的事务管理和提供了不同Redis数据类型的操作接口.
+### 介绍
+
+` RedisConnection `仅接收和返回二进制值 (`byte`数组) , 而`template`负责数据的序列化, 连接的事务管理和提供了不同Redis数据类型的操作视图.
+
+所有**操作视图**如下:
 
 | Interface               | Description                                                  |
 | :---------------------- | :----------------------------------------------------------- |
@@ -187,17 +171,97 @@ Spring Data Redis 将Redis与Spring集合, 并简化了Redis的使用. 它同时
 | `BoundValueOperations`  | Redis string (or value) key bound operations                 |
 | `BoundZSetOperations`   | Redis zset (or sorted set) key bound operations              |
 
+### 使用
 
+可直接注入`RedisTemplate`, 或者注入上述操作视图.
 
+> 注意, `RedisTemplate`使用的序列化器并不会将键值对转化为非字符串, 因此在`Redis-cli`中通过字符串获取不到值.
 
+## 便捷类
 
+实际上, 大部分存储在Redis中的键值对都是以字符串存储的, 因此Spring提供了两个便捷类: ` StringRedisConnection `和`  StringRedisTemplate ` 
 
+它的键值都是字符串, 并且使用`utf-8`序列化键值对.
 
-> 参考[Spring Data Redis](https://docs.spring.io/spring-data/redis/docs/2.2.0.RELEASE/reference/html/#introduction)
+## Low-Level Connection
 
+想获取对Redis全面的控制时, 可通过` RedisTemplate `或` StringRedisTemplate `获取连接, 如
 
+```java
+public void useCallback() {
 
+  redisTemplate.execute(new RedisCallback<Object>() {
+    public Object doInRedis(RedisConnection connection) throws DataAccessException {
+      Long size = connection.dbSize();
+      // Can cast to StringRedisConnection if using a StringRedisTemplate
+      ((StringRedisConnection)connection).set("key", "value");
+    }
+   });
+}
+```
 
+## 序列化
+
+在框架看来, Redis仅存字节数组, 而Redis的数据结构是指数据的存储方式, 而不是单个元素的存储结构.
+
+> 如字符串数组在Redis中以数组结构储存, 但是单个字符串怎么存呢? 以什么样的格式?
+
+因此Spring提供了序列化器, 用于序列化单个对象. 以下是最为常用的
+
+- `JdkSerializationRedisSerializer`, which is used by default for `RedisCache` and `RedisTemplate`.
+
+  > 使用Java原生序列化工具
+
+- the `StringRedisSerializer`.
+
+  > 使用`utf-8`序列化字符串
+
+> Spring 推荐最好将数据存储为Json格式, 怎么存? 不知道
+
+## 缓存支持
+
+[Support for the Spring Cache Abstraction](https://docs.spring.io/spring-data/redis/docs/2.2.0.RELEASE/reference/html/#redis:support:cache-abstraction)
+
+## 踩坑
+
+### 设置键值后, redis-cli中不能取出
+
+因为`RedisTemplate`的序列化器`RedisSerializer`序列化后, 键值都不同了. 
+
+可以考虑使用它的便捷类`StringRedisTemplate`, 它使用`utf-8`进行序列化, 因此redis-cli中键值都不变.
+
+> 参考[Using RedisTemplate set a value but get Nil from Terminal Redis-CLI](https://stackoverflow.com/questions/34736265/using-redistemplate-set-a-value-but-get-nil-from-terminal-redis-cli)
+
+### RedisTemplate与ListOperations类型不一致, 却能注入
+
+这是因为`PropertyEditorSupport`会干涉Spring IOC容器字段注入的过程: 
+
+```java
+class ListOperationsEditor extends PropertyEditorSupport {
+    ListOperationsEditor() {
+    }
+
+    public void setValue(Object value) {
+        if(value instanceof RedisOperations) {
+            super.setValue(((RedisOperations)value).opsForList());
+        } else {
+            throw new IllegalArgumentException("Editor supports only conversion of type " + RedisOperations.class);
+        }
+    }
+}
+```
+
+> 参考
+>
+> * [Why a “RedisTemplate” can convert to a “ListOperations”](https://stackoverflow.com/questions/43006197/why-a-redistemplate-can-convert-to-a-listoperations)
+>
+> * [Custom PropertyEditors Spring Example](https://www.concretepage.com/spring/custom-propertyeditors-spring-example)
+
+# 参考
+
+* [Spring Data Redis](https://docs.spring.io/spring-data/redis/docs/2.2.0.RELEASE/reference/html/#introduction)
+* [Spring Boot（八）集成Spring Cache 和 Redis](https://www.cnblogs.com/ashleyboy/p/9595584.html)
+* [Cache Abstraction](https://docs.spring.io/spring/docs/5.2.0.RELEASE/spring-framework-reference/integration.html#cache)
 
 
 
