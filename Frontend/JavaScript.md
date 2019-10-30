@@ -1277,6 +1277,8 @@ Window接口表示一个包含了DOM文档的窗口，在浏览器中具体表�
   * `window.innerHeight`窗体内容高度
   * `window.outerWidth`窗体总的宽度,包含工具栏,滚动条
   * `window.outerHeight`窗体总的高度,包含工具栏,滚动条
+* 事件
+  *  [resize](https://developer.mozilla.org/en-US/docs/Web/API/Window/resize_event) 窗体大小改变时触发
 
 >具体使用参考
 >* [Window MDN](https://developer.mozilla.org/en-US/docs/Web/API/Window)

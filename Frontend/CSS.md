@@ -1455,11 +1455,11 @@ position覆盖了文档流的默认行为，多用来微调布局，常用于ui�
 # 五、其他
 这里会添加一些其他方面的内容，包括目前支持不太好的一些样式，使用时要特别注意。
 
-## media queries
-media queries可以让我们根据设备类型（比如打印机或屏幕）或特定特征（比如屏幕分辨率或视口宽度）来应用不同的样式。
+## Media Queries
+Media Queries可以让我们根据设备类型（比如打印机或屏幕）或特定特征（比如屏幕分辨率或视口宽度）来应用不同的样式。
 
 media queries有自己的语法规则，可以通过这三种方式来使用：
-1. 在@media或@import中使用
+1. 在`@media`或`@import`中使用
 2. 在`<link>`,`<source>`或其他html元素中使用
 3. 在js的`Window.matchMedia()`和`MediaQuaryList.addListener()`方法中使用。
 
@@ -1581,11 +1581,17 @@ where
 * [Intro to CSS 3D transform](https://3dtransforms.desandro.com/)：深度介绍了3d变换的使用，给出了几个例子
 
 ## animations
-css能够让元素从一个样式**过渡**到另一个样式上，即为动画（animations），animation由两部分组成：描述animation的属性和keyframes（关键帧）。keyframes指定动画开始结束帧和可选的中间帧的样式。
+css能够让元素从一个样式**过渡**到另一个样式上，即为动画（animations）.
 
------
+使用步骤
 
-keyframes使用`@Keyframes`语句来表示，如：
+1. 定义关键帧`keyframes`, 指定动画开始结束帧和可选的中间帧的样式。
+2. 通过`animation`属性, 在元素上声明动画的细节.
+
+### keyframes
+
+`keyframes`使用`@Keyframes`语句来表示，如：
+
 ```css
 @keyframes important1 {
   from { margin-top: 50px; }
@@ -1593,13 +1599,14 @@ keyframes使用`@Keyframes`语句来表示，如：
   to   { margin-top: 100px; }
 }
 ```
-后面的important1表示**帧名**；接着是每一帧对应的样式，使用百分数表示帧序列中的位置。0%表示开始，匿名为**from**，而100%表示结束，匿名为**to**。其他帧使用百分数表示。
+> 后面的`important1`表示~~帧名~~动画名；接着是每一帧对应的样式，使用百分数表示帧序列中的位置。0%表示开始，匿名为**from**，而100%表示结束，匿名为**to**。其他帧使用百分数表示。
 
-注意，动画结束后帧的样式一般不会作用在元素上，可以通过animation-fill-mode属性修改这种默认行为。
+> 注意，动画结束后帧的样式一般不会作用在元素上，可以通过`animation-fill-mode`属性修改这种默认行为。
 
-------------
+### animation
 
 `animation`属性用来描述动画，它是一个速写属性，它的子属性如下：
+
 1. animation-delay：动画开始前的延迟
 2. animation-direction：指针帧的播放方向。如normal（默认）表示每次循环都是**前进**方向，即帧从0%开始，100%结束；reverse则**后退**反向，即从100%开始，0%结束；alternate每次都**改变方向**，先从前进方向开始；altenate-reverse每次都改变方向，但是从后退方向开始。
 3. animation-duration：动画持续时间。
@@ -1617,9 +1624,10 @@ where
 ```
 第一time表示持续时间，第二个是延迟时间。
 
-参考：
-[animations](https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_Animations)
-[w3schools animations](https://www.w3schools.com/css/css3_animations.asp)
+> 参考：
+>
+> * [animations](https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_Animations)
+> * [w3schools animations](https://www.w3schools.com/css/css3_animations.asp)
 
 ## @import
 `@import`用于引入其他样式表的样式，该规则必须位于其他规则之前，除了`@charset`。部分语法如下：
