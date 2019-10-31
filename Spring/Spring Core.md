@@ -44,110 +44,160 @@ Spring的`util`包下, 含有各种工具类, 如
 
 # Cache
 
+## 介绍
+
+Spring提供了一个缓存抽象层, 规定了缓存注解的使用方法, 而抽象层的实现则由缓存提供者实现, 如Spring Data Redis提供了实现.
+
+> 如果classpath下未提供任何实现, 则SpringBoot将使用`ConcurrentHashMap`作为缓存. 注: 不建议用在生成环境中.
+
+缓存提供者主要实现` CacheManager `和` Cache `即可. `CacheManager`是缓存`Cache`的管理器, 拥有获取`Cache`的方法; `Cache`代表缓存, 拥有操作真正缓存的方法.
+
+关于多线程, 虽说Spring有相关约定 ( 如`@Cacheable`的`sync`元素) ,该功能是否提供取决于缓存提供者.
+
+关于使用, **必须**在配置类上添加注解启动缓存.
+
 ## 配置
 
-* 启用缓存
+### 启用缓存
 
-  配置类上添加` @EnableCaching `注解
+配置类上添加` @EnableCaching `注解, 否则缓存注解将失效
 
-* Spring提供了Cache的抽象层, 而实现一般由第三方提供.
+### 配置缓存
 
-   如果未提供, SpringBoot则使用` ConcurrentHashMap `作为缓存. (不建议用在生产环境中)
+需配置缓存提供者的`CacheManager`的实现类, SpringBoot在自动装配时, 提供了获取该类的回调, 如:
 
-* 关于并发
+```java
+@Bean
+public CacheManagerCustomizer<ConcurrentMapCacheManager> cacheManagerCustomizer() {
+    return new CacheManagerCustomizer<ConcurrentMapCacheManager>() {
+        @Override
+        public void customize(ConcurrentMapCacheManager cacheManager) {
+            cacheManager.setAllowNullValues(false);
+        }
+    };
+}
+```
 
-  抽象层未提供任何多线程的处理, 该功能取决于抽象层的实现.
+> 可以定义多个`Customizer`, Spring只会使用与当前缓存实现对应的`Customizer`
 
-* 配置缓存
+### 以Redis作为缓存
 
-  通过` CacheManager `可详细配置缓存
+可通过配置`RedisCacheManager`来配置缓存, 但是推荐使用` RedisCacheConfiguration `, 更为方便.
 
-  > 该类的实现由第三方提供
+可以配置的有:
 
-  SpringBoot在自动装配`CacheManager`时, 提供了回调的入口, 来配置缓存:
+* 过期时间, 默认永久
 
-  ```java
-  @Bean
-  public CacheManagerCustomizer<ConcurrentMapCacheManager> cacheManagerCustomizer() {
-      return new CacheManagerCustomizer<ConcurrentMapCacheManager>() {
-          @Override
-          public void customize(ConcurrentMapCacheManager cacheManager) {
-              cacheManager.setAllowNullValues(false);
-          }
-      };
-  }
-  ```
+* 是否允许`null`值, 默认`yes`
 
-  > 可以定义多个`Customizer`, Spring只会使用与当前缓存实现对应的`Customizer`
+* Redis的键是否使用前缀, 默认`yes`
 
-* 关于` CacheManager `和` Cache `
+* 默认的前缀, 默认`Cache`名
 
-  `CacheManager`是`Cache`的管理器, `Cache`代表具体的一个缓存. 可以手动注入一个`Cache` Bean到容器中, `CacheManager`会自动管理它.
+  > 如`@Cacheable(value = "blog",key = "#a")`, 并假设参数a为`1`, 则键为`blog::1`
 
-* 以Redis作为缓存
-  * SpringBoot中, 若存在Spring Data Redis的Jar时, 会自动配置` RedisCacheManager `Bean
-  * 手动注入` RedisCacheConfiguration `可以全面掌控Redis缓存的配置, 如配置解析器.
+* 键的序列化器, 默认`StringRedisSerializer`
+
+* 值得序列化器, 默认`JdkSerializationRedisSerializer`
+
+* 转化器?? 不认识...
+
+下面的例子中配置了键值的序列化器:
+
+```java
+@EnableCaching
+@Configuration
+public class RedisConfiguration {
+    @Bean
+    public RedisCacheConfiguration redisCacheConfiguration(){
+        return RedisCacheConfiguration.defaultCacheConfig()
+                .serializeKeysWith(RedisSerializationContext.SerializationPair.fromSerializer(RedisSerializer.string()))
+                .serializeValuesWith(RedisSerializationContext.SerializationPair.fromSerializer(RedisSerializer.string()));
+    }
+}
+```
+
+> 都使用`StringRedisSerializer`来序列化
+>
+> 这只是对Cache的配置, 不会影响到Spring Data Redis的`RedisTemplate`的配置.
 
 ## 使用
 
-> 因为没有深入的研究源码, 可能下面的讲解会穿插Redis的实现
+主要是关于注解的使用, SpEL的使用在注解中也很关键.
 
 ### @Cacheable
 
-* 介绍
+主要注解到方法上, 当方法被访问时, 如果被请求的资源已存在, 则直接返回缓存, 并不真正调用方法; 若请求的资源不存在, 则执行方法, 将结果缓存起来并返回.
 
-  注解在方法或类上, 表示方法的结果是可缓存的.
+注解的几个元素介绍:
 
-* 切面逻辑
+* 键相关
 
-  访问方法时, 如果已存在待请求的资源, 则直接返回; 否则调用方法, 将结果存入到缓存, 再返回结果.
+    * `value`或`cacheNames` 指定`Cache`缓存名
 
-* Key生成
+    * `key` 指定键值, 默认由方法所有参数构造.
 
-  默认将方法参数传给` KeyGenerator `, 由其生成Key. 可设置注解的`key`元素, 手动设置, 使用SpEL表达式. 具体使用见文档.
+      > 注意, 在Redis中, 键是由`cacheNames`和`key`两个元素构造的
 
-  > 默认生成方式不太符合一般使用, 请手动设置
+    * `keyGenerator` 自定义的键的构造器, 不能与`key`一同使用
 
-* Redis实现细节
+  > 不指定`key`时的键的构造就是由`KeyGenerator`完成的
 
-  * 真正存储在Redis中的Key为`<cacheNames>::<key>`, 如
+* 缓存管理&解析相关
 
-    ```java
-    @Cacheable(value="blog",key = "#a")
-    public String cache1(String a){
-        return "1";
-    }
-    ```
+    * `cacheManager` 自定义的缓存构造器, 不能同`cacheResolver`一同使用
 
-    则key可能是`blog::c`
+    * `cacheResolver` 自定义的`cacheResolver`
 
-  * Key用`StringRedisSerializer`序列化; Value用`JdkSerializationRedisSerializer`序列化
+* 缓存的条件相关
 
+    默认方法调用的结果都会被缓存起来, 但也可配置是否缓存的条件, 条件有SpEL表达式给出
 
+    * `condition` 设置是否缓存结果的条件, 方法执行前判断
+    * `unless` 设置是否缓存结果的条件, 方法结束后判断, 因此表达式可引用结果对象.
 
+* 同步
 
+    * `sync`是否同步, 防止并发造成的多次操作缓存.
 
+        > 该功能是否支持, 由缓存提供者决定
 
+### SpEL环境
 
+Spring提供了很多环境相关的元数据, 让使用者能在缓存注解中获取所有相关信息.
 
+建议使用相关注解时, 仔细阅读文档.
 
+所有环境元数据如下所示:
 
+| Name          | Location           | Description                                                  | Example                                                      |
+| :------------ | :----------------- | :----------------------------------------------------------- | :----------------------------------------------------------- |
+| `methodName`  | Root object        | The name of the method being invoked                         | `#root.methodName`                                           |
+| `method`      | Root object        | The method being invoked                                     | `#root.method.name`                                          |
+| `target`      | Root object        | The target object being invoked                              | `#root.target`                                               |
+| `targetClass` | Root object        | The class of the target being invoked                        | `#root.targetClass`                                          |
+| `args`        | Root object        | The arguments (as array) used for invoking the target        | `#root.args[0]`                                              |
+| `caches`      | Root object        | Collection of caches against which the current method is executed | `#root.caches[0].name`                                       |
+| Argument name | Evaluation context | Name of any of the method arguments. If the names are not available (perhaps due to having no debug information), the argument names are also available under the `#a<#arg>` where `#arg` stands for the argument index (starting from `0`). | `#iban` or `#a0` (you can also use `#p0` or `#p<#arg>` notation as an alias). |
+| `result`      | Evaluation context | The result of the method call (the value to be cached). Only available in `unless` expressions, `cache put` expressions (to compute the `key`), or `cache evict` expressions (when `beforeInvocation` is `false`). For supported wrappers (such as `Optional`), `#result` refers to the actual object, not the wrapper. | `#result`                                                    |
 
-* `@CacheEvict`: Triggers cache eviction.
-* `@CachePut`: Updates the cache without interfering with the method execution.
+### 其他注解
+
+`@CacheEvict`
+
+* 介绍: Triggers cache eviction.
+
+ `@CachePut`
+
+每次方法运行后, 都会更新缓存的结果, 并不干预方法执行.
+
 * `@Caching`: Regroups multiple cache operations to be applied on a method.
 * `@CacheConfig`: Shares some common cache-related settings at class-level.
-
-
-
-
 
 > 参考
 >
 > * [Cache Abstraction](https://docs.spring.io/spring/docs/5.2.0.RELEASE/spring-framework-reference/integration.html#cache)
 > * [Spring Boot Cache](https://docs.spring.io/spring-boot/docs/current/reference/html/spring-boot-features.html#boot-features-caching)
-
-
 
 # SpEL
 

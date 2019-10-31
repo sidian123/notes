@@ -177,11 +177,15 @@ SpringBoot会自动配置并注入所有所需的Bean, 只需引入对应starter
 
 > 注意, `RedisTemplate`使用的序列化器并不会将键值对转化为非字符串, 因此在`Redis-cli`中通过字符串获取不到值.
 
+> 使用的`JdkSerializationRedisSerializer`
+
 ## 便捷类
 
 实际上, 大部分存储在Redis中的键值对都是以字符串存储的, 因此Spring提供了两个便捷类: ` StringRedisConnection `和`  StringRedisTemplate ` 
 
 它的键值都是字符串, 并且使用`utf-8`序列化键值对.
+
+> 使用的`StringRedisSerializer`
 
 ## Low-Level Connection
 
