@@ -702,6 +702,10 @@ git config --global http.sslVerify false
 
 可能会受到中间人攻击, 但是我不关了它我就`push`不上了, 无可奈何呀....
 
+-----
+
+最新排查, 这可能是网络原因造成的, 所有发生了握手抖动
+
 # 参考
 
 - [书](https://git-scm.com/book/en/v2)
