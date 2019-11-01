@@ -183,16 +183,28 @@ Spring提供了很多环境相关的元数据, 让使用者能在缓存注解中
 
 ### 其他注解
 
-`@CacheEvict`
+由于注解元素的使用方法与`@Cacheable`差不多, 便不详细介绍了.
 
-* 介绍: Triggers cache eviction.
+* `@CachePut` 方法调用后, 结果都会被缓存, 并不会干涉方法的执行
 
- `@CachePut`
+* `@CacheEvict`方法被调用后, 缓存被清空. 额外元素如下
 
-每次方法运行后, 都会更新缓存的结果, 并不干预方法执行.
+  * `allEntries` 是否`Cache`的所有键值都被清空, 默认`false`. 不能与`key`同时存在
 
-* `@Caching`: Regroups multiple cache operations to be applied on a method.
-* `@CacheConfig`: Shares some common cache-related settings at class-level.
+    > 否则仅清空一个键
+
+  * `beforeInvocation` 是否在方法调用前清空缓存, 默认`false`
+
+    > 清空缓存将不被方法所干涉, 如方法是否抛出异常.
+
+* `@Caching` 让同类型的多个注解, 标注在同一方法上, 如
+
+  ```java
+  @Caching(evict = { @CacheEvict("primary"), @CacheEvict(cacheNames="secondary", key="#p0") })
+  public Book importBooks(String deposit, Date date)
+  ```
+
+* `@CacheConfig`注解在类上, 为其他注解设置默认配置
 
 > 参考
 >

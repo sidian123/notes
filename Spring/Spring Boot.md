@@ -507,7 +507,7 @@ public WebMvcConfigurer corsConfigurer() {
 - Allow all headers.
 - Set max age to 1800 seconds (30 minutes).
 
-它默认允许所有源访问，却不通过`*`实现的，而是通过设置为http请求的`Origin`字段（请求源域名）实现的。因此不会与`allowCredentials`冲突。
+它默认允许所有源访问，却不是通过`*`实现的，而是通过设置为http请求的`Origin`字段（请求源域名）实现的。因此不会与`allowCredentials`冲突。
 
 # 六 mybatis
 

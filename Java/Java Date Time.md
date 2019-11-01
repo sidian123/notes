@@ -57,10 +57,11 @@ machine time本身是以现在到epoch之间的时间为度量的，epoch本身�
 
 使用带有zone id的ZonedDateTime会给应用带来复杂性，因此一般推荐使用local类型的类。而OffsetDateTime只有offset，适合于在网络上和数据库中传输数据。
 
-## Duration和Perid
-Duration和Period都是度量两个时间之间的时差，都是通过静态方法`between`生成，区别如下：
-* Duration：使用time-base的值描述时差（即seconds，nanoseconds）。可以为负。添加到ZonedDateTime中，即使存在夏令时，也会产生正确的结果。
-* Perid：使用date-base的值描述时差（即years，months，days）。添加到ZonedDateTime中时，如果存在夏令时，结果可能会出错，因为它是简单的加到对应字段中。
+## Duration和Period
+`Duration`和`Period`都是度量两个时间之间的时差，都是通过静态方法`between`生成，区别如下：
+
+* `Duration`：使用time-base的值描述时差（即seconds，nanoseconds）。可以为负。添加到ZonedDateTime中，即使存在夏令时，也会产生正确的结果。
+* `Period`：使用date-base的值描述时差（即years，months，days）。添加到ZonedDateTime中时，如果存在夏令时，结果可能会出错，因为它是简单的加到对应字段中。
 
 ## 其他类
 * `Month` stores a month on its own. This stores a single month-of-year in isolation, such as 'DECEMBER'.

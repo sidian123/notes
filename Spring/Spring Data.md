@@ -53,104 +53,54 @@ Java Persistent API规范的一种实现, 让使用者仅通过操作实体对�
 
 ## 介绍
 
-Spring Data Redis 将Redis与Spring集合, 并简化了Redis的使用. 它同时提供了低层次和高层次的抽象, 来与Redis交互.
+Spring Data Redis 将Redis与Spring集合, 屏蔽了底层Redis客户端API的使用, 提供了多种操作Redis的方式, 极大简化了Redis的使用.
 
-特性:
+Spring提供的使用方式有:
 
-*  Redis [implementation](https://docs.spring.io/spring-data/data-redis/docs/current/reference/html/#redis:support:cache-abstraction) for Spring 3.1 **cache abstraction**. 
+* 支持Spring 缓存抽象层的注解
+* 提供高级的API访问入口, `RedisTemplate`
+* 提供Spring Data风格的使用方式, `Repository`
+* 提供低级的API接口, `RedisConnection`
+* 提供了`Collection`和`Atomic`接口的实现, 可达到无感知使用Redis
 
-  > 我比较感兴趣
+> Spring Data Redis很是灵活, 使用哪种方式取决于使用者.
 
-*  [RedisTemplate](https://docs.spring.io/spring-data/data-redis/docs/current/reference/html/#redis:template) that provides a **high-level abstraction** for performing various Redis operations, exception translation and serialization support. 
+> 关于底层客户端`Lettuce`和`Jedis`, 默认使用`Lettuce`
 
-  > 有点感兴趣
+## 序列化
 
-* Automatic implementation of `Repository` interfaces including support for custom query methods using `@EnableRedisRepositories`. 
+为何数据需要序列化? 
 
-  > 微微有点兴趣
+尽管Redis的值有数据类型之分, 但Redis数据类型仅规定了**元素间**在内存中是如何分布的, 但是**元素本身**在Redis的内存中就是一个**`byte`数组**. Java的对象如何转化为Redis的`byte`数据交给了使用者, 这个过程就是序列化.
 
-*  Connection package as **low-level abstraction** across multiple Redis drivers([Lettuce](https://github.com/lettuce-io/lettuce-core) and [Jedis](https://github.com/xetorthio/jedis)). 
+序列化包括键和值的序列化. Spring Data Redis提供了多种序列化器, 如下所示:
 
-  > 默认使用Lettuce
+* `JdkSerializationRedisSerializer` 使用JDK原生的序列化器, 被序列化的类需要实现`Serializable`接口.
 
-*  [Exception](https://docs.spring.io/spring-data/data-redis/docs/current/reference/html/#redis:connectors) translation to Spring’s portable Data Access exception hierarchy for Redis driver exceptions. 
+  > `RedisCache`和`RedisTemplate`默认使用这个
 
-* [Pubsub](https://docs.spring.io/spring-data/data-redis/docs/current/reference/html/#pubsub) support (such as a MessageListenerContainer for message-driven POJOs).
+* `StringRedisSerializer` 仅用于操作字符串, 使用`utf-8`字符编码来序列化对象.
 
-* [Redis Sentinel](https://docs.spring.io/spring-data/data-redis/docs/current/reference/html/#redis:sentinel) and [Redis Cluster](https://docs.spring.io/spring-data/data-redis/docs/current/reference/html/#cluster) support.
+  > `StringRedisTemplate`默认使用这个
 
-* ...
+* ` Jackson2JsonRedisSerializer `或` GenericJackson2JsonRedisSerializer ` 使用Jackson和`utf-8`序列化对象为JSON格式
+* ` OxmSerializer ` 序列化对象为XML格式
 
-## 配置
+## 缓存注解
 
-SpringBoot会自动配置并注入所有所需的Bean, 只需引入对应starter jar包即可.
+Spring Data Redis主要通过实现` cache `和` RedisCacheManager `接口, 来提供Spring缓存抽象层的实现.
 
-可以通过Java配置方式配置细节设置, 但推荐通过SpringBoot配置文件来配置.
+使用方法见[Spring Core.md](Spring Core.md)
 
-自动注入的其中有`RedisTemplate`, `StringRedisTemplate`
+## Template
 
-## 连接Redis
+`RedisTemplate`是访问Redis的一个高级接口, 通过该接口获取其**操作视图**即可, 每个操作视图都对应Redis一种类型的所有操作.
 
-* `RedisConnection` & ` RedisConnectionFactory `
+> Spring Data Redis提供了个Trick, 能让`RedisTemplate`直接注入操作视图中
 
-* 配置Lettuce连接器
+大部分操作都是字符串操作, 因此提供了`StringRedisTemplate`, 使用`StringRedisSerializer`作为序列化器.
 
-  ```java
-  @Configuration
-  class AppConfig {
-  
-    @Bean
-    public LettuceConnectionFactory redisConnectionFactory() {
-  
-      return new LettuceConnectionFactory(new RedisStandaloneConfiguration("server", 6379));
-    }
-  }
-  ```
-
-* 配置Jedis连接器
-
-  ```java
-  @Configuration
-  class RedisConfiguration {
-  
-    @Bean
-    public JedisConnectionFactory redisConnectionFactory() {
-  
-      RedisStandaloneConfiguration config = new RedisStandaloneConfiguration("server", 6379);
-      return new JedisConnectionFactory(config);
-    }
-  }
-  ```
-
-  > 运行会报错, 建议用Lettuce
-
-* 主写, 从读配置
-
-  ```java
-  @Configuration
-  class WriteToMasterReadFromReplicaConfiguration {
-  
-    @Bean
-    public LettuceConnectionFactory redisConnectionFactory() {
-  
-      LettuceClientConfiguration clientConfig = LettuceClientConfiguration.builder()
-        .readFrom(SLAVE_PREFERRED)
-        .build();
-  
-      RedisStandaloneConfiguration serverConfig = new RedisStandaloneConfiguration("server", 6379);
-  
-      return new LettuceConnectionFactory(serverConfig, clientConfig);
-    }
-  }
-  ```
-
-## High-Level Template
-
-### 介绍
-
-` RedisConnection `仅接收和返回二进制值 (`byte`数组) , 而`template`负责数据的序列化, 连接的事务管理和提供了不同Redis数据类型的操作视图.
-
-所有**操作视图**如下:
+所有的操作视图:
 
 | Interface               | Description                                                  |
 | :---------------------- | :----------------------------------------------------------- |
@@ -171,23 +121,9 @@ SpringBoot会自动配置并注入所有所需的Bean, 只需引入对应starter
 | `BoundValueOperations`  | Redis string (or value) key bound operations                 |
 | `BoundZSetOperations`   | Redis zset (or sorted set) key bound operations              |
 
-### 使用
 
-可直接注入`RedisTemplate`, 或者注入上述操作视图.
 
-> 注意, `RedisTemplate`使用的序列化器并不会将键值对转化为非字符串, 因此在`Redis-cli`中通过字符串获取不到值.
-
-> 使用的`JdkSerializationRedisSerializer`
-
-## 便捷类
-
-实际上, 大部分存储在Redis中的键值对都是以字符串存储的, 因此Spring提供了两个便捷类: ` StringRedisConnection `和`  StringRedisTemplate ` 
-
-它的键值都是字符串, 并且使用`utf-8`序列化键值对.
-
-> 使用的`StringRedisSerializer`
-
-## Low-Level Connection
+## Connection
 
 想获取对Redis全面的控制时, 可通过` RedisTemplate `或` StringRedisTemplate `获取连接, 如
 
@@ -204,27 +140,7 @@ public void useCallback() {
 }
 ```
 
-## 序列化
-
-在框架看来, Redis仅存字节数组, 而Redis的数据结构是指数据的存储方式, 而不是单个元素的存储结构.
-
-> 如字符串数组在Redis中以数组结构储存, 但是单个字符串怎么存呢? 以什么样的格式?
-
-因此Spring提供了序列化器, 用于序列化单个对象. 以下是最为常用的
-
-- `JdkSerializationRedisSerializer`, which is used by default for `RedisCache` and `RedisTemplate`.
-
-  > 使用Java原生序列化工具
-
-- the `StringRedisSerializer`.
-
-  > 使用`utf-8`序列化字符串
-
-> Spring 推荐最好将数据存储为Json格式, 怎么存? 不知道
-
-## 缓存支持
-
-[Support for the Spring Cache Abstraction](https://docs.spring.io/spring-data/redis/docs/2.2.0.RELEASE/reference/html/#redis:support:cache-abstraction)
+> 通过`Connection`可直接获取底层的客户端, 如Jedis
 
 ## 踩坑
 
@@ -261,7 +177,11 @@ class ListOperationsEditor extends PropertyEditorSupport {
 >
 > * [Custom PropertyEditors Spring Example](https://www.concretepage.com/spring/custom-propertyeditors-spring-example)
 
-# 参考
+### DefaultSerializer需要序列化的负载
+
+让存储到Redis的类实现`Serializable `接口即可.
+
+## 参考
 
 * [Spring Data Redis](https://docs.spring.io/spring-data/redis/docs/2.2.0.RELEASE/reference/html/#introduction)
 * [Spring Boot（八）集成Spring Cache 和 Redis](https://www.cnblogs.com/ashleyboy/p/9595584.html)

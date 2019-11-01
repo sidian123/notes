@@ -1280,6 +1280,9 @@ Window接口表示一个包含了DOM文档的窗口，在浏览器中具体表�
 * 事件
   *  [resize](https://developer.mozilla.org/en-US/docs/Web/API/Window/resize_event) 窗体大小改变时触发
 
+* 滚动
+  * `Window.scrollTo()` 滚动条来自window时可用
+
 >具体使用参考
 >* [Window MDN](https://developer.mozilla.org/en-US/docs/Web/API/Window)
 >* [Wndow w3schools](https://www.w3schools.com/jsref/obj_window.asp)
@@ -1541,13 +1544,15 @@ html5后引入了web storage（本地储存），比cookies更好用。本地存
   * `scrollTop`元素已**滚动**内容的距离
 
     > 注意, 该内容可滚动
+  >
+    > 若仅`window`可滚动, 请用`window.scrollTo()`
 
   * `offsetTop`元素相对于**最近positional父元素**的距离
 
     >最好给父元素添加个`position`css属性
 
   > 因此, 要滚动元素内容时, 可让父元素的`scroll Top`等于滚动到的元素的`offsetTop`值.
-
+  
 * `getBoundingClientRect().top`元素上方`border`边缘距离视窗上方边缘的距离.
 * ...
 
