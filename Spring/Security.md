@@ -10,15 +10,15 @@ Security基于Servelt的**过滤器**和Spring的**AOP**实现, 也就是说, �
 
 # 二 原理
 
+为了与JWT整合, 需要了解其核心组件与过滤器
+
 ## 核心组件
 
-- `SecurityContextHolder`: 存储`SecurityContext`的地方, 是**线程局部**的, 即同样声明的`SecurityContext`字段, 在每个线程中使用的都是不同的, 线程结束后自动被清除.
+- `SecurityContextHolder`: 存储一个`SecurityContext`的地方, 默认是**线程局部**的
 
-  > 变量的线程局部性是通过`ThreadLocal`实现的, 这种模式还可以被更改.
-  >
-  > 不要将**线程作用域**与**会话作用域**混淆
+  > 即同样的一个`SecurityContext`字段, 在不同线程中获取, 得到的对象都是不同的, 线程结束后将自动清除该对象. 通过`ThreadLocal`实现的.
 
-- `SecurityContext`: 含有与当前线程相关的安全信息. 实际上就是存放`Authentication`的地方.
+- `SecurityContext`: 与**当前线程**相关的上下文环境, 实际上就是存放`Authentication`的地方.
 
   > 通过`SecurityContextHolder`的静态方法, 可以获取属于该线程的`SecurityContext`.
 
@@ -32,7 +32,7 @@ Security基于Servelt的**过滤器**和Spring的**AOP**实现, 也就是说, �
   SecurityContextHolder.getContext().setAuthentication(anAuthentication);
   ```
 
-  > `Authentication.isAuthenticated()`返回`true`时, 则不会被拦截器拦截, 提高效率. 并且`true`时就是表示已填充完整
+  > `Authentication.isAuthenticated()`返回`true`时, 则不会被其他验证器拦截, 提高效率. 并且`true`时就是表示已填充完整
 
   > `AuthenticationManager`实际上是一个委派器, 将认证处理委派给其他认证器认证.
 
@@ -53,8 +53,6 @@ Security基于Servelt的**过滤器**和Spring的**AOP**实现, 也就是说, �
 - `GrantedAuthority`: 表示角色, 如`ROLE_USER`, `ROLE_ADMIN`等, 每个角色都对应一定的权限, 在构建`UserDetails`对象时须提供.
 
   > 该权限是系统范围的, 即某一范围的人属于某种角色, 并拥有该角色的权限.
-
-
 
 ## 过滤器
 
@@ -175,7 +173,7 @@ Spring Security主要涉及认证和授权.
 
    认证方式多样, Spring Security可能不符合我们的需求, 但是我们可以提供自己的实现. 这需要深入的了解Spring Security内部的运行原理和机制. 这将会耗费很多时间, 但是也会让我们更深入的了解Web应用如何保证自身安全的.
 
-### 为何Servelt的过滤器可以通过Spring容器注入
+### 为何Servelt的过滤器可以通过Spring容器注入?
 
 Spring Security通过`DelegatingFilterProxy`类作为Servelt Filter与容器中Bean的桥梁.
 
