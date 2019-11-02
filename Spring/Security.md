@@ -260,7 +260,7 @@ Spring Security通过`DelegatingFilterProxy`类作为Servelt Filter与容器中B
 
 > 可以看到, 默认行为分别开启了表单, HTTP Basic认证方式. 实际稍大一点的项目中, 这些认证方式是不满足使用的, 需要提供自己的认证实现.
 
-## 配置与基本使用
+## 配置与基本认证,授权
 
 > 不好分类, `HttpSecurity`即可配置认证, 又可配置授权. 还有一种在方法上授权的注解, 见[3.3方法级授权]
 
@@ -421,6 +421,18 @@ protected void configure(AuthenticationManagerBuilder auth) throws Exception {
    public Account post(Account account, double amount);
    }
    ```
+
+> **注意**
+>
+> 通过查看源码`org.springframework.security.access.vote.vote()`, 发现, 注解的角色名必须以`ROLE_`开头, 导致`UserDetailsService.loadUserByUsername()`中返回的`UserDetails`的角色必须也已`ROLE_`为前缀, 注解才能生效, 坑!!!!
+
+## 其他
+
+### 获取当前用户凭证
+
+```java
+SecurityContextHolder.getContext().getAuthentication().getPrincipal()
+```
 
 # 四 集成JWT
 
