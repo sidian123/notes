@@ -609,12 +609,17 @@ maven默认资源插件负责将项目中资源拷贝到输出目录中。默认
 
 ```xml
 <mirror>
-    <id>nexus-aliyun</id>
-    <mirrorOf>*</mirrorOf> 
-    <name>Nexus aliyun</name>
-  <url>http://maven.aliyun.com/nexus/content/groups/public</url>
+    <id>aliyunmaven</id>
+    <mirrorOf>*</mirrorOf>
+    <name>阿里云公共仓库</name>
+    <url>https://maven.aliyun.com/repository/public</url>
 </mirror>
 ```
+
+> 参考
+>
+> * [阿里仓库使用指南](https://help.aliyun.com/document_detail/102512.html?spm=a2c40.aliyun_maven_repo.0.0.361830542K9g7c)
+> * [所有仓库](https://maven.aliyun.com/mvn/view)
 
 ## 使用
 

@@ -32,7 +32,7 @@ Security基于Servelt的**过滤器**和Spring的**AOP**实现, 也就是说, �
   SecurityContextHolder.getContext().setAuthentication(anAuthentication);
   ```
 
-  > `Authentication.isAuthenticated()`返回`true`时, 则不会被其他验证器拦截, 提高效率. 并且`true`时就是表示已填充完整
+  > `Authentication.isAuthenticated()`返回`true`时, 则不会被其他认证器拦截, 提高效率. 并且`true`时就是表示已填充完整
 
   > `AuthenticationManager`实际上是一个委派器, 将认证处理委派给其他认证器认证.
 
@@ -66,7 +66,9 @@ Spring Security提供了很多过滤器来完成认证和授权的工作. **但�
 
 - `SecurityContextPersistenceFilter`, so a `SecurityContext` can be set up in the `SecurityContextHolder` at the beginning of a web request, and any changes to the `SecurityContext` can be copied to the `HttpSession` when the web request ends (ready for use with the next web request).
 
-  > 这就是为何多次请求下仍能处于认证状态的原因. 本身也是通过cookie记录状态.
+  > 默认行为中, 仍是Cookie标识用户, 用户完整认证信息存于Session中, 因此认证后多次请求, 仍处于认证状态.
+  >
+  > 注意, `SecurityContextHolder`中含有完整填充过的`Authentication`才是认证标志. 因此, Spring Security可被配置无Session化, 仍能正常功能, 见[第四章-集成JWT]
 
 - `ConcurrentSessionFilter`, because it uses the `SecurityContextHolder` functionality and needs to update the `SessionRegistry` to reflect ongoing requests from the principal
 
@@ -86,7 +88,7 @@ Spring Security提供了很多过滤器来完成认证和授权的工作. **但�
 
 - `RememberMeAuthenticationFilter`, so that if no earlier authentication processing mechanism updated the `SecurityContextHolder`, and the request presents a cookie that enables remember-me services to take place, a suitable remembered `Authentication` object will be put there
 
-  > 记住我, 这个功能是通过该处理器实现的. 将凭证存在cookie中, 如果前面的认证过程没有通过, 但cookie中有凭证, 于是就提取数据并认证.
+  > **记住我**, 这个功能是通过该处理器实现的. 将凭证存在Cookie中( 一般Cookie无凭证信息 ), 如果前面的认证过程没有通过, 但Cookie中有凭证, 于是就提取数据并认证.
 
 - `AnonymousAuthenticationFilter`, so that if no earlier authentication processing mechanism updated the `SecurityContextHolder`, an anonymous `Authentication` object will be put there
 
@@ -177,13 +179,14 @@ Spring Security主要涉及认证和授权.
 
 Spring Security通过`DelegatingFilterProxy`类作为Servelt Filter与容器中Bean的桥梁.
 
-### 与cookie保存认证凭证有何不同?
+### 与传统Cookie认证相比, Spring Security认证有何异同?
 
-在cookie认证中, 它本身没有记录和权限相关的信息, 仅用于认证. 后端通过判断cookie即可判断用户.
+* 用户信息上
+  * Cookie认证中, Cookie本身并没有记录和权限相关的信息, 仅用作认证, 后端可通过Cookie即可判断用户身份
+  * Spring Security认证中, Cookie同样不保存太多信息, 仅判断用户身份, 而真正作为认证标识的是小节2.3.1. 默认Session中会保存所有用户认证,授权信息, 但是这不是必须的, Spring Security也能够做到后端去Session化, 认证,授权信息保存在前端.
 
-Spring Security默认行为中, cookie判断用户, 但Spring Security仅承认`SecurityContextHolder`中是否存在已填充完整的`Authentication`作为认证凭证. cookie仅用于给`SecurityContextPersistenceFilter`过滤器跨多次请求填充`Authentication`用的.
-
-然而这只是默认行为, 在自己实现的无session化后端认证授权方案中, 是不需要的, 可以禁用这种使用session的行为.
+* 功能上
+  * Spring Security除了认证功能外, 还有授权的功能.
 
 # 三 使用
 
@@ -195,9 +198,13 @@ Spring Security默认行为中, cookie判断用户, 但Spring Security仅承认`
 
   > 没有配置认证方式时, 那些认证过滤器则不存在.
 
-* `AuthenticationManager`: 配置认证过程中组件, 如使用什么加密器? 何种方式提供用户给Spring Security, 用以验证用户数据等等.
+* `AuthenticationManager`: 配置认证过程中用到的组件, 如使用什么加密器? 何种方式提供用户信息到Spring Security, 用以验证用户数据等等.
 
-## 依赖引入
+还会介绍方法级授权的使用.
+
+## Quick Start
+
+先引入依赖
 
 ```xml
 <dependency>
@@ -206,9 +213,11 @@ Spring Security默认行为中, cookie判断用户, 但Spring Security仅承认`
 </dependency>
 ```
 
-## 基本使用
+使用思路
 
-思路是, 继承`WebSecurityConfigurerAdapter`类, 并加上注解`@EnableWebSecurity`. `WebSecurityConfigurerAdapter`提供了默认配置, 我们只需要覆盖它的某个方法即可, 来提供自己想要的行为.
+继承`WebSecurityConfigurerAdapter`类, 并加上注解`@EnableWebSecurity`开启Security功能. 
+
+>`WebSecurityConfigurerAdapter`提供了默认配置, 我们只需要覆盖它的某个方法即可, 来提供自己想要的行为.
 
 一个例子如下:
 
@@ -249,9 +258,13 @@ Spring Security默认行为中, cookie判断用户, 但Spring Security仅承认`
 
 ----------
 
-可以看到, 默认行为分别开启了表单, HTTP Basic认证方式. 实际稍大一点的项目中, 这些认证方式是不满足使用的, 需要提供自己的认证实现.
+> 可以看到, 默认行为分别开启了表单, HTTP Basic认证方式. 实际稍大一点的项目中, 这些认证方式是不满足使用的, 需要提供自己的认证实现.
 
-## HttpSecurity
+## 配置与基本使用
+
+> 不好分类, `HttpSecurity`即可配置认证, 又可配置授权. 还有一种在方法上授权的注解, 见[3.3方法级授权]
+
+### HttpSecurity
 
 主要用于配置**URL授权**、**登录**、**登出**，下面详细讲解... :
 
@@ -334,31 +347,27 @@ Spring Security默认行为中, cookie判断用户, 但Spring Security仅承认`
 
 分别对应`authorizeRequests()`、`formLogin()`、`logout()`函数，以`and()`分隔。
 
-## AuthenticationManager
+### AuthenticationManager
 
-`AuthenticationManager`负责具体的认证过程, 尽管是最终委派给其他过滤器...
+`AuthenticationManager`负责具体的认证过程, 但其最终将认证委派给其他过滤器处理. 
 
-* **数据提供**: 要配置如何提供数据给Spring Security, 用以验证用户输入的凭证的正确性; 
-* **加密器**: 然后是否配置加密器? 即数据库中存的是加密过的密码, 然后将用户密码也加密下才比较. 这样更具安全性. 
+可以配置的内容有
+
+* **数据提供**: 要配置如何提供数据给Spring Security, 用以验证用户输入的凭证的正确性. 数据提供的方式有:
+
+  - in memory authentication: 测试时最常用的方式.
+  - LDAP authentication
+  - JDBC based authentication: 不好用
+  - adding `UserDetailsService`: 最常用的方式
+  - adding`AuthenticationProvider`: 最具扩展性的方式
+
+* **加密器**(PasswordEncoder): 数据库中存的一般是加密过的密码, 通过上述方式获取到用户密码后, 再经加密器加密, 才能比较是否正确. 
+
+  > 注意, Spring5后, 要求必须存在一个加密器, 官方推荐`BCryptPasswordEncoder`. 当然测试时可用无加密的加密器`NoOpPasswordEncoder`
+
 * **其他配置**: 略.
 
---------
-
-数据提供的方式很多:
-
-- in memory authentication: 测试时最常用的方式.
-- LDAP authentication
-- JDBC based authentication: 不好用
-- adding `UserDetailsService`: 最常用的方式
-- adding`AuthenticationProvider`: 最具扩展性的方式
-
-----------
-
-Spring5中, 必须定义加密器, 当然, 你可以定义一个不加密的加密器...
-
-----------------
-
-具体使用方面, 可以直接将组件注入到容器中, Spring Security会自己搜索组件, 如:
+例子一
 
 ```java
     @Bean
@@ -380,7 +389,7 @@ Spring5中, 必须定义加密器, 当然, 你可以定义一个不加密的加�
     }
 ```
 
-或者覆盖`WebSecurityConfigurerAdapter`的方法来配置`AuthenticationManager`, 如:
+例子二, 覆盖`WebSecurityConfigurerAdapter`的方法来配置`AuthenticationManager`, 如:
 
 ```java
 @Override
@@ -389,18 +398,50 @@ protected void configure(AuthenticationManagerBuilder auth) throws Exception {
 }
 ```
 
+## 方法级授权
+
+通过Spring AOP实现的一种方法级授权方法, 只需在方法上标注`@Secured`, 并指定访问权限即可.
+
+使用步骤:
+
+1. 开启方法注解, 在配置类` @Configuration `上标注` @EnableGlobalMethodSecurity `
+
+2. 使用`@Secured`注解, 指定访问权限
+
+   ```java
+   public interface BankService {
+   
+   @Secured("IS_AUTHENTICATED_ANONYMOUSLY")
+   public Account readAccount(Long id);
+   
+   @Secured("IS_AUTHENTICATED_ANONYMOUSLY")
+   public Account[] findAccounts();
+   
+   @Secured("ROLE_TELLER")
+   public Account post(Account account, double amount);
+   }
+   ```
+
 # 四 集成JWT
 
-在并发数提高时, 我们通常采用微服务化和集群的方式, 保证服务的对流量的承载性能. 应用的对Session的存放方式决定了它的集群方式:
+## 介绍
+
+在并发数提高时, 我们通常采用微服务化和集群的方式, 保证服务对流量的承载性. 应用的对Session的存放方式决定了它的集群方式:
 
 * Session在后端: 这是最常见的方式, 应用集群后需要解决Session共享的问题, 通常采用Redis来解决.
-* Session在前端: 后端不保存用户信息, 而是登录后将用户数据存在token中并返回给用户, 由前端保存token. 后端不存在Session共享问题, 只需直接多次运行应用即可实现集群.
 
-我不会Redis, 并且倾向于第二种方式. 这里涉及如何保证前端发给后端的token的可靠性的问题, 如何保证token中的数据就是正确的, 没有被篡改过的. [JWT](https://jwt.io/introduction/)提供了该方案的可行性, 具体原理略.
+* Session在前端: 后端不保存用户信息, 而是登录后将用户数据存在token中并返回给用户, 由前端保存token. 后端不存在Session共享问题, 只需运行多个应用实例即可实现集群.
 
---------------
+  > 但是否存在Sesion对于使用token来说, 不是必须的.
 
-要想Spring Security与JW集成, 并实现后端Session化, 需要考虑的问题有很多. 最主要的思路时, **提供自己的认证过滤器和登录控制器**. 登录控制器在登录成功后返回一个token给前端, 前端之后的每次请求都携带token; 认证过滤器拦截所有请求, 一旦发现有token并通过了验证, 则放置好对应的`Authentication`.
+这里介绍的是第二种方式, 涉及到如何保证前端发给后端的token是可靠的, 正确的, 没有被篡改的问题. [JWT](https://jwt.io/introduction/)提供了该方案的可行性, 具体原理见第五章.
+
+## 实现细节
+
+要想Spring Security与JWT集成, 并实现后端Session化, 需要考虑的问题有很多. 最主要的思路是, **提供自己的认证过滤器和登录控制器**. 
+
+* 登录控制器在登录成功后返回一个token给前端, 前端之后的每次请求都携带token; 
+* 认证过滤器拦截所有请求, 一旦发现有token并通过了验证, 则放置好对应的`Authentication`.
 
 > 注意, 构建`Authentication`的数据都是来源与解析token得到的.
 
@@ -412,7 +453,7 @@ protected void configure(AuthenticationManagerBuilder auth) throws Exception {
 
 * 注意自定义认证过滤器的位置
 
-  需要配置在和授权相关过滤器之前即可, 如下面将过滤器放到了原先认证过滤器之前:
+  放置在和授权相关过滤器之前即可, 如将过滤器放到了其他认证过滤器之前:
 
   ```java
   http.addFilterBefore(jwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
@@ -422,112 +463,22 @@ protected void configure(AuthenticationManagerBuilder auth) throws Exception {
 
   ```java
   http
-  .sessionManagement()    .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+      .sessionManagement()    
+      .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
   ```
-
----------
 
 具体实现见[Spring_Security_Demo](https://github.com/sidian123/Spring_Security_Demo)
 
-在历史提交中, 第一个提交是仅Spring Security时的配置方式, 后面的提交才加入了JWT的集成.
+> 在Git的提交历史中, 第一个提交是仅含Spring Security时的配置, 后面的提交才加入了JWT的集成.
 
 # 五 JWT
 
-上面都提到了JWT, 那么这里就简略介绍下.
-
-## 结构
-
-JSON Web Token(JWT)是一个安全传递数据的token中的一种. 它产生的token体积比较小, 但
-
-其结构由如下三部分组成, 分别以`.`分隔:
-
-* **Header**: token的元数据. 通常由两个字段组成, 加密的算法和token的类型, 如
-
-  ```json
-  {
-    "alg": "HS256",
-    "typ": "JWT"
-  }
-  ```
-
-  然后进行进行**Base64Url**编码
-
-* **Payload**: token承载的数据, 数据中的每个字段被称为**claim**. JWT规定了标准的claim, 我个人比较喜欢自定义字段(claim). 一个例子如下:
-
-  ```json
-  {
-    "sub": "1234567890",
-    "name": "John Doe",
-    "admin": true
-  }
-  ```
-
-  然后进行**Base64Url**编码
-
-  > 这里千万不要放敏感信息, 如密码
-
-* **Signature**(签名): 用于验证token未被修改的保障. 通过将前面两部分(包括分隔符`.`)+密钥Secret输入到加密算法中产生的签名. 如
-
-  ```
-  HMACSHA256(
-    base64UrlEncode(header) + "." +
-    base64UrlEncode(payload),
-    secret)
-  ```
-
-然后将这三部分通过`.`组合起来就是前端收到的token了, 如:
-
-![Encoded JWT](.Security/encoded-jwt3.png)
-
-前端发送token给后端时, 通常将token放入头字段的`Authorization`中, 并加上前缀`Bearer`, 如:
-
-```
-Authorization: Bearer <token>
-```
-
-> 为啥加前缀? 我也不晓滴
-
-## 原理
-
-### 为啥前面两部分使用Base64Url编码?
-
-因为一般token要存入HTTP头字段中, 头字段中只能使用ascii编码, 因此要进行Base64Url编码, 转化为ascii码.
-
-> 因此拿到token的人可以看到前面两部分的信息, 因此Payload中不要放敏感信息, 如密码.
-
-### 如何保证数据不被篡改?
-
-签名是通过Header, Payload, Secret和算法生成的, 只要拿到token的人不知道secret, 就不能伪造token. 即后端再次通过上述数据生成签名, 并与token中的签名比较, 此时肯定会不同. 这样就判别出来了伪造的token.
-
-## 使用
-
-网站中并没有JWT的实现, 这可能与JWT只是一个标准有关, 但我看大家都用如下的[JWT实现](https://github.com/jwtk/jjwt):
-
-```xml
-<dependency>
-    <groupId>io.jsonwebtoken</groupId>
-    <artifactId>jjwt</artifactId>
-    <version>0.9.1</version>
-</dependency>
-```
-
-然后在JDK11中会出现点问题, 需要加入依赖:
-
-```xml
-<dependency>
-    <groupId>org.glassfish.jaxb</groupId>
-    <artifactId>jaxb-runtime</artifactId>
-</dependency>
-```
-
-至于API的用法, github上也没有给出文档, 需要自己在idea中看API文档摸索, 略.
+见[Library/JWT](../Library/JWT.md)
 
 # 参考
 
 * [Spring Security Reference](https://docs.spring.io/spring-security/site/docs/5.2.0.BUILD-SNAPSHOT/reference/htmlsingle/)
 * [Spring Boot + Sp一个ring Security + JWT + MySQL + React Full Stack Polling app - Part 2](https://www.callicoder.com/spring-boot-spring-security-jwt-mysql-react-app-part-2/): 集成方案主要参考于此
-* [JWT](https://jwt.io/introduction/)
-
 
 
 
