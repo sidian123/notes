@@ -126,7 +126,7 @@ Jackson可识别的属性:
 
 * `@JsonIgnore`可以作用到字段, setter, getter方法上, 都生效, 会忽略属性的**序列化和解析**过程.
 
-  > * 官网说`@JsonProperty`可以重置`@JsonIgnore`的读或写. 经测试, 无效!
+  > 官网说`@JsonProperty`可以重置`@JsonIgnore`的读或写. 经测试, 无效!
 
 * `@JsonIgnoreProperties`注解在类上, 功能类似, 除此之外, 能够允许解析时忽略未知的属性.
 
@@ -241,8 +241,11 @@ public class ItemController {
 
 ## date相关
 
+> 好像Spring Boot配置的ObjectMapper很完美了
+
 * 序列化`LocalDateTime`
 	需要先引入包
+	
 	```xml
 	      <!-- json附加支持jdk8时间类型的包 -->
 	      <dependency>
@@ -264,6 +267,15 @@ public class ItemController {
 	> 因为一般参数是Url encode格式的, 而不是Json格式的
 
 >以后参考：[Jackson Date](https://www.baeldung.com/jackson-serialize-dates)
+---
+
+貌似可以直接这样
+
+```java
+@JsonDeserialize(using = LocalDateTimeDeserializer.class)
+@JsonSerialize(using = LocalDateTimeSerializer.class)
+```
+
 # 五 XML
 **jackson-dataformat-xml**项目是Jackson JSON处理器的扩展，用于在java对象与XML之间转换。
 
