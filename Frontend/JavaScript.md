@@ -1544,16 +1544,19 @@ html5后引入了web storage（本地储存），比cookies更好用。本地存
   * `scrollTop`元素已**滚动**内容的距离
 
     > 注意, 该内容可滚动
-  >
+    
+    >
     > 若仅`window`可滚动, 请用`window.scrollTo()`
-
-  * `offsetTop`元素相对于**最近positional父元素**的距离
-
-    >最好给父元素添加个`position`css属性
-
-  > 因此, 要滚动元素内容时, 可让父元素的`scroll Top`等于滚动到的元素的`offsetTop`值.
+    
+* `offsetTop`元素相对于**最近positional父元素**的距离
   
-* `getBoundingClientRect().top`元素上方`border`边缘距离视窗上方边缘的距离.
+  >最好给父元素添加个`position`css属性
+  
+    > 因此, 要滚动元素内容时, 可让父元素的`scroll Top`等于滚动到的元素的`offsetTop`值.
+  
+  * `getBoundingClientRect().top`元素上方`border`边缘距离视窗上方边缘的距离.
+  
+  * ...
 * ...
 
 其他方向的属性类似, 略
