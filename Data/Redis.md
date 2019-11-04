@@ -37,6 +37,8 @@
 
 ## 安装
 
+### APT安装
+
 `Ubuntu`下,
 
 1.  安装
@@ -63,27 +65,28 @@
    redis-cli
    ```
 
-> 问题: 
->
-> redis-server.service: Can't open PID file /var/run/redis/redis-server.pid (yet?) after start: No such file or directory
->
-> 排查:
->
-> 查看日志` /var/log/redis/redis-server.log `, 发现端口被占用
->
-> `ss`查看端口, 发现监听了其ip6的6379端口, 又去监听ip4的6379端口, 原因明了.
->
-> 解决:
->
-> 配置文件`/etc/redis/redis.conf`中
->
-> ```property
-> bind 127.0.0.1 ::1
-> ```
->
-> 去掉`::1`
->
-> > 参考 https://askubuntu.com/questions/967763/redis-server-service-failed-with-result-timeout-more-errors-listed-inside 
+### 源码安装
+
+1. 下载 & 编译
+
+   ```shell
+   $ wget http://download.redis.io/releases/redis-5.0.5.tar.gz
+   $ tar xzf redis-5.0.5.tar.gz
+   $ cd redis-5.0.5
+   $ make
+   ```
+
+2. 此时可执行文件位于`src/`目录
+
+   ```shell
+   src/redis-server
+   ```
+
+   可指定配置文件
+
+   ```shell
+   ./redis-server /path/to/redis.conf
+   ```
 
 # 命令
 
@@ -111,11 +114,55 @@
 
 * `flushall`删除所有数据库中的key
 
+* `auth`认证
+
+* `config set|get`获取或设置配置
+
+* `client list`查看所有连接
+
+* `info`查看Redis所有信息
+
+## 配置
+
+* 密码: 远程访问Redis将不被运行, 如果设置了密码, 则可以. 需在配置文件中添加
+
+  ```config
+  requirepass 123456
+  ```
+
   
 
+# 问题
 
+## 端口占用
 
+* 错误
 
+  redis-server.service: Can't open PID file /var/run/redis/redis-server.pid (yet?) after start: No such file or directory
+
+* 排查
+
+  查看日志` /var/log/redis/redis-server.log `, 发现端口被占用
+
+  `ss`查看端口, 发现监听了其ip6的6379端口, 又去监听ip4的6379端口, 原因明了.
+
+* 解决
+
+  配置文件`/etc/redis/redis.conf`中
+
+    ```property
+    bind 127.0.0.1 ::1
+    ```
+
+	去掉`::1 `
+
+> 参考 https://askubuntu.com/questions/967763/redis-server-service-failed-with-result-timeout-more-errors-listed-inside 
+
+## 超级大坑!!!
+
+远程连接Redis时, 复杂的,大的对象不能存入Redis, 我用的是JDK的序列化工具.
+
+本地却可以, 无论windows还是linux.
 
 
 
