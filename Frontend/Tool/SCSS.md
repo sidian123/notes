@@ -212,7 +212,28 @@ p ~ span {
 }
 ```
 
+## 变量
 
+SCSS的变量, 可以定义在任何地方, 使用在任何属性值存在的地方. 变量以`$`开始.
+
+例子:
+
+```scss
+$base-color: #c6538c;
+$border-dark: rgba($base-color, 0.88);
+
+.alert {
+  border: 1px solid $border-dark;
+}
+```
+
+转化为
+
+```css
+.alert {
+  border: 1px solid rgba(198, 83, 140, 0.88);
+}
+```
 
 ## 插值
 
@@ -239,6 +260,81 @@ p ~ span {
   border-radius: $size / 2;
 }
 ```
+
+## 引入样式文件
+
+* `@import` 
+
+  * 编译时引入样式
+
+    ```scss
+    @import 'foundation/code', 'foundation/lists';
+    ```
+
+    > 多个样式文件`,`分隔
+
+  * 原生CSS支持, 即运行时引入, 仅当出现如下情况时:
+
+    * Imports where the URL ends with `.css`.
+    * Imports where the URL begins `http://` or `https://`.
+    * Imports where the URL is written as a `url()`.
+    * Imports that have media queries.
+
+    例子:
+
+    ```scss
+    @import "theme.css";
+    @import "http://fonts.googleapis.com/css?family=Droid+Sans";
+    @import url(theme);
+    @import "landscape" screen and (orientation: landscape);
+    ```
+
+## 复用样式
+
+`@mixin`定义样式块, `@inclue`在其他样式中引入样式块, 如
+
+```scss
+@mixin reset-list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+@mixin horizontal-list {
+  @include reset-list;
+
+  li {
+    display: inline-block;
+    margin: {
+      left: -2px;
+      right: 2em;
+    }
+  }
+}
+
+nav ul {
+  @include horizontal-list;
+}
+```
+
+生成
+
+```scss
+nav ul {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+nav ul li {
+  display: inline-block;
+  margin-left: -2px;
+  margin-right: 2em;
+}
+```
+
+> `@inclue`相当于去掉`@mixin`外层代码块, 才引入进来.
+
+> 使用思路, 将非语义的, 纯粹功能性的样式抽离出来
 
 # 参考
 

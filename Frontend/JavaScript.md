@@ -1286,6 +1286,13 @@ Window接口表示一个包含了DOM文档的窗口，在浏览器中具体表�
 >具体使用参考
 >* [Window MDN](https://developer.mozilla.org/en-US/docs/Web/API/Window)
 >* [Wndow w3schools](https://www.w3schools.com/jsref/obj_window.asp)
+## Document
+
+代表整个文档, 可有的操作:
+
+* 查询元素
+* 很多文档相关的全局事件从中发出
+
 ### Location
 
 * 其对象`location`是`window`对象的属性, 代表当前url
@@ -1351,9 +1358,13 @@ Window接口表示一个包含了DOM文档的窗口，在浏览器中具体表�
 
 参考：https://developer.mozilla.org/en-US/docs/Web/API/Event
 
-### 使用
+### 基础
+
+#### 监听方案
+
 一共有三种方法可以使用事件：
 1. **Event handler properties**：html元素对应的javascript对象存在一些用于执行事件处理器的属性。
+	
 	```javascript
 	var btn = document.querySelector('button');
 	btn.onclick = function() {...};
@@ -1377,6 +1388,8 @@ Window接口表示一个包含了DOM文档的窗口，在浏览器中具体表�
 	```
 > 如果2,3都存在时, 先执行2
 
+> 注意! 监听器中的`this`指向监听的元素
+
 > 参考：
 >
 > * [全局事件处理器](https://developer.mozilla.org/en-US/docs/Web/API/GlobalEventHandlers)
@@ -1384,7 +1397,8 @@ Window接口表示一个包含了DOM文档的窗口，在浏览器中具体表�
 > * [event接口](https://developer.mozilla.org/en-US/docs/Web/API/Event)
 > * [事件的所有键值key](https://developer.mozilla.org/en-US/docs/Web/API/KeyboardEvent/key/Key_Values)
 
-### Event object
+#### Event object
+
 事件发生后，会同时产生event对象，通过该对象可以获得关于事件的信息，比如Event.target指定具体产生event的对象。
 
 事件处理器都可以接收event对象，只要函数定义时指定参数即可：
@@ -1404,7 +1418,7 @@ button.addEventListener('click',function(event){
 5.  `event.stopImmediatePropagation()`：停止事件横向、纵向传播。
 6. `event.defaultPrevented()`：阻止默认行为。注意，在html元素的事件处理属性中`return false`也能阻止默认行为，但是在其他地方行不通，因此不建议使用。
 
-### Event bubbling and capture
+#### Event bubbling and capture
 当事件发生时，event对象会传播给目标对象，执行处理器。但是这个过程分为三个阶段：
 1. Capturing phase – the event goes down to the element.
 2. Target phase – the event reached the target element.
@@ -1416,12 +1430,14 @@ addEventListener的第三个参数为true时（默认false）注册在capturing�
 
 target阶段不能单独存在，而是包含在其他两个阶段内。比如，capturing阶段最后一个处理器和budding阶段第一个处理器就发生在该阶段。
 
-### 事件代理
+#### 事件代理
 这里的代理就是指父类来处理子类的事件。比如点击`li`，但监听器设置在`ul`上，通过event.target就知道具体哪个元素被点击，于是可以方便其代为处理该事件。利用事件传播原理。
 
 参考：<https://javascript.info/bubbling-and-capturing>
 
-### 键盘事件
+### 事件使用
+
+#### 键盘事件
 
 有三种与键盘相关的事件
 
@@ -1445,7 +1461,7 @@ target阶段不能单独存在，而是包含在其他两个阶段内。比如�
 
 > 参考:[KeyboardEvent](https://developer.mozilla.org/en-US/docs/Web/API/KeyboardEvent)
 
-### 触碰事件
+#### 触碰事件
 
 在触碰敏感的平面上, 触碰状态改变时, 会触发触碰事件[TouchEvent](https://developer.mozilla.org/en-US/docs/Web/API/TouchEvent) .每个触碰点被描述为[Touch](https://developer.mozilla.org/en-US/docs/Web/API/Touch)对象,含有位置,大小,形状,压力等信息.
 
@@ -1466,7 +1482,7 @@ target阶段不能单独存在，而是包含在其他两个阶段内。比如�
 
 > `Touch`上可通过`clientX`,`clientY`获取其位置
 
-### 鼠标事件
+#### 鼠标事件
 
 与触碰类似, 不过触碰不能用于PC端, 而鼠标事件只能用于PC端
 
@@ -1484,7 +1500,7 @@ target阶段不能单独存在，而是包含在其他两个阶段内。比如�
 
 > 参考[MouseEvent](https://developer.mozilla.org/en-US/docs/Web/API/MouseEvent)
 
-### 剪贴板事件
+#### 剪贴板事件
 
 `ClipboardEvent`代表剪贴板事件, 含有`clipboardData`属性, 能够获取和设置剪贴板内容. 以下都是`ClipboardEvent`的实例
 
@@ -1501,6 +1517,10 @@ target阶段不能单独存在，而是包含在其他两个阶段内。比如�
 >
 > * [Element: paste event](https://developer.mozilla.org/en-US/docs/Web/API/Element/paste_event)
 > * [ClipboardEvent](https://developer.mozilla.org/en-US/docs/Web/API/ClipboardEvent)
+
+#### 其他事件
+
+* [scroll](https://developer.mozilla.org/en-US/docs/Web/API/Document/scroll_event) 滚动事件, 当元素滚动时触发
 
 ##  存储
 
@@ -1547,7 +1567,7 @@ html5后引入了web storage（本地储存），比cookies更好用。本地存
     
     >
     > 若仅`window`可滚动, 请用`window.scrollTo()`
-    
+  
 * `offsetTop`元素相对于**最近positional父元素**的距离
   
   >最好给父元素添加个`position`css属性

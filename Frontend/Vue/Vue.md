@@ -136,6 +136,8 @@ vue指令以`v-`开始，用于渲染DOM或绑定数据，定义在元素或组�
 
 ## 生命周期
 
+### 组件生命周期
+
 ![](.Vue/aHR0cHM6Ly92dWVqcy5vcmcvaW1hZ2VzL2xpZmVjeWNsZS5wbmc.png )
 vue允许在vue实例生命周期的某个阶段（如红色方框所示）上挂载用户自定义的函数，称为hook，如：
 
@@ -152,8 +154,33 @@ new Vue({
 // => "a is: 1"
 ```
 
-补充:
+### 初始化与变动
 ![1571706907009](.Vue/1571706907009.png)
+
+> 尽管初始化时不会造成`computed`计算, 但是第一次被使用时会被计算.
+
+### 组件间生命周期
+
+举个例子说明, 首先, 组件关系如下
+
+```html
+<CommonTools>
+    <Search></Search>
+</CommonTools>
+```
+
+则生命周期执行顺序
+
+```plain
+CommonTool before created
+CommonTool created
+CommonTool before mount
+Search before create
+Search created
+Search before mount
+Search before mounted
+CommonTool mounted
+```
 
 # 四 模板语法
 * 即html模板，允许你声明式的绑定渲染后的DOM到vue实例的数据上。
