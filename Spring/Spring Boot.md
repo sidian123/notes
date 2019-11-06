@@ -340,6 +340,8 @@ spring boot对[Java Util Logging](https://docs.oracle.com/javase/8/docs/api//jav
 </dependency>
 ```
 
+> 注意, 最新版Spring Boot好像已经不再提供该starter了
+
 类中获取Logger
 
 ```java
