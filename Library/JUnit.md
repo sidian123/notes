@@ -29,7 +29,7 @@
 
 即在某处断言某个结果, 全部断言成功则测试成功, 否则失败.
 
-`Assert`类常用的静态方法如下:
+`Assertions`类常用的静态方法如下:
 
 * `void assertEquals(boolean expected,boolean actual)`: checks that two primitives/objects are equal. It is overloaded.
 

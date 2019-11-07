@@ -51,6 +51,14 @@
       
   * 等同于`@Getter`,`@Setter`,`@RequiredArgsConstructor` ,`@ToString`,`@EqualsAndHashCode`
 
+  * 防止某个属性生成Getter, Setter方法
+
+      ```java
+      @Getter(AccessLevel.NONE)
+      @Setter(AccessLevel.NONE)
+      private int mySecret;
+      ```
+
 * `@NonNull`生成检查参数的代码, 为`null`时将抛出`NullPointerException`异常. 可注解到参数或字段上, 在字段上时, 则检查其`getter`方法.
 
 * 日记, 通过不同的日记注解, 可以生成对应的`log`字段. 下面列举常用的注解
