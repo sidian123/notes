@@ -1286,7 +1286,7 @@ Window接口表示一个包含了DOM文档的窗口，在浏览器中具体表�
 >具体使用参考
 >* [Window MDN](https://developer.mozilla.org/en-US/docs/Web/API/Window)
 >* [Wndow w3schools](https://www.w3schools.com/jsref/obj_window.asp)
-## Document
+### Document
 
 代表整个文档, 可有的操作:
 
@@ -1371,11 +1371,13 @@ Window接口表示一个包含了DOM文档的窗口，在浏览器中具体表�
 	```
 	
 2. **Inline event handlers**：不建议使用。html元素的一些属性可以指定事件处理的javascript**代码块**。
+	
 	```javascript
 	<button onclick="alert('Hello, this is my old-fashioned event handler!');">Press me</button>
 	```
 	
 3. **addEventListener() and removeEventListener()**：前者可以为事件注册事件监听器**且同时能注册多个**，后者能够删除事件监听器。
+	
 	```javascript
 	//add handler
 	btn.addEventListener('click', bgChange);
@@ -1383,8 +1385,8 @@ Window接口表示一个包含了DOM文档的窗口，在浏览器中具体表�
 	btn.removeEventListener('click', bgChange);
 	//add multiple handlers
 	myElement.addEventListener('click', functionA);
-	myElement.addEventListener('click', functionB);
-
+myElement.addEventListener('click', functionB);
+	
 	```
 > 如果2,3都存在时, 先执行2
 
