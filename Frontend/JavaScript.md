@@ -1241,6 +1241,7 @@ DOM接口大致分为两类：DOM核心接口和与html元素相关的接口。D
 * Document.createElement()
 * Node.appendChild()
 * Node.removeChild()
+* ` ChildNode.remove()`删除自身
 -----------
 * Element.innerHTML
 
@@ -1388,7 +1389,7 @@ Window接口表示一个包含了DOM文档的窗口，在浏览器中具体表�
 	```
 > 如果2,3都存在时, 先执行2
 
-> 注意! 监听器中的`this`指向监听的元素
+> 注意! 监听器中的`this`指向监听的元素, 在Vue中仍指向vue实例
 
 > 参考：
 >
@@ -1479,6 +1480,12 @@ target阶段不能单独存在，而是包含在其他两个阶段内。比如�
 事件上有用的属性:
 
 * `targetTouches`: 同时被触碰且触碰到同一个元素上的`Touch`对象集合
+
+*  [`TouchEvent.changedTouches`](https://developer.mozilla.org/en-US/docs/Web/API/TouchEvent/changedTouches)  
+
+*  [`TouchEvent.touches`](https://developer.mozilla.org/en-US/docs/Web/API/TouchEvent/touches)  
+
+  > 有点分不清了...
 
 > `Touch`上可通过`clientX`,`clientY`获取其位置
 
