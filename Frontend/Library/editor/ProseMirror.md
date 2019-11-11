@@ -5,3 +5,4 @@
   * [`prosemirror-state`](http://prosemirror.net/docs/ref/#state) provides the data structure that describes the editor's whole state, including the selection, and a transaction system for moving from one state to the next.
   * [`prosemirror-view`](http://prosemirror.net/docs/ref/#view) implements a user interface component that shows a given editor state as an editable element in the browser, and handles user interaction with that element.
   * [`prosemirror-transform`](http://prosemirror.net/docs/ref/#transform) contains functionality for modifying documents in a way that can be recorded and replayed, which is the basis for the transactions in the `state` module, and which makes the undo history and collaborative editing possible.
+

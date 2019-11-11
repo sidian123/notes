@@ -1233,39 +1233,56 @@ DOM接口大致分为两类：DOM核心接口和与html元素相关的接口。D
 
 下面给出一些常用的方法：
 
-* Document.querySelector()：通过css选择器来选择html元素。
-* Document.querySelectorAll()
-* Document.getElementById()
-* Document.getElementsByTagName()
+* 查找相关
+  * Document.querySelector()：通过css选择器来选择html元素。
+  * Document.querySelectorAll()
+  * Document.getElementById()
+  * Document.getElementsByTagName()
 -----------
-* Document.createElement()
-* Node.appendChild()
-* Node.removeChild()
-* ` ChildNode.remove()`删除自身
+* DOM树操作相关
+  * Document.createElement()
+  * Node.appendChild()
+  * Node.removeChild()
+  * ` ChildNode.remove()`删除自身
 -----------
-* Element.innerHTML
+* 节点内容相关
 
-* `HTMLElement.innerText`
+  * Element.innerHTML
 
-* `Node.textContent`
+  * `HTMLElement.innerText`
 
-  > `innerXXX`与`textContent`相比
-  >
-  > * `innerXXX`会额外将样式考虑进去, 区别见[textContent](https://developer.mozilla.org/en-US/docs/Web/API/Node/textContent)
-  > * `innerHTML`会decode HTML实体, 如 `&gt;` => `>` ; 而`textContent`会encode 保留字符, 如 `>` => `&gt;`
+  * `Node.textContent`
 
-* element.style.left
+    > `innerXXX`与`textContent`相比
+    >
+    > * `innerXXX`会额外将样式考虑进去, 区别见[textContent](https://developer.mozilla.org/en-US/docs/Web/API/Node/textContent)
+    > * `innerHTML`会decode HTML实体, 如 `&gt;` => `>` ; 而`textContent`会encode 保留字符, 如 `>` => `&gt;`
 
-* element.setAttribute()
+  * element.style.left
 
-* element.getAttribute()
+  * element.setAttribute()
 
-* element.addEventListener()
+  * element.getAttribute()
+
+  * element.addEventListener()
 ----------
-* window.content
-* window.onload
-* console.log()
-* window.scrollTo()
+* 其他
+
+  * window.content
+
+  * window.onload
+
+  * console.log()
+
+  * `Element.scrollTo()` 滚动元素内容, 如平滑滚动
+
+    ```javascript
+    element.scrollTo({
+      top: 100,
+      left: 100,
+      behavior: 'smooth'
+    });
+    ```
 
 参考：
 [Document Object Model (DOM)](https://developer.mozilla.org/en-US/docs/Web/API/Document_Object_Model)
