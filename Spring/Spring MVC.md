@@ -535,11 +535,18 @@ public Map<...> addMember(Member member) {
 
 ### 介绍(了解)
 
-在请求映射和控制器中抛出的异常会被`HandlerExceptionResolver` （接口）组成的链来处理。当异常不被处理，和处于错误响应状态时，servelt容器会将结果渲染到错误页面中。详情见：[Exceptions](<https://docs.spring.io/spring/docs/current/spring-framework-reference/web.html#mvc-exceptionhandlers>)
+在请求映射和控制器中抛出的异常会被`HandlerExceptionResolver` （接口）组成的链来处理。当异常不被处理，和处于错误响应状态时，servelt容器会将结果渲染到错误页面中。
 
-`@Controller`和`@ControllerAdvice`类中，可以有一个`@ExceptionHandler` 异常处理方法。详情见：[Exceptions](<https://docs.spring.io/spring/docs/current/spring-framework-reference/web.html#mvc-ann-exceptionhandler>)
+以下的四种接口实现中, 给出多种使用异常的方法
 
-> 这是`HandlerExceptionResolver`实现类`ExceptionHandlerExceptionResolver`提供的功能。
+| `HandlerExceptionResolver`                                   | Description                                                  |
+| :----------------------------------------------------------- | :----------------------------------------------------------- |
+| `SimpleMappingExceptionResolver`                             | A mapping between exception class names and error view names. Useful for rendering error pages in a browser application. |
+| [`DefaultHandlerExceptionResolver`](https://docs.spring.io/spring-framework/docs/5.2.1.RELEASE/javadoc-api/org/springframework/web/servlet/mvc/support/DefaultHandlerExceptionResolver.html) | Resolves exceptions raised by Spring MVC and maps them to HTTP status codes. See also alternative `ResponseEntityExceptionHandler` and [REST API exceptions](https://docs.spring.io/spring/docs/current/spring-framework-reference/web.html#mvc-ann-rest-exceptions). |
+| `ResponseStatusExceptionResolver`                            | Resolves exceptions with the `@ResponseStatus` annotation and maps them to HTTP status codes based on the value in the annotation. |
+| `ExceptionHandlerExceptionResolver`                          | Resolves exceptions by invoking an `@ExceptionHandler` method in a `@Controller` or a `@ControllerAdvice` class. See [@ExceptionHandler methods](https://docs.spring.io/spring/docs/current/spring-framework-reference/web.html#mvc-ann-exceptionhandler). |
+
+可以提供自己的异常实现, 下面介绍`ResponseStatusExceptionResolver`的异常处理方式.
 
 ### 状态码(重点)
 

@@ -424,7 +424,9 @@ spring boot也提供了常用的应用属性配置，并且这些属性是日记
 - `RestController`：`@ResponseBody`与`@Controller`的结合，声明为控制器且使用对象作为返回值（默认使用Jackson转化为json数据）。
 - `@RequestMapping`：将方法映射到某个http请求。可使用它的变种，如`@GetMapping`,`@PostMapping`等等。
 
-## 自动配置
+## 自动 && 自定义配置
+
+自动配置
 
 - Inclusion of `ContentNegotiatingViewResolver` and `BeanNameViewResolver` beans.
 - Support for serving static resources, including support for WebJars 
@@ -434,6 +436,14 @@ spring boot也提供了常用的应用属性配置，并且这些属性是日记
 - Static `index.html` support.
 - Custom `Favicon` support 
 - Automatic use of a `ConfigurableWebBindingInitializer` bean 
+
+-----
+
+自定义
+
+* 若想添加额外特性, 如拦截器, 格式化器等, 需自己实现并注入一个`WebMvcConfigurer`
+* 若想提供与映射相关的组件, 需注入` WebMvcRegistrationsAdapter `
+* 若想完全控制Spring MVC的配置, 需提供` @EnableWebMvc `注解的`@ Configuration `配置类.
 
 ## HttpMessageConverters
 
