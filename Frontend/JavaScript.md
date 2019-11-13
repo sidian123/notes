@@ -1459,6 +1459,8 @@ target阶段不能单独存在，而是包含在其他两个阶段内。比如�
 
 #### 键盘事件
 
+> 一般表单元素可接收键盘事件, 若让其他元素也接收键盘事件, 可使用属性`tabindex='-1'`
+
 有三种与键盘相关的事件
 
 * [keydown](https://developer.mozilla.org/en-US/docs/Web/Events/keydown)按下键时触发

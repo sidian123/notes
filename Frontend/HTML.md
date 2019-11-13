@@ -68,12 +68,21 @@ html元素是html最重要的组成部分，这里会简略讲解**html5**各个
 | contenteditable | 指定元素是否可以被编辑                                       |
 | hidden          | 隐藏元素，即display:none                                     |
 | data-*          | 自定义属性，在元素中存储数据                                 |
+| tabindex        | 让元素可focus, 且能够参与`tab`键切换元素.                    |
 
-其中, **style**属性值的设置格式如下：
+详细介绍:
 
-```
-<tagname style="property:value;[property:value;]...">
-```
+* **style**属性值的设置格式如下：
+
+    ```html
+    <tagname style="property:value;[property:value;]...">
+    ```
+    
+* `tabindex`
+
+    * `-1` 可被focus, 但不参与`tab`键切换
+    * `0` 可focus, 以自然顺序参与`tab`切换
+    * 正数, 尚不清除
 
 其他属性请参考链接。
 

@@ -338,6 +338,8 @@ nav ul li {
 
 > 使用思路, 将非语义的, 纯粹功能性的样式抽离出来
 
+> 参考:[@mixin and @include](https://sass-lang.com/documentation/at-rules/mixin)
+
 # 参考
 
 * [Documentation](<https://sass-lang.com/documentation>)	
