@@ -616,7 +616,13 @@ JavaScript是基于原型（prototype）的语言，没有class语句的存在�
 除了对象字面值可以直接建立对象，还可以通过构造函数来实例化对象。构造函数实例化的方式很复杂，首先先理解几个概念。
 
 ### this
-`this`关键词，在函数中通常为`undefined`，当然也可以使用`call()`、`apply()`方法手动设置`this`值；在对象方法中指向该对象。由于**自动包装**(auto box)的存在，`undefined`或`null`值将被替换为全局对象（如`window`），`primitive`值被包装成对象。但在**strict mode**下，不会发生自动包装。
+* 在函数中通常为`undefined`
+
+  > 当然也可以使用`call()`、`apply()`方法手动设置`this`值；
+
+* 在对象方法中指向该对象。
+
+由于**自动包装**(auto box)的存在，`undefined`或`null`值将被替换为全局对象（如`window`），`primitive`值被包装成对象。但在**strict mode**下，不会发生自动包装。
 
 下面看看两个非strict模式下自动包装的例子：
 ```javascript
