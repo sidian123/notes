@@ -14,7 +14,7 @@
   * 可嵌入式使用, 即嵌入到单个应用中
 * MySQL8新变化
   * 默认`utf8mb4`编码, 之前默认`latin1`编码
-  * 建表默认使用`InnoDB`引擎(事物的), 之前默认使用`MyISAM`引擎(非事物的)
+  * 建表默认使用`InnoDB`引擎(事物的), ~~之前默认使用`MyISAM`引擎(非事物的)~~
   * 支持角色权限管理
   * 增强了`InnoDB`引擎功能
   * 增强了`JSON`存储功能
@@ -100,6 +100,10 @@
      ```bash
      bin/mysqld --initialize-insecure --user=mysql
      ```
+
+   > 注意!!!
+   >
+   > 如果这一步失败, 说明mysql无访问当前目录的权限, 无法创建`data/`目录中相关内容, 请至少赋予`other` `x`权限
 
 7. **运行mysqld** : 同样的, 以`mysql`身份运行, 这里的mysqld_safe一个启动mysqld方便的工具.
 
@@ -477,6 +481,14 @@
   * `/usr/local/mysql/etc/my.cnf`
   * `~/.my.cnf`
 
+  > mysqld和mysql使用同一个配置文件, 使用`[mysqld]`,`[mysql]`来区分配置
+  
+* 查看mysqld当前配置或可配置选项
+
+  ```mysql
+  mysqld --verbose --help |less
+  ```
+
 * 查看当前server系统变量
 
   ```mysql
@@ -506,6 +518,26 @@
   * 日记
   * SSL和RSA证书及秘钥
   * server进程id文件(`.pid`)
+
+* 字符编码配置
+
+  ```mysql
+  [client]
+  default-character-set=utf8mb4
+  [mysql]
+  default-character-set=utf8mb4
+  [mysqld]
+  character-set-server=utf8mb4
+  collation-server = utf8mb4_unicode_ci
+  ```
+
+  然后重启mysqld, 进入mysql查看
+
+  ```mysql
+   show variables where variable_name like 'char%' or variable_name like 'collation%'
+  ```
+
+  ![image-20191115125035531](.MySQL/image-20191115125035531.png)
 
 # 五 权限控制
 
