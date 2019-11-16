@@ -130,7 +130,11 @@
   requirepass 123456
   ```
 
-* `bind` 配置绑定的ip地址
+* `bind` 配置绑定的ip地址. 若要外网能够访问, 则配置为
+
+  ```property
+  bind 0.0.0.0
+  ```
 
 # 问题
 
@@ -155,6 +159,8 @@
     ```
 
 	去掉`::1 `
+
+> 其实还未解决上述问题, 但却解决了阻止ngnix运行的问题, 也就不必再深究了.
 
 > 参考 https://askubuntu.com/questions/967763/redis-server-service-failed-with-result-timeout-more-errors-listed-inside 
 
