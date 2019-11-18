@@ -461,5 +461,17 @@ SpEL（Spring Expression Language），即Spring表达式语言，是比JSP的EL
 >
 > * [Spring Expression Language (SpEL)](https://docs.spring.io/spring/docs/5.2.0.RELEASE/spring-framework-reference/core.html#expressions)
 
+# Email
 
+* 首先需要引入JavaMail
+
+  ```xml
+  <dependency>
+      <groupId>com.sun.mail</groupId>
+      <artifactId>javax.mail</artifactId>
+      <version>1.6.2</version>
+  </dependency>
+  ```
+
+  
 
