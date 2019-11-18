@@ -326,7 +326,8 @@ These are the available config options for making requests. Only the `url` is re
 
 > 如果觉得自定义配置仍不能满足需求, 可以选择使用拦截器
 
-##　Response对象
+
+## Response对象
 
 The response for a request contains the following information.
 
