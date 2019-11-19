@@ -32,10 +32,15 @@ Git是一种分布式版本控制系统（DVCS），用来记录团队合作中�
 * **Explore**：在这个页面中，可以寻找有趣的项目，github也会根据你的喜好（watch、star、follow等）推荐一些项目。
 * 等等等等。。
 
-# 三 github pages
-这是github提供的很有用处的服务，github pages是一个静态网站托管的服务，也就是拖放前端代码。这种静态网站可以作为个人博客、项目文档网站存在等等。但是该服务也[有些限制][1]，因此把github pages当做网盘使用的想法就行不通了。
+# 三 Github Pages
 
-github pages分为两种：
+这是Github提供的一个托管静态网站的配置. 
+
+内嵌Jekyll作为网站的编译引擎. 即, Github仓库仅提供数据源, 然后通过Jekyll编译到Github真正托管网站的地方. 让用户感觉就像网站好像直接运行在仓库似的.
+
+该服务有一定的[限制][1]，因此把Github Pages当做网盘来使用的想法就泡汤了.
+
+Github Pages分为两种：
 * **Project Pages sites**：与特定项目有关，存在于仓库中的某个分支上，每个仓库仅此一份。常用于解释该项目的，或者整个项目就是为了开发这个静态网站。
 * **User and Organization Pages sites**：该网站和账户有关，每个账户仅此一个此类网站。个人账户可以用此作个人博客，组织可以用此作组织介绍等等。
 
@@ -62,17 +67,42 @@ github pages是以仓库为基础的，前端代码啥的都来自于仓库，�
 --------------
 你也许会发现，与其手动写前端代码，使用Jekyll theme+Markdown可以轻松制作网页。是的，，但是在github中没有找到好的教程，因此没有深入了解。
 
-但是如果实在想使用markdown的话，可以在<https://dillinger.io/>网站中将markdown转化为html文件，通过简单的修改就可以放到仓库中啦~~
-
----------------
-github也提供了使用自己域名的功能，也许你在查看某个框架文档时，这个文档的网站就是托管在github上的，只是换了域名而已。
+> 如果想展示markdown，可以在<https://dillinger.io/>网站中将markdown转化为html文件，通过简单的修改就可以放到仓库中啦~~
 
 ## 自定义域名
 
 1. 让域名能够解析到Github Pages上: 创建`CNAME`记录, 让自己的域名解析到Github Pages上, 如`sidian.live`解析到`sidian123.github.io`
+
 2. 让Github知晓映射关系: 在Github仓库的`Settings`中, 找到`Custom domain`, 添加自己的域名, 并保存
 
+   > 这一步本质上是在你的仓库根目录下创建了`CNAME`文件, 记录自定义的域名
+
 > 参考[Managing a custom domain for your GitHub Pages site](https://help.github.com/en/github/working-with-github-pages/managing-a-custom-domain-for-your-github-pages-site)
+
+## Jekyll
+
+不深入探究, 只说一点:
+
+Jekyll只编译和拷贝部分网页, 非html, 以`_`为前缀的文件/目录, 将不被访问到, 需要在仓库根目录下添加配置`_config.yml`修改它
+
+```property
+include:
+  - "_*"
+  - "*.*"
+```
+
+> 上述允许任何文件和以`_`为前缀的文件夹被拷贝与编译, 即能够被访问到.
+
+然后, 还不够!!! 否则会编译失败
+
+还需要在根目录下添加空的` .nojekyll `文件, 来忽略Jekyll对特殊文件的处理
+
+> 为何? 鬼晓得
+
+> 参考
+>
+> * [Include files and also copy them to output](https://stackoverflow.com/questions/26128513/include-files-and-also-copy-them-to-output)
+> * [Bypassing Jekyll on GitHub Pages](https://github.blog/2009-12-29-bypassing-jekyll-on-github-pages/)
 
 # 参考
 [github guide](https://guides.github.com/)：最基本的指导
