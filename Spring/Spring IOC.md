@@ -869,7 +869,7 @@ public class AppPreferences {
 
 Bean不同的生命周期中会执行不同的方法:
 
-![img](.Spring IOC/20190223193524552.jpg)
+![img](.Spring%20IOC/20190223193524552.jpg)
 
 >图片来源：[Spring Bean Life Cycle Tutorial](https://www.concretepage.com/spring/spring-bean-life-cycle-tutorial)
 >
