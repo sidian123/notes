@@ -67,6 +67,13 @@ github pages是以仓库为基础的，前端代码啥的都来自于仓库，�
 ---------------
 github也提供了使用自己域名的功能，也许你在查看某个框架文档时，这个文档的网站就是托管在github上的，只是换了域名而已。
 
+## 自定义域名
+
+1. 让域名能够解析到Github Pages上: 创建`CNAME`记录, 让自己的域名解析到Github Pages上, 如`sidian.live`解析到`sidian123.github.io`
+2. 让Github知晓映射关系: 在Github仓库的`Settings`中, 找到`Custom domain`, 添加自己的域名, 并保存
+
+> 参考[Managing a custom domain for your GitHub Pages site](https://help.github.com/en/github/working-with-github-pages/managing-a-custom-domain-for-your-github-pages-site)
+
 # 参考
 [github guide](https://guides.github.com/)：最基本的指导
 [github help](https://help.github.com/)：最详细的文档
