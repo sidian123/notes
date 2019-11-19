@@ -10,7 +10,7 @@
 > * [Spring Validation](https://docs.spring.io/spring/docs/current/spring-framework-reference/core.html#validation-beanvalidation)
 > * [SpringMVC validation完成后端数据校验（较全面）](https://blog.csdn.net/m0_37589327/article/details/78648328)  : 写的还行吧
 
-# 资源获取
+# Resource
 
 `ResourceLoader`提供的`getResource`方法, 可以获取代表资源的`Resource`. 但资源是否真的存在, 需要`Resource.exists()`检测.
 
@@ -463,6 +463,8 @@ SpEL（Spring Expression Language），即Spring表达式语言，是比JSP的EL
 
 # Email
 
+* 目的: 该模块主要用于屏蔽底层实现, 简化邮箱的使用.
+
 * 首先需要引入JavaMail
 
   ```xml
@@ -473,5 +475,19 @@ SpEL（Spring Expression Language），即Spring表达式语言，是比JSP的EL
   </dependency>
   ```
 
-  
+* 核心组件
 
+  * `MailServer`接口代表服务器, 用于发送邮件
+    * `JavaMailSenderImpl`其实现类
+  * `MailMessage`接口表示一封邮件
+    * ` SimpleMailMessage `一封简单的文本邮件
+    * `MimeMailMessage`一封MIME类型的邮件
+
+* 使用
+
+  * 方式一: 使用`MailMessage`创建一封邮箱, 让`MailSender`发送
+  * 方式二: Spring提供了`MimeMessageHelper`类帮助构建邮件, 然后再让`MailServer`发送
+
+  * 方式三: 通过`MimeMessagePreparator`暴露底层类, 来装配邮件, 然后`MailServer`发送
+
+> 参考[Email](https://docs.spring.io/spring-framework/docs/current/spring-framework-reference/integration.html#mail)
