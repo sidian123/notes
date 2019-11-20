@@ -265,6 +265,21 @@ scp file root@wx.sidian123.top:
 
 sftp，暂且不会, 略。
 
+### rz&sz
+
+需使用XShell, 然后服务器中安装`lrzsz`
+
+```shell
+yum install  lrzsz -y
+```
+
+> 一般都有
+
+使用
+
+* 上传`rz`
+* 下载`sz <file>`
+
 ### 其他
 
 还可以使用流的重定向来在两台主机上传输文件，并且windows也支持流的重定向。
