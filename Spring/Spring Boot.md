@@ -156,11 +156,11 @@ public class SpringBootHelloworldApplicationTests {
 
 spring boot整合了spring框架和三方库后，提供了自动配置的功能，它的默认配置通常是我们需要的。spring boot也整合了他们的配置，允许我们使用spring boot的配置文件来配置他们。
 
-- spring boot配置的途径有很多，常用的配置方式有：properties文件、YAML文件、环境变量、命令行参数，这些配置最终会存入`Environment`？。
+- spring boot配置的途径有很多，常用的配置方式有：properties文件、YAML文件、环境变量、命令行参数，这些配置最终会存入`Environment`。
 
-  同名属性覆盖顺序参考：[Externalized Configuration](<https://docs.spring.io/spring-boot/docs/2.0.5.RELEASE/reference/htmlsingle/#boot-features-external-config>)，这种属性覆盖的方式，使得你能够轻松的从开发环境下切换到生产环境。
+  > 同名属性覆盖顺序参考：[Externalized Configuration](<https://docs.spring.io/spring-boot/docs/2.0.5.RELEASE/reference/htmlsingle/#boot-features-external-config>)
 
-- 获取属性值的两种方式：
+- 获取`Environment`中属性值的两种方式：
 
   - `@Value`：将属性绑定到类的字段上，配合SpEL表达式使用。
   - `@ConfigurationProperties`：将一组属性绑定到类上。
@@ -187,6 +187,34 @@ spring boot整合了spring框架和三方库后，提供了自动配置的功能
   ```
 
 - [通用配置](<https://docs.spring.io/spring-boot/docs/current/reference/html/common-application-properties.html>)：这使用spring boot依赖或配置三方库时需要的大部分配置属性。也能存在其他的属性配置，这取决于引入的依赖是否从spring boot环境中取出值来。
+
+### 配置文件
+
+`PropertySource`定义了属性之间的覆盖关系, 如下以优先级降低的顺序列出所有的配置文件:
+
+1. [Devtools global settings properties](https://docs.spring.io/spring-boot/docs/2.0.5.RELEASE/reference/htmlsingle/#using-boot-devtools-globalsettings) on your home directory (`~/.spring-boot-devtools.properties` when devtools is active).
+2. [`@TestPropertySource`](https://docs.spring.io/spring/docs/5.0.9.RELEASE/javadoc-api/org/springframework/test/context/TestPropertySource.html) annotations on your tests.
+3. [`@SpringBootTest#properties`](https://docs.spring.io/spring-boot/docs/2.0.5.RELEASE/api/org/springframework/boot/test/context/SpringBootTest.html) annotation attribute on your tests.
+4. Command line arguments.
+5. Properties from `SPRING_APPLICATION_JSON` (inline JSON embedded in an environment variable or system property).
+6. `ServletConfig` init parameters.
+7. `ServletContext` init parameters.
+8. JNDI attributes from `java:comp/env`.
+9. Java System properties (`System.getProperties()`).
+10. OS environment variables.
+11. A `RandomValuePropertySource` that has properties only in `random.*`.
+12. [Profile-specific application properties](https://docs.spring.io/spring-boot/docs/2.0.5.RELEASE/reference/htmlsingle/#boot-features-external-config-profile-specific-properties) outside of your packaged jar (`application-{profile}.properties` and YAML variants).
+13. [Profile-specific application properties](https://docs.spring.io/spring-boot/docs/2.0.5.RELEASE/reference/htmlsingle/#boot-features-external-config-profile-specific-properties) packaged inside your jar (`application-{profile}.properties` and YAML variants).
+14. Application properties outside of your packaged jar (`application.properties` and YAML variants).
+15. Application properties packaged inside your jar (`application.properties` and YAML variants).
+16. [`@PropertySource`](https://docs.spring.io/spring/docs/5.0.9.RELEASE/javadoc-api/org/springframework/context/annotation/PropertySource.html) annotations on your `@Configuration` classes.
+17. Default properties (specified by setting `SpringApplication.setDefaultProperties`).
+
+> 如命令行提供属性值:
+>
+> ```shell
+> java -jar app.jar --name="Spring"
+> ```
 
 ### YAML与properties
 
@@ -257,7 +285,7 @@ spring boot整合了spring框架和三方库后，提供了自动配置的功能
     my.servers[1]=another.example.com
     ```
 
-### 使用
+### 属性值取出
 
 一个例子，获取上面的数组属性：
 
@@ -309,7 +337,13 @@ private String[] stringArrayWithDefaults;
 private int[] intArrayWithDefaults;
 ```
 
-### 路径
+### Profile
+
+`application-{profile}.properties`允许有多个, 但仅其中一个生效, 由 ` spring.profiles.active`决定, 默认使用`application-default.properties`(如果存在的话)
+
+### 其他
+
+#### 路径
 
 * 环境变量下的路径: 需加上前缀`classpath:`
 * `**`匹配多层目录
