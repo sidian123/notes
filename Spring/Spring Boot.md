@@ -156,7 +156,9 @@ public class SpringBootHelloworldApplicationTests {
 
 spring boot整合了spring框架和三方库后，提供了自动配置的功能，它的默认配置通常是我们需要的。spring boot也整合了他们的配置，允许我们使用spring boot的配置文件来配置他们。
 
-- spring boot配置的途径有很多，常用的配置方式有：properties文件、YAML文件、环境变量、命令行参数，这些配置最终会存入`Environment`？。同名属性覆盖顺序参考：[Externalized Configuration](<https://docs.spring.io/spring-boot/docs/2.0.5.RELEASE/reference/htmlsingle/#boot-features-external-config>)，这种属性覆盖的方式，是的你能够轻松的从开发环境下切换到生产环境。
+- spring boot配置的途径有很多，常用的配置方式有：properties文件、YAML文件、环境变量、命令行参数，这些配置最终会存入`Environment`？。
+
+  同名属性覆盖顺序参考：[Externalized Configuration](<https://docs.spring.io/spring-boot/docs/2.0.5.RELEASE/reference/htmlsingle/#boot-features-external-config>)，这种属性覆盖的方式，使得你能够轻松的从开发环境下切换到生产环境。
 
 - 获取属性值的两种方式：
 

@@ -325,6 +325,10 @@ pom之间是可以继承的, 子pom可继承的元素有:
 >
 > 通常继承和多模块会同时存在于一个顶层项目中, 但是他们没有必然关系, 即被继承的父pom项目可以不存在多模块, 多模块项目可以不被子模块继承.
 
+-------
+
+> Idea中运行多模块项目时, 需要先将依赖的模块Install一下.
+
 ## 属性(Porperties)
 
 属性是一个占位符, 可以在pom中其他地方使用, 如:
@@ -488,9 +492,9 @@ project ...>
 
 ## 资源插件
 
-maven默认资源插件负责将项目中资源拷贝到输出目录中。默认资源放在`src/main/resources`中。
+Maven默认的资源插件, 负责将**项目资源**拷贝到**输出文件的classpath**下。默认的项目资源位于`src/main/resources`中。
 
-- **更改默认资源文件夹**：
+- **更改默认项目资源文件夹**：
 
   ```xml
   <build>
@@ -586,6 +590,28 @@ maven默认资源插件负责将项目中资源拷贝到输出目录中。默认
   ```
 
 > 参考：[Apache Maven Resources Plugin](<https://maven.apache.org/plugins/maven-resources-plugin/index.html>)
+
+## 无测试打包
+
+```xml
+<plugin>
+  <groupId>org.apache.maven.plugins</groupId>
+  <artifactId>maven-surefire-plugin</artifactId>
+  <configuration>
+    <skipTests>true</skipTests>
+  </configuration>
+</plugin>
+```
+
+打包时将不执行Test生命周期
+
+> 或者命令行下加入选项
+>
+> ```shell
+> mvn -Dmaven.test.skip=true package
+> ```
+
+> 参考[Maven packaging without test (skip tests)](https://stackoverflow.com/questions/7456006/maven-packaging-without-test-skip-tests)
 
 # 六 其他
 
