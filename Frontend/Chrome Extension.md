@@ -8,3 +8,18 @@
   * UI Elements
 
   > 都需要在配置文件中注册
+
+
+
+
+
+
+
+
+
+
+
+
+
+> 参考[Chrome Official Tutorial](https://developer.chrome.com/extensions)
+
