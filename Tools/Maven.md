@@ -605,7 +605,7 @@ Maven默认的资源插件, 负责将**项目资源**拷贝到**输出文件的c
 
 打包时将不执行Test生命周期
 
-> 或者命令行下加入选项
+> 或者命令行下加入选项 
 >
 > ```shell
 > mvn -Dmaven.test.skip=true package
