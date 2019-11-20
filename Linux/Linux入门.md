@@ -1775,6 +1775,9 @@ shell在启动时会读取配置文件，不同的shell读取的文件都不同�
 多条由 *管道*、*控制操作数*、`&&`、`||` 等符号隔开的命令序列称为 **list**。执行list后，会返回list中最后一条被执行的命令的状态码。
 ### 复合命令
 复合命令是bash提供的更为复杂的命令。<span style="color:red">书写命令时要注意符号间的空格</span>
+
+#### 常用复合命令
+
 * `(list)`  list会在子Shell环境中运行，因此list中的命令就算修改了环境变量，也不会影响当前shell的环境变量。
 	
 	>于是, 为子Shell设置环境变量而不影响当前Shell的方式如下
@@ -1791,13 +1794,16 @@ shell在启动时会读取配置文件，不同的shell读取的文件都不同�
 
   > 与`[ expression ]`功能基本一致
 
-关于表达式，可以使用逻辑运算符进行组合：
+#### 逻辑运算符组合
+
+通过逻辑运算符组成更复杂的表达式
+
 * `( expression )` :提升表达式执行的优先级
 * `! expression` :取反表达式的状态码
 * `expression1 && expression2` ：两个表达式为true（状态码为0），才true。expression2不被执行，当且仅当expression1返回0（true）。
 * `expression1 || expression2`：任意一个表达式为true，则true。expression2被执行，当且仅当expression1返回1（false）
 
-bash还提供了关于流程控制相关的命令：
+#### 流程控制
 
 * `for name  in  word ... ;  do list ; done`
 	name变量每次从in后取得一个值，然后运行一次list。word可使用通配符，自动被expansion（扩展）。
@@ -1806,7 +1812,63 @@ bash还提供了关于流程控制相关的命令：
 * `if list; then list; [ elif list; then list; ] ... [ else list; ] fi`
 	如果list（不是表达式了）返回0，则执行then后的list，否则检查elif后的list，如果状态码都不为0，则执行else后的list。
 
-其他的, 如函数, 请查看`man bash`手册。
+#### 函数
+
+* 介绍
+
+    * 无作用域之说, 仅为命令分组
+    * 函数使用与命令一致, 可传入参数
+    * 函数状态码为最后一条命令的状态码
+    * 函数的输出为所有命令的输出
+
+* 有两种定义形式
+
+    ```shell
+    name () compound-command [redirection]
+    或
+    function name [()] compound-command [redirection]
+    ```
+
+    > `redirection`在函数执行后会被执行, 详细见手册
+
+* 使用
+  * 可仅给出函数名,如`name`
+  * 可传入参数, 如`name a b c`
+  
+* 例子
+
+    ```shell
+    #!/bin/sh
+    function fun () {
+      echo $1
+      echo $2
+      echo $3
+    
+      pid=1234
+      echo $pid
+      echo 'hello world'
+    }
+    
+    fun a b c
+    echo $pid
+    echo $(fun c d e)
+    echo $(fun)
+    ```
+
+    输出
+
+    ```
+    a
+    b
+    c
+    1234
+    hello world
+    1234
+    c d e 1234 hello world
+    1234 hello world
+    ```
+
+> 其他内容, 请查看`man bash`手册。
 
 > 复杂逻辑还是建议使用通用语言编写.
 
@@ -1863,12 +1925,18 @@ shell变量用于存储字面值、参与计算。bash为我们提供了一些�
 #### 条件表达式
 复合命令 `[[ ]]` 与bash内置`[ ]`命令作用基本一致，可以进行文件测试、字符串测试、算术测试。部分功能与8.3.5小节重叠，具体参数参考`man test`
 
-### 替换
+常用的如下:
+
+* `-n <string>` string长度不为0
+
+### 替换Expansion
+
+Bash提供了很多种替换, 这里仅介绍最常用的
 
 #### 命令替换
-`${COMMAND}`允许**命令**的**标准输出**替换为**命令行参数**。
+`$(COMMAND)`允许**命令**的**标准输出**替换为**命令行参数**。
 
-如下面例子所示，`echo 23`的输出`23`替换了`${echo 23}`
+如下面例子所示，`echo 23`的输出`23`替换了`$(echo 23)`
 
 ```bash
 [root@sidian Desktop]# echo 23
