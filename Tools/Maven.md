@@ -286,6 +286,8 @@ pom之间是可以继承的, 子pom可继承的元素有:
    `relativePath`指定父pom位置, 默认`../pom.xml`
 
    子pom查询父pom的顺序: `relativePath`-->本地仓库-->远程仓库
+   
+   > 建议显式给出父pom文件相对地址
 
 #### dependencyManagement
 
@@ -317,7 +319,7 @@ pom之间是可以继承的, 子pom可继承的元素有:
 </project>
 ```
 
-> `module`元素中填项目的相对路径或这些项目的pom文件地址
+> `module`元素中填**项目**的相对路径或这些项目的**pom文件地址**
 
 --------------
 
@@ -350,6 +352,16 @@ pom之间是可以继承的, 子pom可继承的元素有:
 ```
 
 然后可以通过`${x}`来使用它, 如`${maven.compiler.source}`
+
+### 配置编码
+
+如上所示, 在最新版Spring Boot中, 已默认配置了编码, 只需给出`java.version`执行JVM版本即可.
+
+### 配置版本
+
+新版本Maven中, 不允许`version`元素为表达式, 只能为常量. 但提供了折中方案, 可以定义` revision `属性, 并在`version`元素中设置版本号, 达到统一父子模块版本的问题.
+
+> 参考[Maven CI Friendly Versions](https://maven.apache.org/maven-ci-friendly.html)
 
 # 三 生命周期
 
