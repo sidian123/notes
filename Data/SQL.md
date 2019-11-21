@@ -16,6 +16,7 @@
 | TRANSACTION_READ_COMMITTED   | ✔        | ✔           | ×                    | ×             |
 | TRANSACTION_REPEATABLE_READ  | ✔        | ✔           | ✔                    | ×             |
 | TRANSACTION_SERIALIZABLE     | ✔        | ✔           | ✔                    | ✔             |
+
 ×表示未解决，✔表示能够解决
 >mysql的默认隔离级别：repeatable_read。
 
@@ -38,6 +39,7 @@
 | ---------- | --------- | ---------- |
 | read-lock  |           | X          |
 | write-lock | X         | X          |
+
 x表示不兼容
 
 一个事务尝试对已加过锁的对象加锁时，会判断两者是否兼容，如果不兼容就被阻塞，该事务加入到对象的等待队列中。
