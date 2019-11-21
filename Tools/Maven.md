@@ -359,7 +359,7 @@ pom之间是可以继承的, 子pom可继承的元素有:
 
 ### 配置版本
 
-新版本Maven中, 不允许`version`元素为表达式, 只能为常量. 但提供了折中方案, 可以定义` revision `属性, 并在`version`元素中设置版本号, 达到统一父子模块版本的问题.
+新版本Maven中, 不允许`version`元素为表达式, 只能为常量. 但提供了折中方案, 可以定义` revision `属性, 并在`version`元素中设置版本号, 达到统一父子模块版本的问题. 
 
 > 参考[Maven CI Friendly Versions](https://maven.apache.org/maven-ci-friendly.html)
 
