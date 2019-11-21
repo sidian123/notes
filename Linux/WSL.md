@@ -60,16 +60,7 @@ wsl需要系统支持，安装之前最好将系统更新到最新版。
 3. 安装发行版，这里使用Ubuntu。打开应用商店，然后下载
 	![在这里插入图片描述](.WSL/2019031910040214.png)
 	
-	> 也可以不通过应用商店, 通过如下链接下载安装包
-	>
-	> - Debian: `https://aka.ms/wsl-debian-gnulinux`
-	> - Ubuntu 18.04: `https://aka.ms/wsl-ubuntu-1804`
-	> - Ubuntu 16.04: `https://aka.ms/wsl-ubuntu-1604`
-	> - openSUSE: `https://aka.ms/wsl-opensuse-42`
-	> - SLES: `https://aka.ms/wsl-sles-12`
-	> - Kali: `https://aka.ms/wsl-kali-linux`
-	>
-	> 下载后解压, 并运行其中的安装软件即可
+	> 除了Windows Store安装, 还提供了命令行安装, 解压安装两种方式, 见[Windows Subsystem for Linux Installation Guide for Windows 10](https://docs.microsoft.com/en-us/windows/wsl/install-win10#install-your-linux-distribution-of-choice)
 	
 4. 按win键，找到ubuntu，点击运行，它会进行初始化。然后提示输入普通用户名和密码，这是默认登录用户。ubuntu中默认root用户不能登录。
     ![在这里插入图片描述](.WSL/20190319100716598.png)
