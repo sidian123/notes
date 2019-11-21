@@ -4,7 +4,7 @@
 
 * 快捷键
   * `Win+W` 打开新Tab页, 载入默认Shell
-  * `Win+Shift+W` 打开新Tab页前, 先弹出对话框, 选择要载入的Shell
+  * `Win+Shift+W` 打开新Tab页前, 先弹出对话框, 供选择要载入的Shell
   * `LCtrl+Number` 跳转到对应数字的Tab页
   * `Ctrl+Tab`或`Ctrl+Shift+Tab` 下或上一个Tab页
 
