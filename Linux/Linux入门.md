@@ -1977,6 +1977,10 @@ Bash提供了很多种替换, 这里仅介绍最常用的
 
 * bash脚本必须以`#!/bin/sh`作为首行。
 
+## 其他
+
+* 脚本自己重定向自己, 见[How do I redirect the output of an entire shell script within the script itself?](https://stackoverflow.com/questions/314675/how-do-i-redirect-the-output-of-an-entire-shell-script-within-the-script-itself)
+
 # 参考
 [《How-Linux-Works-2nd-Edition》](https://github.com/KnowNo/How-Linux-Works-2nd-Edition)
 [linux course](https://geek-university.com/linux/what-is-linux/)
