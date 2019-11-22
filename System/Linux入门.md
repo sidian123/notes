@@ -1928,6 +1928,7 @@ shell变量用于存储字面值、参与计算。bash为我们提供了一些�
 常用的如下:
 
 * `-n <string>` string长度不为0
+* `-z <string>` string长度为0
 
 ### 替换Expansion
 
