@@ -50,5 +50,10 @@
       ]
   ```
 
-> 参考[Editing Windows Terminal JSON Settings](https://github.com/microsoft/terminal/blob/master/doc/user-docs/UsingJsonSettings.md)
+----
 
+当前记录时, 遇到的bug有:
+
+* 不能输入中文...
+
+> 参考[Editing Windows Terminal JSON Settings](https://github.com/microsoft/terminal/blob/master/doc/user-docs/UsingJsonSettings.md)
