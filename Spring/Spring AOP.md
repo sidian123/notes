@@ -147,10 +147,20 @@ public class NotVeryUsefulAspect {
 
 > 仅支持方法的连接点
 
+
+
+
+
+
+
+# 其他
+
+* 切点表达式`type+`表示`type`及其子类型
+
 # 参考
 
 * [Aspect Oriented Programming with Spring](https://docs.spring.io/spring-framework/docs/current/spring-framework-reference/core.html#aop)
-
 * [Introduction to Spring AOP](https://www.baeldung.com/spring-aop)
 * [Spring AOP vs AspectJ](https://stackoverflow.com/questions/1606559/spring-aop-vs-aspectj)
+* [The AspectJTM Programming Guide](https://www.eclipse.org/aspectj/doc/released/progguide/index.html)
 
