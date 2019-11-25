@@ -71,7 +71,7 @@
 
 # 二 RabbitMQ
 
-## hello World Demo
+## Demo
 
 * 介绍: 简单的展示, 生产者发送消息, 消费者接收消息
 
@@ -89,7 +89,7 @@
   </dependency>
   ```
 
-  > 服务端需搭建并配置
+  > 服务端需自行搭建并配置
 
 * Server
 
@@ -131,7 +131,7 @@
           factory.setHost("sidian123.geely.com");
           factory.setUsername("sidian");
           factory.setPassword("123456");
-          //connect to server, but without try-width-resource to close ,it's server responsibility
+          //connect to server, but without try-width-resource to close
           Connection connection = factory.newConnection();
           //acquire channel, like socket
           Channel channel = connection.createChannel();
@@ -148,21 +148,62 @@
   }
   ```
 
+  > 消费者不释放资源的原因: 消费者异步监听队列后, 将存在子线程, 主线程的main()方法结束了, 主线程也不会结束, 而是等待子线程退出. 因此不应该在main()方法中释放资源
+
+## 进阶
+
+### 消息分配
+
+当一个队列有多个消费者时, RabbitMQ默认以轮询的方式分配消息
+
+![img](.Message%20Queue/python-two.png)
+
+> 缺点: 如果100个任务到来, 奇数个任务都很繁重, 导致C1一直忙, C2很多时间空间.
+
+可配置, 让消费者空闲时就被分配一个
+
+```java
+int prefetchCount = 1;
+channel.basicQos(prefetchCount);
+```
+
+> `prefetchCount`指定一个消费者一次最多能分配到的个数.
+
+### 消息确认机制
+
+
+
+
+
+
+
+
+
+## Server
+
+### 创建新账号
+
+```shell
+$ rabbitmqctl add_user YOUR_USERNAME YOUR_PASSWORD
+$ rabbitmqctl set_user_tags YOUR_USERNAME administrator
+$ rabbitmqctl set_permissions -p / YOUR_USERNAME ".*" ".*" ".*"
+```
+
+### 查看队列
+
+* 列出所有队列
+
+  ```shell
+  sudo rabbitmqctl list_queues
+  ```
+
+* 列出所有未确认的消息
+
+  ```shell
+  sudo rabbitmqctl list_queues name messages_ready messages_unacknowledged
+  ```
+
   
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 

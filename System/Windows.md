@@ -29,6 +29,10 @@
 
 # 安装Store
 
+> 最新更新:
+>
+> 推荐使用[LTSB-Add-MicrosoftStore](https://github.com/kkkgo/LTSB-Add-MicrosoftStore)的方案, 下面的方案不太方便.
+
 环境:
 
 * 无本地安装包 *Microsoft.WindowsStore* , 即`Get-AppxPackage`命令找不到包
@@ -57,4 +61,20 @@
 3. 安装完毕, 按`Win`可搜索到商店
 
 > 参考[Restore Microsoft Store application in Windows 10](https://superuser.com/questions/949112/restore-microsoft-store-application-in-windows-10)
+
+# 设置混合睡眠模式
+
+关于待机,休眠和休眠的区别, 见[零碎知识]
+
+首先开启睡眠
+
+![image-20191125165129171](.Windows/image-20191125165129171.png)
+
+![image-20191125165203635](.Windows/image-20191125165203635.png)
+
+然后开启混合睡眠模式
+
+![image-20191125165356753](.Windows/image-20191125165356753.png)
+
+![image-20191125165446198](.Windows/image-20191125165446198.png)
 
