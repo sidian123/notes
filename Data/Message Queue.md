@@ -179,7 +179,59 @@ channel.basicQos(prefetchCount);
 
 该机制在**消费者**监听队列时默认开启
 
+### 消息持久性
 
+### 消息模型
+
+* 除了, 生产者, 消费者, 和队列, 还存在 ***exchange*** 这一中间层, 添加灵活性
+
+	![img](.Message%20Queue/exchanges.png)
+
+* 实际生产者并不直接将消息存入队列, 而是交给Exchange, 由Exchange决定消息推入哪个队列, 或不推送.
+
+* 种类:
+
+    * `direct`
+
+    * `topic`
+
+    * `headers`
+
+    * `fanout` : 广播的方式将消息推送到所有已知的队列中
+
+    * 空名的Exchange(默认): 即`''`, 直接将消息推送到 r`outingKey` 标识的队列, 如果存在的话. 如
+
+      > ```shell
+      > channel.basicPublish("", "hello", null, message.getBytes());
+      > ```
+      >
+      > 第一个为Exchange名, 第二个参数为`routingKey`
+
+* 非默认Exchange与队列之间需要消费者显示绑定
+
+    ```java
+    channel.queueBind(queueName, "logs", "");
+    ```
+
+## 路由
+
+### Direct Exchange
+
+* 队列绑定Exchange时, 指定` binding key `, 生产者生产的消息将被路由到`binding key`与消息`routing key`一致的队列上.
+
+* 例子
+
+  * 不同消息推送到不同队列
+
+    ![img](.Message%20Queue/direct-exchange.png)
+
+  * `routing key`为black的消息广播给所有队列, 其他忽略
+
+    ![img](.Message%20Queue/direct-exchange-multiple.png)
+
+  * 按照日志的严重级别推送到不同的队列中
+
+    ![img](.Message%20Queue/python-four.png)
 
 
 
@@ -195,7 +247,7 @@ $ rabbitmqctl set_user_tags YOUR_USERNAME administrator
 $ rabbitmqctl set_permissions -p / YOUR_USERNAME ".*" ".*" ".*"
 ```
 
-### 查看队列
+### 查看
 
 * 列出所有队列
 
@@ -207,6 +259,18 @@ $ rabbitmqctl set_permissions -p / YOUR_USERNAME ".*" ".*" ".*"
 
   ```shell
   sudo rabbitmqctl list_queues name messages_ready messages_unacknowledged
+  ```
+
+* 查看所有Exchange
+
+  ```shell
+  sudo rabbitmqctl list_exchanges
+  ```
+
+* 查看Exchange与队列的绑定情况
+
+  ```shell
+  rabbitmqctl list_bindings
   ```
 
   
