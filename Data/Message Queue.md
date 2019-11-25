@@ -1,4 +1,4 @@
-# 介绍
+# 一 介绍
 
 ## MQ使用场景
 
@@ -55,6 +55,143 @@
 
 ## 消息队列实现对比
 
+| 特性       | ActiveMQ                                                     | RabbitMQ                                                     | RocketMQ                 | kafka                                                        |
+| ---------- | ------------------------------------------------------------ | ------------------------------------------------------------ | ------------------------ | ------------------------------------------------------------ |
+| 开发语言   | java                                                         | erlang                                                       | java                     | scala                                                        |
+| 单机吞吐量 | 万级                                                         | 万级                                                         | 10万级                   | 10万级                                                       |
+| 时效性     | ms级                                                         | us级                                                         | ms级                     | ms级以内                                                     |
+| 可用性     | 高(主从架构)                                                 | 高(主从架构)                                                 | 非常高(分布式架构)       | 非常高(分布式架构)                                           |
+| 功能特性   | 成熟的产品，在很多公司得到应用；有较多的文档；各种协议支持较好 | 基于erlang开发，所以并发能力很强，性能极其好，延时很低;管理界面较丰富 | MQ功能比较完备，扩展性佳 | 只支持主要的MQ功能，像一些消息查询，消息回溯等功能没有提供，毕竟是为大数据准备的，在大数据领域应用广。 |
+
+中小型软件公司建议用RabbitMQ, 其开源且社区比较活跃; 大型软件公司建议用RocketMQ或Kafka, 吞吐量比较大.
+
+## 其他
+
+* 如何保证高可用? 集群, 主从复制
+
+# 二 RabbitMQ
+
+## hello World Demo
+
+* 介绍: 简单的展示, 生产者发送消息, 消费者接收消息
+
+  ![python-one.png](.Message%20Queue/python-one-1574665345043.png)
+
+* 目的: 入门
+
+* 引入Java客户端
+
+  ```xml
+  <dependency>
+      <groupId>com.rabbitmq</groupId>
+      <artifactId>amqp-client</artifactId>
+      <version>5.7.3</version>
+  </dependency>
+  ```
+
+  > 服务端需搭建并配置
+
+* Server
+
+  ```java
+  public class Sender {
+      private final static String QUEUE_NAME = "hello";
+  
+      public static void main(String[] argv) throws Exception {
+          //set config
+          ConnectionFactory factory = new ConnectionFactory();
+          factory.setHost("sidian123.geely.com");
+          factory.setUsername("sidian");
+          factory.setPassword("123456");
+          //connect to server
+          try (Connection connection = factory.newConnection();
+               //acquire channel, like acquire socket
+               Channel channel = connection.createChannel()) {
+               //get queue for send
+              channel.queueDeclare(QUEUE_NAME, false, false, false, null);
+              String message = "Hello World!";
+              //send
+              channel.basicPublish("", QUEUE_NAME, null, message.getBytes(StandardCharsets.UTF_8));
+              System.out.println(" [x] Sent '" + message + "'");
+  
+          }
+      }
+  }
+  ```
+
+* Client
+
+  ```java
+  public class Receiver {
+      private final static String QUEUE_NAME = "hello";
+  
+      public static void main(String[] argv) throws Exception {
+          //set config
+          ConnectionFactory factory = new ConnectionFactory();
+          factory.setHost("sidian123.geely.com");
+          factory.setUsername("sidian");
+          factory.setPassword("123456");
+          //connect to server, but without try-width-resource to close ,it's server responsibility
+          Connection connection = factory.newConnection();
+          //acquire channel, like socket
+          Channel channel = connection.createChannel();
+          //get queue to receive
+          channel.queueDeclare(QUEUE_NAME, false, false, false, null);
+          System.out.println(" [*] Waiting for messages. To exit press CTRL+C");
+          //start to receive
+          channel.basicConsume(QUEUE_NAME, true, (consumerTag, delivery) -> {//callback of received
+              String message = new String(delivery.getBody(), StandardCharsets.UTF_8);
+              System.out.println(" [x] Received '" + message + "'");
+          }, consumerTag -> { });
+      }
+  
+  }
+  ```
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+## 其他
+
+### 登陆失败
+
+默认账号密码都是 `guest`, 但只能本地登陆, 若远程登陆需重新创建账号密码, 如:
+
+```shell
+$ rabbitmqctl add_user YOUR_USERNAME YOUR_PASSWORD
+$ rabbitmqctl set_user_tags YOUR_USERNAME administrator
+$ rabbitmqctl set_permissions -p / YOUR_USERNAME ".*" ".*" ".*"
+```
+
+> 参考[Spring AMQP + RabbitMQ 3.3.5 ACCESS_REFUSED - Login was refused using authentication mechanism PLAIN](https://stackoverflow.com/questions/26811924/spring-amqp-rabbitmq-3-3-5-access-refused-login-was-refused-using-authentica)
+
 
 
 
@@ -63,9 +200,9 @@
 
 * [一个用消息队列 的人，不知道为啥用 MQ，这就有点尴尬](https://blog.csdn.net/alinshen/article/details/80583214)
 
+* [RabbitMQ Tutotial](https://www.rabbitmq.com/getstarted.html)
 
-
-
+* [RabbitMQ Server Config](https://www.rabbitmq.com/configure.html)
 
 
 
