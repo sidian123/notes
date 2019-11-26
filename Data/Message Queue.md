@@ -371,7 +371,7 @@ $ rabbitmqctl set_permissions -p / YOUR_USERNAME ".*" ".*" ".*"
 * 生产者：消息的创建者，负责创建和推送数据到消息服务器；
 * 消费者：消息的接收方，用于处理数据和确认消息；
 
-* 代理：就是RabbitMQ本身，用于扮演“快递”的角色，本身不生产消息，只是扮演“快递”的角色。
+* 代理 ( broker )：就是RabbitMQ本身，用于扮演“快递”的角色，本身不生产消息，只是扮演“快递”的角色。
 
 ### 信道
 
@@ -380,6 +380,8 @@ $ rabbitmqctl set_permissions -p / YOUR_USERNAME ".*" ".*" ".*"
 > 一个TCP连接可创建一个AMQP连接, 一个AMQP连接可创建多个信道
 >
 > ![img](.Message%20Queue/rabbit_channel.png)
+>
+> 信道连接代理与生产者(或消费者)
 
 ### RabbitMQ核心概念
 
@@ -401,16 +403,35 @@ $ rabbitmqctl set_permissions -p / YOUR_USERNAME ".*" ".*" ".*"
 
 #### 防止生产者丢数据
 
-即生产者在发送给
+即生产者在发送给RabbitMQ时, RabbitMQ未收到, 即数据丢失
 
 * 事务: 信道Channel提供了事务的功能, 即
   * ` channel.txSelect() `开启事务
   * ` channel.txRollback() `回滚事务
   * ` channel.txCommit() `提交事务
+* Confirm模式, 见[Publisher Confirms](https://www.rabbitmq.com/tutorials/tutorial-seven-java.html)
 
-* Confirm模式
+> `Channel.basicPublish()`抛出的`IOException`不能作为确认的标志吗? 应该不能, 呵呵...
 
-  一旦信道进入Confirm模式后, 信道上的消息都将被指派一个唯一ID. 消息被推到
+#### 防止消息队列丢数据
+
+即, RabbitMQ重启或突然挂了时, 数据会丢失.
+
+* 首先, 先保证队列是持久的, 即`Channel.queueDeclare()`的`durable`参数为`true`
+
+* 现在保证生产者推送的消息是持久的, 如
+
+  ```java
+  channel.basicPublish("", "task_queue",
+              MessageProperties.PERSISTENT_TEXT_PLAIN,
+              message.getBytes());
+  ```
+
+  > 即设置`MessageProperties.PERSISTENT_TEXT_PLAIN`属性
+
+#### 消费者丢数据
+
+
 
 # 参考
 
