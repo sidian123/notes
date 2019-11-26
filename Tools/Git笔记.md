@@ -536,7 +536,12 @@ git tag [-a] [-m <msg>] <tagnmae> [<commit>]
 ## 分支操作
 
 - 查看分支: 
-  - `git branch`或`git branch -v`
+  - `git branch`
+  
+    或`git branch -v`
+  
+    或`git branch -a`(能查看远程分支)
+  
   - 还是使用`git log`命令, 加上`--decorate`选项.
   
 - 创建分支: `git branch <branchName>`

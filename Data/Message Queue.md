@@ -215,7 +215,7 @@ channel.basicQos(prefetchCount);
 
 ## 路由
 
-### Direct Exchange
+### direct Exchange
 
 * 队列绑定Exchange时, 指定` binding key `, 生产者生产的消息将被路由到`binding key`与消息`routing key`一致的队列上.
 
@@ -232,6 +232,27 @@ channel.basicQos(prefetchCount);
   * 按照日志的严重级别推送到不同的队列中
 
     ![img](.Message%20Queue/python-four.png)
+
+### topic Exchange
+
+消息的`routing_key`与队列的`bind_key`**模式匹配**成功的路线将被选择.
+
+`key`由一组word组成, 以`.`分隔, 存在两个特殊字符:
+
+* `*`匹配一个word
+* `#`匹配0到多个word
+
+例子:
+
+![img](.Message%20Queue/python-five.png)
+
+> * `lazy.orange.elephant `的消息将同时发给两个队列
+>
+> * ` lazy.pink.rabbit `尽管与队列Q2匹配多次, 但只发一次
+
+
+
+
 
 
 
@@ -303,17 +324,100 @@ $ rabbitmqctl set_permissions -p / YOUR_USERNAME ".*" ".*" ".*"
 
 > 参考[Spring AMQP + RabbitMQ 3.3.5 ACCESS_REFUSED - Login was refused using authentication mechanism PLAIN](https://stackoverflow.com/questions/26811924/spring-amqp-rabbitmq-3-3-5-access-refused-login-was-refused-using-authentica)
 
+# 三RabbitMQ学习2
 
+## Ubuntu环境搭建
 
+* 安装
 
+  ```shell
+  sudo apt-get install rabbitmq-server
+  ```
+
+* 用户管理
+
+  - 查看所有用户：`rabbitmqctl list_users`
+  - 添加用户：`rabbitmqctl add_user username password`
+  - 删除用户：`rabbitmqctl delete_user username`
+  - 修改密码：`rabbitmqctl change_password username newpassword`
+
+* 开启网页
+
+  * 开启` rabbitmq-plugins enable rabbitmq_management `
+  * 重启服务`systemctl restart rabbitmq-server.service`
+  * 登陆: 本地搭建的服务用`guest/guest`登陆, 远程的请添加新用户并添加了权限后再登陆
+
+* 例子: 添加用户并赋予所有权限
+
+  ```shell
+  rabbitmqctl add_user test test
+  rabbitmqctl set_user_tags test administrator
+  rabbitmqctl set_permissions -p / test ".*" ".*" ".*"
+  ```
+
+## 工作原理与使用
+
+### 介绍
+
+*  RabbitMQ是一个实现了AMQP（Advanced Message Queuing Protocol）高级消息队列协议的消息队列服务
+* 由Erlang语言编写的。 
+
+### 使用场景
+
+商品秒杀时, 为了避免某个时间断大量的数据查询导致数据库宕机, 而是先将操作入队列, 一个一个执行.
+
+### 重要概念
+
+* 生产者：消息的创建者，负责创建和推送数据到消息服务器；
+* 消费者：消息的接收方，用于处理数据和确认消息；
+
+* 代理：就是RabbitMQ本身，用于扮演“快递”的角色，本身不生产消息，只是扮演“快递”的角色。
+
+### 信道
+
+每个生产者,消费者连接到RabbitMQ时, 会建立TCP连接, 并认证, 通过后, 便接着创建一条**AMQP信道Channel**. 数据的传输都是在该信道上完成的.
+
+> 一个TCP连接可创建一个AMQP连接, 一个AMQP连接可创建多个信道
+>
+> ![img](.Message%20Queue/rabbit_channel.png)
+
+### RabbitMQ核心概念
+
+* **ConnectionFactory（连接管理器）：**应用程序与Rabbit之间建立连接的管理器，程序代码中使用；
+
+* **Channel（信道）：**消息推送使用的通道；
+
+* **Exchange（交换器）：**用于接受、分配消息；
+
+* **Queue（队列）**：用于存储生产者的消息；
+
+* **RoutingKey（路由键）**：用于把生成者的数据分配到交换器上；
+
+* **BindingKey（绑定键）**：用于把交换器的消息绑定到队列上；
+
+![img](.Message%20Queue/rabbit-producer.gif)
+
+### 数据可靠传输(防止丢数据)
+
+#### 防止生产者丢数据
+
+即生产者在发送给
+
+* 事务: 信道Channel提供了事务的功能, 即
+  * ` channel.txSelect() `开启事务
+  * ` channel.txRollback() `回滚事务
+  * ` channel.txCommit() `提交事务
+
+* Confirm模式
+
+  一旦信道进入Confirm模式后, 信道上的消息都将被指派一个唯一ID. 消息被推到
 
 # 参考
 
 * [一个用消息队列 的人，不知道为啥用 MQ，这就有点尴尬](https://blog.csdn.net/alinshen/article/details/80583214)
-
 * [RabbitMQ Tutotial](https://www.rabbitmq.com/getstarted.html)
-
 * [RabbitMQ Server Config](https://www.rabbitmq.com/configure.html)
+* [RabbitMQ系列文章](https://www.cnblogs.com/vipstone/p/9350075.html)
 
 
 
