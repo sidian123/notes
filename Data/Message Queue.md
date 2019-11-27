@@ -192,20 +192,20 @@ channel.basicQos(prefetchCount);
 * 种类:
 
     * `direct`
-
-    * `topic`
-
+* `topic`
     * `headers`
-
-    * `fanout` : 广播的方式将消息推送到所有已知的队列中
-
-    * 空名的Exchange(默认): 即`''`, 直接将消息推送到 r`outingKey` 标识的队列, 如果存在的话. 如
-
-      > ```shell
-      > channel.basicPublish("", "hello", null, message.getBytes());
-      > ```
-      >
-      > 第一个为Exchange名, 第二个参数为`routingKey`
+* `fanout` : 广播的方式将消息推送到所有已知的队列中
+    
+> 默认存在一个empty name(即`''`)的Exchange, 为`direct`类型:  直接将消息推送到 r`outingKey` 标识的队列, 如果存在的话. 如
+    >
+> > ```shell
+    > > channel.basicPublish("", "hello", null, message.getBytes());
+> > ```
+    > >
+    > > 第一个为Exchange名, 第二个参数为`routingKey`
+    >
+    > > 详细见3.2.8
+    
 
 * 非默认Exchange与队列之间需要消费者显示绑定
 
@@ -456,6 +456,44 @@ $ rabbitmqctl set_permissions -p / YOUR_USERNAME ".*" ".*" ".*"
 
 > 事务效率较低, 且文档有点看不懂, 见[Broker Semantics](https://www.rabbitmq.com/semantics.html)
 
+### 虚拟主机VHost
+
+* 一个Rabbit可以存在多个VHost, 每个VHost拥有完整的Rabbit消息模型, 如队列, 交换器和绑定, 还拥有自己的权限控制.
+
+* VHost的一些规则
+
+  * 默认存在一个VHost, 以`/`标识
+  * VHost间是隔离的, 无法通讯. 也即名字隔离
+  * 创建用户时必须指定VHost
+
+* VHost的操作
+
+  * 创建
+
+    ```shell
+    rabbitmqctl add_vhost[vhost_name]
+    ```
+
+  * 删除
+
+    ```shell
+    rabbitmqctl delete_vhost[vhost_name]
+    ```
+
+  * 查看所有VHost
+
+    ```shell
+    rabbitmqctl list_vhosts
+    ```
+
+### 我画的Rabbit整体模型
+
+![image-20191127224326773](.Message%20Queue/image-20191127224326773.png)
+
+> * 同样的, 生产者的消息去往那个队列, 也有匹配规则
+> * 声明队列后, 需要绑定exchane, 未显式绑定时, 则默认绑定到默认exchange上, 且binding key为队列名
+> * 其实, binding key就是routing key, 在使用过程中不做区分
+
 # Spring AMQP
 
 > 随便跑个Demo, 就挂了, 不看了
@@ -505,6 +543,50 @@ $ rabbitmqctl set_permissions -p / YOUR_USERNAME ".*" ".*" ".*"
   
   }
   ```
+
+## AMQP抽象层
+
+* `Message` 
+
+  封装消息, 和消息相关的属性
+
+* `Exchange` 
+
+  接收生产者发送的数据的直接实体
+
+* `Queue`
+
+  一个队列缓存, 消费者获取数据的源
+
+* `Binding` 
+
+  Exchange与Queue之间的绑定关系
+
+  例子:
+
+  * 绑定`direct`类型的Exchange
+
+    ```java
+    new Binding(someQueue, someDirectExchange, "foo.bar");
+    ```
+
+  * 绑定`topic`类型的Exchange
+
+    ```java
+    new Binding(someQueue, someTopicExchange, "foo.*");
+    ```
+
+  * 绑定`fanout`类型的Exchange, 无binding key
+
+    ```java
+    new Binding(someQueue, someFanoutExchange);
+    ```
+
+    
+
+  
+
+  
 
 
 
