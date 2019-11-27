@@ -324,7 +324,7 @@ $ rabbitmqctl set_permissions -p / YOUR_USERNAME ".*" ".*" ".*"
 
 > 参考[Spring AMQP + RabbitMQ 3.3.5 ACCESS_REFUSED - Login was refused using authentication mechanism PLAIN](https://stackoverflow.com/questions/26811924/spring-amqp-rabbitmq-3-3-5-access-refused-login-was-refused-using-authentica)
 
-# 三RabbitMQ学习2
+# 三 RabbitMQ学习2
 
 ## Ubuntu环境搭建
 
@@ -417,7 +417,10 @@ $ rabbitmqctl set_permissions -p / YOUR_USERNAME ".*" ".*" ".*"
 
 即, RabbitMQ重启或突然挂了时, 数据会丢失.
 
-* 首先, 先保证队列是持久的, 即`Channel.queueDeclare()`的`durable`参数为`true`
+* 首先, 先保证队列,交换器是持久的, 即
+
+  * `Channel.queueDeclare()`的`durable`参数为`true`
+  * `Channel.exchangeDeclare()`的`durable`参数为`true`
 
 * 现在保证生产者推送的消息是持久的, 如
 
@@ -431,7 +434,41 @@ $ rabbitmqctl set_permissions -p / YOUR_USERNAME ".*" ".*" ".*"
 
 #### 消费者丢数据
 
+默认消费者采用的自动确认模式, 即`basicConsume()`的`autoAck`参数为true. 当消费者获取到消息后便自动给RabbitMQ确认, 如果消费者出现异常且没有保留该消息时, 将丢失该消息.
 
+解决方案: 采用手动确认
+
+1. 消费时关闭自动确认, 即`autoAck`为`false`
+
+2. 消费者处理好业务逻辑后, 可
+
+   1. 手动确认`Channel.basicAck`
+
+   2. 拒绝确认`Channel.basicNack()`或`Channel.basicReject()`
+
+      > `basicReject`仅拒绝一个, `basicNack`允许拒绝多个.
+
+# Spring AMQP
+
+## 引言
+
+* 介绍: Spring-AMQP是消息队列协议AMQP的抽象概括, Spring-Rabbit是一个使用RabbitMQ的实现.
+
+* 功能
+  * Listener container for asynchronous processing of inbound messages
+  * RabbitTemplate for sending and receiving messages
+  * RabbitAdmin for automatically declaring queues, exchanges and bindings
+  
+* SpringBoot自动配置依赖
+
+  ```xml
+  <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-amqp</artifactId>
+  </dependency>
+  ```
+
+  
 
 # 参考
 

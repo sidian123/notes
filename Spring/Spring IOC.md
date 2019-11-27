@@ -1354,9 +1354,14 @@ public class AppConfig  {
 
 一般web应用时通过xml文件配置的，可以通过java代码配置，参考：[Support for Web Applications with AnnotationConfigWebApplicationContext](https://docs.spring.io/spring-framework/docs/current/spring-framework-reference/core.html#beans-java-instantiating-container-web)
 
-## [11.2、@Bean](https://docs.spring.io/spring-framework/docs/current/spring-framework-reference/core.html#beans-java-bean-annotation)
+## @Bean
 
-@Bean注解的方法的返回值为Bean的类型，Bean名字和方法名一致。对@Bean方法注入依赖时就和构造函数注入依赖一致。等等等等等功能，参考链接：https://docs.spring.io/spring-framework/docs/current/spring-framework-reference/core.html#beans-java-bean-annotation
+* `@Bean`注解的方法的返回值为Bean的类型，Bean名字和方法名一致。
+* `@Bean`方法依赖注入的方式与构造函数注入方式一致。
+* `@Bean`方法参数注入不需要`@Autowire`注解
+* 等等等等等功能
+
+> 参考[@Bean](https://docs.spring.io/spring-framework/docs/current/spring-framework-reference/core.html#beans-java-bean-annotation)
 
 ## @Import
 
