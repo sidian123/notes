@@ -260,6 +260,8 @@ channel.basicQos(prefetchCount);
 
 ## Server
 
+> 推荐使用Rabbit提供的后端网页来管理
+
 ### 创建新账号
 
 ```shell
@@ -436,19 +438,27 @@ $ rabbitmqctl set_permissions -p / YOUR_USERNAME ".*" ".*" ".*"
 
 默认消费者采用的自动确认模式, 即`basicConsume()`的`autoAck`参数为true. 当消费者获取到消息后便自动给RabbitMQ确认, 如果消费者出现异常且没有保留该消息时, 将丢失该消息.
 
-解决方案: 采用手动确认
+解决方案: 
 
-1. 消费时关闭自动确认, 即`autoAck`为`false`
+1. 采用手动确认
+   1. 消费时关闭自动确认, 即`autoAck`为`false`
 
-2. 消费者处理好业务逻辑后, 可
+   2. 消费者处理好业务逻辑后, 可
 
-   1. 手动确认`Channel.basicAck`
+      1. 手动确认`Channel.basicAck`
 
-   2. 拒绝确认`Channel.basicNack()`或`Channel.basicReject()`
+      2. 拒绝确认`Channel.basicNack()`或`Channel.basicReject()`
 
-      > `basicReject`仅拒绝一个, `basicNack`允许拒绝多个.
+         > `basicReject`仅拒绝一个, `basicNack`允许拒绝多个.
+
+
+2. 事务
+
+> 事务效率较低, 且文档有点看不懂, 见[Broker Semantics](https://www.rabbitmq.com/semantics.html)
 
 # Spring AMQP
+
+> 随便跑个Demo, 就挂了, 不看了
 
 ## 引言
 
@@ -468,7 +478,35 @@ $ rabbitmqctl set_permissions -p / YOUR_USERNAME ".*" ".*" ".*"
   </dependency>
   ```
 
+* 入门例子
+
+  ```java
+  @SpringBootApplication
+  public class Application {
   
+      public static void main(String[] args) {
+          SpringApplication.run(Application.class, args);
+      }
+  
+      @Bean
+      public ApplicationRunner runner(AmqpTemplate template) {
+          return args -> template.convertAndSend("myqueue", "foo");
+      }
+  
+      @Bean
+      public Queue myQueue() {
+          return new Queue("myqueue");
+      }
+  
+      @RabbitListener(queues = "myqueue")
+      public void listen(String in) {
+          System.out.println(in);
+      }
+  
+  }
+  ```
+
+
 
 # 参考
 
