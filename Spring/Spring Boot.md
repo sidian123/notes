@@ -271,7 +271,7 @@ spring boot整合了spring框架和三方库后，提供了自动配置的功能
     ```
 
     > `@Value()`获取不到, 考虑使用`,`分割的形式, 如
-  >
+  	>
     > ```yaml
     > my:
     >     servers: dev.example.com, another.example.com
@@ -339,7 +339,9 @@ private int[] intArrayWithDefaults;
 
 ### Profile
 
-`application-{profile}.properties`允许有多个, 但仅其中一个生效, 由 ` spring.profiles.active`决定, 默认使用`application-default.properties`(如果存在的话)
+`application-{profile}.properties`允许有多个, 但仅其中一个生效, 由 ` spring.profiles.active`决定. 未指定时, 默认使用`application-default.properties`(如果存在的话)
+
+
 
 ### 其他
 

@@ -193,9 +193,10 @@ channel.basicQos(prefetchCount);
 
     * `direct`
 * `topic`
+  
     * `headers`
 * `fanout` : 广播的方式将消息推送到所有已知的队列中
-    
+  
 > 默认存在一个empty name(即`''`)的Exchange, 为`direct`类型:  直接将消息推送到 r`outingKey` 标识的队列, 如果存在的话. 如
     >
 > > ```shell
@@ -205,7 +206,7 @@ channel.basicQos(prefetchCount);
     > > 第一个为Exchange名, 第二个参数为`routingKey`
     >
     > > 详细见3.2.8
-    
+
 
 * 非默认Exchange与队列之间需要消费者显示绑定
 
@@ -346,15 +347,19 @@ $ rabbitmqctl set_permissions -p / YOUR_USERNAME ".*" ".*" ".*"
 * 开启网页
 
   * 开启` rabbitmq-plugins enable rabbitmq_management `
+
   * 重启服务`systemctl restart rabbitmq-server.service`
+
   * 登陆: 本地搭建的服务用`guest/guest`登陆, 远程的请添加新用户并添加了权限后再登陆
+
+    > 服务端口:`15672`
 
 * 例子: 添加用户并赋予所有权限
 
   ```shell
-  rabbitmqctl add_user test test
-  rabbitmqctl set_user_tags test administrator
-  rabbitmqctl set_permissions -p / test ".*" ".*" ".*"
+  sudo rabbitmqctl add_user sidian 123456
+  sudo rabbitmqctl set_user_tags sidian administrator
+  sudo rabbitmqctl set_permissions -p / sidian ".*" ".*" ".*"
   ```
 
 ## 工作原理与使用
@@ -496,11 +501,15 @@ $ rabbitmqctl set_permissions -p / YOUR_USERNAME ".*" ".*" ".*"
 
 # Spring AMQP
 
-> 随便跑个Demo, 就挂了, 不看了
-
 ## 引言
 
 * 介绍: Spring-AMQP是消息队列协议AMQP的抽象概括, Spring-Rabbit是一个使用RabbitMQ的实现.
+
+* JMP Vs. AMQP
+
+  JMS是J2EE的一部分 , AMQP是一个协议, 对使用不同MQ的限制较少.
+
+  > 参考[JMS vs AMQP](https://www.linkedin.com/pulse/jms-vs-amqp-eran-shaham)
 
 * 功能
   * Listener container for asynchronous processing of inbound messages
@@ -526,16 +535,25 @@ $ rabbitmqctl set_permissions -p / YOUR_USERNAME ".*" ".*" ".*"
           SpringApplication.run(Application.class, args);
       }
   
+      /**
+      * 发送消息
+      */
       @Bean
       public ApplicationRunner runner(AmqpTemplate template) {
           return args -> template.convertAndSend("myqueue", "foo");
       }
   
+      /**
+      * 声明队列
+      */
       @Bean
       public Queue myQueue() {
           return new Queue("myqueue");
       }
   
+      /**
+      * 接收消息
+      */
       @RabbitListener(queues = "myqueue")
       public void listen(String in) {
           System.out.println(in);
@@ -544,7 +562,7 @@ $ rabbitmqctl set_permissions -p / YOUR_USERNAME ".*" ".*" ".*"
   }
   ```
 
-## AMQP抽象层
+## 实体
 
 * `Message` 
 
@@ -553,6 +571,13 @@ $ rabbitmqctl set_permissions -p / YOUR_USERNAME ".*" ".*" ".*"
 * `Exchange` 
 
   接收生产者发送的数据的直接实体
+
+  有四种类型
+
+  - Direct Exchange – Routes messages to a queue by matching a complete routing key
+  - Fanout Exchange – Routes messages to all the queues bound to it
+  - Topic Exchange – Routes messages to multiple queues by matching a routing key to a pattern
+  - Headers Exchange – Routes messages based on message headers
 
 * `Queue`
 
@@ -582,11 +607,24 @@ $ rabbitmqctl set_permissions -p / YOUR_USERNAME ".*" ".*" ".*"
     new Binding(someQueue, someFanoutExchange);
     ```
 
-    
+## 组件
 
-  
+- AMQP entities – we create entities with the *Message*, *Queue*, *Binding*, and *Exchange* classes
+- Connection Management – we connect to our RabbitMQ broker by using a *CachingConnectionFactory*
+- Message Publishing – we use a *RabbitTemplate* to send messages
+- Message Consumption – we use a *@RabbitListener* to read messages from a queue
 
-  
+
+## 连接和资源的管理
+
+* 资源管理与具体实现有关, 而目前实现只有` spring-rabbit `一个
+* ` ConnectionFactory `用于管理连接, ` CachingConnectionFactory `是其实现, 能够缓存连接和信道
+* AMQP中消息的工作单元是信道
+* 
+
+
+
+
 
 
 
@@ -596,6 +634,7 @@ $ rabbitmqctl set_permissions -p / YOUR_USERNAME ".*" ".*" ".*"
 * [RabbitMQ Tutotial](https://www.rabbitmq.com/getstarted.html)
 * [RabbitMQ Server Config](https://www.rabbitmq.com/configure.html)
 * [RabbitMQ系列文章](https://www.cnblogs.com/vipstone/p/9350075.html)
+* [Messaging with Spring AMQP](https://www.baeldung.com/spring-amqp)
 
 
 

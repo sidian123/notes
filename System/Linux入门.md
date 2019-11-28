@@ -1312,15 +1312,29 @@ systemd也是有参数的，不过systemd是内核执行的，因此可以在GRU
 ### systemctl
 用于控制systemd系统和服务的管理器。命令如下：
 * `list-units`：列出所有已知的units。
+
 * `start`：启动unit
+
 * `stop`：停止unit
+
 * `restart`:重启unit。
+
 * `status`：查看unit状态
+
 * `enable`：根据`[Install]`创建对应的符号链接；如果手动创建符号链接，请使用`daemon-reload`重新加载配置文件
+
 * `disable`:将符号链接删除。
+
 * `isolate`：停止所有进程，启动指定的unit。如果unit名字没有后缀，默认target。类似于sysv的切换运行级别。
+
 * `get-default`：获得自启时默认的default target，即返回default.target指向的unit名。
+
 * `set-default`：设置自启时默认的default target，即修改符号链接default.target。
+
+  > 一般设置的target:
+  >
+  > * multi-user.target 多用户命令行界面
+  > * graphical.targer 图形界面
 
 ### 关机
 关机命令很多，但实现原理一致，通过init进程关机，init进程阻止其他非root用户登陆，然后在systemd中会启动shutdown unit，它会关闭所有程序，最后通知内核结束自己。

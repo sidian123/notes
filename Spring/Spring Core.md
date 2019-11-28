@@ -491,3 +491,11 @@ SpEL（Spring Expression Language），即Spring表达式语言，是比JSP的EL
   * 方式三: 通过`MimeMessagePreparator`暴露底层类, 来装配邮件, 然后`MailServer`发送
 
 > 参考[Email](https://docs.spring.io/spring-framework/docs/current/spring-framework-reference/integration.html#mail)
+
+# 其他
+
+##  CommandLineRunner 
+
+* 当容器初始化完毕后, 执行该接口的方法, 用于处理命令行参数
+* 仅在`SpringApplication`初始化的容器中使用
+* `ApplicationArguments`提供了遍历的
