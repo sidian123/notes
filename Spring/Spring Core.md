@@ -498,4 +498,4 @@ SpEL（Spring Expression Language），即Spring表达式语言，是比JSP的EL
 
 * 当容器初始化完毕后, 执行该接口的方法, 用于处理命令行参数
 * 仅在`SpringApplication`初始化的容器中使用
-* `ApplicationArguments`提供了遍历的
+* `ApplicationArguments`与`CommandLineRunner
