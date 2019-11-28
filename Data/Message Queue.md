@@ -192,8 +192,7 @@ channel.basicQos(prefetchCount);
 * 种类:
 
     * `direct`
-* `topic`
-  
+    * `topic`
     * `headers`
 * `fanout` : 广播的方式将消息推送到所有已知的队列中
   

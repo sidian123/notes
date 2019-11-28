@@ -24,9 +24,10 @@
 
 Spring的`util`包下, 含有各种工具类, 如
 
-*  [Base64Utils](http://localhost:63342/Blog/spring-core-5.1.9.RELEASE-javadoc.jar/org/springframework/util/Base64Utils.html) : A simple utility class for Base64 encoding and decoding. 
-*  [StringUtils](http://localhost:63342/Blog/spring-core-5.1.9.RELEASE-javadoc.jar/org/springframework/util/StringUtils.html) : Miscellaneous [`String`](https://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true) utility methods. 
-*  [DigestUtils](http://localhost:63342/Blog/spring-core-5.1.9.RELEASE-javadoc.jar/org/springframework/util/DigestUtils.html) : Miscellaneous methods for calculating digests.
+*  `Base64Utils` : A simple utility class for Base64 encoding and decoding. 
+*  `StringUtils` : Miscellaneous [`String`](https://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true) utility methods. 
+*  `DigestUtils`: Miscellaneous methods for calculating digests.
+*  `StopWatch`: 一个计算任务耗时的工具
 * ...
 
 > 参考[Package org.springframework.util](https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/util/package-summary.html)
