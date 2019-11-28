@@ -339,7 +339,17 @@ private int[] intArrayWithDefaults;
 
 ### Profile
 
-`application-{profile}.properties`允许有多个, 但仅其中一个生效, 由 ` spring.profiles.active`决定. 未指定时, 默认使用`application-default.properties`(如果存在的话)
+* 关于配置文件
+
+  * `application-{profile}.properties`允许有多个, 但仅其中一个生效, 由 ` spring.profiles.active`决定. 
+
+  * 未指定时, 默认使用`application-default.properties`(如果存在的话)
+
+* 关于Bean与`@Profile`
+
+  * 有`@Profile`注解的Bean, 仅在对应的Profile激活时, 会被注入
+  * 注解中可声明多个Profile, 激活的Profile匹配一个则注入
+  * 关于`@Profile`与重载方法之间的关系, 没看懂
 
 
 

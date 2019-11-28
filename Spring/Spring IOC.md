@@ -197,7 +197,7 @@ public class DefaultServiceLocator {
 
 其中，factory-bean指定含有工厂方法的类的标识符，factory-method指定工厂方法，bean可由反射得知。上面三个bean都会被实例化。
 
-### [3.2.4、实现FactoryBean创建工厂](https://docs.spring.io/spring-framework/docs/current/spring-framework-reference/core.html#beans-factory-extension-factorybean)
+### [实现FactoryBean创建工厂](https://docs.spring.io/spring-framework/docs/current/spring-framework-reference/core.html#beans-factory-extension-factorybean)
 
 同时也可以通过实现FactoryBean来创建Bean。实现FactoryBean的是工厂类，该接口的getObject方法返回的是被生产的Bean，isSingleton方法当该Bean为单实例时返回true，getObjectType方法返回bean的类型。
 
