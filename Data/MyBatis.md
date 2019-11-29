@@ -139,6 +139,7 @@ mybatis配置文件的结果如下：
 			* dataSource：数据源
 	* databaseIdProvider：数据库标识，拥有多个数据库供应商时使用
 	* mappers：指出映射文件或含映射语句的接口的位置
+
 ## properties
 配置属性键值对，在其他元素中可以通`${propertyName}`取出。如：
 ```xml
