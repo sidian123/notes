@@ -423,12 +423,12 @@ $ rabbitmqctl set_permissions -p / YOUR_USERNAME ".*" ".*" ".*"
 
 即, RabbitMQ重启或突然挂了时, 数据会丢失.
 
-* 首先, 先保证队列,交换器是持久的, 即
+* 首先, 先保证**队列**,**交换器**是持久的, 即
 
   * `Channel.queueDeclare()`的`durable`参数为`true`
   * `Channel.exchangeDeclare()`的`durable`参数为`true`
 
-* 现在保证生产者推送的消息是持久的, 如
+* 现在保证生产者推送的**消息**是持久的, 如
 
   ```java
   channel.basicPublish("", "task_queue",
@@ -620,6 +620,32 @@ $ rabbitmqctl set_permissions -p / YOUR_USERNAME ".*" ".*" ".*"
 * ` ConnectionFactory `用于管理连接, ` CachingConnectionFactory `是其实现, 能够缓存连接和信道
 * AMQP中消息的工作单元是信道
 * 
+
+## 使用
+
+### hello world
+
+* 生产者使用`RabbitTemplate`发送消息
+* 两种声明监听器(消费者)的方式
+  * 直接在Bean的方法上注解`@RabbitListener`, 标识该方法用于消费消息
+  * Bean上注解`@RabbitListener`, 然后`@RabbitHandler`标识消费消息的方法
+
+### 进阶
+
+* 消息确认(消费者端)
+
+  * Spring AMQP默认在监听器执行完后才发送确认消息, 而非获取消息时.
+
+  * 一般情况下, 当抛出异常时, 监听器将发送拒绝确认. 而消息将重回队列, 等待重新分发
+  * 当抛出` AmqpRejectAndDontRequeueException `异常时, 消息则不会重回队列
+
+* 消息持久化
+
+  * Spring AMQP默认开启了消息持久化, 需要使用者保证存储消息的队列也是持久化的( durable ).
+
+    > 不持久的队列活不过MQ下一次重启, 更何况队列中的消息, 即使消息是持久化的
+
+  * 
 
 
 
