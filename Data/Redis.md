@@ -59,6 +59,8 @@
    systemctl start redis-server
    ```
 
+   > 端口监听端口6379
+
 3. 启动客户端
 
    ```shell
@@ -164,26 +166,8 @@
 
 > 参考 https://askubuntu.com/questions/967763/redis-server-service-failed-with-result-timeout-more-errors-listed-inside 
 
-## 超级大坑!!!
-
-远程连接Redis时, 复杂的,大的对象不能存入Redis, 我用的是JDK的序列化工具.
-
-本地却可以, 无论windows还是linux.
-
------
-
-最新发现, 当我发送大的, 复杂的对象到远程Redis时, 被公司的防火墙给拦住了.....
 
 
+# 参考
 
-
-
-
-
-
-
-
-
-> 参考
->
-> *  https://redis.io/ 
+* https://redis.io/ 
