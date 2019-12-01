@@ -645,21 +645,59 @@ $ rabbitmqctl set_permissions -p / YOUR_USERNAME ".*" ".*" ".*"
 
     > 不持久的队列活不过MQ下一次重启, 更何况队列中的消息, 即使消息是持久化的
 
-  * 
+* 消息确认(生产者端)
 
+  * 为什么要确认?
 
+    1.  即使消息是持久性的, 也会丢失, 因为MQ收到消息后, 先存入缓存, 等待写入到磁盘中. 可能会出现消息未写入到磁盘中的情况, 因此需要下面的生产者确认, 即真正写入到磁盘时向生产者确认.
 
+    2. 消息发送到了不存在的交换器中, 消息将丢失
+    3. TCP连接假死, 一直超时.
 
+  * 方案: AMQP 0-9-1仅给出了事务的方案, 而生产者确认方案则作为AMQP的协议扩展 
+
+    * 事务
+
+      让信道事务化, 然后推送消息, 并提交, 然后捕获异常. 
+
+      > 该方案异常沉重, 并减低了吞吐量
+
+    * 生产者确认(推荐)
+
+      无需信道事务化, 仅通过`confirm.select`与MQ确认通信方案. MQ确保收到消息后, 将发送确认信息给消费者, 否则发送拒绝信号. 对于持久化的消息, 仅在消息被写入磁盘后才发送确认消息.
+
+    > 事务是同步方案, 生产者确认是异步方案.
+
+* 一个队列多个消费者的分发算法
+
+  * 轮循
+
+    消息进入队列时, 就已经采用轮循的算法分配好了消息, 等待消费者获取.
+
+    > 分配的消息并不会被消费者一次性消费完
+
+  * 公平分发(默认)
+
+    一个消费者默认最多仅分配250个消息, 由
+
+    `AbstractMessageListenerContainer `的`DEFAULT_PREFETCH_COUNT `确定
+
+    > 通过查看信道中消费者已分配但未处理的消息数目得知还可分配多少个消息.
+
+### 交换器
 
 
 
 # 参考
 
-* [一个用消息队列 的人，不知道为啥用 MQ，这就有点尴尬](https://blog.csdn.net/alinshen/article/details/80583214)
-* [RabbitMQ Tutotial](https://www.rabbitmq.com/getstarted.html)
-* [RabbitMQ Server Config](https://www.rabbitmq.com/configure.html)
-* [RabbitMQ系列文章](https://www.cnblogs.com/vipstone/p/9350075.html)
-* [Messaging with Spring AMQP](https://www.baeldung.com/spring-amqp)
+* 入门
+  * [一个用消息队列 的人，不知道为啥用 MQ，这就有点尴尬](https://blog.csdn.net/alinshen/article/details/80583214)
+  * [RabbitMQ Tutotial](https://www.rabbitmq.com/getstarted.html)
+  * [RabbitMQ系列文章](https://www.cnblogs.com/vipstone/p/9350075.html)
+* 进阶
+  * [RabbitMQ Server Config](https://www.rabbitmq.com/configure.html)
+  * [Messaging with Spring AMQP](https://www.baeldung.com/spring-amqp)
+  * [Consumer Acknowledgements and Publisher Confirms](https://www.rabbitmq.com/confirms.html)
 
 
 
