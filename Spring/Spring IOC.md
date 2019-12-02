@@ -215,7 +215,7 @@ public class DefaultServiceLocator {
 
 由于SqlSessionFactoryBean实现了FactoryBean，因此该Bean是一个工厂。如果查看该类对FactoryBean的实现会发现，该工厂是用来生产SqlSessionFactory的，且为单实例。因此，通过id的值SqlSessionFactory可以获得该类（SqlSessionFactory）的对象。如果要获得工厂本身而不是生产的Bean，则需要在id前加个前缀“&”，即可获得工厂Bean。
 
-# [四、依赖](https://docs.spring.io/spring-framework/docs/current/spring-framework-reference/core.html#beans-dependencies)
+# [四 依赖](https://docs.spring.io/spring-framework/docs/current/spring-framework-reference/core.html#beans-dependencies)
 
 ## 依赖注入
 
@@ -716,7 +716,7 @@ public abstract class CommandManager {
 
 就是能够任意替换Bean中的方法，听起来好像spring无所不能，，，，但是他就是有这功能，但不常用，这里只给出链接：https://docs.spring.io/spring-framework/docs/current/spring-framework-reference/core.html#beans-factory-arbitrary-method-replacement
 
-# [五、Bean作用域](https://docs.spring.io/spring-framework/docs/current/spring-framework-reference/core.html#beans-factory-scopes)
+# [五 Bean作用域](https://docs.spring.io/spring-framework/docs/current/spring-framework-reference/core.html#beans-factory-scopes)
 
 scope到底是什么，我也不清楚，感觉像生存范围吧。一个有6种scope，其中4种只能在WebApplicationContext中使用。
 
@@ -840,7 +840,7 @@ public class AppPreferences {
 
 我猜想。。jdk代理会实现userPreferences接口，而他的实现类则作为调用处理器。。。
 
-# 六、Bean生命周期
+# 六 Bean生命周期
 
 Bean不同的生命周期中会执行不同的方法:
 
@@ -890,7 +890,7 @@ public final class Boot {
 
 > 参考[Bean生命周期](https://docs.spring.io/spring-framework/docs/current/spring-framework-reference/core.html#beans-factory-nature)
 
-# [七、Bean定义继承](https://docs.spring.io/spring-framework/docs/current/spring-framework-reference/core.html#beans-child-bean-definitions)
+# [七 Bean定义继承](https://docs.spring.io/spring-framework/docs/current/spring-framework-reference/core.html#beans-child-bean-definitions)
 
 Bean的定义是可以继承和覆盖的，但有些属性不会被继承，有点小复杂因此不建议使用。。
 
@@ -911,7 +911,7 @@ Bean的定义是可以继承和覆盖的，但有些属性不会被继承，有�
 
 如上面所示，子Bean通过parent属性指定父bean，父bean貌似可以不设置abstract，但是没有指定class属性时必须设置abstract，如果不设置那么父bean也会被初始化。
 
-# [八、容器扩展](https://docs.spring.io/spring-framework/docs/current/spring-framework-reference/core.html#beans-factory-extension)
+# [八 容器扩展](https://docs.spring.io/spring-framework/docs/current/spring-framework-reference/core.html#beans-factory-extension)
 
 可以通过实现ApplicationContext来扩展容器功能，但不建议，一般都是继承相应的接口来扩展spring容器功能。
 
@@ -1215,7 +1215,7 @@ public class SimpleMovieLister {
 
 
 
-# [十、classpath扫描和component管理](https://docs.spring.io/spring-framework/docs/current/spring-framework-reference/core.html#beans-classpath-scanning)
+# [十 classpath扫描和component管理](https://docs.spring.io/spring-framework/docs/current/spring-framework-reference/core.html#beans-classpath-scanning)
 
 第九节讲的是和自动注入相关的注解，尽管这也是元数据配置的一部分，但是没有介绍如何使用注解得到Bean定义。接下来便会将到。
 
@@ -1270,71 +1270,72 @@ public class FactoryMethodComponent {
 }
 ```
 
-
-
-# [十一、基于java的容器配置](https://docs.spring.io/spring-framework/docs/current/spring-framework-reference/core.html#beans-java)
+# [十一 基于java的容器配置](https://docs.spring.io/spring-framework/docs/current/spring-framework-reference/core.html#beans-java)
 
 在基于java的容器配置中需要使用到@Configuration和@Bean。@Configuration表明这是一个配置类，里面被@Bean注释的方法会产生Bean实例。尽管@Bean可以在@Component中使用，但是最主要的还是配合@Configuration使用。@Configuration被@Component注解过，因此也可被当做一个Bean定义。在@Configuration注解的类会被CGIB动态继承该类，重写@Bean注解的方法，该方法每次只返回该作用域内的Bean，维护了Bean的作用域，而在@Component中就是个普通方法。因此使用@Configuration注解，可以在一个@Bean方法内调用其他@Bean方法。
 
 ## @Configuration和容器实例化
 
-```java
-@Configuration
-public class AppConfig {
+* 例子
 
-    @Bean
-    public MyService myService() {
-        return new MyServiceImpl();
+    ```java
+    @Configuration
+    public class AppConfig {
+
+        @Bean
+        public MyService myService() {
+            return new MyServiceImpl();
+        }
     }
-}
+    ```
+    
+* 包扫描
+
+    ```java
+    @Configuration
+    @ComponentScan(basePackages = "com.acme") 
+    public class AppConfig  {
+        ...
+    }
+    ```
+
+* 貌似, 配置类中的静态方法也会被扫描与注册
+
+* 实例化
+	
+通过`AnnotationConfigApplicationContext`建立容器，传入配置类：
+  
+  ```java
+    public static void main(String[] args) {
+        ApplicationContext ctx = new AnnotationConfigApplicationContext(AppConfig.class);
+        MyService myService = ctx.getBean(MyService.class);
+        myService.doStuff();
+    }
 ```
+  
+  `AnnotationConfigApplicationContext` 不局限于`@Configuration`类，还可以是`@Componet`：
+  
+  ```java
+    public static void main(String[] args) {
+        ApplicationContext ctx = new AnnotationConfigApplicationContext(MyServiceImpl.class, Dependency1.class, Dependency2.class);
+        MyService myService = ctx.getBean(MyService.class);
+        myService.doStuff();
+    }
+  ```
 
-
-
-通过AnnotationConfigApplicationContext建立容器，传入配置类：
-
-```java
-public static void main(String[] args) {
-    ApplicationContext ctx = new AnnotationConfigApplicationContext(AppConfig.class);
-    MyService myService = ctx.getBean(MyService.class);
-    myService.doStuff();
-}
-```
-
-
-
-`AnnotationConfigApplicationContext` 不局限于@Configuration类，还可以是@Componet：
-
-```java
-public static void main(String[] args) {
-    ApplicationContext ctx = new AnnotationConfigApplicationContext(MyServiceImpl.class, Dependency1.class, Dependency2.class);
-    MyService myService = ctx.getBean(MyService.class);
-    myService.doStuff();
-}
-```
-
-
-
-@Configuration类可以配置包扫描：
-
-```java
-@Configuration
-@ComponentScan(basePackages = "com.acme") 
-public class AppConfig  {
-    ...
-}
-```
-
-
-
-一般web应用时通过xml文件配置的，可以通过java代码配置，参考：[Support for Web Applications with AnnotationConfigWebApplicationContext](https://docs.spring.io/spring-framework/docs/current/spring-framework-reference/core.html#beans-java-instantiating-container-web)
+> 一般web应用是通过xml文件配置的，也可通过Java代码配置，参考：[Support for Web Applications with AnnotationConfigWebApplicationContext](https://docs.spring.io/spring-framework/docs/current/spring-framework-reference/core.html#beans-java-instantiating-container-web)
 
 ## @Bean
 
-* `@Bean`注解的方法的返回值为Bean的类型，Bean名字和方法名一致。
-* `@Bean`方法依赖注入的方式与构造函数注入方式一致。
-* `@Bean`方法参数注入不需要`@Autowire`注解
-* 等等等等等功能
+* Bean注册
+
+  `@Bean`注解的方法的返回值为Bean的类型，Bean名字和方法名一致。
+
+* 依赖注入
+
+  * 注入方式基本与构造函数注入一致, 同时无需`@Autowire`注解
+
+  * 貌似, 注入依赖时, 会先根据类型注入, 接着按照Bean名字.
 
 > 参考[@Bean](https://docs.spring.io/spring-framework/docs/current/spring-framework-reference/core.html#beans-java-bean-annotation)
 
@@ -1392,11 +1393,9 @@ public class AppConfig {
 }
 ```
 
+可以将该类作为Bean在xml声明，需要通过`<context:annotation-config/>`开启注释，容器会识别注解，执行注解的逻辑。
 
-
-可以将该类作为Bean在xml声明，需要通过<context:annotation-config/>开启注释，容器会识别注解，执行注解的逻辑。
-
-```
+```xml
 <beans>
     <!-- enable processing of annotations such as @Autowired and @Configuration -->
     <context:annotation-config/>
@@ -1406,19 +1405,15 @@ public class AppConfig {
 </beans>
 ```
 
+因为`@Configuration`被`@Conmponent`注释过的，因此可以开启包扫描扫描该配置类：
 
-
-因为@Configuration被@Conmponent注释过的，因此可以开启包扫描扫描该配置类：
-
-```
+```xml
 <beans>
     <!-- picks up and registers AppConfig as a bean definition -->
     <context:component-scan base-package="com.acme"/>
 
 </beans>
 ```
-
-
 
 ### @Configuration类中使用xml
 
