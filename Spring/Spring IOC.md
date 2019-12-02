@@ -1303,7 +1303,7 @@ public class FactoryMethodComponent {
 
 * 实例化
 	
-通过`AnnotationConfigApplicationContext`建立容器，传入配置类：
+	通过`AnnotationConfigApplicationContext`建立容器，传入配置类：
   
   ```java
     public static void main(String[] args) {
@@ -1311,17 +1311,17 @@ public class FactoryMethodComponent {
         MyService myService = ctx.getBean(MyService.class);
         myService.doStuff();
     }
-```
+	```
   
-  `AnnotationConfigApplicationContext` 不局限于`@Configuration`类，还可以是`@Componet`：
+	`AnnotationConfigApplicationContext` 不局限于`@Configuration`类，还可以是`@Componet`：
   
-  ```java
+    ```java
     public static void main(String[] args) {
         ApplicationContext ctx = new AnnotationConfigApplicationContext(MyServiceImpl.class, Dependency1.class, Dependency2.class);
         MyService myService = ctx.getBean(MyService.class);
         myService.doStuff();
     }
-  ```
+    ```
 
 > 一般web应用是通过xml文件配置的，也可通过Java代码配置，参考：[Support for Web Applications with AnnotationConfigWebApplicationContext](https://docs.spring.io/spring-framework/docs/current/spring-framework-reference/core.html#beans-java-instantiating-container-web)
 
