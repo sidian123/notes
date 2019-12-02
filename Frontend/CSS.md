@@ -1011,21 +1011,76 @@ where
 
 ## style scrollbar
 
-> 强调, 这是伪元素
+关于滚动条, 没有一个同一的标准
 
-* `::-webkit-scrollbar`表示滚动条, 常用于设置滚动条厚度
-  * `width`设置竖向滚动条的厚度
-  * `hight`设置横向滚动条的厚度
+* for Chrome
 
-* `::-webkit-scrollbar-thumb`表示handle(把手), 常用于设置其形状,颜色
-* `::-webkit-scrollbar-track`表示handle的轨道(track), 即handle之外的部分.
-* ...
+  > 强调, 这是**伪元素**
 
-例子:
+  * `::-webkit-scrollbar`表示滚动条, 常用于设置滚动条厚度
+    * `width`设置竖向滚动条的厚度
+    * `hight`设置横向滚动条的厚度
+  * `::-webkit-scrollbar-thumb`表示handle(把手), 常用于设置其形状,颜色
+  * `::-webkit-scrollbar-track`表示handle的轨道(track), 即handle之外的部分.
+  * ...
 
+* for Firefox
 
+  > 现在是**样式属性**
 
-> 浏览器对其支持度不高
+  * 颜色
+
+    ```css
+    scrollbar-color: <color> <color>
+    ```
+
+    第一个为轨道的样式, 第二个为把手的颜色
+
+  * 横与竖向滚动条的宽度
+
+    ```css
+    scrollbar-width: <keyword>
+    ```
+
+    `keyword`仅三种取值
+
+    * `auto` 默认宽度
+    * `thin` 小一点
+    * `none` 无滚动条出现, 但仍能滚动
+
+* 例子, 同时作用于Chrome和Firefox
+
+  ```css
+  /*  style scrollbar for chrome*/
+  /* width */
+  ::-webkit-scrollbar {
+      width: 0.5rem;
+      height: 0.5rem;
+  }
+  
+  /* Track */
+  ::-webkit-scrollbar-track {
+      background: #f1f1f1;
+  }
+  
+  /* Handle */
+  ::-webkit-scrollbar-thumb {
+      background: #d3d3d3;
+      border-radius: 5px;;
+  }
+  
+  /* Handle on hover */
+  ::-webkit-scrollbar-thumb:hover {
+      background: #555;
+  }
+  /*
+  style scrollbar for firefox
+  */
+  *{
+      scrollbar-width: thin;
+      scrollbar-color: #d3d3d3 #f1f1f1;
+  }
+  ```
 
 ## 其他
 ### object-fit
