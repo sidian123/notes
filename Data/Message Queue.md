@@ -217,7 +217,9 @@ Exchange以广播的方式将消息推送到所有与Exchange绑定的队列中
 
 > 在RabbitMQ使用的AMQP 0-9-1协议中, 还提供了生产者/消费者**事务方案**来保证数据安全, 而仅提供了消费者的确认方案, 而生产者确认方案则作为AMQP的协议扩展.
 >
-> 并不建议使用事务, 性能销毁较严重.
+> 并不建议使用事务, 性能销毁较严重.  
+>
+> 此外, 事务是同步方案, 生产者确认是异步方案.
 
 # 三 Server配置
 
@@ -388,9 +390,41 @@ sudo apt-get install rabbitmq-server
 
 ### 接收
 
+* 当`@RabbitListener`注解在Bean的方法上时
+
+  该方法用于处理监听到的消息
+
+* 当`@RabbitListener`注解在类上时
+
+  在方法上使用`@RabbitHandler`注解来声明为消息处理器
+
+* `@RabbitListener`的`queues`元素指定要监听的队列, 可以使用SpEL表达式, 如
+
+  ```java
+  @RabbitListener(queues = "#{autoDeleteQueue1.name}")
+  public void receive1(String in) throws InterruptedException {
+      receive(in, 1);
+  }
+  ```
 
 
 
+## 可靠性保证
+
+* 消费者确认
+
+  * Spring AMQP默认在监听器执行完后才发送确认消息, 而非获取消息时.
+
+  * 一般情况下, 当抛出异常时, 监听器将发送拒绝确认. 而消息将重回队列, 等待重新分发
+  * 当抛出` AmqpRejectAndDontRequeueException `异常时, 消息则不会重回队列
+
+* 消息持久化
+
+  Spring AMQP默认开启了消息持久化, 但需要使用者保证存储消息的队列也是持久化的( durable ).
+
+* 生产者确认
+
+  默认未开启确认功能, 详细使用见4.4.3小节-生产者确认
 
 ## 使用(进阶)
 
@@ -402,135 +436,55 @@ sudo apt-get install rabbitmq-server
 
 ### 生产者确认
 
+* Publisher Confirms vs. Publisher Returns
 
+  * 生产者将消息发送到Broker的Exchange后, Exchange发现该消息是不可路由的(即没有对应的Queue), 将忽略. 
 
+  * 如果开启了确认功能, 则发送ack ( 确认 ) . 
 
+    > 即`spring.rabbitmq.publisher-confirms=true`
 
+  * 如果消息是强制的 ( mandatory ), 则发送return
 
+    > 即`spring.rabbitmq.publisher-returns=true`
 
+* 使用( 仅介绍Publisher Confirms)
 
+  1. 先开启确认功能
 
+     ```proper
+     spring.rabbitmq.publisher-confirms=true
+     ```
 
+  2. 程序开始前, 先初始化确认监听器, 如
 
-## 组件
+     ```java
+     this.rabbitTemplate.setConfirmCallback((correlation, ack, reason) -> {
+     			if (correlation != null) {
+     				System.out.println("Received " + (ack ? " ack " : " nack ") + "for correlation: " + correlation);
+     			}
+     		});
+     ```
 
-- AMQP entities – we create entities with the *Message*, *Queue*, *Binding*, and *Exchange* classes
-- Connection Management – we connect to our RabbitMQ broker by using a *CachingConnectionFactory*
-- Message Publishing – we use a *RabbitTemplate* to send messages
-- Message Consumption – we use a *@RabbitListener* to read messages from a queue
+  3. 与正常发送消息一样, 但此时多传了个一个`CorrelationData `, 设置其`id`, 用于唯一标识消息. 当生产者收到确认时, 可可通过该对象的`id`得知是哪个消息.
 
+     ```java
+     CorrelationData correlationData = new CorrelationData("Correlation for message 1");
+     		this.rabbitTemplate.convertAndSend("", QUEUE, "foo", correlationData);
+     ```
 
-## 连接和资源的管理
+> 我觉得也不必处理Publisher Returns这种情况, 只要程序初始化时配置好了, 是可以避免这种问题的.
 
-* 资源管理与具体实现有关, 而目前实现只有` spring-rabbit `一个
-* ` ConnectionFactory `用于管理连接, ` CachingConnectionFactory `是其实现, 能够缓存连接和信道
-* AMQP中消息的工作单元是信道
+> 上述给出了异步处理方案, Publisher Confirms也可以同步处理确认, 详细见链接
 
-## 可靠性保证
-
-* 消息确认(消费者端)
-
-  * Spring AMQP默认在监听器执行完后才发送确认消息, 而非获取消息时.
-
-  * 一般情况下, 当抛出异常时, 监听器将发送拒绝确认. 而消息将重回队列, 等待重新分发
-  * 当抛出` AmqpRejectAndDontRequeueException `异常时, 消息则不会重回队列
-
-* 消息持久化
-
-  * Spring AMQP默认开启了消息持久化, 需要使用者保证存储消息的队列也是持久化的( durable ).
-
-    > 不持久的队列活不过MQ下一次重启, 更何况队列中的消息, 即使消息是持久化的
-
-* 消息确认(生产者端)
-
-  * 为什么要确认?
-
-    1.  即使消息是持久性的, 也会丢失, 因为MQ收到消息后, 先存入缓存, 等待写入到磁盘中. 可能会出现消息未写入到磁盘中的情况, 因此需要下面的生产者确认, 即真正写入到磁盘时向生产者确认.
-
-    2.  消息发送到了不存在的交换器中, 消息将丢失
-    3.  TCP连接假死, 一直超时.
-
-  * 方案: AMQP 0-9-1仅给出了事务的方案, 而生产者确认方案则作为AMQP的协议扩展 
-
-    * 事务
-
-      让信道事务化, 然后推送消息, 并提交, 然后捕获异常. 
-
-      > 该方案异常沉重, 并减低了吞吐量
-
-    * 生产者确认(推荐)
-
-      无需信道事务化, 仅通过`confirm.select`与MQ确认通信方案. MQ确保收到消息后, 将发送确认信息给消费者, 否则发送拒绝信号. 对于持久化的消息, 仅在消息被写入磁盘后才发送确认消息.
-
-    > 事务是同步方案, 生产者确认是异步方案.
-
-## 使用
-
-### hello world
-
-* 生产者使用`RabbitTemplate`发送消息
-* 两种声明监听器(消费者)的方式
-  * 直接在Bean的方法上注解`@RabbitListener`, 标识该方法用于消费消息
-  * Bean上注解`@RabbitListener`, 然后`@RabbitHandler`标识消费消息的方法
-
-### 进阶
-
-
-
-* 一个队列多个消费者的分发算法
-
-  * 轮循
-
-    消息进入队列时, 就已经采用轮循的算法分配好了消息, 等待消费者获取.
-
-    > 分配的消息并不会被消费者一次性消费完
-
-  * 公平分发(默认)
-
-    一个消费者默认最多仅分配250个消息, 由
-
-    `AbstractMessageListenerContainer `的`DEFAULT_PREFETCH_COUNT `确定
-
-    > 通过查看信道中消费者已分配但未处理的消息数目得知还可分配多少个消息.
-
-### 交换器
+> 参考
+>
+> * [What is publisher Returns in Spring AMQP](https://stackoverflow.com/questions/50460230/what-is-publisher-returns-in-spring-amqp) 介绍了Returns与Confirms的区别
+> * [Demo](https://github.com/spring-projects/spring-amqp-samples/blob/master/spring-rabbit-confirms-returns/src/main/java/org/springframework/amqp/samples/confirms/SpringRabbitConfirmsReturnsApplication.java) 生产者确认的Demo源代码
 
 ## 使用例子
 
-```java
-@SpringBootApplication
-public class Application {
-
-    public static void main(String[] args) {
-        SpringApplication.run(Application.class, args);
-    }
-
-    /**
-    * 发送消息
-    */
-    @Bean
-    public ApplicationRunner runner(AmqpTemplate template) {
-        return args -> template.convertAndSend("myqueue", "foo");
-    }
-
-    /**
-    * 声明队列
-    */
-    @Bean
-    public Queue myQueue() {
-        return new Queue("myqueue");
-    }
-
-    /**
-    * 接收消息
-    */
-    @RabbitListener(queues = "myqueue")
-    public void listen(String in) {
-        System.out.println(in);
-    }
-
-}
-```
+见参考中的官方Demo源代码链接
 
 # 其他
 
@@ -542,7 +496,25 @@ public class Application {
 >
 > ![img](.Message%20Queue/rabbit_channel.png)
 >
-> 信道连接代理与生产者(或消费者)
+> 信道连接代理与生产者(或消费者), 是处理消息的工作单元.
+
+## 消息分配
+
+一个队列多个消费者的分发算法
+
+* 轮循
+
+  消息进入队列时, 就已经采用轮循的算法分配好了消息, 等待消费者获取.
+
+  > 分配的消息并不会被消费者一次性消费完
+
+* 公平分发(默认)
+
+  一个消费者默认最多仅分配250个消息, 由
+
+  `AbstractMessageListenerContainer `的`DEFAULT_PREFETCH_COUNT `确定
+
+  > 通过查看信道中消费者已分配但未处理的消息数目得知还可分配多少个消息.
 
 # 参考
 
