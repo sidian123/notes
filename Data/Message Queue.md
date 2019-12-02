@@ -686,7 +686,7 @@ $ rabbitmqctl set_permissions -p / YOUR_USERNAME ".*" ".*" ".*"
 
 ### 交换器
 
-
+ 
 
 # 参考
 
