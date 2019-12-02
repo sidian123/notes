@@ -308,21 +308,23 @@ public class DefaultServiceLocator {
 
 ### 依赖解析过程
 
-通过元数据配置，创建和初始化ApplicationContext，在加载元数据配置时，会检测引用是否指向了不存在的bean和**循环依赖**。由于默认Bean为singleton作用域和预初始化，因此之后立马实例化所有的Bean。实例化后，spring会尽可能慢地解析和注入依赖（保证没有循环依赖的情况下能够正常注入依赖，不会出现要注入依赖时，依赖对象还没有实例化）。而在注入依赖时，依赖必须被**完整配置（**包括调用callbacks回调函数吧？**）**。
+通过元数据配置，创建和初始化`ApplicationContext`，在加载元数据配置时，会检测引用是否指向了不存在的bean和**循环依赖**。由于默认Bean为singleton作用域和预初始化，因此之后立马实例化所有的Bean。实例化后，spring会尽可能慢地解析和注入依赖（保证没有循环依赖的情况下能够正常注入依赖，不会出现要注入依赖时，依赖对象还没有实例化的情况）。而在注入依赖时，依赖必须被**完整配置（**包括调用callbacks回调函数吧？**）**。
 
-循环依赖：举个例子，Class A的实例化（通过构造函数）需要Class B的实例，Class B的实例化需要Class A的实例，因此相互之间需要对方的存在，导致创建失败，抛出BeanCurrentlyInCreationException异常
+>循环依赖
+>
+>举个例子，Class A的实例化（通过构造函数）需要Class B的实例，Class B的实例化需要Class A的实例，因此相互之间需要对方的存在，导致创建失败，抛出`BeanCurrentlyInCreationException`异常
 
-如果Bean不预初始化，那么运行程序很久之后，初次使用了该bean，但是发现丢失或无效的属性，那么抛出异常。因此spring才会默认Bean预初始化，因为在容器加载元数据配置时就可以找出错误。
+> 如果Bean不预初始化，那么运行程序很久之后，初次使用了该bean，但是发现丢失或无效的属性，那么抛出异常。因此spring才会默认Bean预初始化，因为在容器加载元数据配置时就可以找出错误。
 
 ## 详细依赖配置
 
-4.1节中讲到了依赖注入的两种方法和注入过程。依赖通过标签*<constructor-arg/>*或*<property/>*的属性value或ref指定。如果依赖是简单类型，则可以使用value直接赋值；如果依赖是Bean对象，则通过ref指定bean。除了使用**value和ref属性**指定依赖，还可以使用**子标签**来给出依赖。
+4.1节中讲到了依赖注入的两种方法和注入过程。依赖通过标签`<constructor-arg/>`或`<property/>`的属性`value`或`ref`指定。如果依赖是简单类型，则可以使用value直接赋值；如果依赖是Bean对象，则通过`ref`指定bean。除了使用**value和ref属性**指定依赖，还可以使用**子标签**来给出依赖。
 
 ### 简单值（基本类型、字符串等等）
 
 简单的值可以通过value属性给出：
 
-```
+```xml
 <bean id="myDataSource" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
     <!-- results in a setDriverClassName(String) call -->
     <property name="driverClassName" value="com.mysql.jdbc.Driver"/>
@@ -334,9 +336,9 @@ public class DefaultServiceLocator {
 
 
 
-或者使用<value/>子标签
+或者使用`<value/>`子标签
 
-```
+```xml
 <bean id="..." class="...">
     <property name="...">
             <value>some value here</value>
@@ -344,11 +346,9 @@ public class DefaultServiceLocator {
 </bean>
 ```
 
+`<value/>`标签有一个非常好的功能，就是可以为`java.util.Properties`对象赋值：
 
-
-<value/>标签有一个非常好的功能，就是可以为java.util.Properties对象赋值：
-
-```
+```xml
 <bean id="mappings"
     class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
 
@@ -362,11 +362,9 @@ public class DefaultServiceLocator {
 </bean>
 ```
 
+如果依赖为其他Bean的标识符，则可以使用`<idref/>`标签，该标签可以在容器加载阶段验证`id`所属的Bean是否存在（在scope不是sintleton时很有用），下面的相当于 `<property name="targetName" value="theTargetBean"/>`
 
-
-如果依赖为其他bean的标识符，则可以使用<idref/>标签，该标签可以在容器加载阶段验证id所属的bean是否存在（在scope不是sintleton时很有用），下面的相当于 <property name="targetName" value="theTargetBean"/>
-
-```
+```xml
 <bean id="theTargetBean" class="..."/>
 
 <bean id="theClientBean" class="...">
@@ -376,30 +374,24 @@ public class DefaultServiceLocator {
 </bean>
 ```
 
-
-
 ### 对Bean的引用
 
-如果依赖为其他的Bean，则需要使用ref属性指定依赖。同时可以使用<ref/>标签指定依赖，这样在容器加载时会验证该bean是否存在（即使不是singleton的作用域）。
+如果依赖为其他的Bean，则需要使用`ref`属性指定依赖。同时可以使用`<ref/>`标签指定依赖，这样在容器加载时会验证该Bean是否存在（即使不是singleton的作用域）。
 
-通过bean属性指定在**相同容器或父容器**的的Bean，无论是否在相同xml文件中：
+通过Bean属性指定在**相同容器或父容器**的的Bean，无论是否在相同xml文件中：
 
-```
+```xml
 <ref bean="someBean"/>
 ```
 
+通过`parent`属性指定**父容器**中的Bean：
 
-
-通过parent属性指定**父容器**中的Bean：
-
-```
+```xml
 <!-- in the parent context -->
 <bean id="accountService" class="com.something.SimpleAccountService">
     <!-- insert dependencies as required as here -->
 </bean>
 ```
-
-
 
 ```xml
 <!-- in the child (descendant) context -->
@@ -412,13 +404,11 @@ public class DefaultServiceLocator {
 </bean>
 ```
 
-
-
 ### 内部Bean
 
-如果一个Bean只作为一个且仅一个Bean的依赖，此时可以直接将该Bean定义为内部bean。内部Bean的id会被忽略，不用给出。内部Bean的scope对Bean的创建没有作用，内部Bean会随着外部Bean创建而创建。内部bean创建时会调用他的生命周期方法。scope作用域会影响内部bean销毁函数的调用。这是非常少见的使用场景。。
+如果一个Bean只作为一个且仅一个Bean的依赖，此时可以直接将该Bean定义为内部Bean。内部Bean的`id`会被忽略，不用给出。内部Bean的scope对Bean的创建没有作用，内部Bean会随着外部Bean创建而创建。内部bean创建时会调用他的生命周期方法。scope作用域会影响内部bean销毁函数的调用。这是非常少见的使用场景。。
 
-```
+```xml
 <bean id="outer" class="...">
     <!-- instead of using a reference to a target bean, simply define the target bean inline -->
     <property name="target">
@@ -430,13 +420,11 @@ public class DefaultServiceLocator {
 </bean>
 ```
 
-
-
 ### 集合
 
-如果依赖是集合，则可以使用子标签`<list/>`, `<set/>`, `<map/>`, and `<props/>设置集合的属性，分别对应java集合类型：List`, `Set`, `Map`, and `Properties。`
+如果依赖是集合，则可以使用子标签`<list/>`, `<set/>`, `<map/>`, and `<props/>`设置集合的属性，分别对应java集合类型：`List`, `Set`, `Map`, and `Properties`
 
-```
+```xml
 <bean id="moreComplexObject" class="example.ComplexObject">
     <!-- results in a setAdminEmails(java.util.Properties) call -->
     <property name="adminEmails">
@@ -470,21 +458,17 @@ public class DefaultServiceLocator {
 </bean>
 ```
 
-
-
 map的键值或set的值可以是如下元素（标签）：
 
 ```
 bean | ref | idref | list | set | map | props | value | null
 ```
 
-
-
 **集合合并**
 
-如果Bean继承父Bean，那么子Bean中注入集合依赖可以**合并**和**覆盖**父Bean依赖的集合，需要合并的属性要设置merge="true"
+如果Bean继承父Bean，那么子Bean中注入集合依赖可以**合并**和**覆盖**父Bean依赖的集合，需要合并的属性要设置`merge="true"`
 
-```
+```xml
 <beans>
     <bean id="parent" abstract="true" class="example.ComplexObject">
         <property name="adminEmails">
@@ -506,17 +490,14 @@ bean | ref | idref | list | set | map | props | value | null
 <beans>
 ```
 
-
-
 下面子Bean的adminEmails属性的内容如下：
 
-> ```html
+> ```properties
 > administrator=administrator@example.com
 > sales=sales@example.com
 > support=support@example.co.uk
 > ```
 >
-> 
 
 上面的所有集合都可以合并，但是`<list/>`特殊点，因为list是有序的，因此，后面子Bean的集合会插入到父Bean集合的后面。
 
@@ -535,9 +516,7 @@ public class SomeClass {
 }
 ```
 
-
-
-```
+```xml
 <beans>
     <bean id="something" class="x.y.SomeClass">
         <property name="accounts">
@@ -551,25 +530,21 @@ public class SomeClass {
 </beans>
 ```
 
-
-
-容器会将key当做String，value转化为Float类型。
+容器会将`key`当做`String`，`value`转化为`Float`类型。
 
 ### null和空字符串
 
 注入空字符串
 
-```
+```xml
 <bean class="ExampleBean">
     <property name="email" value=""/>
 </bean>
 ```
 
+注入`null`
 
-
-注入null
-
-```
+```xml
 <bean class="ExampleBean">
     <property name="email">
         <null/>
@@ -577,11 +552,11 @@ public class SomeClass {
 </bean>
 ```
 
-
-
 ### 其他
 
-一些没多大用处的，只是便于使用的内容，比如使用p-namespace和c-namespace来简化xml配置，什么复杂的属性名注入，学多了头疼。下面给出链接：https://docs.spring.io/spring-framework/docs/current/spring-framework-reference/core.html#beans-p-namespace
+一些没多大用处的，只是便于使用的内容，比如使用p-namespace和c-namespace来简化xml配置，什么复杂的属性名注入，学多了头疼。
+
+> 参考https://docs.spring.io/spring-framework/docs/current/spring-framework-reference/core.html#beans-p-namespace
 
 ## depends-on
 
