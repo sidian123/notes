@@ -652,10 +652,21 @@ mybatis注册mapper接口时，也会检测同包下是否存在对应xml文件�
 spring boot支持三种JSON映射库的集成：
 
 - Gson
-- Jackson：默认使用的库
+- Jackson(默认使用)
 - JSON-B
 
-`spring-boot-starter-json`提供Jackson，会自动生成`ObjectMapper` Bean。`spring-boot-starter-web`中，默认引入了该包。
+starter依赖
+
+```xml
+<dependency>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter-json</artifactId>
+</dependency>
+```
+
+> 自动配置Jackson，将注入`ObjectMapper` Bean。
+>
+> `spring-boot-starter-web`中已默认引入了该包。
 
 ## 嵌入servlet容器支持
 

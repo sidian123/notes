@@ -40,7 +40,7 @@
 
   ![img](.Message%20Queue/o_xuefeng1.png)
 
-  请求时边写入数据库, 造成数据库压力山大
+  请求后立即写入数据库, 造成数据库压力山大
 
 * 中间件模式
 
@@ -63,7 +63,7 @@
 | 可用性     | 高(主从架构)                                                 | 高(主从架构)                                                 | 非常高(分布式架构)       | 非常高(分布式架构)                                           |
 | 功能特性   | 成熟的产品，在很多公司得到应用；有较多的文档；各种协议支持较好 | 基于erlang开发，所以并发能力很强，性能极其好，延时很低;管理界面较丰富 | MQ功能比较完备，扩展性佳 | 只支持主要的MQ功能，像一些消息查询，消息回溯等功能没有提供，毕竟是为大数据准备的，在大数据领域应用广。 |
 
-中小型软件公司建议用RabbitMQ, 其开源且社区比较活跃; 大型软件公司建议用RocketMQ或Kafka, 吞吐量比较大.
+中小型软件公司建议用RabbitMQ, 其开源且社区比较活跃; 大型软件公司建议用RocketMQ或Kafka, 吞吐量比较大
 
 ## 其他
 
@@ -71,169 +71,70 @@
 
 # 二 RabbitMQ
 
-## Demo
+RabbitMQ是一个实现了AMQP（Advanced Message Queuing Protocol）高级消息队列协议的消息队列服务, 由Erlang语言编写的。 
 
-* 介绍: 简单的展示, 生产者发送消息, 消费者接收消息
+是MQ的一种实现, 这里仅介绍原理, 不介绍RabbitMQ的Java客户端, 而在下一章节介绍它的封装库Spring AMQP.
 
-  ![python-one.png](.Message%20Queue/python-one-1574665345043.png)
+## 组件模型
 
-* 目的: 入门
+![image-20191202143124228](.Message%20Queue/image-20191202143124228.png)
 
-* 引入Java客户端
+* RabbitMQ Server 又称Broker(代理) 
+  * 可以存在多个VHost, 每个VHost拥有完整的Rabbit消息模型, 如队列, 交换器和绑定, 还拥有自己的权限控制.
 
-  ```xml
-  <dependency>
-      <groupId>com.rabbitmq</groupId>
-      <artifactId>amqp-client</artifactId>
-      <version>5.7.3</version>
-  </dependency>
-  ```
+  * VHost的一些规则
 
-  > 服务端需自行搭建并配置
+    * 默认存在一个VHost, 以`/`标识
+    * VHost间是隔离的, 无法通讯. 也即名字隔离
+    * 创建用户时必须指定VHost
 
-* Server
+* 消息传递过程
 
-  ```java
-  public class Sender {
-      private final static String QUEUE_NAME = "hello";
-  
-      public static void main(String[] argv) throws Exception {
-          //set config
-          ConnectionFactory factory = new ConnectionFactory();
-          factory.setHost("sidian123.geely.com");
-          factory.setUsername("sidian");
-          factory.setPassword("123456");
-          //connect to server
-          try (Connection connection = factory.newConnection();
-               //acquire channel, like acquire socket
-               Channel channel = connection.createChannel()) {
-               //get queue for send
-              channel.queueDeclare(QUEUE_NAME, false, false, false, null);
-              String message = "Hello World!";
-              //send
-              channel.basicPublish("", QUEUE_NAME, null, message.getBytes(StandardCharsets.UTF_8));
-              System.out.println(" [x] Sent '" + message + "'");
-  
-          }
-      }
-  }
-  ```
+  * 生产者将消息发送到VHost的Exchange中.
 
-* Client
+    > 消息中必须指定Routing Key信息
 
-  ```java
-  public class Receiver {
-      private final static String QUEUE_NAME = "hello";
-  
-      public static void main(String[] argv) throws Exception {
-          //set config
-          ConnectionFactory factory = new ConnectionFactory();
-          factory.setHost("sidian123.geely.com");
-          factory.setUsername("sidian");
-          factory.setPassword("123456");
-          //connect to server, but without try-width-resource to close
-          Connection connection = factory.newConnection();
-          //acquire channel, like socket
-          Channel channel = connection.createChannel();
-          //get queue to receive
-          channel.queueDeclare(QUEUE_NAME, false, false, false, null);
-          System.out.println(" [*] Waiting for messages. To exit press CTRL+C");
-          //start to receive
-          channel.basicConsume(QUEUE_NAME, true, (consumerTag, delivery) -> {//callback of received
-              String message = new String(delivery.getBody(), StandardCharsets.UTF_8);
-              System.out.println(" [x] Received '" + message + "'");
-          }, consumerTag -> { });
-      }
-  
-  }
-  ```
+  * Exchange根据消息的Routing Key, Exchange与Queue的Bind Key, 和算法, 选择消息的下一路由, 发送给对应的Queue
 
-  > 消费者不释放资源的原因: 消费者异步监听队列后, 将存在子线程, 主线程的main()方法结束了, 主线程也不会结束, 而是等待子线程退出. 因此不应该在main()方法中释放资源
+    > 在使用过程中, 若不显示指定Exchange, 将发送给**默认Exchange**. 详细见2.2小节-Exchange路由
 
-## 进阶
+  * Queue可能会被多个消费者监听, 怎么分配消息, 由对应算法决定, 然后发送给消费者.
 
-### 消息分配
+    > 详细见2.3小节-消息分配
 
-当一个队列有多个消费者时, RabbitMQ默认以轮询的方式分配消息
+## Exchange路由
 
-![img](.Message%20Queue/python-two.png)
+**默认Exchange**是`direct`类型的, 且名字为空.
 
-> 缺点: 如果100个任务到来, 奇数个任务都很繁重, 导致C1一直忙, C2很多时间空间.
+### fanout
 
-可配置, 让消费者空闲时就被分配一个
+Exchange以广播的方式将消息推送到所有与Exchange绑定的队列中
 
-```java
-int prefetchCount = 1;
-channel.basicQos(prefetchCount);
-```
+![img](.Message%20Queue/python-three-overall.png)
 
-> `prefetchCount`指定一个消费者一次最多能分配到的个数.
-
-------
-
-> 分配过程猜测
+> X收到的消息, 将同时发送给两个队列
 >
-> 分配后, 如果消费者处理不过来, 则消息仍留在队列中, 消费者
+> Routing Key和Binding Key将被忽略
 
-### 消息确认机制
+### direct
 
-该机制在**消费者**监听队列时默认开启
+根据消息的Routing Key, 将之发送到与Binding Key对应的队列中.
 
-### 消息持久性
+例子如下
 
-### 消息模型
+* 不同消息推送到不同队列
 
-* 除了, 生产者, 消费者, 和队列, 还存在 ***exchange*** 这一中间层, 添加灵活性
+  ![img](.Message%20Queue/direct-exchange.png)
 
-	![img](.Message%20Queue/exchanges.png)
+* `routing key`为black的消息广播给所有队列, 其他忽略
 
-* 实际生产者并不直接将消息存入队列, 而是交给Exchange, 由Exchange决定消息推入哪个队列, 或不推送.
+  ![img](.Message%20Queue/direct-exchange-multiple.png)
 
-* 种类:
+* 按照日志的严重级别推送到不同的队列中
 
-    * `direct`
-    * `topic`
-    * `headers`
-* `fanout` : 广播的方式将消息推送到所有已知的队列中
-  
-> 默认存在一个empty name(即`''`)的Exchange, 为`direct`类型:  直接将消息推送到 r`outingKey` 标识的队列, 如果存在的话. 如
-    >
-> > ```shell
-    > > channel.basicPublish("", "hello", null, message.getBytes());
-> > ```
-    > >
-    > > 第一个为Exchange名, 第二个参数为`routingKey`
-    >
-    > > 详细见3.2.8
+  ![img](.Message%20Queue/python-four.png)
 
-
-* 非默认Exchange与队列之间需要消费者显示绑定
-
-    ```java
-    channel.queueBind(queueName, "logs", "");
-    ```
-
-## 路由
-
-### direct Exchange
-
-* 队列绑定Exchange时, 指定` binding key `, 生产者生产的消息将被路由到`binding key`与消息`routing key`一致的队列上.
-
-* 例子
-
-  * 不同消息推送到不同队列
-
-    ![img](.Message%20Queue/direct-exchange.png)
-
-  * `routing key`为black的消息广播给所有队列, 其他忽略
-
-    ![img](.Message%20Queue/direct-exchange-multiple.png)
-
-  * 按照日志的严重级别推送到不同的队列中
-
-    ![img](.Message%20Queue/python-four.png)
-
-### topic Exchange
+### topic
 
 消息的`routing_key`与队列的`bind_key`**模式匹配**成功的路线将被选择.
 
@@ -250,27 +151,101 @@ channel.basicQos(prefetchCount);
 >
 > * ` lazy.pink.rabbit `尽管与队列Q2匹配多次, 但只发一次
 
+### headers
 
+根据消息的头部信息进行路由, 具体不太了解....
 
+## 消息分配
 
+* 循环分配 ( Round-robin )
 
+  当一个队列有多个消费者时, 消息将循环分配到每一个队列上
 
+  ![img](.Message%20Queue/python-two.png)
 
+  > 缺点: 如果100个任务到来, 奇数个任务都很繁重, 导致C1一直忙, C2很多时间空间.
 
+  >  Java原生客户端中, 默认使用该方案
 
-## Server
+* 公平分配 ( Fair dispatch )
 
-> 推荐使用Rabbit提供的后端网页来管理
+  即一个消费者同一时间内最多仅被分配一定数量的消息. 防止耗时的消息大部分集中在一个消费者上.
 
-### 创建新账号
+  > Spring AMQP中, 默认使用该方案, 一个消费者最多接收250个消息
+
+* 在Spring AMQP中, 默认使用公平的分配方案, 即一个消费者同一时间内最多仅被分配一定数量的消息. 防止耗时的消息大部分集中在一个消费者上.
+
+> 分配过程猜测
+>
+> 消息分配后, 并不会立即发送给消费者, 而是仍旧缓存在队列中, 等待消费者获取.
+
+## 可靠性保证
+
+即消息传递的过程中保证数据不被丢失
+
+### 隐患
+
+* 消费者端
+
+  Java原生客户端中, 消费者一旦获取到消息后, 便发送确定给队列, 队列将删除该消息. 如果消息者抛出异常了, 消息将被丢失.
+
+* Broker端
+
+  Broker重启后, 未持久化的消息, Queue和Exchange将消息. 服务器故障, 断电也是同样的道理.
+
+* 生产者端
+
+  * 消息发送到不存在的Exchange, Queue中, Broker将静默忽视, 消息即丢失
+  * TCP连接假死, 一致超时
+  * 即使消息是持久性的, 也会丢失, 因为Broker收到消息后, 先存入缓存, 等待写入到磁盘中. 如果此时Broker故障, 消息可能将丢失
+
+### 解决方案
+
+* 消费者端确认
+
+  使用手动确认的方案, 在自己的业务处理完后, 再发送确认
+
+* Broker端持久化
+
+  声明持久化的Exchange, Queue和消息
+
+  > 持久化的消息在非持久化的队列中, 照样活不过Broker下一次重启
+
+* 生产者端确认
+
+  消息确保到达Broker后, Broker发送确认消息给生产者. 对于持久化的消息, Broker仅在消息被写入到磁盘后才发送确认消息
+
+> 在RabbitMQ使用的AMQP 0-9-1协议中, 还提供了生产者/消费者**事务方案**来保证数据安全, 而仅提供了消费者的确认方案, 而生产者确认方案则作为AMQP的协议扩展.
+>
+> 并不建议使用事务, 性能销毁较严重.
+
+# 三 Server配置
+
+下面列出了很多命令, 但仍推荐使用Rabbit提供的后端网站来管理, 网站端口`15672`
+
+## 安装
 
 ```shell
-$ rabbitmqctl add_user YOUR_USERNAME YOUR_PASSWORD
-$ rabbitmqctl set_user_tags YOUR_USERNAME administrator
-$ rabbitmqctl set_permissions -p / YOUR_USERNAME ".*" ".*" ".*"
+sudo apt-get install rabbitmq-server
 ```
 
-### 查看
+## 用户管理
+
+- 查看所有用户：`rabbitmqctl list_users`
+
+- 添加用户
+
+  ```shell
+  sudo rabbitmqctl add_user sidian 123456 # 设置账号密码
+  sudo rabbitmqctl set_user_tags sidian administrator # 设置用户表示
+  sudo rabbitmqctl set_permissions -p / sidian ".*" ".*" ".*" # 设置权限
+  ```
+
+- 删除用户：`rabbitmqctl delete_user username`
+
+- 修改密码：`rabbitmqctl change_password username newpassword`
+
+## 查看信息
 
 * 列出所有队列
 
@@ -296,213 +271,56 @@ $ rabbitmqctl set_permissions -p / YOUR_USERNAME ".*" ".*" ".*"
   rabbitmqctl list_bindings
   ```
 
-  
+## VHost管理
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-## 其他
-
-### 登陆失败
-
-默认账号密码都是 `guest`, 但只能本地登陆, 若远程登陆需重新创建账号密码, 如:
-
-```shell
-$ rabbitmqctl add_user YOUR_USERNAME YOUR_PASSWORD
-$ rabbitmqctl set_user_tags YOUR_USERNAME administrator
-$ rabbitmqctl set_permissions -p / YOUR_USERNAME ".*" ".*" ".*"
-```
-
-> 参考[Spring AMQP + RabbitMQ 3.3.5 ACCESS_REFUSED - Login was refused using authentication mechanism PLAIN](https://stackoverflow.com/questions/26811924/spring-amqp-rabbitmq-3-3-5-access-refused-login-was-refused-using-authentica)
-
-# 三 RabbitMQ学习2
-
-## Ubuntu环境搭建
-
-* 安装
+* 创建
 
   ```shell
-  sudo apt-get install rabbitmq-server
+  rabbitmqctl add_vhost[vhost_name]
   ```
 
-* 用户管理
-
-  - 查看所有用户：`rabbitmqctl list_users`
-  - 添加用户：`rabbitmqctl add_user username password`
-  - 删除用户：`rabbitmqctl delete_user username`
-  - 修改密码：`rabbitmqctl change_password username newpassword`
-
-* 开启网页
-
-  * 开启` rabbitmq-plugins enable rabbitmq_management `
-
-  * 重启服务`systemctl restart rabbitmq-server.service`
-
-  * 登陆: 本地搭建的服务用`guest/guest`登陆, 远程的请添加新用户并添加了权限后再登陆
-
-    > 服务端口:`15672`
-
-* 例子: 添加用户并赋予所有权限
+* 删除
 
   ```shell
-  sudo rabbitmqctl add_user sidian 123456
-  sudo rabbitmqctl set_user_tags sidian administrator
-  sudo rabbitmqctl set_permissions -p / sidian ".*" ".*" ".*"
+  rabbitmqctl delete_vhost[vhost_name]
   ```
 
-## 工作原理与使用
+* 查看所有VHost
 
-### 介绍
-
-*  RabbitMQ是一个实现了AMQP（Advanced Message Queuing Protocol）高级消息队列协议的消息队列服务
-* 由Erlang语言编写的。 
-
-### 使用场景
-
-商品秒杀时, 为了避免某个时间断大量的数据查询导致数据库宕机, 而是先将操作入队列, 一个一个执行.
-
-### 重要概念
-
-* 生产者：消息的创建者，负责创建和推送数据到消息服务器；
-* 消费者：消息的接收方，用于处理数据和确认消息；
-
-* 代理 ( broker )：就是RabbitMQ本身，用于扮演“快递”的角色，本身不生产消息，只是扮演“快递”的角色。
-
-### 信道
-
-每个生产者,消费者连接到RabbitMQ时, 会建立TCP连接, 并认证, 通过后, 便接着创建一条**AMQP信道Channel**. 数据的传输都是在该信道上完成的.
-
-> 一个TCP连接可创建一个AMQP连接, 一个AMQP连接可创建多个信道
->
-> ![img](.Message%20Queue/rabbit_channel.png)
->
-> 信道连接代理与生产者(或消费者)
-
-### RabbitMQ核心概念
-
-* **ConnectionFactory（连接管理器）：**应用程序与Rabbit之间建立连接的管理器，程序代码中使用；
-
-* **Channel（信道）：**消息推送使用的通道；
-
-* **Exchange（交换器）：**用于接受、分配消息；
-
-* **Queue（队列）**：用于存储生产者的消息；
-
-* **RoutingKey（路由键）**：用于把生成者的数据分配到交换器上；
-
-* **BindingKey（绑定键）**：用于把交换器的消息绑定到队列上；
-
-![img](.Message%20Queue/rabbit-producer.gif)
-
-### 数据可靠传输(防止丢数据)
-
-#### 防止生产者丢数据
-
-即生产者在发送给RabbitMQ时, RabbitMQ未收到, 即数据丢失
-
-* 事务: 信道Channel提供了事务的功能, 即
-  * ` channel.txSelect() `开启事务
-  * ` channel.txRollback() `回滚事务
-  * ` channel.txCommit() `提交事务
-* Confirm模式, 见[Publisher Confirms](https://www.rabbitmq.com/tutorials/tutorial-seven-java.html)
-
-> `Channel.basicPublish()`抛出的`IOException`不能作为确认的标志吗? 应该不能, 呵呵...
-
-#### 防止消息队列丢数据
-
-即, RabbitMQ重启或突然挂了时, 数据会丢失.
-
-* 首先, 先保证**队列**,**交换器**是持久的, 即
-
-  * `Channel.queueDeclare()`的`durable`参数为`true`
-  * `Channel.exchangeDeclare()`的`durable`参数为`true`
-
-* 现在保证生产者推送的**消息**是持久的, 如
-
-  ```java
-  channel.basicPublish("", "task_queue",
-              MessageProperties.PERSISTENT_TEXT_PLAIN,
-              message.getBytes());
+  ```shell
+  rabbitmqctl list_vhosts
   ```
 
-  > 即设置`MessageProperties.PERSISTENT_TEXT_PLAIN`属性
 
-#### 消费者丢数据
+## 后端网站开启
 
-默认消费者采用的自动确认模式, 即`basicConsume()`的`autoAck`参数为true. 当消费者获取到消息后便自动给RabbitMQ确认, 如果消费者出现异常且没有保留该消息时, 将丢失该消息.
+* 开启
 
-解决方案: 
+   ```shell
+   rabbitmq-plugins enable rabbitmq_management
+   ```
 
-1. 采用手动确认
-   1. 消费时关闭自动确认, 即`autoAck`为`false`
+* 重启服务
 
-   2. 消费者处理好业务逻辑后, 可
+   ```shell
+   systemctl restart rabbitmq-server.service
+   ```
 
-      1. 手动确认`Channel.basicAck`
+* 登陆
 
-      2. 拒绝确认`Channel.basicNack()`或`Channel.basicReject()`
+   本地搭建的服务用`guest/guest`登陆, 远程的请添加新用户并添加了权限后再登陆, 服务端口:`15672`
 
-         > `basicReject`仅拒绝一个, `basicNack`允许拒绝多个.
+   > 默认配置中, `guest`账号只能在localhost中登陆
 
+# 四 Spring AMQP
 
-2. 事务
+该章节着重介绍Spring Boot中Spring AMQP的使用
 
-> 事务效率较低, 且文档有点看不懂, 见[Broker Semantics](https://www.rabbitmq.com/semantics.html)
+## 介绍
 
-### 虚拟主机VHost
+* 介绍
 
-* 一个Rabbit可以存在多个VHost, 每个VHost拥有完整的Rabbit消息模型, 如队列, 交换器和绑定, 还拥有自己的权限控制.
-
-* VHost的一些规则
-
-  * 默认存在一个VHost, 以`/`标识
-  * VHost间是隔离的, 无法通讯. 也即名字隔离
-  * 创建用户时必须指定VHost
-
-* VHost的操作
-
-  * 创建
-
-    ```shell
-    rabbitmqctl add_vhost[vhost_name]
-    ```
-
-  * 删除
-
-    ```shell
-    rabbitmqctl delete_vhost[vhost_name]
-    ```
-
-  * 查看所有VHost
-
-    ```shell
-    rabbitmqctl list_vhosts
-    ```
-
-### 我画的Rabbit整体模型
-
-![image-20191127224326773](.Message%20Queue/image-20191127224326773.png)
-
-> * 同样的, 生产者的消息去往那个队列, 也有匹配规则
-> * 声明队列后, 需要绑定exchane, 未显式绑定时, 则默认绑定到默认exchange上, 且binding key为队列名
-> * 其实, binding key就是routing key, 在使用过程中不做区分
-
-# Spring AMQP
-
-## 引言
-
-* 介绍: Spring-AMQP是消息队列协议AMQP的抽象概括, Spring-Rabbit是一个使用RabbitMQ的实现.
+  Spring-AMQP是消息队列协议AMQP的抽象概括, Spring-Rabbit是一个使用RabbitMQ的实现.
 
 * JMP Vs. AMQP
 
@@ -511,11 +329,12 @@ $ rabbitmqctl set_permissions -p / YOUR_USERNAME ".*" ".*" ".*"
   > 参考[JMS vs AMQP](https://www.linkedin.com/pulse/jms-vs-amqp-eran-shaham)
 
 * 功能
-  * Listener container for asynchronous processing of inbound messages
-  * RabbitTemplate for sending and receiving messages
-  * RabbitAdmin for automatically declaring queues, exchanges and bindings
   
-* SpringBoot自动配置依赖
+  * 提供`RabbitTemplate`进行消息的发送和接收
+  * 提供队列的监听器, 用于异步接收消息
+  * 提供`RabbitAdmin`自动声明Queue, Exchange和Binding
+  
+* SpringBoot的Starter依赖
 
   ```xml
   <dependency>
@@ -524,87 +343,74 @@ $ rabbitmqctl set_permissions -p / YOUR_USERNAME ".*" ".*" ".*"
   </dependency>
   ```
 
-* 入门例子
+## 使用(入门)
 
-  ```java
-  @SpringBootApplication
-  public class Application {
-  
-      public static void main(String[] args) {
-          SpringApplication.run(Application.class, args);
-      }
-  
-      /**
-      * 发送消息
-      */
-      @Bean
-      public ApplicationRunner runner(AmqpTemplate template) {
-          return args -> template.convertAndSend("myqueue", "foo");
-      }
-  
-      /**
-      * 声明队列
-      */
-      @Bean
-      public Queue myQueue() {
-          return new Queue("myqueue");
-      }
-  
-      /**
-      * 接收消息
-      */
-      @RabbitListener(queues = "myqueue")
-      public void listen(String in) {
-          System.out.println(in);
-      }
-  
-  }
-  ```
+### 配置
 
-## 实体
+一般使用Spring Boot的默认配置即可, 也可修改配置
 
-* `Message` 
+* 配置文件方式
 
-  封装消息, 和消息相关的属性
+  默认以用户`guest/guest`连接到`localhost:15672`的RabbitMQ服务上, 可使用以下属性修改
 
-* `Exchange` 
+  * `spring.rabbitmq.host` 连接的主机
+  * `spring.rabbitmq.username` 用户名
+  * `spring.rabbitmq.password` 用户密码
 
-  接收生产者发送的数据的直接实体
+* Java代码方式
 
-  有四种类型
+  手动注入`CachingConnectionFactory`Bean即可
 
-  - Direct Exchange – Routes messages to a queue by matching a complete routing key
-  - Fanout Exchange – Routes messages to all the queues bound to it
-  - Topic Exchange – Routes messages to multiple queues by matching a routing key to a pattern
-  - Headers Exchange – Routes messages based on message headers
+> 见[Integration properties](https://docs.spring.io/spring-boot/docs/2.2.1.RELEASE/reference/html/appendix-application-properties.html#integration-properties)
 
-* `Queue`
+### 声明
 
-  一个队列缓存, 消费者获取数据的源
+接着声明所需要Queue, Exchange和Binding即可, 在Spring AMQP都存在对应的类.
 
-* `Binding` 
+声明方式有:
 
-  Exchange与Queue之间的绑定关系
+* 配置`CachingConnectionFactory`
 
-  例子:
+* 使用`RabbitAdmin`声明
 
-  * 绑定`direct`类型的Exchange
+* ( 推荐 ) 注入Queue, Exchange和Binding的Bean, Spring Boot会自动配置这些实体
 
-    ```java
-    new Binding(someQueue, someDirectExchange, "foo.bar");
-    ```
+  >在最简情况下, 仅需声明`Queue`即可, 因为存在默认的Exchange, 且未执行Binding时, 默认会将Queue连接到默认Exchange上.
 
-  * 绑定`topic`类型的Exchange
+### 发送
 
-    ```java
-    new Binding(someQueue, someTopicExchange, "foo.*");
-    ```
+发送只能靠`RabbitTemplate`了.
 
-  * 绑定`fanout`类型的Exchange, 无binding key
+关于默认的序列化行为
 
-    ```java
-    new Binding(someQueue, someFanoutExchange);
-    ```
+* 如果是字符串, 则根据utf-8解码成字节码
+* 如果是可序列化对象, 则使用原生的JDK序列化器序列化
+
+### 接收
+
+
+
+
+
+## 使用(进阶)
+
+这里暂不完成, 以后有空了再写
+
+### 序列化器
+
+### 自动重试
+
+### 生产者确认
+
+
+
+
+
+
+
+
+
+
 
 ## 组件
 
@@ -619,18 +425,8 @@ $ rabbitmqctl set_permissions -p / YOUR_USERNAME ".*" ".*" ".*"
 * 资源管理与具体实现有关, 而目前实现只有` spring-rabbit `一个
 * ` ConnectionFactory `用于管理连接, ` CachingConnectionFactory `是其实现, 能够缓存连接和信道
 * AMQP中消息的工作单元是信道
-* 
 
-## 使用
-
-### hello world
-
-* 生产者使用`RabbitTemplate`发送消息
-* 两种声明监听器(消费者)的方式
-  * 直接在Bean的方法上注解`@RabbitListener`, 标识该方法用于消费消息
-  * Bean上注解`@RabbitListener`, 然后`@RabbitHandler`标识消费消息的方法
-
-### 进阶
+## 可靠性保证
 
 * 消息确认(消费者端)
 
@@ -651,8 +447,8 @@ $ rabbitmqctl set_permissions -p / YOUR_USERNAME ".*" ".*" ".*"
 
     1.  即使消息是持久性的, 也会丢失, 因为MQ收到消息后, 先存入缓存, 等待写入到磁盘中. 可能会出现消息未写入到磁盘中的情况, 因此需要下面的生产者确认, 即真正写入到磁盘时向生产者确认.
 
-    2. 消息发送到了不存在的交换器中, 消息将丢失
-    3. TCP连接假死, 一直超时.
+    2.  消息发送到了不存在的交换器中, 消息将丢失
+    3.  TCP连接假死, 一直超时.
 
   * 方案: AMQP 0-9-1仅给出了事务的方案, 而生产者确认方案则作为AMQP的协议扩展 
 
@@ -667,6 +463,19 @@ $ rabbitmqctl set_permissions -p / YOUR_USERNAME ".*" ".*" ".*"
       无需信道事务化, 仅通过`confirm.select`与MQ确认通信方案. MQ确保收到消息后, 将发送确认信息给消费者, 否则发送拒绝信号. 对于持久化的消息, 仅在消息被写入磁盘后才发送确认消息.
 
     > 事务是同步方案, 生产者确认是异步方案.
+
+## 使用
+
+### hello world
+
+* 生产者使用`RabbitTemplate`发送消息
+* 两种声明监听器(消费者)的方式
+  * 直接在Bean的方法上注解`@RabbitListener`, 标识该方法用于消费消息
+  * Bean上注解`@RabbitListener`, 然后`@RabbitHandler`标识消费消息的方法
+
+### 进阶
+
+
 
 * 一个队列多个消费者的分发算法
 
@@ -686,7 +495,54 @@ $ rabbitmqctl set_permissions -p / YOUR_USERNAME ".*" ".*" ".*"
 
 ### 交换器
 
- 
+## 使用例子
+
+```java
+@SpringBootApplication
+public class Application {
+
+    public static void main(String[] args) {
+        SpringApplication.run(Application.class, args);
+    }
+
+    /**
+    * 发送消息
+    */
+    @Bean
+    public ApplicationRunner runner(AmqpTemplate template) {
+        return args -> template.convertAndSend("myqueue", "foo");
+    }
+
+    /**
+    * 声明队列
+    */
+    @Bean
+    public Queue myQueue() {
+        return new Queue("myqueue");
+    }
+
+    /**
+    * 接收消息
+    */
+    @RabbitListener(queues = "myqueue")
+    public void listen(String in) {
+        System.out.println(in);
+    }
+
+}
+```
+
+# 其他
+
+## 信道
+
+每个生产者,消费者连接到RabbitMQ时, 会建立TCP连接, 并认证, 通过后, 便接着创建一条**AMQP信道Channel**. 数据的传输都是在该信道上完成的.
+
+> 一个TCP连接可创建一个AMQP连接, 一个AMQP连接可创建多个信道
+>
+> ![img](.Message%20Queue/rabbit_channel.png)
+>
+> 信道连接代理与生产者(或消费者)
 
 # 参考
 
@@ -699,9 +555,11 @@ $ rabbitmqctl set_permissions -p / YOUR_USERNAME ".*" ".*" ".*"
   * [Messaging with Spring AMQP](https://www.baeldung.com/spring-amqp)
   * [Consumer Acknowledgements and Publisher Confirms](https://www.rabbitmq.com/confirms.html)
 
+* 官方Demo的源代码
 
+  * [spring-amqp-samples](https://github.com/spring-projects/spring-amqp-samples)   
 
-
+  * [rabbitmq-tutorials](https://github.com/rabbitmq/rabbitmq-tutorials)
 
 
 
