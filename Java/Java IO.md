@@ -95,6 +95,14 @@
 >
 > 在对内容有了大局观并熟悉后, 除了要点要记下外, 其他内容真没记下的必要, 到时知道在哪并翻阅即可...
 
+### Path
+
+* `Path relativize(@NotNull Path other)`
+
+  获取`other`相对于该`Path`的相对路径.
+
+  > 若该`Path`为`/a/b`, `other`为`a/b/c/d`, 那么将返回`c/d`
+
 ## 坑
 
 * `Files.getParent()`根据地址计算的, 不会考虑系统真实情况. 如`./`的`getParent()`将返回`null`. 因此最好将`Path`转化为绝对路径再计算.
