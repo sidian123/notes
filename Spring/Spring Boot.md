@@ -386,6 +386,17 @@ spring boot对[Java Util Logging](https://docs.oracle.com/javase/8/docs/api//jav
     <groupId>org.springframework.boot</groupId>
     <artifactId>spring-boot-starter-log4j2</artifactId>
 </dependency>
+<!-- 如果pom中也有web starter依赖, 并且日志冲突了, 那么需要排除web starter中的日志依赖 -->
+<dependency>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter-web</artifactId>
+    <exclusions>
+        <exclusion>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-logging</artifactId>
+        </exclusion>
+    </exclusions>
+</dependency>
 ```
 
 > 注意, 最新版Spring Boot好像已经不再提供该starter了

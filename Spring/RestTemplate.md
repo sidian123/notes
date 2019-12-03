@@ -6,8 +6,29 @@
 > * 都有对象的Builder类，方便构建对象。
 
 * 在一些HTTP客户端库的基础上提供更高层的API，使得更容易的访问rest风格的http请求。
+
 * http请求客户端、线程安全、同步请求
+
 * 底层基于JDK HttpURLConnection（默认）或Apache HttpComponents等等
+
+* 依赖引入
+
+  ```xml
+  <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-web</artifactId>
+  </dependency>
+  ```
+
+  Spring Boot >= 1.4 后, 需手动注入`RestTemplate`, 如
+
+  ```java
+  @Bean
+  public RestTemplate restTemplate(RestTemplateBuilder builder) {
+     // Do any additional configuration here
+     return builder.build();
+  }
+  ```
 
 # 二 正文
 
