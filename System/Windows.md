@@ -153,14 +153,88 @@ PowerShell的命令拥有自己的一套命令规则, 同时也提供了匿名, 
   powershell ./script.ps1
   ```
 
-这里有个坑...
+这里有个坑... 凡是由系统调用的脚本, 只认Batch脚本. PowerShell脚本在启动项和计划任务中, 都不会被执行.
 
 ## 参考
 
 * [PowerShell Scripting](https://docs.microsoft.com/en-us/powershell/scripting/how-to-use-docs?view=powershell-6) 官方文档
 * [PowerShell tutorialspoint.com](https://www.tutorialspoint.com/powershell/index.htm)
 
-# 二 自启
+# 二 Batch Script
+
+> batch脚本用的不多了, 下面简单记录
+
+* Batch脚本扩展名`.bat`或`.cmd`, 由`cmd.exe`执行
+
+* 命令大小写不敏感
+
+* 运行
+  * GUI中, 点击即可
+  * CLI中, 输入文件地址即可
+  
+  > 其他方式略; Window对其支持度很高
+  
+* Batch常用命令
+
+  > 已经不常用了, 详细见[Batch Script - Commands](https://www.tutorialspoint.com/batch_script/batch_script_commands.htm)
+
+  * `rem` & `echo`
+
+    * `rem` 后接注释; `echo`用于输出信息, 和控制命令回显模式
+    * `echo on` 打开回显模式
+      * 脚本中执行的命令将被回显到CMD中
+      * `rem`命令也是
+
+    * `echo off` 关闭回显模式
+      * 脚本中执行的命令不被回显到CMD中
+      * `rem`命令也是
+
+    > `@echo`和`echo`没啥区别; `rem`就是个没啥用的命令, 所以作为注释.
+
+* 语法
+
+  * `>` 重定向上一条命令的输出到下一条命令的输入.
+
+  * 变量
+
+    * 设置变量
+
+      ```cmd
+      set a=hello
+      ```
+
+    * 获取变量
+
+      变量名以`%`围绕
+
+      ```cmd
+      echo %a%
+      ```
+
+    * 连接变量
+
+      ```cmd
+      set b=%a% world
+      echo %b%
+      ```
+
+> 参考[Batch Script Tutorial](https://www.tutorialspoint.com/batch_script/index.htm)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+# 三 自启
 
 ## 启用、禁止自启
 
@@ -186,7 +260,7 @@ PowerShell的命令拥有自己的一套命令规则, 同时也提供了匿名, 
 
 [Change which apps run automatically at startup in Windows 10](https://support.microsoft.com/en-us/help/4026268/windows-10-change-startup-apps)
 
-# 三 配置
+# 四 配置
 
 ## 个性化
 
