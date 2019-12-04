@@ -137,7 +137,23 @@ PowerShell的命令拥有自己的一套命令规则, 同时也提供了匿名, 
 
 ## 脚本
 
-脚本文件以`.ps1`为后缀
+脚本文件以`.ps1`为后缀.
+
+运行脚本
+
+* 在PowerShell中
+
+  ```powershell
+  powershell script.ps1
+  ```
+
+* 在CMD中
+
+  ```cmd
+  powershell ./script.ps1
+  ```
+
+这里有个坑...
 
 ## 参考
 
