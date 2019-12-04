@@ -131,6 +131,7 @@ PowerShell的命令拥有自己的一套命令规则, 同时也提供了匿名, 
 
 * `$HOME` 用户家目录
 * `$PWD` 当前工作目录
+* `$PSScriptRoot` 执行脚本时, 脚本的根目录
 * ...
 
 > 详细参考[Powershell - Special Variables](https://www.tutorialspoint.com/powershell/powershell_special_variables.htm)
@@ -144,7 +145,7 @@ PowerShell的命令拥有自己的一套命令规则, 同时也提供了匿名, 
 * 在PowerShell中
 
   ```powershell
-  powershell script.ps1
+  ./script.ps1
   ```
 
 * 在CMD中
@@ -153,7 +154,19 @@ PowerShell的命令拥有自己的一套命令规则, 同时也提供了匿名, 
   powershell ./script.ps1
   ```
 
-这里有个坑... 凡是由系统调用的脚本, 只认Batch脚本. PowerShell脚本在启动项和计划任务中, 都不会被执行.
+> 即必须以路径的形式执行脚本
+
+这里有几个坑...
+
+* 凡是由系统调用的脚本, 只认Batch脚本. PowerShell脚本在启动项和计划任务中, 都不会被执行.
+
+* 必须以管理员身份打开PowerShell来提升权限, 如
+
+  ```powershell
+  Set-ExecutionPolicy -ExecutionPolicy Bypass -Scope Process
+  ```
+
+  > 提升权限后应该一直有效了吧?
 
 ## 参考
 
@@ -171,6 +184,7 @@ PowerShell的命令拥有自己的一套命令规则, 同时也提供了匿名, 
 * 运行
   * GUI中, 点击即可
   * CLI中, 输入文件地址即可
+  * 在WSL中, `cmd.exe /c foo.bat`
   
   > 其他方式略; Window对其支持度很高
   
@@ -190,6 +204,10 @@ PowerShell的命令拥有自己的一套命令规则, 同时也提供了匿名, 
       * `rem`命令也是
 
     > `@echo`和`echo`没啥区别; `rem`就是个没啥用的命令, 所以作为注释.
+
+* 常用环境变量
+
+  * `userprofile` 用户家目录
 
 * 语法
 
@@ -217,6 +235,10 @@ PowerShell的命令拥有自己的一套命令规则, 同时也提供了匿名, 
       set b=%a% world
       echo %b%
       ```
+    
+  * 字符串
+  
+    无变量替换功能
 
 > 参考[Batch Script Tutorial](https://www.tutorialspoint.com/batch_script/index.htm)
 
