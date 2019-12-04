@@ -1,4 +1,4 @@
-# PowerShell
+# 一 PowerShell
 
 Win10中有两种Shell：PowerShell和Cmd。
 
@@ -99,6 +99,22 @@ PowerShell的命令拥有自己的一套命令规则, 同时也提供了匿名, 
   $env:LIB_PATH='/usr/local/lib'
   ```
 
+### 字符串
+
+* 单引号
+
+  不解析字符串中的变量
+
+* 双引号
+
+  解析字符串中的变量, 如
+
+  ```powershell
+  PS C:\Users\Sidian.Luo\Desktop> $a="$pwd/b"
+  PS C:\Users\Sidian.Luo\Desktop> $a
+  C:\Users\Sidian.Luo\Desktop/b
+  ```
+
 ### 注释
 
 以`#`为前缀的字符串
@@ -114,6 +130,7 @@ PowerShell的命令拥有自己的一套命令规则, 同时也提供了匿名, 
 下面列出部分特殊变量
 
 * `$HOME` 用户家目录
+* `$PWD` 当前工作目录
 * ...
 
 > 详细参考[Powershell - Special Variables](https://www.tutorialspoint.com/powershell/powershell_special_variables.htm)
@@ -127,7 +144,33 @@ PowerShell的命令拥有自己的一套命令规则, 同时也提供了匿名, 
 * [PowerShell Scripting](https://docs.microsoft.com/en-us/powershell/scripting/how-to-use-docs?view=powershell-6) 官方文档
 * [PowerShell tutorialspoint.com](https://www.tutorialspoint.com/powershell/index.htm)
 
-# 配置
+# 二 自启
+
+## 启用、禁止自启
+
+有三种方法：
+
+1. 按`win`键--->设置--->应用--->启动
+   ![在这里插入图片描述](.Windows/20190319143603764.png)
+2. 打开任务管理器--->启动
+   ![在这里插入图片描述](.Windows/20190319143702789.png)
+3. 打开电脑管家（如果有的话）--->电脑加速--->启动项
+   ![在这里插入图片描述](.Windows/20190319143814333.png)
+
+## 添加自启程序
+
+思路：将程序的快捷方式添加到用户的自启目录中。
+
+1. 按`win+R`，输入`shell:startup`，直接进入对应文件夹
+2. 将要自启的程序的快捷键添加进去
+
+然后可以用上面三种方法看到自己已经添加成功了。
+
+## 参考
+
+[Change which apps run automatically at startup in Windows 10](https://support.microsoft.com/en-us/help/4026268/windows-10-change-startup-apps)
+
+# 三 配置
 
 ## 个性化
 
@@ -206,4 +249,3 @@ PowerShell的命令拥有自己的一套命令规则, 同时也提供了匿名, 
 ![image-20191125165356753](.Windows/image-20191125165356753.png)
 
 ![image-20191125165446198](.Windows/image-20191125165446198.png)
-
