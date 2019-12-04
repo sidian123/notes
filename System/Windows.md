@@ -15,7 +15,7 @@ Win10中有两种Shell：PowerShell和Cmd。
 
 * `cd`：改变工作目录
 
-* `cd ~`：回到用户目录
+  > `cd ~`：回到用户目录
 
 * 获取帮助
 
@@ -45,72 +45,87 @@ Win10中有两种Shell：PowerShell和Cmd。
 >其余命令可参考：
 >[Table of Basic PowerShell Commands](https://blogs.technet.microsoft.com/heyscriptingguy/2015/06/11/table-of-basic-powershell-commands/)
 
-## Script
+## 相关概念
 
-* 重要概念
-  * 大部分Shell命令的处理对象是字符串, 而PowerShell命令的处理对象是一个包含结构化信息的对象
-  * PowerShell中的原生命令被称为*cmdlets*, 使用者也可提供自己的*cmdlets*
-  *  PowerShell基于.Net平台, 支持C#部分语法的使用
-  * 好像大小写不敏感
+* 大部分Shell命令的处理对象是字符串, 而PowerShell命令的处理对象是一个包含结构化信息的对象
+* PowerShell中的原生命令被称为*cmdlets*, 使用者也可提供自己的*cmdlets*
+*  PowerShell基于.Net平台, 支持C#部分语法的使用
+* 命令和变量大小写不敏感
 
-* 命令名
+## 语法
 
-  PowerShell的命令拥有自己的一套命令规则, 同时也提供了匿名, 帮助习惯Bash Shell的人使用.
+### 命令名
 
-  略, 以后补充
+PowerShell的命令拥有自己的一套命令规则, 同时也提供了匿名, 帮助习惯Bash Shell的人使用.
 
-* 变量
+略, 以后补充
 
-  * 命名: 变量名包含`_`和任意数字和字符, 使用时必须以前缀`$`标识
+### 变量
 
-  * 创建或赋值
+* 命名: 变量名包含`_`和任意数字和字符, 使用时必须以前缀`$`标识
 
-    ```powershell
-    PS> $loc # 创建变量
-    PS> $loc = Get-Location # 创建变量的同时赋值
-    PS> $loc # 打印变量
-    
-    Path
-    ----
-    C:\temp
-    ```
+* 创建或赋值
 
-    > 可以看出, 声明变量时, 如果变量不存在则创建; 如果变量存在, 则打印.
+  ```powershell
+  PS> $loc # 创建变量
+  PS> $loc = Get-Location # 创建变量的同时赋值
+  PS> $loc # 打印变量
+  
+  Path
+  ----
+  C:\temp
+  ```
 
-* 使用环境变量
+  > 可以看出, 声明变量时, 如果变量不存在则创建; 如果变量存在, 则打印.
 
-  * 打印所有环境变量
+### 使用环境变量
 
-    ```powershell
-    Get-ChildItem env:
-    ```
+* 打印所有环境变量
 
-  * 打印某个环境变量
+  ```powershell
+  Get-ChildItem env:
+  ```
 
-    ```powershell
-    PS> $env:SystemRoot
-    C:\WINDOWS
-    ```
+* 打印某个环境变量
 
-  * 修改环境变量
+  ```powershell
+  PS> $env:SystemRoot
+  C:\WINDOWS
+  ```
 
-    ```powershell
-    $env:LIB_PATH='/usr/local/lib'
-    ```
+* 修改环境变量
 
-* 注释
+  ```powershell
+  $env:LIB_PATH='/usr/local/lib'
+  ```
 
-  以`#`为前缀的字符串
+### 注释
 
-* 管道
+以`#`为前缀的字符串
 
-  以`|`连接多个命令, 每个命令的输出将作为下一个命令的输入. 
+### 管道
 
-  > 与其他Shell的管道不同, PowerShell的管道传输的是对象
+以`|`连接多个命令, 每个命令的输出将作为下一个命令的输入. 
 
+> 与其他Shell的管道不同, PowerShell的管道传输的是对象
+
+## 特殊变量
+
+下面列出部分特殊变量
+
+* `$HOME` 用户家目录
 * ...
 
-> 参考[PowerShell Scripting](https://docs.microsoft.com/en-us/powershell/scripting/how-to-use-docs?view=powershell-6)
+> 详细参考[Powershell - Special Variables](https://www.tutorialspoint.com/powershell/powershell_special_variables.htm)
+
+## 脚本
+
+脚本文件以`.ps1`为后缀
+
+## 参考
+
+* [PowerShell Scripting](https://docs.microsoft.com/en-us/powershell/scripting/how-to-use-docs?view=powershell-6) 官方文档
+* [PowerShell tutorialspoint.com](https://www.tutorialspoint.com/powershell/index.htm)
 
 # 配置
 
