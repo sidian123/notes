@@ -31,3 +31,6 @@
 
   不能如Chrome样, 支持全局快捷键, 于是我把我的沙拉查词删了, 装了桌面版有道...
 
+* 国外网站提速
+
+  国外网站经常使用Google CDN, 导致网站访问速度贼慢, 可使用`Replace Google CDN`插件, 将Google CDN的访问换成中科大USTC的CDN.

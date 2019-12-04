@@ -1,3 +1,47 @@
+# PowerShell
+
+Win10中有两种Shell：PowerShell和Cmd。
+
+* Cmd功能有限
+* PowerShell功能强大, 且有很多命令与Linux Bash命令相似，推荐使用.
+
+这里记录与PowerShell相关且常用的命令:
+
+* `ls`：显示目录或文件
+
+* `pwd`：显示当前目录
+
+* `explorer .`：于当前目录打开文件浏览器
+
+* `cd`：改变工作目录
+
+* `cd ~`：回到用户目录
+
+* `man`、`help`命令或`-h`、`--help`、`/?`选项：查看命令帮助文件。（其实没啥子用）
+
+* `cat`：输出文件内容
+
+* `notepad filename`:用记事本打开文本
+
+* 支持重定向，可用于ssh中传输文件，暂不熟
+
+* `clear`：清空屏幕
+
+* `echo $Env:PATH`：打印环境变量, 如`PATH`
+
+  > 与cmd不同，cmd中通过`%PATH%`可以获取值
+
+* ~~`ls env`：打印全部环境变量~~
+
+* ~~获取环境变量: `%NAME%`~~
+
+* `where.exe <Command>` 查找名字所在目录
+
+* ...
+
+>其余命令可参考：
+>[Table of Basic PowerShell Commands](https://blogs.technet.microsoft.com/heyscriptingguy/2015/06/11/table-of-basic-powershell-commands/)
+
 # 配置
 
 ## 个性化
@@ -9,7 +53,7 @@
 * 查看虚拟内存大小: CLI中输入`systeminfo`
 * 修改大小: `控制面板\系统和安全\系统\高级系统设置`, 然后自己找
 
-# 手动更新
+## 手动更新
 
 1. 按`Win`, 输入`update`, 找到OS版本, 及设备信息
 
@@ -27,7 +71,7 @@
 
 > 参考[How To Download Windows 10 Updates Manually (And Install)](https://www.thetechmentor.com/posts/how-download-windows-10-updates-manually-and-install/)
 
-# 安装Store
+## 安装Store
 
 > 最新更新:
 >
@@ -62,7 +106,7 @@
 
 > 参考[Restore Microsoft Store application in Windows 10](https://superuser.com/questions/949112/restore-microsoft-store-application-in-windows-10)
 
-# 设置混合睡眠模式
+## 设置混合睡眠模式
 
 关于待机,休眠和休眠的区别, 见[零碎知识]
 
