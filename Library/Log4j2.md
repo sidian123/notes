@@ -110,6 +110,23 @@ Configuration元素一些重要的属性如下：
 
 参考：[Configuration](https://logging.apache.org/log4j/2.x/manual/configuration.html#ConfigurationSyntax)
 
+## 属性替换
+
+* 获取属性`${prefix:name}` 
+
+  不同前缀代表不同的环境; 无前缀时, 属性来自于当前XML的属性声明中. 其中
+  * 前缀`sys`标识属性来自系统属性
+  * 前缀`env`标识属性来自环境变量
+
+* 声明属性
+
+  ```xml
+  <Properties>    
+        <Property name="filename">target/rolling1/rollingtest-$${sd:type}.log</Property> </Properties>
+  ```
+
+  > 取出时无需前缀, 如`${filename}`
+
 ## 其他配置链接
 配置方式官方文档说的很详细，这里直接贴出链接。。。阅读时记住，xml配置的语法很松懈。
 
