@@ -365,9 +365,9 @@ private int[] intArrayWithDefaults;
 
 # 四 Logging
 
-spring boot对[Java Util Logging](https://docs.oracle.com/javase/8/docs/api//java/util/logging/package-summary.html)、[Log4J2](https://logging.apache.org/log4j/2.x/) 和 [Logback](http://logback.qos.ch/)提供了**支持与默认配置**。当在classpath下发现日记jar包时，会**自动配置**这些jar包，并且对于spring boot支持的日记系统，都可以通过[应用属性](<https://docs.spring.io/spring-boot/docs/current/reference/html/common-application-properties.html>)进行配置，**即logging属性是独立于日记系统的**。
+Spring Boot对[Java Util Logging](https://docs.oracle.com/javase/8/docs/api//java/util/logging/package-summary.html)、[Log4J2](https://logging.apache.org/log4j/2.x/) 和 [Logback](http://logback.qos.ch/)提供了**支持与默认配置**. 当在classpath下发现日记jar包时，会**自动配置**这些jar包，并且对于Spring Boot支持的日记系统，都可以通过[应用属性](<https://docs.spring.io/spring-boot/docs/current/reference/html/common-application-properties.html>)进行配置，**即logging属性是独立于日记系统的**。
 
-在spring boot框架内部，使用Commons Logging做内部使用的**接口**，而**接口实现**不强制规定。但由于spring boot使用的日记是在`ApplicationContext`创建之前初始化的，因此只能通过系统属性来修改spring boot使用的日记系统。并且，`starter`系的jar包默认使用`Logback`作为日结实现使用。替换麻烦，但spring boot提供恰当的路由，**保证其他使用不同日记系统的依赖能够正常工作**。
+在Spring Boot框架内部，使用Commons Logging做内部使用的**接口**，而**接口实现**不强制规定。但由于spring boot使用的日记是在`ApplicationContext`创建之前初始化的，因此只能通过系统属性来修改spring boot使用的日记系统。并且，`starter`系的jar包默认使用`Logback`作为日结实现使用。替换麻烦，但Spring Boot提供恰当的路由，**保证其他使用不同日记系统的依赖能够正常工作**。
 
 因此，自己的项目使用其他框架时不必关心spring boot内部使用的框架，并且应用属性的配置是可以同时作用到所支持的日记系统的！
 
@@ -386,7 +386,7 @@ spring boot对[Java Util Logging](https://docs.oracle.com/javase/8/docs/api//jav
     <groupId>org.springframework.boot</groupId>
     <artifactId>spring-boot-starter-log4j2</artifactId>
 </dependency>
-<!-- 如果pom中也有web starter依赖, 并且日志冲突了, 那么需要排除web starter中的日志依赖 -->
+<!-- 即使Logback有路由的机制, 但是还是可能会冲突, 此时需要去除Logback. 如Web starter可能会导致冲突, 因此去掉. 如果不冲突, 那么可以不去掉 -->
 <dependency>
     <groupId>org.springframework.boot</groupId>
     <artifactId>spring-boot-starter-web</artifactId>
@@ -399,8 +399,6 @@ spring boot对[Java Util Logging](https://docs.oracle.com/javase/8/docs/api//jav
 </dependency>
 ```
 
-> 注意, 最新版Spring Boot好像已经不再提供该starter了
-
 类中获取Logger
 
 ```java
@@ -409,7 +407,7 @@ public class Hello{
 }
 ```
 
-注意，类要引入和log4j相关的包，别引入错了。否则如果用的是Common Logging的接口，那么会导致不如意的使用了Logback，如果将Logback的jar排除掉，那么最终使用的就是log4j2了（被桥接了）。
+> 注意，类要引入和log4j相关的包，别引入错了。否则如果用的是Common Logging的接口，那么会导致不如意的使用了Logback，如果将Logback的jar排除掉，那么最终使用的就是log4j2了（被桥接了）。
 
 至于配置文件呢？见下面。
 
@@ -421,7 +419,7 @@ public class Hello{
 
 - 相同的Log格式，并带有颜色的。
 - 日记级别默认为`info`
-- 输出到console。
+- 输出到Console。
 - 等等
 
 ### 通用配置
@@ -454,7 +452,33 @@ spring boot也提供了常用的应用属性配置，并且这些属性是日记
   | web  | `org.springframework.core.codec`, `org.springframework.http`, `org.springframework.web` |
   | sql  | `org.springframework.jdbc.core`, `org.hibernate.SQL`         |
 
-- 文件相关的属性：不好意思。。仅支持Logback。。不写了
+- 文件相关的属性
+
+  * `logging.file.name` 日志文件名, 默认`spring.log`
+
+    > 也可含路径
+
+  * `logging.file.path` 日志文件的路径, 默认工作目录
+
+    > 路径也可含文件名
+    >
+    > 好像该属性的解析有问题
+
+  > 默认不输出到文件, 当上述两个属性任意一个存在时, 则会输出到文件中.
+
+  ---------
+
+  * `logging.file.max-siz` 一个日志文件最大的大小, 默认`10MB`
+
+    > 超出后, 该文件会被归档
+
+  * `ogging.file.max-history` 日志文件最多存档的数量, 默认`7`
+
+    > 超出临界值后, 旧日志将被删除
+
+  * `logging.file.clean-history-on-start` 是否启动时清除所有日志, 默认`false`
+
+  > 上述默认值来源于logback的默认值.
 
 ### 自定义配置
 
@@ -474,9 +498,195 @@ spring boot也提供了常用的应用属性配置，并且这些属性是日记
 
 具体的不说了，本小白用不到。但注意的是，如果在日记配置文件的属性中使用占位符，因为使用spring boot的语法。Logback的配置文件还支持直接从应用属性中获取值。。。
 
+Log4j2在Spring中的默认配置如下
+
+```xml
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="WARN">
+	<Properties>
+		<Property name="LOG_EXCEPTION_CONVERSION_WORD">%xwEx</Property>
+		<Property name="LOG_LEVEL_PATTERN">%5p</Property>
+		<Property name="LOG_DATEFORMAT_PATTERN">yyyy-MM-dd HH:mm:ss.SSS</Property>
+		<Property name="CONSOLE_LOG_PATTERN">%clr{%d{${LOG_DATEFORMAT_PATTERN}}}{faint} %clr{${LOG_LEVEL_PATTERN}} %clr{%pid}{magenta} %clr{---}{faint} %clr{[%15.15t]}{faint} %clr{%-40.40c{1.}}{cyan} %clr{:}{faint} %m%n${sys:LOG_EXCEPTION_CONVERSION_WORD}</Property>
+		<Property name="FILE_LOG_PATTERN">%d{${LOG_DATEFORMAT_PATTERN}} ${LOG_LEVEL_PATTERN} %pid --- [%t] %-40.40c{1.} : %m%n${sys:LOG_EXCEPTION_CONVERSION_WORD}</Property>
+	</Properties>
+	<Appenders>
+		<Console name="Console" target="SYSTEM_OUT" follow="true">
+			<PatternLayout pattern="${sys:CONSOLE_LOG_PATTERN}" />
+		</Console>
+	</Appenders>
+	<Loggers>
+		<Logger name="org.apache.catalina.startup.DigesterFactory" level="error" />
+		<Logger name="org.apache.catalina.util.LifecycleBase" level="error" />
+		<Logger name="org.apache.coyote.http11.Http11NioProtocol" level="warn" />
+		<logger name="org.apache.sshd.common.util.SecurityUtils" level="warn"/>
+		<Logger name="org.apache.tomcat.util.net.NioSelectorPool" level="warn" />
+		<Logger name="org.eclipse.jetty.util.component.AbstractLifeCycle" level="error" />
+		<Logger name="org.hibernate.validator.internal.util.Version" level="warn" />
+		<logger name="org.springframework.boot.actuate.endpoint.jmx" level="warn"/>
+		<Root level="info">
+			<AppenderRef ref="Console" />
+		</Root>
+	</Loggers>
+</Configuration>
+```
+
+
+
 > 详细参考：[Custom Log Configuration](<https://docs.spring.io/spring-boot/docs/2.1.4.RELEASE/reference/htmlsingle/#boot-features-custom-log-configuration>)
 
-# 五 spring mvc
+---------
+
+## 自定义配置例子
+
+加入依赖
+
+```xml
+<dependency>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter-log4j2</artifactId>
+</dependency>
+
+<dependency>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter-web</artifactId>
+    <exclusions>
+        <exclusion>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-logging</artifactId>
+        </exclusion>
+    </exclusions>
+</dependency>
+```
+
+在其中内中修改Spring内部使用的日志实现
+
+```java
+@SpringBootApplication
+public class ClientApplication {
+    static{
+        System.setProperty("org.springframework.boot.logging.LoggingSystem","org.springframework.boot.logging.log4j2.Log4J2LoggingSystem");
+    }
+
+    public static void main(String[] args) {
+        SpringApplication.run(ClientApplication.class, args);
+    }
+
+}
+```
+
+创建`log4j2-spring.xml`文件, 从上述默认配置中修改
+
+> 下面列出的配置, 比较全, 使用时, 根据自己需求修改即可. 注意, 这个和默认配置不太一样, 使用时注意对照修改.
+
+```xml
+<?xml version="1.0" encoding="UTF-8"?>
+<!--日志级别以及优先级排序: OFF > FATAL > ERROR > WARN > INFO > DEBUG > TRACE > ALL -->
+<!--Configuration后面的status，这个用于设置log4j2自身内部的信息输出，可以不设置，当设置成trace时，你会看到log4j2内部各种详细输出-->
+<!--monitorInterval：Log4j能够自动检测修改配置 文件和重新配置本身，设置间隔秒数-->
+<Configuration status="WARN" monitorInterval="30">
+    <Properties>
+        <Property name="PID">????</Property>
+        <Property name="LOG_EXCEPTION_CONVERSION_WORD">%xwEx</Property>
+        <Property name="LOG_LEVEL_PATTERN">%5p</Property>
+        <Property name="LOG_DATEFORMAT_PATTERN">yyyy-MM-dd HH:mm:ss.SSS</Property>
+        <Property name="CONSOLE_LOG_PATTERN">%clr{%d{${LOG_DATEFORMAT_PATTERN}}}{faint} %clr{${LOG_LEVEL_PATTERN}}
+            %clr{${sys:PID}}{magenta} %clr{---}{faint} %clr{[%15.15t]}{faint} %clr{%-40.40c{1.}}{cyan} %clr{:}{faint}
+            %m%n${sys:LOG_EXCEPTION_CONVERSION_WORD}
+        </Property>
+        <Property name="FILE_LOG_PATTERN">%d{${LOG_DATEFORMAT_PATTERN}} ${LOG_LEVEL_PATTERN} ${sys:PID} --- [%t]
+            %-40.40c{1.} : %m%n${sys:LOG_EXCEPTION_CONVERSION_WORD}
+        </Property>
+    </Properties>
+
+    <!--先定义所有的appender-->
+    <appenders>
+        <!--这个输出控制台的配置-->
+        <Console name="Console" target="SYSTEM_OUT" follow="true">
+            <PatternLayout pattern="${sys:CONSOLE_LOG_PATTERN}"/>
+        </Console>
+
+        <!--文件会打印出所有信息，这个log每次运行程序会自动清空，由append属性决定，这个也挺有用的，适合临时测试用-->
+        <!--<File name="log" fileName="log/test.log" append="false">-->
+        <!--<PatternLayout pattern="%d{HH:mm:ss.SSS} %-5level %class{36} %L %M - %msg%xEx%n"/>-->
+        <!--</File>-->
+
+        <!-- 这个会打印出所有的info及以下级别的信息，每次大小超过size，则这size大小的日志会自动存入按年份-月份建立的文件夹下面并进行压缩，作为存档-->
+        <RollingFile name="RollingFileInfo" fileName="./logs/info.log"
+                     filePattern="./logs/$${date:yyyy-MM}/info-%d{yyyy-MM-dd}-%i.log">
+            <!--控制台只输出level及以上级别的信息（onMatch），其他的直接拒绝（onMismatch）-->
+            <ThresholdFilter level="info" onMatch="ACCEPT" onMismatch="DENY"/>
+            <PatternLayout pattern="[%d{HH:mm:ss:SSS}] [%p] - %l - %m%n"/>
+            <Policies>
+                <TimeBasedTriggeringPolicy/>
+                <SizeBasedTriggeringPolicy size="100 MB"/>
+            </Policies>
+        </RollingFile>
+
+        <RollingFile name="RollingFileWarn" fileName="./logs/warn.log"
+                     filePattern="./logs/$${date:yyyy-MM}/warn-%d{yyyy-MM-dd}-%i.log">
+            <ThresholdFilter level="warn" onMatch="ACCEPT" onMismatch="DENY"/>
+            <PatternLayout pattern="[%d{HH:mm:ss:SSS}] [%p] - %l - %m%n"/>
+            <Policies>
+                <TimeBasedTriggeringPolicy/>
+                <SizeBasedTriggeringPolicy size="100 MB"/>
+            </Policies>
+            <!-- DefaultRolloverStrategy属性如不设置，则默认为最多同一文件夹下7个文件，这里设置了20 -->
+            <DefaultRolloverStrategy max="20"/>
+        </RollingFile>
+
+        <RollingFile name="RollingFileError" fileName="./logs/error.log"
+                     filePattern="./logs/$${date:yyyy-MM}/error-%d{yyyy-MM-dd}-%i.log">
+            <ThresholdFilter level="error" onMatch="ACCEPT" onMismatch="DENY"/>
+            <PatternLayout pattern="[%d{HH:mm:ss:SSS}] [%p] - %l - %m%n"/>
+            <Policies>
+                <TimeBasedTriggeringPolicy/>
+                <SizeBasedTriggeringPolicy size="100 MB"/>
+            </Policies>
+        </RollingFile>
+
+        <!-- sql输出文件 -->
+        <RollingFile name="SQL" fileName="./logs/sql.log"
+                     filePattern="./logs/$${date:yyyy-MM}/sql-%d{yyyy-MM-dd}-%i.log">
+            <ThresholdFilter level="debug" onMatch="ACCEPT" onMismatch="DENY"/>
+            <PatternLayout pattern="[%d{HH:mm:ss:SSS}] [%p] - %l - %m%n"/>
+            <Policies>
+                <TimeBasedTriggeringPolicy/>
+                <SizeBasedTriggeringPolicy size="100 MB"/>
+            </Policies>
+        </RollingFile>
+    </appenders>
+
+    <!--然后定义logger，只有定义了logger并引入的appender，appender才会生效-->
+    <loggers>
+        <Logger name="org.apache.catalina.startup.DigesterFactory" level="error"/>
+        <Logger name="org.apache.catalina.util.LifecycleBase" level="error"/>
+        <Logger name="org.apache.coyote.http11.Http11NioProtocol" level="warn"/>
+        <logger name="org.apache.sshd.common.util.SecurityUtils" level="warn"/>
+        <Logger name="org.apache.tomcat.util.net.NioSelectorPool" level="warn"/>
+        <Logger name="org.eclipse.jetty.util.component.AbstractLifeCycle" level="error"/>
+        <Logger name="org.hibernate.validator.internal.util.Version" level="warn"/>
+        <logger name="org.springframework.boot.actuate.endpoint.jmx" level="warn"/>
+
+        <!--输出sql-->
+        <logger name="com.qthl.wf.dao" level="debug" additivity="false">
+            <appender-ref ref="Console"/>
+            <appender-ref ref="SQL"/>
+        </logger>
+        <root level="info">
+            <appender-ref ref="Console"/>
+            <appender-ref ref="RollingFileInfo"/>
+            <appender-ref ref="RollingFileWarn"/>
+            <appender-ref ref="RollingFileError"/>
+        </root>
+    </loggers>
+
+</Configuration>
+```
+
+> 参考[spring boot2 使用log4j2](https://www.cnblogs.com/shaozm/p/10169708.html)
+
+# 五 Spring MVC
 
 需要引入starter-web依赖，然后会自动配置spring mvc所有的组件，并且加入了嵌入式tomcat，可直接打包成jar并运行。
 
