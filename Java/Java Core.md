@@ -1,3 +1,40 @@
+# Apache Commons
+
+## IO
+
+### Utility
+
+* [IOUtils](http://commons.apache.org/proper/commons-io/javadocs/api-release/index.html?overview-summary.html) 提供输入输出的便利方法, 主要分为四类
+
+  * `toXxx/read` 从流中读取数据
+
+  * `write` 将数据写入流中
+  * `copy` 从一个流中拷贝数据到另一个流中
+  * `contentEquals ` 比较两个流中内容是否一致.
+  * 关闭流? 不建议用, 请用` try-with-resources`语法
+
+  在*byte-to-char*和*char-to-byte*的方法中, 涉及编码转化, 因此该类方法都提供了设置编码的重载方法.
+
+* [FileUtils](http://commons.apache.org/proper/commons-io/javadocs/api-release/index.html?org/apache/commons/io/FileUtils.html) 文件操作的便利方法
+  - writing to a file 
+  - reading from a file 
+  - make a directory including parent directories 
+  - copying files and directories 
+  - deleting files and directories 
+  - converting to and from a URL 
+  - listing files and directories by filter and extension 
+  - comparing file content 
+  - file last changed date 
+  - calculating a checksum 
+
+* [FilenameUtils](http://commons.apache.org/proper/commons-io/javadocs/api-release/index.html?org/apache/commons/io/FilenameUtils.html) 操作文件名和文件路径的便利方法, 主打解决平台差异问题, 个人感觉使用`Path`比较好.
+
+
+
+
+
+
+
 # System
 
 提供了有用的字段和方法, 一个helper类
