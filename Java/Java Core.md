@@ -29,11 +29,79 @@
 
 * [FilenameUtils](http://commons.apache.org/proper/commons-io/javadocs/api-release/index.html?org/apache/commons/io/FilenameUtils.html) 操作文件名和文件路径的便利方法, 主打解决平台差异问题, 个人感觉使用`Path`比较好.
 
+### Filefilter
 
+[filefilter](http://commons.apache.org/proper/commons-io/javadocs/api-release/org/apache/commons/io/filefilter/package-summary.html) 包下提供了很多现成可用的组件, 用于过滤文件目录.
 
+同时, 提供了工具类`FileFilterUtils`, 用于组合不同过滤器以供使用. 部分方法如下:
 
+* `and()` 通过逻辑与, 组合不同过滤器
+* `or()` 通过逻辑或, 组合不同过滤器.
 
+### Monitor
 
+监控文件系统事件, 并通知监听器.
+
+用法
+
+* 创建**事件处理器** [FileAlterationListener](http://commons.apache.org/proper/commons-io/javadocs/api-release/org/apache/commons/io/monitor/FileAlterationListener.html)
+* [FileAlterationObserver](http://commons.apache.org/proper/commons-io/javadocs/api-release/org/apache/commons/io/monitor/FileAlterationObserver.html) **观察者**, 用于观察事件的发生, 事件监听器在此注册.
+* 手动调用`FileAlterationObserver`的方法, 判断事件是否发生; 或者将观察者注册到**监控器** [FileAlterationMonitor](http://commons.apache.org/proper/commons-io/javadocs/api-release/org/apache/commons/io/monitor/FileAlterationMonitor.html) 中, 其会创建线程, 并以一定频率自动执行观察者逻辑.
+
+基本用法
+
+1. 创建观察者, 传入观察目录, 和事件处理器
+
+   ```java
+   File directory = new File(new File("."), "src");
+   FileAlterationObserver observer = new FileAlterationObserver(directory);
+   observer.addListener(...);
+   observer.addListener(...);
+   ```
+
+2. 手动观察是否发生事件
+
+   ```java
+   // initialize
+   observer.init();
+   ...
+   // invoke as required
+   observer.checkAndNotify();
+   ...
+   observer.checkAndNotify();
+   ...
+   // finished
+   observer.finish();
+   ```
+
+3. 或者, 注册到监控器中
+
+   ```java
+   long interval = ...
+       FileAlterationMonitor monitor = new FileAlterationMonitor(interval);
+   monitor.addObserver(observer);
+   monitor.start();
+   ...
+       monitor.stop();
+   ```
+
+4. 若只观察指定目录下部分内容, 可用过滤器. 如, 仅观察`src`目录下非隐藏目录和有`.java`后缀的文件
+
+   ```java
+   // Create a FileFilter
+   IOFileFilter directories = FileFilterUtils.and(
+       FileFilterUtils.directoryFileFilter(),
+       HiddenFileFilter.VISIBLE);
+   IOFileFilter files       = FileFilterUtils.and(
+       FileFilterUtils.fileFileFilter(),
+       FileFilterUtils.suffixFileFilter(".java"));
+   IOFileFilter filter = FileFilterUtils.or(directories, files);
+   
+   // Create the File system observer and register File Listeners
+   FileAlterationObserver observer = new FileAlterationObserver(new File("src"), filter);
+   observer.addListener(...);
+   observer.addListener(...);
+   ```
 
 # System
 
