@@ -266,6 +266,11 @@ Maven项目中, IDEA会用Maven来构建项目, 但不会完全交由Maven构建
 * `F11`设置或取消书签
 * `Shift+F11`查看书签
 
+## Git
+
+* 提交 `Ctrl+K`
+* 推送 `Ctrl+Shift+K`
+
 ## 其他
 
 *  `Ctrl+O`:override methods of the base class.
