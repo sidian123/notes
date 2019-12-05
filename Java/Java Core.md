@@ -105,6 +105,16 @@ UUID存在不同的变体( variant ), 不管哪种变体, 都有4中版本, 而J
 
 > 参考[UUID](https://docs.oracle.com/javase/8/docs/api/java/util/UUID.html?is-external=true)
 
+# 其他
+
+## java vs. javaw
+
+javaw与java一致, 除了javaw运行程序时不会依附终端, 且执行后立即返回
+
+> 参考[Difference between java and javaw](https://stackoverflow.com/questions/12129505/difference-between-java-and-javaw)
+
+
+
 # 参考
 
 * [java.lang](https://docs.oracle.com/javase/8/docs/api/)
