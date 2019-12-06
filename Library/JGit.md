@@ -17,7 +17,7 @@
     </dependencies>
     ```
     
-* 貌似若环境中存在Git, 则优先使用Git; 若某一操作非提供必要信息, 将从环境中获取.
+* 貌似一些配置信息, JGit会从环境中获取, 具体不晓滴
 
 # 使用
 
@@ -37,4 +37,4 @@
 * [JGit API](http://download.eclipse.org/jgit/site/5.5.0.201909110433-r/apidocs/index.html)
 * [JGit tutorial](https://www.vogella.com/tutorials/JGit/article.html#cloning-a-git-repository-with-jgit)
 * [JGit Maven](https://www.eclipse.org/jgit/download/)
-* [jgit-cookbook](https://github.com/centic9/jgit-cookbook)
+* [jgit-cookbook](https://github.com/centic9/jgit-cookbook) 具有完整的JGit使用例子, 极力推荐
