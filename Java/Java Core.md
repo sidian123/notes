@@ -2,6 +2,14 @@
 
 ## IO
 
+```xml
+<dependency>
+    <groupId>commons-io</groupId>
+    <artifactId>commons-io</artifactId>
+    <version>2.6</version>
+</dependency>
+```
+
 ### Utility
 
 * [IOUtils](http://commons.apache.org/proper/commons-io/javadocs/api-release/index.html?overview-summary.html) 提供输入输出的便利方法, 主要分为四类
@@ -102,6 +110,18 @@
    observer.addListener(...);
    observer.addListener(...);
    ```
+
+## Exec
+
+```xml
+<dependency>
+    <groupId>org.apache.commons</groupId>
+    <artifactId>commons-exec</artifactId>
+    <version>1.3</version>
+</dependency>
+```
+
+* `ExecuteResultHandler`与`ExecuteWatchdog`同时存在时, `ExecuteResultHandler`将失效
 
 # System
 

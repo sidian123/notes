@@ -102,6 +102,10 @@
   获取`other`相对于该`Path`的相对路径.
 
   > 若该`Path`为`/a/b`, `other`为`a/b/c/d`, 那么将返回`c/d`
+  
+* `Path resolve(Path other)` 
+
+  连接该`Path`与`other`.
 
 ## 坑
 

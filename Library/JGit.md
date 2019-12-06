@@ -1,21 +1,23 @@
-# 基础
+# 入门
 
-JGit, 一个由Java实现的Git客户端. 提供了命令行和API接口供开发者使用, 使用习惯与我们常用的Git命令一致.
+* 介绍
 
-这里只介绍API使用, 先导入Maven依赖:
+  JGit, 一个由Java实现的Git客户端. 提供了命令行和API接口供开发者使用, 使用习惯与我们常用的Git命令一致.
 
-```xml
-  <!-- Core Library -->
-  <dependencies>
-    <dependency>
-      <groupId>org.eclipse.jgit</groupId>
-      <artifactId>org.eclipse.jgit</artifactId>
-      <version>5.5.0.201909110433-r</version>
-    </dependency>
-  </dependencies>
-```
+* 依赖
 
--------
+    ```xml
+    <!-- Core Library -->
+    <dependencies>
+        <dependency>
+            <groupId>org.eclipse.jgit</groupId>
+            <artifactId>org.eclipse.jgit</artifactId>
+            <version>5.5.0.201909110433-r</version>
+        </dependency>
+    </dependencies>
+    ```
+
+# 使用
 
 [Repository](https://download.eclipse.org/jgit/site/5.5.0.201909110433-r/apidocs/org/eclipse/jgit/lib/Repository.html)代表一个Git仓库, 存储着仓库所有的objects和refs.
 

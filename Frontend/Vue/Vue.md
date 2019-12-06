@@ -947,13 +947,15 @@ this.$emit('update:title', newTitle)
 
 ## 动态Vue实例与销毁
 
-1. 首先有一个Vue子类, 通过`Vue.extend()`创建
+1. 通过`Vue.extend()`创建Vue子类
 
    > `Vue.component()`也会返回Vue子类, 因为内部也调用了`Vue.extend()`
 
-2. 挂载到DOM中, [vm.$mount](https://vuejs.org/v2/api/#vm-mount)
+2. 实例化该子类, 并装配实例 
 
-3. 销毁[vm.$destroy()](https://vuejs.org/v2/api/#vm-destroy)
+3. 挂载到DOM中, [vm.$mount](https://vuejs.org/v2/api/#vm-mount)
+
+4. 销毁[vm.$destroy()](https://vuejs.org/v2/api/#vm-destroy)
 
    > 仅销毁组件, DOM中已存在的元素需手动删除.
 
