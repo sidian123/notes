@@ -37,4 +37,4 @@
 * [JGit API](http://download.eclipse.org/jgit/site/5.5.0.201909110433-r/apidocs/index.html)
 * [JGit tutorial](https://www.vogella.com/tutorials/JGit/article.html#cloning-a-git-repository-with-jgit)
 * [JGit Maven](https://www.eclipse.org/jgit/download/)
-* [sdsd]
+* [jgit-cookbook](https://github.com/centic9/jgit-cookbook)
