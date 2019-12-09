@@ -1,5 +1,7 @@
 # 事务
 
+## ACID
+
 事务（Transaction）是一组SQL语句，被视作一个工作单元，所有的语句要么全部执行，要么全部不被执行。事务必须满足ACID：
 * **Atomicity**（原子性） − A transaction should be treated as a single unit of operation, which means either the entire sequence of operations is successful or unsuccessful.
 * **Consistency**（一致性） − This represents the consistency of the referential integrity of the database, unique primary keys in tables, etc.
@@ -32,7 +34,8 @@
 * repeatable_read：在read_uncommited基础上加读锁（可能为乐观锁），直到事务结束释放，解决不可重复读问题。
 * serializable：在上一级别基础上加间隙锁等等等等，因此解决了幻读。
 
---------------
+## 锁
+
 理解原理之前，需要知道，一般DBMS使用两端封锁协议（[Two-phase locking][4]）来实现并发控制。主要存在两种锁：写锁（独占锁）和读锁（共享锁）。一个对象可能会被加多个锁，或者只有一个锁，说明有的锁是兼容的，有的不是，如下锁兼容性表所示：
 
 | Lock type  | read-lock | write-lock |
@@ -44,12 +47,13 @@
 
 一个事务尝试对已加过锁的对象加锁时，会判断两者是否兼容，如果不兼容就被阻塞，该事务加入到对象的等待队列中。
 
-另外，不要被锁的名字给迷惑，并不是说加了写锁的对象就一定只能写入。锁只是表明一种意图，而不是规定它的操作。一般对数据增删改(DML)时会加写锁，对数据查(DQL)时会加读锁。
+> <span style="color:red">另外</span>，不要被锁的名字给迷惑，并不是说加了写锁的对象就一定只能写入。锁只是表明一种意图，而不是规定它的操作。一般对数据增删改(DML)时会加写锁，对数据查(DQL)时会加读锁。
 
-参考：
-[Isolation (database systems)](https://en.wikipedia.org/wiki/Isolation_(database_systems)#Repeatable_reads)
-[Concurrency control](https://en.wikipedia.org/wiki/Concurrency_control)
-[Two-phase locking](https://en.wikipedia.org/wiki/Two-phase_locking)
+> 参考：
+>
+> * [Isolation (database systems)](https://en.wikipedia.org/wiki/Isolation_(database_systems)#Repeatable_reads)
+> * [Concurrency control](https://en.wikipedia.org/wiki/Concurrency_control)
+> * [Two-phase locking](https://en.wikipedia.org/wiki/Two-phase_locking)
 
 [4]:https://en.wikipedia.org/wiki/Two-phase_locking
 
