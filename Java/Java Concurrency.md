@@ -235,11 +235,33 @@ hello 世界
 
 上述讲的都是较低层的并发API的使用, 这里介绍JDK提供的更高级的API的使用.
 
+## Concurrent
+
+* Executors
+
+  
+
+* Queues
+
+* Timing
+
+* Synchronizers
+
+* Concurrent Collections
+
+* Others
+
+  
+
+
+
+> 参考[Package java.util.concurrent](https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/concurrent/package-summary.html)
+
 ## Atomic
 
-## 并发集合
-
 ## Lock
+
+## 并发集合
 
 ## Executor
 
@@ -248,6 +270,8 @@ hello 世界
 # 其他
 
   不可变的对象, 一旦被构建, 它的使用便是线程安全的. 
+
+
 
 # 参考
 
