@@ -2259,7 +2259,7 @@ package packageName;
 
 ## 异常层次结构
 
-所有异常都是java.lang.Exceptions的子类，而Exception又是Throwable的子类，Throwable还有一个子类为Errors。如图所示。
+所有异常都是`java.lang.Exceptions`的子类，而`Exception`又是`Throwable`的子类，`Throwable`还有一个子类为`Errors`。如图所示。
 
 ![1566640938674](.Java%20Language/1566640938674.png)
 
@@ -2303,7 +2303,7 @@ public void writeList() {
 }
 ```
 
-一个catch也可以同时捕获多个异常，通过|分隔，但是异常类型隐式final：
+一个catch也可以同时捕获多个异常，通过`|`分隔，但是异常类型隐式final：
 
 ```java
 catch (IOException|SQLException ex) {
@@ -2313,12 +2313,13 @@ catch (IOException|SQLException ex) {
 ```
 
 
-> - 即使try中有return，finally也会别执行。在return语句执行之前，finally语句块会被执行。
-> - catch和finally，两者可以省略一个。
+> - 即使`try`中有`return`，`finally`也会别执行。在`return`语句执行之前，`finally`语句块会被执行。
+> - `catch`和`finally`，两者可以省略一个。
+> - 当`try`和`finally`块中同时抛出异常时, `finally`块中的异常先抛出. 后抛出的异常, 如果在当前作用域内未被处理, 则忽略.
 
 ## try-with-resources
 
-在try-with-resources的try块中**声明**的资源在try语句块结束后可以自动关闭，不用手动使用finally关闭了。
+在*try-with-resources*的`try`块中**声明**的资源在`try`语句块结束后可以自动关闭，不用手动使用`finally`关闭了。
 
 ```java
 public class App 
@@ -2337,8 +2338,9 @@ public class App
 }
 ```
 
+需要在`try`的括号中**声明资源**，资源对应的类需要实现`java.lang.AutoCloseable`接口。
 
-需要在try的括号中声明资源，资源对应的类需要实现java.lang.AutoCloseable接口。当try语句执行完或抛出异常时会立刻关闭资源，如果close方法抛出异常，则该异常会被**抑制**。然后才是捕获异常的步骤。
+关于执行顺序, 当try语句执行完或抛出异常时会立刻关闭资源，如果`close`方法抛出异常，则该异常会被**抑制**。然后才执行`catch`块语句。
 
 如果异常被抑制了，可以在catch语句中通过Throwabl的getSuppressed方法获得被抑制的异常，可以看看下面的例子：
 
