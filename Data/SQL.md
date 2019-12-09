@@ -8,6 +8,23 @@
 * **Isolation**（隔离性） − There may be many transaction processing with the same data set at the same time. Each transaction should be isolated from others to prevent data corruption.
 * **Durability**（持久性） − Once a transaction has completed, the results of this transaction have to be made permanent and cannot be erased from the database due to system failure.
 
+## 锁
+
+理解原理之前，需要知道，一般DBMS使用**两端封锁协议**（[Two-phase locking][4]）来实现并发控制。主要存在两种锁：**写锁**（独占锁）和**读锁**（共享锁）。
+
+一个对象可能会被加多个锁，或者只有一个锁，说明有的锁是兼容的，有的不是，如下锁兼容性表所示：
+
+| Lock type  | read-lock | write-lock |
+| ---------- | --------- | ---------- |
+| read-lock  |           | X          |
+| write-lock | X         | X          |
+
+> `x`表示不兼容
+
+一个事务尝试对已加过锁的对象加锁时，会判断两者是否兼容，如果不兼容就被阻塞，该事务加入到对象的等待队列中。
+
+> <span style="color:red">另外</span>，不要被锁的名字给迷惑，并不是说加了写锁的对象就一定只能写入。锁只是表明一种意图，而不是规定它的操作。一般对数据增删改(DML)时会加写锁，对数据查(DQL)时会加读锁。
+
 ## 隔离性
 隔离性主要为了让事务之间互不干扰，但良好的隔离性和性能不可兼得，因此出现了不同的隔离级别，解决不同的问题：
 
@@ -30,24 +47,18 @@
 
 隔离性的实现和锁有关，下面通过讲述各个隔离级别的实现原理：
 * read_uncommited：加写锁，直到事务结束释放，解决丢失修改问题。
+
+  > 事务A加写锁, 事务B等待加写锁, A结束后才执行, 从而保证了B的修改不被丢失
+
 * read_commited:在上一级别基础上加读锁（可能为乐观锁），读完立即释放，解决脏读。
+
+  > 事务B加写锁, 事务A等待加读锁, B结束后读取最新数据, 解决脏读
+
 * repeatable_read：在read_uncommited基础上加读锁（可能为乐观锁），直到事务结束释放，解决不可重复读问题。
+
 * serializable：在上一级别基础上加间隙锁等等等等，因此解决了幻读。
 
-## 锁
-
-理解原理之前，需要知道，一般DBMS使用两端封锁协议（[Two-phase locking][4]）来实现并发控制。主要存在两种锁：写锁（独占锁）和读锁（共享锁）。一个对象可能会被加多个锁，或者只有一个锁，说明有的锁是兼容的，有的不是，如下锁兼容性表所示：
-
-| Lock type  | read-lock | write-lock |
-| ---------- | --------- | ---------- |
-| read-lock  |           | X          |
-| write-lock | X         | X          |
-
-> `x`表示不兼容
-
-一个事务尝试对已加过锁的对象加锁时，会判断两者是否兼容，如果不兼容就被阻塞，该事务加入到对象的等待队列中。
-
-> <span style="color:red">另外</span>，不要被锁的名字给迷惑，并不是说加了写锁的对象就一定只能写入。锁只是表明一种意图，而不是规定它的操作。一般对数据增删改(DML)时会加写锁，对数据查(DQL)时会加读锁。
+> 不加锁, 是可以直接读写的, 获得锁后才读写, 只是为了保证隔离性的一个约定
 
 > 参考：
 >
