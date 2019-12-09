@@ -17,8 +17,8 @@
 | TRANSACTION_REPEATABLE_READ  | ✔        | ✔           | ✔                    | ×             |
 | TRANSACTION_SERIALIZABLE     | ✔        | ✔           | ✔                    | ✔             |
 
-×表示未解决，✔表示能够解决
->mysql的默认隔离级别：repeatable_read。
+> ×表示未解决，✔表示能够解决
+> mysql的默认隔离级别：repeatable_read。
 
 和隔离性相关的问题如下：
 * 丢失修改：事务A读取值，之后事务B也读取值并修改然后提交，事务A修改后提交。此时事务B修改的值被丢失。
@@ -40,7 +40,7 @@
 | read-lock  |           | X          |
 | write-lock | X         | X          |
 
-`x`表示不兼容
+> `x`表示不兼容
 
 一个事务尝试对已加过锁的对象加锁时，会判断两者是否兼容，如果不兼容就被阻塞，该事务加入到对象的等待队列中。
 
