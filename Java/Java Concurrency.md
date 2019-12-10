@@ -294,6 +294,52 @@ hello 世界
 
   容器容量为0的阻塞队列, 即插入数据将立刻等待, 直到消费者取出.
 
+### BlockingDeque
+
+`BlockingDeque`是一个阻塞双端队列, 继承于`BlockingQueue`. 
+
+![A BlockingDeque - threads can put and take from both ends of the deque.](.Java%20Concurrency/blocking-deque.png)
+
+同样有四类方法, 但有两组 
+
+|             | **Throws Exception** | **Special Value** | **Blocks**     | **Times Out**                      |
+| ----------- | -------------------- | ----------------- | -------------- | ---------------------------------- |
+| **Insert**  | `addFirst(o)`        | `offerFirst(o)`   | `putFirst(o)`  | `offerFirst(o, timeout, timeunit)` |
+| **Remove**  | `removeFirst(o)`     | `pollFirst(o)`    | `takeFirst(o)` | `pollFirst(timeout, timeunit)`     |
+| **Examine** | `getFirst(o)`        | `peekFirst(o)`    | ` `            | ` `                                |
+
+|             | **Throws Exception** | **Special Value** | **Blocks**    | **Times Out**                     |
+| ----------- | -------------------- | ----------------- | ------------- | --------------------------------- |
+| **Insert**  | `addLast(o)`         | `offerLast(o)`    | `putLast(o)`  | `offerLast(o, timeout, timeunit)` |
+| **Remove**  | `removeLast(o)`      | `pollLast(o)`     | `takeLast(o)` | `pollLast(timeout, timeunit)`     |
+| **Examine** | `getLast(o)`         | `peekLast(o)`     | ` `           | ` `                               |
+
+> 详细见4.1.2
+
+其实现类为`LinkedBlockingDeque`, 与`LinkedBlockingQueue`类似, 见上一小节.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 # ---美丽的分割线---
 
 ## Concurrent
