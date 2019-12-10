@@ -1,5 +1,3 @@
-
-
 # 概述
 
 * 进程与线程
@@ -91,7 +89,7 @@
 
 	> 类比数据库的事务概念, 一个事务未完成便访问, 可能会出现丢失修改,脏读, 不可重复读等现象. 因此需要一个机制, 使不同线程之间有一定的隔离性, 同步块的使用达到了数据库中serializable的隔离级别. 若想要更好的效率, 可考虑使用读写锁.
 
-2. 可见性: 由于CPU缓存, 寄存器, 多核和优化的存在, 造成数据更新后的值没有被立马回写到内存中, 造成其他线程读取到老的值.
+2. 可见性(或一致性): 由于CPU缓存, 寄存器, 多核和优化的存在, 造成数据更新后的值没有被立马回写到内存中, 造成其他线程读取到老的值.
 
 	> 新数据可能存在CPU缓存中, 寄存器中
 
@@ -99,7 +97,7 @@
 
 	> 这里先提一提, 对`volatile`变量的写入, 将会造成该变量及其之前的变量的缓存都被写入到内存中, 但该变量后面的写入不会被刷新. 即使源码中变量位于`volatile`变量前进行写操作, 由于代码重排, 导致不能保证`volatile`变量刷新时, 其他变量也被刷新
 
-> 外文中经常提到*Happens before relationship* , 指的是一个保证, 即一个线程的操作对其他线程是可见的. 也就是, 保证*happen before*关系, 就是保证上述2,3点条件.
+> 外文中经常提到***Happens before relationship*** , 指的是一个保证, 即一个线程的操作对其他线程是可见的. 也就是, 保证*happen before*关系, 就是保证上述2,3点条件. *happen before* 本质就是**一致性**问题, 见[Memory Consistency Properties](https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/concurrent/package-summary.html#MemoryVisibility).
 
 ## synchronized
 
@@ -239,16 +237,18 @@ hello 世界
 
 上述讲的都是较低层的并发API的使用, 这里介绍JDK提供的更高级的API的使用.
 
-## BlockingQueue
+## 集合
 
-### 介绍
+### BlockingQueue
+
+#### 介绍
 
 ![A BlockingQueue with one thread putting into it, and another thread taking from it.](.Java%20Concurrency/blocking-queue.png)
 
 * 代表队列的接口, 能够线程安全的添加和删除元素. 
 * 能够阻塞线程, 如试图向空队列中取出元素时, 将阻塞, 直到队列中新增元素; 同样的, 试图向满队列添加元素也将被阻塞.
 
-### 操作
+#### 操作
 
 增, 删, 检查三种操作有四种不同类型: 
 
@@ -270,7 +270,7 @@ hello 世界
 > 1. 不能插入`null`
 > 2. 可以删除中间元素, 但耗时
 
-### 实现
+#### 实现
 
 > 有界指队列容量有限, 无界指队列元素可以无限增加
 
@@ -306,19 +306,74 @@ hello 世界
 | ----------- | -------------------- | ----------------- | -------------- | ---------------------------------- |
 | **Insert**  | `addFirst(o)`        | `offerFirst(o)`   | `putFirst(o)`  | `offerFirst(o, timeout, timeunit)` |
 | **Remove**  | `removeFirst(o)`     | `pollFirst(o)`    | `takeFirst(o)` | `pollFirst(timeout, timeunit)`     |
-| **Examine** | `getFirst(o)`        | `peekFirst(o)`    | ` `            | ` `                                |
+| **Examine** | `getFirst(o)`        | `peekFirst(o)`    |                |                                    |
 
 |             | **Throws Exception** | **Special Value** | **Blocks**    | **Times Out**                     |
 | ----------- | -------------------- | ----------------- | ------------- | --------------------------------- |
 | **Insert**  | `addLast(o)`         | `offerLast(o)`    | `putLast(o)`  | `offerLast(o, timeout, timeunit)` |
 | **Remove**  | `removeLast(o)`      | `pollLast(o)`     | `takeLast(o)` | `pollLast(timeout, timeunit)`     |
-| **Examine** | `getLast(o)`         | `peekLast(o)`     | ` `           | ` `                               |
+| **Examine** | `getLast(o)`         | `peekLast(o)`     |               |                                   |
 
 > 详细见4.1.2
 
 其实现类为`LinkedBlockingDeque`, 与`LinkedBlockingQueue`类似, 见上一小节.
 
+### ConcurrentMap
 
+提供线程安全和原子操作的Map, 其实现类有
+
+* `ConcurrentHashMap` `HashMap`的并发版
+* `ConcurrentNavigableMap` 提供了子Map操作的Map
+
+## 同步方案
+
+### CountDownLatch
+
+类似于门闩, 需要一定条件才能打开, 未打开时, 所有达到的线程需等待. 
+
+使用方式如下
+
+1. `CountDownLatch`以一个数值初始化
+2. 调用`await()`方法的线程将被阻塞, 直到其他线程调用`countDown()`将数值减一至零为止, 才恢复执行.
+
+> `CountDownLatch`不可重置数值, 即不可重复使用
+
+例子: 线程们同步执行, 主线程等到所有线程结束才结束
+
+```java
+ class Driver { // ...
+   void main() throws InterruptedException {
+     CountDownLatch startSignal = new CountDownLatch(1);
+     CountDownLatch doneSignal = new CountDownLatch(N);
+
+     for (int i = 0; i < N; ++i) // create and start threads
+       new Thread(new Worker(startSignal, doneSignal)).start();
+
+     doSomethingElse();            // don't let run yet
+     startSignal.countDown();      // let all threads proceed
+     doSomethingElse();
+     doneSignal.await();           // wait for all to finish
+   }
+ }
+
+ class Worker implements Runnable {
+   private final CountDownLatch startSignal;
+   private final CountDownLatch doneSignal;
+   Worker(CountDownLatch startSignal, CountDownLatch doneSignal) {
+     this.startSignal = startSignal;
+     this.doneSignal = doneSignal;
+   }
+   public void run() {
+     try {
+       startSignal.await();
+       doWork();
+       doneSignal.countDown();
+     } catch (InterruptedException ex) {} // return;
+   }
+
+   void doWork() { ... }
+ }
+```
 
 
 
@@ -371,6 +426,8 @@ hello 世界
 # 其他
 
   不可变的对象, 一旦被构建, 它的使用便是线程安全的. 
+
+## ThreadLocal
 
 
 
