@@ -227,6 +227,11 @@ SSH也可以在远程Linux中运行命令, 略.
 ## ssh-keygen
 用于产生秘钥对，可以通过`-t`设置产生秘钥的算法，`-b`设置秘钥大小等等。
 
+```shell
+$ ssh-keygen
+$ ssh-keygen -t ecdsa
+```
+
 >参考:
 >[SSH-KEYGEN - GENERATE A NEW SSH KEY](https://www.ssh.com/ssh/keygen/)
 
