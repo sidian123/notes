@@ -1,3 +1,5 @@
+
+
 # 概述
 
 * 进程与线程
@@ -236,6 +238,43 @@ hello 世界
 # High API
 
 上述讲的都是较低层的并发API的使用, 这里介绍JDK提供的更高级的API的使用.
+
+## BlockingQueue
+
+### 介绍
+
+![A BlockingQueue with one thread putting into it, and another thread taking from it.](.Java%20Concurrency/blocking-queue.png)
+
+* 代表队列的接口, 能够线程安全的添加和删除元素. 
+* 能够阻塞线程, 如试图向空队列中取出元素时, 将阻塞, 直到队列中新增元素; 同样的, 试图向满队列添加元素也将被阻塞.
+
+### 操作
+
+增, 删, 检查三种操作有四种不同类型: 
+
+|             | **Throws Exception** | **Special Value** | **Blocks** | **Times Out**                 |
+| ----------- | -------------------- | ----------------- | ---------- | ----------------------------- |
+| **Insert**  | `add(o)`             | `offer(o)`        | `put(o)`   | `offer(o, timeout, timeunit)` |
+| **Remove**  | `remove(o)`          | `poll()`          | `take()`   | `poll(timeout, timeunit)`     |
+| **Examine** | `element()`          | `peek()`          |            |                               |
+
+如果操作暂时不能进行时, 分别将 
+
+1. 抛出异常 
+2. 返回特殊值(`true` or `false` 
+3. 阻塞
+4. 超时而返回特殊值(`true` or `false`)
+
+> 其他注意点
+>
+> 1. 不能插入`null`
+> 2. 可以删除中间元素, 但耗时
+
+### 实现
+
+
+
+# ---美丽的分割线---
 
 ## Concurrent
 
