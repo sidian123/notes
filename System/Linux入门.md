@@ -1269,9 +1269,14 @@ unit一般的状态：active、inactive、中间态(activing,deactivating)，fai
 #### [Service]
 [Service] section的选项仅适用于service类型的unit配置文件，注意文件以`.service`结尾。默认隐含有对于basic.target的Requires和After依赖，和对shutdown.target的Conflicts和Before依赖。保证service在基本系统初始化后运行，系统关闭之前结束。
 * `Type`：服务进程启动类型，可选值simple、forking、oneshot、dbus、notify、idle。
-	* `simple`：无Type和BusName，仅有ExecStart情况下的默认类型。systemd认为ExecStart上运行的进程为主进程，一旦启动就会执行接下来的units。
+	* `simple`：无Type和BusName，仅有`ExecStart`情况下的默认类型。systemd认为`ExecStart`上运行的进程为主进程，一旦启动就会执行接下来的units。
+	
+	  > 如果`ExecStart`运行的不是主进程, 则最好提供`ExecStop`, `ExecReload`, 这样也能正常关闭和重启进程.
+	
 	* `forking`：如果ExecStart配置的进程可以自己成为守护进程（即后台运行且脱离控制终端，则通过fork子进程实现，父进程结束），则适合forking。一旦父进程结束，systemd会启动其他的units。但是如果子进程多于1个，systemd并不知道哪个子进程是主进程，因此需要PIDFile选项指定进程自己提供pid文件（含有进程号）位置。
+	
 	* `oneshot`：与simple类似，但systemd期待在开启其他unit前结束，Type和ExceStart都不存在的默认类型。适合于RemainAfterExit一起使用。
+	
 	*  ...：请看man手册
 	
 	>总之，进程在shell中运行不返回提示符的使用simple；进程在shell中运行，会自动后台运行且返回提示符的（能自己守护进程话），用forking；进程在shell中运行并返回提示符，此时进程也结束了，使用oneshot。
