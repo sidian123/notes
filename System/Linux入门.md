@@ -1257,10 +1257,12 @@ unit一般的状态：active、inactive、中间态(activing,deactivating)，fai
 * `Wants`：配置该unit的依赖，多个依赖空格分隔。是Requires的弱化版，如果依赖启动失败，则依赖不会被加入事务。
 * `Conflicts`：配置与该unit冲突的依赖，空格分隔。假设运行着的A unit有对B unit的冲突依赖，则B被阻止运行。如果A与B在一个事务中同时运行，则systemd会考虑是否可以修复它。
 * `Before`，`After`：配置该unit的顺序依赖。一般unit会与它的Requires依赖同时运行，与`Before`，`After`一起使用后，会造成该unit先或后于依赖执行。如果顺序依赖于该unit不处于同一事务，则无任何影响。
-	
 	>关机时，unit之间结束的顺序相反
->After常被设置为：`After=network.target local-fs.target remote-fs.target`
+	>After常被设置为：`After=network.target local-fs.target remote-fs.target`
+
+
 #### [Install]
+
 [Install] section的选项并不会被systemd解析，而是被systemctl的enable或disable命令使用的：
 * `WantedBy`，`RequiredBy`：空格分隔的unit列表。使用了systemctl enable命令后，会在列表依赖的`unit_name.wants/`或`unit_name.requireds/`目录下建立该unit的符号链接。使用disable命令则删除符号链接。
 	
