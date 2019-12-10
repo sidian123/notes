@@ -292,16 +292,24 @@ yum install  lrzsz -y
 XShell传输文件的一种方法如下：[xshell如何传输文件](https://jingyan.baidu.com/article/3a2f7c2e27e01b26afd611cc.html)
 
 ## 略谈配置文件
-ssh服务端的配置文件会放入`/etc/ssh/`中，该文件夹中含有`sshd`服务的配置文件`sshd_config`和一些`host key`（见2.1小节）。每个用户的目录下的`.ssh/`文件夹下的`authorized_keys`文件含有该用户放置的公钥信息，一行一条公钥（见2.2小节）。
+* SSH服务端
 
-`ssh`命令获取配置信息的方式依次如下（对于每个参数，最先获得的被使用）：
-1.   command-line options，通过`-o`指定
-2.   user's configuration file (~/.ssh/config)
-3.   system-wide configuration file (/etc/ssh/ssh_config)
+  配置文件会放入`/etc/ssh/`中，该文件夹中含有`sshd`服务的配置文件`sshd_config`和一些`host key`（见2.1小节）。
 
-因此有多处可以存放配置文件。每个用户在密码认证中获得的公钥存放于`$HOME/.ssh/known_hosts`中，自己生成的秘钥对默认放在`$HOME/.ssh/`目录下。
+  每个用户的目录下的`.ssh/`文件夹下的`authorized_keys`文件含有该用户已认证的公钥信息，一行一条公钥（见2.2小节）。
 
-over~~
+* SSH客户端
+
+  每个用户在密码认证中获得的公钥存放于`$HOME/.ssh/known_hosts`中
+
+  自己生成的秘钥对默认放在`$HOME/.ssh/`目录下。
+
+* `ssh`命令获取配置信息来源多处, 下面以优先级递减的顺序列出: 
+
+    1.   command-line options，通过`-o`指定
+    2.   user's configuration file (~/.ssh/config)
+    3.   system-wide configuration file (/etc/ssh/ssh_config)
+    
 
 # 其他
 
@@ -326,7 +334,12 @@ chown $USER ~/.ssh/config
 chmod 644 ~/.ssh/config
 ```
 
+## 密钥只能不生效
+
+公钥中含有生成该密钥的PC的host信息, 只能该PC使用
+
 # 参考
+
 [SSH COMMAND](https://www.ssh.com/ssh/command/#sec-Configuring-port-forwarding)
 [秘钥与数字证书][1]
 [SSH原理与运用（一）：远程登录](http://www.ruanyifeng.com/blog/2011/12/ssh_remote_login.html)
