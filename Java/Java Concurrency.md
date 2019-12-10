@@ -272,7 +272,27 @@ hello 世界
 
 ### 实现
 
+> 有界指队列容量有限, 无界指队列元素可以无限增加
 
+* `ArrayBlockingQueue`
+
+  由数组实现的有界的阻塞队列. 一旦被创建, 容器大小将被固定.
+
+* `DelayQueue`
+
+  无界的阻塞队列,  元素有过期时间. 获取元素时, 线程将被阻塞, 直到一个元素过期. 元素需实现`Delayed`接口, 来提供过期时间.
+
+* `LinkedBlockingQueue`
+
+  由链表实现的, *optionally-bounded* 的阻塞队列. 创建实例时, 若未指定容量大小时, 将默认`Integer.MAX_VALUE`, 即无界; 若指定容量大小, 将有界.
+
+* `PriorityBlockingQueue`
+
+  无界的阻塞队列, 元素有优先级, 通过`Comparable`或`Comparator`给出. 元素越小, 优先级越高.
+
+* `SynchronousQueue`
+
+  容器容量为0的阻塞队列, 即插入数据将立刻等待, 直到消费者取出.
 
 # ---美丽的分割线---
 
@@ -311,5 +331,5 @@ hello 世界
 # 参考
 
 * [oracle tutorial](https://docs.oracle.com/javase/tutorial/essential/concurrency/index.html)
-
 * [java.util.concurrent](https://docs.oracle.com/javase/8/docs/api/java/util/concurrent/package-summary.html)
+* [Concurrent Jenkov.com](http://tutorials.jenkov.com/java-util-concurrent/index.html) 内容覆盖面广, 但十分简略.
