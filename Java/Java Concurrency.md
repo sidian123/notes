@@ -318,12 +318,23 @@ hello 世界
 
 其实现类为`LinkedBlockingDeque`, 与`LinkedBlockingQueue`类似, 见上一小节.
 
-### ConcurrentMap
+### 其他集合
 
-提供线程安全和原子操作的Map, 其实现类有
+* Map
+  * `ConcurrentHashMap`对应`HashMap`
+  * `ConcurrentSkipListMap`对应`TreeMap`
+  * ...
 
-* `ConcurrentHashMap` `HashMap`的并发版
-* `ConcurrentNavigableMap` 提供了子Map操作的Map
+* List
+
+  * `CopyOnWriteArrayList`对应 `ArrayList` 
+
+  > 没了, `LinkedList`无对应的并发实现
+
+* Set 
+
+  * `ConcurrentSkipListSet`对应`TreeSet`
+  *  `CopyOnWriteArraySet`无对应, 由`CopyOnWriteArrayList`实现的
 
 ## 同步方案
 
@@ -588,11 +599,22 @@ class FillAndEmpty {
 
 > 注意, `acquire()`不会影响同步块加锁.
 
+### Phaser
+
+略, 待完善
+
 ### Lock
 
 ## Executor
 
+执行任务的执行器
+
+* 取决于具体使用的实现类, 任务可能在新线程中执行, 或已存在的线程中执行, 或调用者线程中执行; 可能同步执行, 会异步执行.
+* 
+
 ### ExecutorService
+
+代表该执行器异步执行.
 
 
 
