@@ -314,7 +314,7 @@ hello 世界
 | **Remove**  | `removeLast(o)`      | `pollLast(o)`     | `takeLast(o)` | `pollLast(timeout, timeunit)`     |
 | **Examine** | `getLast(o)`         | `peekLast(o)`     |               |                                   |
 
-> 详细见4.1.2
+> 详细见上一小节
 
 其实现类为`LinkedBlockingDeque`, 与`LinkedBlockingQueue`类似, 见上一小节.
 
@@ -375,6 +375,224 @@ hello 世界
  }
 ```
 
+### CyclicBarrier
+
+类似一个障碍点, 需要固定数目线程的到来, 才能突破障碍点, 此时所有线程可通过. 还支持突破障碍点前执行可选的任务; 和重置障碍点.
+
+使用很简单, 调用`await()`造成当前线程等待该障碍点被突破, 有多种方法可突破: 
+
+1. 固定数量的线程的到来
+2. 当前线程被中断, 将抛出`InterruptedException`
+3. 该障碍点中任意一个线程被中断, 将抛出`BrokenBarrierException`
+4. 该障碍点中任意一个线程超时, 将抛出`BrokenBarrierException`
+
+5. 该障碍点被重置, 将抛出`BrokenBarrierException`
+6. 其他原因, 见`BrokenBarrierException`
+
+例子: 两个障碍点, 两个线程
+
+```java
+public class CyclicBarrierRunnable implements Runnable{
+
+    CyclicBarrier barrier1 = null;
+    CyclicBarrier barrier2 = null;
+
+    public CyclicBarrierRunnable(
+            CyclicBarrier barrier1,
+            CyclicBarrier barrier2) {
+
+        this.barrier1 = barrier1;
+        this.barrier2 = barrier2;
+    }
+
+    public void run() {
+        try {
+            Thread.sleep(1000);
+            System.out.println(Thread.currentThread().getName() +
+                                " waiting at barrier 1");
+            this.barrier1.await();
+
+            Thread.sleep(1000);
+            System.out.println(Thread.currentThread().getName() +
+                                " waiting at barrier 2");
+            this.barrier2.await();
+
+            System.out.println(Thread.currentThread().getName() +
+                                " done!");
+
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (BrokenBarrierException e) {
+            e.printStackTrace();
+        }
+    }
+}
+
+public class Main{
+    public static void main(String[] args){
+        Runnable barrier1Action = new Runnable() {
+            public void run() {
+                System.out.println("BarrierAction 1 executed ");
+            }
+        };
+        Runnable barrier2Action = new Runnable() {
+            public void run() {
+                System.out.println("BarrierAction 2 executed ");
+            }
+        };
+
+        CyclicBarrier barrier1 = new CyclicBarrier(2, barrier1Action);
+        CyclicBarrier barrier2 = new CyclicBarrier(2, barrier2Action);
+
+        CyclicBarrierRunnable barrierRunnable1 =
+                new CyclicBarrierRunnable(barrier1, barrier2);
+
+        CyclicBarrierRunnable barrierRunnable2 =
+                new CyclicBarrierRunnable(barrier1, barrier2);
+
+        Thread thread1 = new Thread(barrierRunnable1);
+        Thread thread2 = new Thread(barrierRunnable2);
+        thread1.start();
+        thread2.start();
+        thread1.join();
+        thread2.join();
+    }
+}
+```
+
+结果
+
+```output
+Thread-0 waiting at barrier 1
+Thread-1 waiting at barrier 1
+BarrierAction 1 executed
+Thread-1 waiting at barrier 2
+Thread-0 waiting at barrier 2
+BarrierAction 2 executed
+Thread-0 done!
+Thread-1 done!
+```
+
+### Exchanger
+
+一个同步点, 先到达的两个线程可以交换对象.
+
+使用: 调用`exchange()`, 传入交换的对象, 等待另一个线程的到来, 即调用`exchange()`
+
+例子: 一个生产者填充好数据后, 交换消费者榨干的数据.
+
+```java
+class FillAndEmpty {
+   Exchanger<DataBuffer> exchanger = new Exchanger<>();
+   DataBuffer initialEmptyBuffer = ... a made-up type
+   DataBuffer initialFullBuffer = ...
+
+   class FillingLoop implements Runnable {
+     public void run() {
+       DataBuffer currentBuffer = initialEmptyBuffer;
+       try {
+         while (currentBuffer != null) {
+           addToBuffer(currentBuffer);
+           if (currentBuffer.isFull())
+             currentBuffer = exchanger.exchange(currentBuffer);
+         }
+       } catch (InterruptedException ex) { ... handle ... }
+     }
+   }
+
+   class EmptyingLoop implements Runnable {
+     public void run() {
+       DataBuffer currentBuffer = initialFullBuffer;
+       try {
+         while (currentBuffer != null) {
+           takeFromBuffer(currentBuffer);
+           if (currentBuffer.isEmpty())
+             currentBuffer = exchanger.exchange(currentBuffer);
+         }
+       } catch (InterruptedException ex) { ... handle ...}
+     }
+   }
+
+   void start() {
+     new Thread(new FillingLoop()).start();
+     new Thread(new EmptyingLoop()).start();
+   }
+ }
+```
+
+### Semaphore
+
+> 信号量, 大学操作系统的课本上就是以这个为例子的
+
+信号量维护一组**许可**, 线程调用`acquire()`将获取信号量中的许可, 如果无可用许可将阻塞线程. 调用`release()`将添加一个许可, 被阻塞的线程中的一个将获取该许可并恢复执行.
+
+> * 许可数目在构造是指定, 但仍可变的
+> * 没有特别规定必须获取许可的线程来调用`release()`
+
+信号量主要用于两种场景
+
+1. 限制访问资源的线程的数量, 一般此时许可数量大于1
+
+2. 用作互斥锁
+
+   > 与其他锁相比, 信号量构成的锁不必须让获取锁的线程释放. 该特性可用于死锁的恢复.
+
+等待许可的线程中, 哪个线程被恢复是不确定的, 可能会造成线程饿死的情况. 因此构造函数提供了`fair`参数, 可指定线程恢复的过程是公平的, 即先入先出FIFO.
+
+例子: 限制访问池中元素的线程的个数
+
+```java
+ class Pool {
+   private static final int MAX_AVAILABLE = 100;
+   private final Semaphore available = new Semaphore(MAX_AVAILABLE, true);
+
+   public Object getItem() throws InterruptedException {
+     available.acquire();
+     return getNextAvailableItem();
+   }
+
+   public void putItem(Object x) {
+     if (markAsUnused(x))
+       available.release();
+   }
+
+   // Not a particularly efficient data structure; just for demo
+
+   protected Object[] items = ... whatever kinds of items being managed
+   protected boolean[] used = new boolean[MAX_AVAILABLE];
+
+   protected synchronized Object getNextAvailableItem() {
+     for (int i = 0; i < MAX_AVAILABLE; ++i) {
+       if (!used[i]) {
+         used[i] = true;
+         return items[i];
+       }
+     }
+     return null; // not reached
+   }
+
+   protected synchronized boolean markAsUnused(Object item) {
+     for (int i = 0; i < MAX_AVAILABLE; ++i) {
+       if (item == items[i]) {
+         if (used[i]) {
+           used[i] = false;
+           return true;
+         } else
+           return false;
+       }
+     }
+     return false;
+   }
+ }
+```
+
+> 注意, `acquire()`不会影响同步块加锁.
+
+### Lock
+
+## Executor
+
+### ExecutorService
 
 
 
@@ -385,49 +603,22 @@ hello 世界
 
 
 
-
-
-
-
-
-
-
-
-
-
-# ---美丽的分割线---
-
-## Concurrent
-
-* Executors
-
-  
-
-* Queues
-
-* Timing
-
-* Synchronizers
-
-* Concurrent Collections
-
-* Others
-
-  
-
-
-
-> 参考[Package java.util.concurrent](https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/concurrent/package-summary.html)
 
 ## Atomic
 
-## Lock
+## 小节
+
+
+
+## 其他
+
+### ThreadLocal
 
 # 其他
 
-  不可变的对象, 一旦被构建, 它的使用便是线程安全的. 
+## 不可变对象
 
-## ThreadLocal
+  不可变的对象, 一旦被构建, 它的使用便是线程安全的. 
 
 
 
@@ -435,4 +626,4 @@ hello 世界
 
 * [oracle tutorial](https://docs.oracle.com/javase/tutorial/essential/concurrency/index.html)
 * [java.util.concurrent](https://docs.oracle.com/javase/8/docs/api/java/util/concurrent/package-summary.html)
-* [Concurrent Jenkov.com](http://tutorials.jenkov.com/java-util-concurrent/index.html) 内容覆盖面广, 但十分简略.
+* [Concurrent Jenkov.com](http://tutorials.jenkov.com/java-util-concurrent/index.html) 内容覆盖面广, 但十分简略, 建议搭配Javadoc学习
