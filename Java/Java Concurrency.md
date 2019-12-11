@@ -613,7 +613,10 @@ class FillAndEmpty {
 
 ### ExecutorService
 
-代表该执行器异步执行.
+一个用于执行异步任务的接口, 并提供了额外的功能:
+
+* 终止任务
+* 产生`Future`对象, 跟踪异步任务的进程
 
 
 
@@ -624,12 +627,16 @@ class FillAndEmpty {
 
 
 
+
+
+
+### ThreadPoolExecutor
+
+### Executors
 
 ## Atomic
 
 ## 小节
-
-
 
 ## 其他
 
