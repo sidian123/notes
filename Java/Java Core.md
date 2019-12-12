@@ -174,24 +174,6 @@
 
 限制终究是太多了, 见[Why does Runtime.exec(String) work for some but not all commands?](https://stackoverflow.com/questions/31776546/why-does-runtime-execstring-work-for-some-but-not-all-commands)
 
-# ThreadLocal
-
-- 介绍
-
-  `ThreadLocal`类型的字段是线程局部的, 意味着即使是类变量, 在不同的线程中也有不同的拷贝.
-
-- 使用
-
-  `ThreadLocal`字段通常声明为`private static`, 然后重写它的`initialValue`方法来设置它的初始值. 而`get`, `set`方法用于设置或获得该字段的值.
-
-- 原理
-
-  当线程首次调用`get`方法时, 会执行它的`initialValue`方法来初始化, 并返回该值. 之后的`get`调用仅仅只是获取该值.
-
-  当线程die并且无其他引用时, 该变量go die, 并交由垃圾收集器处理.
-
-> 参考: [ThreadLocal<T>](https://docs.oracle.com/javase/8/docs/api/java/lang/ThreadLocal.html)
-
 # 平台环境
 
 ## System Properties
@@ -229,6 +211,10 @@ UUID存在不同的变体( variant ), 不管哪种变体, 都有4中版本, 而J
 * ...
 
 > 参考[UUID](https://docs.oracle.com/javase/8/docs/api/java/util/UUID.html?is-external=true)
+
+# # 安全
+
+* `MessageDigest` 生成摘要的工具
 
 # 其他
 
