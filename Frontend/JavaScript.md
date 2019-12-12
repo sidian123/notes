@@ -1642,6 +1642,18 @@ html5后引入了web storage（本地储存），比cookies更好用。本地存
 
 > 参考[Measuring Element Dimension and Location with CSSOM in Windows Internet Explorer 9](https://docs.microsoft.com/en-us/previous-versions//hh781509(v=vs.85)?redirectedfrom=MSDN&Accept-Language=zh-cn)
 
+## 编,解码
+
+* `encodeURI()`, `decodeURI()`编码或解码URL
+
+* `encodeURIComponent()`, `decodeURIComponent()` 编码或解码URL组件, 即`(; / ? : @ & = + $ , #)`等字符间的内容.
+
+  > 因此`encodeURIComponent()`传入`/`会被编码的
+
+
+
+
+
 # 四、其他
 ## 一些概念
 * javascript：语言
