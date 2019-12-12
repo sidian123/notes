@@ -91,6 +91,14 @@
 
 > 参考[Relational table naming convention ](https://stackoverflow.com/questions/4702728/relational-table-naming-convention)
 
+# Oracle
+
+* 字符串只能使用单引号
+
+* 字段,别名可使用单,双引号. 此时可转义关键字
+
+  > 但IDEA中建议使用双引号和非关键字, 因为语法支持不是很好
+
 # 其他
 
 * `union [all]`连接两个集合, 每项字段类型需一致, 无`all`时会去重
