@@ -613,26 +613,57 @@ class FillAndEmpty {
 
 ### ExecutorService
 
-一个用于执行异步任务的接口, 并提供了额外的功能:
+* 介绍
 
-* 终止任务
-* 产生`Future`对象, 跟踪异步任务的进程
+  一个用于执行异步任务的接口, 并提供了额外的功能:
 
+  * 终止任务
+  * 产生`Future`对象, 跟踪异步任务的进程
 
+* 关闭
 
+  此时, 将拒绝新任务的加入
 
+  * `shutdown() `执行完等待的任务才结束
+  * `shutdownNow()` 不执行等待的任务, 并尽最大力去停止当前执行的任务.
 
+* 提交任务
 
+  * `submit()`
 
+    与`execute()`方法相比, `submit()`方法将返回`Future`对象, 通过该对象可以取消任务或等待其执行完毕.
 
+  * 执行集合
 
+    * `invokeAll()`
 
+      执行集合中所有任务并等待, 任务都完成时返回`Future`的集合.
 
+      > 一个完成的任务指正常结束或抛出异常.
 
+    * `invokeAny()`
+
+      执行集合中所有任务并等待, 直到一个任务正常结束(即不抛出异常), 之后取消所有的任务. 
+
+      若有任务抛出异常, 同样也取消所有任务, 并抛出异常`ExecutionException`
+
+* `Future`
+
+  代表异步操作的结果
+
+  可以获取任务执行的结果, 取消任务, 检查任务状态
+
+* `Executors`
+
+  含构建`ExecutorService`实例的工具类.
 
 ### ThreadPoolExecutor
 
-### Executors
+
+
+### ScheduledThreadPoolExecutor
+
+
 
 ## Atomic
 
