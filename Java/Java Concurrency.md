@@ -615,7 +615,7 @@ class FillAndEmpty {
 
 * 介绍
 
-  一个用于执行异步任务的接口, 并提供了额外的功能:
+  一个用于执行异步任务的接口, 继承于`Executor`, 并提供了额外的功能:
 
   * 终止任务
   * 产生`Future`对象, 跟踪异步任务的进程
@@ -659,15 +659,79 @@ class FillAndEmpty {
 
 ### ThreadPoolExecutor
 
+#### 介绍
 
+* 使用线程池的执行器, 继承于`ThreadPoolExecutor`
+
+* 目的
+  * 使用线程池, 减少任务调用的性能开销;
+  * 资源的管理, 如约束线程数量
+
+#### 原理
+
+`ThreadPoolExecutor`中存在一个**队列**和**线程池**. 线程池的数量由` corePoolSize`和` maximumPoolSize`约束. 
+
+当提交任务时, 他们的交互关系如下:
+
+* 如果 线程池数目 < `corePoolSize`, 则新增线程完成任务, 即使线程池中有空闲的线程.
+* 如果 ` maximumPoolSize` > 线程池数目 >= `corePoolSize`, 且队列未满, 则任务入队, 否则新增线程完成任务
+* 如果 线程池数目=` maximumPoolSize` , 则**拒绝策略**处理任务.
+
+#### 拒绝策略
+
+* `ThreadPoolExecutor.AbortPolicy`(默认)
+
+  一旦被拒绝, 将抛出运行时异常`RejectedExecutionException` 
+
+* `ThreadPoolExecutor.CallerRunsPolicy`
+
+  一旦被决绝, 在调用`execute()`的线程中自己执行任务
+
+* `ThreadPoolExecutor.DiscardPolicy`
+
+  一旦被拒绝, 简单的忽略该任务
+
+* `ThreadPoolExecutor.DiscardOldestPolicy`
+
+  丢弃队列头上的任务(未被执行), 重新尝试执行该任务.
+
+#### 队列使用
+
+队列的使用大致分为三类
+
+* 0容量的队列, 如`SynchronousQueue`
+
+  > 任务到来, 将被直接交给空闲线程或新线程处理
+
+* 无界的队列, 如`LinkedBlockingQueue`
+
+  > 超出`corePoolSize`的任务将被缓存到队列中, ` maximumPoolSize`将失效
+
+* 有界的队列, 如`ArrayBlockingQueue`
+
+  > 队列容量大, ` maximumPoolSize`小时, CPU使用率, 系统资源和上下文切换的开销较小; 队列容量小, ` maximumPoolSize`大时, 开销较大.
+
+> 无界(unbounded)或无限在数量上指`Long.MAX_VALUE`
+
+#### 其他
+
+* `keepAliveTime`
+
+  默认指超出`corePoolSize`的线程在空闲状态下的存活时间.
+
+  设置`allowCoreThreadTimeOut(boolean)`为`true`时可将该策略同时作用到` corePoolSize`内的线程上.
+
+* 预启动线程
+
+  默认首次新任务到来时才启动线程. 若构造时使用的队列不为空, 可通过`prestartCoreThread()`或 `prestartAllCoreThreads()`预启动线程来处理.
+
+* ... 见[ThreadPoolExecutor](https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/concurrent/ThreadPoolExecutor.html)
 
 ### ScheduledThreadPoolExecutor
 
 
 
 ## Atomic
-
-## 小节
 
 ## 其他
 
