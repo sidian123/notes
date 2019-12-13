@@ -776,7 +776,11 @@ class FillAndEmpty {
 
 ### Timer
 
+与`ScheduledThreadPoolExecutor`一样, 同样能调度一次任务, 或者周期性调度任务. 
 
+但`Timer`仅使用一个后台进程, 如果任务占用时间过长, 将造成接下来的任务簇在一团执行.
+
+> 参考[Timer](https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/Timer.html)
 
 # 其他
 
