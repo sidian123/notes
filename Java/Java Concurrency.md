@@ -661,11 +661,12 @@ class FillAndEmpty {
 
 #### 介绍
 
-* 使用线程池的执行器, 继承于`ThreadPoolExecutor`
+* 使用线程池的执行器, 实现了`ExecutorService`接口
 
 * 目的
   * 使用线程池, 减少任务调用的性能开销;
   * 资源的管理, 如约束线程数量
+* 用法与`ExecutorService`一致.
 
 #### 原理
 
@@ -725,11 +726,27 @@ class FillAndEmpty {
 
   默认首次新任务到来时才启动线程. 若构造时使用的队列不为空, 可通过`prestartCoreThread()`或 `prestartAllCoreThreads()`预启动线程来处理.
 
+* 提供了回调函数, 略
+
 * ... 见[ThreadPoolExecutor](https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/concurrent/ThreadPoolExecutor.html)
 
 ### ScheduledThreadPoolExecutor
 
+* 介绍
 
+  * 继承`ThreadPoolExecutor`, 实现了`ScheduledExecutorService`, 拥有延迟执行和周期性执行的功能.
+
+  * 使用无界的队列, 和默认的拒绝策略.
+
+* 使用
+
+  * 延迟执行`schedule()`
+
+  * 周期执行
+
+    `scheduleAtFixedRate()` 以两个任务的开始时间区间作为周期执行
+
+    `scheduleWithFixedDelay()` 以上一个任务的结束与下一个任务的开始为周期执行.
 
 ## Atomic
 
@@ -752,6 +769,10 @@ class FillAndEmpty {
   当线程die并且无其他引用时, 该变量go die, 并交由垃圾收集器处理.
 
 > 参考: [ThreadLocal<T>](https://docs.oracle.com/javase/8/docs/api/java/lang/ThreadLocal.html)
+
+### Timer
+
+
 
 # 其他
 
