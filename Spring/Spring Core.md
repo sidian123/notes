@@ -64,22 +64,40 @@
 
 Spring提供了注解来异步执行和调度任务.
 
-* 使能注解
+### 使能注解
 
-  * `@EnableScheduling`使能任务调度
-  * `@EnableAsync`使能任务异步执行
+* `@EnableScheduling`使能任务调度
+* `@EnableAsync`使能任务异步执行
 
-  例子:
+例子:
 
-  ```java
-  @Configuration
-  @EnableAsync
-  @EnableScheduling
-  public class AppConfig {
-  }
-  ```
+```java
+@Configuration
+@EnableAsync
+@EnableScheduling
+public class AppConfig {
+}
+```
 
-* `@Scheduled`
+### 配置
+
+`AsyncConfigurer`
+
+`SchedulingConfigurer`
+
+### 使用
+
+#### @Scheduled
+
+* 原理: IOC调度
+
+* 不要在`@Configurable`类中使用`@Scheduled`注解, 会出问题的.
+
+#### @Async
+
+* 原理: 切面
+
+
 
 
 
