@@ -1,3 +1,20 @@
+# Task Execution and Scheduling
+
+* `TaskExecutor`
+* `TaskScheduler`
+
+
+
+
+
+
+
+
+
+
+
+> 参考[Task Execution and Scheduling](https://docs.spring.io/spring-framework/docs/current/spring-framework-reference/integration.html#scheduling)
+
 # Validation
 
 * 未与Web层绑死, 可用在其他地方
