@@ -1,16 +1,89 @@
 # Task Execution and Scheduling
 
-* `TaskExecutor`
+## TaskExecutor
+
+* 介绍
+  
+* 含义与JDK的`Executor`基本一致
+  
+* 类型
+
+  * `SyncTaskExecutor`
+
+    任务在调用者线程中执行, 即同步的. 主要用于测试
+
+  * `SimpleAsyncTaskExecutor`
+
+    简单的为每个任务开启一个线程. 有并发上限, 达到上线时将阻塞调用者线程, 直到有线程结束.
+
+  * `ThreadPoolTaskExecutor`
+
+    适配了`ThreadPoolExecutor`, 并提供Bean属性用于配置.
+
+  * `ConcurrentTaskExecutor`
+
+    连接JDK `Executor`实例的一个适配类, 比较灵活性
+
+* 使用? 
+
+  可与普通类一样注入到容器中, 而`ThreadPoolTaskExecutor`提供了Bean属性, 可以直接在XML中配置.
+
+## TaskScheduler
+
+* 接口方法大致分类
+
+  * `schedule()`
+
+    仅在某个时间点运行且仅运行一次.
+
+  * `scheduleAtFixedRate()`
+
+    周期执行任务, 以两个任务开始的时间段为周期
+
+  * `scheduleWithFixedDelay()`
+
+    周期执行任务, 以上一个任务的结束与下一个任务的开始为周期.
+
+* `Trigger`接口
+
+  ```java
+  ScheduledFuture schedule(Runnable task, Trigger trigger);
+  ```
+
+  该方法中会用到, 极为灵活, 只要`Trigger`触发了并执行一次任务, 即可以触发多次.
+
+  其中, 实现类`CronTrigger`使用cron表达式触发任务执行, 如
+
+  ```java
+  scheduler.schedule(task, new CronTrigger("0 15 9-17 * * MON-FRI"));
+  ```
+
+  > 每月的9到17号的日子中, 且位于周一至周五间内, 则在当天15:00点触发任务执行.
+
+## 注解支持
+
+Spring提供了注解来异步执行和调度任务.
+
+* 使能注解
+
+  * `@EnableScheduling`使能任务调度
+  * `@EnableAsync`使能任务异步执行
+
+  例子:
+
+  ```java
+  @Configuration
+  @EnableAsync
+  @EnableScheduling
+  public class AppConfig {
+  }
+  ```
+
+* `@Scheduled`
 
 
 
 
-
-
-
-
-
-* `TaskScheduler`
 
 
 
