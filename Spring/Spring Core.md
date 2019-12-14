@@ -113,7 +113,9 @@ public class AppConfig {
 
 
 
-> 参考[Task Execution and Scheduling](https://docs.spring.io/spring-framework/docs/current/spring-framework-reference/integration.html#scheduling)
+## 参考
+
+[Task Execution and Scheduling](https://docs.spring.io/spring-framework/docs/current/spring-framework-reference/integration.html#scheduling)
 
 # Validation
 
@@ -324,10 +326,11 @@ Spring提供了很多环境相关的元数据, 让使用者能在缓存注解中
 
 * `@CacheConfig`注解在类上, 为其他注解设置默认配置
 
-> 参考
->
-> * [Cache Abstraction](https://docs.spring.io/spring/docs/5.2.0.RELEASE/spring-framework-reference/integration.html#cache)
-> * [Spring Boot Cache](https://docs.spring.io/spring-boot/docs/current/reference/html/spring-boot-features.html#boot-features-caching)
+## 参考
+
+* [Cache Abstraction](https://docs.spring.io/spring/docs/5.2.0.RELEASE/spring-framework-reference/integration.html#cache)
+
+* [Spring Boot Cache](https://docs.spring.io/spring-boot/docs/current/reference/html/spring-boot-features.html#boot-features-caching)
 
 # SpEL
 
