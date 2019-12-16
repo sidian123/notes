@@ -376,9 +376,9 @@ int[] ints4=new int[]{1,2,3};//此时不能使用字面值.也不需要制定数
 | equality             | `== !=`                                  |
 | bitwise AND          | `&`                                      |
 | bitwise exclusive OR | `^`                                      |
-| bitwise inclusive OR | `|`                                      |
+| bitwise inclusive OR | <code>\|</code>                          |
 | logical AND          | `&&`                                     |
-| logical OR           | `||`                                     |
+| logical OR           | <code>\|\|</code>                        |
 | ternary              | `? :`                                    |
 | assignment           | `= += -= *= /= %= &= ^= |= <<= >>= >>>=` |
 
