@@ -42,7 +42,7 @@
 
   * `scheduleWithFixedDelay()`
 
-    周期执行任务, 以上一个任务的结束与下一个任务的开始为周期.
+    周期执行任务, 以上一个任务的结束与下一个任务的开始为周期, 即延迟一个时间段执行.
 
 * `Trigger`接口
 
@@ -67,23 +67,25 @@ Spring提供了注解来异步执行和调度任务.
 ### 使能注解
 
 * `@EnableScheduling`使能任务调度
+
 * `@EnableAsync`使能任务异步执行
 
-例子:
+    * 
 
-```java
-@Configuration
-@EnableAsync
-@EnableScheduling
-public class AppConfig {
-}
-```
+* 例子:
+
+    ```java
+    @Configuration
+    @EnableAsync
+    @EnableScheduling
+    public class AppConfig {
+    }
+    ```
 
 ### 配置
 
-`AsyncConfigurer`
-
-`SchedulingConfigurer`
+* `AsyncConfigurer`
+* `SchedulingConfigurer`
 
 ### 使用
 
@@ -91,27 +93,143 @@ public class AppConfig {
 
 * 原理: IOC调度
 
-* 不要在`@Configurable`类中使用`@Scheduled`注解, 会出问题的.
+* 使用
+
+  延迟5秒调用
+
+  ```java
+@Scheduled(fixedDelay=5000)
+  public void doSomething() {
+      // something that should execute periodically
+  }
+  ```
+  
+  固定5秒的频率调用
+
+  ```java
+@Scheduled(fixedRate=5000)
+  public void doSomething() {
+      // something that should execute periodically
+  }
+  ```
+  
+  添加初始延迟
+
+  ```java
+@Scheduled(initialDelay=1000, fixedRate=5000)
+  public void doSomething() {
+      // something that should execute periodically
+  }
+  ```
+  
+  使用cron表达式
+
+  ```java
+@Scheduled(cron="*/5 * * * * MON-FRI")
+  public void doSomething() {
+      // something that should execute on weekdays only
+  }
+  ```
+  
+  > 可使用`zone`指定cron表达式用于解析的时区.
+
+* 注意点
+
+  * 由于方法是被容器调用的, 因此返回值必须为`void`且无参
+  * 不要在`@Configurable`类中使用`@Scheduled`注解, 会出问题的.
 
 #### @Async
 
 * 原理: 切面
+* 默认使用`proxy`模式, 因此, 相同的类中调用不会重复的织入
 
+* 使用
 
+  > ~~貌似需事先配置好执行器~~
 
+  最简单的形式
 
+  ```java
+  @Async
+  void doSomething() {
+      // this will be executed asynchronously
+  }
+  ```
 
+  可以有参数, 因为该方法在代码中是被正常调用的
 
+  ```java
+  @Async
+  void doSomething(String s) {
+      // this will be executed asynchronously
+  }
+  ```
 
+  可以有返回值, 但由于是异步执行的, 因此只能返回`Future`类型的对象
 
+  ```java
+  @Async
+  Future<String> returnSomething(int i) {
+      // this will be executed asynchronously
+  }	
+  ```
 
+  > 除此之外, 还有`org.springframework.util.concurrent.ListenableFuture`和`java.util.concurrent.CompletableFuture`
 
+  指定使用的执行器, 而不是`AsyncConfigurer`配置的默认执行器
 
+  ```java
+  @Async("otherExecutor")
+  void doSomething(String s) {
+      // this will be executed asynchronously by "otherExecutor"
+  }
+  ```
 
+* 异常处理
 
+  如果有`Future`返回值, 当异步执行抛出异常时, `Future.get()`将抛出异常. 
 
+  第二种方式, 在注册`AsyncConfigurer`时配置`AsyncUncaughtExceptionHandler`来处理所有异常
 
+  ```java
+  public class MyAsyncUncaughtExceptionHandler implements AsyncUncaughtExceptionHandler {
+  
+      @Override
+      public void handleUncaughtException(Throwable ex, Method method, Object... params) {
+          // handle exception
+      }
+  }
+  ```
 
+* 注意点
+
+  `@Async`不能直接组合`@PostConstruct`来异步初始化Spring Bean, 而是需要其他Bean调用该Bean的异步初始化方法, 如
+
+  ```java
+  public class SampleBeanImpl implements SampleBean {
+  
+      @Async
+      void doSomething() {
+          // ...
+      }
+  
+  }
+  
+  public class SampleBeanInitializer {
+  
+      private final SampleBean bean;
+  
+      public SampleBeanInitializer(SampleBean bean) {
+          this.bean = bean;
+      }
+  
+      @PostConstruct
+      public void initialize() {
+          bean.doSomething();
+      }
+  
+  }
+  ```
 
 ## 参考
 
