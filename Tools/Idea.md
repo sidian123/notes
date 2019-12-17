@@ -269,6 +269,9 @@ Maven项目中, IDEA会用Maven来构建项目, 但不会完全交由Maven构建
 ## Git
 
 * 提交 `Ctrl+K`
+
+  > 在弹出的窗口中, 键入`Ctrl+Alt+K`, 可同时提交并推送.
+
 * 推送 `Ctrl+Shift+K`
 
 ## 其他
