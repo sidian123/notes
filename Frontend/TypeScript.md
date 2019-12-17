@@ -1,4 +1,10 @@
-# Get started
+# 介绍
+
+* TypeScript是JavaScript的超集
+
+  > 即正常的JavaScript语法可在TypeScript中用, 反之不行.
+
+# Get Started
 
 * 安装
 
@@ -58,7 +64,32 @@
 
   > 构造函数中`public`声明的参数将自动生成对应字段.
 
-  
+# 语法
+
+## 基础类型
+
+* `boolean`
+
+  ```ts
+  let isDone: boolean = false;
+  ```
+
+* `number`
+
+  ```ts
+  let decimal: number = 6;
+  let hex: number = 0xf00d;
+  let binary: number = 0b1010;
+  let octal: number = 0o744;
+  ```
+
+* 
 
 
+
+
+
+# 参考
+
+[TypeScript](https://www.typescriptlang.org/docs/home.html)
 
