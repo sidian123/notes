@@ -136,7 +136,7 @@
     > 一般使用实现类`DefaultExecuteResultHandler`, 覆盖父类方法时, 最好调用下其父方法.
 
 * 可设置子进程工作目录和环境变量, 默认为父进程的工作目录和环境变量.
-    
+  
 * 可设置看门狗, 防止子进程长时间运行. 有两种使用方式:
   * 设置有限的超时时间, 超时时让其自动关闭进程
   * 设置无限的超时时间`ExecuteWatchdog.INFINITE_TIMEOUT`, 然后手动调用`destroyProcess()`关闭进程.
@@ -184,7 +184,9 @@
 
 最基础的方法:
 
-- 执行命令： 传入环境变量集合`envp`和指定工作目录`dir`, 将执行命令`cmdarray`.
+* `exec()`
+
+  执行命令, 传入环境变量集合`envp`和指定工作目录`dir`, 将执行命令`cmdarray`.
 
   ```java
   public Process exec(String[] cmdarray, String[] envp, File dir);
@@ -196,9 +198,9 @@
 
   > 一般使用该方法的其他变种
 
-## 弃坑
+* `addShutdownHook()`
 
-限制终究是太多了, 见[Why does Runtime.exec(String) work for some but not all commands?](https://stackoverflow.com/questions/31776546/why-does-runtime-execstring-work-for-some-but-not-all-commands)
+  注册JVM关闭回调
 
 # 平台环境
 
@@ -238,7 +240,7 @@ UUID存在不同的变体( variant ), 不管哪种变体, 都有4中版本, 而J
 
 > 参考[UUID](https://docs.oracle.com/javase/8/docs/api/java/util/UUID.html?is-external=true)
 
-# # 安全
+# 安全
 
 * `MessageDigest` 生成摘要的工具
 
@@ -249,10 +251,4 @@ UUID存在不同的变体( variant ), 不管哪种变体, 都有4中版本, 而J
 javaw与java一致, 除了javaw运行程序时不会依附终端, 且执行后立即返回
 
 > 参考[Difference between java and javaw](https://stackoverflow.com/questions/12129505/difference-between-java-and-javaw)
-
-
-
-# 参考
-
-* [java.lang](https://docs.oracle.com/javase/8/docs/api/)
 
