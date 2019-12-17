@@ -124,14 +124,18 @@ for(let i=0;i<10;i++)｛
 	* Date
 	* RegExp
 
-在javascript中，尽管一切皆为对象，但是它还是有六种基本类型的。。并且**值是不可变的**，传参时是**按值传递**，而不是按引用传递！！
+在Javascript中，尽管一切皆为对象，但是它还是有六种基本类型的。。并且**值是不可变的**，传参时是**按值传递**，而不是按引用传递！！
 
-除了null和undefined，其它基本类型都有对应的包装对象，可以调用它的实例方法。如：
+除了`null`和`undefined`，其它基本类型都有对应的包装对象，可以调用它的实例方法。如：
 ```javascript
 "tom".toUpperCase();//"TOM"
 (2).toString();"2"
 ```
-注意，typeof null;//"object"  。。。
+> 注意
+>
+> ```javascript
+> typeof null;//"object"
+> ```
 
 ### Numbers
 根据说明书，数值都是用双精度浮点数表示的，但是实际上整数还是被当做32位int。但也不用担心`3/2=1`问题的出现，并且整数可以使用按位运算。
@@ -140,21 +144,20 @@ for(let i=0;i<10;i++)｛
 ```javascript
 parseInt('123', 10); // 123
 parseInt('010', 10); // 10，忽略0，不会当做八进制
-parseInt('0x10'); // 16 ，会当作二进制
+parseInt('0x10'); // 16 ，会当作十六进制
 parseInt('11', 2); // 3，指定二进制
 + '42';   // 42
 + '010';  // 10，同样，不当作八进制。。
 + '0x10'; // 16
 Number('123');//123
 ```
-运算过程中会出现一些特殊值：**NaN**（Not a Number）、`Infinity`（无穷大）和`-Infinity`（负无穷大），如：
+运算过程中会出现一些特殊值：`NaN`（Not a Number）、`Infinity`（无穷大）和`-Infinity`（负无穷大），如：
 ```javascript
 parseInt('hello', 10); // NaN
 1 / 0; //  Infinity
 -1 / 0; // -Infinity
 ```
-参考：
-[Number](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number)
+> 参考：[Number](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number)
 
 ### Strings
 使用utf-16的code units编码，因此一个字符1或2个code units编码，并且length属性以code unit为单位。
@@ -173,7 +176,7 @@ parseInt('hello', 10); // NaN
 [String](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String)
 
 ### 其他类型
-`null`表示**故意设置**的、不存在的值；`undefined`表示变量还未初始化，函数没有返回值时也会返回undefined。
+`null`表示**故意设置**的、不存在的值；`undefined`表示变量还未初始化，函数没有返回值时也会返回`undefined`。
 
 **任何值**都可以被转化为布尔值，根据如下规则：
 1. false, 0, empty strings (""), NaN, null, and undefined all become false.称为**falsy**
