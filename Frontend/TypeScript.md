@@ -68,13 +68,13 @@
 
 ## 基础类型
 
-* `boolean`
+* Boolean
 
   ```ts
   let isDone: boolean = false;
   ```
 
-* `number`
+* Number
 
   ```ts
   let decimal: number = 6;
@@ -83,13 +83,87 @@
   let octal: number = 0o744;
   ```
 
-* 
+* String
 
+  ```ts
+  let color: string = "blue";
+  color = 'red';
+  let fullName: string = `Bob Bobbington`;
+  let age: number = 37;
+  let sentence: string = `Hello, my name is ${ fullName }.
+  ```
 
+* Array
 
+  ```ts
+  let list: number[] = [1, 2, 3];
+  ```
 
+  或使用泛型数组`Array<elemType>`
+
+  ```ts
+  let list: Array<number> = [1, 2, 3];
+  ```
+
+* Tuple
+
+  也是一种数据, 但是数组元素类型可以不同
+
+  ```ts
+  // Declare a tuple type
+  let x: [string, number];
+  // Initialize it
+  x = ["hello", 10]; // OK
+  // Initialize it incorrectly
+  x = [10, "hello"]; // Error
+  console.log(x[0].substring(1)); // OK
+  console.log(x[1].substring(1)); // Error, 'number' does not have 'substring'
+  x[3] = "world"; // Error, Property '3' does not exist on type '[string, number]'.
+  console.log(x[5].toString()); // Error, Property '5' does not exist on type '[string, number]'.
+  ```
+
+* Enum
+
+  TypeScript中新增的类型
+
+  ```ts
+  enum Color {Red, Green, Blue}
+  let c: Color = Color.Green;
+  ```
+
+  每个元素对应一个数值, 第一个元素默认为零, 之后以此递增. 但可修改:
+
+  ```ts
+  enum Color {Red = 1, Green, Blue}
+  let c: Color = Color.Green;
+  ```
+
+  ```ts
+  enum Color {Red = 1, Green = 2, Blue = 4}
+  let c: Color = Color.Green;
+  ```
+
+  枚举本质是由数据实现的, 因此可通过索引获取值
+
+  ```ts
+  enum Color {Red = 1, Green, Blue}
+  let colorName: string = Color[2];
+  
+  console.log(colorName); // Displays 'Green' as its value is 2 above
+  ```
+
+* Any
+
+  为了兼容三方无类型信息的对象, 提供了`any`类型, 表示任何对象, 避免编译时类型检查, 如
+
+  ```ts
+  let notSure: any = 4;
+  notSure = "maybe a string instead";
+  notSure = false; // okay, definitely a boolean
+  ```
 
 # 参考
 
-[TypeScript](https://www.typescriptlang.org/docs/home.html)
+* [TypeScript Docs](https://www.typescriptlang.org/docs/home.html)
+* [TypeScript Playground](https://www.typescriptlang.org/play/index.html#) TypeScript To JavaScript 的在线编译器
 
