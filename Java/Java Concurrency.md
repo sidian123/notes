@@ -103,7 +103,12 @@
 
 如何优雅关闭? `stop()`方法并不安全.
 
-中断线程或设置停止变量而正常结束啊. 见[如何优雅的关闭Java线程池](https://www.cnblogs.com/qingquanzi/p/9018627.html)
+有两步需做:
+
+1. 中断线程或设置停止变量而正常结束. 
+2. 挂载到JVM关闭时间上`Runtime.addShutdownHook()`, 或设置闲置超时时间.
+
+> 见[如何优雅的关闭Java线程池](https://www.cnblogs.com/qingquanzi/p/9018627.html)
 
 # 并发
 
