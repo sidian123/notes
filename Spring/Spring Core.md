@@ -101,6 +101,8 @@ Spring提供了注解来异步执行和调度任务.
       }
   }
   ```
+  
+  > 若仅实现一个方法, 可继承`AsyncConfigurerSupport`
 
 #### 调度
 
