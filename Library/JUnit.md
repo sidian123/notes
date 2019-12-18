@@ -14,6 +14,17 @@
 
    > 即使是Maven项目, 在Idea中运行时, 也不会自动测试, 因为idea它接管了Maven的部分功能.
 
+依赖
+
+```xml
+<dependency>
+    <groupId>org.junit.jupiter</groupId>
+    <artifactId>junit-jupiter-api</artifactId>
+    <version>5.5.2</version>
+    <scope>test</scope>
+</dependency>
+```
+
 # API使用
 
 ## 测试方法相关
