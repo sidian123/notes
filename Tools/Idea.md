@@ -442,6 +442,34 @@ mybatis的xml映射文件经常被使用，如果不安装插件，则需要自�
 1. 右键调试的数据查看视图, 选择`Customize Data Views...`, 取消`Enable toString() object view`的勾选
 2. 或者, 重写类的`toString()`方法, 防止递归调用.
 
+## 不能通过Run Configuration运行nuxt项目
+
+若在命令行中, 可输入下面命令运行
+
+```shell
+npm run dev
+```
+
+Idea中以如下配置运行却不行
+
+![image-20191218235134477](.Idea/image-20191218235134477.png)
+
+> `dev`脚本内容: `nuxt`
+
+因为这种方式不会去执行项目中的`nuxt`命令, 需添加全局nuxt包, 如
+
+```shell
+cnpm install -g nuxt
+```
+
+一般此时可以运行了.
+
+但我这又出问题了, 我的node-sass是在WSL中, 即Linux环境下安装编译的, Idea则在Windows运行, 因此冲突了. 
+
+需要删除`node_modules/`目录, 并在Windows环境下重新安全.
+
+> 此时又出问题了, WSL又不可以执行跑项目了, 没办法, 二者不可兼得~
+
 # 参考
 
 * [idea download][1]
