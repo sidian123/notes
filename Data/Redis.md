@@ -138,7 +138,7 @@
   bind 0.0.0.0
   ```
 
-# 问题
+# 坑
 
 ## 端口占用
 
@@ -166,7 +166,27 @@
 
 > 参考 https://askubuntu.com/questions/967763/redis-server-service-failed-with-result-timeout-more-errors-listed-inside 
 
+## Redis不允许备份
 
+```
+MISCONF Redis is configured to save RDB snapshots, but it is currently not able to persist on disk
+```
+
+这是因为Redis fork子进程来备份的, OS认为该行为将消耗大量内存而拒绝. 更改内存策略即可:
+
+1. `/etc/sysctl.conf`中添加
+
+   ```conf
+   vm.overcommit_memory=1
+   ```
+
+2. 重新读取系统参数
+
+   ```shell
+   sysctl -p /etc/sysctl.conf
+   ```
+
+> 详细解析见https://stackoverflow.com/a/49839193
 
 # 参考
 
