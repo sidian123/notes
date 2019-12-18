@@ -1927,6 +1927,7 @@ shell变量用于存储字面值、参与计算。bash为我们提供了一些�
 	当前shell的进程号
 * exit code：`$?`
 	上一条命令的exit code。在脚本中，exit code一般为最后一条命令的exit code。也可以通过命令`exit num`，手动返回exit code，并结束当前shell。如果num不给出，默认上一条命令的exit code
+* `$*` 将多个参数当作一个字符串???
 
 ### 表达式
 
