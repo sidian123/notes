@@ -272,6 +272,8 @@ npm help install
 
   npm怎么使用, cnpm就怎么使用, 除了不支持`publish`命令
 
+> 参考http://npm.taobao.org/
+
 ## 编译node-sass失败
 
 `install`或`update` `node-sass`时, 会编译该package, 如果运行环境中缺少对应的工具, 将报错.
