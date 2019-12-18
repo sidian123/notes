@@ -137,13 +137,6 @@ npm安装package分全局或局部安装，全局安装的package如果有可执
 
 >安装的package的版本受`package-lock.json`影响
 
-> 如果觉得安装慢, 可以使用`cnpm`代替`npm`, 它仅仅只是将仓库源改成了淘宝的, 本质上与`npm`无差别. 安装如下:
->
-> ```bash
-> npm install -g cnpm
-> ```
->
-
 --------
 
 依赖
@@ -250,7 +243,34 @@ npm help install
 ##  3.12 缓存
 安装过的package会被缓存起来。
 
-# 踩坑
+# 其他
+
+## cnpm
+
+* 介绍
+
+  cnpm是npm在国内的镜像版, 即除了使用国内镜像仓库外, 与npm无本质区别. 
+
+  国内镜像速度很快
+
+* 安装
+
+  ```shell
+  $ npm install -g cnpm --registry=https://registry.npm.taobao.org
+  ```
+
+  或者直接使用npm, 但配置国内镜像, 这里给出别名的配置
+
+  ```shell
+  alias cnpm="npm --registry=https://registry.npm.taobao.org \
+  --cache=$HOME/.npm/.cache/cnpm \
+  --disturl=https://npm.taobao.org/dist \
+  --userconfig=$HOME/.cnpmrc"
+  ```
+
+* 使用
+
+  npm怎么使用, cnpm就怎么使用, 除了不支持`publish`命令
 
 ## 编译node-sass失败
 
