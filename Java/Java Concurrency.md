@@ -105,8 +105,17 @@
 
 有两步需做:
 
-1. 中断线程或设置停止变量而正常结束. 
-2. 挂载到JVM关闭时间上`Runtime.addShutdownHook()`, 或设置闲置超时时间.
+1. 关闭条件
+
+   中断线程或设置停止变量而正常结束. 
+
+2. 关闭事件
+
+   有三种方式
+
+   1. 挂载到JVM关闭时间上`Runtime.addShutdownHook()`
+   2. 设置闲置超时时间.
+   3. 在对象的`finalize()`中由GC触发.
 
 > 见[如何优雅的关闭Java线程池](https://www.cnblogs.com/qingquanzi/p/9018627.html)
 
