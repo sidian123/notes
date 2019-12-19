@@ -546,14 +546,24 @@ MapperFactoryBean需要注入SqlSessionFactory或SqlSessionTemplate都行，如�
 	</bean>
 	```
 
-# 八 映射语句-例子
+# 八 映射语句
 ## 注意点
 
 - 在xml中，语句必须指定结果类型（resultType、resultMap），参数类型不用指定。因为在用SqlSession的selectList、selectOne等方法时，可以从参数中反射推断类型，但不能推断返回值的类型（泛型）。
+
 - 在注解中，sql语句绑定到了具体某个Dao的接口方法中，不能出现泛型，才能够推断出参数、结果类型。
+
 - 注解不能使用动态SQL，因此可以考虑xml和注解混合使用。
+
 - 自动映射：默认`PARTIAL` ，即除了嵌套层外，只要结果类型字段与sql结果列一致，就能自动映射。因此在使用级联时，需手动设置。
+
 - 在resultMap中，id的使用很关键，尽管能自动映射，也要手动给出id的映射。
+
+- 返回值
+
+  查询语句中, 若无结果时, 返回`null`; 请注意结果本身就是`null`的情况
+
+  其他语句中, 将返回被影响的记录项.
 
 ## 例子
 
