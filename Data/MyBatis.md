@@ -563,7 +563,7 @@ MapperFactoryBean需要注入SqlSessionFactory或SqlSessionTemplate都行，如�
 
   查询语句中, 若无结果时, 返回`null`; 请注意结果本身就是`null`的情况
 
-  其他语句中, 将返回被影响的记录项.
+  其他语句中, 将返回被影响记录项的数量.
 
 ## 例子
 
