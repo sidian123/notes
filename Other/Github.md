@@ -104,6 +104,16 @@ include:
 > * [Include files and also copy them to output](https://stackoverflow.com/questions/26128513/include-files-and-also-copy-them-to-output)
 > * [Bypassing Jekyll on GitHub Pages](https://github.blog/2009-12-29-bypassing-jekyll-on-github-pages/)
 
+# 其他
+
+## Webhooks
+
+* 当仓库中发送事件时, Github将发送Post请求, 携带payload 负载到配置的URL中. 
+* 每种事件携带的负载格式都不同
+* 请求头字段中包含额外信息, 如`X-GitHub-Event`, 表明事件类型
+
+> 参考[Webhooks](https://developer.github.com/webhooks/)
+
 # 参考
 [github guide](https://guides.github.com/)：最基本的指导
 [github help](https://help.github.com/)：最详细的文档
