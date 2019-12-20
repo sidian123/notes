@@ -254,3 +254,11 @@ javaw与java一致, 除了javaw运行程序时不会依附终端, 且执行后�
 
 > 参考[Difference between java and javaw](https://stackoverflow.com/questions/12129505/difference-between-java-and-javaw)
 
+## function
+
+`java.util.function`下提供了很多用于函数式编程的接口, 大致分类
+
+* `Consumer`接收参数并处理, 消费性的接口
+* `Function` 处理参数并返回结果, 功能性的接口
+* `Predicate` 接收参数并返回`boolean`值, 预测性的接口
+* ...
