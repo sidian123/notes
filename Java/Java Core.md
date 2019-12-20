@@ -151,16 +151,6 @@
 
 > 参考[DefaultExecutor](https://commons.apache.org/proper/commons-exec/apidocs/index.html)
 
-# System
-
-提供了有用的字段和方法, 一个helper类
-
-* 与输入输出相关的字段
-* 访问属性和环境变量的方法
-* 加载文件和库的方法
-* 数组的快速拷贝
-* ...
-
 # 进程相关
 
 ## Process
@@ -204,6 +194,16 @@
 
   注册JVM关闭回调
 
+## System
+
+提供了有用的字段和方法, 一个helper类
+
+* 与输入输出相关的字段
+* 访问属性和环境变量的方法
+* 加载文件和库的方法
+* 数组的快速拷贝
+* ...
+
 # 平台环境
 
 ## System Properties
@@ -229,19 +229,6 @@ Jvm会维护所处环境的信息, 称之为系统属性, 可通过`System`类�
 | `"user.home"`       | User home directory                                          |
 | `"user.name"`       | User account name                                            |
 
-# UUID
-
-`java.util.UUID`代表不变的全局唯一标识符, UUID由128位标识.
-
-UUID存在不同的变体( variant ), 不管哪种变体, 都有4中版本, 而JDK提供了 Leach-Salz 类型的UUID.
-
-方法:
-
-*  **[randomUUID](https://docs.oracle.com/javase/8/docs/api/java/util/UUID.html#randomUUID--)**() 获取`v4` 版的uuid
-* ...
-
-> 参考[UUID](https://docs.oracle.com/javase/8/docs/api/java/util/UUID.html?is-external=true)
-
 # 安全
 
 * `MessageDigest` 生成摘要的工具
@@ -264,3 +251,28 @@ javaw与java一致, 除了javaw运行程序时不会依附终端, 且执行后�
 * ...
 
 > 参考[java.util.function](https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/function/package-tree.html)
+
+## UUID
+
+`java.util.UUID`代表不变的全局唯一标识符, UUID由128位标识.
+
+UUID存在不同的变体( variant ), 不管哪种变体, 都有4中版本, 而JDK提供了 Leach-Salz 类型的UUID.
+
+方法:
+
+*  **[randomUUID](https://docs.oracle.com/javase/8/docs/api/java/util/UUID.html#randomUUID--)**() 获取`v4` 版的uuid
+*  ...
+
+> 参考[UUID](https://docs.oracle.com/javase/8/docs/api/java/util/UUID.html?is-external=true)
+
+## 远程调试
+
+一张图诠释如何使用
+
+![image-20191220173010738](.Java%20Core/image-20191220173010738.png)
+
+有两种使用方式
+
+* `suspend=n` JVM启动后不暂停, 之后Idea可随时连接上
+* `suspend=y` JVM启动后暂停, Idea远程连接后才继续执行下去.
+
