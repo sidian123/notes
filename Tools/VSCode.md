@@ -18,11 +18,9 @@
   >
   > 注意最后有个空格, 可根据自己的需求改.
 
-# 配置
+# Java开发
 
-## Java开发
-
-### 环境搭建
+## 环境搭建
 
 1. 首先安装了JDK, 并配置了环境
 
@@ -42,10 +40,15 @@
    6. [CheckStyle](https://marketplace.visualstudio.com/items?itemName=shengchen.vscode-checkstyle)
 
 	> 除此之外可以自行扩充
-	>
-	> Windows上可安装 [Java Extension Pack](https://marketplace.visualstudio.com/items?itemName=vscjava.vscode-java-pack), 它会检测并安装所有所需插件.
 
-### 配置
+------------
+
+或者使用扩展包的方式
+
+* [Java Extension Pack](https://marketplace.visualstudio.com/items?itemName=vscjava.vscode-java-pack) 包含了Java开发的常用扩展
+* [Spring Boot Extension Pack](https://marketplace.visualstudio.com/items?itemName=Pivotal.vscode-boot-dev-pack) 包含Spring Boot开发的常用扩展
+
+## 配置
 
 `.vscode`中有两个配置文件
 
@@ -54,7 +57,7 @@
 
 > 参考: [Java in Visual Studio Code](https://code.visualstudio.com/docs/languages/java)
 
-## 插件
+# 插件
 
 * `Remote-WSL`: 使code能够编辑WSL中的文件.
 
@@ -64,8 +67,45 @@
   
   > 然而, 在WSL中打开Windows软件, 也会被该插件接管, 效率不太行, 故删除.
 
-## 其他
+# 远程开发
+
+## 介绍
+
+在远程环境下开发时又获取到了与本地开发同等的体验, 如智能代码补全, 代码导航和调试等.
+
+工作原理图:
+
+![Architecture](.VSCode/architecture.png)
+
+## 准备
+
+先下载插件包[Remote Development extension pack](https://aka.ms/vscode-remote/download/extension), 该包包含
+
+* [Remote - SSH](https://code.visualstudio.com/docs/remote/ssh) 用于打开任意含有SSH Server的远程主机上的目录
+* [Remote - Containers](https://code.visualstudio.com/docs/remote/containers) 用于连接容器
+* [Remote - WSL](https://code.visualstudio.com/docs/remote/wsl) 用于连接WSL
+* ...
+
+对于SSH, `PATH`下需存在`ssh`命令, 如OpenSSH或Git附带的`ssh`命令
+
+## 使用
+
+* 连接远程主机
+
+## 放弃
+
+这是个玩具啊... 实在不太好用
+
+# 其他
 
 * 换行符: 搜索`end of line`
+
 * 全局配置文件`settings.json`: 基本上, 配置与默认不一致时, 则会被记录在这
+
 * 隐藏的文件: `Commonly Used->Files:Exclude`
+
+  > 疑问? 怎么插件隐藏的文件呢?
+
+## 疑问
+
+* 怎么主动打开Java Overview
