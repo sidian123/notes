@@ -262,3 +262,5 @@ javaw与java一致, 除了javaw运行程序时不会依附终端, 且执行后�
 * `Function` 处理参数并返回结果, 功能性的接口
 * `Predicate` 接收参数并返回`boolean`值, 预测性的接口
 * ...
+
+> 参考[java.util.function](https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/function/package-tree.html)
