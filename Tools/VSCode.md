@@ -20,10 +20,6 @@
 
 # 配置
 
-* 换行符: 搜索`end of line`
-* 全局配置文件`settings.json`: 基本上, 配置与默认不一致时, 则会被记录在这
-* 隐藏的文件: `Commonly Used->Files:Exclude`
-
 ## Java开发
 
 ### 环境搭建
@@ -67,3 +63,9 @@
   > 该插件本质是通过在WSL开启一个远程server, 而Win上的VSCode作为client, 来实现的.
   
   > 然而, 在WSL中打开Windows软件, 也会被该插件接管, 效率不太行, 故删除.
+
+## 其他
+
+* 换行符: 搜索`end of line`
+* 全局配置文件`settings.json`: 基本上, 配置与默认不一致时, 则会被记录在这
+* 隐藏的文件: `Commonly Used->Files:Exclude`
