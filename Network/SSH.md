@@ -95,7 +95,7 @@ ssh root@aliyun "umask 077; test -d .ssh || mkdir .ssh ; cat >> .ssh/authorized_
 ```bash
 ssh -L [bind_address:]port:host:hostport 	[user@]hostname [command]
 ```
-指定一个连接到ssh客户端`port`的连接被转发到`host`主机的`hostport`端口上。`bind_address`指定哪个主机被允许连接到本地端口上，空和`*`表示允许任何主机连接。
+指定一个连接到ssh客户端`port`端口的连接被转发到`host`主机的`hostport`端口上。`bind_address`指定哪个主机被允许连接到本地端口上，空和`*`表示允许任何主机连接。
 
 基本原理是，连接到ssh客户端`port`的连接被转发到ssh服务器上，ssh服务器再将连接转发到`host`主机的`hostport`端口上。这里ssh服务器是中转服务器。
 >端口转发也可以通过配置文件配置。
