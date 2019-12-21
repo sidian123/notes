@@ -313,7 +313,11 @@ XShell传输文件的一种方法如下：[xshell如何传输文件](https://jin
 
 # 其他
 
-## 防止连接自动断开
+## SSHFS
+
+## 坑
+
+### 防止连接自动断开
 
 当ssh客户端长时间未发送消息时, ssh服务端会自动断开连接. 可以在配置客户端或服务端, 让其在一定间隔内发送信息, 保持活性.
 
@@ -325,7 +329,7 @@ ServerAliveInterval 60
 
 > 单位秒, 上述中, 超过一分钟未发送信息时, SSH客户端会自动发送信息.
 
-## Bad Owner Or Permissions
+### Bad Owner Or Permissions
 
 配置文件的权限和使用有规定, 可修改如下
 
@@ -334,7 +338,7 @@ chown $USER ~/.ssh/config
 chmod 644 ~/.ssh/config
 ```
 
-## 密钥只能不生效
+### 密钥只能不生效
 
 公钥中含有生成该密钥的PC的host信息, 只能该PC使用
 
