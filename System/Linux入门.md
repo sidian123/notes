@@ -1756,6 +1756,39 @@ curl -F media=@test.jpg "https://api.weixin.qq.com/cgi-bin/media/upload?access_t
 ### Unix Domain Sockets
 socket有很多中，我们常用的是network socket，linux也提供了unix socket，它表现起来像TCP或UDP，但它只用作内部进程交流的途径，因此更高校。
 
+## 其他
+
+### 实时查看网速
+
+```shell
+sar -n DEV 1 100
+```
+
+命令解读
+
+* `sar`用于打印系统活动信息
+* `-n DEV`指定打印网络信息
+* `1`表示每秒统计一次
+* `100` 表示统计100次
+
+输出结束
+
+```log
+07:48:29 PM     IFACE   rxpck/s   txpck/s    rxkB/s    txkB/s   rxcmp/s   txcmp/s  rxmcst/s   %ifutil
+07:48:30 PM      eth0      2.00      2.00      0.12      1.21      0.00      0.00      0.00      0.00
+07:48:30 PM        lo      0.00      0.00      0.00      0.00      0.00      0.00      0.00      0.00
+```
+
+分别是
+
+* 网络接口名 IFACE
+* 每秒收包率 rxpck
+* 每秒发包率 txpck
+* 每秒接收字节 rxkB
+* 每秒发送字节 txKb
+* ...
+* 网络接口利用率 ifutil
+
 ## 参考
 [Introduction to FirewallD on CentOS](https://www.linode.com/docs/security/firewalls/introduction-to-firewalld-on-centos/)
 [CHAPTER 5. USING FIREWALLS](https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/7/html/security_guide/sec-using_firewalls#sec-Introduction_to_firewalld)

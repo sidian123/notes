@@ -196,7 +196,7 @@ gedit
 ## 吐槽
 即使压缩了数据传输，远程主机的GUI程序在本地显示也超慢。。特别是在我的阿里云服务器下行速度只有200KB左右下，，，我再也不想使用ssh x11这个功能了。。。
 
-# 五 命令与配置
+# 五 命令
 OpenSSH常用命令大致如下：
 * **ssh** - OpenSSH client
 * **sshd** - OpenSSH server
@@ -307,28 +307,36 @@ yum install  lrzsz -y
 
 XShell传输文件的一种方法如下：[xshell如何传输文件](https://jingyan.baidu.com/article/3a2f7c2e27e01b26afd611cc.html)
 
-## 略谈配置文件
+# 六 配置
+
+## 介绍
+
 * SSH服务端
 
-  配置文件会放入`/etc/ssh/`中，该文件夹中含有`sshd`服务的配置文件`sshd_config`和一些`host key`（见2.1小节）。
+  `/etc/ssh/`中存放`sshd`服务的配置文件, 如
 
-  每个用户的目录下的`.ssh/`文件夹下的`authorized_keys`文件含有该用户已认证的公钥信息，一行一条公钥（见2.2小节）。
+  * 配置文件`sshd_config`
+  * 一些*host key* ( 见2.1小节 )
+
+  > Linux服务器一般既有服务端, 也有客户端, 因此该目录下也会存在`ssh`客户端的配置文件
+
+  ----
+
+  `/var/log/auth.log`中记录着用户登录的日志
 
 * SSH客户端
 
-  每个用户在密码认证中获得的公钥存放于`$HOME/.ssh/known_hosts`中
+  `/etc/ssh/` 和 `$HOME/.ssh/`目录下, 存放`ssh`客户端的配置文件, 如含
 
-  自己生成的秘钥对默认放在`$HOME/.ssh/`目录下。
+  * 用户已认可的服务器的公钥信息的`authorized_keys`文件, 见2.2小节.
+  * 用户的密钥对
+  * 配置文件, 如`/etc/ssh/ssh_config`, `$HOME/.ssh/config`
 
-* `ssh`命令获取配置信息来源多处, 下面以优先级递减的顺序列出: 
+* `ssh`客户端配置优先级, 以递减的顺序给出:
 
     1.   command-line options，通过`-o`指定
     2.   user's configuration file ( `~/.ssh/config` )
     3.   system-wide configuration file ( `/etc/ssh/ssh_config` )
-    
-* 日志
-
-    `/var/log/auth.log`中记录着用户登录的日志
 
 # 其他
 
