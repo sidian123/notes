@@ -620,6 +620,9 @@ https://en.wikipedia.org/wiki/Job_control_(Unix)
 http://www.aboutlinux.info/2005/05/job-control-in-linux.html
 
 ### top
+
+> 进阶使用见6.2小节
+
 top类似ps，用来显示进程，但能够动态显示进程，并且默认按cpu利用率排序。
 
 一些单词描述：
