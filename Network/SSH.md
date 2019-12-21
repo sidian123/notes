@@ -268,7 +268,9 @@ scp file root@wx.sidian123.top:
 
 ### sftp
 
-sftp，暂且不会, 略。
+SSH File Transfer Protocol ( SFTP ) , 一个基于SSH隧道, 提供文件访问, 传输和管理的网络协议, 作为SSH2.0协议的扩展而存在.
+
+`sftp`命令，暂且不会, 略。
 
 ### rz&sz
 
@@ -314,6 +316,10 @@ XShell传输文件的一种方法如下：[xshell如何传输文件](https://jin
 # 其他
 
 ## SSHFS
+
+SSHFS ( SSH Filesystem) 是一个文件系统客户端, 只需服务器存在SSH Server, 即可挂载远程服务器的目录到本地主机上, 由SFTP实现.
+
+> 使用方案百度即可, 很简单.
 
 ## 坑
 
