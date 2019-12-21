@@ -2055,7 +2055,93 @@ Bash提供了很多种替换, 这里仅介绍最常用的
 
 ## 其他
 
+### 重定向
+
 * 脚本自己重定向自己, 见[How do I redirect the output of an entire shell script within the script itself?](https://stackoverflow.com/questions/314675/how-do-i-redirect-the-output-of-an-entire-shell-script-within-the-script-itself)
+
+### 转义(坑之所在)
+
+####  坑死人的规则
+
+凡是用到字符串的地方, 都要被转义一次
+
+#### 例子
+
+在WSL中, 若要跳转到Windows中某个目录中, 如
+
+```shell
+cd /mnt/c/Program\ Files/Typora/
+```
+
+这里有个`\` 用于转义空格, 然后整个路径被当作一个字符串
+
+----
+
+现在先定义变量后再使用
+
+```shell
+export typora_home="/mnt/c/Program Files/Typora"
+```
+
+然后跳转
+
+```shell
+cd $typora_home
+```
+
+将报错
+
+```shell
+-bash: cd: too many arguments
+```
+
+因为有了空格, 被当作多个参数
+
+----
+
+那么修改字符串
+
+```shell
+export typora_home="/mnt/c/Program\ Files/Typora"
+```
+
+然后跳转
+
+```shell
+cd $typora_home
+```
+
+将报同样错误. 
+
+来分析下
+
+1. 赋值变量时, 根据规则, 先判断转义, 但在双引号中不构成转义关系.
+
+   > `\"`才会构成转义关系
+
+2. `cd`时, 根据规则, 需判断转义; 然而, 上一步转义中, `\`不构成转义关系, 因此本身被转义了, 不再参与转义过程, 导致之后的空格被Bash解析为两个字符串, 因此跳转失败.
+
+-----
+
+那么解决办法: 修改字符串如下所示
+
+```shell
+export typora_home="/mnt/c/Program Files/Typora"
+```
+
+然后跳转
+
+```shell
+cd "$typora_home"
+```
+
+#### 总结
+
+* 任何用到字符串的地方都会被跳转
+* 未参与转义的`\`本身将被转义, 即下次不参与转义过程了
+* 最好使用`"`, 保证字符串不被分割
+
+* 字符串中还要注意**替换语法**
 
 # 参考
 [《How-Linux-Works-2nd-Edition》](https://github.com/KnowNo/How-Linux-Works-2nd-Edition)
