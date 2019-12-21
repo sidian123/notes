@@ -225,15 +225,29 @@ SSH也可以在远程Linux中运行命令, 略.
 >[-Y与-X](https://askubuntu.com/questions/35512/what-is-the-difference-between-ssh-y-trusted-x11-forwarding-and-ssh-x-u)
 
 ## ssh-keygen
-用于产生秘钥对，可以通过`-t`设置产生秘钥的算法，`-b`设置秘钥大小等等。
+用于产生秘钥对.
 
-```shell
-$ ssh-keygen
-$ ssh-keygen -t ecdsa
-```
+例子:
 
->参考:
->[SSH-KEYGEN - GENERATE A NEW SSH KEY](https://www.ssh.com/ssh/keygen/)
+* 产生默认的RSA密钥
+
+  ```shell
+  ssh-keygen
+  ```
+
+* 产生ECDSA密钥
+
+  ```shell
+  ssh-keygen -t ecdsa
+  ```
+
+* 对于所有类型**host key**(RSA, DSA, ECDSA和ED25519), 如果丢失, 则补上
+
+  ```shell
+  ssh-keygen -A
+  ```
+
+>参考:[SSH-KEYGEN - GENERATE A NEW SSH KEY](https://www.ssh.com/ssh/keygen/)
 
 ## ssh-copy-id
 生成好秘钥对后，需要将公钥放入ssh服务端的`$HOME/.ssh/authorized_keys`文件后才能使用秘钥认证，`ssh-copy-id`命令会自动帮你完成，它会在ssh客户端的`$HOME/.ssh/`下寻找最新修改的秘钥，也可以通过`-i`指定秘钥位置或使用`touch`修改文件的时间属性。
@@ -274,15 +288,15 @@ SSH File Transfer Protocol ( SFTP ) , 一个基于SSH隧道, 提供文件访问,
 
 ### rz&sz
 
-需使用XShell, 然后服务器中安装`lrzsz`
+需在支持某个协议 (忘了) 的工具中使用, 如XShell, 然后服务器中安装`lrzsz`
 
 ```shell
 yum install  lrzsz -y
 ```
 
-> 一般都有
+> 一般发行版都有
 
-使用
+使用:
 
 * 上传`rz`
 * 下载`sz <file>`
@@ -309,9 +323,12 @@ XShell传输文件的一种方法如下：[xshell如何传输文件](https://jin
 * `ssh`命令获取配置信息来源多处, 下面以优先级递减的顺序列出: 
 
     1.   command-line options，通过`-o`指定
-    2.   user's configuration file (~/.ssh/config)
-    3.   system-wide configuration file (/etc/ssh/ssh_config)
+    2.   user's configuration file ( `~/.ssh/config` )
+    3.   system-wide configuration file ( `/etc/ssh/ssh_config` )
     
+* 日志
+
+    `/var/log/auth.log`中记录着用户登录的日志
 
 # 其他
 
@@ -347,6 +364,18 @@ chmod 644 ~/.ssh/config
 ### 密钥只能不生效
 
 公钥中含有生成该密钥的PC的host信息, 只能该PC使用
+
+### 服务端不能加载host key
+
+```log
+Could not load host key: /etc/ssh/ssh_host_ed25519_key in /var/log/auth.log
+```
+
+用的云服务器, 可能镜像中本就没有密钥, SSHD不是首次安装, 也不会自己补上, 因此需手动补上:
+
+```shell
+ssh-keygen -A
+```
 
 # 参考
 
