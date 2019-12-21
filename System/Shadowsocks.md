@@ -106,6 +106,7 @@ ssserver -d stop
 ```
 ### json配置
 json对象每个字段含义如下：
+
 | Name          | Explanation                                |
 | :------------ | :----------------------------------------- |
 | server        | the address your server listens            |
