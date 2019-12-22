@@ -392,7 +392,7 @@ XShell传输文件的一种方法如下：[xshell如何传输文件](https://jin
 
 只需任何一方发送活性消息即可
 
-* 配置客户端, 修改`$HOME/.ssh.config`
+* 客户端配置, 修改`$HOME/.ssh.config`
 
     ```properties
     Host *
@@ -402,7 +402,7 @@ XShell传输文件的一种方法如下：[xshell如何传输文件](https://jin
 
     > 数值20比较好, 太小了当连接数目多时耗服务端带宽大, 太大了可能会被服务端关闭连接.
     
-* 配置服务端, 修改`/etc/ssh/sshd_config`
+* 服务端配置, 修改`/etc/ssh/sshd_config`
 
     ```shell
     ClientAliveInterval 60
