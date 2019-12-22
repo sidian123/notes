@@ -325,10 +325,20 @@ $ #或
 $ find dir -regex fullPath -print
 ```
 
-* `dir`可以含有通配符；
-* `-name` 匹配文件的base name（即没有leading directories）, 可以使用通配符；
-* `-regex` 匹配文件的全路径名, 可以使用正则表达式
-* `-print`打印找到的文件的全名（full file name）。
+* 查找的目录
+
+  `dir`可以含有通配符；
+
+* 查找的文件
+
+  * `-name <pattern>` 匹配文件的base name（即没有leading directories）, 可以使用通配符；
+  * `-iname <pattern>` 同`-name`, 但大小写不敏感
+  * `-regex <pattern>` 匹配文件的全路径名, 可以使用正则表达式
+  * `-iregex <pattern>` 同`-regex`, 但大小写不敏感
+
+* 对匹配项的动作
+
+  * `-print`打印找到的文件的全名（full file name）。
 
 ### locate
 在系统内建的数据库中查找文件，因此速度更快。该数据库会周期性的更新，如果一个文件在更新前添加进来，locate则不能找到该文件。
