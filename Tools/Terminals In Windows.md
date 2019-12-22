@@ -67,13 +67,28 @@
 
 * 配置
 
-  在Cmder中, 打开一个tab, 就是打开一个任务
+  在Cmder中, 打开一个tab, 就是打开一个任务.
 
+  现在需修改打开任务时的默认工作目录
   
+  ![image-20191222231011254](.Terminals%20In%20Windows/image-20191222231011254.png)
+  
+  > 通过`Startup dir...`设置好家目录后, 将文本框中的地址替换成`%userprofile%`, 防止配置特定于某一台电脑
+  
+  设置默认启动任务
+  
+  ![image-20191222231150829](.Terminals%20In%20Windows/image-20191222231150829.png)
+  
+  > 若没有自己Shell的任务, 请手动配置一个任务 ( 这操作...巨难 )
+  
+  接下来配置自己想要的快捷键
+  
+  ![image-20191222231301398](.Terminals%20In%20Windows/image-20191222231301398.png)
 
-
-
-> 参考:[cmder](https://cmder.net/)
+> 参考
+>
+> * [cmder](https://cmder.net/) 官网
+> * [Windows上的程序员神器——Cmder](https://zhuanlan.zhihu.com/p/28400466)
 
   # Windows Terminal
 
