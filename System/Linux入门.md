@@ -1789,6 +1789,14 @@ sar -n DEV 1 100
 * ...
 * 网络接口利用率 ifutil
 
+### 修改主机名
+
+```shell
+hostname hk.sidian.live
+```
+
+> 直接修改`/etc/hostname`文件无效
+
 ## 参考
 [Introduction to FirewallD on CentOS](https://www.linode.com/docs/security/firewalls/introduction-to-firewalld-on-centos/)
 [CHAPTER 5. USING FIREWALLS](https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/7/html/security_guide/sec-using_firewalls#sec-Introduction_to_firewalld)
