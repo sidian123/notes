@@ -65,7 +65,11 @@
 
     用到的三方库, 如`Clink`, `ConEmu`, `Git for Windows`等
 
+* 配置
 
+  在Cmder中, 打开一个tab, 就是打开一个任务
+
+  
 
 
 

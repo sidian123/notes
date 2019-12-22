@@ -453,6 +453,24 @@ SSHFS ( SSH Filesystem) 是一个文件系统客户端, 只需服务器存在SSH
    rm /etc/ssh/ssh_host_*
    dpkg-reconfigure openssh-server
    ```
+   
+4. 权限不够
+
+   ```log
+   Connection closed by xxx [preauth]
+   ```
+
+   可尝试修改`/etc/ssh/sshd_config`, 不知道有没有用
+
+   ```properties
+   PubkeyAuthentication yes
+   ```
+
+   然后重启
+
+   ```shell
+   systemctl restart sshd
+   ```
 
 ### Bad Owner Or Permissions
 
