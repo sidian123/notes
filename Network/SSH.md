@@ -320,7 +320,7 @@ yum install  lrzsz -y
 
 ### 其他
 
-还可以使用流的重定向来在两台主机上传输文件，并且windows也支持流的重定向。
+还可以使用流的重定向来在两台主机上传输文件，并且Windows也支持流的重定向。
 
 XShell传输文件的一种方法如下：[xshell如何传输文件](https://jingyan.baidu.com/article/3a2f7c2e27e01b26afd611cc.html)
 
@@ -337,10 +337,6 @@ XShell传输文件的一种方法如下：[xshell如何传输文件](https://jin
 
   > Linux服务器一般既有服务端, 也有客户端, 因此该目录下也会存在`ssh`客户端的配置文件
 
-  ----
-
-  `/var/log/auth.log`中记录着用户登录的日志
-
 * SSH客户端
 
   `/etc/ssh/` 和 `$HOME/.ssh/`目录下, 存放`ssh`客户端的配置文件, 如含
@@ -355,7 +351,7 @@ XShell传输文件的一种方法如下：[xshell如何传输文件](https://jin
     2.   user's configuration file ( `~/.ssh/config` )
     3.   system-wide configuration file ( `/etc/ssh/ssh_config` )
 
-## 查看
+## 查看配置
 
 * 查看默认值
 
@@ -420,6 +416,14 @@ XShell传输文件的一种方法如下：[xshell如何传输文件](https://jin
 按理说仅修改客户端就行了, 但我这里总是自动断开, 只能两端都设置了.
 
 # 其他
+
+## 问题查找
+
+手段如下:
+
+* `/var/log/auth.log`中记录着用户登录的日志
+* `systemctl status sshd` 查看部分sshd运行日志
+* `ssh -vvv  user@host` 链接时查看Debug信息
 
 ## SSHFS
 
