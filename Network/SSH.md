@@ -338,6 +338,48 @@ XShell传输文件的一种方法如下：[xshell如何传输文件](https://jin
     2.   user's configuration file ( `~/.ssh/config` )
     3.   system-wide configuration file ( `/etc/ssh/ssh_config` )
 
+## 查看
+
+* 查看默认值
+
+  `man ssh_config`, `man sshd_config`
+
+* 查看系统配置
+
+  `/etc/ssh/ssh_config`, `/etc/ssh/sshd_config` 
+
+## 配置
+
+* 客户端配置可进行`Host`分组, 成功匹配的使用该组配置, `*`匹配所有host
+
+  > 貌似不加入`Host`分组也行?
+
+### 防止连接被重置
+
+当ssh客户端长时间未发送消息时, ssh服务端会自动断开连接. 可让客户端或服务端在一定时间间隔内发送消息, 保持活性.
+
+这里先介绍相关配置和默认值
+
+* 客户端
+
+  * `ServerAliveInterval` 未收到Server数据后多少秒发送*活性消息*. 默认0, 即不发送
+
+  * `ServerAliveCountMax` 发送*活性消息*时, 最多重试几次, 默认3次.
+
+* 服务端
+
+  	* `ClientAliveInterval` 未收到Server数据后多少秒发送*活性消息*. 默认0, 即不发送
+  	* `ClientAliveCountMax` 发送*活性消息*时, 最多重试几次, 默认3次.
+
+只需任何一方发送活性消息即可, 这里配置客户端, 修改`$HOME/.ssh.config`文件:
+
+```shell
+Host *
+        ServerAliveInterval 20
+```
+
+> 数值20比较好, 太小了当连接数目多时耗服务端带宽大, 太大了可能会被服务端关闭连接.
+
 # 其他
 
 ## SSHFS
@@ -347,18 +389,6 @@ SSHFS ( SSH Filesystem) 是一个文件系统客户端, 只需服务器存在SSH
 > 使用方案百度即可, 很简单.
 
 ## 坑
-
-### 防止连接自动断开
-
-当ssh客户端长时间未发送消息时, ssh服务端会自动断开连接. 可以在配置客户端或服务端, 让其在一定间隔内发送信息, 保持活性.
-
-这里使用SSH客户端配置的方案, 打开`$HOME/.ssh/config`文件, 添加
-
-```
-ServerAliveInterval 60
-```
-
-> 单位秒, 上述中, 超过一分钟未发送信息时, SSH客户端会自动发送信息.
 
 ### Bad Owner Or Permissions
 
