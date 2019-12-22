@@ -390,15 +390,34 @@ XShell传输文件的一种方法如下：[xshell如何传输文件](https://jin
 	* `ClientAliveInterval` 未收到Server数据后多少秒发送*活性消息*. 默认0, 即不发送
 	* `ClientAliveCountMax` 发送*活性消息*时, 最多重试几次, 默认3次. 若都失败时, 将主动断开连接
 
-只需任何一方发送活性消息即可, 这里配置客户端, 修改`$HOME/.ssh.config`文件:
+只需任何一方发送活性消息即可
 
-```properties
-Host *
-        ServerAliveInterval 20
-        ServerAliveCountMax 10
-```
+* 配置客户端, 修改`$HOME/.ssh.config`
 
-> 数值20比较好, 太小了当连接数目多时耗服务端带宽大, 太大了可能会被服务端关闭连接.
+    ```properties
+    Host *
+            ServerAliveInterval 20
+            ServerAliveCountMax 10
+    ```
+
+    > 数值20比较好, 太小了当连接数目多时耗服务端带宽大, 太大了可能会被服务端关闭连接.
+    
+* 配置服务端, 修改`/etc/ssh/sshd_config`
+
+    ```shell
+    ClientAliveInterval 60
+    ClientAliveCountMax 10
+    ```
+
+    > 里面有现成的注释, 去掉并修改值即可
+
+    然后重启服务
+
+    ```shell
+    systemctl restart sshd
+    ```
+
+按理说仅修改客户端就行了, 但我这里总是自动断开, 只能两端都设置了.
 
 # 其他
 
