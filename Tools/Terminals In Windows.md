@@ -32,9 +32,38 @@
 
   基于ConEmu, 但也提供更多的功能, 如
 
-  * 为cmd.exe提供了更好的Bash风格的代码补全和提示功能, 见[Clink](https://mridgers.github.io/clink/)
-  * 可移植性高, 可直接装入U盘中使用.
-  * 内置几乎所有常用Unix命令(包括git), 并且在`PATH`下可用
+  1. 为cmd.exe提供了更好的Bash风格的代码补全和提示功能, 见[Clink](https://mridgers.github.io/clink/)
+  
+  2. 可移植性高, 可直接装入U盘中使用.
+  
+  3. 内置几乎所有常用Unix命令(包括git), 并且在`PATH`下可用, cmd下可用
+  
+     > 需要下载完整版的Cmder
+
+* 我的理解
+
+  我认为, Cmder起到了组合和配置的作用, 将多个实用工具组合了起来. 
+
+  * 终端由ConEmu提供; 
+  * Clink提供第一个功能; 
+  * Cmder本就小, 因此有了第二个功能; 
+  * 第三个功能由Git Bash提供, Git Bash提供了大量exe格式的Unix命令.
+
+  总之, 已经帮我们配置到很好用的程度了!
+
+* 目录结构
+
+  * `bin/`
+
+    该目录下的文件, 在Cmder运行时会被注入到`PATH`下.
+
+  * `config/`
+
+    Cmder所有配置文件
+
+  * `vendor/`
+
+    用到的三方库, 如`Clink`, `ConEmu`, `Git for Windows`等
 
 
 

@@ -208,6 +208,7 @@ PowerShell的命令拥有自己的一套命令规则, 同时也提供了匿名, 
 * 常用环境变量
 
   * `userprofile` 用户家目录
+  * `windir` Windows家目录, 如`C:\WINDOWS`
 
 * 语法
 
