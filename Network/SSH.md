@@ -460,17 +460,31 @@ ssh-keygen -A
 
 # 参考
 
-[SSH COMMAND](https://www.ssh.com/ssh/command/#sec-Configuring-port-forwarding)
-[秘钥与数字证书][1]
-[SSH原理与运用（一）：远程登录](http://www.ruanyifeng.com/blog/2011/12/ssh_remote_login.html)
-[SSH原理与运用（二）：远程操作与端口转发](http://www.ruanyifeng.com/blog/2011/12/ssh_port_forwarding.html)
-[SSH PORT FORWARDING EXAMPLE](https://www.ssh.com/ssh/tunneling/example)
-[Create a SOCKS proxy on a Linux server with SSH to bypass content filters](https://ma.ttias.be/socks-proxy-linux-ssh-bypass-content-filters/)
-[Secure Shell](https://en.wikipedia.org/wiki/Secure_Shell)[HOST KEY](https://www.ssh.com/ssh/host-key)
-[How do I work with GUI tools over a remote server?](https://unix.stackexchange.com/questions/9870/how-do-i-work-with-gui-tools-over-a-remote-server)
-[How to forward X over SSH to run graphics applications remotely?](https://unix.stackexchange.com/questions/12755/how-to-forward-x-over-ssh-to-run-graphics-applications-remotely)
-[How can I specify a display?][5]
-[OpenSSH](https://www.openssh.com/)
+* [SSH COMMAND](https://www.ssh.com/ssh/command/#sec-Configuring-port-forwarding)
+
+* [秘钥与数字证书][1]
+
+* [SSH原理与运用（一）：远程登录](http://www.ruanyifeng.com/blog/2011/12/ssh_remote_login.html)
+
+* [SSH原理与运用（二）：远程操作与端口转发](http://www.ruanyifeng.com/blog/2011/12/ssh_port_forwarding.html)
+
+* [SSH PORT FORWARDING EXAMPLE](https://www.ssh.com/ssh/tunneling/example)
+
+* [Create a SOCKS proxy on a Linux server with SSH to bypass content filters](https://ma.ttias.be/socks-proxy-linux-ssh-bypass-content-filters/)
+
+* [Secure Shell](https://en.wikipedia.org/wiki/Secure_Shell)[HOST KEY](https://www.ssh.com/ssh/host-key)
+
+* [How do I work with GUI tools over a remote server?](https://unix.stackexchange.com/questions/9870/how-do-i-work-with-gui-tools-over-a-remote-server)
+
+* [How to forward X over SSH to run graphics applications remotely?](https://unix.stackexchange.com/questions/12755/how-to-forward-x-over-ssh-to-run-graphics-applications-remotely)
+
+* [How can I specify a display?][5]
+
+* [OpenSSH](https://www.openssh.com/)
+
+* [所有SSH协议实现的对比](https://ssh-comparison.quendi.de/comparison/cipher.html)
+
+  > 感觉OpenSSH动态代理有Bug, 时不时就断, 哎
 
 [1]:https://blog.csdn.net/jdbdh/article/details/87376221
 [2]:http://en.wikipedia.org/wiki/Man-in-the-middle_attack
