@@ -1,8 +1,17 @@
+# 引言
+
+莫要把终端和Shell混淆了
+
+* 终端是Shell的壳, 提供用户与Shell的交互功能; 
+* Shell是操作系统内核API的壳, 提供用户操作系统的功能.
+
+> 有时候, 大家说到终端时, 其实意思中也暗指其Shell.
+
 # ConEmu
 
-* 介绍: 一款好用的Windows终端, 特点: 小, 美观, 便携, 多Tab.
+* 介绍
 
-  > 个人感觉比Cmder好用
+  一款好用的Windows终端, 特点: 小, 美观, 便携, 多Tab.
 
 * 快捷键
 
@@ -17,9 +26,27 @@
 
 > 参考[ConEmu](https://conemu.github.io/)
 
+# Cmder
+
+* 介绍
+
+  基于ConEmu, 但也提供更多的功能, 如
+
+  * 为cmd.exe提供了更好的Bash风格的代码补全和提示功能, 见[Clink](https://mridgers.github.io/clink/)
+  * 可移植性高, 可直接装入U盘中使用.
+  * 内置几乎所有常用Unix命令(包括git), 并且在`PATH`下可用
+
+
+
+
+
+> 参考:[cmder](https://cmder.net/)
+
   # Windows Terminal
 
-微软出产的终端, 目前为预览版, 功能很简陋. 
+* 介绍
+
+  微软出产的终端, 目前为预览版, 功能很简陋, 但实用, 简约, 大气, 美观等.
 
 * 默认终端
 
@@ -49,11 +76,5 @@
           { "command": "paste", "keys": ["ctrl+shift+v"] }
       ]
   ```
-
-----
-
-当前记录时, 遇到的bug有:
-
-* 不能输入中文...
 
 > 参考[Editing Windows Terminal JSON Settings](https://github.com/microsoft/terminal/blob/master/doc/user-docs/UsingJsonSettings.md)

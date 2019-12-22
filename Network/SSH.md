@@ -433,6 +433,27 @@ SSHFS ( SSH Filesystem) 是一个文件系统客户端, 只需服务器存在SSH
 
 ## 坑
 
+### 连接断开
+
+莫名奇妙连接断开的原因有
+
+1. 网络不稳定
+
+   大概SSH连接经常断开的原因就在这里吧, 如果我使用XShell, 基本不会出现这种问题, 所以不同SSH客户端的稳定性都不一样. OpenSSH不咋行...
+
+2. 连接被重置了
+
+   解决方案见6.3.1小节
+
+3. host key损坏
+
+   利用如下方式重置
+
+   ```shell
+   rm /etc/ssh/ssh_host_*
+   dpkg-reconfigure openssh-server
+   ```
+
 ### Bad Owner Or Permissions
 
 配置文件的权限和使用有规定, 可修改如下
@@ -483,8 +504,6 @@ ssh-keygen -A
 * [OpenSSH](https://www.openssh.com/)
 
 * [所有SSH协议实现的对比](https://ssh-comparison.quendi.de/comparison/cipher.html)
-
-  > 感觉OpenSSH动态代理有Bug, 时不时就断, 哎
 
 [1]:https://blog.csdn.net/jdbdh/article/details/87376221
 [2]:http://en.wikipedia.org/wiki/Man-in-the-middle_attack
