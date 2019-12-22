@@ -1,8 +1,22 @@
 # 系统日志实现
 
-* `syslog` 最初的系统日志项目, 定义了最基础的日志协议`syslog`
-* `rsyslog` 兼容`syslog`协议, 使用类似`syslog`的配置语法, 并提供新的特性
-* `syslog-ng` 兼容`syslog`协议, 使用全新的配置语法, 并提供新的特性
+* `syslog` 
+
+  最初的系统日志项目, 定义了最基础的日志协议`syslog`
+
+  配置位于`/etc/syslog.conf`
+
+* `rsyslog` 
+
+  兼容`syslog`协议, 使用类似`syslog`的配置语法, 并提供新的特性
+
+  配置位于`/etc/rsyslog.conf`
+
+  > 听说也使用`syslog`的配置? 
+
+* `syslog-ng` 
+
+  兼容`syslog`协议, 使用全新的配置语法, 并提供新的特性
 
 # 使用
 
