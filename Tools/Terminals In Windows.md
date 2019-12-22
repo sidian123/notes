@@ -124,5 +124,9 @@
           { "command": "paste", "keys": ["ctrl+shift+v"] }
       ]
   ```
+  
+* 缺点
+
+  所需Windows版本太高了... 我公司的电脑用不了.
 
 > 参考[Editing Windows Terminal JSON Settings](https://github.com/microsoft/terminal/blob/master/doc/user-docs/UsingJsonSettings.md)
