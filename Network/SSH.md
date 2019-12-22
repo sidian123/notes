@@ -367,8 +367,10 @@ XShell传输文件的一种方法如下：[xshell如何传输文件](https://jin
 
 ## 配置
 
-* 客户端配置可进行`Host`分组, 成功匹配的使用该组配置, `*`匹配所有host
+* 客户端配置可进行`Host`分组, `Host`成功匹配且最先找到的属性将被使用
 
+  >  `*`匹配所有host
+  
   > 貌似不加入`Host`分组也行?
 
 ### 防止连接被重置
@@ -381,18 +383,19 @@ XShell传输文件的一种方法如下：[xshell如何传输文件](https://jin
 
   * `ServerAliveInterval` 未收到Server数据后多少秒发送*活性消息*. 默认0, 即不发送
 
-  * `ServerAliveCountMax` 发送*活性消息*时, 最多重试几次, 默认3次.
+  * `ServerAliveCountMax` 发送*活性消息*时, 最多重试几次, 默认3次. 若都失败时, 将主动断开连接
 
 * 服务端
 
 	* `ClientAliveInterval` 未收到Server数据后多少秒发送*活性消息*. 默认0, 即不发送
-	* `ClientAliveCountMax` 发送*活性消息*时, 最多重试几次, 默认3次.
+	* `ClientAliveCountMax` 发送*活性消息*时, 最多重试几次, 默认3次. 若都失败时, 将主动断开连接
 
 只需任何一方发送活性消息即可, 这里配置客户端, 修改`$HOME/.ssh.config`文件:
 
 ```properties
 Host *
         ServerAliveInterval 20
+        ServerAliveCountMax 10
 ```
 
 > 数值20比较好, 太小了当连接数目多时耗服务端带宽大, 太大了可能会被服务端关闭连接.
