@@ -368,8 +368,8 @@ XShell传输文件的一种方法如下：[xshell如何传输文件](https://jin
 
 * 服务端
 
-  	* `ClientAliveInterval` 未收到Server数据后多少秒发送*活性消息*. 默认0, 即不发送
-  	* `ClientAliveCountMax` 发送*活性消息*时, 最多重试几次, 默认3次.
+	* `ClientAliveInterval` 未收到Server数据后多少秒发送*活性消息*. 默认0, 即不发送
+	* `ClientAliveCountMax` 发送*活性消息*时, 最多重试几次, 默认3次.
 
 只需任何一方发送活性消息即可, 这里配置客户端, 修改`$HOME/.ssh.config`文件:
 
