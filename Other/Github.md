@@ -109,8 +109,20 @@ include:
 ## Webhooks
 
 * 当仓库中发送事件时, Github将发送Post请求, 携带payload 负载到配置的URL中. 
+
 * 每种事件携带的负载格式都不同
+
 * 请求头字段中包含额外信息, 如`X-GitHub-Event`, 表明事件类型
+
+* 关于URL调用失败的问题
+
+  查看Github日志, 大致报无法传输负载, 服务超时的问题.
+
+  面对超时问题, 我在代码中对请求进行了异步处理, 减少了URL调用失败率, 但是仍还是出现调用失败的问题. 
+
+  这不可避免... 因为Github服务器在国外, 延迟较高, 极有可能超时.
+
+  解决方案? 忍一忍!
 
 > 参考[Webhooks](https://developer.github.com/webhooks/)
 
