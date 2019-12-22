@@ -320,9 +320,9 @@ Write sorted concatenation of all FILE(s) to standard output.
 ### find
 在以给定目录为根的目录树中，搜索文件。该命令比较复杂，先给出最简形式，以后补充：
 ```bash
-$ find dir -name fileBaseName -print
+$ find dir -name fileBaseName
 $ #或
-$ find dir -regex fullPath -print
+$ find dir -regex fullPath
 ```
 
 * 查找的目录
@@ -338,7 +338,7 @@ $ find dir -regex fullPath -print
 
 * 对匹配项的动作
 
-  * `-print`打印找到的文件的全名（full file name）。
+  * `-print` (默认) 打印找到的文件的全名（full file name）。
 
 ### locate
 在系统内建的数据库中查找文件，因此速度更快。该数据库会周期性的更新，如果一个文件在更新前添加进来，locate则不能找到该文件。
