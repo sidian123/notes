@@ -212,17 +212,34 @@ OpenSSH常用命令大致如下：
 
 不会的命令查看帮助手册就行了，这里稍微介绍下。
 ## ssh
-OpenSSH最常用的命令，登录、转发都通过该命令进行。ssh可以登录，可以转发，可以设置压缩数据（`-C`），可以覆盖配置文件的设置（`-o`）等等。
+OpenSSH最常用的命令，登录、转发都通过该命令进行。
 
-SSH也可以在远程Linux中运行命令, 略.
+功能:
 
-其中，在使用ssh进行x11转发时，设置了选项`-X`，其实也可以设置`-Y`，那两者有何不同？简单的来说，使用`-X`，你会被当做不被信任的客户，一些设计安全的命令将被拒绝执行。而`-Y`作为受信任的客户，权限更大。
+* 登录
 
-但是由于远程主机中的其他client GUI程序可以嗅探到你的x11数据，导致你的信息可能被主机内其他用户窃取。
+  * `-C` 设置压缩数据
+  * `-o` 覆盖配置文件的设置
+  * ...
+
+* 转发
+
+  > 其中，在使用ssh进行x11转发时，设置了选项`-X`，其实也可以设置`-Y`，那两者有何不同？简单的来说，使用`-X`，你会被当做不被信任的客户，一些设计安全的命令将被拒绝执行。而`-Y`作为受信任的客户，权限更大。但是由于远程主机中的其他client GUI程序可以嗅探到你的x11数据，导致你的信息可能被主机内其他用户窃取。
+
+* 远程运行命令
+
+* 调试
+
+  `-v` 进入详细模式, 将打印调试信息. 可以使用多个`-v`选项, 调试信息将更详细, 最多3个, 如
+
+  ```shell
+  ssh -vvv root@sidian.live
+  ```
 
 >参考：
->[SSH COMMAND](https://www.ssh.com/ssh/command/#sec-Configuring-port-forwarding)
->[-Y与-X](https://askubuntu.com/questions/35512/what-is-the-difference-between-ssh-y-trusted-x11-forwarding-and-ssh-x-u)
+>
+>* [SSH COMMAND](https://www.ssh.com/ssh/command/#sec-Configuring-port-forwarding)
+>* [-Y与-X](https://askubuntu.com/questions/35512/what-is-the-difference-between-ssh-y-trusted-x11-forwarding-and-ssh-x-u)
 
 ## ssh-keygen
 用于产生秘钥对.
