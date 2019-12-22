@@ -442,7 +442,7 @@ chown $USER ~/.ssh/config
 chmod 644 ~/.ssh/config
 ```
 
-### 密钥只能不生效
+### 密钥不生效
 
 公钥中含有生成该密钥的PC的host信息, 只能该PC使用
 
