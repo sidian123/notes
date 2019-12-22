@@ -373,7 +373,7 @@ XShell传输文件的一种方法如下：[xshell如何传输文件](https://jin
 
 只需任何一方发送活性消息即可, 这里配置客户端, 修改`$HOME/.ssh.config`文件:
 
-```shell
+```properties
 Host *
         ServerAliveInterval 20
 ```
