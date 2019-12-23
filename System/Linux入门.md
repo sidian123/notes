@@ -1809,6 +1809,24 @@ hostname hk.sidian.live
 
 > 直接修改`/etc/hostname`文件无效
 
+### nc & telnet
+
+`nc`用于简单的创建一个sockets并监听, 如
+
+```shell
+nc -l localhost 8080
+```
+
+> 监听本地8080端口
+
+`telnet`简单的与监听端口的进程交互
+
+```shell
+telnet localhost 8080
+```
+
+两者都可以在里面发送消息, 只是`nc`是监听者, `telnet`是请求者罢了.
+
 ## 参考
 [Introduction to FirewallD on CentOS](https://www.linode.com/docs/security/firewalls/introduction-to-firewalld-on-centos/)
 [CHAPTER 5. USING FIREWALLS](https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/7/html/security_guide/sec-using_firewalls#sec-Introduction_to_firewalld)
