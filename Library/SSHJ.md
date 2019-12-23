@@ -1,4 +1,4 @@
-# 介绍
+# SSHJ
 
 * 一个实现SSHv2协议的纯Java库
 
@@ -18,6 +18,19 @@
   </dependency>
   ```
 
+
+# JSch
+
+* Maven依赖
+
+  ```xml
+  <dependency>
+      <groupId>com.jcraft</groupId>
+      <artifactId>jsch</artifactId>
+      <version>0.1.55</version>
+  </dependency>
+  ```
+
   
 
 
@@ -27,6 +40,7 @@
 # 参考
 
 - [SSHJ](https://github.com/hierynomus/sshj)
+- [Jsch Javadoc](http://epaul.github.io/jsch-documentation/javadoc/)
 
 * [所有SSH协议实现的对比](https://ssh-comparison.quendi.de/comparison/cipher.html)
 
