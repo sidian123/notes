@@ -301,11 +301,42 @@ scp file root@wx.sidian123.top:
 
 SSH File Transfer Protocol ( SFTP ) , 一个基于SSH隧道, 提供文件访问, 传输和管理的网络协议, 作为SSH2.0协议的扩展而存在.
 
-`sftp`命令，暂且不会, 略。
+sftp提供交互式和非交互式的使用方式
+
+```shell
+sftp user@host
+sftp -b batchfile user@host
+```
+
+在交互模式下, 可使用的命令
+
+> 下面的命令中, 有`l`前缀的命令作用于本地主机, 否则远程主机
+
+* `?` 获取帮助
+
+  **很重要**!!
+
+* `ls`, `lls` 打印当前工作目录结构
+
+* `cd`, `lcd` 改变工作目录
+
+* `pwd`, `lpwd` 打印当前工作目录的路径
+
+* `mkdir`, `lmkdir` 创建目录
+
+* ....
+
+* `put local-path [remote-path]` 上传文件
+* `get remote-path [local-path]` 下载文件
+* `exit`, `bye` 退出
+
+功能命令不止这些, 具体请查看`man sftp`
+
+> 命令大小写不敏感; 特殊字符, 如空格,通配符, 需放入引号或`\`中转义.
 
 ### rz&sz
 
-需在支持某个协议 (忘了) 的工具中使用, 如XShell, 然后服务器中安装`lrzsz`
+需在支持ZMODEM协议的工具中使用, 如XShell, 然后服务器中安装`lrzsz`
 
 ```shell
 yum install  lrzsz -y
