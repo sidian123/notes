@@ -134,7 +134,7 @@ ssh -D [bind_address:]port [user@]hostname [command]
 
 >shadowsocks也是基于socks5代理的。如果服务器位于国外，岂不是能翻墙了？是的。
 
-## 实战之优化线路
+### 实战之优化线路
 
 * 问题描述
 
@@ -159,7 +159,7 @@ ssh -D [bind_address:]port [user@]hostname [command]
      ```shell
      ssh -D 1024 root@hk.sidian.live
      ```
-   
+  
      > 注意该命令在上海服务器中执行
 
   接着, 本地就可以将`1025`作为代理端口使用啦
@@ -174,7 +174,7 @@ ssh -D [bind_address:]port [user@]hostname [command]
   >
   > `-N`表示不运行命令, `-f`表示后台运行
 
-## 如何安全
+### 如何安全
 上面只是讲了ssh转发的原理和过程，那安全如何保证？其实只有ssh客户端到ssh服务器之间的连接时安全的、加密过的，其他的不一定了。。
 
 举个例子，在本地转发中，ssh服务器作为中转服务器转发数据，ssh客户端（如手机）可以安全的在公共wifi的环境下发送数据，避免被人窃取。那ssh服务器到目标服务器（如web服务器，这里没有使用https协议的情况下）的数据传送就不一定安全了。。可以考虑将ssh服务放入目标服务器中，此时ssh服务器只需转发给本机即可。
