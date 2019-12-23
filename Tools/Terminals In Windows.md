@@ -85,6 +85,10 @@
   
   ![image-20191222231301398](.Terminals%20In%20Windows/image-20191222231301398.png)
 
+* 使用
+
+  关于复制, `Ctrl+V`粘贴, 格式可能会错误, 应该使用右键粘贴
+
 > 参考
 >
 > * [cmder](https://cmder.net/) 官网
