@@ -636,8 +636,6 @@ public ModelAndView showRoleJsonInfo(Long id,String roleName,String note){
 }
 ```
 
-
-
 如果传递的参数是对象，那么url不能够有效的以字符串传递参数了，那么要使用到会话：
 
 ```java
@@ -655,9 +653,18 @@ public ModelAndView showRoleJsonInfo(Role role){
 }
 ```
 
+> 关于RedirectAttribute，请参考4.2的表格
 
+--------
 
-关于RedirectAttribute，请参考4.2的表格
+补充
+
+```java
+HttpHeaders headers = new HttpHeaders();
+headers.add("Location", "http://stackoverflow.com");
+
+return new ResponseEntity<byte []>(null,headers,HttpStatus.FOUND);
+```
 
 ## 数据模型
 
