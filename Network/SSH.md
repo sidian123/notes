@@ -471,6 +471,10 @@ SSHFS ( SSH Filesystem) 是一个文件系统客户端, 只需服务器存在SSH
    ```shell
    systemctl restart sshd
    ```
+   
+5. IP冲突
+
+   我见网络上很多人的问题都是这个造成的, 固定IP或换一个就好了.
 
 ### Bad Owner Or Permissions
 
