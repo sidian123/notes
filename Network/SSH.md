@@ -369,11 +369,33 @@ XShell传输文件的一种方法如下：[xshell如何传输文件](https://jin
   
   > 貌似不加入`Host`分组也行?
 
-### 防止连接被重置
+### 防止连接断开
 
-当ssh客户端长时间未发送消息时, ssh服务端会自动断开连接. 可让客户端或服务端在一定时间间隔内发送消息, 保持活性.
+防止连接断开, 需要发送心跳包, SSH提供了以下两种方案, 默认开启的TCP的方案.
 
-这里先介绍相关配置和默认值
+#### TCP的Keep Alive方案
+
+* 传输层保持连接活动状态的方案. 
+
+* 当一定时间过去后, 系统将发送TCP keepalive包给另一端, 另一端再发送响应. 如果连续重试之后仍未响应, 等待方将断开连接. 
+
+* 超时时间由系统设定, 一般为两小时.
+
+* 目的
+
+  * 检查断开的连接, 避免资源的浪费
+
+  * 保证连接再NAT中的活性
+
+    > 我认为该方案无法保持NAT的活性. 因为TCPKeppAlive超时发送时间很长, 而NAT几分钟后为收到包就将之视为失效的连接, 从而丢弃
+
+* 由`TCPKeepAlive`为`true`, 即启动该方案
+
+#### SSH的Keep Alive方案
+
+客户端和服务端都可以发送, 一般仅开启客户端即可.
+
+相关配置如下
 
 * 客户端
 
@@ -386,34 +408,62 @@ XShell传输文件的一种方法如下：[xshell如何传输文件](https://jin
 	* `ClientAliveInterval` 未收到Server数据后多少秒发送*活性消息*. 默认0, 即不发送
 	* `ClientAliveCountMax` 发送*活性消息*时, 最多重试几次, 默认3次. 若都失败时, 将主动断开连接
 
-只需任何一方发送活性消息即可
+#### 挑战
 
-* 客户端配置, 修改`$HOME/.ssh.config`
+> 别人的情况我不知道, 但我的问题如下, 很复杂的
 
-    ```properties
-    Host *
-            ServerAliveInterval 20
-            ServerAliveCountMax 10
-    ```
+**服务端超时发送的TCPKeepAlive包被NAT过滤掉了**, 导致服务端认为客户端已经断开了, 于是关闭了连接.
 
-    > 数值20比较好, 太小了当连接数目多时耗服务端带宽大, 太大了可能会被服务端关闭连接.
-    
-* 服务端配置, 修改`/etc/ssh/sshd_config`
+即使我开启了SSH的Keep Alive方案, 也会出现断开的情况, 因为被TCPKeepAlive方案影响了.
 
-    ```shell
-    ClientAliveInterval 60
-    ClientAliveCountMax 10
-    ```
+> * 为啥NAT会过滤TCPKeepAlive呢? 
+>
+>   估计该功能是TCP可选的功能吧, 并且该方案会影响带宽, 所以禁止了. 
+>
+> * 为啥应用层的Keep Alive方案不会被禁止呢? 
+>
+>   NAT工作在传输层, 没那能力处理应用层的数据.
+>
+> * 为啥仅拦服务端的? 
+> * 可能处于外网的服务端会得到NAT更多的"关爱"吧...
 
-    > 里面有现成的注释, 去掉并修改值即可
+#### 解决方案
 
-    然后重启服务
+* 服务端
 
-    ```shell
-    systemctl restart sshd
-    ```
+  关闭TCPKeepAlive方案, 使用应用层Keep Alive方案
 
-按理说仅修改客户端就行了, 但我这里总是自动断开, 只能两端都设置了.
+  修改`/etc/ssh/sshd_config`
+
+  ```property
+  TCPKeepAlive no
+  ClientAliveInterval 60
+  ClientAliveCountMax 20
+  ```
+
+  重启SSHD服务
+
+  ```shell
+  systemctl restart sshd
+  ```
+
+  > 断开的连接的检查, 必须需要一个心跳方案, 因此关闭TCPKeepAlive后需要开启SSH的Keep Alive方案. 
+  >
+  > 并且这里SSH的keep alive功能主要是为了检查连接活性, 而不是保证连接活性. 因为为了性能和稳定性, 需将超时间隔调大点, 重试次数多点
+
+* 客户端
+
+  开启SSH的Keep Alive方案, 至于TCPKeepAlive关不关无所谓, 因为客户端的`TCPKeepAlive`功能能正常.
+
+  修改`.ssh/config`
+
+  ```property
+  Host *
+          ServerAliveInterval 5
+          ServerAliveCountMax 10
+  ```
+
+  > 客户端SSH的Keep Alive方案主要为了保证连接活性, 因此必须在NAT中连接记录过期前发送, 从而刷新NAT的记录. 这里5s发一次, 绝对够了! 至于其他时间, 未尝试过.
 
 # 其他
 
@@ -431,19 +481,21 @@ SSHFS ( SSH Filesystem) 是一个文件系统客户端, 只需服务器存在SSH
 
 > 使用方案百度即可, 很简单.
 
-## 坑
-
-### 连接断开
+## 连接断开的原因
 
 莫名奇妙连接断开的原因有
 
-1. 网络不稳定
+1. NAT丢弃了连接
 
-   大概SSH连接经常断开的原因就在这里吧, 如果我使用XShell, 基本不会出现这种问题, 所以不同SSH客户端的稳定性都不一样. OpenSSH不咋行...
+   连接长时间不用, 连接将被丢弃. 即使使用TCPKeepAlive, 也极有可能失效, 因为有些NAT会过滤掉TCPKeepAlive包.
 
-2. 连接被重置了
+   > 解决方案见 6.3.1
 
-   解决方案见6.3.1小节
+2. KeepAlive超时并未收到回复
+
+   SSH中有两种KeepAlive方案, 传输层的TCPKeepAlive和应用层SSH自己的AliveInterval方案
+
+   > 解决方案见 6.3.1
 
 3. host key损坏
 
@@ -453,8 +505,8 @@ SSHFS ( SSH Filesystem) 是一个文件系统客户端, 只需服务器存在SSH
    rm /etc/ssh/ssh_host_*
    dpkg-reconfigure openssh-server
    ```
-   
-4. 权限不够
+
+4. 配置文件权限不够
 
    ```log
    Connection closed by xxx [preauth]
@@ -471,12 +523,14 @@ SSHFS ( SSH Filesystem) 是一个文件系统客户端, 只需服务器存在SSH
    ```shell
    systemctl restart sshd
    ```
-   
+
 5. IP冲突
 
    我见网络上很多人的问题都是这个造成的, 固定IP或换一个就好了.
 
-### Bad Owner Or Permissions
+## 坑
+
+### 无读取配置权限
 
 配置文件的权限和使用有规定, 可修改如下
 
@@ -485,11 +539,11 @@ chown $USER ~/.ssh/config
 chmod 644 ~/.ssh/config
 ```
 
-### 密钥不生效
+### 密钥不能共享
 
 公钥中含有生成该密钥的PC的host信息, 只能该PC使用
 
-### 服务端不能加载host key
+### 服务端丢失host key
 
 ```log
 Could not load host key: /etc/ssh/ssh_host_ed25519_key in /var/log/auth.log
