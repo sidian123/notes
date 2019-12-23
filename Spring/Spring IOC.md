@@ -1454,6 +1454,10 @@ public class AppConfig {
 
 
 
+# 待补充
+
+## 条件注入
+
 # 参考
 
 * [官方文档](https://docs.spring.io/spring-framework/docs/current/spring-framework-reference/core.html#beans)
