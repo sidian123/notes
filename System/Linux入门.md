@@ -2062,7 +2062,7 @@ shell变量用于存储字面值、参与计算。bash为我们提供了一些�
 * `id++` `id--` 
 	variable post-increment and post-decrement
 * `++id` `--id`
-              variable pre-increment and pre-decrement
+          variable pre-increment and pre-decrement
 * `-` `+`    unary minus and plus
 * `!` `~`    logical and bitwise negation
 * `**`     exponentiation
@@ -2077,11 +2077,10 @@ shell变量用于存储字面值、参与计算。bash为我们提供了一些�
 * `&&`     logical AND
 * `||`     logical OR
 * `expr?expr:expr`
-              conditional operator
+          conditional operator
 * `=` `*=` `/=` `%=` `+=` `-=` `<<=` `>>=` `&=` `^=` `|=`
-              assignment
-* `expr1 , expr2`
-              comma
+          assignment
+* `expr1 , expr2`  comma
 
 #### 条件表达式
 复合命令 `[[ ]]` 与bash内置`[ ]`命令作用基本一致，可以进行文件测试、字符串测试、算术测试。部分功能与8.3.5小节重叠，具体参数参考`man test`
