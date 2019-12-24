@@ -11,7 +11,9 @@
 
 * 睿频：根据工作情况可自动上涨的频率
 
-* 超频：人为提升的频率，对cpu伤害大，很多cpu不支持超频
+* 超频：人为提升的频率，是CPU过载运行, 对CPU伤害大，很多cpu不支持超频
+
+  > 貌似Intel CPU后面有K的可以超载.
 
   ----------
 
@@ -21,7 +23,7 @@
 
 > 主频低, 也意味着低功耗吧? 
 
-## cpu架构
+## CPU架构
 
 cpu有很多架构，这三种很常见：**ARM** 、**x86**(IA-32、i386)、 **x86_64**(x64、AMD64、intel64)
 
@@ -39,6 +41,29 @@ arm采用精简集指令，x86_64和x86采用复杂集指令。
 > * https://serverfault.com/questions/610308/x86-i386-i686-amd64-i5-i7-archtecture-processor-confusion
 > * https://stackoverflow.com/questions/14794460/how-does-the-arm-architecture-differ-from-x86
 > * https://askubuntu.com/questions/54296/difference-between-the-i386-download-and-the-amd64
+
+## TDP
+
+Thermal Design Power ( 散热设计功率 ) , 即处理器达到最大负荷时, 所放出的热量
+
+通常散热器的选择需依据CPU的TDP功耗
+
+> 注意, CPU满载功耗 != TDP, 还有其他形式的能量转化, 热能只是一部分. 参考[科普：tdp的误区](http://tieba.baidu.com/p/5060056063)
+
+## 盒装 vs. 散装
+
+1. 散片和盒装都是Intel生产的，不存在假货，也造不出来假货
+2. 盒装有保修，散片没有保修，但是CPU本身不易坏，保修没有多大作用
+3. 散片价格比盒装便宜20-30%盒装一定没被挑过体质，散片也许被挑过也许没有
+4. 盒装散片现在都不送散热器了
+
+综上，在保修不那么重要的情况下，散片价格优势太明显，所以我推荐大家去买散片，当然，散片本身就是特殊渠道来的东西， 所以某猫和某东就没有了，你要买只能去某宝买了。
+
+> 摘录至[CPU的散片与盒装的区别？散片一般哪来的？质量与盒装有区别吗？](https://www.zhihu.com/question/50763446/answer/395150577)
+
+## i3,i5,i7,i9
+
+
 
 # 内存
 
@@ -72,13 +97,13 @@ Type-C支持正反面插入, 数据传输信号强, 支持电力传输(充电)
 
 # 主板
 
-* 主板规格
+## 主板规格
 
-  不同规格的主板有不同的大小, 消费级主板目前有 E-ATX, ATX, M-ATX, ITX四种.
+不同规格的主板有不同的大小, 消费级主板目前有 E-ATX, ATX, M-ATX, ITX四种.
 
-  ![img](.hardware/v2-41c3b4bd13e9e9a2facc7b878be43653_b.jpg)
+![img](.hardware/v2-41c3b4bd13e9e9a2facc7b878be43653_b.jpg)
 
-  > 大佬们的ITX主机作品:[*ITX*主机入坑指南和配置推荐](https://zhuanlan.zhihu.com/p/50859198)
+> 大佬们的ITX主机作品:[*ITX*主机入坑指南和配置推荐](https://zhuanlan.zhihu.com/p/50859198)
 
 
 
@@ -259,24 +284,6 @@ Type-C支持正反面插入, 数据传输信号强, 支持电力传输(充电)
 
 # 其他
 
-## 参数
-
-* TDP
-
-  Thermal Design Power ( 散热设计功率 ) , 即处理器达到最大负荷时, 所放出的热量
-
-  通常散热器的选择需依据CPU的TDP功耗
-  
-  > 注意, CPU满载功耗 != TDP, 还有其他形式的能量转化, 热能只是一部分. 参考[科普：tdp的误区](http://tieba.baidu.com/p/5060056063)
-
-## 陌生概念
-
-* ITX主板
-
-  实现了Mini ITX规范的主板?
-
-  
-
 ## 笔记本购买
 
 [四机型对比](<http://detail.zol.com.cn/ProductComp_param_1211014-1212030-1233117-1257942-1268272.html>), 我还是觉得华为的matebook性价比高
@@ -290,3 +297,6 @@ Type-C支持正反面插入, 数据传输信号强, 支持电力传输(充电)
 缺点
 
 * 接口少了点, 可扩展插槽少了点
+
+## 牙膏厂?
+
