@@ -2097,6 +2097,8 @@ shell变量用于存储字面值、参与计算。bash为我们提供了一些�
 
     > 在脚本中，exit code一般为最后一条命令的exit code。也可以通过命令`exit num`，手动返回exit code，并结束当前shell。如果num不给出，默认上一条命令的exit code
 
+> 参考[How do I know the script file name in a Bash script?](https://stackoverflow.com/questions/192319/how-do-i-know-the-script-file-name-in-a-bash-script)
+
 ### 表达式
 
 #### 算术表达式
