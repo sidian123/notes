@@ -639,6 +639,8 @@ Git for Windows版除了有git命令, 还附带了终端Git Bash ( 或者叫MinT
 
 > 如果使用Windows默认终端, 需要自己去配置Unicode字符编码.
 
+> 推荐使用Cmder ,终端更好用, 还自带Git for Windows.
+
 ## 问题
 
 ### git status乱码
