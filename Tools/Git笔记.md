@@ -633,6 +633,14 @@ $ git branch -vv
 
 ## 问题
 
+### Git for Windows
+
+Git for Windows是Windows上的Git版, 还附带了终端Git Bash, 大部分Unix常用命令等.
+
+Git for Windows版除了有git命令, 还附带了终端Git Bash ( 或者叫MinTTY? ), 与Windows默认命令终端相比, 有更好的选中功能, 并使用Unicode字符. 当Windows交互软件需通过`winpty`去运行, 否则会乱码?
+
+> 如果使用Windows默认终端, 需要自己去配置Unicode字符编码.
+
 ### git status乱码
 
 尽管Git使用了`UTF-8`字符编码, 但`git status`仍然乱码, 这是[core.quotePath](https://git-scm.com/docs/git-config#Documentation/git-config.txt-corequotePath)被设置了的缘故, 关闭即可:
