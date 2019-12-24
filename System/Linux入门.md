@@ -1913,10 +1913,43 @@ shell在启动时会读取配置文件，不同的shell读取的文件都不同�
 
 * `for name  in  word ... ;  do list ; done`
 	name变量每次从in后取得一个值，然后运行一次list。word可使用通配符，自动被expansion（扩展）。
+	
 * `for (( expr1 ; expr2 ; expr3 )) ; do list ; done`
 	首先执行expr1，之后每次都检测expr2是否为0，如果为0则结束；否则执行list和expr3被执行，然后再重复检测。
+	
 * `if list; then list; [ elif list; then list; ] ... [ else list; ] fi`
 	如果list（不是表达式了）返回0，则执行then后的list，否则检查elif后的list，如果状态码都不为0，则执行else后的list。
+	
+* case
+
+  ```bash
+   case word in [ [(] pattern [ | pattern ] ... ) list ;; ] ... esac
+  ```
+
+  `word`和`pattern`都可使用通配符
+
+  ```bash
+  case $1 in
+  	-i|i|install )
+          	install_ss $2 $3
+  		;;
+          -bbr )
+          	install_bbr
+                  ;;
+          -ssr )
+          	install_ssr
+                  ;;
+  	-uninstall )
+  		uninstall_ss
+  		;;
+          -sslink )
+                  get_ss_link
+                  ;;
+  	* )
+  		usage
+  		;;
+  esac
+  ```
 
 #### 函数
 
@@ -2090,23 +2123,56 @@ Bash提供了很多种替换, 这里仅介绍最常用的
 56
 ```
 ## 脚本
-* 脚本就是Bash命令的集合，并且脚本执行时开启了新的Bash Shell。
 
-* 运行脚本前需要赋予它可执行权限。
+### 介绍
 
-  > 未有可执行权限时, 可以如下方式运行
-  >
-  > ```bash
-  > bash script.sh
-  > ```
+* 脚本就是Bash命令的集合。
 
-* 运行脚本时，不明确给出脚本路径，则从PATH路径下查找
+### 运行方式
 
-* `. script`或`source script`会在当前shell中导入并执行脚本中的命令
+* 赋予可执行权限后直接运行
 
-* bash脚本要以`#!/bin/bash`作为首行。
+    ```shell
+    chmod a+x script.sh
+    ./script.sh
+    ```
 
-  > 如果`/bin/sh`用作首行, 请确保`sh`指向`bash`
+    > 应明确给出脚本路径，否则将从PATH路径下查找
+
+    具体使用解析器执行脚本需在第一行指定, 如
+
+    ```shell
+    #!/usr/bin/env bash
+    ```
+
+    ```shell
+    #!/bin/bash
+    ```
+
+    第二种不推荐, 因为不同环境下解析器存放位置不同; 而`env`命令会从`PATH`路径下寻找解析器, 如`bash`
+
+* 启动新`bash`执行
+
+    ```shell
+    bash script.sh
+    ```
+
+> 上述两种都是开启了新的Bash Shell来执行脚本
+
+----
+
+* 在当前bash中执行
+
+    ```shell
+    . script.sh
+    ```
+
+    或
+
+    ```shell
+    source script.sh
+    ```
+
 
 ## 其他
 
