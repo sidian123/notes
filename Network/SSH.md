@@ -118,6 +118,18 @@ ssh -D [bind_address:]port [user@]hostname [command]
 
 基本原理是，ssh客户端生成socks5代理端口`port`，ssh客户端的请求可以通过该端口交由ssh服务器代为请求。这里ssh服务器是socks5代理服务器。被socks5代理的应用需要支持socks5协议。
 
+> 若报错
+>
+> ```
+> bind: Cannot assign requested address
+> ```
+>
+> 则可强制使用ipv4协议解决, 如
+>
+> ```
+> ssh -4 -D 8081 user@8.8.8.8
+> ```
+
 ## 其他
 
 ### 实战之socks5代理
