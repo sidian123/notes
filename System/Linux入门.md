@@ -1841,6 +1841,12 @@ telnet localhost 8080
 [Linux命令之ip](http://www.cnblogs.com/diantong/p/9511072.html)
 
 # 八 bash
+
+> 待学习 
+>
+> * https://www.tutorialspoint.com/unix/index.htm
+> * https://www.tutorialkart.com/bash-shell-scripting/bash-variable/ ( 感觉这个比较好 )
+
 ## 介绍
 bash shell是一个与sh兼容的命令行解析器，是用户与系统内核交互的接口。通过bash，可以执行命令（程序），bash本身就内置了很多常用的命令。可以将一些常用的命令写入脚本中，让bash运行，用以实现简化和自动化日常的任务。对于其他比较复杂的任务，如字符串操作、算术、数据访问、更强的函数等功能，尽管bash也提供了对应的语法（也有函数！！），但还是应该选择使用其他脚本（python）或编译语言（c）。因此，这里只记录比较常用的bash语法。
 
@@ -1862,7 +1868,46 @@ shell在启动时会读取配置文件，不同的shell读取的文件都不同�
 
 ### 变量
 
-变量及局部变量, 待补充
+* 环境变量
+
+* 全局变量
+
+* 局部变量
+
+  局部变量可以隐藏全局变量.
+
+  定义
+
+  ```shell
+  local variableReference=value
+  ```
+
+  例子
+
+  ```shell
+  #!/bin/bash
+   
+  # bash variable
+  SHELL="Unix"
+   
+  function bashShell {
+      # bash local variable
+      local SHELL="Bash"
+      echo $SHELL
+  }
+   
+  echo $SHELL
+  bashShell
+  echo $SHELL
+  ```
+
+  输出
+
+  ```
+  Unix
+  Bash
+  Unix
+  ```
 
 ### 简单命令
 一条简单的bash命令，以要执行的**命令**开始，接着给出空格分隔的**参数**，最后以**控制操作符**结束，执行结束后，会返回一个**状态码**。
