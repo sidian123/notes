@@ -58,18 +58,6 @@
 > * [About Intel® Processor Numbers]https://www.intel.com/content/www/us/en/processors/processor-numbers.html)
 > * [怎么让小白理解intel处理器（CPU）的分类？](https://www.zhihu.com/question/32669957/answer/158384001)
 
-
-
-
-
-
-
-* i3,i5,i7,i9
-
-* `U`低压版
-
-  
-
 ## 排行榜
 
 * [CPU性能排行](https://cpu.51240.com/)
