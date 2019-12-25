@@ -1,66 +1,5 @@
 # CPU
 
-## 介绍
-
-* 一个超线程的核相当于两个核，但是性能肯定比不上两个核。
-* intel cpu系列：i3、i5、i7、E5。其中，型号后有k的表示可以超频
-
-## 频率
-
-* 主频：正常工作频率
-
-* 睿频：根据工作情况可自动上涨的频率
-
-* 超频：人为提升的频率，是CPU过载运行, 对CPU伤害大，很多cpu不支持超频
-
-  > 貌似Intel CPU后面有K的可以超载.
-
-  ----------
-
-* 主频=外频*倍频
-
-* FSB前端总线不等于外频
-
-> 主频低, 也意味着低功耗吧? 
-
-## CPU架构
-
-cpu有很多架构，这三种很常见：**ARM** 、**x86**(IA-32、i386)、 **x86_64**(x64、AMD64、intel64)
-
-架构是一个很抽象的概念，不同cpu产商可以生产同一架构的cpu。操作系统通常有对应不同cpu架构的版本。
-
-x86包括i386、i686等处理器，支持32位地址空间。x64支持64位地址空间。
-
-arm采用精简集指令，x86_64和x86采用复杂集指令。
-
-树莓派是arm架构的。arm架构有很多版本，ARMv3道ARMv7支持32位地址空间，ARMv8-A架构支持64位。
-
-> 参考：
->
-> * https://en.wikipedia.org/wiki/ARM_architecture https://en.wikipedia.org/wiki/X86 https://en.wikipedia.org/wiki/X86_64
-> * https://serverfault.com/questions/610308/x86-i386-i686-amd64-i5-i7-archtecture-processor-confusion
-> * https://stackoverflow.com/questions/14794460/how-does-the-arm-architecture-differ-from-x86
-> * https://askubuntu.com/questions/54296/difference-between-the-i386-download-and-the-amd64
-
-## TDP
-
-Thermal Design Power ( 散热设计功率 ) , 即处理器达到最大负荷时, 所放出的热量
-
-通常散热器的选择需依据CPU的TDP功耗
-
-> 注意, CPU满载功耗 != TDP, 还有其他形式的能量转化, 热能只是一部分. 参考[科普：tdp的误区](http://tieba.baidu.com/p/5060056063)
-
-## 盒装 vs. 散装
-
-1. 散片和盒装都是Intel生产的，不存在假货，也造不出来假货
-2. 盒装有保修，散片没有保修，但是CPU本身不易坏，保修没有多大作用
-3. 散片价格比盒装便宜20-30%盒装一定没被挑过体质，散片也许被挑过也许没有
-4. 盒装散片现在都不送散热器了
-
-综上，在保修不那么重要的情况下，散片价格优势太明显，所以我推荐大家去买散片，当然，散片本身就是特殊渠道来的东西， 所以某猫和某东就没有了，你要买只能去某宝买了。
-
-> 摘录至[CPU的散片与盒装的区别？散片一般哪来的？质量与盒装有区别吗？](https://www.zhihu.com/question/50763446/answer/395150577)
-
 ## 分类
 
 ### AMD
@@ -111,8 +50,70 @@ Thermal Design Power ( 散热设计功率 ) , 即处理器达到最大负荷时,
 ## 排行榜
 
 * [CPU性能排行](https://cpu.51240.com/)
-
 * [CPU天梯图](http://www.mydrivers.com/zhuanti/tianti/cpu/)
+
+## 其他
+
+### 介绍
+
+* 一个超线程的核相当于两个核，但是性能肯定比不上两个核。
+* intel cpu系列：i3、i5、i7、E5。其中，型号后有k的表示可以超频
+
+### 频率
+
+* 主频：正常工作频率
+
+* 睿频：根据工作情况可自动上涨的频率
+
+* 超频：人为提升的频率，是CPU过载运行, 对CPU伤害大，很多cpu不支持超频
+
+  > 貌似Intel CPU后面有K的可以超载.
+
+  ----------
+
+* 主频=外频*倍频
+
+* FSB前端总线不等于外频
+
+> 主频低, 也意味着低功耗吧? 
+
+### CPU架构
+
+cpu有很多架构，这三种很常见：**ARM** 、**x86**(IA-32、i386)、 **x86_64**(x64、AMD64、intel64)
+
+架构是一个很抽象的概念，不同cpu产商可以生产同一架构的cpu。操作系统通常有对应不同cpu架构的版本。
+
+x86包括i386、i686等处理器，支持32位地址空间。x64支持64位地址空间。
+
+arm采用精简集指令，x86_64和x86采用复杂集指令。
+
+树莓派是arm架构的。arm架构有很多版本，ARMv3道ARMv7支持32位地址空间，ARMv8-A架构支持64位。
+
+> 参考：
+>
+> * https://en.wikipedia.org/wiki/ARM_architecture https://en.wikipedia.org/wiki/X86 https://en.wikipedia.org/wiki/X86_64
+> * https://serverfault.com/questions/610308/x86-i386-i686-amd64-i5-i7-archtecture-processor-confusion
+> * https://stackoverflow.com/questions/14794460/how-does-the-arm-architecture-differ-from-x86
+> * https://askubuntu.com/questions/54296/difference-between-the-i386-download-and-the-amd64
+
+### TDP
+
+Thermal Design Power ( 散热设计功率 ) , 即处理器达到最大负荷时, 所放出的热量
+
+通常散热器的选择需依据CPU的TDP功耗
+
+> 注意, CPU满载功耗 != TDP, 还有其他形式的能量转化, 热能只是一部分. 参考[科普：tdp的误区](http://tieba.baidu.com/p/5060056063)
+
+## 盒装 vs. 散装
+
+1. 散片和盒装都是Intel生产的，不存在假货，也造不出来假货
+2. 盒装有保修，散片没有保修，但是CPU本身不易坏，保修没有多大作用
+3. 散片价格比盒装便宜20-30%盒装一定没被挑过体质，散片也许被挑过也许没有
+4. 盒装散片现在都不送散热器了
+
+综上，在保修不那么重要的情况下，散片价格优势太明显，所以我推荐大家去买散片，当然，散片本身就是特殊渠道来的东西， 所以某猫和某东就没有了，你要买只能去某宝买了。
+
+> 摘录至[CPU的散片与盒装的区别？散片一般哪来的？质量与盒装有区别吗？](https://www.zhihu.com/question/50763446/answer/395150577)
 
 # 内存
 
