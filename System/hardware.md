@@ -128,6 +128,8 @@ Thermal Design Power ( 散热设计功率 ) , 即处理器达到最大负荷时,
 
 # 内存
 
+
+
 ## 双通道
 
 带宽衡量CPU和内存之间的传输速率
@@ -150,11 +152,29 @@ Thermal Design Power ( 散热设计功率 ) , 即处理器达到最大负荷时,
 
 > 参考:[超极本的LPDDR3与笔记本的DDR4性能差多少](<http://zhongce.sina.com.cn/article/view/9040/>)
 
-# USB接口
+## 厂商
 
-**USB**，是英文**U**niversal **S**erial **B**us（[通用串行总线](https://baike.baidu.com/item/通用串行总线/8635470)）的缩写，是一个[外部总线](https://baike.baidu.com/item/外部总线)标准，用于规范电脑与[外部设备](https://baike.baidu.com/item/外部设备)的连接和通讯。[Type-C](https://baike.baidu.com/item/Type-C) 是下一代USB接口.
+* 主要厂商
 
-Type-C支持正反面插入, 数据传输信号强, 支持电力传输(充电)
+  三星镁光（铂胜）海力士（科赋）
+
+* 其他牌子
+
+  金士顿、芝奇、海盗船
+
+# 显卡
+
+## 接口
+
+* PCI-E接口: 主要用于连接显卡, 也可连接固态硬盘
+
+# 固态
+
+## 接口
+
+* SATA, M.2和PCI-E
+
+  早期使用SATA, 现在使用M.2, PCI-E可用于固态, 但主要还是用于显卡
 
 # 主板
 
@@ -327,6 +347,34 @@ Type-C支持正反面插入, 数据传输信号强, 支持电力传输(充电)
 
 # 装机
 
+## 推荐选购
+
+* CPU
+
+    AMD三代锐龙从性能和价格上全面碾压Intel.
+
+    ![img](.hardware/v2-a527bcb07c9755eb0a05d4bbb9f46099_hd.jpg)
+
+    ![img](.hardware/v2-1aea3e4506000de5512c9950af2e05c7_hd.jpg)
+
+* 主板
+
+  AMD锐龙与迫击炮B450搭配比较合适.
+
+* 内存
+
+  标配 8G*2组成双通道. 
+
+  内存对性能提升不是很大, 但是低内存却是严重影响整机性能.
+
+  三星的好点
+
+* 固态硬盘
+
+  三星的好点
+
+## 学习
+
 * 选购
 
   小白如何从零开始自学装机？ - 老汤的回答 - 知乎 https://www.zhihu.com/question/31362682/answer/55723321
@@ -373,7 +421,13 @@ Type-C支持正反面插入, 数据传输信号强, 支持电力传输(充电)
 
 ## 牙膏厂?
 
-# 手机
+## USB接口
+
+**USB**，是英文**U**niversal **S**erial **B**us（[通用串行总线](https://baike.baidu.com/item/通用串行总线/8635470)）的缩写，是一个[外部总线](https://baike.baidu.com/item/外部总线)标准，用于规范电脑与[外部设备](https://baike.baidu.com/item/外部设备)的连接和通讯。[Type-C](https://baike.baidu.com/item/Type-C) 是下一代USB接口.
+
+Type-C支持正反面插入, 数据传输信号强, 支持电力传输(充电)
+
+## 手机
 
 * 屏幕单位
 
