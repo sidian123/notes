@@ -2,12 +2,6 @@
 
 ## 分类
 
-### AMD
-
-* Ryzen系列
-
-  听说第三代很不错, 即Ryzen 5/7/9版 3600+
-
 ### Intel
 
 #### 处理器系列
@@ -57,6 +51,26 @@
 >
 > * [About Intel® Processor Numbers]https://www.intel.com/content/www/us/en/processors/processor-numbers.html)
 > * [怎么让小白理解intel处理器（CPU）的分类？](https://www.zhihu.com/question/32669957/answer/158384001)
+
+### AMD
+
+#### 处理器系列
+
+![img](.hardware/v2-bc43716167ec0d31ec957022d2442f29_hd.jpg)
+
+> 性能: 锐龙 > AMD FX > APU > 速龙 > 闪龙
+
+锐龙Ryzen3,5,7分别对标Intel的Core i3,i5,i7, 是面同不同用户的产品.
+
+#### 处理器编号
+
+与Intel类型, 编号首字母表示年代, 后缀字母表示特性
+
+* K 可超频
+* X 超频强化
+* E 节能版
+* B 低功耗
+* M 移动版
 
 ## 排行榜
 
@@ -164,9 +178,11 @@ Thermal Design Power ( 散热设计功率 ) , 即处理器达到最大负荷时,
 
 # 显卡
 
-## 接口
+* PCI-E接口
 
-* PCI-E接口: 主要用于连接显卡, 也可连接固态硬盘
+  主要用于连接显卡, 也可连接固态硬盘
+
+* [显卡天梯图]([http://www.mydrivers.com/zhuanti/tianti/gpu/](https://link.zhihu.com/?target=http%3A//www.mydrivers.com/zhuanti/tianti/gpu/))
 
 # 固态
 
@@ -174,7 +190,7 @@ Thermal Design Power ( 散热设计功率 ) , 即处理器达到最大负荷时,
 
 * SATA, M.2和PCI-E
 
-  早期使用SATA, 现在使用M.2, PCI-E可用于固态, 但主要还是用于显卡
+  早期使用SATA, 现在使用M.2, PCI-E可用于固态, 但主要还是用于显卡.
 
 # 主板
 
@@ -372,6 +388,10 @@ Thermal Design Power ( 散热设计功率 ) , 即处理器达到最大负荷时,
 * 固态硬盘
 
   三星的好点
+  
+* 电源
+
+    电源要满足整机极限功耗, 尽量不要长期满载工作
 
 ## 学习
 
@@ -382,6 +402,8 @@ Thermal Design Power ( 散热设计功率 ) , 即处理器达到最大负荷时,
 * 参考下别人配置
 
   [两千以内迷你主机配置推荐](https://baijiahao.baidu.com/s?id=1621464465814192752&wfr=spider&for=pc)
+
+  [2019电脑配置入门指南：AMD](https://zhuanlan.zhihu.com/p/69586445)
 
 * 装机视频, 极力推荐!!!
 
