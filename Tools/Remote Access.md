@@ -1,7 +1,3 @@
-* VNC协议 ( Virtual Network Computing )
-
-  原理: 传输图像
-
 # RDP
 
 * RDP协议 ( Remote Desktop Protocol )
@@ -32,7 +28,15 @@
 
   ...
 
-* 
+* 缺点
+
+  当有用户以相同账号登录时, RDP将登录失败.
+
+# VNC
+
+* VNC协议 ( Virtual Network Computing )
+
+* 原理: 传输图像
 
 
 
