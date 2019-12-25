@@ -61,17 +61,58 @@ Thermal Design Power ( 散热设计功率 ) , 即处理器达到最大负荷时,
 
 > 摘录至[CPU的散片与盒装的区别？散片一般哪来的？质量与盒装有区别吗？](https://www.zhihu.com/question/50763446/answer/395150577)
 
-## i3,i5,i7,i9
+## 分类
 
-## 类型
+### AMD
 
-* AMD
+* Ryzen系列
 
-  * Ryzen系列
+  听说第三代很不错, 即Ryzen 5/7/9版 3600+
 
-    听说第三代很不错, 即Ryzen 5/7/9版 3600+
-    
-    
+### Intel
+
+#### 系列
+
+* 台式和笔记本电脑
+
+  * 酷睿 Core
+  * 奔腾 Pentium
+  * 赛扬 Celeron
+
+  > 同代产品中, 性能: 酷睿 > 奔腾 > 赛扬
+
+* 服务器
+
+  * 至强 Xeon
+  * 安腾 Itanium
+
+* 智能手机, 平板电脑和低成本PC
+
+  * 凌动 Atom
+
+* 可穿戴设备
+
+  * Quark SoC
+
+#### 酷睿
+
+
+
+
+
+
+
+* i3,i5,i7,i9
+
+* `U`低压版
+
+  
+
+## 排行榜
+
+* [CPU性能排行](https://cpu.51240.com/)
+
+* [CPU天梯图](http://www.mydrivers.com/zhuanti/tianti/cpu/)
 
 # 内存
 
@@ -301,11 +342,6 @@ Type-C支持正反面插入, 数据传输信号强, 支持电力传输(充电)
   - [组装电脑：如何挑选固态硬盘？](https://zhuanlan.zhihu.com/p/83510679)
   - [组装电脑：CPU散热器怎么选？](https://zhuanlan.zhihu.com/p/82613024)
 
-* 排行榜
-
-  [CPU性能排行](https://cpu.51240.com/)
-
-  [CPU天梯图](http://www.mydrivers.com/zhuanti/tianti/cpu/)
 
 # 其他
 
