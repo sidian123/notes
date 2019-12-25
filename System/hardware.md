@@ -69,7 +69,9 @@ Thermal Design Power ( 散热设计功率 ) , 即处理器达到最大负荷时,
 
   * Ryzen系列
 
-    听说很不错
+    听说第三代很不错, 即Ryzen 5/7/9版 3600+
+    
+    
 
 # 内存
 
@@ -287,6 +289,23 @@ Type-C支持正反面插入, 数据传输信号强, 支持电力传输(充电)
 * ITX主机的选购
 
   [*ITX*主机入坑指南和配置推荐](https://zhuanlan.zhihu.com/p/50859198)
+  
+* 一篇组装系列
+
+  - [组装电脑：如何选择CPU？](https://zhuanlan.zhihu.com/p/83500668)
+  - [组装电脑：如何选择主板？](https://zhuanlan.zhihu.com/p/83516346)
+  - [组装电脑：如何选择显卡？](https://zhuanlan.zhihu.com/p/83503683)
+  - [组装电脑：如何选择内存？](https://zhuanlan.zhihu.com/p/83502558)
+  - [组装电脑：怎么选择显示器？](https://zhuanlan.zhihu.com/p/82764085)
+  - [组装电脑：如何挑选电源？](https://zhuanlan.zhihu.com/p/83498194)
+  - [组装电脑：如何挑选固态硬盘？](https://zhuanlan.zhihu.com/p/83510679)
+  - [组装电脑：CPU散热器怎么选？](https://zhuanlan.zhihu.com/p/82613024)
+
+* 排行榜
+
+  [CPU性能排行](https://cpu.51240.com/)
+
+  [CPU天梯图](http://www.mydrivers.com/zhuanti/tianti/cpu/)
 
 # 其他
 
