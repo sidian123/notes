@@ -10,7 +10,7 @@
 
 ### Intel
 
-#### 系列
+#### 处理器系列
 
 * 台式和笔记本电脑
 
@@ -33,7 +33,30 @@
 
   * Quark SoC
 
-#### 酷睿
+目前个人电脑中, 酷睿系列处理器很常见. 酷睿常见品牌处理器有 i3, i5, i7, 面向不同的用户, 同代酷睿系列中, 性能: i7 > i5 > i3.
+
+> 并不是 i7 就一定比 i3强, i3高代CPU要比 i7低代CPU强. 
+
+#### 处理器编号
+
+![img](.hardware/v2-a2b340c10f0bb2852409587bc4ccae02_hd.jpg)
+
+后缀表示CPU不同的特点
+
+* 台式机
+  * K 不锁频, 即可用于超频
+  * T 功耗优化过的
+* 移动式
+  * H 集显是高性能的
+  * HK 集显是高性能的, 且CPU未锁频
+  * KQ 集显是高性能的, 且CPU四核
+  * Y 极低功耗
+  * U 超低功耗
+
+> 参考
+>
+> * [About Intel® Processor Numbers]https://www.intel.com/content/www/us/en/processors/processor-numbers.html)
+> * [怎么让小白理解intel处理器（CPU）的分类？](https://www.zhihu.com/question/32669957/answer/158384001)
 
 
 
