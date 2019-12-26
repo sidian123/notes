@@ -1574,11 +1574,13 @@ target阶段不能单独存在，而是包含在其他两个阶段内。比如�
       event.preventDefault();
   }
   element.addEventListener("mousedown",ev->{
-      event.preventDefault();
   	document.addEventListener("selectstart",preventSelection)
+  	event.preventDefault();
   })
-  element.addEventlistener("mousemove",)
+  element.addEventlistener("mouseup",preventSelection)
   ```
+  
+  > 见[javascript: Disable Text Select](https://stackoverflow.com/a/27434703)
 
 #### 其他事件
 
