@@ -174,6 +174,8 @@
 
 代表Java程序的运行环境, 通过它可启动新进程并执行, 即执行命令.
 
+> 注意, 只能执行PATH下的命令, 非PATH下脚本的执行都是通过解析器执行的 ,而解析器在PATH下.
+
 最基础的方法:
 
 * `exec()`
@@ -234,9 +236,38 @@ Jvm会维护所处环境的信息, 称之为系统属性, 可通过`System`类�
 
 * `MessageDigest` 生成摘要的工具
 
-# 
+# System Tray
 
+* 用于控制系统托盘. 
 
+  [SystemTray](https://docs.oracle.com/javase/8/docs/api/java/awt/SystemTray.html) 代表系统托盘, 可以有多个托盘图标[TrayIcon](https://docs.oracle.com/javase/8/docs/api/java/awt/TrayIcon.html), 每个托盘图标都可有一个弹出菜单[PopupMenu](https://docs.oracle.com/javase/8/docs/api/java/awt/PopupMenu.html)
+
+* `SystemTray`
+
+  * `isSupported()` 系统是否支持该功能
+  * `getSystemTray()` 获取系统托盘对象
+  * `add()` 添加托盘图标
+  * `remove()` 删除托盘图标
+
+* `TrayIcon`
+
+  * `setImageAutoSize(true)` 设置自动调整图标大小以适应当前平台的托盘图标显示
+
+  * `setImage(Image image)` 根据需要可在随时改变显示的图标
+  * `setPopupMenu(PopupMenu popup)` 根据需要可随时改变点击时的弹出菜单
+  * `addActionListener(ActionListener listener)` 添加托盘图标的动作监听器（鼠标右键的点击监听）
+  * `addMouseListener(MouseListener listener)` 添加托盘图标的鼠标监听器（包括鼠标所有按键的监听）
+  * `add(trayIcon)` 添加托盘图标到系统托盘（一个应用程序可添加多个托盘图标）
+  * `remove(trayIcon)` 从系统托盘移除图标
+
+* `PopupMenu`
+
+  ...
+
+> 参考
+>
+> * [How to Use the System Tray](https://docs.oracle.com/javase/tutorial/uiswing/misc/systemtray.html)
+> * [Java SystemTray类（系统托盘）和TrayIcon类（托盘图标）](https://blog.csdn.net/qq_36761831/article/details/81516535)
 
 # 其他
 

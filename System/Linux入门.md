@@ -2219,8 +2219,34 @@ Bash提供了很多种替换, 这里仅介绍最常用的
     source script.sh
     ```
 
-
 ## 其他
+
+### exec
+
+Bash内置命令, 用于修改或替换当前Shell进程.
+
+```shell
+exec [-c] [-l] [-a name] [command [arguments ...]] [redirection ...]
+```
+
+* `command` 要替换的命令
+* `arguments` 命令执行的参数
+* `redirection` 重定向
+* `-a name` 修改`$0`
+* `-c` 在空环境变量下执行
+* `-l` 插入dash符号, 主要用于替换Login Shell时提示用户的
+
+---
+
+一种特殊的使用情况
+
+```shell
+exec > output.txt
+```
+
+即仅修改当前Shell的重定向, 
+
+> 参考[Bash exec builtin command](https://www.computerhope.com/unix/bash/exec.htm)
 
 ### 重定向
 
