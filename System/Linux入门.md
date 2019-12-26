@@ -2135,6 +2135,7 @@ shell变量用于存储字面值、参与计算。bash为我们提供了一些�
 
 * `-n <string>` string长度不为0
 * `-z <string>` string长度为0
+* `-f <file>` 文件存在且为普通文件
 
 ### 替换Expansion
 
@@ -2323,11 +2324,15 @@ cd "$typora_home"
 
 # 待完善
 
-* 用户管理之登录记录
+* 用户管理
 
-  https://blog.csdn.net/xiaotangxianshengqi/article/details/82687701
+  * 登录记录
   
+    https://blog.csdn.net/xiaotangxianshengqi/article/details/82687701
+    
   * `last`
+  
+  * `whoami`
 
 # 参考
 
