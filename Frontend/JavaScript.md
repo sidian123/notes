@@ -1556,6 +1556,30 @@ target阶段不能单独存在，而是包含在其他两个阶段内。比如�
 > * [Element: paste event](https://developer.mozilla.org/en-US/docs/Web/API/Element/paste_event)
 > * [ClipboardEvent](https://developer.mozilla.org/en-US/docs/Web/API/ClipboardEvent)
 
+#### 范围选择事件
+
+* 事件
+
+  * `selectstart` 
+  * `selectionchange`
+
+  > 见[Selection API](https://w3c.github.io/selection-api/)
+
+* 阻止
+
+  Chrome和Firefox的范围选择功能不一致, 统一阻止范围选择的方案如下:
+
+  ```javascript
+  function preventSelection(event){
+      event.preventDefault();
+  }
+  element.addEventListener("mousedown",ev->{
+      event.preventDefault();
+  	document.addEventListener("selectstart",preventSelection)
+  })
+  element.addEventlistener("mousemove",)
+  ```
+
 #### 其他事件
 
 * [scroll](https://developer.mozilla.org/en-US/docs/Web/API/Document/scroll_event) 滚动事件, 当元素滚动时触发
