@@ -122,6 +122,21 @@ export STUFF
 * `Ctrl+e`去行尾
 * `Ctrl+l`清屏
 
+### 配置
+
+* 默认编辑器
+
+  在`.bashrc`下添加
+
+  ```shell
+  export EDITOR='program'
+  export VISUAL='program'
+  ```
+
+  > 关于`EDITOR`和`VISUAL`, Bash默认使用`VISUAL`, 失败后使用`EDITOR`
+
+  
+
 ## 基本命令
 ### ls
 `ls`命令列出目录中的全部内容（不包括以前缀`.`开始的文件）。默认显示当前目录。
