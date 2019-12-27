@@ -64,10 +64,12 @@ public class SpringBootHelloworldApplication {
 目录结构和平常使用的一样，可分层或分模块来组织代码：
 
 - 分层
-![在这里插入图片描述](.Spring Boot/20190509110331698.png)
+
+  ![在这里插入图片描述](.Spring Boot/20190509110331698.png)
 
 - 分模块
-![在这里插入图片描述](.Spring Boot/20190509110354644.png)
+
+  ![在这里插入图片描述](.Spring Boot/20190509110354644.png)
 
 其中：
 
