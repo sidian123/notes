@@ -34,3 +34,7 @@
 * 国外网站提速
 
   国外网站经常使用Google CDN, 导致网站访问速度贼慢, 可使用`Replace Google CDN`插件, 将Google CDN的访问换成中科大USTC的CDN.
+  
+* 关于调试
+
+  Firefox调试器看着挺丰富的, 但实际上对前端的调试支持度不如Chrome.
