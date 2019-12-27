@@ -766,7 +766,55 @@ SpEL（Spring Expression Language），即Spring表达式语言，是比JSP的EL
 
 # 其他
 
-##  CommandLineRunner 
+## Spring boot 启动
+
+### SpringApplication
+
+用于在Java主方法中启动Spring应用, 将执行如下步骤:
+
+- Create an appropriate `ApplicationContext` instance (depending on your classpath)
+- Register a `CommandLinePropertySource` to expose command line arguments as Spring properties
+- Refresh the application context, loading all singleton beans
+- Trigger any [`CommandLineRunner`](http://localhost:63342/Blog/spring-boot-2.2.1.RELEASE-javadoc.jar/org/springframework/boot/CommandLineRunner.html) beans
+
+常用`run()`启动应用
+
+```java
+@Configuration
+@EnableAutoConfiguration
+public class MyApplication  {
+
+    // ... Bean definitions
+
+    public static void main(String[] args) {
+        SpringApplication.run(MyApplication.class, args);
+    }
+}
+```
+
+或提供更多的配置
+
+```java
+public static void main(String[] args) {
+    SpringApplication application = new SpringApplication(MyApplication.class);
+    // ... customize application settings here
+    application.run(args)
+}
+```
+
+数据源来源三种
+
+- The fully qualified class name to be loaded by `AnnotatedBeanDefinitionReader`
+
+  > 即`Configuration`注解标注的类
+
+- The location of an XML resource to be loaded by `XmlBeanDefinitionReader`, or a groovy script to be loaded by `GroovyBeanDefinitionReader`
+
+- The name of a package to be scanned by `ClassPathBeanDefinitionScanner`
+
+  > 即动态扫描的Bean.
+
+###  CommandLineRunner 
 
 * 当容器初始化完毕后, 执行该接口的方法, 用于处理命令行参数
 * 仅在`SpringApplication`初始化的容器中使用
