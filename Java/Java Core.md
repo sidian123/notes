@@ -264,6 +264,14 @@ Jvm会维护所处环境的信息, 称之为系统属性, 可通过`System`类�
 
   ...
 
+> 在Spring boot应用中, 默认不支持AWT的使用, 即托盘功能不可用, 需修改启动配置, 如
+>
+> ```java
+>         SpringApplication springApplication = new SpringApplication(ClientApplication.class);
+>         springApplication.setHeadless(false);//允许使用awt,即界面
+>         springApplication.run(args);
+> ```
+
 > 参考
 >
 > * [How to Use the System Tray](https://docs.oracle.com/javase/tutorial/uiswing/misc/systemtray.html)
