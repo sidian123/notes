@@ -1278,23 +1278,38 @@ flexbox这一章就此结束了，可以参考这篇教程，主要图多：<htt
 
 > 参考[grid layout mdn](https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_Grid_Layout/Basic_Concepts_of_Grid_Layout)
 
-grid layout是一个**二维**的布局，就像表格一样，有行和列。简单的说，**grid**是一组水平线和垂直线的集合，分割的单元称为**cell**，行和列分别称为**row tracks**和**column tracks**。tracks之间的空白称为**cutters**或者**gap**，它位于**线**（line）所在的位置，可以将它看做比较粗的线（line）。grid中也有两个方向：**block or column axis**和**inline or row axis**。grid布局中的元素为**grid items**，它可以占据多个cell，这几个cell连同范围内的gap被称为**grid area**。
+### 介绍
 
-被`display:grid`和`display:inline-grid`声明的元素作为**grid容器**，它的直接子元素会被当做**grid items**。
+* 概念引入
 
-通过`grid-template-columns`定义列的个数和占据大小，而`grid-template-rows`定义行的个数和行占据大小，但是一般不使用该属性，因为你不是很确定行的个数，因此一般使用`grid-auto-rows`只设置行的大小。对应的属性还有`grid-auto-columns`
+  grid layout是一个**二维**的布局，就像表格一样，有行和列。简单的说，**grid**是一组水平线和垂直线的集合，分割的单元称为**cell**，行和列分别称为**row tracks**和**column tracks**。tracks之间的空白称为**cutters**或者**gap**，它位于**线**（line）所在的位置，可以将它看做比较粗的线（line）。grid中也有两个方向：**block or column axis**和**inline or row axis**。grid布局中的元素为**grid items**，它可以占据多个cell，这几个cell连同范围内的gap被称为**grid area**。
 
-定义好tracks后，有四种方式指定grid items的位置（grid area）所在：
-1. line-based placement：grid布局由线（line）组成，items通过`grid-column`和`grid-row`指定行列边界线位置，线内的空间就是items位置所在。line number从1开始。
-2. grid template areas：就是通过`grid-template-areas`为grid中一块区域（area）命名，在item中通过`grid-area`指定area 名字，那么该item就被放置在该处。
-3. name grid lines：也是在item中指定它的边界线来决定放置位置，但是此时指定的是线的名字，因此需要在容器中设置线名。我觉得不常用。
-4. auto-placement：就是自动从左到右，从上到下放置item，一个cell一个item，如果超过，比如规定的行数，那么grid会自动补加行。
+* 布局容器声明
 
-这里又引申出两个概念：**implicit grid**和**explicit grid**。被`grid-template-columns`和`grid-template-rows`固定行列大小、个数的grid被称为explicit grid；<u>而只限制一列（或一行）的grid</u>，随着items的放置，自动生成行，这种grid为implicit grid。通过`grid-auto-columns`或`grid-auto-rows`可以限制生成行或列的大小。
+  被`display:grid`和`display:inline-grid`声明的元素作为**grid容器**，它的直接子元素会被当做**grid items**。
 
-放置items后，每个Item都有了自己的区域（grid area），然后就可以在area中对齐items了，比如水平对齐`justify-items`和垂直对齐`align-items`，默认stretch，即拉伸占据所有空间。
+* 行列声明
 
-最后，还可以对齐下tracks，即gap空间的分派使不同tracks对齐。比如水平对齐`justify-content`和垂直对齐`align-content`，都默认start，即位于左上角。它会导致grid-gap失效。注意tracks对齐的前提是对应方向的track长度固定，有足够剩余空间。
+  通过`grid-template-columns`定义列的个数和占据大小，而`grid-template-rows`定义行的个数和行占据大小，但是一般不使用该属性，因为你不是很确定行的个数，因此一般使用`grid-auto-rows`只设置行的大小。对应的属性还有`grid-auto-columns`
+
+* Item排列规则
+
+  定义好tracks后，有四种方式指定grid items的位置（grid area）所在：
+
+    1. **line-based placement**：grid布局由线（line）组成，items通过`grid-column`和`grid-row`指定行列边界线位置，线内的空间就是items位置所在。line number从1开始。
+    2. **grid template areas**：就是通过`grid-template-areas`为grid中一块区域（area）命名，在item中通过`grid-area`指定area 名字，那么该item就被放置在该处。
+    3. **name grid lines**：也是在item中指定它的边界线来决定放置位置，但是此时指定的是线的名字，因此需要在容器中设置线名。我觉得不常用。
+    4. **auto-placement**：就是自动从左到右，从上到下放置item，一个cell一个item，如果超过，比如规定的行数，那么grid会自动补加行。
+
+* implicit grid & explicit grid
+
+  这里又引申出两个概念：**implicit grid**和**explicit grid**。被`grid-template-columns`和`grid-template-rows`固定行列大小、个数的grid被称为explicit grid；<u>而只限制一列（或一行）的grid</u>，随着items的放置，自动生成行，这种grid为implicit grid。通过`grid-auto-columns`或`grid-auto-rows`可以限制生成行或列的大小。
+
+* Item对齐 & 行列 ( tracks ) 对齐
+
+  放置items后，每个Item都有了自己的区域（grid area），然后就可以在area中对齐items了，比如水平对齐`justify-items`和垂直对齐`align-items`，默认stretch，即拉伸占据所有空间。
+
+  最后，还可以对齐下tracks，即gap空间的分派使不同tracks对齐。比如水平对齐`justify-content`和垂直对齐`align-content`，都默认start，即位于左上角。它会导致grid-gap失效。注意tracks对齐的前提是对应方向的track长度固定，有足够剩余空间。
 
 ### 部分属性
 [**grid-template-columns**][65] ,[**grid-template-rows**][66]
