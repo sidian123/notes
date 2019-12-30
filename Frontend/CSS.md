@@ -1374,25 +1374,27 @@ grid-area: 1 / 3 / 3 / 4;
 
 ### 对齐
 [align-items][79]垂直对齐item，justify-items[80]水平对齐item。默认都为stretch，但是对于有intrinsic size的元素来说表现起来像start，比如说img。部分可选值：
-normal
-start
-end
-center
-stretch 
-baseline
+
+* normal
+* start
+* end
+* center
+* stretch 
+* baseline
 
 而[align-self][81]和[justify-self][82]用于item，覆盖容器的对齐设置。
 
 tracks也可以被对齐，[align-content][83]用来对齐column tracks（列），[justify-content][84]用来对齐row tracks（行）。默认start。可以对齐的前提是还有剩余空间，即容器大小比items总和要大。部分可选值：
-normal
-start
-end
-center
-stretch
-space-around
-space-between
-space-evenly
-baseline
+
+* normal
+* start
+* end
+* center
+* stretch
+* space-around
+* space-between
+* space-evenly
+* baseline
 
 与flexbox取值差不多，可以参考下。
 

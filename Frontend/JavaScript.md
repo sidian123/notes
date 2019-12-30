@@ -1384,7 +1384,14 @@ Window接口表示一个包含了DOM文档的窗口，在浏览器中具体表�
 
 事件传播一般是从DOM树中从下至上传播的，即**bubbling**。由于同一事件可能有多个处理器，因此事件被传到一个元素时，会横向传播，然后在向上传播（bubbling）。一些元素都有对事件有默认行为，如链接点击会打开网页、表单按钮点击发送表单等等，默认行为会在事件横向传播时执行，通过`Event.preventDefault()`可以阻止默认行为。`Event.stopPropagation()`可以阻止事件向上传播，但允许横向传播。`Event.stopImmediatePropagation()`同时阻止事件横向和向上传播。
 
-参考：https://developer.mozilla.org/en-US/docs/Web/API/Event
+> 参考
+>
+> * [Event](https://developer.mozilla.org/en-US/docs/Web/API/Event)
+>
+> * [全局事件处理器](https://developer.mozilla.org/en-US/docs/Web/API/GlobalEventHandlers)
+> * [所有事件](https://developer.mozilla.org/en-US/docs/Web/Events)
+> * [event接口](https://developer.mozilla.org/en-US/docs/Web/API/Event)
+> * [事件的所有键值key](https://developer.mozilla.org/en-US/docs/Web/API/KeyboardEvent/key/Key_Values)
 
 ### 基础
 
@@ -1419,13 +1426,6 @@ myElement.addEventListener('click', functionB);
 > 如果2,3都存在时, 先执行2
 
 > 注意! 监听器中的`this`指向监听的元素, 在Vue中仍指向vue实例
-
-> 参考：
->
-> * [全局事件处理器](https://developer.mozilla.org/en-US/docs/Web/API/GlobalEventHandlers)
-> * [所有事件](https://developer.mozilla.org/en-US/docs/Web/Events)
-> * [event接口](https://developer.mozilla.org/en-US/docs/Web/API/Event)
-> * [事件的所有键值key](https://developer.mozilla.org/en-US/docs/Web/API/KeyboardEvent/key/Key_Values)
 
 #### Event object
 
