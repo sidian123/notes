@@ -102,6 +102,34 @@
 
 ## Content scripts
 
+内容脚本 ( Content scripts ) 被加载到网页中, 用于访问和操作网页的DOM. 除此之外, 还能
+
+* 发起跨域请求
+* 使用部分WebExtension API
+* 与后台脚本[通信](https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/Content_scripts#Communicating_with_background_scripts)
+* 可通过[window.postMessage()](https://developer.mozilla.org/en-US/docs/Web/API/Window/postMessage)与网页的脚本通信
+
+## Web accessible resources
+
+可让扩展的资源被内容脚本和页面脚本访问.
+
+步骤如下:
+
+1. 在manifest.json中注册这些资源
+2. 通过`browser.extension.getURL()`获取资源URL
+
+# WebExtensions API 
+
+* 介绍
+  * 可用于后台脚本和扩展页面中, 部分API也可用于内容脚本中.
+  * 使用API前, 需在`manifest.json`中声明权限
+  * 以`browser`为名字空间, 同时也支持`chrome`作为名字空间; 支持异步回调, 支持promises
+
+* API 列表
+
+  ...
+
+> 参考[JavaScript APIs](https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/API)
 
 
 
@@ -117,10 +145,6 @@
 
 
 
+# 参考
 
-
-
-
-
-* 参考
-  * [manifest.json](https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/manifest.json)
+* [manifest.json](https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/manifest.json)
