@@ -154,13 +154,57 @@
 
 * Any
 
-  为了兼容三方无类型信息的对象, 提供了`any`类型, 表示任何对象, 避免编译时类型检查, 如
+  为了兼容三方无类型信息的对象, 提供了`any`类型, 表示任何对象, <u>避免编译时类型检查</u>, 如
 
   ```ts
   let notSure: any = 4;
   notSure = "maybe a string instead";
   notSure = false; // okay, definitely a boolean
   ```
+  
+  与`Object`相比, `any`完全退出了类型检查, 而`Object`还处于继承的关系中, 如:
+  
+  ```ts
+  let notSure: any = 4;
+  notSure.ifItExists(); // okay, ifItExists might exist at runtime
+  notSure.toFixed(); // okay, toFixed exists (but the compiler doesn't check)
+  
+  let prettySure: Object = 4;
+  prettySure.toFixed(); // Error: Property 'toFixed' doesn't exist on type 'Object'.
+  ```
+  
+  `any`也可以附带部分信息
+  
+  ```ts
+  let list: any[] = [1, true, "free"];
+  
+  list[1] = 100;
+  ```
+  
+* Void
+
+  用于函数, 表示无返回值
+
+  ```ts
+  function warnUser(): void {
+      console.log("This is my warning message");
+  }
+  ```
+
+  用于声明变量类型, 则该变量只能赋值`undefined`和`null`( `--strictNullChecks`未指定的情况下) 
+
+  ```ts
+  let unusable: void = undefined;
+  unusable = null; // OK if `--strictNullChecks` is not given
+  ```
+
+* Null and Undefined
+
+* Object
+
+* Type assertions
+
+* 关于 let
 
 # 参考
 
