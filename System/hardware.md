@@ -35,6 +35,8 @@
 
 ![img](.hardware/v2-a2b340c10f0bb2852409587bc4ccae02_hd.jpg)
 
+> 年代越高, 能力越强. 这里所说能力不与性能挂钩.
+
 后缀表示CPU不同的特点
 
 * 台式机
@@ -49,7 +51,7 @@
 
 > 参考
 >
-> * [About Intel® Processor Numbers]https://www.intel.com/content/www/us/en/processors/processor-numbers.html)
+> * [About Intel® Processor Numbers](https://www.intel.com/content/www/us/en/processors/processor-numbers.html)
 > * [怎么让小白理解intel处理器（CPU）的分类？](https://www.zhihu.com/question/32669957/answer/158384001)
 
 ### AMD
@@ -58,9 +60,10 @@
 
 ![img](.hardware/v2-bc43716167ec0d31ec957022d2442f29_hd.jpg)
 
-> 性能: 锐龙 > AMD FX > APU > 速龙 > 闪龙
+* 性能: 锐龙 > AMD FX > APU > 速龙 > 闪龙
 
-锐龙Ryzen3,5,7分别对标Intel的Core i3,i5,i7, 是面同不同用户的产品.
+* 锐龙Ryzen3,5,7分别对标Intel的Core i3,i5,i7, 是面同不同用户的产品.
+* 所有锐龙使用AM4接口; 线程撕裂者Threadrippers使用TR4接口.
 
 #### 处理器编号
 
@@ -71,6 +74,7 @@
 * E 节能版
 * B 低功耗
 * M 移动版
+* G 含集显 ( 通常为Vega )
 
 ## 排行榜
 
@@ -193,6 +197,8 @@ Thermal Design Power ( 散热设计功率 ) , 即处理器达到最大负荷时,
   早期使用SATA, 现在使用M.2, PCI-E可用于固态, 但主要还是用于显卡.
 
 # 主板
+
+* 选择: 看主板是否支持CPU的接口, 如AMD Ryzen CPU的AM4接口
 
 ## 主板规格
 
@@ -363,7 +369,7 @@ Thermal Design Power ( 散热设计功率 ) , 即处理器达到最大负荷时,
 
 # 装机
 
-## 推荐选购
+## 选购指南
 
 * CPU
 
@@ -393,7 +399,7 @@ Thermal Design Power ( 散热设计功率 ) , 即处理器达到最大负荷时,
 
     电源要满足整机极限功耗, 尽量不要长期满载工作
 
-## 学习
+## 学习指南
 
 * 选购
 
