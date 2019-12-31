@@ -1,4 +1,29 @@
-# 结构剖析
+# 一 介绍
+
+* 扩展
+
+  * Firefox 有多种**附加组件** ( Add-ons ), 这里仅介绍**扩展** ( Extensions ) 
+
+    其他附加组件还有
+
+    * 主题 ( Themes )
+
+    * [Search engine plugins](https://developer.mozilla.org/en-US/docs/Web/OpenSearch) add new search engines to the browser's search bar.
+
+    * [User dictionaries](https://developer.mozilla.org/en-US/docs/Mozilla/Creating_a_spell_check_dictionary_add-on) let you spell-check in different languages.
+
+    * [Language packs](https://support.mozilla.org/kb/use-firefox-interface-other-languages-language-pack) let you have more languages available for the user interface of Firefox. 
+
+  * 扩展是JavaScript, HTML和CSS编写, 并提供了浏览器相关的[WebExtensions APIs](https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions).
+
+    > 据说可跨平台? 不能API还是要去查看下兼容性的
+
+* 发布
+
+  * [Addons.mozilla.org](https://addons.mozilla.org) 上可发布和获取插件
+  * 插件需要被签名才能被其他用户安装, 直接在官网上上传即可签名, 详细见[Signing and distributing your add-on](https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/Distribution).
+
+# 二 结构
 
 ## manifest.json
 
@@ -118,7 +143,7 @@
 1. 在manifest.json中注册这些资源
 2. 通过`browser.extension.getURL()`获取资源URL
 
-# WebExtensions API 
+# 三 WebExtensions API 
 
 * 介绍
   * 可用于后台脚本和扩展页面中, 部分API也可用于内容脚本中.
@@ -131,20 +156,11 @@
 
 > 参考[JavaScript APIs](https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/API)
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 # 参考
 
 * [manifest.json](https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/manifest.json)
+
+* [Add-ons](https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons)
+
+* [WebExtensions APIs](https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions)
+* [Browser support for JavaScript APIs](https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/Browser_support_for_JavaScript_APIs) 扩展API在不同浏览器中的兼容性

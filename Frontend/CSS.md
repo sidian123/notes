@@ -1275,31 +1275,50 @@ flexbox这一章就此结束了，可以参考这篇教程，主要图多：<htt
 [64]:https://developer.mozilla.org/en-US/docs/Web/CSS/align-self
 
 ## grid layout
-grid layout是一个**二维**的布局，就像表格一样，有行和列。简单的说，**grid**是一组水平线和垂直线的集合，分割的单元称为**cell**，行和列分别称为**row tracks**和**column tracks**。tracks之间的空白称为**cutters**或者**gap**，它位于**线**（line）所在的位置，可以将它看做比较粗的线（line）。grid中也有两个方向：**block or column axis**和**inline or row axis**。grid布局中的元素为**grid items**，它可以占据多个cell，这几个cell连同范围内的gap被称为**grid area**。
 
-被`display:grid`和`display:inline-grid`声明的元素作为**grid容器**，它的直接子元素会被当做**grid items**。
+> 参考[grid layout mdn](https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_Grid_Layout/Basic_Concepts_of_Grid_Layout)
 
-通过`grid-template-columns`定义列的个数和占据大小，而`grid-template-rows`定义行的个数和行占据大小，但是一般不使用该属性，因为你不是很确定行的个数，因此一般使用`grid-auto-rows`只设置行的大小。对应的属性还有`grid-auto-columns`
+### 介绍
 
-定义好tracks后，有四种方式指定grid items的位置（grid area）所在：
-1. line-based placement：grid布局由线（line）组成，items通过`grid-column`和`grid-row`指定行列边界线位置，线内的空间就是items位置所在。line number从1开始。
-2. grid template areas：就是通过`grid-template-areas`为grid中一块区域（area）命名，在item中通过`grid-area`指定area 名字，那么该item就被放置在该处。
-3. name grid lines：也是在item中指定它的边界线来决定放置位置，但是此时指定的是线的名字，因此需要在容器中设置线名。我觉得不常用。
-4. auto-placement：就是自动从左到右，从上到下放置item，一个cell一个item，如果超过，比如规定的行数，那么grid会自动补加行。
+* 概念引入
 
-这里又引申出两个概念：**implicit grid**和**explicit grid**。被`grid-template-columns`和`grid-template-rows`固定行列大小、个数的grid被称为explicit grid；而只限制一列（或一行）的grid，随着items的放置，自动生成行，这种grid为implicit grid。通过`grid-auto-columns`或`grid-auto-rows`可以限制生成行或列的大小。
+  grid layout是一个**二维**的布局，就像表格一样，有行和列。简单的说，**grid**是一组水平线和垂直线的集合，分割的单元称为**cell**，行和列分别称为**row tracks**和**column tracks**。tracks之间的空白称为**cutters**或者**gap**，它位于**线**（line）所在的位置，可以将它看做比较粗的线（line）。grid中也有两个方向：**block or column axis**和**inline or row axis**。grid布局中的元素为**grid items**，它可以占据多个cell，这几个cell连同范围内的gap被称为**grid area**。
 
-为啥这么多概念？？因为不分清的话看不懂英文文档在说啥，查集料都不方便。。。。没办法。。
+* 布局容器声明
 
-放置items后，每个Item都有了自己的区域（grid area），然后就可以在area中对齐items了，比如水平对齐`justify-items`和垂直对齐`align-items`，默认stretch，即拉伸占据所有空间。
+  被`display:grid`和`display:inline-grid`声明的元素作为**grid容器**，它的直接子元素会被当做**grid items**。
 
-最后，还可以对齐下tracks，即gap空间的分派使不同tracks对齐。比如水平对齐`justify-content`和垂直对齐`align-content`，都默认start，即位于左上角。它会导致grid-gap失效。注意tracks对齐的前提是对应方向的track长度固定，有足够剩余空间。
+* 行列声明
+
+  通过`grid-template-columns`定义列的个数和占据大小，而`grid-template-rows`定义行的个数和行占据大小，但是一般不使用该属性，因为你不是很确定行的个数，因此一般使用`grid-auto-rows`只设置行的大小。对应的属性还有`grid-auto-columns`
+
+* Item排列规则
+
+  定义好tracks后，有四种方式指定grid items的位置（grid area）所在：
+
+    1. **line-based placement**：grid布局由线（line）组成，items通过`grid-column`和`grid-row`指定行列边界线位置，线内的空间就是items位置所在。line number从1开始。
+    2. **grid template areas**：就是通过`grid-template-areas`为grid中一块区域（area）命名，在item中通过`grid-area`指定area 名字，那么该item就被放置在该处。
+    3. **name grid lines**：也是在item中指定它的边界线来决定放置位置，但是此时指定的是线的名字，因此需要在容器中设置线名。我觉得不常用。
+    4. **auto-placement**：就是自动从左到右，从上到下放置item，一个cell一个item，如果超过，比如规定的行数，那么grid会自动补加行。
+
+* implicit grid & explicit grid
+
+  这里又引申出两个概念：**implicit grid**和**explicit grid**。被`grid-template-columns`和`grid-template-rows`固定行列大小、个数的grid被称为explicit grid；<u>而只限制一列（或一行）的grid</u>，随着items的放置，自动生成行，这种grid为implicit grid。通过`grid-auto-columns`或`grid-auto-rows`可以限制生成行或列的大小。
+
+* Item对齐 & 行列 ( tracks ) 对齐
+
+  放置items后，每个Item都有了自己的区域（grid area），然后就可以在area中对齐items了，比如水平对齐`justify-items`和垂直对齐`align-items`，默认stretch，即拉伸占据所有空间。
+
+  最后，还可以对齐下tracks，即gap空间的分派使不同tracks对齐。比如水平对齐`justify-content`和垂直对齐`align-content`，都默认start，即位于左上角。它会导致grid-gap失效。注意tracks对齐的前提是对应方向的track长度固定，有足够剩余空间。
 
 ### 部分属性
 [**grid-template-columns**][65] ,[**grid-template-rows**][66]
-文法复杂了点，就不给出了。这两个属性分别用来确定列、行的个数和大小。同时可以给出线名。
 
-长度可以是固定或者相对的。`fr`是一个相对单位，一个对剩余空间分配的比例。注意是固定，比如列值后剩余空间的分配。
+> 文法复杂了点，就不给出了。
+
+这两个属性分别用来确定列、行的个数和大小, 同时可声明线的名。
+
+长度可以是固定或者相对的。使用相对值时, 以`fr`为单位，指定对除去被固定占用后的剩余空间分配的比例。
 ```css
 /*定义三列*/
 grid-template-columns: 200px 200px 200px;
@@ -1308,30 +1327,41 @@ grid-template-columns: 100px 1fr;
 ```
 通过`repeat`函数可以重复生成列（或行）值，minmax可以指定列（或行）的最大和最小值。如：
 ```css
-/*按照每个item 200px的大小再一行上尽可能多的划分列，然后剩余空间等比例分配*/
+/*按照每个item 200px的大小在一行上尽可能多的划分列，然后剩余空间等比例分配*/
 grid-template-columns:repeat(auto-fill,minmax(200px,1fr);
+/*重复三行, 每行最小40px, 然后按照实际需求分配剩余空间*/
+grid-template-rows: repeat(3,minmax(40px,auto));
 ```
 
 [**grid-auto-columns**][67] ,[**grid-auto-rows**][68] ,[**grid-auto-flow**][69]
-grid中可能会出现grid中item超过cell个数的情况，此时会产生新行（或列），也就是产生了implicit grid。。`grid-auto-columns`和`grid-auto-rows`设置这些自动生成的行、列的大小。这些items会使用自动放置（auto replacement），而`grid-auto-flow`控制自动放置算法，文法：
+
+grid中可能会出现grid中item超过cell个数的情况，此时会产生新行（或列），也就是产生了*implicit grid*.
+
+`grid-auto-columns`和`grid-auto-rows`设置这些自动生成的行、列的大小, 这些items会使用自动放置（auto replacement），而`grid-auto-flow`控制自动放置算法的具体行为，文法如下：
+
 ```markup
 [ row | column ] || dense
 ```
-指定放置的方向和具体的算法：sparse或dense。dense看起来会紧凑一点，适合用来做画廊。
+>  `row`和`column`指定放置的方向; 默认使用`sparse`算法, `dense`算法会让item自动向前面的空位上补齐, 看起来会紧凑一点，适合用来做画廊。
 
 [**grid-column-gap**][73] ,[**grid-row-gap**][74] ,[**grid-gap**][75]
 设置tracks间的间距，grid-gap为前两个的速写属性。
 
 [**order**][85]
-在auto replacement中，通过order可以改变自动放置的顺序。貌似用处不大。
+在auto replacement中，通过order可以改变自动放置的顺序。
+
+>  貌似用处不大。
 
 ### line-base placement
-上面设置好grid 的track（行列后），就可以通过[grid-column][70]和[grid-row][71]来指定item位置的范围了（在4条边线之间的范围）。线从1开始数起，最后一条线可以用负数表示，比如-1表示该方向上最后一条线。注意负数不能使用在implicit grid中，因为最后一条线不确定。
+上面设置好grid 的track（行列后），就可以通过[grid-column][70]和[grid-row][71]来指定item位置的范围了（在4条边线之间的范围）。线从1开始数起，最后一条线可以用负数表示，如-1表示该方向上最后一条线。
+
+> 注意, 负数不能使用在implicit grid中，因为最后一条线不确定。
 
 例子：
 ```css
-/*不给出另一条线表示占一列*/
+/*不给出另一条线, 表示仅占一列*/
 grid-column: 1;
+/*占1和2列?*/
 grid-column: 1 / 3;
 /*从第2列开始到最后一列*/
 grid-column: 2 / -1;
@@ -1341,6 +1371,7 @@ grid-column: 1 / span 2;
 如果线被定义了线名，那么grid-column和grid-row也可以用指定线名。
 
 [grid-area][72]属性主要在item中指定该item占据的grid area名字，但是也可以直接指定线号（line number）：
+
 ```css
 /*分别为grid-row-start,grid-column-start,grid-row-end,grid-column-end  。和margin类似*/
 grid-area: 1 / 3 / 3 / 4;
@@ -1359,7 +1390,8 @@ grid-area: 1 / 3 / 3 / 4;
 }
 ```
 结果：
-![在这里插入图片描述](https://img-blog.csdnimg.cn/20181127203321499.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L2pkYmRo,size_16,color_FFFFFF,t_70 =300x)
+
+![在这里插入图片描述](.CSS/20181127203321499.png)
 
 如果某一个cell为空，那么使用`.`逗号来代替。area必须为长方形。
 
@@ -1373,30 +1405,34 @@ grid-area: 1 / 3 / 3 / 4;
 上面说过grid-template-columns和grid-template-rows在定义tracks（行列）时可以同时定义线名（line name），然后在grid-row中使用。感觉用处不大，直接给出参考链接：[Layout using namd grid lines][78]
 
 ### 对齐
-[align-items][79]垂直对齐item，justify-items[80]水平对齐item。默认都为stretch，但是对于有intrinsic size的元素来说表现起来像start，比如说img。部分可选值：
-normal
-start
-end
-center
-stretch 
-baseline
 
-而[align-self][81]和[justify-self][82]用于item，覆盖容器的对齐设置。
+* 对齐Item
 
-tracks也可以被对齐，[align-content][83]用来对齐column tracks（列），[justify-content][84]用来对齐row tracks（行）。默认start。可以对齐的前提是还有剩余空间，即容器大小比items总和要大。部分可选值：
-normal
-start
-end
-center
-stretch
-space-around
-space-between
-space-evenly
-baseline
+    [align-items][79]垂直对齐item，[justify-items][80]水平对齐item, 都默认为`stretch`，即占满整个Cell.
 
-与flexbox取值差不多，可以参考下。
+    > 注意, 有intrinsic size的元素表现起来像`start`，比如说`img`。
+    
+    部分可选值如下：
 
-[grid layout mdn 参考资料](https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_Grid_Layout/Basic_Concepts_of_Grid_Layout)
+    ```
+    normal|start|end|center|stretch|baseline
+    ```
+    
+    >  上述两个样式用于容器中, 而[align-self][81]和[justify-self][82]用于item中，可覆盖容器的对齐设置。
+    
+* 对齐Tracks
+
+    即Tracks间的剩余空间怎么分配. [align-content][83]对齐column tracks（列），[justify-content][84]对齐row tracks（行）, 都默认`start`。
+
+    > 注意, 可以对齐的前提是还有剩余空间，即容器大小比items总和要大。
+    
+    部分可选值如下:
+
+    ```
+    normal|start|end|center|stretch|space-around|space-between|space-evenly|baseline
+    ```
+    
+    > 与flexbox取值差不多，可以参考下。
 
 
 [65]:https://developer.mozilla.org/en-US/docs/Web/CSS/grid-template-columns
