@@ -279,7 +279,113 @@ public class ItemController {
 @JsonSerialize(using = LocalDateTimeSerializer.class)
 ```
 
+## 多态支持
+
+> 能简单上手即可, 不作详细介绍.
+
+* 背景
+
+  一个基类, 有多个子类, 已将某个子类序列化. 问题是, 该使用哪个类型反序列化?
+
+  > 如果对象中包含类型信息, 可先转化为Map, 获取该信息, 然后再转一次. 此为下策. 若对象中不含类型信息, 也没有上下文信息呢? 
+
+* 解决方案
+
+  Jackson提供了两个注解来解决. 使用`@JsonTypeInfo`注解在序列化时注入类型信息, `@JsonSubTypes`注解声明JSON中类型信息与Java Class的对应关系, 反序列化时提供基类Class, Jackson会自动处理类型转化.
+
+* 简单Demo
+
+  ```java
+  public class SimpleTest {
+      @Test
+      public void test() throws IOException, InterruptedException {
+          ObjectMapper mapper=new ObjectMapper();
+          Dog dog = new Dog();
+          dog.name="旺财";
+          dog.barkVolume=111;
+          String s = mapper.writeValueAsString(dog);
+          System.out.println(s);
+          Animal animal = mapper.readValue(s, Animal.class);
+          System.out.println(animal.getClass());
+          System.out.println(animal);
+          System.out.println(animal.name);
+      }
+      /**
+       * 基类
+       */
+      @JsonTypeInfo(use=JsonTypeInfo.Id.CLASS)
+      static class Animal { // All animals have names, for our demo purposes...
+          public String name;
+          protected Animal() { }
+  
+          @Override
+          public String toString() {
+              return "Animal{" +
+                      "name='" + name + '\'' +
+                      '}';
+          }
+      }
+      static class Dog extends Animal {
+          public double barkVolume; // in decibels
+          public Dog() { }
+  
+          @Override
+          public String toString() {
+              return "Dog{" +
+                      "name='" + name + '\'' +
+                      ", barkVolume=" + barkVolume +
+                      '}';
+          }
+      }
+      static class Cat extends Animal {
+          boolean likesCream;
+          public int lives;
+          public Cat() { }
+      }
+  }
+  ```
+
+  这里的`@JsonTypeInfo`使用类全限定名作为类型信息, 序列化时默认将信息存储到对象的`@class`属性中.
+
+  这里没有使用`@JsonSubTypes`声明JSON中类型信息与Java Class的对应关系, 因为JSON中的类全限定名提供的信息已经足够了.
+
+* 复杂一点的Demo
+
+  ```java
+      ...
+          
+   	@JsonTypeInfo(
+              use=JsonTypeInfo.Id.NAME, //默认使用类型名的, 如Dog. 但可被@JsonSubTypes提供的name属性更改
+              include = JsonTypeInfo.As.PROPERTY,//信息存在属性中, 默认可选
+              property = "type"//属性名, 默认@type
+      )
+      @JsonSubTypes({ //注册Java对象与其JSON中类型信息的对应关系
+              @JsonSubTypes.Type(value = Dog.class, name = "dog") ,
+              @JsonSubTypes.Type(value = Cat.class, name = "cat")
+      })
+      static class Animal { // All animals have names, for our demo purposes...
+          public String name;
+          protected Animal() { }
+  
+  		...
+      }
+  	
+  	...
+  ```
+
+  > 一切尽在注释中
+
+  且外, 即使`@JsonTypeInfo`中`property`指定的属性与对象的属性重名了, 仍会再次插入该属性. 貌似这是个bug.
+
+> 参考:
+>
+> * [Jackson多态支持](https://www.jianshu.com/p/43564c096f53) 入门实例
+> * [十分钟学习Jackson多态处理](https://www.jianshu.com/p/6e3888998b6f) 注解详细使用介绍
+>
+> * [Type handling](https://github.com/FasterXML/jackson-annotations/wiki/Jackson-Annotations#type-handling) 官方文档
+
 # 五 XML
+
 **jackson-dataformat-xml**项目是Jackson JSON处理器的扩展，用于在java对象与XML之间转换。
 
 使用之前先配置Maven依赖：
