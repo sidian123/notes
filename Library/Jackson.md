@@ -93,6 +93,9 @@ Map<String, ResultValue> results = mapper.readValue(jsonSource,
 // why extra work? Java Type Erasure will prevent type detection otherwise
 ```
 # 四 注解
+
+> 所有注解参考[Jackson Annotations](https://github.com/FasterXML/jackson-docs/wiki/JacksonAnnotations)
+
 ## 更改属性名
 使用`@JsonProperty`：
 ```java
@@ -317,6 +320,7 @@ Simple value = xmlMapper.readValue("<Simple><x>1</x><y>2</y></Simple>", Simple.c
 * [FasterXML/jackson-databind](https://github.com/FasterXML/jackson-databind/) Json序列化的官方教程
 * [Jackson - Data Binding](https://www.tutorialspoint.com/jackson/jackson_data_binding.htm) tutorialspoint上的简易教程
 * [FasterXML/jackson-dataformat-xml](https://github.com/FasterXML/jackson-dataformat-xml) xml序列化的官方教程
+* [Jackson Annotations](https://github.com/FasterXML/jackson-docs/wiki/JacksonAnnotations) Json所有注解
 
 ---------
 
