@@ -314,6 +314,13 @@ Simple value = xmlMapper.readValue("<Simple><x>1</x><y>2</y></Simple>", Simple.c
 * `@JacksonXmlCData` allows specifying that the value of a property is to be serialized within a CData tag.
 
 # 参考
-* [FasterXML/jackson-databind](https://github.com/FasterXML/jackson-databind/) Json序列化的官方文档
+* [FasterXML/jackson-databind](https://github.com/FasterXML/jackson-databind/) Json序列化的官方教程
 * [Jackson - Data Binding](https://www.tutorialspoint.com/jackson/jackson_data_binding.htm) tutorialspoint上的简易教程
-* [FasterXML/jackson-dataformat-xml](https://github.com/FasterXML/jackson-dataformat-xml) xml序列化的官方文档
+* [FasterXML/jackson-dataformat-xml](https://github.com/FasterXML/jackson-dataformat-xml) xml序列化的官方教程
+
+---------
+
+进阶阅读
+
+- [Overall Jackson Docs](https://github.com/FasterXML/jackson-docs) 全面的文档
+- [Project wiki page](https://github.com/FasterXML/jackson-databind/wiki)
