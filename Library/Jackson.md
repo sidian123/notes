@@ -244,41 +244,41 @@ public class ItemController {
 
 ## date相关
 
-> 好像Spring Boot配置的ObjectMapper很完美了
+* 依赖引入
 
-* 序列化`LocalDateTime`
-	需要先引入包
-	
-	```xml
-	      <!-- json附加支持jdk8时间类型的包 -->
-	      <dependency>
-	          <groupId>com.fasterxml.jackson.datatype</groupId>
-	          <artifactId>jackson-datatype-jsr310</artifactId>
-	          <version>2.9.8</version>
-	      </dependency>
-	```
-	然后在属性上添加注解
-	```java
-	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
-	@JsonSerialize(using=LocalDateTimeSerializer.class)
-	```
-* 解序列化，这里暂时使用spring的注解
-	```java
-	@DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-	```
-	
-	> 因为一般参数是Url encode格式的, 而不是Json格式的
+  ```xml
+  <!-- json附加支持jdk8时间类型的包 -->
+  <dependency>
+      <groupId>com.fasterxml.jackson.datatype</groupId>
+      <artifactId>jackson-datatype-jsr310</artifactId>
+      <version>2.9.8</version>
+  </dependency>
+  ```
 
->以后参考：[Jackson Date](https://www.baeldung.com/jackson-serialize-dates)
----
+  该依赖在序列化时需要, 请确保依赖存在.
 
-貌似可以直接这样
+* 使用
 
-```java
-@JsonDeserialize(using = LocalDateTimeDeserializer.class)
-@JsonSerialize(using = LocalDateTimeSerializer.class)
-```
+  在POJO的属性上添加如下注解:
 
+  ```java
+  //指定序列化和反序列化的时间格式
+  @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
+  //指定序列化时的转化器
+  @JsonSerialize(using = LocalDateTimeSerializer.class)
+  //指定反序列化时的转化器
+  @JsonDeserialize(using = LocalDateTimeDeserializer.class)
+  ```
+
+  > 注意, 序列化和反序列化时都需要`@JsonFormat`注解
+
+  如果在Spring Boot中, 如果未使用`@RequestBody`注解, 即未使用Jackson反序列化时, 则用Spring的`@DateTimeFormat`注解来反序列化:
+
+  ```java
+  @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+  ```
+
+>参考：[Jackson Date](https://www.baeldung.com/jackson-serialize-dates)
 ## 多态支持
 
 > 能简单上手即可, 不作详细介绍.
