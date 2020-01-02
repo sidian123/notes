@@ -235,6 +235,10 @@ $border-dark: rgba($base-color, 0.88);
 }
 ```
 
+-----
+
+还支持运算, 见[Operators](https://sass-lang.com/documentation/operators)
+
 ## 插值
 
 表达式可以用在属性值、函数、甚至类名上。
