@@ -93,7 +93,6 @@ void vsyslog(int priority, const char *format, va_list ap);
   
   LOG_DEBUG      debug-level message
   ```
-  
 
 # 参考
 
