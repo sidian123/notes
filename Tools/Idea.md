@@ -137,6 +137,7 @@ module与project一同被创建出来，每个module都是个独立的实体，�
 有些选项值只有在特定的配置下可用，受不同运行配置（local or romote）、发布方式（war or war exploded）影响。因此下拉列表中显示的都是可用的选项值。
 
 所有选项值如下：
+
 | Option                       | Description                                                  | Available for                                                |
 | :--------------------------- | :----------------------------------------------------------- | :----------------------------------------------------------- |
 | Update resources             | All changed resources are updated (HTML, JSP, JavaScript, CSS and image files). | Exploded artifacts in local configurations                   |
