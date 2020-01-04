@@ -1466,9 +1466,23 @@ public class AppConfig {
 > * [What is the difference between spring parent context and child context?](https://stackoverflow.com/questions/43452644/what-is-the-difference-between-spring-parent-context-and-child-context)
 >* [About multiple containers in spring framework](https://stackoverflow.com/questions/18578143/about-multiple-containers-in-spring-framework)
 
-## 好像构造函数注入了, 字段就不再注入
+## 字段未注入?
 
+构造函数中不能使用被注入的属性? 
 
+不能, 因为Bean实例化之前不能够进行属性装配
+
+## 代理对象注入失败
+
+代理失败的原因有很多, 这里介绍我遇到的, 很难发现的失效代理情况.
+
+* 问题
+
+  一个`@Configuration`配置类A, 依赖一个Bean B. 而B又被代理了, 但是代理却失效了.
+
+* 原因
+
+  `@Configuration`类比普通Bean要早装配, 其依赖的Bean来不及被代理就被注入了, 而注入后的Bean不会再被代理了, 因此此时代理失效了, 包括其依赖Bean的依赖.
 
 # 待补充
 
