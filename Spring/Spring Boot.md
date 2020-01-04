@@ -403,6 +403,8 @@ Spring Boot对[Java Util Logging](https://docs.oracle.com/javase/8/docs/api//jav
 </dependency>
 ```
 
+> 好像`spring-boot-starter`中也引入了logging starter依赖
+
 类中获取Logger
 
 ```java
