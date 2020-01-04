@@ -215,7 +215,7 @@
 
         > 还有其他变种方法, 如`min()`,`max()`,`average()`,`sum()`等
 
-      * `collect()`修改和改变现有的值, 得到一个容器
+      * `collect()`修改和改变现有的值, 得到一个~~容器~~
 
         > 使用有点小复杂, 因此提供了 [Collectors](https://docs.oracle.com/javase/8/docs/api/java/util/stream/Collectors.html) 类, 含有提供常用聚合操作的静态方法.
 
