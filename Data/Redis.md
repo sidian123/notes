@@ -144,7 +144,9 @@
 
 * 错误
 
+  ```
   redis-server.service: Can't open PID file /var/run/redis/redis-server.pid (yet?) after start: No such file or directory
+  ```
 
 * 排查
 

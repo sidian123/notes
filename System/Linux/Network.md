@@ -198,7 +198,7 @@ sar -n DEV 1 100
 hostname hk.sidian.live
 ```
 
-> 直接修改`/etc/hostname`文件无效
+保守起见, 再修改下`/etc/hostname`文件
 
 ## nc & telnet
 
