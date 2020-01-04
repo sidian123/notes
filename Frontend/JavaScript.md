@@ -189,12 +189,12 @@ parseInt('hello', 10); // NaN
 * 本地时区相关
   * `setDate()`, `getDate()` 
   * `setMonth()`, `getMonth()` 
-  * `setYear()`, `getYear()`
+  * `setFullYear()`, `getFullYear()`
   * ...
 * UTC时区相关
   * `setUTCDate()`, `getUTCDate()` 
   * `setUTCMonth()`, `getUTCMonth()` 
-  * `setUTCYear()`, `getUTCYear()`
+  * `setUTCFullYear()`, `getUTCFullYear()`
   * ...
 
 > 若无特别指明, 如UTC, 都是以本地时区计算的.
@@ -202,6 +202,8 @@ parseInt('hello', 10); // NaN
 其他有意思的一些方法
 
 * `getDay()` 返回这周的第几天, 对应关系:`Sunday - Saturday : 0 - 6`
+
+> 参考[Date](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date)
 
 ### 其他类型
 `null`表示**故意设置**的、不存在的值；`undefined`表示变量还未初始化，函数没有返回值时也会返回`undefined`。
