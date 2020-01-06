@@ -118,6 +118,15 @@ shell在启动时会读取配置文件，不同的shell读取的文件都不同�
 * `for name  in  word ... ;  do list ; done`
   name变量每次从in后取得一个值，然后运行一次list。word可使用通配符，自动被expansion（扩展）。
 
+  ```bash
+  for var in "$@"
+  do
+      echo "$var"
+  done
+  ```
+  
+  > 打印所有参数.
+  
 * `for (( expr1 ; expr2 ; expr3 )) ; do list ; done`
   首先执行expr1，之后每次都检测expr2是否为0，如果为0则结束；否则执行list和expr3被执行，然后再重复检测。
 
