@@ -298,6 +298,7 @@ shell变量用于存储字面值、参与计算。bash为我们提供了一些�
 * `-n <string>` string长度不为0
 * `-z <string>` string长度为0
 * `-f <file>` 文件存在且为普通文件
+* `-d <file>` 文件存在且为目录
 
 ## 替换Expansion
 
