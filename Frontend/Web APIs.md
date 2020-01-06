@@ -518,11 +518,26 @@ html5后引入了web storage（本地储存），比cookies更好用。本地存
 
 ## 编,解码
 
-* `encodeURI()`, `decodeURI()`编码或解码URL
+* URL
+  * `encodeURI()`, `decodeURI()`编码或解码URL
 
-* `encodeURIComponent()`, `decodeURIComponent()` 编码或解码URL组件, 即`(; / ? : @ & = + $ , #)`等字符间的内容.
+  * `encodeURIComponent()`, `decodeURIComponent()` 编码或解码URL组件, 即`(; / ? : @ & = + $ , #)`等字符间的内容.
 
-  > 因此`encodeURIComponent()`传入`/`会被编码的
+    > 因此`encodeURIComponent()`传入`/`会被编码的
+
+* Base64
+
+  * `atob()`解码
+  * `btoa()`编码
+
+* JSON
+  * `JSON.parse()`解码
+  * `JSON.stringify()`编码
+
+> 参考
+>
+> * [Base64 encoding and decoding](https://developer.mozilla.org/en-US/docs/Web/API/WindowBase64/Base64_encoding_and_decoding)
+> * [JSON](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/JSON)
 
 ## DevTools
 
