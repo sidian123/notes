@@ -524,7 +524,7 @@ spring boot也提供了常用的应用属性配置，并且这些属性是日记
 | `logging.pattern.level`             | `LOG_LEVEL_PATTERN`             | The format to use when rendering the log level (default `%5p`). (Only supported with the default Logback setup.) |
 | `PID`                               | `PID`                           | The current process ID (discovered if possible and when not already defined as an OS environment variable). |
 
-具体的不说了，本小白用不到。但注意的是，如果在日记配置文件的属性中使用占位符，因为使用spring boot的语法。Logback的配置文件还支持直接从应用属性中获取值。。。
+> 注意，若想在日志配置文件中的属性中使用占位符时, 请使用[Spring的语法](https://docs.spring.io/spring-boot/docs/2.1.4.RELEASE/reference/htmlsingle/#boot-features-external-config-placeholders-in-properties)(待验证)
 
 Log4j2在Spring中的默认配置如下
 
@@ -560,8 +560,6 @@ Log4j2在Spring中的默认配置如下
 ```
 
 > 详细参考：[Custom Log Configuration](<https://docs.spring.io/spring-boot/docs/2.1.4.RELEASE/reference/htmlsingle/#boot-features-custom-log-configuration>)
-
----------
 
 ## 自定义配置例子
 
