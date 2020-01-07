@@ -145,8 +145,8 @@ Configuration元素一些重要的属性如下：
 * Appender
   * [ConsoleAppender][3]常用于输出到控制台
   * `RollingFile`常用于输出到文件
-
-* [PatternLayout][4]是一个比较常用的layout。这里要注意使用`charset`属性日志乱码，PatternLayout默认使用系统编码。
+* Layout
+  * [PatternLayout][4]通过模式, 将日志输出为字符串. 注意, 请设置`charset`属性, 防止日志乱码，`PatternLayout`默认使用系统编码。
 
 [3]:https://logging.apache.org/log4j/2.x/manual/appenders.html#ConsoleAppender
 [4]:https://logging.apache.org/log4j/2.x/manual/layouts.html#PatternLayout
@@ -197,7 +197,7 @@ Configuration元素一些重要的属性如下：
 
 ## 复杂Demo
 
-> 摘录至, 且最新修改存于Spring Boot文章中.
+> 摘录至文章Spring Boot中, 这个不是最新版, 请移步查看
 
 ```xml
 <?xml version="1.0" encoding="UTF-8"?>

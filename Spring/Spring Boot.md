@@ -601,39 +601,43 @@ public class ClientApplication {
 
 创建`log4j2-spring.xml`文件, 从上述默认配置中修改
 
-> 下面列出的配置, 比较全, 使用时, 根据自己需求修改即可. 注意, 这个和默认配置不太一样, 使用时注意对照修改.
+> 下面列出的配置, 比较全, 使用时, 根据自己需求修改即可.
 
 ```xml
 <?xml version="1.0" encoding="UTF-8"?>
-<!--日志级别与优先级: OFF > FATAL > ERROR > WARN > INFO > DEBUG > TRACE > ALL -->
+<!--日志级别与严重程度: OFF > FATAL > ERROR > WARN > INFO > DEBUG > TRACE > ALL -->
 <!--Configuration中status属性用于设置log4j2自身内部日志输出的等级, 默认warn; monitorInterval配置重新扫描配置的时间间隔-->
 <Configuration status="WARN" monitorInterval="30">
+    <!-- 属性,在其他元素中使用 -->
     <Properties>
-        <Property name="LOG_EXCEPTION_CONVERSION_WORD">%xwEx</Property>
-        <Property name="LOG_LEVEL_PATTERN">%5p</Property>
-        <Property name="LOG_DATEFORMAT_PATTERN">yyyy-MM-dd HH:mm:ss.SSS</Property>
+        <Property name="LOG_EXCEPTION_CONVERSION_WORD">%xwEx</Property> <!-- 和异常有关, 具体不知. SpringBoot未提供时,将使用这个配置 -->
+        <Property name="LOG_LEVEL_PATTERN">%5p</Property> <!-- 日志级别格式 -->
+        <Property name="LOG_DATEFORMAT_PATTERN">yyyy-MM-dd HH:mm:ss.SSS</Property> <!-- 日期格式 -->
+        <!-- 控制台输出格式, 带有颜色. 该颜色由ANSI转义字符提供, 若重定向到文件且用less查看时需要加上选项-R -->
         <Property name="CONSOLE_LOG_PATTERN">%clr{%d{${LOG_DATEFORMAT_PATTERN}}}{faint} %clr{${LOG_LEVEL_PATTERN}} %clr{%pid}{magenta} %clr{---}{faint} %clr{[%15.15t]}{faint} %clr{%-40.40c{1.}}{cyan} %clr{:}{faint} %m%n${sys:LOG_EXCEPTION_CONVERSION_WORD}</Property>
-        <Property name="FILE_LOG_PATTERN">%d{${LOG_DATEFORMAT_PATTERN}} ${LOG_LEVEL_PATTERN} %pid --- [%t] %-40.40c{1.} : %m%n${sys:LOG_EXCEPTION_CONVERSION_WORD}</Property>
+        <!-- 文件输出格式, 无颜色, 因为考虑到很多编辑器不支持查看 -->
+        <Property name="FILE_LOG_PATTERN">%d{${LOG_DATEFORMAT_PATTERN}} ${LOG_LEVEL_PATTERN} %pid --- [%15.15t] %-40.40c{1.} : %m%n${sys:LOG_EXCEPTION_CONVERSION_WORD}</Property>
     </Properties>
 
-    <!--所有的appender-->
+    <!--所有的Appender,Appender负责将LogEvent派送到目的地，可以有很多目的地，如console，文件、远程服务器或数据库等等.-->
+    <!-- Appender中可配置过滤器ThresholdFilter,即日志级别.-->
     <appenders>
-        <!--这个输出控制台的配置-->
+        <!--打印所有日志到控制台-->
         <Console name="Console" target="SYSTEM_OUT" follow="true">
             <PatternLayout pattern="${CONSOLE_LOG_PATTERN}"/>
         </Console>
 
         <!--文件会打印出所有信息，这个log每次运行程序会自动清空，由append属性决定，用于临时测试-->
-        <!--<File name="log" fileName="log/test.log" append="false">-->
+        <!--<File name="log" fileName="logs/test.log" append="false">-->
         <!--<PatternLayout pattern="${FILE_LOG_PATTERN}"/>-->
         <!--</File>-->
 
-        <!-- 将打印所有的info及以下级别的日志. 每天日志都会按照filePattern归档, 且当info.log文件大小超过size时，该日志也会被归档-->
+        <!--打印所有info及以上级别的日志到文件中. 每天日志都会按照filePattern归档, 且当info.log文件大小超过size时，该日志也会被归档-->
         <RollingFile name="RollingFileInfo" fileName="./logs/info.log"
                      filePattern="./logs/$${date:yyyy-MM}/info-%d{yyyy-MM-dd}-%i.log">
             <!--控制台只输出level及以上级别的信息（onMatch），其他的直接拒绝（onMismatch）-->
             <ThresholdFilter level="info" onMatch="ACCEPT" onMismatch="DENY"/>
-            <PatternLayout pattern="[%d{HH:mm:ss:SSS}] [%p] - %l - %m%n"/>
+            <PatternLayout pattern="${FILE_LOG_PATTERN}"/>
             <!-- 归档策略 -->
             <Policies>
                 <!-- 根据上述filePattern归档, 即每天归档一次 -->
@@ -641,20 +645,20 @@ public class ClientApplication {
                 <!-- 日志超过size归档 -->
                 <SizeBasedTriggeringPolicy size="100 MB"/>
             </Policies>
+            <!-- DefaultRolloverStrategy的max属性设置该Appender最多存在多少个归档, 默认7个.注意,该元素即使未声明,也默认被使用. -->
+            <DefaultRolloverStrategy max="20"/>
         </RollingFile>
-
+        <!-- 打印所有warn及以上级别的日志到文件中 -->
         <RollingFile name="RollingFileWarn" fileName="./logs/warn.log"
                      filePattern="./logs/$${date:yyyy-MM}/warn-%d{yyyy-MM-dd}-%i.log">
             <ThresholdFilter level="warn" onMatch="ACCEPT" onMismatch="DENY"/>
-            <PatternLayout pattern="[%d{HH:mm:ss:SSS}] [%p] - %l - %m%n"/>
+            <PatternLayout pattern="${FILE_LOG_PATTERN}"/>
             <Policies>
                 <TimeBasedTriggeringPolicy/>
                 <SizeBasedTriggeringPolicy size="100 MB"/>
             </Policies>
-            <!-- DefaultRolloverStrategy的max属性设置该Appender最多存在多少个归档, 默认7个.注意,该元素即使未声明,也默认被使用. -->
-            <DefaultRolloverStrategy max="20"/>
         </RollingFile>
-
+        <!-- 打印所有error及以上级别的日志到文件中 -->
         <RollingFile name="RollingFileError" fileName="./logs/error.log"
                      filePattern="./logs/$${date:yyyy-MM}/error-%d{yyyy-MM-dd}-%i.log">
             <ThresholdFilter level="error" onMatch="ACCEPT" onMismatch="DENY"/>
@@ -664,12 +668,11 @@ public class ClientApplication {
                 <SizeBasedTriggeringPolicy size="100 MB"/>
             </Policies>
         </RollingFile>
-
-        <!-- sql输出文件 -->
+        <!-- 打印所有的SQL日志到文件中. -->
         <RollingFile name="SQL" fileName="./logs/sql.log"
                      filePattern="./logs/$${date:yyyy-MM}/sql-%d{yyyy-MM-dd}-%i.log">
             <ThresholdFilter level="debug" onMatch="ACCEPT" onMismatch="DENY"/>
-            <PatternLayout pattern="[%d{HH:mm:ss:SSS}] [%p] - %l - %m%n"/>
+            <PatternLayout pattern="${FILE_LOG_PATTERN}"/>
             <Policies>
                 <TimeBasedTriggeringPolicy/>
                 <SizeBasedTriggeringPolicy size="100 MB"/>
@@ -677,7 +680,9 @@ public class ClientApplication {
         </RollingFile>
     </appenders>
 
-    <!--然后定义logger，只有定义了logger并引入的appender，appender才会生效-->
+    <!-- 所有的Logger, 只有关联了Logger和Appender, Appender才生效. Logger元素与代理中使用的Logger对象需要绑定才能使用, 这个绑定关系是由框架维护的 -->
+    <!-- 日志由Logger对象传给Logger元素, 这个传递过程涉及日志级别过滤和Level Inheritance -->
+    <!-- 日志由logger元素传给Appender元素, 这个传递过程涉及日志级别的再次过滤和Additivity -->
     <loggers>
         <!-- Spring Boot默认Logger配置 -->
         <Logger name="org.apache.catalina.startup.DigesterFactory" level="error"/>
@@ -690,7 +695,7 @@ public class ClientApplication {
         <logger name="org.springframework.boot.actuate.endpoint.jmx" level="warn"/>
 
         <!--sql日志-->
-        <logger name="com.qthl.wf.dao" level="debug" additivity="false">
+        <logger name="live.sidian.blog.dao" level="debug" additivity="false">
             <appender-ref ref="Console"/>
             <appender-ref ref="SQL"/>
         </logger>
