@@ -502,6 +502,19 @@ spring boot也提供了常用的应用属性配置，并且这些属性是日记
 
 为了支持更好的扩展，spring boot将一一些`Environment`中的属性转移到了系统属性中，并且上述日记系统都支持从系统属性中获得属性。
 
+| Spring Environment                  | System Property                 | Comments                                                     |
+| ----------------------------------- | ------------------------------- | ------------------------------------------------------------ |
+| `logging.exception-conversion-word` | `LOG_EXCEPTION_CONVERSION_WORD` | The conversion word used when logging exceptions.            |
+| `logging.file`                      | `LOG_FILE`                      | If defined, it is used in the default log configuration.     |
+| `logging.file.max-size`             | `LOG_FILE_MAX_SIZE`             | Maximum log file size (if LOG_FILE enabled). (Only supported with the default Logback setup.) |
+| `logging.file.max-history`          | `LOG_FILE_MAX_HISTORY`          | Maximum number of archive log files to keep (if LOG_FILE enabled). (Only supported with the default Logback setup.) |
+| `logging.path`                      | `LOG_PATH`                      | If defined, it is used in the default log configuration.     |
+| `logging.pattern.console`           | `CONSOLE_LOG_PATTERN`           | The log pattern to use on the console (stdout). (Only supported with the default Logback setup.) |
+| `logging.pattern.dateformat`        | `LOG_DATEFORMAT_PATTERN`        | Appender pattern for log date format. (Only supported with the default Logback setup.) |
+| `logging.pattern.file`              | `FILE_LOG_PATTERN`              | The log pattern to use in a file (if `LOG_FILE` is enabled). (Only supported with the default Logback setup.) |
+| `logging.pattern.level`             | `LOG_LEVEL_PATTERN`             | The format to use when rendering the log level (default `%5p`). (Only supported with the default Logback setup.) |
+| `PID`                               | `PID`                           | The current process ID (discovered if possible and when not already defined as an OS environment variable). |
+
 具体的不说了，本小白用不到。但注意的是，如果在日记配置文件的属性中使用占位符，因为使用spring boot的语法。Logback的配置文件还支持直接从应用属性中获取值。。。
 
 Log4j2在Spring中的默认配置如下
