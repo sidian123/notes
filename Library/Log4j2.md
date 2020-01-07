@@ -134,9 +134,10 @@ Configuration元素一些重要的属性如下：
 
   ```xml
   <Properties>    
-        <Property name="filename">target/rolling1/rollingtest-$${sd:type}.log</Property> </Properties>
-  ```
-
+        <Property name="filename">target/rolling1/rollingtest-$${sd:type}.log</Property
+  </Properties>
+```
+  
   > 取出时无需前缀, 如`${filename}`
 
 ## 其他配置
