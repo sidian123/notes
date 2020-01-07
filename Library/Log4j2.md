@@ -1,7 +1,7 @@
 # 一 简介
 历史上出现了很多的日志框架，如：
 * **Log4j**：Apache Log4j是一个基于Java的日志记录工具。它是由Ceki Gülcü首创的，现在则是Apache软件基金会的一个项目。 Log4j是几种Java日志框架之一。
-* **Log4j 2**：Apache Log4j 2是apache开发的一款Log4j的升级产品。
+* **Log4j 2**：Apache Log4j 2是Apache开发的一款Log4j的升级产品。
 * **Commons Logging**：Apache基金会所属的项目，是一套Java日志接口，之前叫Jakarta Commons Logging，后更名为Commons Logging。
 * **Slf4j**：类似于Commons Logging，是一套简易Java日志门面，本身并无日志的实现。（Simple Logging Facade for Java，缩写Slf4j）。
 * **Logback**：一套日志组件的实现(Slf4j阵营)。
@@ -9,7 +9,7 @@
 
 由于java官方日志框架Jul出现较晚，因此没能统一日志接口。slf4j和commons-loggings都只定义了接口，为了**桥接**其他日志框架，需要额外的jar包。使用日志接口，可以方便的在不同日志框架间切换（为了灵活性的同时也付出了一定代价），于是形成了两大阵容：
 ![在这里插入图片描述](.Log4j2/20190228085152727.png)
-一般常见的使用组合为：slf4j与logback，commons logging与log4j。但是我选择使用**Log4j2**，它重写了log4j，具有Logback的全部特性，是log4j的升级版，却不兼容log4j。log4j2将接口（log4j-api）和实现（log4j-core）分开来，提供了桥接其他日志实现的可能（log4j-core被适配器替换）。log4j2提供了与Jul、Slf4j、commons logging桥接的jar包，因此log4j2即使不兼容log4j，也能通过commons logging桥接包使用它。与slf4j的桥接如下：
+一般常见的使用组合为：Slf4j与Logback，Commons Logging与Log4j。但是我选择使用**Log4j2**，它重写了Log4j，具有Logback的全部特性，是Log4j的升级版，却不兼容log4j。Log4j2将接口（`log4j-api`）和实现（`log4j-core`）分开来，提供了桥接其他日志实现的可能（`log4j-core`被适配器替换）。Log4j2提供了与Jul、Slf4j、Commons Logging桥接的jar包，因此log4j2即使不兼容log4j，也能通过commons logging桥接包使用它。与slf4j的桥接如下：
 ![在这里插入图片描述](.Log4j2/20190228090313717.png)
 除此之外，log4j2还有很多特性，如异步输出（降低io负担），自动加载配置（避免重启应用），自定义日志级别（感觉不常用）等等。
 
@@ -136,6 +136,12 @@ Configuration元素一些重要的属性如下：
 
 [3]:https://logging.apache.org/log4j/2.x/manual/appenders.html#ConsoleAppender
 [4]:https://logging.apache.org/log4j/2.x/manual/layouts.html#PatternLayout
+
+## 复杂Demo
+
+```xml
+
+```
 
 # 四 使用
 使用例子如下：
