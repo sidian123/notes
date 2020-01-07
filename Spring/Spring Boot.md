@@ -575,10 +575,21 @@ Log4j2在Spring中的默认配置如下
     <groupId>org.springframework.boot</groupId>
     <artifactId>spring-boot-starter-log4j2</artifactId>
 </dependency>
-
+<!-- 即使Logback有路由的机制, 但是还是可能会冲突, 此时需要去除Logback. 如Web starter可能会导致冲突, 因此去掉. 如果不冲突, 那么可以不去掉 -->
 <dependency>
     <groupId>org.springframework.boot</groupId>
     <artifactId>spring-boot-starter-web</artifactId>
+    <exclusions>
+        <exclusion>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-logging</artifactId>
+        </exclusion>
+    </exclusions>
+</dependency>
+<!-- 该Starter存在于Spring Boot最新版中, 请同时也排除 -->
+<dependency>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter</artifactId>
     <exclusions>
         <exclusion>
             <groupId>org.springframework.boot</groupId>
@@ -594,7 +605,8 @@ Log4j2在Spring中的默认配置如下
 @SpringBootApplication
 public class ClientApplication {
     static{
-        System.setProperty("org.springframework.boot.logging.LoggingSystem","org.springframework.boot.logging.log4j2.Log4J2LoggingSystem");
+    	//让SpringBoot内部使用log4j2
+		System.setProperty("org.springframework.boot.logging.LoggingSystem","org.springframework.boot.logging.log4j2.Log4J2LoggingSystem");
     }
 
     public static void main(String[] args) {
