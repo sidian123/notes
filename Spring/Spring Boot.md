@@ -529,7 +529,7 @@ spring boot也提供了常用的应用属性配置，并且这些属性是日记
 | `logging.pattern.rolling-file-name`   | `ROLLING_FILE_NAME_PATTERN`       | Pattern for rolled-over log file names (default `${LOG_FILE}.%d{yyyy-MM-dd}.%i.gz`). (Only supported with the default Logback setup.) |
 | `PID`                                 | `PID`                             | The current process ID (discovered if possible and when not already defined as an OS environment variable). |
 
-> 注意，若想在日志配置文件中的属性中使用占位符时, 请使用[Spring的语法](https://docs.spring.io/spring-boot/docs/2.1.4.RELEASE/reference/htmlsingle/#boot-features-external-config-placeholders-in-properties)(待验证)
+> 注意，若想在日志配置文件中的属性中使用占位符时, 请使用[Spring的语法](https://docs.spring.io/spring-boot/docs/2.1.4.RELEASE/reference/htmlsingle/#boot-features-external-config-placeholders-in-properties) , 经测试, 该功能仅在Logback中有效
 
 Log4j2在Spring中的默认配置如下
 
@@ -622,6 +622,7 @@ public class ClientApplication {
         <Property name="CONSOLE_LOG_PATTERN">%clr{%d{${LOG_DATEFORMAT_PATTERN}}}{faint} %clr{${LOG_LEVEL_PATTERN}} %clr{%pid}{magenta} %clr{---}{faint} %clr{[%15.15t]}{faint} %clr{%-40.40c{1.}}{cyan} %clr{:}{faint} %m%n${sys:LOG_EXCEPTION_CONVERSION_WORD}</Property>
         <!-- 文件输出格式, 无颜色, 因为考虑到很多编辑器不支持查看 -->
         <Property name="FILE_LOG_PATTERN">%d{${LOG_DATEFORMAT_PATTERN}} ${LOG_LEVEL_PATTERN} %pid --- [%15.15t] %-40.40c{1.} : %m%n${sys:LOG_EXCEPTION_CONVERSION_WORD}</Property>
+        <Property name="LOG_HOME">logs</Property> <!-- 日志家目录 -->
     </Properties>
 
     <!--所有的Appender,Appender负责将LogEvent派送到目的地，可以有很多目的地，如console，文件、远程服务器或数据库等等.-->
@@ -633,12 +634,12 @@ public class ClientApplication {
         </Console>
 
         <!--文件会打印出所有信息，这个log每次运行程序会自动清空，由append属性决定，用于临时测试-->
-        <!--<File name="log" fileName="logs/test.log" append="false">-->
+        <!--<File name="log" fileName="${LOG_HOME}/test.log" append="false">-->
         <!--<PatternLayout pattern="${FILE_LOG_PATTERN}"/>-->
         <!--</File>-->
 
         <!--打印所有info及以上级别的日志到文件中. 每天日志都会按照filePattern归档, 且当info.log文件大小超过size时，该日志也会被归档-->
-        <RollingFile name="RollingFileInfo" fileName="./logs/info.log"
+        <RollingFile name="RollingFileInfo" fileName="${LOG_HOME}/info.log"
                      filePattern="./logs/$${date:yyyy-MM}/info-%d{yyyy-MM-dd}-%i.log">
             <!--控制台只输出level及以上级别的信息（onMatch），其他的直接拒绝（onMismatch）-->
             <ThresholdFilter level="info" onMatch="ACCEPT" onMismatch="DENY"/>
@@ -654,7 +655,7 @@ public class ClientApplication {
             <DefaultRolloverStrategy max="20"/>
         </RollingFile>
         <!-- 打印所有warn及以上级别的日志到文件中 -->
-        <RollingFile name="RollingFileWarn" fileName="./logs/warn.log"
+        <RollingFile name="RollingFileWarn" fileName="${LOG_HOME}/warn.log"
                      filePattern="./logs/$${date:yyyy-MM}/warn-%d{yyyy-MM-dd}-%i.log">
             <ThresholdFilter level="warn" onMatch="ACCEPT" onMismatch="DENY"/>
             <PatternLayout pattern="${FILE_LOG_PATTERN}"/>
@@ -664,7 +665,7 @@ public class ClientApplication {
             </Policies>
         </RollingFile>
         <!-- 打印所有error及以上级别的日志到文件中 -->
-        <RollingFile name="RollingFileError" fileName="./logs/error.log"
+        <RollingFile name="RollingFileError" fileName="${LOG_HOME}/error.log"
                      filePattern="./logs/$${date:yyyy-MM}/error-%d{yyyy-MM-dd}-%i.log">
             <ThresholdFilter level="error" onMatch="ACCEPT" onMismatch="DENY"/>
             <PatternLayout pattern="[%d{HH:mm:ss:SSS}] [%p] - %l - %m%n"/>
@@ -674,7 +675,7 @@ public class ClientApplication {
             </Policies>
         </RollingFile>
         <!-- 打印所有的SQL日志到文件中. -->
-        <RollingFile name="SQL" fileName="./logs/sql.log"
+        <RollingFile name="SQL" fileName="${LOG_HOME}/sql.log"
                      filePattern="./logs/$${date:yyyy-MM}/sql-%d{yyyy-MM-dd}-%i.log">
             <ThresholdFilter level="debug" onMatch="ACCEPT" onMismatch="DENY"/>
             <PatternLayout pattern="${FILE_LOG_PATTERN}"/>
@@ -699,7 +700,7 @@ public class ClientApplication {
         <Logger name="org.hibernate.validator.internal.util.Version" level="warn"/>
         <logger name="org.springframework.boot.actuate.endpoint.jmx" level="warn"/>
 
-        <!--sql日志-->
+        <!--sql日志. additivity为false, 表示不关联到父logger的appender上去. -->
         <logger name="live.sidian.blog.dao" level="debug" additivity="false">
             <appender-ref ref="Console"/>
             <appender-ref ref="SQL"/>
