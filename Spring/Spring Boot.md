@@ -401,9 +401,18 @@ Spring Boot对[Java Util Logging](https://docs.oracle.com/javase/8/docs/api//jav
         </exclusion>
     </exclusions>
 </dependency>
+<!-- 该Starter存在于Spring Boot最新版中, 请同时也排除 -->
+<dependency>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter</artifactId>
+    <exclusions>
+        <exclusion>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-logging</artifactId>
+        </exclusion>
+    </exclusions>
+</dependency>
 ```
-
-> 好像`spring-boot-starter`中也引入了logging starter依赖
 
 类中获取Logger
 
@@ -549,8 +558,6 @@ Log4j2在Spring中的默认配置如下
 	</Loggers>
 </Configuration>
 ```
-
-
 
 > 详细参考：[Custom Log Configuration](<https://docs.spring.io/spring-boot/docs/2.1.4.RELEASE/reference/htmlsingle/#boot-features-custom-log-configuration>)
 

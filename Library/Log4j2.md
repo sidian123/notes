@@ -110,7 +110,7 @@ Configuration元素一些重要的属性如下：
 
 参考：[Configuration](https://logging.apache.org/log4j/2.x/manual/configuration.html#ConfigurationSyntax)
 
-## 属性替换
+## 属性
 
 * 获取属性`${prefix:name}` 
 
@@ -127,17 +127,21 @@ Configuration元素一些重要的属性如下：
 
   > 取出时无需前缀, 如`${filename}`
 
-## 其他配置链接
+## 其他配置
 配置方式官方文档说的很详细，这里直接贴出链接。。。阅读时记住，xml配置的语法很松懈。
 
-[ConsoleAppender][3]是比较常用的appender
+* Appender
+  * [ConsoleAppender][3]常用于输出到控制台
+  * `RollingFile`常用于输出到文件
 
-[PatternLayout][4]是一个比较常用的layout。这里要注意使用`charset`属性日志乱码，PatternLayout默认使用系统编码。
+* [PatternLayout][4]是一个比较常用的layout。这里要注意使用`charset`属性日志乱码，PatternLayout默认使用系统编码。
 
 [3]:https://logging.apache.org/log4j/2.x/manual/appenders.html#ConsoleAppender
 [4]:https://logging.apache.org/log4j/2.x/manual/layouts.html#PatternLayout
 
 ## 复杂Demo
+
+> 摘录至, 且最新修改存于Spring Boot文章中.
 
 ```xml
 <?xml version="1.0" encoding="UTF-8"?>
