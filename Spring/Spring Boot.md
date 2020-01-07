@@ -499,6 +499,8 @@ spring boot也提供了常用的应用属性配置，并且这些属性是日记
 
 文件相关的属性，仅支持Logback，但是我们可以通过自定义日记系统自己的配置文件来支持这些属性。
 
+> 貌似最新版支持文件相关的属性了, 但是有bug
+
 默认情况下, 根据使用的日记系统, 不同的文件会被加载, 如下所示. 可通过属性`logging.config`显式指定使用的日志文件
 
 | Logging System          | Customization                                                |
@@ -511,18 +513,21 @@ spring boot也提供了常用的应用属性配置，并且这些属性是日记
 
 为了支持更好的扩展，spring boot将一一些`Environment`中的属性转移到了系统属性中，并且上述日记系统都支持从系统属性中获得属性。
 
-| Spring Environment                  | System Property                 | Comments                                                     |
-| ----------------------------------- | ------------------------------- | ------------------------------------------------------------ |
-| `logging.exception-conversion-word` | `LOG_EXCEPTION_CONVERSION_WORD` | The conversion word used when logging exceptions.            |
-| `logging.file`                      | `LOG_FILE`                      | If defined, it is used in the default log configuration.     |
-| `logging.file.max-size`             | `LOG_FILE_MAX_SIZE`             | Maximum log file size (if LOG_FILE enabled). (Only supported with the default Logback setup.) |
-| `logging.file.max-history`          | `LOG_FILE_MAX_HISTORY`          | Maximum number of archive log files to keep (if LOG_FILE enabled). (Only supported with the default Logback setup.) |
-| `logging.path`                      | `LOG_PATH`                      | If defined, it is used in the default log configuration.     |
-| `logging.pattern.console`           | `CONSOLE_LOG_PATTERN`           | The log pattern to use on the console (stdout). (Only supported with the default Logback setup.) |
-| `logging.pattern.dateformat`        | `LOG_DATEFORMAT_PATTERN`        | Appender pattern for log date format. (Only supported with the default Logback setup.) |
-| `logging.pattern.file`              | `FILE_LOG_PATTERN`              | The log pattern to use in a file (if `LOG_FILE` is enabled). (Only supported with the default Logback setup.) |
-| `logging.pattern.level`             | `LOG_LEVEL_PATTERN`             | The format to use when rendering the log level (default `%5p`). (Only supported with the default Logback setup.) |
-| `PID`                               | `PID`                           | The current process ID (discovered if possible and when not already defined as an OS environment variable). |
+| Spring Environment                    | System Property                   | Comments                                                     |
+| ------------------------------------- | --------------------------------- | ------------------------------------------------------------ |
+| `logging.exception-conversion-word`   | `LOG_EXCEPTION_CONVERSION_WORD`   | The conversion word used when logging exceptions.            |
+| `logging.file.clean-history-on-start` | `LOG_FILE_CLEAN_HISTORY_ON_START` | Whether to clean the archive log files on startup (if LOG_FILE enabled). (Only supported with the default Logback setup.) |
+| `logging.file.name`                   | `LOG_FILE`                        | If defined, it is used in the default log configuration.     |
+| `logging.file.max-size`               | `LOG_FILE_MAX_SIZE`               | Maximum log file size (if LOG_FILE enabled). (Only supported with the default Logback setup.) |
+| `logging.file.max-history`            | `LOG_FILE_MAX_HISTORY`            | Maximum number of archive log files to keep (if LOG_FILE enabled). (Only supported with the default Logback setup.) |
+| `logging.file.path`                   | `LOG_PATH`                        | If defined, it is used in the default log configuration.     |
+| `logging.file.total-size-cap`         | `LOG_FILE_TOTAL_SIZE_CAP`         | Total size of log backups to be kept (if LOG_FILE enabled). (Only supported with the default Logback setup.) |
+| `logging.pattern.console`             | `CONSOLE_LOG_PATTERN`             | The log pattern to use on the console (stdout). (Only supported with the default Logback setup.) |
+| `logging.pattern.dateformat`          | `LOG_DATEFORMAT_PATTERN`          | Appender pattern for log date format. (Only supported with the default Logback setup.) |
+| `logging.pattern.file`                | `FILE_LOG_PATTERN`                | The log pattern to use in a file (if `LOG_FILE` is enabled). (Only supported with the default Logback setup.) |
+| `logging.pattern.level`               | `LOG_LEVEL_PATTERN`               | The format to use when rendering the log level (default `%5p`). (Only supported with the default Logback setup.) |
+| `logging.pattern.rolling-file-name`   | `ROLLING_FILE_NAME_PATTERN`       | Pattern for rolled-over log file names (default `${LOG_FILE}.%d{yyyy-MM-dd}.%i.gz`). (Only supported with the default Logback setup.) |
+| `PID`                                 | `PID`                             | The current process ID (discovered if possible and when not already defined as an OS environment variable). |
 
 > 注意，若想在日志配置文件中的属性中使用占位符时, 请使用[Spring的语法](https://docs.spring.io/spring-boot/docs/2.1.4.RELEASE/reference/htmlsingle/#boot-features-external-config-placeholders-in-properties)(待验证)
 
