@@ -712,6 +712,10 @@ stat第一个字符表示总的状态，其他字符表示额外的信息：
 | l        | is multi-threaded (using CLONE_THREAD, like NPTL pthreads do) |
 | +        | is in the foreground process group                           |
 
+## pstree
+
+打印所有进程的树状结构
+
 ## kill
 
 让内核发送一个**信号**给进程，常用于结束进程。
