@@ -417,9 +417,43 @@ Bash提供了很多种替换, 这里仅介绍最常用的
 
 # 五 其他
 
-## exec
+## 成为孤儿进程
 
-> 不知道为何, 貌似Shell脚本中`exec`运行的命令将作为守护进程存在.
+> 原理见[linux core]
+
+### 结束父进程
+
+```bash
+( command &  exit)
+```
+
+启动了一个子Shell, 子Shell中后台启动了命令command, 接着子Shell结束, 导致command变成孤儿进程. 如:
+
+```bash
+((sleep 30 &)  ; exit)
+```
+
+> 参考[How to prevent a background process from being stopped after closing SSH client in Linux](https://stackoverflow.com/a/38165810/12574399)
+
+### nohup
+
+该命令仅运行指定的命令, 需手动后台化, 如
+
+```bash
+nohup COMMAND &
+```
+
+* 原理
+
+  与上述方案一样, 运行父进程nohup, nohup运行指定命令, Bash结束后, nohup被杀死, 但nohup运行的命令未死, 成了孤儿进程.
+
+* 使用
+
+  nohup默认将准输入流重定向到`/dev/null`，标准输出流重定向到nohup.out，标准错误流重定向到标准输出。若不满足使用, 需自己需改重定向.
+
+### exec
+
+> 貌似替换了Bash进程后, 其父进程变成了init, 直接成为孤儿进程. 注意, 需要后台化.
 
 Bash内置命令, 用于修改或替换当前Shell进程.
 
