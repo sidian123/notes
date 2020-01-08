@@ -181,6 +181,22 @@ class ListOperationsEditor extends PropertyEditorSupport {
 
 让存储到Redis的类实现`Serializable `接口即可.
 
+### 超时
+
+```
+io.lettuce.core.RedisCommandTimeoutException: Command timed out after 1 minute(s)
+```
+
+发送Redis请求后, 服务端太久没有响应, 导致超时. 这里增大超时时间 (ms) :
+
+```properties
+spring.redis.timeout=500
+```
+
+> 有人采取切换底层实现到JRedis来解决, 在4.1.2 lettuce前是存在这个bug, 之后这个Bug已经被修复了. 因此还是采取增大超时时间的办法.
+
+> 参考[Too many RedisCommandTimeoutException in lettuce](https://stackoverflow.com/questions/49811076/too-many-rediscommandtimeoutexception-in-lettuce)
+
 ## 参考
 
 * [Spring Data Redis](https://docs.spring.io/spring-data/redis/docs/2.2.0.RELEASE/reference/html/#introduction)
