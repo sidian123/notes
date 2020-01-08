@@ -184,7 +184,7 @@ ssh -D [bind_address:]port [user@]hostname [command]
   > ssh -D 9090 -N -f user@remote.host
   > ```
   >
-  > `-N`表示不运行命令, `-f`表示后台运行
+  > `-N`表示不运行命令(不启动终端), `-f`表示后台运行
 
 ### 如何安全
 上面只是讲了ssh转发的原理和过程，那安全如何保证？其实只有ssh客户端到ssh服务器之间的连接时安全的、加密过的，其他的不一定了。。
