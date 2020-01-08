@@ -1,4 +1,6 @@
-# 了解
+# Get Start
+
+## 介绍
 
 * 介绍: 静态web服务器
 * 用途
@@ -27,7 +29,7 @@
   
   * ...
 
-# 入门
+## 使用
 
 * 组成
 
@@ -100,9 +102,7 @@
 
 # 配置
 
-## 介绍
-
-  * 位置: 位于`/etc/nginx.conf`文件中
+> 配置位于`/etc/nginx.conf`文件中
 
 ## 语法
 
@@ -298,6 +298,7 @@ http #http块
 # 参考
 
 * [所有指令](http://nginx.org/en/docs/http/ngx_http_core_module.html)
+* [Web Server](https://docs.nginx.com/nginx/admin-guide/web-server/web-server/) Nginx Plus的文档, 讲的比较细
 
 
 
