@@ -262,7 +262,7 @@ http #http块
 
 * `root`: 指定请求资源的根目录, 如
 
-  ```
+  ```nginx
   location /i/ {
       root /data/w3;
   }
@@ -294,6 +294,180 @@ http #http块
 2. 改变文件所属者为`nginx`, 给与目录访问权限即可. (推荐)
 
 > 参考:[Nginx出现403 forbidden](https://blog.csdn.net/qq_35843543/article/details/81561240)
+
+## 变量
+
+nginx中可以定义变量, 也提供了代表请求头字段的变量.
+
+> 见[Embedded Variables](https://nginx.org/en/docs/http/ngx_http_core_module.html?&_ga=2.36392416.114713352.1578467350-2037701528.1578467350#variables)
+
+# Web Server
+
+## 介绍
+
+配置一个Web Server, 就是配置URL如何被处理. 
+
+首先, Http中URL的简化结构如下:
+
+```url
+(http|https)://host[:port][path]
+```
+
+在Nginx中, 以`host`和`port`确定**Virtual Server**, 以`path`确定`Location`.
+
+`Virtual Server`中含有与Server相关的配置; `Location`确定`path`与访问资源的映射关系, 可以是本地文件或代理服务器(反向代理).
+
+## Virtual Server
+
+* 介绍
+
+  不同的域名或IP的请求被不同的Virtual Server处理
+
+* 结构
+
+    ```nginx
+    http {
+        server {
+            # Server configuration
+        }
+    }
+    ```
+    
+    > `http`中`server`可有多个
+    
+* 配置
+
+    * `listen` 设置监听端口和IP
+
+      ```nginx
+      server {
+          listen 127.0.0.1:8080;
+          # The rest of server configuration
+      }
+      ```
+
+      > IP可省略, 默认所有地址; 端口可省略, nginx有管理员权限时默认`80`端口, 否则`8000`端口
+
+    * `server_name` 设置监听的域名
+
+      ```nginx
+      server {
+          listen      80;
+          server_name example.org www.example.org;
+          #...
+      }
+      ```
+
+      > 可省略, 默认所有域名.
+
+      有三种形式指定域名: 完整域名, 含通配符, 正则. 
+
+      > 其中, 通配符只能位于域名前,后或两端都有
+      >
+      > ```nginx
+      > server {
+      >     server_name example.com *.example.com www.example.*;
+      > }
+      > ```
+      >
+      > 正则需加前缀`~`
+      >
+      > ```nginx
+      > server {
+      >     server_name www.example.com ~^www\d+\.example\.com$;
+      > }
+      > ```
+
+    * 默认Server
+
+      默认以第一个`server`指令为默认Server. 可通过`listen`的`default_server`参数显式指定, 如:
+
+      ```nginx
+      server {
+          listen 80 default_server;
+          #...
+      }
+      ```
+
+* 路由规则
+
+    当请求到来时
+
+    1. 找出IP和端口一致的`server`
+
+    2. 再将请求的`Host`与`server_name`比较, 成功匹配则使用该Virtual Server, 否则使用默认Server
+
+## Location
+
+* 介绍
+
+  映射请求到具体的资源上.
+
+* 语法
+
+  ```nginx
+  Syntax:	location [ = | ~ | ~* | ^~ ] uri { ... }
+  Default:	—
+  Context:	server, location
+  ```
+
+* 匹配模式
+
+  有多种匹配方式, 其中后缀匹配可以使用正则.
+
+  * 空: 前缀匹配
+
+    ```nginx
+    location /some/path/ {
+        #...
+    }
+    ```
+
+    > 将匹配`/some/path/document.html`
+
+  * `~`: 使用正则进行后缀匹配, 大小写敏感
+
+    ```nginx
+    location ~ \.html? {
+        #...
+    }
+    ```
+
+    > 将匹配以`.html`或`.htm`结尾的路径
+
+  * `~*`: 使用正则进行后缀匹配, 大小写不敏感
+
+  * `^~` 前缀匹配, 若匹配成功, 且该前缀最长时, 将不进行后缀匹配过程.
+
+    > 即影响下面的匹配规则
+
+  * `=`: 准确匹配, 同样也无后缀匹配过程
+
+* 匹配规则
+
+  当`server`收到请求时
+
+  1. 先前缀匹配  选择并记住前缀最长的`location`
+
+  2. 再匹配后缀, 选中第一个成功匹配的后缀并**结束**, 使用该`location`的配置
+
+  3. 如果后缀匹配不成功, 则使用之前记住的最长前缀的`location`配置
+
+  > 注意, 前缀匹配过程中,  `=`和`^~`(需满足条件: 前缀最长) 无后缀匹配过程
+
+* 资源映射
+
+  
+
+## 其他
+
+> 参考[Configuring NGINX Plus as a Web Server](https://docs.nginx.com/nginx/admin-guide/web-server/web-server/)
+
+### 重写URL
+
+### 修改响应
+
+
 
 # 参考
 
