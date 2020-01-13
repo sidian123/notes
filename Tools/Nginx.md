@@ -489,15 +489,10 @@ server {
 
 # HTTPS
 
+暂时略, 参考
 
-
-
-
-
-
-
-
-
+* [在Nginx/Tengine服务器上安装证书](https://help.aliyun.com/document_detail/98728.html?spm=5176.2020520154.0.0.675456a7crLH9u)
+* [Nginx安装SSL配置HTTPs超详细完整全过程](https://www.hack520.com/481.html)
 
 # 其他
 
