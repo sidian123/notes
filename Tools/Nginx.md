@@ -278,29 +278,6 @@ http #http块
 
 
 
-# 其他
-
-## 403 forbidden
-
-403说明我们的访问受限, 很多种原因都可造成403, 这里只谈及我遇到的.
-
-原因:
-
-虽然我们是通过`root`用户运行的Nginx, 但是在它的配置文件中, 指定了工作进程使用`nginx`用户来运行. 因此不能访问`root`用户的文件.
-
-解决方案:
-
-1. 在配置文件中指定工作进程以`root`身份运行, 但不安全
-2. 改变文件所属者为`nginx`, 给与目录访问权限即可. (推荐)
-
-> 参考:[Nginx出现403 forbidden](https://blog.csdn.net/qq_35843543/article/details/81561240)
-
-## 变量
-
-nginx中可以定义变量, 也提供了代表请求头字段的变量.
-
-> 见[Embedded Variables](https://nginx.org/en/docs/http/ngx_http_core_module.html?&_ga=2.36392416.114713352.1578467350-2037701528.1578467350#variables)
-
 # Web Server
 
 ## 介绍
@@ -443,6 +420,12 @@ nginx中可以定义变量, 也提供了代表请求头字段的变量.
 
   * `=`: 准确匹配, 同样也无后缀匹配过程
 
+    ```nginx
+    location = / {
+        #...
+    }
+    ```
+
 * 匹配规则
 
   当`server`收到请求时
@@ -457,17 +440,56 @@ nginx中可以定义变量, 也提供了代表请求头字段的变量.
 
 * 资源映射
 
+  ```nginx
+  server {
+      location /images/ {
+          root /data;
+      }
   
+      location / {
+          proxy_pass http://www.example.com;
+      }
+  }
+  ```
+  
+  `root`确定URL路径和系统路径的映射关系, 文件的真实路径=系统路径+URL路径.
+  
+  > 如请求路径`/images/example.png`, 访问的文件路径则为`/data/images/example.png`
+  
+  `proxy_pass`确定URL路径和代理Server的关系, 资源位置=代理URL+URL路径
+  
+  > 如请求路径`/videos/hello.mp4`, 访问的文件路径则为`http://www.example.com/videos/hello.mp4`
 
 ## 其他
-
-> 参考[Configuring NGINX Plus as a Web Server](https://docs.nginx.com/nginx/admin-guide/web-server/web-server/)
 
 ### 重写URL
 
 ### 修改响应
 
+# 其他
 
+## 变量
+
+nginx中可以定义变量, 也提供了代表请求头字段的变量.
+
+> 见[Embedded Variables](https://nginx.org/en/docs/http/ngx_http_core_module.html?&_ga=2.36392416.114713352.1578467350-2037701528.1578467350#variables)
+
+## 踩坑
+
+### 403 forbidden
+
+403说明我们的访问受限, 很多种原因都可造成403, 这里只谈及我遇到的.
+
+原因:
+
+虽然我们是通过`root`用户运行的Nginx, 但是在它的配置文件中, 指定了工作进程使用`nginx`用户来运行. 因此不能访问`root`用户的文件.
+
+解决方案:
+
+1. 在配置文件中指定工作进程以`root`身份运行, 但不安全
+2. 改变文件所属者为`nginx`, 给与目录访问权限即可. (推荐)
+
+> 参考:[Nginx出现403 forbidden](https://blog.csdn.net/qq_35843543/article/details/81561240)
 
 # 参考
 
