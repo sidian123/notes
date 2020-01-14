@@ -970,6 +970,13 @@ $ tar -xvzf archive.tar.gz
 
 linux的发行版都准守Filesystem Hierarchy Standard（FHS），每个目录都有自己的含义。但会FHS也有一些模糊的地方，因此不同的发行版的目录结构会有一定的不同。
 ![在这里插入图片描述](../.Linux%25E5%2585%25A5%25E9%2597%25A8/201812192235513.png)
+
+补充:
+
+* `var/`
+  * `run/` 含守护进程的PID文件
+  * `log/`含守护进程的日志
+
 注意：
 
 * linux中，一切皆为文件。
