@@ -46,7 +46,7 @@ Github Pages分为两种：
 
 [1]:https://help.github.com/articles/what-is-github-pages/#usage-limits
 
-## 3.1 创建
+## 创建
 创建一个github pages很简单，如教程：<https://pages.github.com/> 这里简易说一下。
 
 github pages是以仓库为基础的，前端代码啥的都来自于仓库，修改网站也是在仓库中进行的。
