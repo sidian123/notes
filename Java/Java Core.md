@@ -127,29 +127,50 @@
 
 整个库的用法围绕着`DefaultExecutor`展开
 
-* `execute()`执行命令, 需传入
+* 执行命令
 
-  * `CommandLine`参数, 指定要执行的命令; 
+  `execute()`执行命令. 参数有
 
-  * `ExecuteResultHandler`用于处理进程结束的结果, 此时`execute()`异步执行, 否则同步.
+  * `CommandLine`
 
+    要执行的命令; 
+
+  * `ExecuteResultHandler`
+
+    用于处理进程结束的结果. 该参数存在时`execute()`**异步**执行, 否则**同步**执行.
+    
     > 一般使用实现类`DefaultExecuteResultHandler`, 覆盖父类方法时, 最好调用下其父方法.
     >
     > 注意, 被看门狗杀死时, 并不会触发该处理器执行.
 
-* 可设置子进程工作目录和环境变量, 默认为父进程的工作目录和环境变量.
+* 工作目录和环境变量
   
-* 可设置看门狗, 防止子进程长时间运行. 有两种使用方式:
+  `setWorkingDirectory()`设置工作目录, `execute()`的第三个参数设置环境变量, 默认为父进程的工作目录和环境变量.
+  
+* 看门狗
+  
+  `setWatchdog()`设置看门狗, 防止子进程长时间运行. 
+
+  有两种使用方式:
+  
   * 设置有限的超时时间, 超时时让其自动关闭进程
   * 设置无限的超时时间`ExecuteWatchdog.INFINITE_TIMEOUT`, 然后手动调用`destroyProcess()`关闭进程.
+  
+* 输入输出
 
-* 设置`ExecuteStreamHandler`, 捕获子进程的输入输出
+  `setStreamHandler()`获取子进程的输入和输出
 
-* 设置期待的结束状态码, 若子进程返回其他值时, 将抛出异常.
+* 期待的结束状态码
 
-* 设置`ShutdownHookProcessDestroyer`, 可在VM退出时自动关闭所有子进程.
+  `setExitValue()`设置期待的结束状态码, 若子进程返回其他值时, 将抛出异常. 默认0.
 
-> 参考[DefaultExecutor](https://commons.apache.org/proper/commons-exec/apidocs/index.html)
+* 进程处理器
+
+  主进程销毁时的回调, 通过`setProcessDestroyer()`实现. 
+
+  其中`ShutdownHookProcessDestroyer`可在VM退出时自动关闭所有子进程.
+
+> 参考[API](https://commons.apache.org/proper/commons-exec/apidocs/index.html)
 
 # 进程相关
 
