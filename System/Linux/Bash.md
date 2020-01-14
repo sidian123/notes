@@ -426,13 +426,13 @@ Bash提供了很多种替换, 这里仅介绍最常用的
 ### 结束父进程
 
 ```bash
-( command &  exit)
+(command & exit)
 ```
 
 启动了一个子Shell, 子Shell中后台启动了命令command, 接着子Shell结束, 导致command变成孤儿进程. 如:
 
 ```bash
-((sleep 30 &)  ; exit)
+(sleep 30 & exit)
 ```
 
 > 参考[How to prevent a background process from being stopped after closing SSH client in Linux](https://stackoverflow.com/a/38165810/12574399)
