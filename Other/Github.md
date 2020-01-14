@@ -104,7 +104,7 @@ include:
 > * [Include files and also copy them to output](https://stackoverflow.com/questions/26128513/include-files-and-also-copy-them-to-output)
 > * [Bypassing Jekyll on GitHub Pages](https://github.blog/2009-12-29-bypassing-jekyll-on-github-pages/)
 
-# 其他
+# 开发
 
 ## Webhooks
 
@@ -125,6 +125,10 @@ include:
   解决方案? 忍一忍!
 
 > 参考[Webhooks](https://developer.github.com/webhooks/)
+
+## OAuth
+
+参考[Java 实现 Github 第三方登陆](https://www.jianshu.com/p/5f1b268216d0)
 
 # 参考
 [github guide](https://guides.github.com/)：最基本的指导
