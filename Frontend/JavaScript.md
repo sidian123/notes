@@ -177,6 +177,7 @@ parseInt('hello', 10); // NaN
 4. `slice()`：通过索引截取子串。
 5. `toLowerCase()`,`toUpperCase()`：获得全小写或大写的字符串。
 6. `replace()`：将字符串中的子串替换成其他的子串。
+7. `includes()` 是否包含子字符串
 
 > 参考：[String](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String)
 
