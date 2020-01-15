@@ -206,6 +206,39 @@ parseInt('hello', 10); // NaN
 
 > 参考[Date](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date)
 
+### Arrays
+
+数组是一个可以存入多个任意类型值的对象。下标访问、赋值，从0开始。
+
+```javascript
+//create array
+var random = ['tree', 795, [0, 1, 2]];
+var shopping = ['bread', 'milk', 'cheese', 'hummus', 'noodles'];
+//access array
+shopping[0];
+//modify array items
+shopping[0]='tahini';
+//access two-dimensional array
+random[2][2];
+```
+
+`length`属性实际上是**最大索引+1**，有时候不表示数组实际个数。
+
+访问不存在数组，返回undefined。可以使用`for...of`遍历数组。
+
+一些有用的数组方法：
+
+* `String`的`split()`方法分割字符串产生数组
+* `Array`的`join()`方法合并数组成为字符串
+* `Array`的`toString()`方法将数组转化为字符串
+* `push()`和`pop()`方法分别在数组底端添加和删除数组。
+* `unshift()`和`shift()`方法分别在数组前端添加和删除数组。
+* `splice`用于在某个索引上添加或删除元素。
+* `Array.from`：浅拷贝
+* `slice()`返回数据的一部分
+
+> 参考[Array](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array)
+
 ### 其他类型
 `null`表示**故意设置**的、不存在的值；`undefined`表示变量还未初始化，函数没有返回值时也会返回`undefined`。
 
@@ -276,33 +309,6 @@ condition ? exprT : exprF
 > * [循环语句](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Loops_and_iteration#do...while_statement )
 > * [条件语句](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Control_flow_and_error_handling)
 
-## Arrays
-数组是一个可以存入多个任意类型值的对象。下标访问、赋值，从0开始。
-```javascript
-//create array
-var random = ['tree', 795, [0, 1, 2]];
-var shopping = ['bread', 'milk', 'cheese', 'hummus', 'noodles'];
-//access array
-shopping[0];
-//modify array items
-shopping[0]='tahini';
-//access two-dimensional array
-random[2][2];
-```
-
-`length`属性实际上是**最大索引+1**，有时候不表示数组实际个数。
-
-访问不存在数组，返回undefined。可以使用`for...of`遍历数组。
-
-一些有用的数组方法：
-* `String`的`split()`方法分割字符串产生数组
-* `Array`的`join()`方法合并数组成为字符串
-* `Array`的`toString()`方法将数组转化为字符串
-* `push()`和`pop()`方法分别在数组底端添加和删除数组。
-* `unshift()`和`shift()`方法分别在数组前端添加和删除数组。
-* `splice`用于在某个索引上添加或删除元素。
-* `Array.from`：浅拷贝
-* `slice()`返回数据的一部分
 ## 注释
 1. 单行注释
     ```javascript
