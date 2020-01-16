@@ -108,6 +108,8 @@
 
 ## 语法
 
+> nginx配置文件不简单啊, 也有简单的控制逻辑, 这里略.
+
 配置由指令和注解组成, 指令可分为
 
 * 简单指令
@@ -484,6 +486,36 @@ server {
 ## 其他
 
 ### 重写URL
+
+```nginx
+location /users/ {
+    rewrite ^/users/(.*)$ /show?user=$1 break;
+}
+```
+
+`rewrite`指令有三个参数, 第一个是匹配当前`location`环境中URL路径的一个正则, 第二个是重写后的URL路径, 第三个是后续行为, 常用值有:
+
+* `last` 使用重写后的URL, 重新寻找合适的`location`, 让其处理
+* `break` 使用重写后的URL, 继续在当前`location`中执行
+
+例子
+
+```nginx
+server {
+    #...
+    rewrite ^(/download/.*)/media/(.*)\..*$ $1/mp3/$2.mp3 last;
+    rewrite ^(/download/.*)/audio/(.*)\..*$ $1/mp3/$2.ra  last;
+    return  403;
+    #...
+}
+```
+
+> 若匹配正则, 则重写, 否则返回403
+
+> 参考
+>
+> * [Module ngx_http_rewrite_module](https://nginx.org/en/docs/http/ngx_http_rewrite_module.html?&_ga=2.127166349.1048841569.1579135406-2037701528.1578467350)
+> * [Rewriting URIs in Requests](https://docs.nginx.com/nginx/admin-guide/web-server/web-server/#rewriting-uris-in-requests)
 
 ### 修改响应
 
