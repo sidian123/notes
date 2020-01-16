@@ -128,7 +128,21 @@ include:
 
 ## OAuth
 
-参考[Java 实现 Github 第三方登陆](https://www.jianshu.com/p/5f1b268216d0)
+* 用于三方登陆, 即通过Github账号登陆自己的应用
+
+* 认证流程
+
+  1. 用户被第三方客户端(也就是我们的应用)重定向至Github官网上, 请求用户授权。
+
+  2. 用户被Github带上短暂有效的code重定向回第三方客户端（ 根据Authorization callback URL 指定的地址。
+
+  3. 第三方客户端 可以带着通过code向Github换取的用户token访问Github API 得到用户的资源。
+
+> 参考
+>
+> * [Java 实现 Github 第三方登陆](https://www.jianshu.com/p/5f1b268216d0)
+> * [Authorizing OAuth Apps](https://developer.github.com/apps/building-oauth-apps/authorizing-oauth-apps/)
+> * [Building OAuth Apps](https://developer.github.com/apps/building-oauth-apps/)
 
 # 参考
 [github guide](https://guides.github.com/)：最基本的指导
