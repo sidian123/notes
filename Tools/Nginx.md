@@ -521,10 +521,39 @@ server {
 
 # HTTPS
 
-暂时略, 参考
+直接看例子
 
-* [在Nginx/Tengine服务器上安装证书](https://help.aliyun.com/document_detail/98728.html?spm=5176.2020520154.0.0.675456a7crLH9u)
-* [Nginx安装SSL配置HTTPs超详细完整全过程](https://www.hack520.com/481.html)
+```nginx
+server {
+    # 监听的端口,ip,域名
+    listen 443 default_server ssl;
+    listen [::]:443 default_server ssl;
+    server_name sidian.live www.sidian.live;
+    # SSL 配置
+    ssl_certificate /etc/nginx/cert/sidian.live.pem;   # 证书。
+    ssl_certificate_key /etc/nginx/cert/sidian.live.key;   # 密钥
+    ssl_session_timeout 5m;
+    ssl_ciphers HIGH:!aNULL:!MD5;  # 加密算法
+    ssl_protocols TLSv1 TLSv1.1 TLSv1.2;   # 加密协议
+    ssl_prefer_server_ciphers on; # 首选使用服务端的算法
+    # 前端网页
+    location / {
+        try_files $uri $uri/ =404;
+        root /root/Blog/root/web; # 前端页面位置
+        index index.html index.htm;
+    }
+    # 后端API代理
+    location /api/ {
+        rewrite ^/api/(.*)$ /$1 break; # 去掉API前缀
+        proxy_pass http://localhost:8080; # 代理地址
+    }
+}
+```
+
+> 参考
+>
+> * [在Nginx/Tengine服务器上安装证书](https://help.aliyun.com/document_detail/98728.html?spm=5176.2020520154.0.0.675456a7crLH9u)
+> * [Nginx安装SSL配置HTTPs超详细完整全过程](https://www.hack520.com/481.html)
 
 # 其他
 
