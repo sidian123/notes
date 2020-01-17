@@ -172,6 +172,39 @@
 
 > 参考[API](https://commons.apache.org/proper/commons-exec/apidocs/index.html)
 
+## BeanUtils
+
+* 依赖
+
+  ```xml
+  <dependency>
+      <groupId>commons-beanutils</groupId>
+      <artifactId>commons-beanutils</artifactId>
+      <version>1.9.4</version>
+  </dependency>
+  ```
+
+* JavaBeans 约定
+
+  * 必须是`public`类, 且提供`public`的无参构造函数
+
+  * Bean的配置都是通过修改**属性 properties ** 完成
+
+  * 每个属性都有*getter* **或** *setter*方法, 方法名以`get`或`set`为前缀, 接着属性名, 但首字母大写
+
+    > 其中, 基本类型`boolean`的属性特殊, 其*getter*方法以`is`为前缀
+
+  * 属性不必一定存在对应字段.
+
+
+
+
+
+> 参考:
+>
+> * [Commons BeanUtils](https://commons.apache.org/proper/commons-beanutils/)
+> * [User Guide](https://commons.apache.org/proper/commons-beanutils/)
+
 # 进程相关
 
 ## Process
