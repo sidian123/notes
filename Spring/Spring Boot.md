@@ -939,10 +939,20 @@ starter依赖
 ## 嵌入servlet容器支持
 
 - 支持嵌入式tomcat、Jetty和Undertow。
-- 网络配置：
-  - `server.port`：监听端口号，默认8080
-  - `server.address`：绑定地址
-  - `server.servlet.context-path`：配置content-path，即访问url的前缀。
+
+### 基本配置
+
+- `server.port`：监听端口号，默认8080
+- `server.address`：绑定地址
+- `server.servlet.context-path`：配置content-path，即访问url的前缀。
+
+### SSL
+
+参考:
+
+* [HTTPS using Self-Signed Certificate in Spring Boot](https://www.baeldung.com/spring-boot-https-self-signed-certificate)
+
+* [安装PFX格式证书](https://help.aliyun.com/document_detail/98576.html?spm=5176.2020520154.0.0.461956a75vS9c0)
 
 # 参考
 

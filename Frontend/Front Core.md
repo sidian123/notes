@@ -27,7 +27,7 @@
 
   ![image-20200108145158177](.Front%20Core/image-20200108145158177.png)
   
-  > 如果访问是本地localhost的HTTP内容, 是允许的.
+  > 如果访问是本地localhost的HTTP内容, 是允许的. 但在火狐中不允许, 因为这是W3标准, 见[Reason: CORS request did not succeed](https://developer.mozilla.org/en-US/docs/Web/HTTP/CORS/Errors/CORSDidNotSucceed)
 
 # 开发模式
 
