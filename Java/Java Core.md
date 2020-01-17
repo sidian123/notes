@@ -174,27 +174,150 @@
 
 ## BeanUtils
 
-* 依赖
+### 依赖
 
-  ```xml
-  <dependency>
-      <groupId>commons-beanutils</groupId>
-      <artifactId>commons-beanutils</artifactId>
-      <version>1.9.4</version>
-  </dependency>
+```xml
+<dependency>
+    <groupId>commons-beanutils</groupId>
+    <artifactId>commons-beanutils</artifactId>
+    <version>1.9.4</version>
+</dependency>
+```
+
+### JavaBean约定
+
+* 必须是`public`类, 且提供`public`的无参构造函数
+
+* Bean的配置都是通过修改**属性 properties ** 完成
+
+* 每个属性都有*getter* **或** *setter*方法, 方法名以`get`或`set`为前缀, 接着属性名, 但首字母大写
+
+  > 其中, 基本类型`boolean`的属性特殊, 其*getter*方法以`is`为前缀
+
+* 属性不必一定存在对应字段.
+
+### JavaBean例子
+
+```java
+public class Employee {
+    public Address getAddress(String type);
+    public void setAddress(String type, Address address);
+    public Employee getSubordinate(int index);
+    public void setSubordinate(int index, Employee subordinate);
+    public String getFirstName();
+    public void setFirstName(String firstName);
+    public String getLastName();
+    public void setLastName(String lastName);
+}
+```
+
+### 属性类型
+
+> 以下, 除了Simple类型属性, 其他属性几乎不多见.
+
+* **Simple**
+
+  属性只有一个值
+
+  ```java
+  public String getFirstName();
+  public void setFirstName(String firstName);
+  public String getLastName();
+  public void setLastName(String lastName);
   ```
 
-* JavaBeans 约定
+  操作方法
 
-  * 必须是`public`类, 且提供`public`的无参构造函数
+  ```java
+  PropertyUtils.getSimpleProperty(Object, String)
+  PropertyUtils.setSimpleProperty(Object, String, Object)
+  ```
 
-  * Bean的配置都是通过修改**属性 properties ** 完成
+  例子
 
-  * 每个属性都有*getter* **或** *setter*方法, 方法名以`get`或`set`为前缀, 接着属性名, 但首字母大写
+  ```java
+  Employee employee = ...;
+  String firstName = (String)
+      PropertyUtils.getSimpleProperty(employee, "firstName");
+  String lastName = (String)
+      PropertyUtils.getSimpleProperty(employee, "lastName");
+  ... manipulate the values ...
+      PropertyUtils.setSimpleProperty(employee, "firstName", firstName);
+  PropertyUtils.setSimpleProperty(employee, "lastName", lastName);
+  ```
 
-    > 其中, 基本类型`boolean`的属性特殊, 其*getter*方法以`is`为前缀
+* **Indexed**
 
-  * 属性不必一定存在对应字段.
+  有多个值, 可通过索引操作
+
+  ```java
+  public Employee getSubordinate(int index);
+  public void setSubordinate(int index, Employee subordinate);
+  ```
+
+  操作方法
+
+  ```java
+  PropertyUtils.getIndexedProperty(Object, String)
+      PropertyUtils.getIndexedProperty(Object, String, int)
+      PropertyUtils.setIndexedProperty(Object, String, Object)
+      PropertyUtils.setIndexedProperty(Object, String, int, Object)
+  ```
+
+  例子
+
+  ```java
+  Employee employee = ...;
+  int index = ...;
+  String name = "subordinate[" + index + "]";
+  Employee subordinate = (Employee)
+      PropertyUtils.getIndexedProperty(employee, name);
+  
+  Employee employee = ...;
+  int index = ...;
+  Employee subordinate = (Employee)
+      PropertyUtils.getIndexedProperty(employee, "subordinate", index);
+  ```
+
+* **Mapped**
+
+  有多个值, 通过键值操作
+
+  ```java
+  public Address getAddress(String type);
+  public void setAddress(String type, Address address);
+  ```
+
+  操作方法
+
+  ```java
+  PropertyUtils.getMappedProperty(Object, String)
+  PropertyUtils.getMappedProperty(Object, String, String)
+  PropertyUtils.setMappedProperty(Object, String, Object)
+  PropertyUtils.setMappedProperty(Object, String, String, Object)
+  ```
+
+  例子
+
+  ```java
+  Employee employee = ...;
+  Address address = ...;
+  PropertyUtils.setMappedProperty(employee, "address(home)", address);
+  
+  Employee employee = ...;
+  Address address = ...;
+  PropertyUtils.setMappedProperty(employee, "address", "home", address);
+  ```
+
+### 使用
+
+主要使用`PropertyUtils`和`BeanUtils`
+
+
+
+
+
+
 
 
 
