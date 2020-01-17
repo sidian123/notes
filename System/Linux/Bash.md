@@ -421,7 +421,8 @@ Bash提供了很多种替换, 这里仅介绍最常用的
 
 ## 成为孤儿进程
 
-> 原理见[linux core]
+> * 原理见[linux core]
+> * 待学[Linux 技巧：让进程在后台运行更可靠的几种方法](https://www.ibm.com/developerworks/cn/linux/l-cn-nohup/index.html)
 
 ### 结束父进程
 
