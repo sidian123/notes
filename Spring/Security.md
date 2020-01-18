@@ -436,6 +436,8 @@ SecurityContextHolder.getContext().getAuthentication().getPrincipal()
 
 # 四 集成JWT
 
+> 集成JWT, 本质是更换了认证方式, 将Token从后端移入前端.
+
 ## 介绍
 
 在并发数提高时, 我们通常采用微服务化和集群的方式, 保证服务对流量的承载性. 应用的对Session的存放方式决定了它的集群方式:
@@ -450,7 +452,7 @@ SecurityContextHolder.getContext().getAuthentication().getPrincipal()
 
 ## 实现细节
 
-要想Spring Security与JWT集成, 并实现后端Session化, 需要考虑的问题有很多. 最主要的思路是, **提供自己的认证过滤器和登录控制器**. 
+要想Spring Security与JWT集成, 并实现后端无Session化, 需要考虑的问题有很多. 最主要的思路是, **提供自己的认证过滤器和登录控制器**. 
 
 * 登录控制器在登录成功后返回一个token给前端, 前端之后的每次请求都携带token; 
 * 认证过滤器拦截所有请求, 一旦发现有token并通过了验证, 则放置好对应的`Authentication`.
