@@ -159,6 +159,8 @@ Window接口表示一个包含了DOM文档的窗口，在浏览器中具体表�
   * `replace()`替换当前页面, 无历史记录
   * `assign()`加载新页面, 有历史记录, 即可以会退到上一页面.
 
+> 参考[Location mdn](https://developer.mozilla.org/en-US/docs/Web/API/Location)
+
 ## History
 
 代表浏览器的会话历史, 通过该接口, 可以后退前进来浏览历史, 和添加或替换新历史记录.
