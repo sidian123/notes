@@ -313,20 +313,66 @@ public class Employee {
 
 主要使用`PropertyUtils`和`BeanUtils`
 
+* `PropertyUtils`
 
+  * 属性操作
 
+    * 获取属性值
 
+      `getXXXProperty()`
 
+    * 设置属性值
 
+      `setXXXProperty()`
 
+  * 获得属性
 
+    * 所有属性
 
+      `getPropertyDescriptors()`
 
+    * 单个属性
+
+      `getPropertyDescriptor()`
+
+  * 反射属性方法
+
+    * 读
+
+      `getReadMethod()`
+
+    * 写
+
+      `getWriteMethod()`
+
+  * 判断属性类型
+
+    * 可读
+
+      `isReadable()`
+
+    * 可写
+
+      `isWriteable()`
+
+* `BeanUtils`
+
+  * 克隆
+
+    `cloneBean()`
+
+  * 拷贝
+
+    `copyProperties()`
+
+> `BeanUtils`与`PropertyUtils`很多功能都相同, 上述我仅根据语义罗列了部分方法.
 
 > 参考:
 >
 > * [Commons BeanUtils](https://commons.apache.org/proper/commons-beanutils/)
 > * [User Guide](https://commons.apache.org/proper/commons-beanutils/)
+> * [PropertyUtils](http://commons.apache.org/proper/commons-beanutils/javadocs/v1.9.4/apidocs/org/apache/commons/beanutils/PropertyUtils.html)
+> * [BeanUtils](http://commons.apache.org/proper/commons-beanutils/javadocs/v1.9.4/apidocs/org/apache/commons/beanutils/BeanUtils.html)
 
 # 进程相关
 
