@@ -501,6 +501,8 @@ Spring Security本身没有提供角色和权限的功能, 需要自己实现.
 
 因此将该用户对应角色的所有权限存入到`Authentication`中, 即可实现角色与权限的功能.
 
+> 在`userDetailsService.loadUserByUsername()`中修改代码
+
 至于`ROLE_`前缀问题, 完全可以避免, 见参考链接
 
 > 参考:
