@@ -211,6 +211,17 @@ public class BlogApplicationTests {
 }
 ```
 
+`exchange()`的例子
+
+```java
+        GithubUser user = restTemplate.exchange(
+                RequestEntity
+                        .get(URI.create("https://api.github.com/user"))
+                        .header("Authorization", "token "+access_token).build(),
+                GithubUser.class
+        ).getBody();
+```
+
 # 五 其他
 
 ## bug
