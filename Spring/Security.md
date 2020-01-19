@@ -133,13 +133,15 @@ Spring Security主要涉及认证和授权.
 
 认证流程:
 
-1. 在`UserDetailsService`中实现获取用户数据的逻辑, 并与角色`GrantedAuthority`组成`UserDetails`, 再返回该`UserDetails`对象.
+1. 用户登录
 
-2. `UserDetails`存入`Authentication`中.
+2. 将用户信息保证到`Authentication`中
 
-3. `AuthenticationManager.authenticate(Authentication)`中验证`Authentication`是否与用户输入的一致, 能否通过验证.
+3. `AuthenticationManager.authenticate(Authentication)`验证该凭证是否正确. 验证的参考对象来源于数据库, 由`UserDetailsService`提供.
 
    > 它本身是一个委派器, 交给其他认证器验证.
+   >
+   > `UserDetailsService`将返回`UserDetails`, 代表用户, 包含权限信息`GrantedAuthority`
 
 4. 验证成功则返回填充过的`Authentication`, 并存入`SecurityContextHolder`中
 
@@ -151,11 +153,11 @@ Spring Security主要涉及认证和授权.
 
 1. 登录成功后, 再次发出请求
 
-2. `SecurityContextPersistenceFilter`判断cookie, 放置`Authentication`, 表示用户处于已认证状态.
+2. `SecurityContextPersistenceFilter`校验cookie, 正确后放置已填充完整的`Authentication`到`SecurityContextHolder`中, 表示用户处于已认证状态.
 
 3. `FilterSecurityInterceptor`看到`SecurityContextHolder`中存在已填充的`Authentication`对象, 并符合权限要求, 则运行访问URL
 
-   > 如果是方法上过滤的, 则拦截该方法的拦截器, 同样判断`SecurityContextHolder`中存在已填充的`Authentication`对象, 并符合权限要求, 则运行执行该方法. 
+   > 如果是方法上过滤的, 则拦截该方法的拦截器, 同样判断`SecurityContextHolder`中是否存在已填充的`Authentication`对象, 若符合权限要求, 则运行执行该方法. 
 
 ### 如何保持多请求下的认证状态?
 
@@ -485,14 +487,31 @@ SecurityContextHolder.getContext().getAuthentication().getPrincipal()
 
 > 在Git的提交历史中, 第一个提交是仅含Spring Security时的配置, 后面的提交才加入了JWT的集成.
 
-# 五 JWT
+# 其他
+
+## JWT
 
 见[Library/JWT](../Library/JWT.md)
+
+## 角色,权限
+
+Spring Security本身没有提供角色和权限的功能, 需要自己实现.
+
+实现的关键点: 授权时, 是根据`Authentication`中的权限信息`GrantedAuthority`判断的. 若有访问该方法, URL的权限, 则放行. (见2.3.3小节)
+
+因此将该用户对应角色的所有权限存入到`Authentication`中, 即可实现角色与权限的功能.
+
+至于`ROLE_`前缀问题, 完全可以避免, 见参考链接
+
+> 参考:
+>
+> * [Spring Security – Roles and Privileges](https://www.baeldung.com/role-and-privilege-for-spring-security-registration) 一篇关于角色和权限的实现教程
+> * [Avoid using the prefix ROLE_](https://github.com/spring-projects/spring-security/issues/4912#issuecomment-353129360)
 
 # 参考
 
 * [Spring Security Reference](https://docs.spring.io/spring-security/site/docs/5.2.0.BUILD-SNAPSHOT/reference/htmlsingle/)
-* [Spring Boot + Sp一个ring Security + JWT + MySQL + React Full Stack Polling app - Part 2](https://www.callicoder.com/spring-boot-spring-security-jwt-mysql-react-app-part-2/): 集成方案主要参考于此
+* [Spring Boot + Spring Security + JWT + MySQL + React Full Stack Polling app - Part 2](https://www.callicoder.com/spring-boot-spring-security-jwt-mysql-react-app-part-2/): 集成方案主要参考于此
 
 
 
