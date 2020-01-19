@@ -40,7 +40,9 @@
 
 # 使用
 
-* `@Data`用于JavaBean
+* `@Data`
+
+  JavaBean生成
 
   * 自动生成`getter`,`setter`,`toString`,`hashCode`,`equals`等方法. 
 
@@ -59,23 +61,65 @@
       private int mySecret;
       ```
 
-* `@NonNull`生成检查参数的代码, 为`null`时将抛出`NullPointerException`异常. 可注解到参数或字段上, 在字段上时, 则检查其`getter`方法.
+* `@Builder`
 
-* 日记, 通过不同的日记注解, 可以生成对应的`log`字段. 下面列举常用的注解
+  产生建造者, 来构建对象.
+
+  > 注意, 必须存在接受所有字段的构造函数. 默认会创建, 但是会导致无默认构造函数; 并且, 显式声明其他构造函数时, 会造成构造函数消失.
+  >
+  > 因此解决办法如下:
+  >
+  > ```java
+  > @Builder
+  > @NoArgsConstructor
+  > @AllArgsConstructor
+  > ```
+
+* `@NonNull`
+
+  生成检查参数的代码, 为`null`时将抛出`NullPointerException`异常. 可注解到参数或字段上, 在字段上时, 则检查其`getter`方法.
+
+* `@Log`
+
+  日记, 通过不同的日记注解, 可以生成对应的`log`字段. 下面列举常用的注解
 
   * `@Log4j2`生成
-
+  
     ```java
-    private static final org.apache.logging.log4j.Logger log = org.apache.logging.log4j.LogManager.getLogger(LogExample.class);
+  private static final org.apache.logging.log4j.Logger log = org.apache.logging.log4j.LogManager.getLogger(LogExample.class);
     ```
 
   * `@Slf4j`生成
-
+  
     ```java
-    private static final org.slf4j.Logger log = org.slf4j.LoggerFactory.getLogger(LogExample.class);
+  private static final org.slf4j.Logger log = org.slf4j.LoggerFactory.getLogger(LogExample.class);
     ```
-
+  
   * ...
+
+# 例子
+
+Java Bean上常见的注解组合:
+
+```java
+@Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
+public class UserRole implements Serializable {
+    private Integer id;
+    private String name;
+    private Integer userId;
+
+    private static final long serialVersionUID = 1L;
+}
+```
+
+# 期待
+
+Lombok的注解当前并不支持注解组合的使用方式, 但是该需求已经被Lombok开发者提上章程了, 期待该功能的完成.
+
+新特性跟进地址:[[FEATURE] Composable Annotations](https://github.com/rzwitserloot/lombok/issues/2294)
 
 # 参考
 
