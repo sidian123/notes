@@ -524,6 +524,7 @@ server {
 直接看例子
 
 ```nginx
+# https配置与反向代理
 server {
     # 监听的端口,ip,域名
     listen 443 default_server ssl;
@@ -547,6 +548,13 @@ server {
         rewrite ^/api/(.*)$ /$1 break; # 去掉API前缀
         proxy_pass http://localhost:8080; # 代理地址
     }
+}
+
+# http重定向到https
+server {
+        listen 80;
+        server_name sidian.live www.sidian.live;
+        return 301 https://$server_name$request_uri;
 }
 ```
 
