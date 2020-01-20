@@ -948,11 +948,20 @@ starter依赖
 
 ### SSL
 
-参考:
+```yml
+server:
+  port: 8089
+  ssl:
+    enabled: true # 是否启用ssl, 默认true
+    key-store-type: PKCS12 # 证书类型
+    key-store: classpath:client.sidian.live.pfx # 证书
+    key-store-password: q6W8VCSp # 证书的密码
+```
 
-* [HTTPS using Self-Signed Certificate in Spring Boot](https://www.baeldung.com/spring-boot-https-self-signed-certificate)
-
-* [安装PFX格式证书](https://help.aliyun.com/document_detail/98576.html?spm=5176.2020520154.0.0.461956a75vS9c0)
+> 参考:
+>
+> * [HTTPS using Self-Signed Certificate in Spring Boot](https://www.baeldung.com/spring-boot-https-self-signed-certificate)
+> * [安装PFX格式证书](https://help.aliyun.com/document_detail/98576.html?spm=5176.2020520154.0.0.461956a75vS9c0)
 
 # 参考
 
