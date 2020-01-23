@@ -264,7 +264,25 @@ function infiniteLoop(): never {
 
 > TypeScript于JSX一起使用时, 仅As语法可用.
 
+## 变量声明
 
+* `var`声明的变量
+
+  1. 没有[block scope](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/block)（块作用域）,只有function, module, namespace, or global scope ；
+  2. **声明**有[hoisting](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/var#var_hoisting)现象，但**初始化**没有该现象；
+  3. 可以多次声明变量。
+
+* 例子
+
+  ```ts
+  for (var i = 0; i < 10; i++) {
+      setTimeout(function() { console.log(i); }, 100 * i);
+  }
+  ```
+
+  
+
+  因此函数表达式不会新增作用域, 因为未存在闭包. 因此每次回调, 表达式中`i`都指向同一个变量, 全部输出`10`
 
 # 其他
 

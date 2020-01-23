@@ -106,6 +106,31 @@
 
   > 疑问? 怎么插件隐藏的文件呢?
 
+## 更换Shell
+
+VSCode会自动检测部分Shell, 如Cmd,WSL和Bash等. 至于其他Shell, 需自己设置.
+
+* `terminal.integrated.shell.windows`
+
+  指定要运行的Shell可执行文件
+
+* `terminal.integrated.shellArgs.windows`
+
+  指定Shell运行的参数
+
+下面已`Cmder`为例子, 打开`settings.json`文件, 添加
+
+```json
+{
+     "terminal.integrated.shell.windows": "C:\\Users\\sidian\\Software\\cmder\\vendor\\git-for-windows\\bin\\bash.exe",
+    "terminal.integrated.shellArgs.windows" : ["--init-file","~/.bashrc_custom.sh"],
+}
+```
+
+> 执行Cmder的bash, 和初始化的脚本.
+
+
+
 ## 疑问
 
 * 怎么主动打开Java Overview
