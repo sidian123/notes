@@ -750,6 +750,53 @@ jdbc:mysql://localhost:3306/database_name?useSSL=false&serverTimezone=GMT%2B8&al
 
 > <span style="color:red">注意</span>, 如果出现链接错误, 可能是`useSSL`造成的, 其他选项可以不用, 仅设置时区也行.
 
+# 坑
+
+## too many connections
+
+Mysqld连接数上线太小了, 100左右, 应用的线程池空闲时间又太长, 连接得不到释放, 导致其他应用获取不到连接.
+
+查看最大连接数
+
+```sql
+mysql>  show variables like 'max_connections'; 
++-----------------+-------+
+| Variable_name   | Value |
++-----------------+-------+
+| max_connections | 151   |
++-----------------+-------+
+1 row in set (0.01 sec)
+```
+
+临时设置
+
+```mysql
+mysql> set GLOBAL max_connections=1000; 
+Query OK, 0 rows affected (0.00 sec)
+--查看
+mysql>  show variables like "max_connections";
++-----------------+-------+
+| Variable_name   | Value |
++-----------------+-------+
+| max_connections | 1000  |
++-----------------+-------+
+1 row in set (0.00 sec)
+```
+
+永久设置
+
+```
+[mysqld]
+max_connections=1000
+```
+
+但是, 如果看日志的话, 会发现, 因为某种限制, 最大连接数达不到1000, 仅214. 这里修复`mysqld.service`文件, `[Service]`中添加:
+
+```systemd
+[Service]
+LimitNOFILE = 65535
+```
+
 # 参考
 
 * [MySQL 8.0 Reference Manual](<https://dev.mysql.com/doc/refman/8.0/en/>)
