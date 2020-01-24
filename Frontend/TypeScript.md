@@ -324,3 +324,4 @@ function keepWholeObject(wholeObject: { a: string, b?: number }) {
 * [TypeScript Docs](https://www.typescriptlang.org/docs/home.html)
 * [TypeScript Playground](https://www.typescriptlang.org/play/index.html#) TypeScript To JavaScript 的在线编译器
 
+* [typescript-tutorial](https://github.com/xcatliu/typescript-tutorial) ts教程
