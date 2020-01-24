@@ -301,6 +301,10 @@ function infiniteLoop(): never {
 > * [JavaScript]
 > * [Variable Declarations in TypeScript](https://www.typescriptlang.org/docs/handbook/variable-declarations.html)
 
+## 接口
+
+
+
 # 其他
 
 `union`类型
