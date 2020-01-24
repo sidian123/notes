@@ -266,27 +266,54 @@ function infiniteLoop(): never {
 
 ## 变量声明
 
-* `var`声明的变量
+* `var` ( 弃用 )
+
+  声明的变量
 
   1. 没有[block scope](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/block)（块作用域）,只有function, module, namespace, or global scope ；
   2. **声明**有[hoisting](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/var#var_hoisting)现象，但**初始化**没有该现象；
   3. 可以多次声明变量。
 
-* 例子
+* `let`
 
-  ```ts
-  for (var i = 0; i < 10; i++) {
-      setTimeout(function() { console.log(i); }, 100 * i);
-  }
-  ```
+  有块作用域; 无`hoisting`现象; 仅能声明一次; 嵌套作用域中存在*shadowing*
 
-  
+* `const`
 
-  因此函数表达式不会新增作用域, 因为未存在闭包. 因此每次回调, 表达式中`i`都指向同一个变量, 全部输出`10`
+  与`let`一致, 但是变量不能多次被赋值
+
+* 解构
+
+  * 数组解构
+  * 元组解构
+  * 对象解构
+    * 属性重命名
+    * 默认值
+
+* 方法声明
+
+  * 声明有*hoisting*现象, 无块作用域, 但该作用域会限制函数声明*hosting*到该块作用域的顶端
+
+* Spread语法
+
+> 参考
+>
+> * [JavaScript]
+> * [Variable Declarations in TypeScript](https://www.typescriptlang.org/docs/handbook/variable-declarations.html)
 
 # 其他
 
-* `union`类型
+`union`类型
+
+------
+
+```ts
+function keepWholeObject(wholeObject: { a: string, b?: number }) {
+    let { a, b = 1001 } = wholeObject;
+}
+```
+
+`?`表示可选
 
 # 参考
 
