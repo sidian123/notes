@@ -143,7 +143,7 @@ enum Color {Red = 1, Green = 2, Blue = 4}
 let c: Color = Color.Green;
 ```
 
-枚举本质是由数据实现的, 因此可通过索引获取值
+枚举本质是由数组实现的, 因此可通过索引获取值
 
 ```ts
 enum Color {Red = 1, Green, Blue}
