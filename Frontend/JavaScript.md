@@ -1258,3 +1258,5 @@ f().catch(alert); // TypeError: failed to fetch // (*)
 * [A re-introduction to JavaScript (JS tutorial)](https://developer.mozilla.org/en-US/docs/Web/JavaScript/A_re-introduction_to_JavaScript)
 * [JavaScript](https://developer.mozilla.org/en-US/docs/Web/JavaScript)
 * [javascript reference](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference)
+
+* [ES6 阮一峰](http://es6.ruanyifeng.com/#README) ES6语法进阶阅读
