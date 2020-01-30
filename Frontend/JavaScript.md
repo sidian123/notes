@@ -4,10 +4,10 @@
 
 ## 概括
 
-html用于定义网页的结构，css设置网页格式和外观，javascript则添加交互内容。
+html用于定义网页的结构，css设置网页格式和外观，JavaScript则添加交互内容。
 
-在浏览器的环境下，javascript并不仅仅指的语言，它包括了：核心语言（ECMAScript）和Web APIs（包括DOM） 。
-1. **核心语言（ECMAScript）**：ECMAScript只定义了语言规则，不仅仅用于浏览器环境，还可以用于服务端脚本，如node.js。javascript几乎实现了ECMAScript所有的规范，包括:
+在浏览器的环境下，JavaScript并不仅仅指的语言，它包括了：核心语言（ECMAScript）和Web APIs（包括DOM） 。
+1. **核心语言（ECMAScript）**：ECMAScript只定义了语言规则，不仅仅用于浏览器环境，还可以用于服务端脚本，如node.js。JavaScript几乎实现了ECMAScript所有的规范，包括:
 	* **Language syntax** (parsing rules, keywords, control flow, object literal initialization, ...)
 	* **Error handling mechanisms** (throw, try/catch, ability to create user-defined Error types)
 	* **Types** (boolean, number, string, function, object, ...)
@@ -25,13 +25,13 @@ html用于定义网页的结构，css设置网页格式和外观，javascript则
 > * [Introduction](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Introduction)
 
 ## 语法
-这里开始介绍javascript的核心语法，即ECMAScritp的内容，奈何它的语法太多了，这里只介绍了**入门**所需要的知识。
+这里开始介绍JavaScript的核心语法，即ECMAScritp的内容，奈何它的语法太多了，这里只介绍了**入门**所需要的知识。
 
-javascript是一种面向对象、动态类型、函数式编程等等等语言。声明变量时不需要指定类型，一切皆为对象，不论是数组、还是函数，都是一种特殊的对象。所谓对象，即有方法有属性的变量。在javascript并没有类，但是有prototype机制，因此照样可以继承其他对象的属性和方法，也因此可以通过构造函数来生成对象。构造函数和普通函数并没有什么区别，只是在使用new关键值时被当做了构造函数。函数也是一种对象，但可以储存代码，在其他对象中传递，因此会出现闭包的概念。
+JavaScript是一种面向对象、动态类型、函数式编程等等等语言。声明变量时不需要指定类型，一切皆为对象，不论是数组、还是函数，都是一种特殊的对象。所谓对象，即有方法有属性的变量。在JavaScript并没有类，但是有prototype机制，因此照样可以继承其他对象的属性和方法，也因此可以通过构造函数来生成对象。构造函数和普通函数并没有什么区别，只是在使用new关键值时被当做了构造函数。函数也是一种对象，但可以储存代码，在其他对象中传递，因此会出现闭包的概念。
 
 一切皆为对象，那么在全局作用域内定义的变量和函数属于谁？ECMAScript规定了一个全局对象，属于该对象的属性和方法。ECMAScript定义了全局变量的接口，由所处的环境提供该变量，通过该对象操作环境，在浏览器的环境中为**window**。
 
-注意！！ECMAScript和环境无关，只是语言，比如javascript就实现了ECMAScript的所有语法，是js的一部分；node.js也是使用ECMAScript作为脚本语言；在qt中，ECMAScript也被实现过。等等等。
+注意！！ECMAScript和环境无关，只是语言，比如JavaScript就实现了ECMAScript的所有语法，是js的一部分；node.js也是使用ECMAScript作为脚本语言；在qt中，ECMAScript也被实现过。等等等。
 
 > 参考：[A re-introduction to JavaScript (JS tutorial)](https://developer.mozilla.org/en-US/docs/Web/JavaScript/A_re-introduction_to_JavaScript)
 
@@ -39,12 +39,12 @@ javascript是一种面向对象、动态类型、函数式编程等等等语言�
 
 ## 变量
 
-变量是用来存储数据的容器，可以是**任何类型数据**。javascript是**动态类型语言**（也称弱类型语言），声明变量时不需要指定数据类型，但通过操作符`typeof`可以打印变量类型。
+变量是用来存储数据的容器，可以是**任何类型数据**。JavaScript是**动态类型语言**（也称弱类型语言），声明变量时不需要指定数据类型，但通过操作符`typeof`可以打印变量类型。
 
 变量必须被声明才能被使用，否则报错。声明变量没有赋初始值时，则默认`undefined`。
 
 ### 变量命名
-javascript支持unicode字符集，变量也可以使用中文来命名。但是命名最好还是要符合一定规范，下面给出的不是强制的，但最好准守：
+JavaScript支持unicode字符集，变量也可以使用中文来命名。但是命名最好还是要符合一定规范，下面给出的不是强制的，但最好准守：
 1. 使用数字（0-9）、字母（a-z，A-Z）和下划线命名。
 2. 不要以下划线、数字开头。下划线开始的变量名有特殊意义。
 3. 最好使用驼峰命名法，即变量和方法的首个单词小写，之后的每个单词首字母大写。方法第一个单词最好是动词。
@@ -53,7 +53,7 @@ javascript支持unicode字符集，变量也可以使用中文来命名。但是
 大小写敏感。
 
 ### 变量声明
-javascript中使用`var`、`let`和`const`来定义变量。
+JavaScript中使用`var`、`let`和`const`来定义变量。
 
 `var`声明的变量
 1. 没有[block scope][1]（块作用域）,只有function scope；
@@ -116,34 +116,24 @@ for(let i=0;i<10;i++)｛
 [2]:https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/var#var_hoisting
 
 ## 类型
-大致分为如下：
-* Six data types that are primitives:
-	* Boolean
-	* Null
-	* Undefined
-	* Number
-	* String
-	* Symbol (new in ECMAScript 6)
-* Object
-	* Function
-	* Array
-	* Date
-	* RegExp
+分类:
+* 六种基本类型
+	
+	Number, Boolean, String, Null, Undefined, Symbol (new in ECMAScript 6)
+	
+* 对象
+	
+	Object, Function, Array, Date, RegExp, ...
 
-在Javascript中，尽管一切皆为对象，但是它还是有六种基本类型的。。并且**值是不可变的**，传参时是**按值传递**，而不是按引用传递！！
+> 注意, 基本类型的值不可变, 且传参时按值传递.
 
 除了`null`和`undefined`，其它基本类型都有对应的包装对象，可以调用它的实例方法。如：
 ```javascript
 "tom".toUpperCase();//"TOM"
 (2).toString();"2"
 ```
-> 注意
->
-> ```javascript
-> typeof null;//"object"
-> ```
 
-### Numbers
+### Number
 根据说明书，数值都是用双精度浮点数表示的，但是实际上整数还是被当做32位int。但也不用担心`3/2=1`问题的出现，并且整数可以使用按位运算。
 
 一些内置函数可以将字符转化为Number，如`parseInt()`,`parseFloat()`。`+`，`Number()`也可以将字符转化为数值。如：
@@ -165,7 +155,16 @@ parseInt('hello', 10); // NaN
 ```
 > 参考：[Number](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number)
 
-### Strings
+### Boolean
+
+**任何值**都可以被转化为布尔值，根据如下规则：
+
+1. false, 0, empty strings (""), NaN, null, and undefined all become false.称为**falsy**
+2. All other values become true.称为**truthy**
+
+Boolean()可以显示转化值为布尔值，但是很少使用，因为会自动转化（java中不会）。
+
+### String
 使用utf-16的code units编码，因此一个字符1或2个code units编码，并且length属性以code unit为单位。
 
 字符串用单引号或双引号围起来，单引号内可以存在双引号，反之亦然。特殊字符也可以通过转义，成为普通字符。+可以连接字符串与字符串，字符串与数值。Number()函数可将字符串转化为数值。数值变量的toString()方法可将数值转化为字符串。
@@ -206,7 +205,7 @@ parseInt('hello', 10); // NaN
 
 > 参考[Date](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date)
 
-### Arrays
+### Array
 
 数组是一个可以存入多个任意类型值的对象。下标访问、赋值，从0开始。
 
@@ -239,14 +238,15 @@ random[2][2];
 
 > 参考[Array](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array)
 
-### 其他类型
-`null`表示**故意设置**的、不存在的值；`undefined`表示变量还未初始化，函数没有返回值时也会返回`undefined`。
+### Null&Undefined
 
-**任何值**都可以被转化为布尔值，根据如下规则：
-1. false, 0, empty strings (""), NaN, null, and undefined all become false.称为**falsy**
-2. All other values become true.称为**truthy**
+`null`和`undefined`都可以对任意变量赋值. `null`表示**故意设置**的、不存在的值；`undefined`表示变量还未初始化，函数没有返回值时也会返回`undefined`。
 
-Boolean()可以显示转化值为布尔值，但是很少使用，因为会自动转化（java中不会）。
+> 注意
+>
+> ```javascript
+> typeof null;//"object"
+> ```
 
 ## 操作符
 完整操作符内容可以参考：[Expressions and operators][3]
@@ -281,29 +281,37 @@ Boolean()可以显示转化值为布尔值，但是很少使用，因为会自�
 [3]:https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Expressions_and_Operators
 
 ## 控制语句
-语句有：if else、while、do-while、for、switch。
+* 控制语句
 
-要注意，block语句（即｛｝）可以看做一个语句。
+  if else、while、do-while、for、switch。
 
-for语句有两种变种：
-1. for...in：用于遍历对象所有可遍历**属性**。
-	```javascript
-	for (let property in object) {
-	  // do something with object property
-	}
-	```
-2. for...of：用于遍历array的值。
-	```javascript
-	for (let value of array) {
-	  // do something with value
-	}
-	```
-switch中，表达式和case值之间是通过`===`来比较的。
+  > 要注意，block语句（即`{}`）可以看做一个语句。
 
-三元运算符：
-```javascript
-condition ? exprT : exprF 
-```
+* `for`语句的两种形式
+
+    1. for...in：用于遍历对象所有可遍历**属性**。
+        ```javascript
+        for (let property in object) {
+          // do something with object property
+        }
+        ```
+
+    2. for...of：用于遍历array的值。
+        ```javascript
+        for (let value of array) {
+          // do something with value
+        }
+        ```
+
+* `switch`
+
+  表达式和`case`值之间是通过`===`来比较的。
+
+* 三元运算符
+
+    ```javascript
+    condition ? exprT : exprF 
+    ```
 > 参考:
 >
 > * [循环语句](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Loops_and_iteration#do...while_statement )
@@ -702,7 +710,7 @@ function test(){
 }
 test();
 ```
->参考：[Does javascript autobox?](https://stackoverflow.com/a/17216967/10248407)
+>参考：[Does JavaScript autobox?](https://stackoverflow.com/a/17216967/10248407)
 ## prototype
 每个对象都有一个**prototype object**（原型对象），被存入到对象的__proto__属性中。prototype object的所有属性和方法都会被该对象继承。而prototype object对象源自于构造函数（constructor function）的prototype属性，该属性也是一个对象，Object。prototype object中有个属性constructor，指向它的构造函数。
 
@@ -741,7 +749,7 @@ person1.fullName();//"Simon Willsion"
 前面的例子是一个很好的模板，不建议在构造函数中为构造函数的prototype属性添加方法，如果这样，那么每次实例化对象都会创建新的方法然后覆盖原方法上，影响效率。
 
 ## 继承
-javascript中的继承是**对象之间**的继承，即一个对象继承另一个对象所有属性，作为对象的属性；而原型方法（即构造函数prototype属性中定义的方法）则构成一个prototype chain。
+JavaScript中的继承是**对象之间**的继承，即一个对象继承另一个对象所有属性，作为对象的属性；而原型方法（即构造函数prototype属性中定义的方法）则构成一个prototype chain。
 
 一般对象是通过构造函数来创建的，因此对象之间的继承通过改写构造函数来完成。用到了几个方法：
 1. `function.call(thisArg, arg1, arg2, ...)`：在thisArg的上下文中调用函数。此时this会指向拥有该上下文的对象，即thisArg。
@@ -777,7 +785,7 @@ Teacher.prototype....=function(...)...
 
 #  六 类
 
-类只是javascript原型继承链的语法糖，并没有引入新的对象继承模型。因此可以参考2.8小节来理解。
+类只是JavaScript原型继承链的语法糖，并没有引入新的对象继承模型。因此可以参考2.8小节来理解。
 
 * **类定义**：类实际上是一个特殊的函数，因此可以与函数一样，通过class声明、class表达式定义。但定义的class没有hoisting现象。
 
@@ -795,7 +803,7 @@ Teacher.prototype....=function(...)...
 
   * **公有字段**：使类具有自我描述性，仅此而已.
 
-        ```javascript
+        ```JavaScript
         class Rectangle {
           height = 0;
           width;
@@ -915,7 +923,7 @@ x(6); // returns 11
 y(7); // returns 27
 ```
 ##  strict mode
-strict mode限制了一些javascript语法的使用，并且赋予了普通代码新的含义。strict mode的一些规则或作用：
+strict mode限制了一些JavaScript语法的使用，并且赋予了普通代码新的含义。strict mode的一些规则或作用：
 1. 一些错误（silent errors）会被忽视，但strict mode抛出该错误
 2. 更好的优化效率
 3. 一些在以后ECMAScript版本中使用的语法或word会被保留
@@ -1239,24 +1247,24 @@ async function f() {
 f().catch(alert); // TypeError: failed to fetch // (*)
 ```
 
-> 参考: [Async/await](https://javascript.info/async-await)
+> 参考: [Async/await](https://JavaScript.info/async-await)
 
 # 八 其他
 ## 一些概念
-* javascript：语言
+* JavaScript：语言
 * Browser APIs：内置在浏览器的api
 * Third party APIs：构建在三方平台上的api。
-* javascript libraries：通常为含有自定义函数的javascript文件，比如Jquery、React、Mootools。
-* javascript frameworks：高于libraries，为html、css、js和其他技术的集合。也libraries的区别是框架是**控制反转**的，即框架调用开发者的代码。
+* JavaScript libraries：通常为含有自定义函数的JavaScript文件，比如Jquery、React、Mootools。
+* JavaScript frameworks：高于libraries，为html、css、js和其他技术的集合。也libraries的区别是框架是**控制反转**的，即框架调用开发者的代码。
 
 ----------
 错误大致类型：语法错误和逻辑错误。console.log()函数用于输出数据到控制台。
 
-* javascript单线程，异步
+* JavaScript单线程，异步
 
 # 参考
 * [A re-introduction to JavaScript (JS tutorial)](https://developer.mozilla.org/en-US/docs/Web/JavaScript/A_re-introduction_to_JavaScript)
 * [JavaScript](https://developer.mozilla.org/en-US/docs/Web/JavaScript)
-* [javascript reference](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference)
+* [JavaScript reference](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference)
 
 * [ES6 阮一峰](http://es6.ruanyifeng.com/#README) ES6语法进阶阅读
