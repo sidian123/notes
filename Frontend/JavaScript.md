@@ -60,7 +60,11 @@ JavaScript中使用`var`、`let`和`const`来声明变量。
 `var`声明的变量
 
 1. 没有[block scope][1]（块作用域）,只有function scope；
+
+   > 块作用域内外声明的同名变量为同一变量, 无*Shadowing*现象
+
 2. **声明**有[hoisting][2]现象，但**初始化**没有该现象；
+
 3. 可以多次声明变量。
 
 *hoisting*表示任何地方的变量声明都会被放到作用域内最顶端。例子如下：
@@ -464,60 +468,6 @@ JSON和literal的一些区别如下：
 
 [5]:https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/JSON#Full_JSON_syntax
 
-##  解构(Destructuring)
-解构，即将数组的元素或对象的属性赋值到单个变量中。数组按位置赋值，对象按变量名赋值，如下所示：
-```javascript
-//数据安装位置赋值
-var a, b, rest;
-[a, b] = [10, 20];
-console.log(a); // 10
-console.log(b); // 20
-
-[a, b, ...rest] = [10, 20, 30, 40, 50];
-console.log(a); // 10
-console.log(b); // 20
-console.log(rest); // [30, 40, 50]
-
-//对象按照变量名赋值
-({ a, b } = { a: 10, b: 20 });//需要小括号，防止{a,b}被解析为块语句
-console.log(a); // 10
-console.log(b); // 20
-
-({a, b, ...rest} = {a: 10, b: 20, c: 30, d: 40});
-console.log(a); // 10
-console.log(b); // 20
-console.log(rest); // {c: 30, d: 40}
-```
->参考：[Destructuring assignment](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Destructuring_assignment)
-
-## Spread语法
-
-Spread语法允许将数组或对象的元素或属性展开到需要很多参数或属性的地方.
-
-调用方式如下:
-
-* 函数调用
-
-  ```javascript
-  myFunction(...iterableObj);
-  ```
-
-* 数组
-
-  ```javascript
-  [...iterableObj, '4', 'five', 6];
-  ```
-
-* 对象
-
-  ```javascript
-  let objClone = { ...obj };
-  ```
-
-都是将元素拆分的过程.
-
-> 参考:[Spread syntax](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Spread_syntax)
-
 ## set & get
 
 * `get`: 绑定对象属性到函数上, 访问该属性时会返回函数的返回值
@@ -584,17 +534,50 @@ Object.assign(target, ...sources)
 **返回值**：
 >* 目标对象
 # 四 Functions
+
+## 语法
+
+### 定义
+
 简单的一个函数：
+
 ```javascript
 function add(x, y) {
   var total = x + y;
   return total;
 }
 ```
+
 1. 函数可以接收0到多个参数，如果调用时没有传入参数，那么参数默认为undefined
 2. 如果函数定义时没有参数列表，但是调用时传入了参数，可以通过[arguments][6]对象访问这些对象。
 3. return用来返回值并结束函数，可以直接`return;`不返回值但结束函数。如果函数没有返回值时，函数默认返回undefined。
 4. 函数的定义会引入函数作用域。
+
+###  声明
+
+函数有两种方法定义：函数声明和函数表达式
+
+* 函数声明
+
+    ```javascript
+    function a(){}
+    ```
+
+* 函数表达式（匿名函数）
+
+    没有方法名的函数, 通常赋值给变量. 作为一个表达式，最好添加分号在语句尾。
+    
+    ```javascript
+    var a=function(){};
+    ```
+    
+    > 实际上，函数表达式也可以拥有名字，但只能在函数内部使用，通过函数`name`属性取出。但感觉没啥子用处。
+
+>class可以说是一种特殊的函数，也有上述两种定义方式。
+
+>对象中的方法定义可以使用简写，见2.6.1小节
+
+### arguments
 
 [arguments][6]是一个类似array的**对象**，存有所有传入函数的参数。可以通过下标访问参数，有length属性。也可通过for of语句遍历：
 ```javascript
@@ -608,7 +591,10 @@ function add(){
 add(2,3,4,5);//14
 ```
 
+### 可变参数
+
 [Rest parameter syntax][7]允许接收无限个参数，然后存入到一个数组中。
+
 ```javascript
 //除了第1、2个参数外，其他参数组合构建成一个数组存入theArgs中。
 function f(a, b, ...theArgs) {
@@ -616,12 +602,7 @@ function f(a, b, ...theArgs) {
 }
 ```
 
-[spread operator][8]用于函数调用时将数组展开成逗号分隔的参数，如`avg(...numbers)`
-
-匿名函数，没有方法名，作为一个表达式，最好添加分号在语句尾。
-```javascript
-var avg=function(){...};
-```
+[spread operator][8]表示函数调用时将数组展开成逗号分隔的参数，如`avg(...numbers)`
 
 [6]:https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Functions/arguments
 [7]:https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Functions/rest_parameters
@@ -651,23 +632,6 @@ function.apply([thisArg, [argsArray]])
 >* [Search Function.prototype.apply()](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function/apply)
 >
 >* [bind()](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function/bind)
-
-##  函数声明
-函数有两种方法定义：函数声明和函数表达式
-
-函数声明：
-```javascript
-function a(){}
-```
-函数表达式（匿名函数）：
-```javascript
-var a=function(){}
-```
-实际上，函数表达式也可以拥有名字，但只能在函数内部使用，通过函数`name`属性取出。但感觉没啥子用处。
-
->class可以说是一种特殊的函数，也有上述两种定义方式。
-
->对象中的方法定义可以使用简写，见2.6.1小节
 
 ## arrow function expression 
 
@@ -898,6 +862,145 @@ Teacher.prototype....=function(...)...
 >参考：[Classes](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Classes)
 
 # 七 进阶
+
+##  解构(Destructuring)
+解构，即将数组的元素或对象的属性赋值到多个变量中的过程。
+
+### 数组解构
+
+按位置赋值
+
+```javascript
+let [first, second] = [1, 2];
+console.log(first); // outputs 1
+console.log(second); // outputs 2
+```
+
+`...`创建剩余元素的数组
+
+```javascript
+let [first, ...rest] = [1, 2, 3, 4];
+console.log(first); // outputs 1
+console.log(rest); // outputs [ 2, 3, 4 ]
+```
+
+忽略不关心的元素
+
+```javascript
+let [first] = [1, 2, 3, 4];
+console.log(first); // outputs 1
+```
+
+```javascript
+let [, second, , fourth] = [1, 2, 3, 4];
+console.log(second); // outputs 2
+console.log(fourth); // outputs 4
+```
+
+### 对象解构
+
+按属性名赋值
+
+```javascript
+let { a, b } = { a: "foo", b: 12, c: "bar" };
+```
+
+不像数组解构, 可以不必声明创建的变量
+
+```javascript
+({ a, b } = { a: "baz", b: 101 });
+```
+
+> 必须加上`()`, 防止语法 二义性的产生.
+
+`...`创建剩余属性的数组
+
+```javascript
+({a, b, ...rest} = {a: 10, b: 20, c: 30, d: 40});
+console.log(a); // 10
+console.log(b); // 20
+console.log(rest); // {c: 30, d: 40}
+```
+
+不适用属性名创建变量
+
+```javascript
+let { a: newName1, b: newName2 } = { a: "baz", b: 101 };
+```
+
+> 不会创建变量`a`, 而是`newName1`
+
+对象属性不存在时使用默认值
+
+```javascript
+let { a, b = 1001 } = {a:"123"}
+console.log(a);//"123"
+console.log(b);//1001
+```
+
+可用在方法参数中
+
+```javascript
+function f({ a, b = 0 } = { a: "" }): void {
+    // ...
+}
+f({ a: "yes" }); // ok, default b = 0
+f(); // ok, default to { a: "" }, which then defaults b = 0
+f({}); // error, 'a' is required if you supply an argument
+```
+
+> `{a:""}`是参数默认值, 莫要被误导了
+
+>参考
+>
+>* [Destructuring assignment](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Destructuring_assignment) MDN上的
+>* [Destructuring](https://www.typescriptlang.org/docs/handbook/variable-declarations.html#destructuring) TypeScript官网上的
+
+## Spread
+
+Spread语法用于将数组的元素或对象的属性展开到另一个数组或对象中.  如:
+
+```javascript
+let first = [1, 2];
+let second = [3, 4];
+let bothPlus = [0, ...first, ...second, 5];
+console.log(bothPlus);//[0, 1, 2, 3, 4, 5]
+```
+
+> Spread用的浅拷贝, 且仅拷贝对象的可遍历属性.
+
+调用方式如下:
+
+* 函数调用
+
+  ```javascript
+  myFunction(...iterableObj);
+  ```
+
+* 数组
+
+  ```javascript
+  [...iterableObj, '4', 'five', 6];
+  ```
+
+* 对象
+
+  ```javascript
+  let objClone = { ...obj };
+  ```
+
+对象Spread遇到相同属性时, 后者会覆盖前者
+
+```javascript
+let defaults = { food: "spicy", price: "$$", ambiance: "noisy" };
+let search = { ...defaults, food: "rich" };
+console.log(search);//{ food: "rich", price: "$$", ambiance: "noisy" }
+```
+
+> 参考
+>
+> * [Spread syntax](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Spread_syntax) MDN上的
+> * [Spread](https://www.typescriptlang.org/docs/handbook/variable-declarations.html#spread) TypeScript上的
 
 ## 闭包
 函数中还可以定义函数，而且可以访问外部函数的变量。如：
