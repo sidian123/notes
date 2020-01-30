@@ -266,22 +266,6 @@ function infiniteLoop(): never {
 
 ## 变量声明
 
-* `var` ( 弃用 )
-
-  声明的变量
-
-  1. 没有[block scope](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/block)（块作用域）,只有function, module, namespace, or global scope ；
-  2. **声明**有[hoisting](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/var#var_hoisting)现象，但**初始化**没有该现象；
-  3. 可以多次声明变量。
-
-* `let`
-
-  有块作用域; 无`hoisting`现象; 仅能声明一次; 嵌套作用域中存在*shadowing*
-
-* `const`
-
-  与`let`一致, 但是变量不能多次被赋值
-
 * 解构
 
   * 数组解构

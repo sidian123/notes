@@ -53,14 +53,18 @@ JavaScript支持unicode字符集，变量也可以使用中文来命名。但是
 大小写敏感。
 
 ### 变量声明
-JavaScript中使用`var`、`let`和`const`来定义变量。
+JavaScript中使用`var`、`let`和`const`来声明变量。
+
+#### var(弃)
 
 `var`声明的变量
+
 1. 没有[block scope][1]（块作用域）,只有function scope；
 2. **声明**有[hoisting][2]现象，但**初始化**没有该现象；
 3. 可以多次声明变量。
 
-hoisting表示任何地方的变量声明都会被放到作用域内最顶端。例子如下：
+*hoisting*表示任何地方的变量声明都会被放到作用域内最顶端。例子如下：
+
 ```javascript
 bla=2;//由于hoisting的存在，下面的声明会跑到作用域顶端，因此可以对比变量赋值
 var bla;
@@ -80,7 +84,10 @@ for(var i=0;i<10;i++){
 }
 //i这里可以访问
 ```
-注意，**函数声明**也存在hosting现象，几乎没有块作用域，但是block作用域会限制函数声明hosting到该block作用域的顶端。但要注意，**函数名**是隐性的变量名。如：
+#### 函数声明
+
+函数声明也存在*hosting*现象, 但受块作用域的影响，即函数声明仅*hosting*到该块作用域的顶端, 如:
+
 ```javascript
 myfun1();//函数声明也可hosting，因此可调用
 function myfun1(){...};
@@ -94,10 +101,14 @@ foo;//undefined，因为函数名是一个隐性变量，不受块作用域影�
 foo();//几乎没有块作用域，现在能够看到函数声明了
 ```
 
----------
-看到了吧,var即复杂，又和我们使用的习惯不一样（对于c++，java程序员来说），因此后面又出现了`let`和`const`关键值来声明变量。
+> 注意，函数名是隐性的变量名.
 
-`let`有块作用域，没有hoisting现象，和c++、java声明的变量一样。如：
+#### let,const
+
+> 看到了吧,var即复杂，又和我们使用的习惯不一样（对于c++，java程序员来说），因此后面又出现了`let`和`const`关键值来声明变量。
+
+`let`有块作用域; 无*hoisting*现象; 仅能声明一次; 嵌套作用域中存在*shadowing*. 类似于C++、Java声明的变量。如：
+
 ```javascript
 a=3;//错误，未定义不能使用。
 let a;
@@ -200,6 +211,7 @@ Boolean()可以显示转化值为布尔值，但是很少使用，因为会自�
 	> 若无特别指明, 如UTC, 都是以本地时区计算的.
 
 * 其他有意思的一些方法
+  
   * `getDay()` 返回这周的第几天, 对应关系:`Sunday - Saturday : 0 - 6`
 
 > 参考[Date](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date)
