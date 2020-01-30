@@ -264,27 +264,6 @@ function infiniteLoop(): never {
 
 > TypeScript于JSX一起使用时, 仅As语法可用.
 
-## 变量声明
-
-* 解构
-
-  * 数组解构
-  * 元组解构
-  * 对象解构
-    * 属性重命名
-    * 默认值
-
-* 方法声明
-
-  * 声明有*hoisting*现象, 无块作用域, 但该作用域会限制函数声明*hosting*到该块作用域的顶端
-
-* Spread语法
-
-> 参考
->
-> * [JavaScript]
-> * [Variable Declarations in TypeScript](https://www.typescriptlang.org/docs/handbook/variable-declarations.html)
-
 ## 接口
 
 
