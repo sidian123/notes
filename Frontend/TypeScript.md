@@ -495,17 +495,38 @@ mySearch = function(src, sub) {
 
 # 其他
 
-`union`类型
+## 类型兼容
 
-------
+TypeScript is a structural type system. When we compare two different types, regardless of where they came from, if the types of all members are compatible, then we say the types  themselves are compatible.
+
+However, when comparing types that have `private` and `protected` members, we treat these types differently. For two types to be considered compatible, if one of them has a `private` member, then the other must have a `private` member that originated in the same declaration. The same applies to `protected` members.
+
+Let’s look at an example to better see how this plays out in practice:
 
 ```ts
-function keepWholeObject(wholeObject: { a: string, b?: number }) {
-    let { a, b = 1001 } = wholeObject;
+class Animal {
+    private name: string;
+    constructor(theName: string) { this.name = theName; }
 }
+
+class Rhino extends Animal {
+    constructor() { super("Rhino"); }
+}
+
+class Employee {
+    private name: string;
+    constructor(theName: string) { this.name = theName; }
+}
+
+let animal = new Animal("Goat");
+let rhino = new Rhino();
+let employee = new Employee("Bob");
+
+animal = rhino;
+animal = employee; // Error: 'Animal' and 'Employee' are not compatible
 ```
 
-`?`表示可选
+
 
 # 参考
 
