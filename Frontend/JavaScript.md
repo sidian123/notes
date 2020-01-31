@@ -543,7 +543,7 @@ Object.assign(target, ...sources)
 
 ## 语法
 
-### 定义
+### 介绍
 
 简单的一个函数：
 
@@ -609,6 +609,17 @@ function f(a, b, ...theArgs) {
 ```
 
 [spread operator][8]表示函数调用时将数组展开成逗号分隔的参数，如`avg(...numbers)`
+
+### 默认值
+
+```javascript
+function a(b=23){
+    console.log(b);
+}
+
+a();//23
+a(22);//22
+```
 
 [6]:https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Functions/arguments
 [7]:https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Functions/rest_parameters
