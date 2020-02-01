@@ -1,10 +1,12 @@
-# 介绍
+# 引言
+
+## 介绍
 
 * TypeScript是JavaScript的超集
 
   > 即正常的JavaScript语法可在TypeScript中用, 反之不行.
 
-# Get Started
+## Get Started
 
 * 安装
 
@@ -485,17 +487,235 @@ mySearch = function(src, sub) {
 
 ### 静态属性
 
+
+
 # 类
 
+## 介绍
 
+ES6语法支持类, TS也支持, 并且更为完善.
 
+### 声明
 
+一个简单Demo:
 
+```ts
+class Greeter {
+    greeting: string;
+    constructor(message: string) {
+        this.greeting = message;
+    }
+    greet() {
+        return "Hello, " + this.greeting;
+    }
+}
 
+let greeter = new Greeter("world");
+```
+
+* `constructor()`是构造函数
+* 字段方法默认公有
+* `this`调用实例属性&方法, `super`调用父类属性&方法
+* 支持多态 ( due to prototype chain )
+* 类也是一种类型, 可以出现在接口出现的地方
+
+### 修饰符
+
+* 访问权限
+
+  * `public` (默认) 允许类外访问
+
+    ```ts
+    class Animal {
+        public name: string;
+        public constructor(theName: string) { this.name = theName; }
+        public move(distanceInMeters: number) {
+            console.log(`${this.name} moved ${distanceInMeters}m.`);
+        }
+    }
+    ```
+
+  * `private` 仅类中被访问
+
+    ```ts
+    class Animal {
+        private name: string;
+        constructor(theName: string) { this.name = theName; }
+    }
+    
+    new Animal("Cat").name; // Error: 'name' is private;
+    ```
+
+    TS3.8支持私有字段的另一种写法
+
+    ```ts
+    class Animal {
+        #name: string;
+        constructor(theName: string) { this.#name = theName; }
+    }
+    
+    new Animal("Cat").#name; // Property '#name' is not accessible outside class 'Animal' because it has a private identifier.
+    ```
+
+  * `protected` 类且子类中可被访问
+
+    ```ts
+    class Person {
+        protected name: string;
+        constructor(name: string) { this.name = name; }
+    }
+    
+    class Employee extends Person {
+        private department: string;
+    
+        constructor(name: string, department: string) {
+            super(name);
+            this.department = department;
+        }
+    
+        public getElevatorPitch() {
+            return `Hello, my name is ${this.name} and I work in ${this.department}.`;
+        }
+    }
+    
+    let howard = new Employee("Howard", "Sales");
+    console.log(howard.getElevatorPitch());
+    console.log(howard.name); // error
+    ```
+
+* `readonly` 属性只读, 只能在字段声明或构造函数中初始化
+
+  ```ts
+  class Octopus {
+      readonly name: string;
+      readonly numberOfLegs: number = 8;
+      constructor (theName: string) {
+          this.name = theName;
+      }
+  }
+  let dad = new Octopus("Man with the 8 strong legs");
+  dad.name = "Man with the 3-piece suit"; // error! name is readonly.
+  ```
+
+### 属性
+
+例子:
+
+```ts
+class Person{
+    name:string;//一般属性声明方式
+    static num:number;//静态属性声明方式
+    //参数属性声明方式
+    constructor(public age:number,readonly sex:string){
+
+    }
+}
+```
+
+> 参数属性声明=声明属性+初始化, 仅在参数前添加修饰符即可
+
+### getter&setter
+
+```ts
+class Person{
+    private _age:number;
+    get age(){
+        return this._age;
+    }
+    set age(value:number){
+        this._age=value;
+    }
+}
+let me:Person=new Person();
+me.age=23;
+```
+
+getter&setter是一组方法, 声明一个**伪属性**, 对该属性访问时会调用不同的方法. 
+
+注意, 不允许存在一个同名的属性.
+
+## 继承
+
+* 与Java类似, 属于单继承, 只能继承一个类, 但可以实现多个接口; 
+* 存在多态; 
+* 子类若有构造函数, 函数必须先调用父类构造函数.
+
+* 简单例子:
+
+    ```ts
+    class Animal {
+        name: string;
+        constructor(theName: string) { this.name = theName; }
+        move(distanceInMeters: number = 0) {
+            console.log(`${this.name} moved ${distanceInMeters}m.`);
+        }
+    }
+
+    class Snake extends Animal {
+        constructor(name: string) { super(name); }
+        move(distanceInMeters = 5) {
+            console.log("Slithering...");
+            super.move(distanceInMeters);
+        }
+    }
+
+    class Horse extends Animal {
+        constructor(name: string) { super(name); }
+        move(distanceInMeters = 45) {
+            console.log("Galloping...");
+            super.move(distanceInMeters);
+        }
+    }
+
+    let sam = new Snake("Sammy the Python");
+    let tom: Animal = new Horse("Tommy the Palomino");
+
+    sam.move();
+    tom.move(34);
+    ```
+
+* 注意--类的类型匹配规则
+
+  不同类见, `public`属性/方法只要形状一致即可,  对于`private`, `protect`属性/方法, 除了形状外, 原型链上的来源也要一致.
+
+  > 例子见接下来的*类型兼容*
+
+## 抽象类
+
+抽象类不能实例化, 只能被继承, 可以有抽象方法(也可无), 方法实现.
+
+```ts
+abstract class Animal {
+    abstract makeSound(): void;
+    move(): void {
+        console.log("roaming the earth...");
+    }
+}
+```
+
+## 其他
+
+### 获取类的类型
+
+类如`Person`, 代表的是实例化对象的类型. 类自身的类型可由`typeof Person`给出. 如
+
+```ts
+class Greeter {
+    static standardGreeting = "Hello, there";
+	...
+}
+//获取类的类型, 直接修改类的静态属性值.
+let greeterMaker: typeof Greeter = Greeter;
+greeterMaker.standardGreeting = "Hey there!";
+```
 
 # 其他
 
-## 类型兼容
+## 类型
+
+### 类型推断
+
+### 类型兼容
 
 TypeScript is a structural type system. When we compare two different types, regardless of where they came from, if the types of all members are compatible, then we say the types  themselves are compatible.
 
