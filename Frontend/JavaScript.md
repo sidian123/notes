@@ -680,6 +680,8 @@ JavaScript是基于原型（prototype）的语言，没有class语句的存在�
 
 由于**自动包装**(auto box)的存在，`undefined`或`null`值将被替换为全局对象（如`window`），`primitive`值被包装成对象。但在**strict mode**下，不会发生自动包装。
 
+-----
+
 下面看看两个非strict模式下自动包装的例子：
 ```javascript
 var s={first:"Simon",
@@ -693,7 +695,6 @@ s.fullName();//"Simon Willison" ，此时this指向s
 var fullName=s.fullName;
 fullName();//undefined undefined ,fullName是全局变量window的方法，因此this指向window
 ```
-----------
 ```javascript
 function test(){
     test.a="aaa";
