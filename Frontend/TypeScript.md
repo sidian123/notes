@@ -66,6 +66,14 @@
 
   > 构造函数中`public`声明的参数将自动生成对应字段.
 
+# 类型
+
+## 基础类型
+
+## 类型推断
+
+## 类型兼容
+
 # 基础类型
 
 ## Boolean
@@ -263,6 +271,231 @@ function infiniteLoop(): never {
   ```
 
 > TypeScript于JSX一起使用时, 仅As语法可用.
+
+# 函数
+
+## 介绍
+
+带类型的函数声明, 主要涉及参数类型, 返回值类型的声明, 如
+
+```ts
+function add(x: number, y: number): number {
+    return x + y;
+}
+
+let myAdd = function(x: number, y: number): number { return x + y; };
+```
+
+函数名不能当作类型定义变量, 需要使用接口表示函数的类型, 如:
+
+```ts
+let myAdd: (x: number, y: number) => number =
+    function(x: number, y: number): number { return x + y; };
+```
+
+> 这是表示函数的接口的字面值形式, 注意`=>`后接返回类型
+
+当然, 类型自动推断, 能减少显式的类型声明, 如
+
+```ts
+// myAdd has the full function type
+let myAdd = function(x: number, y: number): number { return  x + y; };
+
+// The parameters 'x' and 'y' have the type number
+let myAdd: (baseValue: number, increment: number) => number =
+    function(x, y) { return x + y; };
+```
+
+> 从函数推断变量类型, 或从变量推断函数类型, 都可.
+
+## 参数
+
+### 必需参数
+
+```ts
+function hello(word:string):string{
+    return `hello ${word}`;
+}
+hello("world");
+```
+
+> 尽管必须, 但可以传入`null`, `undefined`
+
+### 可选参数
+
+```ts
+function buildName(firstName: string, lastName?: string) {
+    if (lastName)
+        return firstName + " " + lastName;
+    else
+        return firstName;
+}
+
+let result1 = buildName("Bob");                  // works correctly now
+let result2 = buildName("Bob", "Adams", "Sr.");  // error, too many parameters
+let result3 = buildName("Bob", "Adams");         // ah, just right
+```
+
+注意, 可选参数必须位于必需参数之后
+
+### 默认参数
+
+函数调用在参数未被传入值或传入`undefined`后, 将使用参数的默认值.
+
+```ts
+function buildName(firstName: string, lastName = "Smith") {
+    return firstName + " " + lastName;
+}
+
+let result1 = buildName("Bob");                  // works correctly now, returns "Bob Smith"
+let result2 = buildName("Bob", undefined);       // still works, also returns "Bob Smith"
+let result3 = buildName("Bob", "Adams", "Sr.");  // error, too many parameters
+let result4 = buildName("Bob", "Adams");         // ah, just right
+```
+
+---
+
+默认参数类似可选参数, 与可选参数的类型一致, 如
+
+```ts
+function buildName(firstName: string, lastName?: string) {
+    // ...
+}
+```
+
+```ts
+function buildName(firstName: string, lastName = "Smith") {
+    // ...
+}
+```
+
+类型都是`(firstName: string, lastName?: string) => string`
+
+---
+
+与可选参数不同, 默认参数可位于必需参数之前, 若用默认值, 传入`undefined`即可
+
+```ts
+function buildName(firstName = "Will", lastName: string) {
+    return firstName + " " + lastName;
+}
+
+let result1 = buildName("Bob");                  // error, too few parameters
+let result2 = buildName("Bob", "Adams", "Sr.");  // error, too many parameters
+let result3 = buildName("Bob", "Adams");         // okay and returns "Bob Adams"
+let result4 = buildName(undefined, "Adams");     // okay and returns "Will Adams"
+```
+
+### Rest参数
+
+函数调用时, 可传入多个参数, 函数内部提供数组来访问这些参数, 如
+
+```ts
+function buildName(firstName: string, ...restOfName: string[]) {
+    return firstName + " " + restOfName.join(" ");
+}
+
+// employeeName will be "Joseph Samuel Lucas MacKinzie"
+let employeeName = buildName("Joseph", "Samuel", "Lucas", "MacKinzie");
+```
+
+> 以`...`为Rest参数前缀.
+
+Rest参数可传入0到多个, 必须位于最后一个参数.
+
+## this
+
+### 绑定this
+
+非strict模式下, 函数的`this`指向全局变量, 对象方法的`this`指向对象本省, 但对象的方法赋值给其他对象, `this`值又会改变. 总之, `this`会随环境改变而改变
+
+> 详细见[JavaScript]
+
+可通过`apply()`,`call()`显式绑定`this`. 闭包也行, 如
+
+```ts
+let a={
+    name:"a",
+    hello(){
+        return ()=>{
+            console.log(`Hi, I'm ${this.name}`)
+        }
+    }
+}
+let b=a.hello();
+b();
+```
+
+> Arrow函数表达式中, `this`指向对象本身, 直接返回函数, 将捕获`this`值
+
+### this参数
+
+上述被返回的函数中, `this`的类型为`any`, 可显式提供`this`参数, 指定其类型, 如
+
+```ts
+function f(this: void) {
+    // make sure `this` is unusable in this standalone function
+}
+```
+
+### 回调函数中this
+
+一个接口如下
+
+```ts
+interface UIElement {
+    addClickListener(onclick: (this: void, e: Event) => void): void;
+}
+```
+
+回调函数`onclick()`要求`this`类型为`void`, 即用不到`this`
+
+那么调用时需提供`this`参数
+
+```ts
+class Handler {
+    info: string;
+    onClickGood(this: void, e: Event) {
+        // can't use `this` here because it's of type void!
+        console.log('clicked!');
+    }
+}
+let h = new Handler();
+uiElement.addClickListener(h.onClickGood);
+```
+
+## 重载
+
+JavaScript中有比较Low的重载实现, 而TS仅对它提供了类型支持, 如
+
+```ts
+let suits = ["hearts", "spades", "clubs", "diamonds"];
+
+function pickCard(x: {suit: string; card: number; }[]): number;
+function pickCard(x: number): {suit: string; card: number; };
+function pickCard(x): any {
+    // Check to see if we're working with an object/array
+    // if so, they gave us the deck and we'll pick the card
+    if (typeof x == "object") {
+        let pickedCard = Math.floor(Math.random() * x.length);
+        return pickedCard;
+    }
+    // Otherwise just let them pick the card
+    else if (typeof x == "number") {
+        let pickedSuit = Math.floor(x / 13);
+        return { suit: suits[pickedSuit], card: x % 13 };
+    }
+}
+
+let myDeck = [{ suit: "diamonds", card: 2 }, { suit: "spades", card: 10 }, { suit: "hearts", card: 4 }];
+let pickedCard1 = myDeck[pickCard(myDeck)];
+alert("card: " + pickedCard1.card + " of " + pickedCard1.suit);
+
+let pickedCard2 = pickCard(15);
+alert("card: " + pickedCard2.card + " of " + pickedCard2.suit);
+```
+
+`pickCard()`有两种重载形式, 第三个`pickCard()`不是重载的部分, 仅提供实现, 且要求: 参数和返回值类型必须包含所有重载形式的类型.
 
 # 接口
 
