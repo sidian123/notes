@@ -296,7 +296,9 @@ function printLabel(labeledObj: LabeledValue) {
 
 ## 属性声明
 
-声明对象所需的属性, 包括函数
+声明对象所需的属性, 包括函数. 
+
+> 不能声明静态属性/方法, 它是属于类的, 而非实例对象的. Java中, 接口属性是静态的常量, 不要搞混了.
 
 * 必需属性
 
@@ -329,7 +331,7 @@ function printLabel(labeledObj: LabeledValue) {
 
 * 只读属性
 
-  只读属性被创建后, 不能被修改
+  只读属性被创建后, 不能被修改. 也是*必需属性*
 
   ```ts
   interface Point {
@@ -469,25 +471,181 @@ mySearch = function(src, sub) {
 
   > `Dog`满足`Animal`的类型形状
 
+## 混合类型
+
+由于JavaScript的动态和灵活性, 可以将上述几种类型组合成一个混合类型.
+
+如, 组合函数和对象:
+
+```ts
+interface Counter {
+    (start: number): string;
+    interval: number;
+    reset(): void;
+}
+
+function getCounter(): Counter {
+    let counter = (function (start: number) { }) as Counter;
+    counter.interval = 123;
+    counter.reset = function () { };
+    return counter;
+}
+
+let c = getCounter();
+c(10);
+c.reset();
+c.interval = 5.0;
+```
+
 ## 继承
 
+### 继承接口
 
+```ts
+interface Shape {
+    color: string;
+}
 
+interface PenStroke {
+    penWidth: number;
+}
 
+interface Square extends Shape, PenStroke {
+    sideLength: number;
+}
 
+let square = {} as Square;
+square.color = "blue";
+square.sideLength = 10;
+square.penWidth = 5.0;
+```
 
+### 继承类
 
+接口可继承类, 仅获取类的所有属性声明, 方法原型 ( 含`public`,`private`,`protected`的, 应该不含静态的 ) .
 
+```ts
+class Control {
+    private state: any;
+}
 
+interface SelectableControl extends Control {
+    select(): void;
+}
 
+class Button extends Control implements SelectableControl {
+    select() { }
+}
+
+class Button2{
+    private state:any;
+    select(){}
+}
+
+let control:SelectableControl=new Button();
+let control2:SelectableControl=new Button2();//state属性的来源不同, 因此类型不兼容
+```
+
+> 关于类型兼容, 见下
 
 ## 特殊情况
 
 ### 额外属性
 
-### 静态属性
+#### 介绍
 
+一般来说, 对象赋值给变量时, 只要满足变量类型的必要属性, 方法存在即可 ( 此处说法不严谨 ). 即使对象有多余属性也算类型匹配.
 
+但是有个特殊情况, 字面值对象直接赋值给变量或参数时, 不允许对象有多余的属性. 如
+
+```ts
+interface SquareConfig {
+    color?: string;
+    width?: number;
+}
+
+function createSquare(config: SquareConfig): { color: string; area: number } {
+    // ...
+}
+
+let mySquare = createSquare({ colour: "red", width: 100 });//error: colour多余
+```
+
+> 这里, 接口中两个属性都是可选的, 那么字面值对象的`colour`属性是多余的, 不允许
+
+#### 原因
+
+因为大多数情况下, 多余的属性意味着拼错单词了, 因此TS在这种情况下禁止这种用法了.
+
+#### 解决办法
+
+绕过该类检查有三种方式:
+
+1. 类型断言
+
+   ```ts
+   let mySquare = createSquare({ width: 100, opacity: 0.5 } as SquareConfig);
+   ```
+
+2. 间接赋值
+
+   ```ts
+   let squareOptions = { colour: "red", width: 100 };
+   let mySquare = createSquare(squareOptions);
+   ```
+
+3. 允许任意属性存在
+
+   ```ts
+   interface SquareConfig {
+       color?: string;
+       width?: number;
+       [propName: string]: any;
+   }
+   ```
+
+### 构造函数
+
+一般接口中不能声明静态方法的, 但有种例外, 可以声明构造函数原型, 如
+
+```ts
+interface ClockConstructor {
+    new (hour: number, minute: number);
+}
+```
+
+这种接口是不能被继承的, 只能用于指定变量类型, 如
+
+```ts
+interface ClockConstructor {
+    new (hour: number, minute: number): ClockInterface;
+}
+interface ClockInterface {
+    tick(): void;
+}
+
+function createClock(ctor: ClockConstructor, hour: number, minute: number): ClockInterface {
+    return new ctor(hour, minute);
+}
+
+class DigitalClock implements ClockInterface {
+    constructor(h: number, m: number) { }
+    tick() {
+        console.log("beep beep");
+    }
+}
+class AnalogClock implements ClockInterface {
+    constructor(h: number, m: number) { }
+    tick() {
+        console.log("tick tock");
+    }
+}
+
+let digital = createClock(DigitalClock, 12, 17);
+let analog = createClock(AnalogClock, 7, 32);
+```
+
+> `DigitalClock`, `AnalogClock`满足接口`ClockConstructor`的形状, 因此可以赋值给`createClock()`的参数`ctor`
 
 # 类
 
@@ -745,8 +903,6 @@ let employee = new Employee("Bob");
 animal = rhino;
 animal = employee; // Error: 'Animal' and 'Employee' are not compatible
 ```
-
-
 
 # 参考
 
