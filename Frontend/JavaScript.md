@@ -612,6 +612,8 @@ function f(a, b, ...theArgs) {
 
 ### 默认值
 
+参数被传入`undefined`时, 参数将使用默认值
+
 ```javascript
 function a(b=23){
     console.log(b);
