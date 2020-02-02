@@ -381,6 +381,7 @@ html的class和style都是属性，因此可以使用`v-bind`来绑定vue属性�
 # 七 条件性渲染
 ## v-if
 * 含有`v-if`指令的元素，只有在属性值为true时才会被渲染。
+
 * 如果需要一个`v-if`指令条件渲染多个html元素，可使用`template`包裹起来：
     ```html
     <template v-if="ok">
@@ -389,7 +390,9 @@ html的class和style都是属性，因此可以使用`v-bind`来绑定vue属性�
       <p>Paragraph 2</p>
     </template>
     ```
+    
 * 可像其他语言一样，有`v-else`,`v-else-if`
+
 * vue实例数据改变时，会导致虚拟DOM重新渲染。但为了提高效率，虚拟DOM应用到DOM时，会复用已有的元素。使用`key`属性阻止这里行为：
     ```html
     <template v-if="loginType === 'username'">
@@ -402,6 +405,7 @@ html的class和style都是属性，因此可以使用`v-bind`来绑定vue属性�
     </template>
     ```
     但label还是会被复用
+
 ## v-show
 含`v-show`的元素还是会被渲染到dom中，但会条件性的选择是否显示它，使用了css的`display`属性。因此隐藏或显示后，事件监听器还是存在的。
 
