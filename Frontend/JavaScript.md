@@ -326,7 +326,22 @@ random[2][2];
 
 * `switch`
 
-  表达式和`case`值之间是通过`===`来比较的。
+  ```javascript
+  switch (expression) {
+    case label_1:
+      statements_1
+      [break;]
+    case label_2:
+      statements_2
+      [break;]
+      …
+    default:
+      statements_def
+      [break;]
+  }
+  ```
+
+  > 表达式和`case`值之间是通过`===`来比较的。
 
 * 三元运算符
 
