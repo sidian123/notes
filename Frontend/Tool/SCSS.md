@@ -338,9 +338,28 @@ nav ul li {
 
 > `@inclue`相当于去掉`@mixin`外层代码块, 才引入进来.
 
-> 还可以使用参数
+> 使用思路: 将非语义的, 纯粹功能性的样式抽离出来
 
-> 使用思路, 将非语义的, 纯粹功能性的样式抽离出来
+可以存在参数, 及默认值
+
+```scss
+@mixin replace-text($image, $x: 50%, $y: 50%) {
+  text-indent: -99999em;
+  overflow: hidden;
+  text-align: left;
+
+  background: {
+    image: $image;
+    repeat: no-repeat;
+    position: $x $y;
+  }
+}
+
+.mail-icon {
+  @include replace-text(url("/images/mail.svg"), 0);
+}
+
+```
 
 > 参考:[@mixin and @include](https://sass-lang.com/documentation/at-rules/mixin)
 
