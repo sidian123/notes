@@ -1,4 +1,4 @@
-# 引言
+# 一 引言
 
 ## 介绍
 
@@ -6,8 +6,7 @@
 
   > 即正常的JavaScript语法可在TypeScript中用, 反之不行.
 
-## Get Started
-
+## 安装
 * 安装
 
   ```shell
@@ -19,6 +18,9 @@
   ```shell
   tsc greeter.ts
   ```
+
+
+## 入门
 
 * 类型注解
 
@@ -66,23 +68,19 @@
 
   > 构造函数中`public`声明的参数将自动生成对应字段.
 
-# 类型
+# 二 类型
+
+TS中每个对象都有类型, 可以显式声明, 可以让编译器自动推断. 未声明且不能推断的类型, 类型都默认为`any`
 
 ## 基础类型
 
-## 类型推断
-
-## 类型兼容
-
-# 基础类型
-
-## Boolean
+### boolean
 
 ```ts
 let isDone: boolean = false;
 ```
 
-## Number
+### number
 
 ```ts
 let decimal: number = 6;
@@ -91,7 +89,7 @@ let binary: number = 0b1010;
 let octal: number = 0o744;
 ```
 
-## String
+### string
 
 ```ts
 let color: string = "blue";
@@ -101,7 +99,7 @@ let age: number = 37;
 let sentence: string = `Hello, my name is ${ fullName }.
 ```
 
-## Array
+### array
 
 ```ts
 let list: number[] = [1, 2, 3];
@@ -113,7 +111,7 @@ let list: number[] = [1, 2, 3];
 let list: Array<number> = [1, 2, 3];
 ```
 
-## Tuple
+### tuple
 
 也是一种数据, 但是数组元素类型可以不同
 
@@ -130,7 +128,7 @@ x[3] = "world"; // Error, Property '3' does not exist on type '[string, number]'
 console.log(x[5].toString()); // Error, Property '5' does not exist on type '[string, number]'.
 ```
 
-## Enum
+### enum
 
 TypeScript中新增的类型
 
@@ -160,7 +158,7 @@ let colorName: string = Color[2];
 console.log(colorName); // Displays 'Green' as its value is 2 above
 ```
 
-## Any
+### any
 
 为了兼容三方无类型信息的对象, 提供了`any`类型, 表示任何对象, <u>避免编译时类型检查</u>, 如
 
@@ -189,7 +187,7 @@ let list: any[] = [1, true, "free"];
 list[1] = 100;
 ```
 
-## Void
+### void
 
 用于函数, 表示无返回值
 
@@ -206,7 +204,7 @@ let unusable: void = undefined;
 unusable = null; // OK if `--strictNullChecks` is not given
 ```
 
-## Null and Undefined
+### null&undefined
 
 ```ts
 // Not much else we can assign to these variables!
@@ -218,7 +216,7 @@ let n: null = null;
 
 当`--strictNullChecks`被设置后, `null`和`undefined`只能赋值给`any`和自己的类型 ( 除了`undefined`也可以赋值给`void`.
 
-## Never
+### never
 
 用于声明变量, 它的值永远得不到,如
 
@@ -244,11 +242,62 @@ function infiniteLoop(): never {
 
 `never`是所有类型的子类, 可以赋值给所有类型. 但`never`除了自己, 不能被任何类型的变量赋值.
 
-## Object
+### object
 
-表示所有的类型, 除了`number`, `string`, `boolean`, `bigint`, `symbol`, `null`, 或 `undefined`.
+`object`表示所有的类型, 除了`number`, `string`, `boolean`, `bigint`, `symbol`, `null`, 或 `undefined`.
 
-## Type assertions
+## 类型推断
+
+编译器能够根据已有的信息自动推断未显式声明的变量的类型.
+
+例子略...2333
+
+## 类型兼容
+
+TS中类型是否兼容并不如其他语言(如Java,C++)那么严格, 大致只要形状匹配即可.
+
+具体规则: 类型A匹配类型B, 仅当类型A拥有类型B全部的`public`属性/方法, 而`protect`,`private`属性/方法, 也要拥有, 且原型链中来源一致.
+
+例子:
+
+```ts
+class Animal {
+    private name: string;
+    constructor(theName: string) { this.name = theName; }
+}
+
+class Rhino extends Animal {
+    constructor() { super("Rhino"); }
+}
+
+class Employee {
+    private name: string;
+    constructor(theName: string) { this.name = theName; }
+}
+
+let animal = new Animal("Goat");
+let rhino = new Rhino();
+let employee = new Employee("Bob");
+
+animal = rhino;
+animal = employee; // Error: 'Animal' and 'Employee' are not compatible
+```
+
+> `Employee`与`Animal`形状一致, 但`name`来源不一致.
+
+## 其他
+
+### 联合类型
+
+联合类型, 表示变量可取值多个类型中的一种, 如
+
+```ts
+let myFavoriteNumber: string | number;
+myFavoriteNumber = 'seven';
+myFavoriteNumber = 7;
+```
+
+### 类型断言
 
 与类型转化cast类型, 但不对运行时造成影响, 仅作用于编译器.
 
@@ -272,7 +321,11 @@ function infiniteLoop(): never {
 
 > TypeScript于JSX一起使用时, 仅As语法可用.
 
-# 函数
+
+
+## Type assertions
+
+# 三 函数
 
 ## 介绍
 
@@ -497,7 +550,7 @@ alert("card: " + pickedCard2.card + " of " + pickedCard2.suit);
 
 `pickCard()`有两种重载形式, 第三个`pickCard()`不是重载的部分, 仅提供实现, 且要求: 参数和返回值类型必须包含所有重载形式的类型.
 
-# 接口
+# 四 接口
 
 ## 介绍
 
@@ -880,7 +933,7 @@ let analog = createClock(AnalogClock, 7, 32);
 
 > `DigitalClock`, `AnalogClock`满足接口`ClockConstructor`的形状, 因此可以赋值给`createClock()`的参数`ctor`
 
-# 类
+# 五 类
 
 ## 介绍
 
@@ -1100,42 +1153,94 @@ let greeterMaker: typeof Greeter = Greeter;
 greeterMaker.standardGreeting = "Hey there!";
 ```
 
-# 其他
+# 六 泛型
 
-## 类型
+泛型, 即变量类型声明时不知道, 使用时才确定下来.
 
-### 类型推断
+> 与Java类型, 但使用时无占位符`?`
 
-### 类型兼容
+> 因为已有其他语言的基础, 很多小知识点未展开, 完整内容传送通道:[Generics in TS](https://www.typescriptlang.org/docs/handbook/generics.html)
 
-TypeScript is a structural type system. When we compare two different types, regardless of where they came from, if the types of all members are compatible, then we say the types  themselves are compatible.
+## 函数
 
-However, when comparing types that have `private` and `protected` members, we treat these types differently. For two types to be considered compatible, if one of them has a `private` member, then the other must have a `private` member that originated in the same declaration. The same applies to `protected` members.
+* 声明
 
-Let’s look at an example to better see how this plays out in practice:
+    ```ts
+    function identity<T>(arg: T): T {
+        return arg;
+    }
+    ```
+
+    > `<T>`中的`T`表示不确定的类型, 可以是任意类型
+
+* 使用
+
+    ```ts
+    let output = identity<string>("myString");
+    ```
+
+## 类
 
 ```ts
-class Animal {
-    private name: string;
-    constructor(theName: string) { this.name = theName; }
+class GenericNumber<T> {
+    zeroValue: T;
+    add: (x: T, y: T) => T;
 }
 
-class Rhino extends Animal {
-    constructor() { super("Rhino"); }
-}
-
-class Employee {
-    private name: string;
-    constructor(theName: string) { this.name = theName; }
-}
-
-let animal = new Animal("Goat");
-let rhino = new Rhino();
-let employee = new Employee("Bob");
-
-animal = rhino;
-animal = employee; // Error: 'Animal' and 'Employee' are not compatible
+let myGenericNumber = new GenericNumber<number>();
+myGenericNumber.zeroValue = 0;
+myGenericNumber.add = function(x, y) { return x + y; };
 ```
+
+## 接口
+
+与类类似, 如下定义了泛型函数的接口
+
+```ts
+interface GenericIdentityFn<T> {
+    (arg: T): T;
+}
+
+function identity<T>(arg: T): T {
+    return arg;
+}
+
+let myIdentity: GenericIdentityFn<number> = identity;
+```
+
+## 约束
+
+类型参数可以表示任意类型, 在声明时, 只能当作`object`使用. 如
+
+```ts
+function loggingIdentity<T>(arg: T): T {
+    console.log(arg.length);  // Error: T doesn't have .length
+    return arg;
+}
+```
+
+> `object`可没有`length`属性.
+
+可约束类型参数到一定范围内
+
+```ts
+interface Lengthwise {
+    length: number;
+}
+
+function loggingIdentity<T extends Lengthwise>(arg: T): T {
+    console.log(arg.length);  // Now we know it has a .length property, so no more error
+    return arg;
+}
+```
+
+> `T`仅表示符合`Lengthwise`形状的类型, 因此可当作`Lengthwise`使用.
+
+# 七 其他
+
+## 声明文件
+
+## 配置
 
 # 参考
 
