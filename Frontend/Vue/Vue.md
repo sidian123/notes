@@ -965,6 +965,18 @@ this.$emit('update:title', newTitle)
 
 > 动态创建Element UI的组件? 它的每个组件可直接传入`Vue.extend()`中
 
+# Vue3
+
+Vue3采用Composition API的方式组织代码, 以解决以下问题:
+
+1. 组件的逻辑分离, 更好的组织代码
+2. 逻辑复用
+3. 更好的TS支持.
+
+传送门: [Vue Composition API](https://vue-composition-api-rfc.netlify.com/)
+
+> 该方式主要受React Hooks启发
+
 # 踩过的坑
 
 ## 组件名与原生Html元素冲突
