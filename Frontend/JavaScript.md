@@ -249,13 +249,22 @@ random[2][2];
   ```
 
 * `String`的`split()`方法分割字符串产生数组
+
 * `Array`的`join()`方法合并数组成为字符串
+
 * `Array`的`toString()`方法将数组转化为字符串
+
 * `push()`和`pop()`方法分别在数组底端添加和删除数组。
+
 * `unshift()`和`shift()`方法分别在数组前端添加和删除数组。
+
 * `splice`用于在某个索引上添加或删除元素。
+
 * `Array.from`：浅拷贝
+
 * `slice()`返回数据的一部分
+
+* `includes()` 是否包含元素
 
 > 参考[Array](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array)
 
