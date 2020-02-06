@@ -217,6 +217,7 @@ Boolean()可以显示转化值为布尔值，但是很少使用，因为会自�
 * 其他有意思的一些方法
   
   * `getDay()` 返回这周的第几天, 对应关系:`Sunday - Saturday : 0 - 6`
+  * `getTime()` 返回自[Unix Epoch](https://en.wikipedia.org/wiki/Unix_time)到现在毫秒数.
 
 > 参考[Date](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date)
 
