@@ -805,7 +805,7 @@ class FillAndEmpty {
 
 - 使用
 
-  `ThreadLocal`字段通常声明为`private static`, 然后重写它的`initialValue`方法来设置它的初始值. 而`get`, `set`方法用于设置或获得该字段的值.
+  `ThreadLocal`字段通常声明为`private static`, 然后重写它的`initialValue`方法来设置它的初始值 ( 或静态方法`withInitial()` ) . 而`get`, `set`方法用于设置或获得该字段的值.
 
 - 原理
 
