@@ -967,8 +967,19 @@ server:
 
 ## 自动配置
 
-* [Create a Custom Auto-Configuration with Spring Boot](https://www.baeldung.com/spring-boot-custom-auto-configuration) 如何创建自动配置的依赖
-* [SpringBoot自动配置的原理及实现](https://blog.csdn.net/zjcjava/article/details/84028222) 原理没有说清楚, 可以瞅瞅
+* 原理
+
+  扫描每个依赖的`classpath:META-INF/spring.factories`文件, 找到`org.springframework.boot.autoconfigure.EnableAutoConfiguration`属性, 自动配置的类通过该属性指定.
+
+* 使用
+
+  1. 在自己依赖的`META-INF/spring.factories`文件中添加上述属性, 指定该依赖的自动配置类
+  2. 通过condition注解, 根据条件判断是否注入相应的Bean
+
+> 参考
+>
+> * [Create a Custom Auto-Configuration with Spring Boot](https://www.baeldung.com/spring-boot-custom-auto-configuration) 如何创建自动配置的依赖
+> * [SpringBoot自动配置的原理及实现](https://blog.csdn.net/zjcjava/article/details/84028222) 原理没有说清楚, 可以瞅瞅
 
 # 参考
 
