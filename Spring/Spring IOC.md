@@ -870,6 +870,8 @@ public class AppPreferences {
 
 # 六 Bean生命周期
 
+## 方法顺序
+
 Bean不同的生命周期中会执行不同的方法:
 
 ![img](.Spring%20IOC/20190223193524552.jpg)
@@ -888,6 +890,8 @@ Bean不同的生命周期中会执行不同的方法:
 >
 >4. 注解方式只能使用`@PostConstruct`和`@PreDestroy`了
 
+## 初始化
+
 下面三种生命周期常用于初始化
 
 - The [`InitializingBean`](https://docs.spring.io/spring-framework/docs/current/spring-framework-reference/core.html#beans-factory-lifecycle-initializingbean) and [`DisposableBean`](https://docs.spring.io/spring-framework/docs/current/spring-framework-reference/core.html#beans-factory-lifecycle-disposablebean) callback interfaces
@@ -895,6 +899,8 @@ Bean不同的生命周期中会执行不同的方法:
 - The [`@PostConstruct` and `@PreDestroy` annotations](https://docs.spring.io/spring-framework/docs/current/spring-framework-reference/core.html#beans-postconstruct-and-predestroy-annotations). You can combine these mechanisms to control a given bean.
 
 > 如果不同生命周期方法调用不同的函数，那么会以一定顺序执行。如果不同生命周期方法调用相同函数，比如`init()`，那么该方法只会被调用一次。
+
+## shutdown hook
 
 在WebApplicationContext应用中，已经能够优雅的关闭ioc，而非web应用需要自己注册个关闭钩子（shutdown hook），否则有些Bean的生命周期不被调用：
 
@@ -914,9 +920,14 @@ public final class Boot {
 }
 ```
 
+## Aware接口
+
 还有什么Aware接口，继承后可以通过接口方法获得一些对象，比如容器本身啥的。
 
-> 参考[Bean生命周期](https://docs.spring.io/spring-framework/docs/current/spring-framework-reference/core.html#beans-factory-nature)
+## 参考
+
+* [Bean生命周期](https://docs.spring.io/spring-framework/docs/current/spring-framework-reference/core.html#beans-factory-nature)
+* [BeanFactory](https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/beans/factory/BeanFactory.html)
 
 # [七 Bean定义继承](https://docs.spring.io/spring-framework/docs/current/spring-framework-reference/core.html#beans-child-bean-definitions)
 

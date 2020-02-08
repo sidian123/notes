@@ -315,6 +315,8 @@ Spring的`util`包下, 含有各种工具类, 如
 
 # Cache
 
+> 缓存逻辑位于`CacheAspectSupport.execute()`中
+
 ## 介绍
 
 Spring提供了一个缓存抽象层, 规定了缓存注解的使用方法, 而抽象层的实现则由缓存提供者实现, 如Spring Data Redis提供了实现.
