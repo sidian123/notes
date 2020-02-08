@@ -93,6 +93,8 @@ Spring AOP的实现是基于代理的
     ```
 
   * 最好注解在`public`方法上：非`public`方法, `static`方法容易出现注解失效的问题。
+  
+    > 貌似只要非`private`方法就行了?
 
 ### AspectJ 模式
 
