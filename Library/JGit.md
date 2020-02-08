@@ -38,3 +38,4 @@
 * [JGit tutorial](https://www.vogella.com/tutorials/JGit/article.html#cloning-a-git-repository-with-jgit)
 * [JGit Maven](https://www.eclipse.org/jgit/download/)
 * [jgit-cookbook](https://github.com/centic9/jgit-cookbook) 具有完整的JGit使用例子, 极力推荐
+* [JGit Authentication Explained](https://www.codeaffine.com/2014/12/09/jgit-authentication/) JGit不同认证方式的使用
