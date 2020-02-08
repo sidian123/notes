@@ -479,6 +479,14 @@ Spring提供了很多环境相关的元数据, 让使用者能在缓存注解中
 
 * `@CacheConfig`注解在类上, 为其他注解设置默认配置
 
+## 日!天坑!!
+
+![image-20200208183602564](.Spring%20Core/image-20200208183602564.png)
+
+大部分初始化回调 ( 如`@PostConstruct`, `BeanPostProcessor `等 ) 都是在第一个`for`循环中执行的, 而Spring Cache的初始化是在第二个`for`循环中执行的.
+
+因此, 初始化的缓存注解都是**失效的**!!!
+
 ## 参考
 
 * [Cache Abstraction](https://docs.spring.io/spring/docs/5.2.0.RELEASE/spring-framework-reference/integration.html#cache)
