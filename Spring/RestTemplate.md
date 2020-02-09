@@ -116,7 +116,16 @@
 
     上面的序列化文件时，使用的，，是哪个转换器？？不知道，，反正使用的对象必须有对应的转换器存在才行！
 
-# 三 例子
+# 三 配置
+
+`RestTemplate`是可以通过`RestTemplateBuilder`配置的, 常用的配置如下:
+
+* `rootUri()` 配置根相对路径的前缀
+* `basicAuthentication()` 配置HTTP Basic认证用的账户密码 ( 不常用 )
+* `defaultHeader()` 配置默认头字段
+* ...
+
+# 四 例子
 
 测试时所用的，全贴下来了，，
 
