@@ -438,15 +438,29 @@ sudo apt-get install rabbitmq-server
 
 * Publisher Confirms vs. Publisher Returns
 
-  * 生产者将消息发送到Broker的Exchange后, Exchange发现该消息是不可路由的(即没有对应的Queue), 将忽略. 
+  * 默认行为
 
-  * 如果开启了确认功能, 则发送ack ( 确认 ) . 
+    生产者将消息发送到Broker的Exchange后, Exchange发现该消息是不可路由的(即没有对应的Queue), 将忽略. 
 
-    > 即`spring.rabbitmq.publisher-confirms=true`
+  * Publisher Confirms
 
-  * 如果消息是强制的 ( mandatory ), 则发送return
+    此时开启了确认功能, 若消息不可路由, 则发送ack ( 确认 ) . 
 
-    > 即`spring.rabbitmq.publisher-returns=true`
+    > 配置:
+    >
+    > ```
+    > spring.rabbitmq.publisher-confirms=true
+    > ```
+
+  * Publisher Returns
+
+    此时消息是强制的 ( mandatory ), 若消息不可路由, 将发送return
+    
+    > 配置:
+    >
+    > ```
+    > spring.rabbitmq.publisher-returns=true
+    > ```
 
 * 使用( 仅介绍Publisher Confirms)
 
