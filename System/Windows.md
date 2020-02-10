@@ -367,5 +367,11 @@ PowerShell的命令拥有自己的一套命令规则, 同时也提供了匿名, 
 
 ## 家庭版vs.专业版
 
+### 区别
+
 ![https://pic2.zhimg.com/v2-9d7c4e5742faefdd76b1737785fad4ed_r.jpg](.Windows/v2-9d7c4e5742faefdd76b1737785fad4ed_r.jpg)
+
+> 参考
+>
+> win10专业版和家庭版有什么区别？ - 小马的回答 - 知乎 https://www.zhihu.com/question/51633999/answer/306860365
 
