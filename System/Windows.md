@@ -362,3 +362,10 @@ PowerShell的命令拥有自己的一套命令规则, 同时也提供了匿名, 
 ![image-20191125165356753](.Windows/image-20191125165356753.png)
 
 ![image-20191125165446198](.Windows/image-20191125165446198.png)
+
+# 其他
+
+## 家庭版vs.专业版
+
+![https://pic2.zhimg.com/v2-9d7c4e5742faefdd76b1737785fad4ed_r.jpg](.Windows/v2-9d7c4e5742faefdd76b1737785fad4ed_r.jpg)
+
