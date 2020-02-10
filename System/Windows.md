@@ -257,9 +257,20 @@ PowerShell的命令拥有自己的一套命令规则, 同时也提供了匿名, 
 
 
 
-# 三 自启
+# 三 管理
 
-## 启用、禁止自启
+## 自启
+
+### 添加
+
+思路：将程序的快捷方式添加到用户的自启目录中。
+
+1. 按`win+R`，输入`shell:startup`，直接进入对应文件夹
+2. 将要自启的程序的快捷键添加进去
+
+然后可以用上面三种方法看到自己已经添加成功了。
+
+### 自启管理
 
 有三种方法：
 
@@ -270,18 +281,11 @@ PowerShell的命令拥有自己的一套命令规则, 同时也提供了匿名, 
 3. 打开电脑管家（如果有的话）--->电脑加速--->启动项
    ![在这里插入图片描述](.Windows/20190319143814333.png)
 
-## 添加自启程序
+> 参考[Change which apps run automatically at startup in Windows 10](https://support.microsoft.com/en-us/help/4026268/windows-10-change-startup-apps)
 
-思路：将程序的快捷方式添加到用户的自启目录中。
+## 计划任务
 
-1. 按`win+R`，输入`shell:startup`，直接进入对应文件夹
-2. 将要自启的程序的快捷键添加进去
-
-然后可以用上面三种方法看到自己已经添加成功了。
-
-## 参考
-
-[Change which apps run automatically at startup in Windows 10](https://support.microsoft.com/en-us/help/4026268/windows-10-change-startup-apps)
+Win->计算机管理->计划任务
 
 # 四 配置
 
