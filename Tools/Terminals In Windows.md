@@ -85,7 +85,7 @@
 
 ![image-20191222231301398](.Terminals%20In%20Windows/image-20191222231301398.png)
 
-设置自启, 见[Cmder auto start](https://github.com/cmderdev/cmder/issues/532#issuecomment-584161122)
+设置自启, 见[我的回复](https://github.com/cmderdev/cmder/issues/532#issuecomment-584161122)
 
 ## 使用
 
