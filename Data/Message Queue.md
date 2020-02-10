@@ -480,11 +480,11 @@ sudo apt-get install rabbitmq-server
      		});
      ```
 
-  3. 与正常发送消息一样, 但此时多传了个一个`CorrelationData `, 设置其`id`, 用于唯一标识消息. 当生产者收到确认时, 可可通过该对象的`id`得知是哪个消息.
+  3. 与正常发送消息一样, 但此时多传了个一个`CorrelationData `, 设置其`id`, 用于唯一标识消息. 当生产者收到确认时, 可通过该对象的`id`得知是哪个消息.
 
      ```java
      CorrelationData correlationData = new CorrelationData("Correlation for message 1");
-     		this.rabbitTemplate.convertAndSend("", QUEUE, "foo", correlationData);
+     this.rabbitTemplate.convertAndSend("", QUEUE, "foo", correlationData);
      ```
 
 > 我觉得也不必处理Publisher Returns这种情况, 只要程序初始化时配置好了, 是可以避免这种问题的.
