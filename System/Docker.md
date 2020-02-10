@@ -29,5 +29,5 @@
 * [【 全干货 】5 分钟带你看懂 Docker ！](https://zhuanlan.zhihu.com/p/30713987)
 * [Docker Documentation](https://docs.docker.com/) 官方文档
 * [Docker Quick Start](https://hub.docker.com/?overlay=onboarding) 官方入门
-* [Docker最全教程——从理论到实战(一)](https://www.cnblogs.com/codelove/p/10030439.html)
+* [Docker最全教程——从理论到实战(一)](https://www.cnblogs.com/codelove/p/10030439.html) 待读
 
