@@ -177,6 +177,8 @@ PowerShell的命令拥有自己的一套命令规则, 同时也提供了匿名, 
 
 > batch脚本用的不多了, 下面简单记录
 
+## 介绍
+
 * Batch脚本扩展名`.bat`或`.cmd`, 由`cmd.exe`执行
 
 * 命令大小写不敏感
@@ -187,67 +189,82 @@ PowerShell的命令拥有自己的一套命令规则, 同时也提供了匿名, 
   * 在WSL中, `cmd.exe /c foo.bat`
   
   > 其他方式略; Window对其支持度很高
+
+## 常用命令
+
+> 已经不常用了, 详细见[Batch Script - Commands](https://www.tutorialspoint.com/batch_script/batch_script_commands.htm)
+
+* `rem` & `echo`
+
+  * `rem` 后接注释; `echo`用于输出信息, 和控制命令回显模式
+  * `echo on` 打开回显模式
+    * 脚本中执行的命令将被回显到CMD中
+    * `rem`命令也是
+
+  * `echo off` 关闭回显模式
+    * 脚本中执行的命令不被回显到CMD中
+    * `rem`命令也是
+
+  > `@echo`和`echo`没啥区别; `rem`就是个没啥用的命令, 所以作为注释.
   
-* Batch常用命令
+* 帮助
 
-  > 已经不常用了, 详细见[Batch Script - Commands](https://www.tutorialspoint.com/batch_script/batch_script_commands.htm)
-
-  * `rem` & `echo`
-
-    * `rem` 后接注释; `echo`用于输出信息, 和控制命令回显模式
-    * `echo on` 打开回显模式
-      * 脚本中执行的命令将被回显到CMD中
-      * `rem`命令也是
-
-    * `echo off` 关闭回显模式
-      * 脚本中执行的命令不被回显到CMD中
-      * `rem`命令也是
-
-    > `@echo`和`echo`没啥区别; `rem`就是个没啥用的命令, 所以作为注释.
-    
-  * 帮助
-
-    ```
-    command /?
-    ```
-
+  ```
+  command /?
+  ```
+  
 * 常用环境变量
 
   * `userprofile` 用户家目录
   * `windir` Windows家目录, 如`C:\WINDOWS`
 
-* 语法
 
-  * `>` 重定向上一条命令的输出到下一条命令的输入.
+## 语法
 
-  * 变量
+* `>` 重定向上一条命令的输出到下一条命令的输入.
 
-    * 设置变量
+* 变量
 
-      ```cmd
-      set a=hello
-      ```
+  * 设置变量
 
-    * 获取变量
+    ```cmd
+    set a=hello
+    ```
 
-      变量名以`%`围绕
+  * 获取变量
 
-      ```cmd
-      echo %a%
-      ```
+    变量名以`%`围绕
 
-    * 连接变量
+    ```cmd
+    echo %a%
+    ```
 
-      ```cmd
-      set b=%a% world
-      echo %b%
-      ```
-    
-  * 字符串
+  * 连接变量
+
+    ```cmd
+    set b=%a% world
+    echo %b%
+    ```
   
-    无变量替换功能
+* 字符串
 
-> 参考[Batch Script Tutorial](https://www.tutorialspoint.com/batch_script/index.htm)
+  无变量替换功能
+
+## 其他
+
+### 无参口运行bat
+
+通过vb脚本运行bat, 如
+
+`Cmder.vbs`
+
+```vbscript
+WScript.CreateObject( "WScript.Shell" ).run "cmd /c Cmder.bat", 0
+```
+
+## 参考
+
+* [Batch Script Tutorial](https://www.tutorialspoint.com/batch_script/index.htm)
 
 
 
