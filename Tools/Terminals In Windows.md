@@ -69,11 +69,15 @@
 
 在Cmder中, 打开一个tab, 就是打开一个任务.
 
+### 工作目录
+
 现在需修改打开任务时的默认工作目录
 
 ![image-20191222231011254](.Terminals%20In%20Windows/image-20191222231011254.png)
 
 > 通过`Startup dir...`设置好家目录后, 将文本框中的地址替换成`%userprofile%`, 防止配置特定于某一台电脑
+
+### 启动任务
 
 设置默认启动任务
 
@@ -81,11 +85,35 @@
 
 > 若没有自己Shell的任务, 请手动配置一个任务 ( 这操作...巨难 )
 
+### 快捷键
+
 接下来配置自己想要的快捷键
 
 ![image-20191222231301398](.Terminals%20In%20Windows/image-20191222231301398.png)
 
-设置自启, 见[我的回复](https://github.com/cmderdev/cmder/issues/532#issuecomment-584161122)
+### 自启
+
+Cmder没有原生支持, 但是其依赖的ConEmu有支持, 解决思路由此而来.
+
+1. 通过运行ConEmu来运行Cmder, 加入自动后台化的`/min`参数
+
+   `Cmder.bat`
+
+   ```cmd
+   cmd /c "vendor\conemu-maximus5\ConEmu64.exe /min /Icon icons\cmder.ico /Title Cmder  /LoadCfgFile config\user-ConEmu.xml"
+   ```
+
+2. 使用vb脚本, 阻止bat窗口出现
+
+   `Cmder.vbs`
+
+   ```vbscript
+   WScript.CreateObject( "WScript.Shell" ).run "cmd /c Cmder.bat", 0
+   ```
+
+3. 将vb脚本的**快捷方式**加入到自启目录中
+
+   `Win+R`-->`shell:startup`-->copy
 
 ## 使用
 
