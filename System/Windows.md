@@ -321,6 +321,8 @@ Win->计算机管理->计划任务
 * 集中式组策略 (Centralized Group Policy)
 * 本地组策略 (Local Group Policy)
 
+> 参考[What Is “Group Policy” in Windows?](https://www.howtogeek.com/125171/htg-explains-what-group-policy-is-and-how-you-can-use-it/)
+
 # 四 配置
 
 ## 个性化
