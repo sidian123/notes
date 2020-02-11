@@ -310,6 +310,13 @@ WScript.CreateObject( "WScript.Shell" ).run "cmd /c Cmder.bat", 0
 
 Win->计算机管理->计划任务
 
+## 注册表
+
+## 组策略
+
+* 集中式组策略 (Centralized Group Policy)
+* 本地组策略 (Local Group Policy)
+
 # 四 配置
 
 ## 个性化
