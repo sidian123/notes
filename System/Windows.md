@@ -405,6 +405,8 @@ Win->计算机管理->计划任务
 
 ## 家庭版vs.专业版
 
+初次之外, 还有企业版, 教育版
+
 ### 区别
 
 ![https://pic2.zhimg.com/v2-9d7c4e5742faefdd76b1737785fad4ed_r.jpg](.Windows/v2-9d7c4e5742faefdd76b1737785fad4ed_r.jpg)
