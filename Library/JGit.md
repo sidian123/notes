@@ -71,7 +71,7 @@ cloneCommand.setURI("git@github.com:sidian123/notes-private.git")
 @Override
 protected JSch createDefaultJSch(FS fs) throws JSchException {
     JSch jSch = super.createDefaultJSch(fs);
-    jSch.addIdentity("C:/Users/xxx/.ssh/id_rsa_git");//私钥
+    jSch.addIdentity("C:/Users/xxx/.ssh/id_rsa");//私钥
     jSch.setKnownHosts("C:/Users/xxx/.ssh/known_hosts");//known hosts
     return jSch;
 }
