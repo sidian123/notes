@@ -57,6 +57,8 @@ Get-ItemProperty HKCU:\software\microsoft\windows\currentversion\Run -name "Dock
 
 以管理员权限打开Powershell, 在里面运行该脚本即可.
 
+> 参考: [How to completely remove Docker in Windows 10](https://success.docker.com/article/how-to-completely-remove-docker-in-windows-10)
+
 # 参考
 
 * [Docker 入门教程](http://www.ruanyifeng.com/blog/2018/02/docker-tutorial.html)
