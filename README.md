@@ -1,1 +1,12 @@
-该仓库用于存放个人的学习笔记, 大部分内容将从[我的博客](https://blog.csdn.net/jdbdh)中迁移过来. 目前只迁移了部分内容.
+# 个人博客
+
+* 链接
+  * 个人站点: https://sidian.live
+  * CSDN站点 ( 已停更 ) https://blog.csdn.net/jdbdh
+* 网站使用
+  * 搜索 
+    * 打开 `Alt+P`
+    * 关闭 `Esc`
+  * 小工具
+    1. 展开 `Alt+J`
+    2. 接着点击对应数字
