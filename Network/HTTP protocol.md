@@ -91,7 +91,7 @@ name=lee&psd=hnxy
 
 其他的请求方式参考链接。
 
-# [四、状态字](https://en.wikipedia.org/wiki/Hypertext_Transfer_Protocol#Status_codes)
+# 四 状态字
 
 在http响应消息时会在响应状态行中放回状态字，根据状态字就可以知道响应的大致结果，详细结果需要和响应头具体确定。状态字有三位数字，最高位确定大致分类：
 
@@ -107,6 +107,8 @@ name=lee&psd=hnxy
 - 302：表示重定向，需要Location字段给出临时资源的URL
 - 404：表示服务器找不到请求的资源
 - 500：表示服务器发送错误，无法处理客户端的请求
+
+> 参考[List of HTTP status codes](https://en.wikipedia.org/wiki/List_of_HTTP_status_codes)
 
 # [五、头字段](https://en.wikipedia.org/wiki/List_of_HTTP_header_fields#Effects_of_selected_fields)
 
@@ -202,16 +204,16 @@ Pragma、Cache-Control和Expires都可以达到控制缓存的目的，但是考
 
 # 参考
 
-《Java Web 程序开发入门》传智博客高教产品研发部
+* 《Java Web 程序开发入门》传智博客高教产品研发部
 
-关于http的维基百科：https://en.wikipedia.org/wiki/Hypertext_Transfer_Protocol#Status_codes
+* 关于http的维基百科：https://en.wikipedia.org/wiki/Hypertext_Transfer_Protocol#Status_codes
 
-http头字段：https://en.wikipedia.org/wiki/List_of_HTTP_header_fields#Request_fields
+* http头字段：https://en.wikipedia.org/wiki/List_of_HTTP_header_fields#Request_fields
 
-http状态字：https://en.wikipedia.org/wiki/List_of_HTTP_status_codes
+* http状态字：https://en.wikipedia.org/wiki/List_of_HTTP_status_codes
 
-web cache：https://en.wikipedia.org/wiki/Web_cache#Cache_control
+* web cache：https://en.wikipedia.org/wiki/Web_cache#Cache_control
 
-HTTP caching：https://developer.mozilla.org/en-US/docs/Web/HTTP/Caching#Varying_responses
+* HTTP caching：https://developer.mozilla.org/en-US/docs/Web/HTTP/Caching#Varying_responses
 
-reverse cache和forward cache的区别：https://www.ibm.com/support/knowledgecenter/en/SSAW57_8.5.5/com.ibm.websphere.edge.doc/concepts/concepts20.html#graphic_content_tr_px_single
+* reverse cache和forward cache的区别：https://www.ibm.com/support/knowledgecenter/en/SSAW57_8.5.5/com.ibm.websphere.edge.doc/concepts/concepts20.html#graphic_content_tr_px_single
