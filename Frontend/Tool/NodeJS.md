@@ -170,11 +170,31 @@ $ npm uninstall underscore
 
 ## npm update
 
-更新包，它会同时修改package.json和package-lock.json文件，单独修改package.json是无效的。
-```bash
-$ npm update underscore
-```
-安装package后，再次npm install 该package，貌似也能升级，达到同样的效果。
+* 介绍
+
+  更新包，它会同时修改package.json和package-lock.json文件，单独修改package.json是无效的。
+
+* 版本
+
+  ```
+  大版本号.小版本号.次版本号
+  ```
+
+* 例子
+
+  仅更新次版本号
+
+  ```shell
+  npm update underscore
+  ```
+
+  指定版本更新, 可以更新小版本号, 非大版本号
+
+  ```shell
+  npm update lodash@3.10.* --save
+  ```
+
+  大版本号呢? 不知道
 
 ## npm search
 在npm仓库中搜索package
