@@ -93,17 +93,17 @@
 
 ### 自启
 
-Cmder没有原生支持, 但是其依赖的ConEmu有支持, 解决思路由此而来.
+Cmder没有原生支持, 但是其依赖的ConEmu有支持, 并且传给Cmder的任意参数都将直接传给ConEmu .
 
-1. 通过运行ConEmu来运行Cmder, 加入自动后台化的`/min`参数
+1. 运行Cmder, 传入`min`参数
 
    `Cmder.bat`
 
    ```cmd
-   cmd /c "vendor\conemu-maximus5\ConEmu64.exe /min /Icon icons\cmder.ico /Title Cmder  /LoadCfgFile config\user-ConEmu.xml"
+   .\Cmder.exe -- -min
    ```
 
-2. 使用vb脚本, 阻止bat窗口出现
+2. 使用vb脚本, 阻止bat窗口的出现
 
    `Cmder.vbs`
 
