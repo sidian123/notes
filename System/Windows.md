@@ -327,6 +327,11 @@ Win->计算机管理->计划任务
 
 > 参考[What Is “Group Policy” in Windows?](https://www.howtogeek.com/125171/htg-explains-what-group-policy-is-and-how-you-can-use-it/)
 
+## 域
+
+* [什么是windows的域（Domain）？](https://www.jianshu.com/p/cc8d4bc9d25a)
+* [域帐户的好处](https://wenku.baidu.com/view/169fc7a9d1f34693daef3e71.html)
+
 # 四 配置
 
 ## 个性化
@@ -426,4 +431,3 @@ Win->计算机管理->计划任务
 家庭版升级到专业版, 仅需输入专业版的产品密钥即可, 它会自动升级的; 然后更新下
 
 ![image-20200210114749357](.Windows/image-20200210114749357.png)
-
