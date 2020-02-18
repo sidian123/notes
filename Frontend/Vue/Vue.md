@@ -455,6 +455,7 @@ html的class和style都是属性，因此可以使用`v-bind`来绑定vue属性�
 	  <span v-for="n in 10">{{ n }} </span>
 	</div>
 	```
+	
 ## key
 这里再次强调一下，虚拟DOM应用到DOM时会patch/reuse元素，达到对DOM的最少操作。元素（如input）或组件的内部状态可能会被保存，使用`key`属性可以将防止这种优化，如：
 ```html
@@ -462,6 +463,7 @@ html的class和style都是属性，因此可以使用`v-bind`来绑定vue属性�
   <!-- content -->
 </div>
 ```
+
 ## 数组中元素改变探测
 >对下面的话，做个总结：简而言之，vue检测不到`data`中数组属性中元素的修改，需要其他手段。对于对象也是同样的道理
 
