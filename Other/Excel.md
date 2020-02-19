@@ -124,4 +124,6 @@
 
   参数以`,`隔离, 上面的`A1:C2`是范围Range的表示方法.
 
-  若不记得函数明, 
+  若不记得函数明, Excel提供了面板, 可自行查找
+  
+  ![Insert a Function](.Excel/insert-function.png)
