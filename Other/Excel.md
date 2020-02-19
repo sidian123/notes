@@ -85,3 +85,43 @@
 ![Inserted Row](.Excel/inserted-row.png)
 
 ## 公式&函数
+
+* 介绍
+
+  公式是一个计算Cell值的表达式, 函数是已预定义的一组公式.
+
+* 编辑公式
+
+  公式以`=`开始, Cell的值通过坐标引用
+
+  ![Enter a Formula](.Excel/formula-example.png)
+
+* 优先级
+
+  公式拥有优先级, 其中`()`优先级最高
+
+  ![Parentheses](.Excel/parentheses.png)
+
+* 拷贝/粘贴公式
+
+  张贴后的公式中, 变量的引用会依据公式的相对位置而改变.
+
+  未粘贴前
+
+  ![Copy a Formula Example](.Excel/copy-formula-example.png)
+
+  粘贴公式后
+
+  ![Copy a Formula Result](.Excel/copy-formula-result.png)
+
+* 使用函数
+
+  和编程语言中的函数差不多, 使用方式也差不多
+
+  ![COUNTIF Result](.Excel/countif-result.png)
+
+  > `COUNTIF`函数计算值大于5的Cell个数.
+
+  参数以`,`隔离, 上面的`A1:C2`是范围Range的表示方法.
+
+  若不记得函数明, 
