@@ -45,3 +45,5 @@
 VDI, 全称Virtual Desktop Infrastructure, 是远程桌面的统称. 
 
 远程桌面协议, 如RDP,VNC都是实现VDI应用的关键技术.
+
+> 参考[VDI(远程桌面)是什么?](http://c.biancheng.net/view/3896.html)
