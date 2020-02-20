@@ -564,6 +564,10 @@ Object.assign(target, ...sources)
 
 **返回值**：
 >* 目标对象
+### Object.defineProperty
+
+为对象添加属性, 详细略.
+
 # 四 Functions
 
 ## 语法
