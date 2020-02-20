@@ -1118,6 +1118,9 @@ tag函数编写，略！
 >参考：[Template literals](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Template_literals)
 
 ##  模块
+
+> 注意, Nodejs不支持该模块, 但是通过脚手架搭建的项目, 大都支持, 应该是预处理过的.
+
 模块（module）和脚本（script）类似，都是一个含有JavaScript代码的文件，但还有一些不同。
 
 * 模块中只有被`export`（导出）的部分，才能在其他模块`import`（导入）并使用，`import()`可以动态导入。
