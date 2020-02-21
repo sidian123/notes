@@ -132,7 +132,7 @@ for(let i=0;i<10;i++)｛
 
 ## 类型
 分类:
-* 六种基本类型
+* 基本类型 ( 六种 )
 	
 	Number, Boolean, String, Null, Undefined, Symbol (new in ECMAScript 6)
 	
@@ -278,6 +278,151 @@ random[2][2];
 > ```javascript
 > typeof null;//"object"
 > ```
+
+### Symbol
+
+* 介绍
+
+  `Symbol`是ES6引入基本类型, 表示独一无二的值, 常用于方法名和属性名中.
+
+* 基础
+
+  由于是基本类型, 所以使用`Symbol()`函数创建, 而非`new`,
+
+  ```javascript
+  let s = Symbol();
+  
+  typeof s
+  // "symbol"
+  ```
+
+  函数可添加描述参数, 但不会对`Symbol`值的唯一性产生影响
+
+  ```javascript
+  //创建变量
+  let s1 = Symbol('foo');
+  let s2 = Symbol('foo');
+  //打印描述
+  s1.toString() // "Symbol(foo)" 方式一
+  s2.description // "Symbol(foo)"  方式二
+  //比较
+  s1===s2 //false 不相等
+  ```
+
+  基本操作
+
+  ```javascript
+  //不可隐式转化为字符串描述
+  "your symbol is " + sym // TypeError: can't convert symbol to string
+  `your symbol is ${sym}` // TypeError: can't convert symbol to string
+  //只能显示转化
+  String(sym) // 'Symbol(My symbol)'
+  sym.toString() // 'Symbol(My symbol)'
+  //可以转化为布尔值, 不能转化为数值
+  Boolean(sym) // true
+  !sym  // false
+  Number(sym) // TypeError
+  sym + 2 // TypeError
+  ```
+
+* 作为属性/方法名
+
+  可以通过`[]`声明和访问属性/方法名, 见第三章.
+
+  ```javascript
+  let mySymbol = Symbol();
+  
+  // 第一种写法
+  let a = {};
+  a[mySymbol] = 'Hello!';
+  
+  // 第二种写法
+  let a = {
+    [mySymbol]: 'Hello!'
+  };
+  
+  // 第三种写法
+  let a = {};
+  Object.defineProperty(a, mySymbol, { value: 'Hello!' });
+  
+  // 以上写法都得到同样结果
+  a[mySymbol] // "Hello!"
+  ```
+
+  ```javascript
+  let obj = {
+    [s](arg) { ... }
+  };
+  ```
+
+* 属性遍历
+
+  通过以下方式, 都不能遍历到以`Symbol`为属性名的属性.
+
+  > `for...in`, `for...of` , `Object.keys()`, `Object.getOwnPropertyNames()`, `JSON.stringify()`
+
+  以下方法可获取
+
+  > `Object.getOwnPropertySymbols()`, `Reflect.ownKeys()`
+
+* 内置方法
+
+  * `Symbol.for()`
+
+    同样可以创建`Symbol`变量, 但与`Symbol()`方法不同, `Symbol.for()`创建的变量会被**登记**在全局环境中, 并且当全局环境中存在该变量时, 将返回该变量, 而非新建.
+
+    ```javascript
+    Symbol.for("bar") === Symbol.for("bar")
+    // true
+    
+    Symbol("bar") === Symbol("bar")
+    // false
+    ```
+
+  * `Symbol.keyFor()`
+
+    从全局环境中, 搜索`Symbol`变量并返回, 若不存在则返回`undefined`
+
+    ```javascript
+    let s1 = Symbol.for("foo");
+    Symbol.keyFor(s1) // "foo"
+    
+    let s2 = Symbol("foo");
+    Symbol.keyFor(s2) // undefined
+    ```
+
+* 内置的`Symbol`值
+
+  即ES6预先定义好的`Symbol`变量, 并挂到`Symbol`方法上, 可直接使用.
+
+  这些内置`Symbol`值常用作其他对象的属性/方法名
+
+  * `Symbol.hasInstance`
+
+    `foo instanceof Foo`实际上会调用方法`Foo[Symbol.hasInstance](foo)`, 需要用到该`Symbol`值
+
+    ```javascript
+    class MyClass {
+      [Symbol.hasInstance](foo) {
+        return foo instanceof Array;
+      }
+    }
+    
+    [1, 2, 3] instanceof new MyClass() // true
+    ```
+
+  * `Symbol.isConcatSpreadable`
+
+  * `Symbol.species`
+
+  * ...
+
+  > 不展开细说了.
+
+* 参考
+
+  * [Symbol 阮一峰](http://es6.ruanyifeng.com/#docs/symbol)
+  * [Symbols TypeScript](http://www.typescriptlang.org/docs/handbook/symbols.html)
 
 ## 操作符
 完整操作符内容可以参考：[Expressions and operators][3]
@@ -436,7 +581,7 @@ var person = {
 };
 ```
 
-如果属性名不是合理的标识符或数子，则必须使用字符串表示属性名，然后通过bracket notation（[ ]）来访问该属性。如：
+如果属性名不是合理的标识符或数子，则必须使用字符串表示属性名，然后通过**bracket notation（[ ]**）来访问该属性。如：
 ```javascript
 var unusualPropertyNames = {
   '': 'An empty string',

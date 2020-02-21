@@ -8,7 +8,7 @@
   
 * 格式清除
 
-  [如何快速清除excel表格中的格式？](
+  [如何快速清除excel表格中的格式？](https://jingyan.baidu.com/article/d5c4b52b4fb688da560dc5b4.html)
 
 * 系统学习教程: [Excel Easy](https://www.excel-easy.com/)
 
