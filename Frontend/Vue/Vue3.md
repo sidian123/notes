@@ -59,9 +59,13 @@ Vue3 ( 即[vue-next](https://github.com/vuejs/vue-next) ) 当前还处于预览�
 
 
 
+# 学个锤子!
 
+目前为止, Vue3还未出来, Composition API提供了Vue2.x的插件, 在NuxtJs中有简单Demo. 
 
+实践过程中遇到了Nuxt框架自身的类型检查错误, 解决之后, 也不知道怎么在Composition API中使用子组件....
 
+呸呸呸! 学React去!!!
 
 
 
