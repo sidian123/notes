@@ -1240,6 +1240,42 @@ function loggingIdentity<T extends Lengthwise>(arg: T): T {
 
 ## 声明文件
 
+* 介绍
+
+  * Ts文件自带类型声明, 而Js文件则没有, **声明文件**则用于提供Js的类型声明.
+
+  * 声明文件必须以`.d.ts`声明, 文件中含有声明语句. 
+
+    > 声明语句可以用在Ts文件中使用, 但一般不这么用.
+
+  * 只要将声明文件放入ts解析器能够访问到的地方, 就能生效.
+
+  * [社区](https://microsoft.github.io/TypeSearch/)提供了大量已定义好的三方声明文件, 如Jquery. 
+
+    ```shell
+    npm install @types/jquery --save-dev
+    ```
+
+    > 安装即可
+
+* 书写
+
+  略
+
+* 包声明文件识别
+
+  Package中, TS识别声明文件的步骤如下:
+
+  * 查找`package.json`中的`types`或`typings`字段
+  * 查找**项目根目录**下的`index.d.ts`文件
+  * 查找入口文件 ( `package.json`中`main`字段指定 ) 旁的同名不同后缀的声明文件
+
+  > 否则该Package无类型声明.
+
+  
+
+
+
 ## 配置
 
 # 参考
