@@ -344,6 +344,23 @@ export default {
 }
 ```
 
+## vue-cli配置
+
+使用`vue.config`, 提供配置Vue CLI的入口
+
+```javascript
+export default {
+  vue: {
+    config: {
+      productionTip: true,
+      devtools: false
+    }
+  }
+}
+```
+
+> 参考[API: The vue.config Property](https://nuxtjs.org/api/configuration-vue-config)
+
 # 其他
 
 ## 元数据head
