@@ -344,22 +344,50 @@ export default {
 }
 ```
 
-## vue-cli配置
+## vue配置
 
-使用`vue.config`, 提供配置Vue CLI的入口
+* `Vue`对象全局配置
 
-```javascript
-export default {
-  vue: {
-    config: {
-      productionTip: true,
-      devtools: false
+    ```javascript
+    export default {
+      vue: {
+        config: {
+          productionTip: true,
+          devtools: false
+        }
+      }
     }
-  }
-}
-```
+    ```
 
-> 参考[API: The vue.config Property](https://nuxtjs.org/api/configuration-vue-config)
+    等于
+    
+    ```javascript
+    Vue.config.productionTip // true
+    Vue.config.devtools // false
+    Vue.config.silent // !isDev [default value]
+    Vue.config.performance // isDev [default value]
+    ```
+    
+    > 参考
+    >
+    > * [API: The vue.config Property](https://nuxtjs.org/api/configuration-vue-config)
+    > * [Vue Global Config](https://vuejs.org/v2/api/#Global-Config)
+    
+* Runtime+Compiler
+
+    即构建过程中, 构建文件同时含有Vue运行时和Vue组件编辑器. NuxtJs没有提供直接的配置, 可另图它经:
+
+    `nuxt.config.js`
+
+    ```javascript
+     build: {
+            extend(config) {
+                config.resolve.alias['vue'] = 'vue/dist/vue.common'
+            }
+        }
+    ```
+
+    > 参考[You are using the runtime-only build of Vue...](https://github.com/nuxt/nuxt.js/issues/1142)
 
 # 其他
 
