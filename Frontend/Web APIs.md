@@ -259,7 +259,7 @@ Window接口表示一个包含了DOM文档的窗口，在浏览器中具体表�
 
 > 如果2,3都存在时, 先执行2
 
-> 注意! 监听器中的`this`指向监听的元素, 在Vue中仍指向vue实例
+> 注意! 监听器中的`this`指向监听的元素; 但如果传入的是Vue实例的方法, 则`this`仍指向Vue实例
 
 ### Event object
 
@@ -392,7 +392,7 @@ target阶段不能单独存在，而是包含在其他两个阶段内。比如�
 
 ----
 
-`clipboardData`属性是一个[DataTransfer](https://developer.mozilla.org/en-US/docs/Web/API/DataTransfer)实例, `getData()`和`setData()`可操作剪贴板, 需要传入MIME类型, 指定其数据格式
+~~`clipboardData`属性是一个[DataTransfer](https://developer.mozilla.org/en-US/docs/Web/API/DataTransfer)实例, `getData()`和`setData()`可操作剪贴板, 需要传入MIME类型, 指定其数据格式~~
 
 > 参考
 >
@@ -411,7 +411,7 @@ target阶段不能单独存在，而是包含在其他两个阶段内。比如�
 * `DataTransfer.setData()`设置传递的数据
 * `DataTransfer.getData()`获取传递的数据.
 
-
+> 参考[HTML Drag and Drop API](https://developer.mozilla.org/en-US/docs/Web/API/HTML_Drag_and_Drop_API)
 
 ### 范围选择事件
 
