@@ -401,17 +401,30 @@ target阶段不能单独存在，而是包含在其他两个阶段内。比如�
 
 ### 拖拽事件
 
-`DragEvent`接口代表拖拽事件, 具体事件有:
+* 介绍
 
-* `drag `拖动
-* `drop` 放下
+  `DragEvent`接口代表拖拽事件.
 
-`DragEvent.dataTransfer`属性存放拖拽时要传递的数据. 
+* 具体事件
+  * `drag `拖动
+  * `drop` 放下
+  * ...
 
-* `DataTransfer.setData()`设置传递的数据
-* `DataTransfer.getData()`获取传递的数据.
+* `DataTransfer`
 
-> 参考[HTML Drag and Drop API](https://developer.mozilla.org/en-US/docs/Web/API/HTML_Drag_and_Drop_API)
+  拖拽事件的数据通过其属性`dataTransfer`来传递.
+
+  * `items` 拖拽事件传递的数据集合.
+  * `types` 数据的类型集合, 与`items`位置一一对应.
+  * `setData()` 添加指定类型的数据. 若`items`中不存在该类型, 则添加, 否则替换.
+  * `getData()` 获取指定类型的数据
+  * `clearData()` 清楚指定类型的数据
+  * ...
+
+> 参考
+>
+> * [HTML Drag and Drop API](https://developer.mozilla.org/en-US/docs/Web/API/HTML_Drag_and_Drop_API)
+> * [DataTransfer](https://developer.mozilla.org/en-US/docs/Web/API/DataTransfer)
 
 ### 范围选择事件
 
@@ -443,7 +456,7 @@ target阶段不能单独存在，而是包含在其他两个阶段内。比如�
 
 * [scroll](https://developer.mozilla.org/en-US/docs/Web/API/Document/scroll_event) 滚动事件, 当元素滚动时触发
 
-# 四 其他
+# 四 API
 
 ##  存储
 
@@ -455,6 +468,163 @@ html5后引入了web storage（本地储存），比cookies更好用。本地存
 使用`setItem`保存键值对，`getItem`获得键值对。注意，键值对被存为字符串形式，因此存入和取出时做好转化。
 
 >参考：[HTML5 Web Storage](https://www.w3schools.com/html/html5_webstorage.asp)
+
+## 编,解码
+
+* URL
+  * `encodeURI()`, `decodeURI()`编码或解码URL
+
+  * `encodeURIComponent()`, `decodeURIComponent()` 编码或解码URL组件, 即`(; / ? : @ & = + $ , #)`等字符间的内容.
+
+    > 因此`encodeURIComponent()`传入`/`会被编码的
+
+* Base64
+
+  * `atob()`解码
+  * `btoa()`编码
+
+* JSON
+  * `JSON.parse()`解码
+  * `JSON.stringify()`编码
+
+> 参考
+>
+> * [Base64 encoding and decoding](https://developer.mozilla.org/en-US/docs/Web/API/WindowBase64/Base64_encoding_and_decoding)
+> * [JSON](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/JSON)
+
+## 文件相关
+
+### Blob
+
+* 介绍
+
+  表示二进制数据.
+
+* 属性
+
+  * `size` 大小, 单位字节
+  * `type` MIME类型
+
+* 方法 (不常用)
+
+  * `arrayBuffer()` 解析为二进制数组缓存
+  * `text()` 以UTF-8编码解析二进制, 得到文本.
+
+> 参考[Blob](https://developer.mozilla.org/en-US/docs/Web/API/Blob)
+
+### File
+
+* 介绍
+
+  `File`继承于`Blob`, 表示本地文件;
+
+  网页环境中仅可以通过`<input type="file">`元素和拖拽文件获取.
+
+  > 在其他特权环境中, 如插件, 可通过文件名直接获取, 见[Using the DOM File API in chrome code](https://developer.mozilla.org/en/Extensions/Using_the_DOM_File_API_in_chrome_code)
+
+* 获取`File`对象
+
+  * 通过`input`元素的`files`属性, 这是一个数组.
+
+    ```html
+    <input type="file" id="input">
+    ```
+
+    ```javascript
+    const selectedFile = document.getElementById('input').files[0];
+    ```
+
+    > `input`元素需要加上`multiple`属性才能选择多个文件
+
+    > 可以将获取逻辑写在`change`事件上.
+
+  * 通过拖拽事件获取
+
+    获取该事件对象的`dataTransfer`的`files`属性, 这是一个数组.
+
+    ```javascript
+    dropEvent.dataTransfer.files
+    ```
+
+* `File`对象常用属性
+
+  * `name` 文件名, 不包括路径
+  * `size` 文件大小, 单位字节
+  * `type` 文件的MIME类型.
+
+* 从`input`元素上获取`File`对象的两种方式
+
+  * 隐藏`input`元素, 通过`click()`方法模拟点击
+
+    ```html
+    <input type="file" id="element" multiple accept="image/*" style="display:none" onchange="handleFiles(this.files)">
+    <button id="button">Select some files</button>
+    ```
+
+    ```javascript
+    document
+        .getElementById("button")
+    	.addEventListener("click", function (e) {
+    		document.getElementByid("element").click();
+        });
+    ```
+
+  * 使用`label`触发`input`元素
+
+    `label`的特点: 点击`label`相当于点击`input`. 然后隐藏`input`元素, 这里有个注意事项, 略...
+
+> 参考
+>
+> * [File](https://developer.mozilla.org/en-US/docs/Web/API/File)
+> * [Using files from web applications](https://developer.mozilla.org/en-US/docs/Web/API/File/Using_files_from_web_applications)
+> * [Using the DOM File API in chrome code](https://developer.mozilla.org/en/Extensions/Using_the_DOM_File_API_in_chrome_code)
+> * [DataTransfer](https://developer.mozilla.org/en-US/docs/Web/API/DataTransfer)
+
+### FileReader
+
+* 介绍
+
+  用于异步读取`Blob`对象内容
+
+* 部分方法
+
+  * `readAsArrayBuffer()`
+  * `readAsBinaryString()`
+  * `readAsDataURL()` 读取为`data:`协议的URL. 数据以base64编码的字符串呈现.
+  * `readAsText()` 以指定编码解析为字符串
+
+> 参考
+>
+> * [FileReader](https://developer.mozilla.org/en-US/docs/Web/API/FileReader)
+> * [Data URLs](https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/Data_URIs)
+
+## URL
+
+* 介绍
+
+  通过`URL`接口, 可以方便的操作URL链接.
+
+* 对象URL
+
+  * `createObjectURL()` 读取Blob为`blob:`协议的URL. 数据格式倒是不晓滴.
+
+  * `createObjectURL()` 释放URL
+
+    > 每次调用`createObjectURL()`后必须调用`createObjectURL()`, 否则占内存. 内部逻辑不晓滴
+
+> 参考[URL](https://developer.mozilla.org/en-US/docs/Web/API/URL)
+
+## blob&URL
+
+* `blob:`与`data:`的区别
+
+  不晓滴, 只知道`FileReader.readAsDataURL()`创建的URL不用释放?
+
+* 从Object URL中获取Blob
+
+  见[How to get a file or blob from an object URL?](https://stackoverflow.com/questions/11876175/how-to-get-a-file-or-blob-from-an-object-url)
+
+# 其他
 
 ## 元素大小与位置
 
@@ -535,29 +705,6 @@ html5后引入了web storage（本地储存），比cookies更好用。本地存
 
 > 参考[Measuring Element Dimension and Location with CSSOM in Windows Internet Explorer 9](https://docs.microsoft.com/en-us/previous-versions//hh781509(v=vs.85)?redirectedfrom=MSDN&Accept-Language=zh-cn)
 
-## 编,解码
-
-* URL
-  * `encodeURI()`, `decodeURI()`编码或解码URL
-
-  * `encodeURIComponent()`, `decodeURIComponent()` 编码或解码URL组件, 即`(; / ? : @ & = + $ , #)`等字符间的内容.
-
-    > 因此`encodeURIComponent()`传入`/`会被编码的
-
-* Base64
-
-  * `atob()`解码
-  * `btoa()`编码
-
-* JSON
-  * `JSON.parse()`解码
-  * `JSON.stringify()`编码
-
-> 参考
->
-> * [Base64 encoding and decoding](https://developer.mozilla.org/en-US/docs/Web/API/WindowBase64/Base64_encoding_and_decoding)
-> * [JSON](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/JSON)
-
 ## DevTools
 
 * Chrome的调试器
@@ -570,7 +717,7 @@ html5后引入了web storage（本地储存），比cookies更好用。本地存
 
 * **搜索文件**`Ctrl+P`
 
-# 五 参考
+# 参考
 
 * [Web APIs](https://developer.mozilla.org/en-US/docs/Web/API)
 * [DOM](https://developer.mozilla.org/en-US/docs/Web/API/Document_Object_Model)
