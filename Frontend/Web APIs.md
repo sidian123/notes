@@ -594,7 +594,7 @@ html5后引入了web storage（本地储存），比cookies更好用。本地存
 
 * 介绍
 
-  用于异步读取`Blob`对象内容
+  用于**异步**读取`Blob`对象内容
 
 * 部分方法
 
@@ -602,6 +602,8 @@ html5后引入了web storage（本地储存），比cookies更好用。本地存
   * `readAsBinaryString()`
   * `readAsDataURL()` 读取为`data:`协议的URL. 数据以base64编码的字符串呈现.
   * `readAsText()` 以指定编码解析为字符串
+  
+  > 注意, 读取完毕后, 会触发`load`事件, 通过该事件可以获取数据. 方法本身不立刻返回数据.
 
 > 参考
 >
