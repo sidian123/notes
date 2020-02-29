@@ -290,7 +290,7 @@ The most powerful feature of tiptap is that you can create your own extensions. 
 | --- | :---: | :---: | --- |
 | `get name()` | `String` | `null` | Define a name for your extension. |
 | `get defaultOptions()` | `Object` | `{}` | Define some default options. The options are available as `this.$options`. |
-| `get plugins()` | `Array` | `[]` | Define a list of [Prosemirror plugins](https://prosemirror.net/docs/guide/). |
+| `get plugins()` | `Array` | `[]` | Define a list of [Prosemirror plugins](https://prosemirror.net/docs/guide/). API见[Plugin System](https://prosemirror.net/docs/ref/#state.Plugin_System) |
 | `keys({ schema })` | `Object` | `null` | Define some keybindings. |
 | `commands({ schema, attrs })` | `Object` | `null` | Define a command. |
 | `inputRules({ schema })` | `Array` | `[]` | Define a list of input rules. |
@@ -309,7 +309,7 @@ The most powerful feature of tiptap is that you can create your own extensions. 
 | `commands({ type, schema, attrs })` | `Object` | `null` | Define a command. For example this is used for menus to convert to this node or mark. |
 | `inputRules({ type, schema })` | `Array` | `[]` | Define a list of input rules. |
 | `pasteRules({ type, schema })` | `Array` | `[]` | Define a list of paste rules. |
-| `get plugins()` | `Array` | `[]` | Define a list of [Prosemirror plugins](https://prosemirror.net/docs/guide/). |
+| `get plugins()` | `Array` | `[]` | Define a list of [Prosemirror plugins](https://prosemirror.net/docs/guide/). API见[Plugin System](https://prosemirror.net/docs/ref/#state.Plugin_System) |
 
 ## Create a Node
 
