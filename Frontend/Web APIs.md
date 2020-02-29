@@ -55,6 +55,8 @@ html解析器最先开始运行，可以调用其他两个解析器。**从上�
 
 # 二 DOM
 
+## 介绍
+
 DOM（Document Object Model）是一个用于操作HTML或XML文档的编程**接口**。DOM将文档的内容当作**节点以树的方式**表示文档。并且是与语言无关的，DOM只定义了每个接口的内容。
 
 DOM接口大致分为两类：DOM核心接口和与html元素相关的接口。DOM核心接口定义了一些主要和DOM文档操作、事件相关的接口。其中`Node`接口代表节点，`Element`接口继承Node，代表元素；而其他接口定义了和html元素相关的接口，含有对应元素特定的属性。其中`HTMLELement`代表html元素，然后是继承该接口的其他更具体的接口，比如`HTMLTableElement`。
@@ -62,7 +64,7 @@ DOM接口大致分为两类：DOM核心接口和与html元素相关的接口。D
 在实际使用中，都是对对象操作的，那对象与接口的关系如何？接口与接口之间是有继承关系的，因此对象可以使用多个接口定义的属性或方法。比如`<p>`对应的接口`HTMLParagraphElement`，该接口可以设置和p元素相关的属性；它的继承对象为`HTMLElement`，该接口拥有操作html元素通用的方法；在之上为`Element`、`Node`，提供了操作dom节点的方法。经常使用的还是window和document对象，前者代表浏览器，后者代表文档，提供了查找某个元素的方法。
 ![在这里插入图片描述](.Web%20APIs/20181204202507391.png)
 
-下面给出一些常用的方法：
+## 常用操作
 
 * 查找相关
   * Document.querySelector()：通过css选择器来选择html元素。
@@ -145,10 +147,30 @@ Window接口表示一个包含了DOM文档的窗口，在浏览器中具体表�
 
 ## Document
 
-代表整个文档, 可有的操作:
+* 介绍
 
-* 查询元素
-* 很多文档相关的全局事件从中发出
+  代表整个文档
+
+* 操作
+  * 查询元素
+  * 很多文档相关的全局事件从中发出
+  * ...
+
+* 事件
+
+  * `visibilitychange` 当标签页可视或隐藏时触发
+
+    ```javascript
+    document.addEventListener("visibilitychange", function() {
+      if (document.visibilityState === 'visible') {
+        backgroundMusic.play();
+      } else {
+        backgroundMusic.pause();
+      }
+    });
+    ```
+
+> 参考[Document](https://developer.mozilla.org/en-US/docs/Web/API/Document)
 
 ## Location
 
