@@ -378,27 +378,6 @@ target阶段不能单独存在，而是包含在其他两个阶段内。比如�
 
 > 参考[MouseEvent](https://developer.mozilla.org/en-US/docs/Web/API/MouseEvent)
 
-### 剪贴板事件
-
-`ClipboardEvent`代表剪贴板事件, 含有`clipboardData`属性, 能够获取和设置剪贴板内容. 
-
-以下都是`ClipboardEvent`的实例
-
-* `paste`粘贴事件
-  
-  当`paste`事件发生且光标处于可编辑元素中时, 默认行为是将剪贴板中内容插入到文档中( 会带有格式 ).
-* `cut`
-* `copy`
-
-----
-
-~~`clipboardData`属性是一个[DataTransfer](https://developer.mozilla.org/en-US/docs/Web/API/DataTransfer)实例, `getData()`和`setData()`可操作剪贴板, 需要传入MIME类型, 指定其数据格式~~
-
-> 参考
->
-> * [Element: paste event](https://developer.mozilla.org/en-US/docs/Web/API/Element/paste_event)
-> * [ClipboardEvent](https://developer.mozilla.org/en-US/docs/Web/API/ClipboardEvent)
-
 ### 拖拽事件
 
 * 介绍
@@ -424,6 +403,37 @@ target阶段不能单独存在，而是包含在其他两个阶段内。比如�
 > 参考
 >
 > * [HTML Drag and Drop API](https://developer.mozilla.org/en-US/docs/Web/API/HTML_Drag_and_Drop_API)
+> * [DataTransfer](https://developer.mozilla.org/en-US/docs/Web/API/DataTransfer)
+
+### 剪贴板事件
+
+* 介绍
+
+  `ClipboardEvent`接口代表剪贴板事件, 含有`clipboardData`属性, 能够获取和设置剪贴板内容. 
+  
+* 事件
+
+  > 以下都是`ClipboardEvent`的实例对象
+
+  * `paste`粘贴事件
+
+    当`paste`事件发生且光标处于可编辑元素中时, 默认行为是将剪贴板中内容插入到文档中( 会带有格式 ).
+
+  * `cut`
+
+  * `copy`
+
+* 自定义行为
+
+  `ClipboardEvent.clipboardData` 是一个`DataTransfer`对象, 剪贴板内容将存入`items`中. 
+
+  `cut`, `copy`事件默认行为都调用`DataTransfer.setData()`方法, `paste`事件默认行为调用了`DataTransfer.getData()`方法
+
+  > 具体使用见 *拖拽事件*
+
+> 参考
+>
+> * [ClipboardEvent](https://developer.mozilla.org/en-US/docs/Web/API/ClipboardEvent)
 > * [DataTransfer](https://developer.mozilla.org/en-US/docs/Web/API/DataTransfer)
 
 ### 范围选择事件
