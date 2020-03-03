@@ -1,17 +1,3 @@
-* 筛选 ( 含多列 )
-
-  [EXCEL多列进行筛选](https://jingyan.baidu.com/article/b907e6270f640906e6891c31.html)
-
-* 占比
-
-  [excel怎样计算单项所占合计的百分比？](https://jingyan.baidu.com/article/b2c186c8f01f04c46ef6ffca.html)
-  
-* 格式清除
-
-  [如何快速清除excel表格中的格式？](https://jingyan.baidu.com/article/d5c4b52b4fb688da560dc5b4.html)
-
-* 系统学习教程: [Excel Easy](https://www.excel-easy.com/)
-
 # Intro
 
 ## Range
@@ -131,3 +117,29 @@
   若不记得函数明, Excel提供了面板, 可自行查找
   
   ![Insert a Function](.Excel/insert-function.png)
+
+# 其他
+
+* 筛选 ( 含多列 )
+
+  [EXCEL多列进行筛选](https://jingyan.baidu.com/article/b907e6270f640906e6891c31.html)
+
+* 占比
+
+  [excel怎样计算单项所占合计的百分比？](https://jingyan.baidu.com/article/b2c186c8f01f04c46ef6ffca.html)
+
+* 格式清除
+
+  [如何快速清除excel表格中的格式？](https://jingyan.baidu.com/article/d5c4b52b4fb688da560dc5b4.html)
+
+* 系统学习教程: [Excel Easy](https://www.excel-easy.com/)
+
+* 换行
+
+  * 自动换行
+
+    *开始* --> *自动换行*
+
+  * 强制换行
+
+    `alt+enter`
