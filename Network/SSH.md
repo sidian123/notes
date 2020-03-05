@@ -475,7 +475,7 @@ XShell传输文件的一种方法如下：[xshell如何传输文件](https://jin
 
     > 我认为该方案无法保持NAT的活性. 因为TCPKeppAlive超时发送时间很长, 而NAT几分钟后为收到包就将之视为失效的连接, 从而丢弃
 
-* 由`TCPKeepAlive`为`true`, 即启动该方案
+* `TCPKeepAlive`为`true`时, 即启动该方案
 
 #### SSH的Keep Alive方案
 
@@ -491,7 +491,7 @@ XShell传输文件的一种方法如下：[xshell如何传输文件](https://jin
 
 * 服务端
 
-	* `ClientAliveInterval` 未收到Server数据后多少秒发送*活性消息*. 默认0, 即不发送
+	* `ClientAliveInterval` 未收到Client数据后多少秒发送*活性消息*. 默认0, 即不发送
 	* `ClientAliveCountMax` 发送*活性消息*时, 最多重试几次, 默认3次. 若都失败时, 将主动断开连接
 
 #### 挑战
@@ -553,6 +553,14 @@ XShell传输文件的一种方法如下：[xshell如何传输文件](https://jin
   ```
 
   > 客户端SSH的Keep Alive方案主要为了保证连接活性, 因此必须在NAT中连接记录过期前发送, 从而刷新NAT的记录. 这里5s发一次, 绝对够了! 至于其他时间, 未尝试过.
+  >
+  > 有些人的更为激进:
+  >
+  > ```
+  > Host *
+  > 	ClientAliveInterval 30
+  > 	ClientAliveCountMax 86400
+  > ```
 
 # 其他
 
