@@ -408,7 +408,7 @@ public class RedisConfiguration {
 
     * `value`或`cacheNames` 指定`Cache`缓存名
 
-    * `key` 指定键值, 默认由方法所有参数构造.
+    * `key` 指定键值, 默认由方法所有参数构造. **支持SpEL表达式**
 
       > 注意, 在Redis中, 键是由`cacheNames`和`key`两个元素构造的
 
