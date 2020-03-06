@@ -295,71 +295,94 @@ $border-dark: rgba($base-color, 0.88);
 
 ## 复用样式
 
-`@mixin`定义样式块, `@inclue`在其他样式中引入样式块, 如
+* 介绍
 
-```scss
-@mixin reset-list {
-  margin: 0;
-  padding: 0;
-  list-style: none;
-}
+  `@mixin`定义样式块, `@inclue`在其他样式中引入样式块
 
-@mixin horizontal-list {
-  @include reset-list;
+* 例子&原理
 
-  li {
-    display: inline-block;
-    margin: {
-      left: -2px;
-      right: 2em;
+    ```scss
+    @mixin reset-list {
+      margin: 0;
+      padding: 0;
+      list-style: none;
+    }
+
+    @mixin horizontal-list {
+      @include reset-list;
+
+      li {
+        display: inline-block;
+        margin: {
+          left: -2px;
+          right: 2em;
+        }
+      }
+    }
+
+    nav ul {
+      @include horizontal-list;
+    }
+    ```
+
+    生成
+
+    ```scss
+    nav ul {
+      margin: 0;
+      padding: 0;
+      list-style: none;
+    }
+    nav ul li {
+      display: inline-block;
+      margin-left: -2px;
+      margin-right: 2em;
+    }
+    ```
+
+    > `@inclue`相当于去掉`@mixin`外层代码块, 才引入进来.
+
+    > 使用思路: 将非语义的, 纯粹功能性的样式抽离出来
+
+* 可以存在参数, 以及默认值
+
+    ```scss
+    @mixin replace-text($image, $x: 50%, $y: 50%) {
+      text-indent: -99999em;
+      overflow: hidden;
+      text-align: left;
+
+      background: {
+        image: $image;
+        repeat: no-repeat;
+        position: $x $y;
+      }
+    }
+
+    .mail-icon {
+      @include replace-text(url("/images/mail.svg"), 0);
+    }
+```
+
+* 除了按照位置传参外, 还可按名字传参
+
+  ```scss
+  @mixin square($size, $radius: 0) {
+    width: $size;
+    height: $size;
+  
+    @if $radius != 0 {
+      border-radius: $radius;
     }
   }
-}
-
-nav ul {
-  @include horizontal-list;
-}
-```
-
-生成
-
-```scss
-nav ul {
-  margin: 0;
-  padding: 0;
-  list-style: none;
-}
-nav ul li {
-  display: inline-block;
-  margin-left: -2px;
-  margin-right: 2em;
-}
-```
-
-> `@inclue`相当于去掉`@mixin`外层代码块, 才引入进来.
-
-> 使用思路: 将非语义的, 纯粹功能性的样式抽离出来
-
-可以存在参数, 及默认值
-
-```scss
-@mixin replace-text($image, $x: 50%, $y: 50%) {
-  text-indent: -99999em;
-  overflow: hidden;
-  text-align: left;
-
-  background: {
-    image: $image;
-    repeat: no-repeat;
-    position: $x $y;
+  
+  .avatar {
+    @include square(100px, $radius: 4px);
   }
-}
+  
+  ```
 
-.mail-icon {
-  @include replace-text(url("/images/mail.svg"), 0);
-}
-
-```
+* 其他特性, 略
 
 > 参考:[@mixin and @include](https://sass-lang.com/documentation/at-rules/mixin)
 
