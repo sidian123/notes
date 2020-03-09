@@ -928,6 +928,8 @@ var app5 = new Vue({
 * `$parent`：访问子组件的父组件
 * `$refs`：子元素或子组件上添加`ref`属性，指定引用id，可通过`$refs`来获取该DOM元素或组件实例。
 * 	`$el`：组件的根DOM元素
+
+
 ## .sync
 用于双向绑定属性的，与`v-model`类似。
 
@@ -947,6 +949,8 @@ this.$emit('update:title', newTitle)
 <text-document v-bind:title.sync="doc.title"></text-document>
 ```
 >可以发现，`.sync`与`v-model`监督的事件不同，`.sync`监听的事件前有`update:`前缀，`v-model`默认监听`input`事件。
+
+
 ## 插件
 
 * `Vue.use()`注册插件
@@ -966,6 +970,14 @@ this.$emit('update:title', newTitle)
    > 仅销毁组件, DOM中已存在的元素需手动删除.
 
 > 动态创建Element UI的组件? 它的每个组件可直接传入`Vue.extend()`中
+
+## 子父组件数据双向绑定
+
+* `v-model` 父子组件仅可绑定一个属性
+* `.sync` 可绑定多个
+* 事件机制, 较为繁琐
+* 直接获取组件实例对象的引用, 缺点: 耦合度高.
+* 使用Vuex, 缺点: 小项目使用起来繁琐
 
 # Vue3
 
