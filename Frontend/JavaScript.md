@@ -1526,7 +1526,21 @@ let value = await promise;
 console.log(value)//成功获取值, 而非undefined
 ```
 
-**注意, `await`必须存在于`async`方法中!**
+> 注意点
+>
+> * `await`必须存在于`async`方法中!
+>
+> * `await`的操作优先级不高, 下列的用法错误
+>
+>   ```javascript
+>   await UserService.current().id
+>   ```
+>
+>   需要加上括号
+>
+>   ```javascript
+>   (await UserService.current()).id
+>   ```
 
 #### 异常处理
 
