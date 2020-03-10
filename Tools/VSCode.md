@@ -4,7 +4,7 @@
 
 * 打开终端 
 
-  `Ctrl+` 
+  ````Ctrl+```` 
 
 * 快速打开文件
 
@@ -21,7 +21,27 @@
   
 * 列选择
 
-  `Ctrl+Alt+↓`
+  `Ctrl+Alt+Up|Down`
+  
+* 扩大/收缩选择
+
+  `Shift+Alt+Left|Right`
+
+* 智能提示
+
+  `Ctrl+Space`, `Ctrl+Shift+Space`
+
+* 跳转到定义
+
+  `Ctrl+Click`
+
+* 重命名
+
+  `F2`
+
+* 搜索
+
+  正则中, 通过`$num`来反向引用.
 
 # 搜索
 
