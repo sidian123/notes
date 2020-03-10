@@ -1,12 +1,27 @@
 # 快捷键
 
-* 打开终端 ```Ctrl+` ```
-* 打开命令面板: `F1`
+![image-20200310144808647](.VSCode/image-20200310144808647.png)
+
+* 打开终端 
+
+  `Ctrl+` 
+
+* 快速打开文件
+
+  `Ctrl+P`
+
+* 打开命令面板 ( 查找或运行命令 )
+
+  `Ctrl+Shift+P `或`F1`
+
 * 代码格式重构
   * On Windows `Shift + Alt + F`
   * On Mac `Shift + Option + F`
   * On Ubuntu `Ctrl + Shift + I`
-  * 列选择`Ctrl+Alt+下移光标`
+  
+* 列选择
+
+  `Ctrl+Alt+↓`
 
 # 搜索
 
