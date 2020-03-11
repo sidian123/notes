@@ -264,6 +264,50 @@ npm help install
 
 安装过的package会被缓存起来。
 
+## 配置
+
+npm运行的配置可以来自于命令行, 环境变量, `npmrc`文件和`package.json`.
+
+* `npmrc`文件配置方式
+
+    `npm config`用于编辑`npmrc`文件, 语法如下:
+
+    ```
+    npm config set <key> <value> [-g|--global] //设置配置
+    npm config get <key> //获取配置
+    npm config delete <key> //删除配置
+    npm config list [-l] [--json] //列出所有配置
+    npm config edit //在编辑器中打开配置文件
+    npm get <key> //获取配置
+    npm set <key> <value> [-g|--global] //设置配置
+    ```
+
+    > 同样设置配置有全局和局部之分, 局部指操作当前用户的配置, 全局指操作系统级的配置.
+    
+* 命令行配置方式
+
+    ```shell
+    npm install -g cnpm --registry=https://registry.npm.taobao.org
+    ```
+
+    > `registry`是npm运行时的命令行配置, 指定安装的`cnpm`的仓库来源.
+
+> 参考
+>
+> * [npm-config命令](https://docs.npmjs.com/cli/config)
+> * [所有配置](https://docs.npmjs.com/misc/config)
+
+## 仓库
+
+默认使用公有仓库 https://registry.npmjs.org/ 来下载包. 可以通过指定配置`registry`来使用不同仓库. 如
+
+```
+//设置一次, 永久生效
+npm config set registry https://registry.npm.taobao.org
+//仅该次命令生效
+npm install cnpm -registry=https://registry.npm.taobao.org
+```
+
 ## 帮助
 
 ```shell
