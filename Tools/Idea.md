@@ -233,6 +233,11 @@ Maven项目中, IDEA会用Maven来构建项目, 但不会完全交由Maven构建
 
   > 如`Ctrl+LMouse`跳转到方法声明处, `Ctrl+Alt+<--`跳回去.
 
+
+## 搜索
+
+* `Shift->Shift` 搜索文件, Symbol, 类, 动作等.
+
 * `Ctrl+Shift+F`: 全局搜索代码
 
 ---------
