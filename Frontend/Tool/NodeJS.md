@@ -260,8 +260,15 @@ npm help
 npm help install
 ```
 
-##  3.12 缓存
+## 缓存
+
 安装过的package会被缓存起来。
+
+## 帮助
+
+```shell
+npm help <command>
+```
 
 # 其他
 
