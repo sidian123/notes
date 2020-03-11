@@ -50,12 +50,7 @@ Docker Desktop使用Windows原生虚拟机方案Hyper-V创建虚拟机.
 
     > 可能会碰到一些问题, 如文件下载失败, 手动下载即可; 还会遇到其他问题, 重试即可; 总之随机应变
 
-  * Ok, 安装完毕, 可通过Docker提供的Quickstart Terminal使用docker命令, 或者其他终端都行.
-
-    ```shell
-    $ docker --version
-    Docker version 19.03.1, build 74b1e89e8a
-    ```
+  * Ok, 安装完毕. 但是每次重启, 都需要通过Docker Quickstart Terminal来启动Docker. 之后可以在该Terminal中执行Docker命令, 或者在其他终端中执行. ( 命令已添加到PATH下)
 
 > 参考[Docker Toolbox overview](https://docs.docker.com/toolbox/overview/)
 
