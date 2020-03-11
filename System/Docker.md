@@ -1,5 +1,21 @@
 # 概述
 
+## 介绍
+
+* 基于**进程隔离**技术, 将程序以及其运行环境一起打包, 称之为**镜像**. 镜像可安全的运行在Docker存在的环境中, 而不会出现进程冲突, 此时运行的镜像称为**容器**. ( 类似程序和进程 )
+
+* 与虚拟机本质上的区别是, 容器不带有内核, 容器功能是基于内核提供的进程隔离功能的; 而虚拟机虚拟了物理环境, 需要在该环境上运行操作系统. 
+
+  > 因此有些容器装载了整个Linux发行版, 如Ubuntu, 但却无内容的. 有些容器可仅装可执行文件. 
+
+* 关于性能, 并不会受太大影响, 但是内存可能会消耗更多, 因为运行了多份相同环境.
+
+* Docker provides the ability to package and run an application in a loosely isolated environment called a container. 
+
+* 好处
+  * Docker将程序已经环境打包, 让你能够快速分发应用.
+  * 使得上线和线下环境一致
+
 * Container
 
   * Windows Container
@@ -19,8 +35,11 @@
   > 参考
   >
   > * [Windows Container 和 Docker：你需要知道的5件事](https://www.cnblogs.com/ups216/p/6385663.html)
-  >
-  > * [Windows系统下的Windows Container和Linux Contaner](https://blog.csdn.net/littleworm0/article/details/102626516)
+  >* [Windows系统下的Windows Container和Linux Contaner](https://blog.csdn.net/littleworm0/article/details/102626516)
+
+## Docker Engine
+
+![Docker Engine Components Flow](.Docker/engine-components-flow.png)
 
 # 安装
 
