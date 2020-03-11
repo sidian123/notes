@@ -1,3 +1,5 @@
+# 概述
+
 * Container
 
   * Windows Container
@@ -24,7 +26,55 @@
 
 ## Docker Desktop
 
-Docker Desktop使用Windows原生虚拟机方案Hyper-V创建虚拟机.
+* 介绍
+
+  Docker Desktop提供了WIndows容器和Linux容器. 
+
+  * Windows容器使用系统本身的进程隔离技术;
+  * Linux容器使用Windows原生虚拟机方案Hyper-V创建虚拟机, 进而使用Linux系统的进程隔离技术.
+
+* 安装
+
+  ...
+
+* 卸载
+
+  右键卸载即可, 有些电脑却卡死, 这里给出脚本卸载方式.
+  
+  新建脚本, 如`remote-docker.ps1`, 内容:
+  
+  ```powershell
+  $ErrorActionPreference = "SilentlyContinue"
+  
+  kill -force -processname 'Docker for Windows', com.docker.db, vpnkit, com.docker.proxy, com.docker.9pdb, moby-diag-dl, dockerd
+  
+  try {
+  ./MobyLinux.ps1 -Destroy
+  } Catch {}
+  
+  $service = Get-WmiObject -Class Win32_Service -Filter "Name='com.docker.service'"
+  if ($service) { $service.StopService() }
+  if ($service) { $service.Delete() }
+  Start-Sleep -s 5
+  Remove-Item -Recurse -Force "~/AppData/Local/Docker"
+  Remove-Item -Recurse -Force "~/AppData/Roaming/Docker"
+  if (Test-Path "C:\ProgramData\Docker") { takeown.exe /F "C:\ProgramData\Docker" /R /A /D Y }
+  if (Test-Path "C:\ProgramData\Docker") { icacls "C:\ProgramData\Docker\" /T /C /grant Administrators:F }
+  Remove-Item -Recurse -Force "C:\ProgramData\Docker"
+  Remove-Item -Recurse -Force "C:\Program Files\Docker"
+  Remove-Item -Recurse -Force "C:\ProgramData\Microsoft\Windows\Start Menu\Programs\Docker"
+  Remove-Item -Force "C:\Users\Public\Desktop\Docker for Windows.lnk"
+  Get-ChildItem HKLM:\software\microsoft\windows\currentversion\uninstall | % {Get-ItemProperty $_.PSPath}  | ? { $_.DisplayName -eq "Docker" } | Remove-Item -Recurse -Force
+  Get-ChildItem HKLM:\software\classes\installer\products | % {Get-ItemProperty $_.pspath} | ? { $_.ProductName -eq "Docker" } | Remove-Item -Recurse -Force
+  Get-Item 'HKLM:\software\Docker Inc.' | Remove-Item -Recurse -Force
+  Get-ItemProperty HKCU:\software\microsoft\windows\currentversion\Run -name "Docker for Windows" | Remove-Item -Recurse -Force
+  #Get-ItemProperty HKCU:\software\microsoft\windows\currentversion\UFH\SHC | ForEach-Object {Get-ItemProperty $_.PSPath} | Where-Object { $_.ToString().Contains("Docker for Windows.exe") } | Remove-Item -Recurse -Force $_.PSPath
+  #Get-ItemProperty HKCU:\software\microsoft\windows\currentversion\UFH\SHC | Where-Object { $(Get-ItemPropertyValue $_) -Contains "Docker" }
+  ```
+  
+  以管理员权限打开Powershell, 在里面运行该脚本即可.
+  
+  > 参考: [How to completely remove Docker in Windows 10](https://success.docker.com/article/how-to-completely-remove-docker-in-windows-10)
 
 ## Docker Toolbox
 
@@ -53,45 +103,6 @@ Docker Desktop使用Windows原生虚拟机方案Hyper-V创建虚拟机.
   * Ok, 安装完毕. 但是每次重启, 都需要通过Docker Quickstart Terminal来启动Docker. 之后可以在该Terminal中执行Docker命令, 或者在其他终端中执行. ( 命令已添加到PATH下)
 
 > 参考[Docker Toolbox overview](https://docs.docker.com/toolbox/overview/)
-
-# 删除
-
-我工作用的电脑运行Docker报错, 无法解决, 于是想删除Docker, 却一直卡死, 只能另图它径.
-
-新建脚本, 如`remote-docker.ps1`, 内容:
-
-```powershell
-$ErrorActionPreference = "SilentlyContinue"
-
-kill -force -processname 'Docker for Windows', com.docker.db, vpnkit, com.docker.proxy, com.docker.9pdb, moby-diag-dl, dockerd
-
-try {
-./MobyLinux.ps1 -Destroy
-} Catch {}
-
-$service = Get-WmiObject -Class Win32_Service -Filter "Name='com.docker.service'"
-if ($service) { $service.StopService() }
-if ($service) { $service.Delete() }
-Start-Sleep -s 5
-Remove-Item -Recurse -Force "~/AppData/Local/Docker"
-Remove-Item -Recurse -Force "~/AppData/Roaming/Docker"
-if (Test-Path "C:\ProgramData\Docker") { takeown.exe /F "C:\ProgramData\Docker" /R /A /D Y }
-if (Test-Path "C:\ProgramData\Docker") { icacls "C:\ProgramData\Docker\" /T /C /grant Administrators:F }
-Remove-Item -Recurse -Force "C:\ProgramData\Docker"
-Remove-Item -Recurse -Force "C:\Program Files\Docker"
-Remove-Item -Recurse -Force "C:\ProgramData\Microsoft\Windows\Start Menu\Programs\Docker"
-Remove-Item -Force "C:\Users\Public\Desktop\Docker for Windows.lnk"
-Get-ChildItem HKLM:\software\microsoft\windows\currentversion\uninstall | % {Get-ItemProperty $_.PSPath}  | ? { $_.DisplayName -eq "Docker" } | Remove-Item -Recurse -Force
-Get-ChildItem HKLM:\software\classes\installer\products | % {Get-ItemProperty $_.pspath} | ? { $_.ProductName -eq "Docker" } | Remove-Item -Recurse -Force
-Get-Item 'HKLM:\software\Docker Inc.' | Remove-Item -Recurse -Force
-Get-ItemProperty HKCU:\software\microsoft\windows\currentversion\Run -name "Docker for Windows" | Remove-Item -Recurse -Force
-#Get-ItemProperty HKCU:\software\microsoft\windows\currentversion\UFH\SHC | ForEach-Object {Get-ItemProperty $_.PSPath} | Where-Object { $_.ToString().Contains("Docker for Windows.exe") } | Remove-Item -Recurse -Force $_.PSPath
-#Get-ItemProperty HKCU:\software\microsoft\windows\currentversion\UFH\SHC | Where-Object { $(Get-ItemPropertyValue $_) -Contains "Docker" }
-```
-
-以管理员权限打开Powershell, 在里面运行该脚本即可.
-
-> 参考: [How to completely remove Docker in Windows 10](https://success.docker.com/article/how-to-completely-remove-docker-in-windows-10)
 
 # 参考
 
