@@ -20,6 +20,30 @@
   >
   > * [Windows系统下的Windows Container和Linux Contaner](https://blog.csdn.net/littleworm0/article/details/102626516)
 
+# # 安装
+
+## Docker Desktop
+
+Docker Desktop使用Windows原生虚拟机方案Hyper-V创建虚拟机.
+
+## Docker Toolbox
+
+* 介绍
+
+  对于不满足安装Docker Desktop的比较老的Mac和Windows系统, Docker Toolbox提供了传统方案. Toolbox使用VirtualBox而非Hyper-V来创建虚拟机.
+
+* 安装条件
+
+  * 64位
+  * Windows7+
+  * 使能虚拟化
+
+  > 一般都满足
+
+* 
+
+> 参考[Docker Toolbox overview](https://docs.docker.com/toolbox/overview/)
+
 # 删除
 
 我工作用的电脑运行Docker报错, 无法解决, 于是想删除Docker, 却一直卡死, 只能另图它径.
