@@ -58,9 +58,11 @@ Connection: close
 
 请求行由http协议、状态码和状态码对应的描述组成。
 
-# [三、请求方法](https://en.wikipedia.org/wiki/Hypertext_Transfer_Protocol#Request_methods)
+# 三 请求方法
 
 请求方法用来表示对指定资源的动作，比如get获取资源、post提交资源。http1.0定义了GET、POST和HEAD，http1.1新添OPTIONS、PUT、DELETE、TRACE和CONNECT。每个对应的方法在服务器中如何被对待，可以由后台程序员自己确定，但是最好遵守语义。
+
+> 参考[请求方法](https://en.wikipedia.org/wiki/Hypertext_Transfer_Protocol#Request_methods)
 
 ## GET
 
