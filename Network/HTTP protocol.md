@@ -21,8 +21,6 @@ GET /index.html HTTP/1.1
 Host: www.example.com
 ```
 
-![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
-
 请求行和请求头必须通过回车换行（\r\n）结束，空行必须是回车换行（\r\n）。
 
 请求行由请求方法、资源路径名（有的书把它称为uri，这是不对的）和http协议组成。请求头由键值对组成，注意冒号后有一个空格！！，在http1.1中除了host字段其他的都是可选的。在使用post等请求方法时可以存在消息体。
@@ -51,8 +49,6 @@ Connection: close
 </body>
 </html>
 ```
-
-![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
 
 和请求消息一样，请求行和请求头需要\r\n结束本行，空行必须为\r\n。请求头字段的键值由冒号和空格分隔。
 
