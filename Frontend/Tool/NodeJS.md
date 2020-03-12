@@ -194,7 +194,7 @@ $ npm uninstall underscore
   npm update lodash@3.10.* --save
   ```
 
-  大版本号呢? 不知道
+  大版本号, 直接使用`npm install package@version`
 
 ## npm search
 在npm仓库中搜索package
