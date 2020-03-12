@@ -476,6 +476,10 @@ cnpm install -g nuxt
 
 > 此时又出问题了, WSL又不可以执行跑项目了, 没办法, 二者不可兼得~
 
+## Command line is too long
+
+Run Configuration-> 在shorten command line中选择JAR manifest.
+
 # 参考
 
 * [idea download][1]
