@@ -64,14 +64,91 @@ public class SpringFoxConfig {
 
 不用注解, Swagger也会解析出信息. 但注解能够提供更多的信息来.
 
-略
+> 注意, 并不是所有Swagger注解都使用, 也不是所有的注解属性都使用. 
 
+下面将介绍常用注解的使用.
 
+> 注意, 注解仅作描述, 无额外功能.
+
+## Controller相关
+
+* `@Api`
+
+  描述类
+
+  ```java
+  @Api(tags="测试类")
+  @RestController
+  public class TestController {
+  	//...
+  }
+  ```
+
+* `@ApiOperation`
+
+  描述方法
+
+  * `value` 方法总结, 默认方法名.
+  * `notes` 方法详细说明
+  * `httpMethod` 请求方式, Swagger会从Spring注解上获取信息.
+
+  ```java
+  @ApiOperation(value="say hello",notes="say hello to the man")
+  @GetMapping("/hello")
+  public String hello(String man){
+      return "hi, "+man;
+  }
+  ```
+
+* `@ApiParam`
+
+  描述参数
+
+  * `value` 参数说明 
+  * `required` 是否必填, 默认false
+
+  ```java
+  @ApiOperation(value="say hello",notes="say hello to the man")
+  @GetMapping("/hello")
+  public String hello(
+      @ApiParam(value= "这个人的名字",name="aaa",required = true) 
+      @RequestParam(required = true) 
+      String man
+  ){
+      return "hi, "+man;
+  }
+  ```
+
+  > `@ApiParam`仅含语义, 并无约束, 所以常常配置`@RequestParam`注解使用, 达到描述与其功能一致性
+
+## Model相关
+
+实体类被用作请求参数或响应时, 注解信息将被Swagger提取
+
+* `@ApiModel`
+
+  描述实体类
+
+  * `value` 实体名
+  * `description` 详细描述
+
+* `@ApiModelProperty`
+
+  实体字段描述
+
+  * `value` 字段说明
+  * `required` 是否必填
+  * `example` 为该字段的值举个例子
+  * `hidden` 不显示该字段
 
 # 参考
 
 * [Swagger介绍及使用](https://www.jianshu.com/p/349e130e40d5) 侧重Swagger缘由脉络
 * [Setting Up Swagger 2 with a Spring REST API](https://www.baeldung.com/swagger-2-documentation-for-spring-rest-api) 侧重Swagger使用
+
+* [swagger2常用注解说明](https://www.cnblogs.com/yueguanguanyun/p/9041690.html) Swagger注解详细使用介绍. ( 排版有点乱 )
+* [Swagger-Core Annotations](https://github.com/swagger-api/swagger-core/wiki/Annotations-1.5.X) 官方对常用注解的介绍, 很多内容国内开发用不到.
+
 * [Springboot集成Swagger操作步骤](https://www.jianshu.com/p/be1e772b089a)
 
 
