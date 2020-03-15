@@ -788,6 +788,8 @@ MapperFactoryBean需要注入SqlSessionFactory或SqlSessionTemplate都行，如�
 
   返回`PageInfo`对象
 
+---------------------
+
 * `Page` vs. `PageInfo`
 
   * `Page`继承`ArrayList`, 完成可当作`List`使用; `PageInfo`可当作一个普通Model类, 含页相关属性, 已经查询结果集.
