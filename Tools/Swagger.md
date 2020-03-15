@@ -11,13 +11,13 @@ Springfox是Swagger规范的一种实现, 提供了自动扫描代码并生成�
 Spring boot中引入依赖
 
 ```xml
-<!- 提供扫描代码, 得到Swagger描述内容的功能 ->
+<!-- 提供扫描代码, 得到Swagger描述内容的功能 -->
 <dependency>
     <groupId>io.springfox</groupId>
     <artifactId>springfox-swagger2</artifactId>
     <version>2.9.2</version>
 </dependency>
-<!- 提供将描述内容转化为网页的功能 ->
+<!-- 提供将描述内容转化为网页的功能 -->
 <dependency>
     <groupId>io.springfox</groupId>
     <artifactId>springfox-swagger-ui</artifactId>
