@@ -480,6 +480,14 @@ cnpm install -g nuxt
 
 Run Configuration-> 在shorten command line中选择JAR manifest.
 
+## 编写Maven依赖, 自动提示
+
+通过以下方式更新Maven仓库索引:
+
+setting-->maven-->repositories-->点击本地仓库-->update
+
+> 注意, 远程仓库用不了
+
 # 参考
 
 * [idea download][1]
