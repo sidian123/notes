@@ -722,7 +722,162 @@ MapperFactoryBean需要注入SqlSessionFactory或SqlSessionTemplate都行，如�
   int deleteById(int id);
   ```
 
-# 九 其他
+# 九 分页
+
+## 介绍
+
+每种数据库都支持分页操作, 但是语法不一定兼容, 而PageHelper以Mybatis插件的方式提供分页功能, 屏蔽底层语法差异
+
+## Maven依赖
+
+这里给出SpringBoot的依赖
+
+```xml
+<dependency>
+    <groupId>com.github.pagehelper</groupId>
+    <artifactId>pagehelper-spring-boot-starter</artifactId>
+    <version>1.2.13</version>
+</dependency>
+```
+
+## 配置
+
+一般无需配置, 这里给出常用配置
+
+* `pagehelper.default-count`
+
+  分页时, 是否顺带查出总数, 默认`true`
+
+* ...
+
+## 使用
+
+提供了很多种使用方式, 这里介绍常用的
+
+* 静态方法
+
+  提供两种方式, 都返回`Page`对象
+
+  * `PageHelper.startPage(pageNum,pageSize)`
+
+    `pageNum`指页数, 从1开始; `pageSize`指查询数量
+
+      ```java
+    PageHelper.startPage(1, 10);
+    List<User> list = userMapper.selectIf(1);
+      ```
+
+      > 注意, 紧跟在`PageHelper.startPage`方法后的**第一个**Mybatis的**查询（Select）**方法会被分页。
+
+  * `PageHelper.offsetPage(offset,limit)`
+
+    `offset`指起始位置, 以0开始; `limit`指查询数量
+
+    ```
+    PageHelper.offsetPage(1, 10);
+    List<User> list = userMapper.selectIf(1);
+    ```
+
+* lambda表达式
+
+  返回`Page`对象
+
+  ```java
+  Page<User> page = PageHelper.startPage(1, 10).doSelectPage(()-> userMapper.selectGroupBy());
+  ```
+
+  返回`PageInfo`对象
+
+---------------------
+
+* `Page` vs. `PageInfo`
+
+  * `Page`继承`ArrayList`, 完成可当作`List`使用; `PageInfo`可当作一个普通Model类, 含页相关属性, 已经查询结果集.
+
+  * 都含有和页相关的信息
+
+  * 返回给前端的内容不一样, 如
+  
+    `Page`
+  
+    ```json
+    [
+      {
+        "id": 5,
+        "name": "说的"
+      },
+      {
+        "id": 6,
+        "name": "圣诞氛围"
+      }
+    ]
+    ```
+  
+    > 表现像数组, 无页信息
+  
+    `PageInfo`
+  
+    ```json
+    {
+      "total": 11,
+      "list": [
+        {
+          "id": 5,
+          "name": "说的"
+        },
+        {
+          "id": 6,
+          "name": "圣诞氛围"
+        }
+      ],
+      "pageNum": 3,
+      "pageSize": 2,
+      "size": 2,
+      "startRow": 5,
+      "endRow": 6,
+      "pages": 6,
+      "prePage": 2,
+      "nextPage": 4,
+      "isFirstPage": false,
+      "isLastPage": false,
+      "hasPreviousPage": true,
+      "hasNextPage": true,
+      "navigatePages": 8,
+      "navigatepageNums": [
+        1,2,3,4,5,6
+      ],
+      "navigateFirstPage": 1,
+      "navigateLastPage": 6
+    }
+    ```
+  
+    > 表现像普通Model, 含页信息
+
+## 使用限制
+
+* `PageHelper.startPage`方法重要提示
+
+  只有紧跟在`PageHelper.startPage`方法后的**第一个**Mybatis的**查询（Select）**方法会被分页。
+
+* 请不要配置多个分页插件
+
+  请不要在系统中配置多个分页插件(使用Spring时,`mybatis-config.xml`和`Spring`配置方式，请选择其中一种，不要同时配置多个分页插件)！
+
+* 分页插件不支持带有`for update`语句的分页
+
+  对于带有`for update`的sql，会抛出运行时异常，对于这样的sql建议手动分页，毕竟这样的sql需要重视。
+
+* 分页插件不支持嵌套结果映射
+
+  由于嵌套结果方式会导致结果集被折叠，因此分页查询的结果在折叠后总数会减少，所以无法保证分页结果数量正确。
+
+## 参考
+
+* [PageHelper](https://github.com/pagehelper/Mybatis-PageHelper/blob/master/wikis/en/HowToUse.md) 官方详细使用教程
+* [Mybatis-PageHelper](https://github.com/pagehelper/Mybatis-PageHelper) PageHelper项目仓库
+* [pagehelper-spring-boot](https://github.com/pagehelper/pagehelper-spring-boot) PageHelper在Spring中的Starter依赖, 的项目仓库
+
+# 其他
 
 ## `collection`与`List<Integer>`
 
