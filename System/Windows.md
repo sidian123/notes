@@ -270,19 +270,27 @@ WScript.CreateObject( "WScript.Shell" ).run "cmd /c Cmder.bat", 0
 
 * [Batch Script Tutorial](https://www.tutorialspoint.com/batch_script/index.htm)
 
+# 命令
 
+## 查看端口占用
 
+* 通过端口找打进程号
 
+  ```shell
+  netstat -aon|findstr "8081"
+  ```
 
+* 查看进程详细信息
 
+  ```shell
+  tasklist|findstr "9088"
+  ```
 
+* 杀死进程
 
-
-
-
-
-
-
+  ```shell
+  taskkill /T /F /PID 9088 
+  ```
 
 # 三 管理
 
