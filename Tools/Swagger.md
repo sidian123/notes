@@ -111,7 +111,7 @@ public class SpringFoxConfig {
   @ApiOperation(value="say hello",notes="say hello to the man")
   @GetMapping("/hello")
   public String hello(
-      @ApiParam(value= "这个人的名字",name="aaa",required = true) 
+      @ApiParam(value= "这个人的名字",required = true) 
       @RequestParam(required = true) 
       String man
   ){
