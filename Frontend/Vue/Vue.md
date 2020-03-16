@@ -993,6 +993,10 @@ Vue3采用Composition API的方式组织代码, 以解决以下问题:
 
 > 除此之外, Vue3还有其他的改动, 见[Vue3中不止composition-api，其他的提案(RFC)也很精彩](https://www.lizenghai.com/archives/42675.html)
 
+# 国际化i18n
+
+https://github.com/kazupon/vue-i18n
+
 # 踩过的坑
 
 ## 组件名与原生Html元素冲突
