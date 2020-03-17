@@ -138,7 +138,7 @@
   bind 0.0.0.0
   ```
 
-## 待看
+# 待看
 
 [浅谈redis的单点模式、主从模式、哨兵模式和集群模式](https://blog.csdn.net/m0_38084879/article/details/100542327)
 
