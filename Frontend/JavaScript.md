@@ -268,9 +268,12 @@ random[2][2];
   * `Array.from` 浅拷贝
   * `slice()`返回数据的一部分
 
-* 流操作
+* 遍历
 
-  * `includes()` 是否包含元素
+  * 元素查找
+    * `find()`, `findIndex()` *自定义*查找某个元素, 分别返回该元素或索引.
+  * 元素判断
+    * `includes()` 是否包含元素
 
 > 参考[Array](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array)
 
