@@ -241,7 +241,9 @@ random[2][2];
 
 常用的方法和属性：
 
-* `length` 数组个数, 实际上仅仅等于数组的最大索引+1, 因此`length`并不一定代表数组个数, 如:
+* 数组个数
+
+  `length` 数组个数, 实际上仅仅等于数组的最大索引+1, 因此`length`并不一定代表数组个数, 如:
 
   ```javascript
   let a=[1,2,3];
@@ -249,23 +251,26 @@ random[2][2];
   console.log(a.length);//9
   ```
 
-* `String`的`split()`方法分割字符串产生数组
+* 字符串 <--> 数组
 
-* `Array`的`join()`方法合并数组成为字符串
+  * `String`的`split()`方法分割字符串产生数组
+  * `Array`的`join()`方法合并数组成为字符串
+  * `Array`的`toString()`方法将数组转化为字符串
 
-* `Array`的`toString()`方法将数组转化为字符串
+* 添加或删除
 
-* `push()`和`pop()`方法分别在数组底端添加和删除数组。
+  * `push()`和`pop()`方法分别在数组**底端**添加和删除数组。
+  * `unshift()`和`shift()`方法分别在数组**前端**添加和删除数组。
+  * `splice`用于在**某个索引**上添加或删除元素。
 
-* `unshift()`和`shift()`方法分别在数组前端添加和删除数组。
+* 拷贝
 
-* `splice`用于在某个索引上添加或删除元素。
+  * `Array.from` 浅拷贝
+  * `slice()`返回数据的一部分
 
-* `Array.from`：浅拷贝
+* 流操作
 
-* `slice()`返回数据的一部分
-
-* `includes()` 是否包含元素
+  * `includes()` 是否包含元素
 
 > 参考[Array](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array)
 
