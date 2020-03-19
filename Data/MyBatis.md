@@ -879,6 +879,20 @@ MapperFactoryBean需要注入SqlSessionFactory或SqlSessionTemplate都行，如�
 
 # Example
 
+* 引言
+
+  在公司做项目时, 经常会遇到多字段, 复杂条件查询的情况. Mybatis提供了动态SQL编写的能力, 能够简化复杂条件的编写, 减少代码量和增加灵活性.
+
+  我在公司也见识到了这些复杂查询的SQL, 并且形成了一定规范, 适用于很多情况. 
+
+  但是问题来了, 复杂情况下动态SQL的编写还是很费劲的, 远远没有高级语言那么灵活
+
+
+
+
+
+
+
 * 复杂条件解决方案
 * 待学--[mybatis Example 使用方法](https://www.jianshu.com/p/d022fbbc3f8c)
 
