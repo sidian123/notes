@@ -879,22 +879,51 @@ MapperFactoryBean需要注入SqlSessionFactory或SqlSessionTemplate都行，如�
 
 # Example
 
-* 引言
+## 引言
 
-  在公司做项目时, 经常会遇到多字段, 复杂条件查询的情况. Mybatis提供了动态SQL编写的能力, 能够简化复杂条件的编写, 减少代码量和增加灵活性.
+在公司做项目时, 经常会遇到多字段, 复杂条件查询的情况. Mybatis提供了动态SQL编写的能力, 能够简化复杂条件的编写, 减少代码量和增加灵活性.
 
-  我在公司也见识到了这些复杂查询的SQL, 并且形成了一定规范, 适用于很多情况. 
+我在公司也见识到了这些复杂查询的SQL, 并且形成了一定规范, 适用于很多情况. 
 
-  但是问题来了, 复杂情况下动态SQL的编写还是很费劲的, 远远没有高级语言那么灵活
+但是问题来了, 复杂情况下动态SQL的编写还是很费劲的, 远远没有高级语言那么灵活. 将逻辑迁移到弱逻辑能力的语言上, 是不明智的选择, 即动态SQL逻辑能力太弱了. 其二, 编写SQL太容易出错了.
 
+于是有了接下来的Example
 
+## Example原理
 
+Example提供了特定的方式在Java代码中构建`where`条件语句, 将条件按照一定规范组织起来. 正是这种规范, 让动态SQL的弱逻辑能力也能轻松的解析并拼接SQL.
 
+## 实现简单分析
 
+* 条件构建
 
+  * `XXX`实体的条件构造器被命名为`XXXExample`
 
-* 复杂条件解决方案
-* 待学--[mybatis Example 使用方法](https://www.jianshu.com/p/d022fbbc3f8c)
+  * 条件构造器中的基本单元为`Criterion`类, 表示一个最基本的条件, 如`is is null`, `is >= 3`等
+
+  * `Criteria`类表示由逻辑与`and`组成的条件集合
+
+    > `GeneratedCriteria`类含义如其名, 用于指导`Criteria`怎么构建`Criterion`并加入到自身的集合中. 这是根据实体类字段自动生成的, 实体类字段越多, `GeneratedCriteria`的代码越庞大.
+
+  * 构造器`XXXExample`则是这些`Criteria`通过逻辑或`or`组成的条件集合
+
+* 分析&拼接
+
+  构建的条件层次结构很清晰, 如
+
+  * 构造器就是`where (....) or (...) ...`, 
+  * `Criteria`就是`<condition> and <condition> and ...`
+  * `Criterion`就是`id =3`, `name like '张` 等等
+
+  这种解析与拼接, 动态SQL能轻松胜任!
+
+具体怎么实现, 看代码啊....
+
+## 使用
+
+构造器可由插件自动生成; 至于API使用,,,, 这还用的着举例吗? 看懂了代码啥都会了, 况且生成的代码量并不多....
+
+> 实在不会, 还是可以参考下[mybatis Example 使用方法](https://www.jianshu.com/p/d022fbbc3f8c), 但是这篇文章还是没有详尽所有的使用方式.
 
 # 其他
 
