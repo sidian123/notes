@@ -877,6 +877,11 @@ MapperFactoryBean需要注入SqlSessionFactory或SqlSessionTemplate都行，如�
 * [Mybatis-PageHelper](https://github.com/pagehelper/Mybatis-PageHelper) PageHelper项目仓库
 * [pagehelper-spring-boot](https://github.com/pagehelper/pagehelper-spring-boot) PageHelper在Spring中的Starter依赖, 的项目仓库
 
+# Example
+
+* 复杂条件解决方案
+* 待学--[mybatis Example 使用方法](https://www.jianshu.com/p/d022fbbc3f8c)
+
 # 其他
 
 ## `collection`与`List<Integer>`
