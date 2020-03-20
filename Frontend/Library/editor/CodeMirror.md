@@ -71,6 +71,19 @@
 
 > 详细配置见[Configuration](https://codemirror.net/doc/manual.html#config)
 
+## API
+
+* 内容
+
+  * 获取内容 `cm.getValue()`
+  * 设置内容 `cm.setValue()`
+
+* 其他
+
+  * 重绘 `cm.refresh()`
+
+  
+
 # 事件
 
 CodeMirror中存在多种对象可以发送事件
@@ -82,8 +95,6 @@ CodeMirror中存在多种对象可以发送事件
 # Commands
 
 和编辑器相关的命令, 常用于映射到快捷键
-
-
 
 # 自定义
 

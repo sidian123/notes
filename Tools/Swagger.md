@@ -120,6 +120,8 @@ public class SpringFoxConfig {
   ```
 
   > `@ApiParam`仅含语义, 并无约束, 所以常常配置`@RequestParam`注解使用, 达到描述与其功能一致性
+  
+  请最好配合`@RequestParam`使用, 否则参数将被当作请求体参数!!!
 
 ## Model相关
 
