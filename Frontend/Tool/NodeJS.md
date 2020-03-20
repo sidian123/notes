@@ -345,6 +345,42 @@ npm help <command>
 
 > 参考http://npm.taobao.org/
 
+## nrm
+
+用于管理仓库源的
+
+* 按照
+
+  ```
+  npm install -g nrm
+  ```
+
+* 列出所有仓库源
+
+  ```
+  nrm ls
+  ```
+
+* 使用某个仓库源
+
+  ```
+  use <registry>
+  ```
+
+* 添加仓库源
+
+  ```
+  add <registry> <url> [home]
+  ```
+
+* 获得帮助
+
+  ```
+  nrm
+  ```
+
+> 参考[nrm -- NPM registry manager](https://www.npmjs.com/package/nrm)
+
 ## 编译node-sass失败
 
 `install`或`update` `node-sass`时, 会编译该package, 如果运行环境中缺少对应的工具, 将报错.
