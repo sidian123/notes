@@ -173,68 +173,73 @@
 
 # 三 流
 
-* 介绍:  A *stream* is a sequence of elements. Unlike a collection, it is not a data structure that stores elements. Instead, a stream carries values from a source through a pipeline 
+## 介绍
 
-  > 简而言之, 流就是一个流经管道的元素流, 在管道的每个节点 (中间操作) 上加工处理, 最终得到一个结果 (结束操作) .
+A *stream* is a sequence of elements. Unlike a collection, it is not a data structure that stores elements. Instead, a stream carries values from a source through a pipeline 
 
-* 区别于集合的特性
-  * **No storage**. A stream is not a data structure that stores elements; **instead, it conveys elements from a source** such as a data structure, an array, a generator function, or an I/O channel, **through a pipeline of computational operations.**
-  * **Functional in nature**. An operation on a stream produces a result, **but does not modify its source**. For example, filtering a `Stream` obtained from a collection produces a new `Stream` without the filtered elements, rather than removing elements from the source collection.
-  * **Laziness-seeking.** Many stream operations, such as filtering, mapping, or duplicate removal, can be implemented lazily, exposing opportunities for optimization. For example, "find the first `String` with three consecutive vowels" need not examine all the input strings. Stream operations are divided into intermediate (`Stream`-producing) operations and terminal (value- or side-effect-producing) operations. **Intermediate operations are always lazy.**
-  * **Possibly unbounded.** While collections have a finite size, streams need not. Short-circuiting operations such as `limit(n)` or `findFirst()` can **allow computations on infinite streams to complete in finite time.**
-  * **Consumable**. The elements of a stream are only visited once during the life of a stream. Like an [`Iterator`](https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/Iterator.html), a new stream must be generated to revisit the same elements of the source.
+> 简而言之, 流就是一个流经管道的元素流, 在管道的每个节点 (中间操作) 上加工处理, 最终得到一个结果 (结束操作) .
 
-* 组成
+## 区别于集合的特性
 
-  * 一个**数据源**: 可以是集合, 数组,  generator 函数或 IO 通道
+* **No storage**. A stream is not a data structure that stores elements; **instead, it conveys elements from a source** such as a data structure, an array, a generator function, or an I/O channel, **through a pipeline of computational operations.**
+* **Functional in nature**. An operation on a stream produces a result, **but does not modify its source**. For example, filtering a `Stream` obtained from a collection produces a new `Stream` without the filtered elements, rather than removing elements from the source collection.
+* **Laziness-seeking.** Many stream operations, such as filtering, mapping, or duplicate removal, can be implemented lazily, exposing opportunities for optimization. For example, "find the first `String` with three consecutive vowels" need not examine all the input strings. Stream operations are divided into intermediate (`Stream`-producing) operations and terminal (value- or side-effect-producing) operations. **Intermediate operations are always lazy.**
+* **Possibly unbounded.** While collections have a finite size, streams need not. Short-circuiting operations such as `limit(n)` or `findFirst()` can **allow computations on infinite streams to complete in finite time.**
+* **Consumable**. The elements of a stream are only visited once during the life of a stream. Like an [`Iterator`](https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/Iterator.html), a new stream must be generated to revisit the same elements of the source.
 
-  * 0到多个**中间操作**, 返回一个新的流. 
+## 组成
 
-    > 如`filter()`过滤, 得到新的流; `map()`将流映射为其他形式的流; 等等
-    >
-    
-  * 一个**结束操作**: 不返回流
+* 一个**数据源**: 可以是集合, 数组,  generator 函数或 IO 通道
 
-    > 如`forEach()`,仅处理流, 不产生新的流.
+* 0到多个**中间操作**, 返回一个新的流. 
 
-  >* 中间操作是Lazy的, 只有执行结束操作时才执行;
-  >* 并且不是所有的元素都会被用到, 如`findFirst()`找到第一个流就结束了. 避免性能浪费.
+  > 如`filter()`过滤, 得到新的流; `map()`将流映射为其他形式的流; 等等
+  >
+  
+* 一个**结束操作**: 不返回流
 
-* 操作
+  > 如`forEach()`,仅处理流, 不产生新的流.
 
-  * 中间操作
-    * 过滤`filter()`
-    * 映射`map()`
-    * 遍历`peek()`
+>* 中间操作是Lazy的, 只有执行结束操作时才执行;
+>* 并且不是所有的元素都会被用到, 如`findFirst()`找到第一个流就结束了. 避免性能浪费.
 
-  * 结束操作
+## 操作
 
-    * Reduction : 将流转化为一个结果
+* 中间操作
+  * 过滤`filter()`
+  * 映射`map()`
+  * 遍历`peek()`
 
-      * `reduce()`对每个元素进行同一个操作, 并累积结果, 生成一个新值.
+* 结束操作
 
-        > 还有其他变种方法, 如`min()`,`max()`,`average()`,`sum()`等
+  * Reduction : 将流转化为一个结果
 
-      * `collect()`修改和改变现有的值, 得到一个~~容器~~
+    * `reduce()`对每个元素进行同一个操作, 并累积结果, 生成一个新值.
 
-        > 使用有点小复杂, 因此提供了 [Collectors](https://docs.oracle.com/javase/8/docs/api/java/util/stream/Collectors.html) 类, 含有提供常用聚合操作的静态方法.
+      > 还有其他变种方法, 如`min()`,`max()`,`average()`,`sum()`等
 
-    * 遍历`forEach()`
-    
-    * 获取元素
-    
-      * `findFirst()`找到流中第一个元素
-      * `findAny()`流中找任意一个
-    
-    * 判断是否匹配
-    
-      * `anyMatch()`
-      * `allMatch()`
-      * `noneMatch()`
+    * `collect()`修改和改变现有的值, 得到一个~~容器~~
 
-* 平行流: 将流分成子流, 每个子流在单独的线程中执行所有操作, 然后再组合所有子流的结果.
+      > 使用有点小复杂, 因此提供了 [Collectors](https://docs.oracle.com/javase/8/docs/api/java/util/stream/Collectors.html) 类, 含有提供常用聚合操作的静态方法.
 
-  > 在数据量大的情况下效率会高点, 但要考虑多线程问题. 见[Parallelism](https://docs.oracle.com/javase/tutorial/collections/streams/parallelism.html)
+  * 遍历`forEach()`
+  
+  * 获取元素
+  
+    * `findFirst()`找到流中第一个元素
+    * `findAny()`流中找任意一个
+  
+  * 判断是否匹配
+  
+    * `anyMatch()`
+    * `allMatch()`
+    * `noneMatch()`
+
+## 平行流
+
+将流分成子流, 每个子流在单独的线程中执行所有操作, 然后再组合所有子流的结果.
+
+> 在数据量大的情况下效率会高点, 但要考虑多线程问题. 见[Parallelism](https://docs.oracle.com/javase/tutorial/collections/streams/parallelism.html)
 
 # 四 实现
 
