@@ -1,10 +1,28 @@
 [TOC]
 
-# 一 介绍
+# 一 开始
+
+## 介绍
 
 Node.js是一个开源的、跨平台的JavaScript运行时环境，使JavaScript可以运行在浏览器端之外；Node.js是事件驱动的架构，支持异步IO，单线程；Node.js实现了CommonJS的模块加载功能（当然也支持ES6模块语法）。
 
 但是开发者常用Node.js制作进行前端开发的工具（如Gurnt、Gulp和Webpack），进行前端开发。
+
+## 安装
+可从[Long Term Support (LTS) version of Node](https://github.com/nodejs/LTS#lts-schedule1)中查看Node目前长期支持版本（LTS），最好选择`v10.15.3`版本的。在[download page][312]中下载Node.js；对于Linux，使用包管理器安装，参考[package manager][313]
+
+我使用的是WSL的Ubuntu，安装命令如下：
+```bash
+# Using Ubuntu
+curl -sL https://deb.nodesource.com/setup_10.x | sudo -E bash -
+sudo apt-get install -y nodejs
+```
+安装时，它会自己全局安装npm包，并且该包含有可执行脚本，因此可以使用npm命令
+
+> 在deepin中, 命令安装不成功, 而是通过下载压缩包并配置环境变量安装成功的...
+
+[312]:https://nodejs.org/en/download/
+[313]:https://nodejs.org/en/download/package-manager/
 
 # 二 模块
 **模块**（module）是一个可复用的功能模块，一个模块对应一个Js文件，模块可导出模块内的变量、函数、对象给其他模块使用。
@@ -90,22 +108,9 @@ package安装有全局安装(`npm install --global`)和局部安装（默认）�
 
 >之所以可以直接执行Node.js脚本，是因为在linux环境中，解析型脚本在首部添加了`#!/usr/bin/env Interpreter`，它会在执行时使用指定解析器。
 
-# 三 使用
-## 安装Node.js
-可从[Long Term Support (LTS) version of Node](https://github.com/nodejs/LTS#lts-schedule1)中查看Node目前长期支持版本（LTS），最好选择`v10.15.3`版本的。在[download page][312]中下载Node.js；对于Linux，使用包管理器安装，参考[package manager][313]
+# 三 npm使用
 
-我使用的是WSL的Ubuntu，安装命令如下：
-```bash
-# Using Ubuntu
-curl -sL https://deb.nodesource.com/setup_10.x | sudo -E bash -
-sudo apt-get install -y nodejs
-```
-安装时，它会自己全局安装npm包，并且该包含有可执行脚本，因此可以使用npm命令
-
-> 在deepin中, 命令安装不成功, 而是通过下载压缩包并配置环境变量安装成功的...
-
-[312]:https://nodejs.org/en/download/
-[313]:https://nodejs.org/en/download/package-manager/
+npm (nodejs package manager) 包管理工具
 
 ## npm init && node
 尽管`node`命令可以直接执行js脚本（如`node index.js`），但最好还是使用`npm init`初始化产生`package.json`，它记录包依赖关系，可以在发布时无需附带其他package，使用时再安装。
@@ -347,7 +352,7 @@ npm help <command>
 
 ## nrm
 
-用于管理仓库源的
+nrm (nodejs registry manger) 用于管理仓库源的
 
 * 按照
 
@@ -380,6 +385,12 @@ npm help <command>
   ```
 
 > 参考[nrm -- NPM registry manager](https://www.npmjs.com/package/nrm)
+
+## nvm
+
+nvm (nodejs version manager) 用于管理多版本nodejs的工具
+
+略
 
 ## 编译node-sass失败
 
