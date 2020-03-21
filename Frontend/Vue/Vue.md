@@ -1014,3 +1014,5 @@ https://github.com/kazupon/vue-i18n
 # 推荐阅读
 
 * [React.js与Vue.js：流行框架的比较](https://baijiahao.baidu.com/s?id=1608099200125495014&wfr=spider&for=pc)
+
+* [Vue中数据响应式原理---对象的变化侦测](https://blog.csdn.net/Riona_cheng/article/details/102882160)
