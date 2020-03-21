@@ -719,7 +719,68 @@ Object.assign(target, ...sources)
 >* 目标对象
 ### Object.defineProperty
 
-为对象添加属性, 详细略.
+* 介绍
+
+  除了对象定义时创建属性, 还可通过`Object.defineProperty()`创建对象属性.
+
+* 普通属性默认行为
+
+  可被`for`循环枚举, 值可读可写, 属性可被删除. 
+
+  > `Object.defineProperty()`可修改这些行为
+
+* 属性描述形式
+
+  有两种描述属性的方式
+
+  * data descriptions : 即存在该属性对象
+  * accessor descriptors : 无属性对象, 但提供`set&get`方法
+
+  > 这两种定义属性的方式冲突, 只能使用其中一种.
+
+* 使用
+
+  ```
+  Object.defineProperty(obj, prop, descriptor)
+  ```
+
+  * `obj` 要操作的对象
+
+  * `prop` 要定义的属性名
+
+  * `descriptor` 属性描述符
+
+    通用的
+
+    * `configurable` (default to `false`)
+
+      是否属性描述可改变, 属性可删除
+
+    * `enumerable` (default to `false`)
+
+      属性是否可被`for`枚举
+
+    仅用作描述data descriptor的属性
+
+    * `value` ( default to `undefined`)
+
+      属性值
+
+    * `writable` (default to `false`)
+
+      是否可写
+
+    仅用作描述accessor descriptor的属性
+
+    * `get` (default to `undefined`)
+
+      属性的getter方法
+
+    * `set` (default to `undefined`)
+
+      属性的setter方法
+
+> 参考[Object.defineProperty()](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/defineProperty)
 
 # 四 Functions
 
