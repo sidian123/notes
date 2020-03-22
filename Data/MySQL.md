@@ -1,4 +1,6 @@
-# 一 介绍
+# 一 开始
+
+## 介绍
 
 * 数据库: 是数据的结构化集合.
 * 数据库管理系统(DBMS): 操作数据库的软件, 如Oracle,MySQL等
@@ -466,6 +468,22 @@
 
 * InnoDB支持外键约束, 其他引擎无作用, 仅用作注释
 * `auto_increment`列, 在没有被赋值或赋null时, 会以递增的方式自动设置 ,从1开始. 产生的值可通过[`LAST_INSERT_ID()`](https://dev.mysql.com/doc/refman/8.0/en/information-functions.html#function_last-insert-id)获取.
+
+## 其他
+
+* 名字冲突
+
+  列名, 表名, 数据库名可能会与保留字冲突, 需要转义, 如
+
+  ```
+  select `name` from `student`
+  ```
+
+* 注释
+
+  ```sql
+  # 我是注释
+  ```
 
 
 
