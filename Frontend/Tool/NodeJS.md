@@ -390,7 +390,7 @@ nrm (nodejs registry manger) 用于管理仓库源的
 
 nvm (nodejs version manager) 用于管理多版本nodejs的工具
 
-略
+仅Linux和macOS用户可用, 略
 
 ## 编译node-sass失败
 
