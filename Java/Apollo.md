@@ -102,9 +102,85 @@ Namespace分三种类型: **私有**, **公共**和**关联**
   env=DEV
   ```
 
-  `env`可选值: `DEV|FAT|UAT|PRO`
+  `env`可选值: `DEV|FAT|UAT|PRO|Local`, 默认值呢? 不知道
+  
+  > `Local`表示仅使用本地配置
+  
+* 配置选择, 即Namespace
 
+  ```properties
+  apollo.bootstrap.namespaces = application,FX.apollo,application.yml
+  ```
 
+  > 可多个, 不知道优先级如何
 
+* 初始化时间
 
+  * SpringBoot的`bootstrap `阶段初始化
 
+    ```properties
+    apollo.bootstrap.enabled = true
+    ```
+
+  * 在日志加载前初始化
+
+    ```properties
+    apollo.bootstrap.eagerLoad.enabled=true
+    ```
+
+    > 此时部分Apollo启动日志将看不到
+
+* 集群(略)
+
+## Maven依赖
+
+```xml
+<dependency>
+    <groupId>com.ctrip.framework.apollo</groupId>
+    <artifactId>apollo-client</artifactId>
+    <version>1.1.0</version>
+</dependency>
+```
+
+## 使用
+
+* 支持`@Value`
+
+  ```java
+  @Value("${someKeyFromApollo:someDefaultValue}")
+  ```
+
+* 支持`@ConfigurationProperties`
+
+* 获取Apollo的`Config`对象
+
+  ```java
+  @ApolloConfig
+  private Config config;
+  ```
+
+* 变动配置监听
+
+  ```java
+  //config change listener for namespace application
+  @ApolloConfigChangeListener
+  private void someOnChange(ConfigChangeEvent changeEvent) {
+      //update injected value of batch if it is changed in Apollo
+      if (changeEvent.isChanged("batch")) {
+          batch = config.getIntProperty("batch", 100);
+      }
+  }
+  ```
+
+* 将配置值为JSON字符串的属性注入为对象
+
+  ```java
+  @ApolloJsonValue("${jsonBeanProperty:[]}")
+  private List<JsonBean> anotherJsonBeans;
+  ```
+
+  > `jsonBeanProperty`是一个数组类型的JSON串
+
+# 参考
+
+* [apollo](https://github.com/ctripcorp/apollo)
