@@ -444,7 +444,7 @@ sudo apt-get install rabbitmq-server
 
   * Publisher Confirms
 
-    此时开启了确认功能, 若消息不可路由, 则发送ack ( 确认 ) . 
+    开启确认功能. 
 
     > 配置:
     >
@@ -454,7 +454,7 @@ sudo apt-get install rabbitmq-server
 
   * Publisher Returns
 
-    此时消息是强制的 ( mandatory ), 若消息不可路由, 将发送return
+    上述开启确认后, 遇到不可路由消息 (找不到queue) 将发送ack(确认) . 而开启Publisher Returns后, 此时消息是强制的 ( mandatory ), 将发送return
     
     > 配置:
     >
