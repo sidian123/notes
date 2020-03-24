@@ -70,6 +70,34 @@
 
 [4]:https://en.wikipedia.org/wiki/Two-phase_locking
 
+# 分布式事务
+
+## 基础储备
+
+### CAP定理
+
+- 一致性 **C**onsistency
+
+  所有节点在同一时间内都存在相同数据
+
+- 可用性 **A**vailability
+
+  任何节点总是可成功读写的
+
+- 分区容错性 **P**artition tolerance
+
+  整个分布式系统在某个节点或分区故障后, 仍能对外提供一致性和可用性的服务.
+
+由于网络延迟, CAP最多只能满足两个
+
+> 详细见文章--零碎知识
+
+### BASE理论
+
+
+
+
+
 # 索引
 
 ## 介绍
