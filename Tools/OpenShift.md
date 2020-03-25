@@ -1,0 +1,1 @@
+* [openshift基本概念总结](https://blog.csdn.net/qq_23348071/article/details/86605686)
