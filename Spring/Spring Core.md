@@ -4,7 +4,7 @@
 
 * 介绍
   
-* 含义与JDK的`Executor`基本一致
+  含义与JDK的`Executor`基本一致
   
 * 类型
 
@@ -22,7 +22,7 @@
 
   * `ConcurrentTaskExecutor`
 
-    连接JDK `Executor`实例的一个适配类, 比较灵活性
+    能够适配JDK的任何一个`Executor`类, 比较灵活性
 
 * 使用? 
 

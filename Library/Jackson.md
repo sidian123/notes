@@ -97,17 +97,42 @@ Map<String, ResultValue> results = mapper.readValue(jsonSource,
 > 所有注解参考[Jackson Annotations](https://github.com/FasterXML/jackson-docs/wiki/JacksonAnnotations)
 
 ## 更改属性名
-使用`@JsonProperty`：
-```java
-class Student{
-    @JsonProperty("Name")
-    String name;
-    String sex;
-    
-	/****setter and getter****/
-	...
-}
-```
+
+* 方式一
+
+  使用`@JsonProperty`, 仅Serialize时有效
+  ```java
+  class Student{
+      @JsonProperty("Name")
+      String name;
+      String sex;
+  
+      /****setter and getter****/
+    ...
+  }
+    ```
+  
+* 方式二
+
+  Serialize和Deserialize都有效
+
+  ```java
+  class Coordinates {
+      private int red;
+  
+      //# Used during serialization
+      @JsonGetter("r")
+      public int getRed() {
+          return red;
+      }
+  
+      //# Used during deserialization
+      @JsonSetter("red")
+      public void setRed(int red) {
+          this.red = red;
+      }
+  }
+  ```
 ## 忽略属性
 
 ### 默认规则
