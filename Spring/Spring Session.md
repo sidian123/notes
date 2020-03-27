@@ -25,19 +25,34 @@ Spring替代Servlet容器自身会话的解决方案.
 
 ## 配置
 
-* 启动
+* 启动Spring Session
 
-```java
-@EnableRedisHttpSession 
-public class Config {
-}
-```
+    ```java
+    @EnableRedisHttpSession 
+    public class Config {
+    }
+    ```
 
-`@EnableRedisHttpSession`注解启用了Spring Session, 并使用Redis做存储, 还需要自己配置Redis信息.
+	>  `@EnableRedisHttpSession`注解启用了Spring Session, 并使用Redis做存储, 
 
-```properties
-spring.session.store-type=redis # Session store type.
-```
+* Spring Session配置
+
+    > 默认就好
+    
+    ```properties
+    spring.session.store-type=redis # Session store type.
+    server.servlet.session.timeout= # Session timeout.
+    spring.session.redis.flush-mode=on-save # Sessions flush mode.
+    spring.session.redis.namespace=spring:session # Namespace for keys used to store sessions.
+    ```
+    
+* Redis配置
+
+    ```properties
+    spring.redis.host=localhost  #Server host
+    spring.redis.password=    #password
+    spring.redis.port=6379    #Redis server port
+    ```
 
 # 使用
 
@@ -45,7 +60,7 @@ spring.session.store-type=redis # Session store type.
 
   通过Spring MVC直接注入
 
-https://www.javadevjournal.com/spring/spring-session/
+
 
 
 
