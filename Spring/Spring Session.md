@@ -17,11 +17,15 @@ Spring替代Servlet容器自身会话的解决方案.
     <groupId>org.springframework.session</groupId>
     <artifactId>spring-session-data-redis</artifactId>
 </dependency>
+
+
 <dependency>
     <groupId>org.springframework.boot</groupId>
-    <artifactId>spring-session-data-redis</artifactId>
+    <artifactId>spring-boot-starter-data-redis</artifactId>
 </dependency>
 ```
+
+> 这里直接使用Spring Data Redis的依赖来引入Redis自动配置
 
 ## 配置
 
@@ -37,28 +41,69 @@ Spring替代Servlet容器自身会话的解决方案.
 
 * Spring Session配置
 
-    > 默认就好
+    必须的配置
     
     ```properties
-    spring.session.store-type=redis # Session store type.
-    server.servlet.session.timeout= # Session timeout.
-    spring.session.redis.flush-mode=on-save # Sessions flush mode.
-    spring.session.redis.namespace=spring:session # Namespace for keys used to store sessions.
+    # Session store type.
+    spring.session.store-type=redis
+    ```
+    
+    下面的可选, 默认就好
+    
+    ```properties
+    # Session timeout.
+    server.servlet.session.timeout=
+    # Sessions flush mode.
+    spring.session.redis.flush-mode=on-save
+    # Namespace for keys used to store sessions.
+    spring.session.redis.namespace=spring:session
     ```
     
 * Redis配置
 
     ```properties
-    spring.redis.host=localhost  #Server host
-    spring.redis.password=    #password
-    spring.redis.port=6379    #Redis server port
+    #Server host
+    spring.redis.host=localhost
+    #password
+    spring.redis.password=
+    #Redis server port
+    spring.redis.port=6379
     ```
 
 # 使用
 
-* 方式一(传统方式)
+* 传统方式
 
   通过Spring MVC直接注入
+  
+  ```java
+  @RequestMapping("/test")
+  public String test(HttpServletRequest request){
+      HttpSession session = request.getSession();
+      return session.getId();
+  }
+  ```
+  
+* 注入
+
+  ```java
+  @Autowired
+  HttpSession session;
+  
+  @RequestMapping("/test")
+  public String test(HttpServletRequest request){
+     return session.getId();
+  }
+  ```
+
+* 其他方式, 如`SessionRepository`
+
+  不会用...
+
+# 参考
+
+* [Spring Session官网](https://docs.spring.io/spring-session/docs/2.2.2.RELEASE/reference/html5/#introduction)
+* [Spring-Session基于Redis管理Session](https://segmentfault.com/a/1190000015432590)
 
 
 

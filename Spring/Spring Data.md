@@ -67,6 +67,28 @@ Spring提供的使用方式有:
 
 > 关于底层客户端`Lettuce`和`Jedis`, 默认使用`Lettuce`
 
+## 配置
+
+* Maven依赖
+
+  ```xml
+  <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-data-redis</artifactId>
+  </dependency>
+  ```
+
+* 配置
+
+  ```properties
+  #Server host
+  spring.redis.host=localhost
+  #password
+  spring.redis.password=
+  #Redis server port
+  spring.redis.port=6379
+  ```
+
 ## 序列化
 
 为何数据需要序列化? 
