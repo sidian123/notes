@@ -16,4 +16,6 @@
 
 其他未迁移的内容:
 
-* [jvm学习小结一](
+* [jvm学习小结一](https://blog.csdn.net/jdbdh/article/details/82495735)
+* [jvm学习小结二----垃圾收集器与内存分配策略](https://blog.csdn.net/jdbdh/article/details/82529463)
+* [java类型信息](https://blog.csdn.net/jdbdh/article/details/82381514)

@@ -519,7 +519,9 @@ server {
 
 ### 修改响应
 
-# HTTPS
+# 进阶
+
+## HTTPS
 
 直接看例子
 
@@ -562,6 +564,46 @@ server {
 >
 > * [在Nginx/Tengine服务器上安装证书](https://help.aliyun.com/document_detail/98728.html?spm=5176.2020520154.0.0.675456a7crLH9u)
 > * [Nginx安装SSL配置HTTPs超详细完整全过程](https://www.hack520.com/481.html)
+
+## upstream
+
+* 介绍
+
+  `upstream`定义了一组Servers, 用于负载均衡, 在`proxy_pass`, `fastcgi_pass`等代理指令中使用.
+
+  使用加权轮询的方式将请求分散在各个请求中; 如果请求在一个Server中响应失败, 将传给下一个Server, 直到最后一个Server也失败, 最终返回最后一个Server的响应.
+
+* 例子
+
+  ```nginx
+  upstream backend {
+      //使用默认权重
+      server backend1.example.com       weight=5;
+      //指定端口
+      server backend2.example.com:8080;
+      //可以是ip地址, 并指定失败条件
+      server 127.0.0.1:8080       max_fails=3 fail_timeout=30s;
+      //可混合unix socket
+      server unix:/tmp/backend3;
+  	//备用server
+      server backup1.example.com:8080   backup;
+      server backup2.example.com:8080   backup;
+  }
+  
+  server {
+      location / {
+          //在代理相关的指令中使用
+          proxy_pass http://backend;
+      }
+  }
+  ```
+
+  > 我自己有个疑问, `backup`有存在的必要吗?
+
+> 参考
+>
+> * [Module ngx_http_upstream_module](http://nginx.org/en/docs/http/ngx_http_upstream_module.html)
+> * [What does upstream mean in nginx?](https://stackoverflow.com/questions/5877929/what-does-upstream-mean-in-nginx)
 
 # 其他
 
