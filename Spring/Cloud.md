@@ -429,6 +429,10 @@ public class Fallback implements UserService {
 
 > 为啥会这样? 不知道...
 
+# 七 Zuul
+
+> [Router and Filter: Zuul](https://cloud.spring.io/spring-cloud-static/spring-cloud-netflix/2.2.2.RELEASE/reference/html/#router-and-filter-zuul)
+
 
 
 # 杂乱的学习笔记(非重点)

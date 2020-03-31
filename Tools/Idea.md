@@ -488,6 +488,10 @@ setting-->maven-->repositories-->点击本地仓库-->update
 
 > 注意, 远程仓库用不了
 
+## 配置文件乱码
+
+
+
 # 参考
 
 * [idea download][1]
