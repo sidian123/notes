@@ -490,7 +490,13 @@ setting-->maven-->repositories-->点击本地仓库-->update
 
 ## 配置文件乱码
 
+```
+file->setting->editor->file encodings下把transparent native-to-ascll conversion
+```
 
+勾选上就好
+
+> 参考[详解Intellij IDEA中.properties文件中文显示乱码问题的解决](https://www.cnblogs.com/telwanggs/p/11201032.html)
 
 # 参考
 

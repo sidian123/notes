@@ -815,6 +815,11 @@ max_connections=1000
 LimitNOFILE = 65535
 ```
 
+# 待学
+
+* 全文索引
+* JSON类型
+
 # 参考
 
 * [MySQL 8.0 Reference Manual](<https://dev.mysql.com/doc/refman/8.0/en/>)
