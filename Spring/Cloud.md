@@ -455,6 +455,18 @@ public class Fallback implements UserService {
 
     前缀`/zuul` 可由`zuul.servlet-path`属性修改
 
+  * 配置服务路由
+
+    ```yaml
+     zuul:
+      routes:
+        users:
+          path: /myusers/**
+          serviceId: users_service
+    ```
+
+    访问`/myusers/abc`将访问`users_service`服务的`/abc`接口
+
 > 参考[Router and Filter: Zuul](https://cloud.spring.io/spring-cloud-static/spring-cloud-netflix/2.2.2.RELEASE/reference/html/#router-and-filter-zuul)
 
 # 杂乱的学习笔记(非重点)
