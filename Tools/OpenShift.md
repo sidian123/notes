@@ -36,6 +36,9 @@
 
       用于被外部访问的IP
 
+
+* 
+
 * 参考
   
   * [openshift基本概念总结](https://blog.csdn.net/qq_23348071/article/details/86605686)
