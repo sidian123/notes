@@ -457,7 +457,21 @@ Zuul被实现为Servlet, 请求一般先Spring MVC的DispatcherServlet控制路�
 
   前缀`/zuul` 可由`zuul.servlet-path`属性修改
 
-* 配置服务路由
+* 路由
+
+  > 下面都使用 ant-style 模式的URL
+
+  微服务路由的简化形式:
+
+  ```yaml
+   zuul:
+    routes:
+      users: /myusers/**
+  ```
+
+  > `/myusers`的请求将被转发到`users`服务上. 如`/myusers/101`被转发到`/101`
+
+  微服务路由更详细配置的形式:
 
   ```yaml
    zuul:
@@ -467,17 +481,31 @@ Zuul被实现为Servlet, 请求一般先Spring MVC的DispatcherServlet控制路�
         serviceId: users_service
   ```
 
-  访问`/myusers/abc`将访问`users_service`服务的`/abc`接口
+  > `/myusers`的请求将被转发到`users_service`服务上
+
+  静态路由
+
+  ```yaml
+   zuul:
+    routes:
+      users:
+        path: /myusers/**
+        url: https://example.com/users_service
+  ```
+
+  > 这里以url的形式给出, 而非微服务名.
+
+  > **注意**, 该方式不支持负载均衡(Ribbon) 和熔断(Hystrix)
 
 ## 过滤器
 
 这个很关键, 通过自定义路由器, 可实现自己的路由功能, 不必非得用上述配置.
 
-> 待学习
->
-> * [zuul学习四：zuul 过滤器详解](https://www.jianshu.com/p/ff863d532767)
->
-> * [Router and Filter: Zuul](https://cloud.spring.io/spring-cloud-static/spring-cloud-netflix/2.2.2.RELEASE/reference/html/#router-and-filter-zuul)
+## 参考
+
+* [zuul学习四：zuul 过滤器详解](https://www.jianshu.com/p/ff863d532767)
+
+* [Router and Filter: Zuul](https://cloud.spring.io/spring-cloud-static/spring-cloud-netflix/2.2.2.RELEASE/reference/html/#router-and-filter-zuul)
 
 # 杂乱的学习笔记(非重点)
 
