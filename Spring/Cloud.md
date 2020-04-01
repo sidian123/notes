@@ -433,25 +433,23 @@ public class Fallback implements UserService {
 
 * 介绍
   
-* 网关, 主要提供路由和过滤功能
+  * 网关, 主要提供**路由**和**过滤**功能
   
 * 原理
   
-原理
-  
-* Zuul被实现为Servlet, 由Spring MVC控制路由, 导致Zuul的请求被缓存起来, 因此仅允许上传小文件. 
+* Zuul被实现为Servlet, 请求一般先Spring MVC的DispatcherServlet控制路由, 导致Zuul的请求被缓存起来, 因此仅允许上传小文件. 
   
   * 对于大文件, Zuul提供了外置Servlet`/zuul/*`, 不会缓存请求
   
-    > 例子如下
-    >
-    > 1. 配置路由
-    >
-    >    ```
-    >    zuul.routes.customers=/customers/**
-  >    ```
-    >
-    > 2. 可通过发起请求到`/zuul/customers/*` , 直接由Zuul外置Servlet处理
+      > 例子如下
+      >
+      > 1. 配置路由
+      >
+      >    ```
+      >    zuul.routes.customers=/customers/**
+      >    ```
+      > 
+      > 2. 可通过发起请求到`/zuul/customers/*` , 直接由Zuul外置Servlet处理
   
 * 配置
 
@@ -471,7 +469,11 @@ public class Fallback implements UserService {
 
     访问`/myusers/abc`将访问`users_service`服务的`/abc`接口
 
-> 参考[Router and Filter: Zuul](https://cloud.spring.io/spring-cloud-static/spring-cloud-netflix/2.2.2.RELEASE/reference/html/#router-and-filter-zuul)
+> 待学习
+>
+> * [zuul学习四：zuul 过滤器详解](https://www.jianshu.com/p/ff863d532767)
+>
+> * [Router and Filter: Zuul](https://cloud.spring.io/spring-cloud-static/spring-cloud-netflix/2.2.2.RELEASE/reference/html/#router-and-filter-zuul)
 
 # 杂乱的学习笔记(非重点)
 
