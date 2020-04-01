@@ -437,7 +437,7 @@ public class Fallback implements UserService {
   
 * 原理
   
-* Zuul被实现为Servlet, 请求一般先Spring MVC的DispatcherServlet控制路由, 导致Zuul的请求被缓存起来, 因此仅允许上传小文件. 
+  Zuul被实现为Servlet, 请求一般先Spring MVC的DispatcherServlet控制路由, 导致Zuul的请求被缓存起来, 因此仅允许上传小文件. 
   
   * 对于大文件, Zuul提供了外置Servlet`/zuul/*`, 不会缓存请求
   
@@ -468,6 +468,10 @@ public class Fallback implements UserService {
     ```
 
     访问`/myusers/abc`将访问`users_service`服务的`/abc`接口
+  
+* 过滤器
+
+  这个很关键, 通过自定义路由器, 可实现自己的路由功能, 不必非得用上述配置.
 
 > 待学习
 >
