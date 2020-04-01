@@ -432,23 +432,27 @@ public class Fallback implements UserService {
 # 七 Zuul
 
 * 介绍
-  * 网关
-
+  
+* 网关, 主要提供路由和过滤功能
+  
 * 原理
-  * Zuul被实现为Servlet, 由Spring MVC控制路由, 导致Zuul的请求被缓存起来, 因此仅允许上传小文件. 
-
+  
+原理
+  
+* Zuul被实现为Servlet, 由Spring MVC控制路由, 导致Zuul的请求被缓存起来, 因此仅允许上传小文件. 
+  
   * 对于大文件, Zuul提供了外置Servlet`/zuul/*`, 不会缓存请求
-
+  
     > 例子如下
     >
     > 1. 配置路由
     >
     >    ```
     >    zuul.routes.customers=/customers/**
-    >    ```
+  >    ```
     >
     > 2. 可通过发起请求到`/zuul/customers/*` , 直接由Zuul外置Servlet处理
-
+  
 * 配置
 
   * 修改外置Servlet默认URL`/zuul`
