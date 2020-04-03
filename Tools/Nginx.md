@@ -463,25 +463,45 @@ server {
 
 * 资源映射
 
-  ```nginx
-  server {
-      location /images/ {
-          root /data;
-      }
+  * `root`
   
-      location / {
-          proxy_pass http://www.example.com;
-      }
-  }
-  ```
+    `root`确定URL路径和**系统路径**的映射关系, 文件的真实路径=系统路径+URL路径.
   
-  `root`确定URL路径和系统路径的映射关系, 文件的真实路径=系统路径+URL路径.
+      ```nginx
+    server {
+        location /images/ {
+            root /data;
+        }
+}
+      ```
+    
+      > 如请求路径`/images/example.png`, 访问的文件路径则为`/data/images/example.png`
+    
+  * `proxy_pass`
+
+    `proxy_pass`确定URL路径和**代理Server**的关系, 文件的真实路径=代理URL+去掉匹配前缀的URL路径
   
-  > 如请求路径`/images/example.png`, 访问的文件路径则为`/data/images/example.png`
+    ```nginx
+    server{
+     	location /app/ {
+        	proxy_pass      http://192.168.154.102;
+    	}   
+    }
+    ```
   
-  `proxy_pass`确定URL路径和代理Server的关系, 资源位置=代理URL+URL路径
+    > `test.com/app/xxxxx` =>  `http://192.168.154.102/xxxxx`
   
-  > 如请求路径`/videos/hello.mp4`, 访问的文件路径则为`http://www.example.com/videos/hello.mp4`
+    ```nginx
+    server{
+     	location /app/ {
+            proxy_pass      http://192.168.154.102/maped_dir/;
+        }   
+    }
+    ```
+  
+    > `test.com/app/xxxxx` =>  `http://192.168.154.102/maped_dir/xxxxx`
+  
+    > 详细参考[Nginx proxy_pass: examples for how does nginx proxy_pass map the request](https://www.liaohuqiu.net/posts/nginx-proxy-pass/)
 
 ## 其他
 
@@ -516,6 +536,16 @@ server {
 >
 > * [Module ngx_http_rewrite_module](https://nginx.org/en/docs/http/ngx_http_rewrite_module.html?&_ga=2.127166349.1048841569.1579135406-2037701528.1578467350)
 > * [Rewriting URIs in Requests](https://docs.nginx.com/nginx/admin-guide/web-server/web-server/#rewriting-uris-in-requests)
+
+### 请求头部
+
+`proxy_set_header`指令可修改请求头部.
+
+如, 代理默认不转发`host`头部, 现在让Niginx转发
+
+```nginx
+proxy_set_header Host  $http_host;
+```
 
 ### 修改响应
 
@@ -610,6 +640,18 @@ server {
 ## 变量
 
 nginx中可以定义变量, 也提供了代表请求头字段的变量.
+
+常用变量如下:
+
+* `$http_<name>`
+
+  代表任意请求头部字段, `<name>`为转化后的字段名, 即小写, 且`-`替换为`_`. 如`HOST` --> `$http_host`
+
+* `$host`
+
+  代表URL上的host. 与`$http_host`相比, 无port
+
+  > `$http_host` vs. `$host` , 见[What's the difference of $host and $http_host in Nginx](https://stackoverflow.com/questions/15414810/whats-the-difference-of-host-and-http-host-in-nginx)
 
 > 见[Embedded Variables](https://nginx.org/en/docs/http/ngx_http_core_module.html?&_ga=2.36392416.114713352.1578467350-2037701528.1578467350#variables)
 
