@@ -539,6 +539,8 @@ server {
 
 ### 请求头部
 
+
+
 `proxy_set_header`指令可修改请求头部.
 
 如, 代理默认不转发`host`头部, 现在让Niginx转发
