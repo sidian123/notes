@@ -539,15 +539,36 @@ server {
 
 ### 请求头部
 
+* 介绍
 
+  代理过程中, 默认请求头部也被转发, 即`proxy_pass_request_headers `和`proxy_pass_request_body`默认为`on`.
 
-`proxy_set_header`指令可修改请求头部.
+  但有例外, 如`Host`, `Connection`被重置为
 
-如, 代理默认不转发`host`头部, 现在让Niginx转发
+  ```nginx
+  proxy_set_header Host       $proxy_host;
+  proxy_set_header Connection close;
+  ```
 
-```nginx
-proxy_set_header Host  $http_host;
-```
+  并且自定义头部不被转发.
+
+* `proxy_set_header`
+
+  该指令可修改或新增头部字段.
+
+  如, 代理默认不转发`host`头部, 现在让Niginx转发
+
+    ```nginx
+  proxy_set_header Host  $http_host;
+    ```
+  
+  > 这种方式有弊端, 若请求未存在`host`字段, 也不会被转发.
+
+> 参考
+>
+> * [proxy_set_header](http://nginx.org/en/docs/http/ngx_http_proxy_module.html#proxy_set_header)
+> * [proxy_pass_request_headers](http://nginx.org/en/docs/http/ngx_http_proxy_module.html#proxy_pass_request_headers)
+> * [proxy_pass_request_body](http://nginx.org/en/docs/http/ngx_http_proxy_module.html#proxy_pass_request_body)
 
 ### 修改响应
 
