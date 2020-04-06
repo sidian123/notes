@@ -437,23 +437,25 @@ public class Fallback implements UserService {
 
 ## 原理
 
-Zuul被实现为Servlet, 请求一般先Spring MVC的DispatcherServlet控制路由, 导致Zuul的请求被缓存起来, 因此仅允许上传小文件. 
+* Zuul被实现为Servlet, 但请求一般先经过默认Servlet, 即Spring MVC的`DispatcherServlet` , 然后交由Zuul的Servlet(`/zuul/*`)处理. 默认Servlet具有缓存功能, 因此不建议默认Servlet上传大文件. 
 
-* 对于大文件, Zuul提供了外置Servlet`/zuul/*`, 不会缓存请求
+* 对于大文件, 应该直接走Zuul提供的Servlet(`/zuul/*`), 请求不会被缓存.
 
-    > 例子如下
-    >
-    > 1. 配置路由
-    >
-    >    ```
-    >    zuul.routes.customers=/customers/**
-    >    ```
-    > 
-    > 2. 可通过发起请求到`/zuul/customers/*` , 直接由Zuul外置Servlet处理
+    > 转发时, 前缀`/zuul`会被移除
+
+> 例子如下
+>
+> 1. 配置路由
+>
+>    ```properties
+>    zuul.routes.customers=/customers/**
+>    ```
+> 
+> 2. 发起请求到`/customers/**`, 由`DispatcherServlet`处理; 发起请求到`/zuul/customers/**` , 直接由Zuul外置Servlet处理.
 
 ## 配置
 
-* 修改外置Servlet默认URL`/zuul`
+* 修改Zuul Servlet的默认URL`/zuul`
 
   前缀`/zuul` 可由`zuul.servlet-path`属性修改
 
@@ -496,12 +498,54 @@ Zuul被实现为Servlet, 请求一般先Spring MVC的DispatcherServlet控制路�
   > `/myusers/101` --> `https://example.com/users_service/101`
 >
   > 这里以url的形式给出, 而非微服务名.
-  
+
   > **注意**, 该方式不支持负载均衡(Ribbon) 和熔断(Hystrix)
 
 ## 过滤器
 
 这个很关键, 通过自定义路由器, 可实现自己的路由功能, 不必非得用上述配置.
+
+
+
+* `RequestContext`
+
+  提供上下文信息, 和支持在请求作用域中存储变量. 基于`ThreadLocal`实现
+
+  * 获取`RequestContext`
+
+    ```java
+    RequestContext.getCurrentContext()
+    ```
+
+  * 获取请求
+
+    ```java
+    getRequest()
+    ```
+
+  * 存取变量
+
+    ```java
+    get()
+    ```
+
+    ```java
+    set()
+    ```
+
+    
+
+    
+
+  
+
+  
+
+
+
+
+
+
 
 ## 参考
 
