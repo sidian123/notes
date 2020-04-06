@@ -109,13 +109,179 @@ Vue.use(ElementUI);
 
 ## Form
 
-- **介绍**：`el-form`表示表单，`el-form-item`表示表单项（包裹`input`元素）。能够提供收集、**验证**（主要使用原因）和提交数据的功能。
-- **基本使用**：`el-form`的`model`设置表单数据，`label-width`：设置标签宽度；`el-form-item`的`label`属性设置标签名
-- **inline form**：`el-form-item`默认为`block`，`el-form`的`inline`属性将之设置为`inline-block`
-- **标签位置**：`el-form`的`label-position`设置标签位置，值`left/right/top`
-- **验证**：`el-form`的`rules`属性设置所有规则，`el-form-item`的`prop`属性设置某个规则对应的键值。
+### 基础
 
-。。。还是觉得十分不好用，还是用vue的watch来验证比较合适。
+- **介绍**
+
+  * `el-form`表示表单，`el-form-item`表示表单项（包裹`input`元素）。
+  * 能够提供收集、**验证**（主要使用原因）和提交数据的功能。
+
+- **基本使用**
+
+  * `el-form`的`model`设置表单数据，
+  * `label-width`：设置标签宽度；
+  * `el-form-item`的`label`属性设置标签名
+
+- **inline form**
+
+  `el-form-item`默认为`block`，`el-form`的`inline`属性将之设置为`inline-block`
+
+- **标签位置**
+
+  `el-form`的`label-position`设置标签位置，值`left/right/top`
+
+- **验证**
+
+  `el-form`的`rules`属性设置所有规则，`el-form-item`的`prop`属性设置某个规则对应的键值。
+
+### 校验
+
+例子:
+
+```javascript
+rules : {
+   name: [
+      { required: true, message: '请输入活动名称', trigger: 'blur' },
+      { min: 3, max: 5, message: '长度在 3 到 5 个字符', trigger: 'blur' }
+   ],
+   region: [
+      { required: true, message: '请选择活动区域', trigger: 'change' }
+   ],
+   date1: [
+      { type: 'date', required: true, message: '请选择日期', trigger: 'change' }
+   ],
+   date2: [
+      { type: 'date', required: true, message: '请选择时间', trigger: 'change' }
+   ],
+   type: [
+      { type: 'array', required: true, message: '请至少选择一个活动性质', trigger: 'change' }
+   ],
+   resource: [
+      { required: true, message: '请选择活动资源', trigger: 'change' }
+   ],
+   desc: [
+      { required: true, message: '请填写活动形式', trigger: 'blur' }
+   ],
+   age: [
+      {
+         validator: (rule, value, callback) => {
+            if (!value) {
+               return callback(new Error('年龄不能为空'));
+            }
+            setTimeout(() => {
+               if (!Number.isInteger(value)) {
+                  callback(new Error('请输入数字值'));
+               } else {
+                  if (value < 18) {
+                     callback(new Error('必须年满18岁'));
+                  } else {
+                     callback();
+                  }
+               }
+            }, 1000);
+         },
+         trigger: 'blur'
+      }
+   ]
+}
+```
+
+常用的校验规则声明字段:
+
+* **字段类型**
+
+  Indicates the `type` of validator to use. Recognised type values are:
+
+  * `string` (default): Must be of type `string`. `This is the default type.`
+  * `number`: Must be of type `number`.
+  * `boolean`: Must be of type `boolean`.
+  * `method`: Must be of type `function`.
+  * `regexp`: Must be an instance of `RegExp` or a string that does not generate an exception when creating a new `RegExp`.
+  * `integer`: Must be of type `number` and an integer.
+  * `float`: Must be of type `number` and a floating point number.
+  * `array`: Must be an array as determined by `Array.isArray`.
+  * `object`: Must be of type `object` and not `Array.isArray`.
+  * `enum`: Value must exist in the `enum`.
+  * `date`: Value must be valid as determined by `Date`
+  * `url`: Must be of type `url`.
+  * `hex`: Must be of type `hex`.
+  * `email`: Must be of type `email`.
+  * `any`: Can be any type.
+
+* **是否必须**
+
+  The `required` rule property indicates that the field must exist on the source object being validated.
+
+* **匹配模式**
+
+  The `pattern` rule property indicates a regular expression that the value must match to pass validation.
+
+* 值域范围
+
+  A range is defined using the `min` and `max` properties. For `string` and `array` types comparison is performed against the `length`, for `number` types the number must not be less than `min` nor greater than `max`.
+
+* 长度
+
+  To validate an exact length of a field specify the `len` property. For `string` and `array` types comparison is performed on the `length` property, for the `number` type this property indicates an exact match for the `number`, ie, it may only be strictly equal to `len`.
+
+  > If the `len` property is combined with the `min` and `max` range properties, `len` takes precedence.
+
+* 内容不可空白
+
+  `whitespace:true` , 仅适用于`string`类型
+
+* 转化
+
+  在校验前转化字段值, 且覆盖原有值
+
+  ```javascript
+    name: {
+      type: "string",
+      required: true, pattern: /^[a-z]+$/,
+      transform(value) {
+        return value.trim();
+      }
+    }
+  ```
+
+* **提示消息**
+
+  校验后不符合时的提示消息
+
+  ```javascript
+  {name:{type: "string", required: true, message: "Name is required"}}
+  ```
+
+* **校验器**
+
+  提供自定义校验, 更为灵活, 分为同步和异步校验器.
+
+  下面给出同步校验的例子
+
+  ```javascript
+  field: {
+      validator(rule, value, callback) {
+          return value === 'test';
+      },
+      message: 'Value is not equal to "test".',
+  }
+  ```
+
+* **触发器**
+
+  什么时候校验的触发器声明.
+
+  已知两种:
+
+  * `blur` 字段失去聚焦时
+  * `change` 字段改变时
+
+  例子
+
+  ```javascript
+  { required: true, message: '请输入邮箱地址', trigger: 'blur' },
+  { type: 'email', message: '请输入正确的邮箱地址', trigger: ['blur', 'change'] }
+  ```
 
 # 通知(Notice)
 
