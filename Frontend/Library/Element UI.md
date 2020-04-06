@@ -84,9 +84,9 @@ Vue.use(ElementUI);
 
   - list-type：文件列表类型。
 
-    - text（默认）：![1559207926245](.Element UI/1559207926245.png)
-    - picture：![1559207980004](.Element UI/1559207980004.png)
-    - picture-card：![1559208082581](.Element UI/1559208082581.png)
+    - text（默认）：![1559207926245](.Element%20UI/1559207926245.png)
+    - picture：![1559207980004](.Element%20UI/1559207980004.png)
+    - picture-card：![1559208082581](.Element%20UI/1559208082581.png)
 
   - file-list：默认已上传文件，默认`[]`
 
