@@ -83,8 +83,6 @@ Content-Length: 17
 name=lee&psd=hnxy
 ```
 
-![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
-
 由于使用了消息体，所以必须指定Content-Type字段，Content-Length指定消息体长度（可以使用其他方法）。Host在http1.1中必须指定。
 
 其他的请求方式参考链接。
@@ -108,27 +106,44 @@ name=lee&psd=hnxy
 
 > 参考[List of HTTP status codes](https://en.wikipedia.org/wiki/List_of_HTTP_status_codes)
 
-# [五、头字段](https://en.wikipedia.org/wiki/List_of_HTTP_header_fields#Effects_of_selected_fields)
+# 五 头字段
 
 请求头和响应头是定义了HTTP事务的操作参数。头字段分为**请求字段**、**响应字段**。其中有些字段是服务器浏览器都可以使用的**通用字段**，和与消息体具体相关的**实体字段**。一些非标准的、正在实验的字段名通常（不是所有）以X-开头。
 下面简单介绍下字段，详细介绍参考标题链接。
+
+> 参考[头字段](https://en.wikipedia.org/wiki/List_of_HTTP_header_fields#Effects_of_selected_fields)
 
 ## 请求字段
 
 浏览器发出请求时给服务器信息的字段。
 
 1. Accept：浏览器能够处理的MIME类型。
+
 2. Accept-Charset：告知服务器客户端使用的字符集
+
 3. Accept-Encoding：客户端能够解码的编码方法
+
 4. Accept-Language：客户端期待的指定国家语言的文档，因为不同国家对相同字符有不同的渲染方式和含义，有时需要设置此字段。
+
 5. Authorization、Proxy-Authorization：访问受保护的网页时需要的这些字段提交账户密码。
+
 6. Host：指定资源所在的主机名和端口号。http1.1强制使用，web服务器通过该字段可以区分[虚拟web站点](https://blog.csdn.net/jdbdh/article/details/82631376#六、配置虚拟主机)。
+
 7. If-Match：附着Etag实体标签，用作使用使用缓存的条件。
+
 8. If-Modified-Since：与If-Match类型，存入GMT格式的时间，服务器会比较此字段，判断浏览器缓存的是否是最新的文档，作为浏览器是否使用缓存的条件。该字段的值是上次响应消息中Last-Modified字段的值。
+
 9. Range和If-Range：指定服务器返回文档中的部分内容及内容范围。
+
 10. Max-Forward：当前请求可以经过的代理服务器数量，经过一个代理服务器该值减一。
+
 11. Referer：通过在浏览器中输入URL访问超链接，通过其他方式访问时会使用Referer字段。比如点击网页上超链接，发出请求时会使用referer字段，该字段指定该网页的URL。比如打开一个网页时，该网页需要其他文件，如css、js、image，那么请求这些资源时会通过referer指定该网页。该字段用来检测访问者如何导航进入该网站的，也可用于防止盗链的存在。
+
 12. User-Agent：指定浏览器的操作系统及版本、浏览器及版本、浏览器渲染引擎、浏览器语言等信息。
+
+13. [X-Forwarded-For](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/X-Forwarded-For)
+
+    在HTTP代理中, 用于记录最初请求的客户端, 和经过的代理服务器.
 
 ## 响应字段
 

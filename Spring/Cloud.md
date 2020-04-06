@@ -503,49 +503,172 @@ public class Fallback implements UserService {
 
 ## 过滤器
 
-这个很关键, 通过自定义路由器, 可实现自己的路由功能, 不必非得用上述配置.
+### 过滤器类型
 
+* `pre`
 
+  请求路由器被调用
 
-* `RequestContext`
+* `route`
 
-  提供上下文信息, 和支持在请求作用域中存储变量. 基于`ThreadLocal`实现
+  路由请求时调用
 
-  * 获取`RequestContext`
+* `post`
 
-    ```java
-    RequestContext.getCurrentContext()
-    ```
+  路由后使用
 
-  * 获取请求
+* `error`
 
-    ```java
-    getRequest()
-    ```
+  路由过程异常时使用
 
-  * 存取变量
+> 上述描述不足以概括过滤器具体行为, 必须参考下述Servlet的具体实现
 
-    ```java
-    get()
-    ```
+### 生命周期
 
-    ```java
-    set()
-    ```
+较复杂, 这里直接给出Zuul Servlet的源码
 
-    
+```java
+@Override
+public void service(javax.servlet.ServletRequest servletRequest, javax.servlet.ServletResponse servletResponse) throws ServletException, IOException {
+    try {
+        init((HttpServletRequest) servletRequest, (HttpServletResponse) servletResponse);
 
-    
+        // Marks this request as having passed through the "Zuul engine", as opposed to servlets
+        // explicitly bound in web.xml, for which requests will not have the same data attached
+        RequestContext context = RequestContext.getCurrentContext();
+        context.setZuulEngineRan();
 
-  
+        try {
+            preRoute();
+        } catch (ZuulException e) {
+            error(e);
+            postRoute();
+            return;
+        }
+        try {
+            route();
+        } catch (ZuulException e) {
+            error(e);
+            postRoute();
+            return;
+        }
+        try {
+            postRoute();
+        } catch (ZuulException e) {
+            error(e);
+            return;
+        }
 
-  
+    } catch (Throwable e) {
+        error(new ZuulException(e, 500, "UNHANDLED_EXCEPTION_" + e.getClass().getName()));
+    } finally {
+        RequestContext.getCurrentContext().unset();
+    }
+}
+```
 
+总的来说, `pre`-->`route`-->`postRoute`, 异常后会执行`error`->`postRoute`.
 
+### 定义
 
+下面给出黑名单拦截IP的过滤器
 
+```java
+public class IpFilter extends ZuulFilter {
+    // IP黑名单列表
+    private List<String> blackIpList = Arrays.asList("127.0.0.1");
+    public IpFilter() {
+        super();
+    }
+    //是否执行该过滤器, true执行, false不执行.
+    @Override
+    public boolean shouldFilter() {
+        return true
+    }
+    //过滤器类型, 可选值:pre|route|post|error
+    @Override
+    public String filterType() {
+        return "pre";
+    }
+    //过滤器执行优先级, 数值越小, 优先级越高
+    @Override
+    public int filterOrder() {
+        return 1;
+    }
+    //过滤器的业务逻辑, 返回值没啥用
+    @Override
+    public Object run() {
+        RequestContext ctx = RequestContext.getCurrentContext();
+        String ip = IpUtils.getIpAddr(ctx.getRequest());
+        // 在黑名单中禁用
+        if (StringUtils.isNotBlank(ip) && blackIpList.contains(ip)) {
+            ctx.setSendZuulResponse(false);
+            ResponseData data = ResponseData.fail("非法请求 ", ResponseCode.NO_AUTH_CODE.getCode());
+            ctx.setResponseBody(JsonUtils.toJson(data));
+            ctx.getResponse().setContentType("application/json; charset=utf-8");
+            return null;
+        }
+        return null;
+    }
+}
+```
 
+### 解决方案
 
+* 不同filter间数据传递
+
+  已经过滤器执行顺序后, 通过`RequestContext`存取请求作用域内的数据
+
+  ```java
+  RequestContext ctx = RequestContext.getCurrentContext();
+  ctx.set("msg", "你好吗");
+  ```
+
+  ```java
+  RequestContext ctx = RequestContext.getCurrentContext();
+  ctx.get("msg");
+  ```
+
+* 拦截请求
+
+  ```java
+  RequestContext ctx = RequestContext.getCurrentContext();
+  ctx.setSendZuulResponse(false);
+  ctx.setResponseStatusCode(HttpStatus.UNAUTHORIZED.value());
+  ctx.getResponse().setContentType("application/json;charset=UTF-8");
+  ctx.setResponseBody("{\"result\":\"this request is not allow!\"}");
+  ctx.set("isSuccess", false);
+  ```
+
+* 放行请求
+
+  啥都不用管, 结束`run()`即可
+
+### `RequestContext`
+
+提供上下文信息, 和支持在请求作用域中存储变量. 基于`ThreadLocal`实现
+
+* 获取`RequestContext`
+
+  ```java
+  RequestContext.getCurrentContext()
+  ```
+
+* 获取请求
+
+  ```java
+  getRequest()
+  ```
+
+* 存取变量
+
+  ```java
+  get()
+  ```
+
+  ```java
+  set()
+  ```
 
 ## 参考
 
