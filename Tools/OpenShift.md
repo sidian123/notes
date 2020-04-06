@@ -28,21 +28,22 @@
 
   * Service
 
-    * cluster ip 
+    Service名在容器内部DNS服务器中解析为Cluster IP.
+
+    * Cluster IP 
 
       内部IP, 与其他Services处于同于局域网内, 让不同Service的Pod相互访问
 
-    * external IP
-
+    * External IP
+    
       用于被外部访问的IP
-
-
-* Route详解
-
-  创建Route, 将为应用自动生成一个唯一的域名, 提供外部访问的入口 . 
-
-  自动生成的域名, 是容器云的子域名. 可以自定义域名, 即创建Route时提供自定义域名. 之后在提供该域名的DNS服务器上创建CNAME记录, 指向容器云的入站路由器
-
-* 参考
+    
+  * Route
   
+    创建Route, 将为应用自动生成一个唯一的域名, 提供外部访问的入口 . 
+  
+    自动生成的域名, 是容器云的子域名. 可以自定义域名, 即创建Route时提供自定义域名. 之后在提供该域名的DNS服务器上创建CNAME记录, 指向容器云的入站路由器
+  
+* 参考
+
   * [openshift基本概念总结](https://blog.csdn.net/qq_23348071/article/details/86605686)
