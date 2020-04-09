@@ -496,9 +496,9 @@ public class Fallback implements UserService {
   ```
 
   > `/myusers/101` --> `https://example.com/users_service/101`
->
+	
   > 这里以url的形式给出, 而非微服务名.
-
+	
   > **注意**, 该方式不支持负载均衡(Ribbon) 和熔断(Hystrix)
 
 ## 过滤器
