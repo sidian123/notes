@@ -1380,7 +1380,7 @@ public class FactoryMethodComponent {
 
 ## @Import
 
-@Import可以导入其他配置类的Bean定义：
+`@Import`可以导入其他配置类的Bean定义：
 
 ```java
 @Configuration
@@ -1403,7 +1403,23 @@ public class ConfigB {
 }
 ```
 
+从Spring4.2开始, 也可以导入普通Bean, 如
 
+```java
+public class UserService {
+	//...
+}
+
+@Configuration
+@Import(UserService.class)
+public class ConfigB {
+
+    @Bean
+    public B b() {
+        return new B();
+    }
+}
+```
 
 ## java和xml混合配置
 
