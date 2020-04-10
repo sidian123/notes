@@ -500,6 +500,10 @@ public class Fallback implements UserService {
   > 这里以url的形式给出, 而非微服务名.
 	
   > **注意**, 该方式不支持负载均衡(Ribbon) 和熔断(Hystrix)
+  
+* **踩坑点**
+
+  `path`间不要有包含关系, 如`/a/b/c/**`, `/a/b/**`, 这样会出问题, 具体什么问题还没详细测试过.
 
 ## 过滤器
 
