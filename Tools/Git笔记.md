@@ -623,6 +623,36 @@ $ git branch -vv
 
 > 那添加呢? push时服务器中不存在则自动添加.
 
+## Rebase分支
+
+rebase, 重置当前分支的base(起始点)到另一个分支末处, 这是一个优化提交历史的方案.
+
+概念抽象, 这里举个例子, 现在rebase hotfix分支到master分支上, 就是将两个分支的提交合在一起.
+
+```
+//当前处于hotfix分支, 现在rebase到master上
+git rebase master
+```
+
+
+
+![image-20200411093833817](.Git%E7%AC%94%E8%AE%B0/image-20200411093833817.png)
+
+首先找到两个分支的分岔口`c0`, 得到hotfix分支的起始点`c2`, 将其移接到master分支的末尾处c1.
+
+![image-20200411094349965](.Git%E7%AC%94%E8%AE%B0/image-20200411094349965.png)
+
+注意, 这里的`c2'`, `c3'`可能与原先的不同, 因为`c1`可能与`c2`,`c3`存在冲突. 那么rabase的过程中解决冲突的方式如下:
+
+1. 若`c1`与`c2`冲突, 让用户去解决, 得到`c2'`
+2. 若`c2'`与`c3`冲突, 让用户去解决, 得到`c3'`
+
+接下来, 用户可以选择让master合并hotfix, 但这不是rebase的功能了.
+
+> 命令行怎么用? 命令自身会有提示的...
+
+> 参考[Git Branching - Rebasing](https://git-scm.com/book/en/v2/Git-Branching-Rebasing)
+
 # 四 其他
 
 ## 分支管理
