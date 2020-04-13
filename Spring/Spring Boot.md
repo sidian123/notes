@@ -214,11 +214,19 @@ spring boot整合了spring框架和三方库后，提供了自动配置的功能
 16. [`@PropertySource`](https://docs.spring.io/spring/docs/5.0.9.RELEASE/javadoc-api/org/springframework/context/annotation/PropertySource.html) annotations on your `@Configuration` classes.
 17. Default properties (specified by setting `SpringApplication.setDefaultProperties`).
 
-> 如命令行提供属性值:
+> 例子
 >
-> ```shell
-> java -jar app.jar --name="Spring"
-> ```
+> * 通过系统参数(9)
+>
+>     ```shell
+>     java -jar app.jar -Dname="Spring"
+>     ```
+>
+> * 通过命令行参数(4)
+>
+>     ```shell
+>     java -jar app.jar --name="Spring"
+>     ```
 
 ### YAML与properties
 
