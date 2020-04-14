@@ -294,7 +294,7 @@ sudo apt-get install rabbitmq-server
   ```
 
 
-## 后端网站开启
+## Web管理网站开启
 
 * 开启
 
@@ -313,6 +313,34 @@ sudo apt-get install rabbitmq-server
    本地搭建的服务用`guest/guest`登陆, 远程的请添加新用户并添加了权限后再登陆, 服务端口:`15672`
 
    > 默认配置中, `guest`账号只能在localhost中登陆
+
+## Windows安装
+
+1. 安装依赖[Erlang](https://www.erlang.org/downloads)
+
+2. 安装[RabbitMQ](https://www.rabbitmq.com/download.html)
+
+   > 它会默认注册并运行RabbitMQ服务
+
+3. 安装可视化界面
+
+   ```shell
+   rabbitmq-plugins.bat enable rabbitmq_management
+   ```
+
+4. 其他命令
+
+   1. 检测状态
+
+      ```shell
+      rabbitmqctl.bat status
+      ```
+
+   2. 其他命令
+
+      ![image-20200413124225426](.Message%20Queue/image-20200413124225426.png)
+
+> 参考[RabbitMQ的安装和配置化可视界面](https://www.cnblogs.com/wade-luffy/p/6003668.html) 		
 
 # 四 Spring AMQP
 
