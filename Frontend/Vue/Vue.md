@@ -979,6 +979,14 @@ this.$emit('update:title', newTitle)
 * 直接获取组件实例对象的引用, 缺点: 耦合度高.
 * 使用Vuex, 缺点: 小项目使用起来繁琐
 
+## 国际化i18n
+
+https://github.com/kazupon/vue-i18n
+
+## 自定义组件
+
+https://vuejs.org/v2/guide/custom-directive.html
+
 # Vue3
 
 Vue3采用Composition API的方式组织代码, 以解决以下问题:
@@ -992,10 +1000,6 @@ Vue3采用Composition API的方式组织代码, 以解决以下问题:
 > 该方式主要受React Hooks启发
 
 > 除此之外, Vue3还有其他的改动, 见[Vue3中不止composition-api，其他的提案(RFC)也很精彩](https://www.lizenghai.com/archives/42675.html)
-
-# 国际化i18n
-
-https://github.com/kazupon/vue-i18n
 
 # 踩过的坑
 
