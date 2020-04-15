@@ -978,14 +978,33 @@ this.$emit('update:title', newTitle)
 * 事件机制, 较为繁琐
 * 直接获取组件实例对象的引用, 缺点: 耦合度高.
 * 使用Vuex, 缺点: 小项目使用起来繁琐
+* 使用provide/inject, 功能贼强
 
 ## 国际化i18n
 
 https://github.com/kazupon/vue-i18n
 
-## 自定义组件
+## 自定义指令
 
 https://vuejs.org/v2/guide/custom-directive.html
+
+## mixins
+
+混合选项到组件中, 包含钩子, 并且先于组件的钩子调用.
+
+```javascript
+var mixin = {
+  created: function () { console.log(1) }
+}
+var vm = new Vue({
+  created: function () { console.log(2) },
+  mixins: [mixin]
+})
+// => 1
+// => 2
+```
+
+> 参考[mixins](https://vuejs.org/v2/api/#mixins)
 
 # Vue3
 
