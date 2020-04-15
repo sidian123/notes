@@ -842,7 +842,7 @@ public WebMvcConfigurer corsConfigurer() {
 
 它默认允许所有源访问，却不是通过`*`实现的，而是通过设置为http请求的`Origin`字段（请求源域名）实现的。因此不会与`allowCredentials`冲突。
 
-# 六 mybatis
+# 六 Mybatis
 
 ## 使用
 
@@ -921,7 +921,78 @@ mybatis注册mapper接口时，也会检测同包下是否存在对应xml文件�
 > - [mybatis-spring-boot-autoconfigure](<http://www.mybatis.org/spring-boot-starter/mybatis-spring-boot-autoconfigure/#>)
 > - [Spring Boot(六)：如何优雅的使用 Mybatis](https://www.cnblogs.com/ityouknow/p/6037431.html)：好文
 
-# 七 其他
+# 七 Test
+
+## 依赖
+
+```xml
+<dependency>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter-test</artifactId>
+    <scope>test</scope>
+    <exclusions>
+        <exclusion>
+            <groupId>org.junit.vintage</groupId>
+            <artifactId>junit-vintage-engine</artifactId>
+        </exclusion>
+    </exclusions>
+</dependency>
+```
+
+> `junit-vintage-engine`包用于在JUnit5中提供JUnit4的支持, 若需要, 则无需排除它.
+
+## Starter引入的内容
+
+* [spring-boot-test](https://docs.spring.io/spring/docs/5.2.5.RELEASE/spring-framework-reference/testing.html#testing-introduction)
+
+  含与Spring Boot应用测试的工具和集成支持.
+
+* `spring-boot-test-autoconfigure`
+
+  自动配置支持
+
+* [JUnit5](https://junit.org/junit5/)
+
+  Java程序单元测试的标准工具
+
+* [AssertJ](https://assertj.github.io/doc/)
+
+  A fluent assertion library.
+
+* [Hamcrest](https://github.com/hamcrest/JavaHamcrest)
+
+  A library of matcher objects (also known as constraints or predicates).
+
+* [Mockito](https://site.mockito.org/)
+
+  A Java mocking framework.
+
+* [JSONassert](https://github.com/skyscreamer/JSONassert)
+
+  An assertion library for JSON.
+
+* [JsonPath](https://github.com/jayway/JsonPath)
+
+  XPath for JSON.
+
+## 声明测试类
+
+* `@SpringBootTest`
+
+    用于帮助创建`SpringApplication`
+
+* `@RunWith(SpringRunner.class)`
+
+    使用JUnit4时必须添加. JUnit5可不用, 因为`@XXXTest`注解包含该注解功能.
+
+## 参考
+
+* [Testing](https://docs.spring.io/spring-boot/docs/2.2.6.RELEASE/reference/html/spring-boot-features.html#boot-features-testing)
+* [Testing2](https://docs.spring.io/spring/docs/5.2.5.RELEASE/spring-framework-reference/testing.html#testing-introduction)
+
+
+
+# 其他
 
 ## JSON
 
