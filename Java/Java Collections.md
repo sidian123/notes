@@ -160,16 +160,28 @@
 
 ## Map
 
-* 实现类: 与`Set`类似, 略
-  *  [`HashMap`](https://docs.oracle.com/javase/8/docs/api/java/util/HashMap.html) 
+* 实现类
+  
+  > 与`Set`类似, 略
+  
+*  [`HashMap`](https://docs.oracle.com/javase/8/docs/api/java/util/HashMap.html) 
   * [`TreeMap`](https://docs.oracle.com/javase/8/docs/api/java/util/TreeMap.html)
   * [`LinkedHashMap`](https://docs.oracle.com/javase/8/docs/api/java/util/LinkedHashMap.html) 
-
-* ~~相等, 当且仅当`Key`的`equals`和`hashcode`值一致~~
+  
 * 集合视图
   * `keySet` — the `Set` of keys contained in the `Map`.
   * `values` — The `Collection` of values contained in the `Map`. This `Collection` is not a `Set`, because multiple keys can map to the same value.
   * `entrySet` — the `Set` of key-value pairs contained in the `Map`. The `Map` interface provides a small nested interface called `Map.Entry`, the type of the elements in this `Set`.
+  
+* 实用方法
+
+  * `put()` 设置键值对
+  * `get()` 获取值
+  * `V getOrDefault(Object key, V defaultValue)` 获取值, 若获取不到, 则取`defaultValue`
+
+* 其他
+
+  * ~~元素相等, 当且仅当`Key`的`equals`和`hashcode`值一致~~
 
 # 三 流
 
