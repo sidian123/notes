@@ -2727,29 +2727,25 @@ for (Method m : clz.getDeclaredMethods()) {
 
 * 介绍
 
-  所谓动态代理，就是提供一个接口给Proxy类，Proxy类会在运行时自己实现该接口，然后返回该接口的实例，之后对该接口方法的调用都会传给一个处理类处理。它实际上动态实现了该接口，但在方法的实现中，会将该方法传递给了处理器（handler）的处理函数（invoke）。
+  动态代理, 即运行时动态实现提供的接口.
 
-* 类介绍
-  * Proxy
+* 重点类介绍
 
-    提供了静态方法创建动态代理类（dynamic proxy class）和实例（instance），也是所有被该类方法创建的动态代理类的父类。
+  * `Proxy`
 
-    调用getInvocationHandler方法可得到调用处理器（ invocation handler），getProxyClass可得到动态代理类的Class对象，newProxyInstance可以创建代理实例（proxy instance）。
+    提供代理接口的功能. 通过`newProxyInstance()`方法动态实现接口
 
-  * InvocationHandler
+  * `InvocationHandler`
 
-    调用处理器要实现的接口，代理实例被调用的方法会传入该接口的invoke方法中。
+    提供代理类的处理器, 作为`newProxyInstance()`方法的参数传入
 
-* 相关名词
+* 原理
 
-  * 动态代理类（dynamic proxy class）：运行时动态创建的类，实现了传入的接口，可通过Proxy.getProxyClass获得。
-  * 代理实例：动态代理类的对象，可由Proxy.newProxyInstance获得。
-
-  * 调用处理器（invocation handler）:实现了InvocationHandler的类，动态代理调用的方法都会被出给该类处理。
+  `Proxy`运行时实现**接口**, 接口方法的内部实现就是调用处理器的`invoke()`方法.
 
 * Demo
 
-  下面给出具体代码，该代码可以代理任意一个类， 然后计算每个方法被调用所花的时间。
+  下例中, 计算**被代理类**(`Map`)计算所需时间
 
   ```java
   public class App 
@@ -2803,11 +2799,10 @@ for (Method m : clz.getDeclaredMethods()) {
   	        return result;
   	    }
   	}
-  	
   }
   ```
 
-  输出：
+  输出
 
   ```
   excecuting put:179980ns
