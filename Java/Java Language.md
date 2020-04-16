@@ -2766,8 +2766,6 @@ for (Method m : clz.getDeclaredMethods()) {
   	 *
   	 */
   	 static class TimingDynamicInvocationHandler implements InvocationHandler {
-  		 
-  	
   	     //用于存放target的方法名和Method类的信息。
   	    private final Map<String, Method> methods = new HashMap<>();
   	    //被代理的对象，也就是真实对象（real object）
@@ -2784,8 +2782,7 @@ for (Method m : clz.getDeclaredMethods()) {
   	            this.methods.put(method.getName(), method);
   	        }
   	    }
-  	 
-  	    
+           
   	    @Override
   	    public Object invoke(Object proxy, Method method, Object[] args) 
   	      throws Throwable {
