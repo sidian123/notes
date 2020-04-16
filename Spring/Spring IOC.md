@@ -769,7 +769,7 @@ prototype作用域的Bean在来一个请求就会创建一个Bean实例。于其
 
 ## request、session、application作用域
 
-和web相关的作用域，需要使用WebApplicationContext容器。为了支持这些作用域，定义Bean之前小小的配置是需要的。在SpringMVC中，你可以web应用中的web.xml文件中声明`DispatcherServlet`, `RequestContextListener`, 或 `RequestContextFilter其中的任意一个都行，这几个。。东西都做了同一件事，就是绑定http请求对象到处理该请求的线程中（我懵懂中。。）。`
+和web相关的作用域，需要使用WebApplicationContext容器。为了支持这些作用域，定义Bean之前小小的配置是需要的。在SpringMVC中，你可以web应用中的web.xml文件中声明`DispatcherServlet`, `RequestContextListener`, 或 `RequestContextFilter`其中的任意一个都行，这几个。。东西都做了同一件事，就是绑定http请求对象到处理该请求的线程中（我懵懂中。。）。
 
 request作用域中的Bean每来一个请求时会被创建，不同请求中Bean互不相扰，请求被处理结束后，bean会被销毁。可以通过如下方式配置：
 
