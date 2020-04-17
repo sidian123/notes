@@ -842,6 +842,38 @@ public WebMvcConfigurer corsConfigurer() {
 
 它默认允许所有源访问，却不是通过`*`实现的，而是通过设置为http请求的`Origin`字段（请求源域名）实现的。因此不会与`allowCredentials`冲突。
 
+## 获取Servlet的类
+
+* 通过Controller参数注入
+
+  ```java
+  @RequestMapping("/test")
+  public String test(HttpServletRequest request,HttpSession session){
+      //...
+  }
+  ```
+
+* 通过属性注入
+
+  ```java
+  @Component
+  class XXXService{
+      @Autowired
+      private HttpServletRequest request;
+      @Autowired
+      private HttpSession session;
+  }
+  ```
+
+* 通过上下文
+
+  ```java
+  ServletRequestAttributes attributes = 
+          ((ServletRequestAttributes)RequestContextHolder.getRequestAttributes());
+  HttpServletRequest request=attributes.getRequest();
+  HttpSession session=attributes.getResponse();
+  ```
+
 # 六 Mybatis
 
 ## 使用
