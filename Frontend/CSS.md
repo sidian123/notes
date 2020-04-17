@@ -1329,7 +1329,7 @@ grid-template-columns: 100px 1fr;
 通过`repeat`函数可以重复生成列（或行）值，minmax可以指定列（或行）的最大和最小值。如：
 ```css
 /*按照每个item 200px的大小在一行上尽可能多的划分列，然后剩余空间等比例分配*/
-grid-template-columns:repeat(auto-fill,minmax(200px,1fr);
+grid-template-columns:repeat(auto-fill,minmax(200px,1fr));
 /*重复三行, 每行最小40px, 然后按照实际需求分配剩余空间*/
 grid-template-rows: repeat(3,minmax(40px,auto));
 ```
