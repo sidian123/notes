@@ -407,10 +407,11 @@ target阶段不能单独存在，而是包含在其他两个阶段内。比如�
   `DragEvent`接口代表拖拽事件.
 
 * 具体事件
-  * `drag `拖动
-  * `drop` 放下
-  * ...
-
+  * `drag `拖动一个可拖拽元素时触发
+  * `drop` 在可放置区域放下时
+  * `dragend` 无论是否拖拽成功, 拖拽结束后触发
+* ...
+  
 * `DataTransfer`
 
   拖拽事件的数据通过其属性`dataTransfer`来传递.
@@ -421,6 +422,52 @@ target阶段不能单独存在，而是包含在其他两个阶段内。比如�
   * `getData()` 获取指定类型的数据
   * `clearData()` 清楚指定类型的数据
   * ...
+  
+* 使用步骤
+
+  1. 拖拽的对象必须是可拖拽的, 需声明`draggable`属性
+
+      ```html
+      <p id="p1" draggable="true">This element is draggable.</p>
+      ```
+
+  2. `dragstart`事件上定义拖拽的数据
+  
+     ```javascript
+     function dragstart_handler(ev) {
+       // Add different types of drag data
+       ev.dataTransfer.setData("text/plain", ev.target.innerText);
+       ev.dataTransfer.setData("text/html", ev.target.outerHTML);
+       ev.dataTransfer.setData("text/uri-list", ev.target.ownerDocument.location.href);
+     }
+     ```
+  
+  3. 定义拖拽效果, 会影响拖拽过程中光标的样式, 可选值`copy|move|link`等
+  
+     ```java
+     function dragstart_handler(ev) {
+       ev.dataTransfer.dropEffect = "copy";
+     }
+     ```
+  
+  4. 定义可放置区域, 同时注册`dragover`,`ondrop`事件处理器即可
+  
+     ```html
+     <script>
+     function dragover_handler(ev) {
+      ev.preventDefault();
+      ev.dataTransfer.dropEffect = "move";
+     }
+     function drop_handler(ev) {
+      ev.preventDefault();
+      // Get the id of the target and add the moved element to the target's DOM
+      const data = ev.dataTransfer.getData("text/plain");
+      ev.target.appendChild(document.getElementById(data));
+     }
+     </script>
+     
+     <p id="target" ondrop="drop_handler(event)" ondragover="dragover_handler(event)">Drop Zone</p>
+     ```
 
 > 参考
 >
