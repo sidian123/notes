@@ -275,6 +275,10 @@ random[2][2];
   * 元素判断
     * `includes()` 是否包含元素
 
+* Reduce
+
+  对集合中的每个元素执行Reduce操作, 最终得到一个值
+
 > 参考[Array](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array)
 
 ### Null&Undefined
