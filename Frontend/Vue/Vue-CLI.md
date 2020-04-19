@@ -260,13 +260,26 @@ css处理前：
 
 ## eslint
 
-`vue.config.js`中添加选项`lintOnSave: true`(默认)，可以去掉一些无意义的错误。这里禁用eslint
+eslint帮助减少隐藏错误.
 
-```java
-module.exports = {
-    lintOnSave: false
-};
-```
+禁用的多种方法:
+
+1. `vue.config.js`中添加选项`lintOnSave: false`
+
+    ```java
+    module.exports = {
+        lintOnSave: false
+    };
+    ```
+    
+2. `.eslintrc.js`
+
+    ```javascript
+    module.exports = {
+        root:false,
+        //...
+    }
+    ```
 
 > 参考：[@vue/cli-plugin-eslint](<https://github.com/vuejs/vue-cli/tree/dev/packages/%40vue/cli-plugin-eslint>)
 
