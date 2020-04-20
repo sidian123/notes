@@ -255,6 +255,29 @@ src和alt必须指定，如果src指定的文件不存在时，会显示alt的�
 * `td`元素
   * `colspan` 跨多少列
   * `rowspan` 跨多少行
+  
+* `colgroup`, `col` 用于给列设置样式, 如
+
+  ```html
+  <table class="inner-table">
+      <colgroup>
+          <col style="width:25%"/>
+          <col style="width:25%"/>
+          <col style="width:50%"/>
+      </colgroup>
+      <tbody>
+          <tr>
+              <td>1</td>
+              <td>2</td>
+              <td>3</td>
+          </tr>
+          <tr>
+              <td colspan="2">4</td>
+              <td>5</td>
+          </tr>
+      </tbody>
+  </table>
+  ```
 
 ## frames
 
