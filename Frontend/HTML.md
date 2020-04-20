@@ -236,7 +236,7 @@ src和alt必须指定，如果src指定的文件不存在时，会显示alt的�
 
 通过样式可以控制列表的外观，通过语义使用它即可。
 
-## tables 元素
+## tables
 | Tag          | Description                                                  |
 | ------------ | :----------------------------------------------------------- |
 | `<table>`    | Defines a table                                              |
@@ -250,7 +250,14 @@ src和alt必须指定，如果src指定的文件不存在时，会显示alt的�
 | `<col>`      | Specifies column properties for each column within a `<colgroup>` element |
 | `<colgroup>` | Specifies a group of one or more columns in a table for formatting |
 
-## frames 元素
+其中
+
+* `td`元素
+  * `colspan` 跨多少列
+  * `rowspan` 跨多少行
+
+## frames
+
 在html5中，只有`<iframe>`可用了。
 
 示例：
@@ -275,7 +282,7 @@ src和alt必须指定，如果src指定的文件不存在时，会显示alt的�
 | `<fieldset>` | Groups related elements in a form                          |
 | `<legend>`   | Defines a caption for a `<fieldset>` element               |
 | `<datalist>` | Specifies a list of pre-defined options for input controls |
-| `<output>`   | Defines the result of a calculation                        
+| `<output>`   | Defines the result of a calculation     |
 
 示例：
 
@@ -289,10 +296,10 @@ src和alt必须指定，如果src指定的文件不存在时，会显示alt的�
 
 有name属性的表单元素才会被发送，发送给`form`元素action指定的网页，通过method指定的方法发送，然后在target指定的位置打开。
 
-### [form][6]
+### form
 
-[6]:https://www.w3schools.com/tags/tag_form.asp
 **属性：**
+
 1. action：指定发送数据的目的地（默认当前网页）
 2. method：发送的请求方式（默认get）
 3. target：响应展示的位置（默认_self）
@@ -303,6 +310,8 @@ src和alt必须指定，如果src指定的文件不存在时，会显示alt的�
 当上传文件时，method必须使用post方式，enctype使用multipart/form-data。
 
 [10]:https://www.w3schools.com/tags/att_form_enctype.asp
+
+> 参考[form](https://www.w3schools.com/tags/tag_form.asp)
 
 ### [input][7]
 
