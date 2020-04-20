@@ -235,9 +235,18 @@ $border-dark: rgba($base-color, 0.88);
 }
 ```
 
------
+> 参考[variables](https://sass-lang.com/documentation/variables)
 
-还支持运算, 见[Operators](https://sass-lang.com/documentation/operators)
+## 表达式运算
+
+如
+
+```scss
+@debug 1 + 2 * 3 == 1 + (2 * 3); // true
+width: 12px * 6 ;
+```
+
+> 参考[Operators](https://sass-lang.com/documentation/operators)
 
 ## 插值
 
@@ -362,6 +371,7 @@ $border-dark: rgba($base-color, 0.88);
     .mail-icon {
       @include replace-text(url("/images/mail.svg"), 0);
     }
+    ```
 ```
 
 * 除了按照位置传参外, 还可按名字传参
@@ -380,7 +390,7 @@ $border-dark: rgba($base-color, 0.88);
     @include square(100px, $radius: 4px);
   }
   
-  ```
+```
 
 * 其他特性, 略
 
