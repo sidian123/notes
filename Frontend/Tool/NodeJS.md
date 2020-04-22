@@ -233,9 +233,22 @@ $ npm run
 >参考：[https://www.tutorialdocs.com/article/npm-scripts-tutorial.html](https://www.tutorialdocs.com/article/npm-scripts-tutorial.html)
 
 ## npm link
-一般情况下，全局package不能直接引入，需要npm link创建符号链接。或者直接指定绝对路径。
 
-略
+* 介绍
+
+  一般情况下，全局package不能直接引入，需要npm link创建符号链接。或者直接指定绝对路径。
+
+* 原理&使用
+
+  Package linking is a two-step process.
+
+  First, `npm link` in a package folder will create a symlink in the global folder `{prefix}/lib/node_modules/` that links to the package where the `npm link` command was executed. (see `npm-config(7)` for the value of `prefix`). It will also link any bins in the package to `{prefix}/bin/{name}`.
+
+  Next, in some other location, `npm link package-name` will create a symbolic link from globally-installed `package-name` to `node_modules/` of the current folder.
+  
+  Note that `package-name` is taken from `package.json`, not from directory name.
+
+> 参考[npm-link](https://docs.npmjs.com/cli/link)
 
 ## npx
 
@@ -425,4 +438,4 @@ nvm (nodejs version manager) 用于管理多版本nodejs的工具
 * [What's the difference between dependencies, devDependencies and peerDependencies in npm package.json file?](https://stackoverflow.com/questions/18875674/whats-the-difference-between-dependencies-devdependencies-and-peerdependencies)
 * [NPM5, What is the difference of package-lock.json with package.json?](https://stackoverflow.com/questions/48456236/npm5-what-is-the-difference-of-package-lock-json-with-package-json)
 
-[https://github.com/nodejs/LTS#lts-schedule1]: 
+* https://github.com/nodejs/LTS#lts-schedule1
