@@ -938,10 +938,9 @@ this.$emit('update:title', newTitle)
 * Basic
 
   * `provide`从父组件中提供一个**上下文**, 通过`inject`可以在子组件中共享上下文.
-
-  * `provide`/`inject`都在`props`和`data`初始化后解析.
+*  `provide/inject`在`props`和`data`初始化**前**解析 (V2.2.1+版本有效)
   * Vue不会主动让上下文可响应的, 仅自己提供的属性是可响应时, 才是可响应的属性.
-
+  
 * 使用
 
   * 基本使用
@@ -967,7 +966,67 @@ this.$emit('update:title', newTitle)
     }
     ```
 
+    若上下文是个对象, 则将`provide`声明为方法
     
+    ```javascript
+      provide () {
+        return {
+          foo: 'bar'
+        }
+      }
+    ```
+    
+  * 使用Symbol做为Key
+  
+    ```javascript
+    const s = Symbol()
+    
+    const Provider = {
+      provide () {
+        return {
+          [s]: 'foo'
+        }
+      }
+    }
+    
+    const Child = {
+      inject: { s },
+      // ...
+    }
+    ```
+  
+  * 注入的上下文属性可有默认值, 可修改名字
+  
+    ```javascript
+    const Child = {
+      inject: {
+        foo: {
+          from: 'bar',
+          default: 'foo'//也可以是函数
+        }
+      }
+    }
+    ```
+  
+  * 提供可响应对象
+  
+    ```javascript
+      data() {
+        return {
+          sharedState: {
+            expanded: false
+          }
+        }
+      },
+    
+      provide() {
+        return {
+          accordionItemState: this.sharedState
+        }
+      },
+    ```
+
+> 详细参考[provide/inject](https://vuejs.org/v2/api/#provide-inject)
 
 # 十七 其他
 ## 获取元素
