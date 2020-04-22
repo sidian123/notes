@@ -1025,6 +1025,8 @@ this.$emit('update:title', newTitle)
         }
       },
     ```
+    
+    > 如何可响应, 可参考[How to make provide/inject reactive](https://blog.logrocket.com/how-to-make-provide-inject-reactive/)
 
 > 详细参考[provide/inject](https://vuejs.org/v2/api/#provide-inject)
 
