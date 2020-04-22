@@ -938,7 +938,7 @@ this.$emit('update:title', newTitle)
 * Basic
 
   * `provide`从父组件中提供一个**上下文**, 通过`inject`可以在子组件中共享上下文.
-*  `provide/inject`在`props`和`data`初始化**前**解析 (V2.2.1+版本有效)
+  * `provide`在`props`和`data`初始化**后**解析;  `inject`在`props`和`data`初始化**前**解析 (2.2.1+版本有效)
   * Vue不会主动让上下文可响应的, 仅自己提供的属性是可响应时, 才是可响应的属性.
   
 * 使用
