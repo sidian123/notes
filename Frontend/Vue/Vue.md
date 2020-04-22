@@ -555,26 +555,6 @@ Vue提供了`App.set()`方法来添加Reactive对象, 即动态中通过`App.set
 	
 * 系统键值modifiers、鼠标按键modifers：[System Modifier Keys](https://vuejs.org/v2/guide/events.html#System-Modifier-Keys)
 
-# 十 Form Input绑定
-`v-model`用于对表单元素进行双向绑定，略！但记住：
-```html
-<input v-model="searchText">
-```
-等于
-```html
-<input
-  v-bind:value="searchText"
-  v-on:input="searchText = $event.target.value"
->
-```
-如果是组件，则等于：
-```html
-<custom-input
-  v-bind:value="searchText"
-  v-on:input="searchText = $event"
-></custom-input>
-```
-这里的`$event`是组件发出自定义事件时传的参数。与`v-on`的`$event`不同。
 # 十一 组件基础
 * 尽管组件本质上是一个Vue实例。但在html中仍不能单独使用，需要放入vue实例的html元素中；组件通过js代码实例化可以作为根组件。
 * Vue实例有特定于自己的根选项：`el`
@@ -730,14 +710,14 @@ Vue.component('alert-box', {
 * `<script type="text/x-template">`
 
 
-# 十二 组件注册
-## 全局注册
+## 组件注册
+### 全局注册
 ```javascript
 Vue.component('my-component-name', { /* ... */ })
 ```
 第一个参数为组件名，第二个参数为选项对象。全局注册的组件，可以直接在其他组件中使用。
 
-## 局部注册
+### 局部注册
 创建Vue实例时，可将组件传给选项对象的components数组，如：
 ```javascript
 //选项对象
@@ -754,7 +734,7 @@ new Vue({
 })
 ```
 并且该组件只能在注册的父组件中使用。
-## 组件名
+### 组件名
 * kebab-case（推荐）：注册组件名如`my-component-name`，可以在html和模板中直接使用。
 * PascalCase：注册组件名如`MyComponentName`，此时在html中只能使用对应的kebab-case命令，但在模板中两则都可使用。(即存在自动转换过程)
 
@@ -793,9 +773,6 @@ Vue.component('base-input', {
 >注意，都不会影响`class`和`style`属性。
 
 参考：[props](https://vuejs.org/v2/api/#props);
-
-# 十四 事件
-略
 
 # 十五 slots
 
@@ -902,38 +879,39 @@ Vue.component('base-input', {
 
 * `v-slot:`的缩写为`#`，使用时后面必须存在参数。
 
-# 十六 例子
-## 指令与vue实例
-```html
-<div id="app-5">
-  <p>{{ message }}</p>
-  <button v-on:click="reverseMessage">Reverse Message</button>
-</div>
-```
-```javascript
-//创建vue实例时，需要传入选项对象
-var app5 = new Vue({
-  //绑定的element
-  el: '#app-5',
-  //data里的属性最终成为vue实例的属性
-  data: {
-    message: 'Hello Vue.js!'
-  },
-  //methods中的属性最终成为vue实例的方法，因此this指向vue实例
-  methods: {
-    reverseMessage: function () {
-      this.message = this.message.split('').reverse().join('')
-    }
-  }
-})
-```
-# 十七 其他
-## 获取元素
-* `$root`：访问组件的根实例
-* `$parent`：访问子组件的父组件
-* `$refs`：子元素或子组件上添加`ref`属性，指定引用id，可通过`$refs`来获取该DOM元素或组件实例。
-* 	`$el`：组件的根DOM元素
+# 数据共享
 
+> 又称*子父组件数据双向绑定*
+
+## 方案
+
+* `v-model` 父子组件仅可绑定一个属性
+* `.sync` 可绑定多个
+* 事件机制, 较为繁琐
+* 直接获取组件实例对象的引用, 缺点: 耦合度高.
+* 使用Vuex, 缺点: 小项目使用起来繁琐
+* 使用provide/inject, 功能贼强
+
+## v-model
+`v-model`用于对表单元素进行双向绑定，略！但记住：
+```html
+<input v-model="searchText">
+```
+等于
+```html
+<input
+  v-bind:value="searchText"
+  v-on:input="searchText = $event.target.value"
+>
+```
+如果是组件，则等于：
+```html
+<custom-input
+  v-bind:value="searchText"
+  v-on:input="searchText = $event"
+></custom-input>
+```
+这里的`$event`是组件发出自定义事件时传的参数。与`v-on`的`$event`不同。
 
 ## .sync
 用于双向绑定属性的，与`v-model`类似。
@@ -955,6 +933,48 @@ this.$emit('update:title', newTitle)
 ```
 >可以发现，`.sync`与`v-model`监督的事件不同，`.sync`监听的事件前有`update:`前缀，`v-model`默认监听`input`事件。
 
+## provide/inject
+
+* Basic
+
+  * `provide`从父组件中提供一个**上下文**, 通过`inject`可以在子组件中共享上下文.
+
+  * `provide`/`inject`都在`props`和`data`初始化后解析.
+  * Vue不会主动让上下文可响应的, 仅自己提供的属性是可响应时, 才是可响应的属性.
+
+* 使用
+
+  * 基本使用
+
+    父组件提供上下文, 子组件使用
+
+    ```javascript
+    // parent component providing 'foo'
+    var Provider = {
+      provide: {
+        foo: 'bar'
+      },
+      // ...
+    }
+    
+    // child component injecting 'foo'
+    var Child = {
+      inject: ['foo'],
+      created () {
+        console.log(this.foo) // => "bar"
+      }
+      // ...
+    }
+    ```
+
+    
+
+# 十七 其他
+## 获取元素
+* `$root`：访问组件的根实例
+* `$parent`：访问子组件的父组件
+* `$refs`：子元素或子组件上添加`ref`属性，指定引用id，可通过`$refs`来获取该DOM元素或组件实例。
+* 	`$el`：组件的根DOM元素
 
 ## 插件
 
@@ -975,15 +995,6 @@ this.$emit('update:title', newTitle)
    > 仅销毁组件, DOM中已存在的元素需手动删除.
 
 > 动态创建Element UI的组件? 它的每个组件可直接传入`Vue.extend()`中
-
-## 子父组件数据双向绑定
-
-* `v-model` 父子组件仅可绑定一个属性
-* `.sync` 可绑定多个
-* 事件机制, 较为繁琐
-* 直接获取组件实例对象的引用, 缺点: 耦合度高.
-* 使用Vuex, 缺点: 小项目使用起来繁琐
-* 使用provide/inject, 功能贼强
 
 ## 国际化i18n
 
@@ -1011,6 +1022,34 @@ var vm = new Vue({
 
 > 参考[mixins](https://vuejs.org/v2/api/#mixins)
 
+## Demo
+
+* 指令与vue实例
+
+    ```html
+    <div id="app-5">
+      <p>{{ message }}</p>
+      <button v-on:click="reverseMessage">Reverse Message</button>
+    </div>
+    ```
+    ```javascript
+    //创建vue实例时，需要传入选项对象
+    var app5 = new Vue({
+      //绑定的element
+      el: '#app-5',
+      //data里的属性最终成为vue实例的属性
+      data: {
+        message: 'Hello Vue.js!'
+      },
+      //methods中的属性最终成为vue实例的方法，因此this指向vue实例
+      methods: {
+        reverseMessage: function () {
+          this.message = this.message.split('').reverse().join('')
+        }
+      }
+    })
+    ```
+
 # Vue3
 
 Vue3采用Composition API的方式组织代码, 以解决以下问题:
@@ -1037,10 +1076,10 @@ Vue3采用Composition API的方式组织代码, 以解决以下问题:
 
 # 参考
 
-* [vue api](https://vuejs.org/v2/api/#Options-Data)
+* 参考
+  * [vue api](https://vuejs.org/v2/api/#Options-Data)
 
-# 推荐阅读
+* 推荐阅读
+  * [React.js与Vue.js：流行框架的比较](https://baijiahao.baidu.com/s?id=1608099200125495014&wfr=spider&for=pc)
 
-* [React.js与Vue.js：流行框架的比较](https://baijiahao.baidu.com/s?id=1608099200125495014&wfr=spider&for=pc)
-
-* [Vue中数据响应式原理---对象的变化侦测](https://blog.csdn.net/Riona_cheng/article/details/102882160)
+  * [Vue中数据响应式原理---对象的变化侦测](https://blog.csdn.net/Riona_cheng/article/details/102882160)
