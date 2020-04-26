@@ -396,6 +396,12 @@ JShell可以使用项目依赖的库, 如果还想访问自身项目的类, 需�
 
 > 虽然Intellij也有这功能, 但是不完美
 
+## Eslint
+
+Idea会自动去`node_modules`中查找eslint的包, 和当前工作目录和父目录中查找eslint的配置文件.
+
+若要自动修复当前页面, 使其符合eslint要求, 右键, 选择`Fix ESLint Problems`
+
 #  其他
 
 ## 清除缓存
