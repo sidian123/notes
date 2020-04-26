@@ -874,11 +874,103 @@ public WebMvcConfigurer corsConfigurer() {
   HttpSession session=attributes.getResponse();
   ```
 
+# 六 数据访问
 
+## 数据库
 
-# 六 Mybatis
+支持多种数据库, 通过配置数据源的方式配置使用的数据库, 数据源默认用的[HikariCP](https://github.com/brettwooldridge/HikariCP). 接着, 可以使用其他支持的ORM框架.
 
-## 使用
+### MySQL
+
+引入MySQL依赖
+
+```xml
+<dependency>
+    <groupId>mysql</groupId>
+    <artifactId>mysql-connector-java</artifactId>
+</dependency>
+```
+
+配置数据源
+
+```properties
+spring:
+  datasource:
+    url: jdbc:mysql://localhost:3306/test?useSSL=false&serverTimezone=GMT%2B8&allowPublicKeyRetrieval=true
+    username: root
+    password: 123456
+```
+
+### H2
+
+* 引入H2依赖
+
+    ```xml
+    <dependency>
+        <groupId>org.hsqldb</groupId>
+        <artifactId>hsqldb</artifactId>
+        <scope>runtime</scope>
+    </dependency>
+    ```
+
+* 配置数据源
+
+    ```properties
+    # 数据存内存
+    spring.datasource.url=jdbc:h2:mem:testdb
+    spring.datasource.driverClassName=org.h2.Driver
+    # 可选, 默认用户名sa和空密码, 这里会修改其值
+    spring.datasource.username=sa
+    spring.datasource.password=password
+    ```
+
+	数据也是可以持久化的
+
+    ```properties
+    # 数据存文件
+    spring.datasource.url=jdbc:h2:file:/data/demo
+    ```
+
+	> 当`url`指向的数据库不存在的时候, 会自动创建
+
+* 指定初始化的Scheme和data
+
+    ```properties
+    spring.datasource.schema=classpath:db/schema.sql
+    spring.datasource.data=classpath:db/data.sql
+    ```
+
+    > 默认`classpath:schema.sql`和`classpath:data.sql`
+    
+* H2内置了可视化页面
+
+    * `spring.h2.console.enabled` (默认`false`)
+
+      是否使能可视化页面
+
+    * `spring.h2.console.path` (默认`/h2-console`)
+
+      页面路径
+
+    * `spring.h2.console.settings.trace` (默认`false`)
+
+      是否使能日志输出
+
+    * `spring.h2.console.settings.web-allow-others` (默认`false`)
+
+      是否使能远程访问
+
+    默认访问路径: http://localhost:8080/h2-console/ , 然后填上上述配置的账户密码, 或者未设置则使用默认账户密码.
+
+* 参考
+  * [Spring Boot集成H2数据库](https://www.jianshu.com/p/d1bdbee2dd8e)
+  * [Spring Boot With H2 Database](https://www.baeldung.com/spring-boot-h2-database)
+
+## ORM框架
+
+### 六 Mybatis
+
+#### 使用
 
 maven中加入依赖：
 
@@ -926,7 +1018,7 @@ public interface UserDao {
 >
 > Settings - Editor - Inspections - Spring - Spring Core - Code - Autowiring for Bean Class - disable
 
-## 配置
+#### 配置
 
 mybatis与spring boot整合后，也可以在spring boot的配置文件中配置mybatis。部分属性如下：
 
