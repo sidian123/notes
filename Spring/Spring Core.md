@@ -87,10 +87,17 @@ Spring提供了注解来异步执行和调度任务.
       @Override
       public Executor getAsyncExecutor() {
           ThreadPoolTaskExecutor executor = new ThreadPoolTaskExecutor();
+          //设置线程约束
           executor.setCorePoolSize(7);
           executor.setMaxPoolSize(42);
           executor.setQueueCapacity(11);
+          //线程池前缀
           executor.setThreadNamePrefix("MyExecutor-");
+          //线程数达到最大数量时,在调用者自己的线程中执行
+          executor.setRejectedExecutionHandler(new ThreadPoolExecutor.CallerRunsPolicy());
+          //当关闭时,等待所有任务完成才关闭,而不是中断
+          executor.setWaitForTasksToCompleteOnShutdown(true);
+          //初始化
           executor.initialize();
           return executor;
       }
