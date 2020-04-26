@@ -924,14 +924,16 @@ spring:
     spring.datasource.password=password
     ```
 
-	数据也是可以持久化的
+    > url上可设置兼容模式`jdbc:h2:mem:testdb;MODE=MYSQL;`
+
+    数据也是可以持久化的
 
     ```properties
     # 数据存文件
     spring.datasource.url=jdbc:h2:file:/data/demo
     ```
 
-	> 当`url`指向的数据库不存在的时候, 会自动创建
+    > 当`url`指向的数据库不存在的时候, 会自动创建
 
 * 指定初始化的Scheme和data
 
