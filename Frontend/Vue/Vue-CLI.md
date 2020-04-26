@@ -278,6 +278,8 @@ eslint帮助减少隐藏错误.
     /* eslint-disable */
     ```
 
+    > 好像文件尾也不用添加注释
+
 3. 禁用eslint, 有多种方案
 
     1. 如果用的vue-cli2, 在`config/index.js`中, 添加
