@@ -1113,12 +1113,28 @@ mybatis注册mapper接口时，也会检测同包下是否存在对应xml文件�
 
     使用JUnit4时必须添加. JUnit5可不用, 因为`@XXXTest`注解包含该注解功能.
 
+## 数据库模拟
+
+通常使用内存数据库H2作为测试数据库. 可以通过配置指定数据库的Scheme和Data. 也可以通过`@Sql`注解指定测试用例要加载的数据.
+
+下面给出个使用例子, 详细见Javadoc
+
+```java
+@Test
+@Sql(executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD, value = "classpath:h2/init-data-message.sql")
+public void selectMessageUsercodePage() {
+    MessageUsercodeCondition condition = new MessageUsercodeCondition();
+    condition.setPageNum(2);
+    condition.setNumPerPage(5);
+    Page<MessageUsercode> page = messageUsercodeService.selectMessageUsercodePage(condition);
+    Assert.assertEquals(page.getPageNum(), 2);
+}
+```
+
 ## 参考
 
 * [Testing](https://docs.spring.io/spring-boot/docs/2.2.6.RELEASE/reference/html/spring-boot-features.html#boot-features-testing)
 * [Testing2](https://docs.spring.io/spring/docs/5.2.5.RELEASE/spring-framework-reference/testing.html#testing-introduction)
-
-
 
 # 其他
 
