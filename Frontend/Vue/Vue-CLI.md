@@ -264,24 +264,52 @@ eslint帮助减少隐藏错误.
 
 禁用的多种方法:
 
-1. `vue.config.js`中添加选项`lintOnSave: false`
-
-    ```java
-    module.exports = {
-        lintOnSave: false
-    };
-    ```
-    
-2. `.eslintrc.js`
+1. 禁止一行eslint校验
 
     ```javascript
-    module.exports = {
-        root:false,
-        //...
-    }
+    javascript code // eslint-disable-line
+    ```
+    
+2. 禁止整个文件的eslint校验
+
+    ```javascript
+    /* eslint-disable */
+    your code
+    /* eslint-disable */
     ```
 
-> 参考：[@vue/cli-plugin-eslint](<https://github.com/vuejs/vue-cli/tree/dev/packages/%40vue/cli-plugin-eslint>)
+3. 禁用eslint, 有多种方案
+
+    1. 如果用的vue-cli2, 在`config/index.js`中, 添加
+
+        ```javascript
+        useEslint: false
+        ```
+
+    2. 如果用的vue-cli3, 在`.eslintrc.js`中设置
+
+        ```javascript
+        root: false
+        ```
+
+    3. 移除`@vlue/cli-plugin-eslint`包
+
+    4. 将目录添加到`eslintignore`目录
+
+        ```
+        /build/
+        /config/
+        /dist/
+        /*.js
+        /test/unit/coverage/
+        
+        /000-xyz/ 
+        ```
+
+> 参考：
+>
+> * [@vue/cli-plugin-eslint](<https://github.com/vuejs/vue-cli/tree/dev/packages/%40vue/cli-plugin-eslint>)
+> * [How can I disable eslint correct?](https://stackoverflow.com/questions/58634424/how-can-i-disable-eslint-correct)
 
 # 十 其他
 
