@@ -1051,7 +1051,9 @@ mybatis注册mapper接口时，也会检测同包下是否存在对应xml文件�
 
 # 七 Test
 
-## 依赖
+## 开始
+
+### 依赖
 
 ```xml
 <dependency>
@@ -1069,7 +1071,7 @@ mybatis注册mapper接口时，也会检测同包下是否存在对应xml文件�
 
 > `junit-vintage-engine`包用于在JUnit5中提供JUnit4的支持, 若需要, 则无需排除它.
 
-## Starter引入的内容
+### Starter引入的内容
 
 * [spring-boot-test](https://docs.spring.io/spring/docs/5.2.5.RELEASE/spring-framework-reference/testing.html#testing-introduction)
 
@@ -1103,7 +1105,7 @@ mybatis注册mapper接口时，也会检测同包下是否存在对应xml文件�
 
   XPath for JSON.
 
-## 声明测试类
+### 测试类声明
 
 * `@SpringBootTest`
 
@@ -1112,6 +1114,14 @@ mybatis注册mapper接口时，也会检测同包下是否存在对应xml文件�
 * `@RunWith(SpringRunner.class)`
 
     使用JUnit4时必须添加. JUnit5可不用, 因为`@XXXTest`注解包含该注解功能.
+
+## 使用
+
+### 框架
+
+
+
+
 
 ## 数据库模拟
 
@@ -1130,6 +1140,8 @@ public void selectMessageUsercodePage() {
     Assert.assertEquals(page.getPageNum(), 2);
 }
 ```
+
+
 
 ## 参考
 
