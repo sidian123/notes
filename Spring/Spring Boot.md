@@ -1119,11 +1119,33 @@ mybatis注册mapper接口时，也会检测同包下是否存在对应xml文件�
 
 ### 框架
 
+* JUnit5
 
+  用于声明测试用例, 或测试用例前后执行的方法
 
+  * `@Test`: 标注方法为**测试方法**. 其中`timeout`参数指定失败时间
+  * `@BeforeClass`: 所有测试方法开始前调用, 且**仅一次**
+  * `@Before`: 每个测试方法前**都调用**
+  * `@AfterClass`: 所有测试方法结束后调用, 且**仅一次**
+  * `@After`: 每个测试方法结束后**都调用**
 
+* AssertJ
 
-## 数据库模拟
+  在某处断言某个结果, 全部断言成功则测试成功, 否则失败.
+
+  - `void assertEquals(boolean expected,boolean actual)`: checks that two primitives/objects are equal. It is overloaded.
+  - `void assertTrue(boolean condition)`: checks that a condition is true.
+  - `void assertFalse(boolean condition)`: checks that a condition is false.
+  - `void assertNull(Object obj)`: checks that object is null.
+  - `void assertNotNull(Object obj)`: checks that object is not null.
+
+  除此之外, 测试函数不抛出异常也是算测试成功的.
+
+* Mockito
+
+  
+
+### 数据库模拟
 
 通常使用内存数据库H2作为测试数据库. 可以通过配置指定数据库的Scheme和Data. 也可以通过`@Sql`注解指定测试用例要加载的数据.
 
