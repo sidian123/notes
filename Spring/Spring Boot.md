@@ -1204,7 +1204,7 @@ mybatis注册mapper接口时，也会检测同包下是否存在对应xml文件�
 
 ### Spring Test
 
-主要是`MockMvc`类, 默认HTTP请求, 同时断言, 如
+主要是`MockMvc`类, 模拟HTTP请求, 同时断言, 如
 
 ```java
 mvc.perform(get("/api/employees")
