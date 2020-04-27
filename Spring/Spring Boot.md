@@ -1051,7 +1051,9 @@ mybatis注册mapper接口时，也会检测同包下是否存在对应xml文件�
 
 # 七 Test
 
-## 依赖
+## 开始
+
+### 依赖
 
 ```xml
 <dependency>
@@ -1065,11 +1067,18 @@ mybatis注册mapper接口时，也会检测同包下是否存在对应xml文件�
         </exclusion>
     </exclusions>
 </dependency>
+<dependency>
+    <groupId>com.h2database</groupId>
+    <artifactId>h2</artifactId>
+    <scope>test</scope>
+</dependency>
 ```
 
 > `junit-vintage-engine`包用于在JUnit5中提供JUnit4的支持, 若需要, 则无需排除它.
 
-## Starter引入的内容
+> H2是测试时用到的内存数据库
+
+### Starter引入的内容
 
 * [spring-boot-test](https://docs.spring.io/spring/docs/5.2.5.RELEASE/spring-framework-reference/testing.html#testing-introduction)
 
@@ -1103,7 +1112,7 @@ mybatis注册mapper接口时，也会检测同包下是否存在对应xml文件�
 
   XPath for JSON.
 
-## 声明测试类
+### 测试类声明
 
 * `@SpringBootTest`
 
@@ -1113,7 +1122,101 @@ mybatis注册mapper接口时，也会检测同包下是否存在对应xml文件�
 
     使用JUnit4时必须添加. JUnit5可不用, 因为`@XXXTest`注解包含该注解功能.
 
-## 数据库模拟
+> 在后端三层结构中, 若仅测试其中一层, 则无需`@SpringBootTest`注解, 因为其依赖可以被mock掉
+
+## 框架使用
+
+> 下面讲的, 未涵盖所有, 还需看*实战*小节
+
+### JUnit5
+
+用于声明测试用例, 或测试用例前后执行的方法
+
+* `@Test`: 标注方法为**测试方法**. 其中`timeout`参数指定失败时间
+* `@BeforeClass`: 所有测试方法开始前调用, 且**仅一次**
+* `@Before`: 每个测试方法前**都调用**
+* `@AfterClass`: 所有测试方法结束后调用, 且**仅一次**
+* `@After`: 每个测试方法结束后**都调用**
+
+### AssertJ
+
+在某处断言某个结果, 全部断言成功则测试成功, 否则失败.
+
+- `void assertEquals(boolean expected,boolean actual)`: checks that two primitives/objects are equal. It is overloaded.
+- `void assertTrue(boolean condition)`: checks that a condition is true.
+- `void assertFalse(boolean condition)`: checks that a condition is false.
+- `void assertNull(Object obj)`: checks that object is null.
+- `void assertNotNull(Object obj)`: checks that object is not null.
+- ...
+
+除此之外, 测试函数不抛出异常也是算测试成功的.
+
+### Mockito
+
+用于模拟对象
+
+* 验证行为
+
+  ```java
+  @Test
+  public void verify_behaviour(){
+      //模拟创建一个List对象
+      List mock = mock(List.class);
+      //使用mock的对象
+      mock.add(1);
+      mock.clear();
+      //验证add(1)和clear()行为是否发生
+      verify(mock).add(1);
+      verify(mock).clear();
+  }
+  ```
+
+* 模拟对象返回的结果
+
+  ```java
+  @Test
+  public void when_thenReturn(){
+      //mock一个Iterator类
+      Iterator iterator = mock(Iterator.class);
+      //预设当iterator调用next()时第一次返回hello，第n次都返回world
+      when(iterator.next()).thenReturn("hello").thenReturn("world");
+      //使用mock的对象
+      String result = iterator.next() + " " + iterator.next() + " " + iterator.next();
+      //验证结果
+      assertEquals("hello world world",result);
+  }
+  ```
+
+  ```java
+  @Test(expected = IOException.class)
+  public void when_thenThrow() throws IOException {
+      OutputStream outputStream = mock(OutputStream.class);
+      OutputStreamWriter writer = new OutputStreamWriter(outputStream);
+      //预设当流关闭时抛出异常
+      doThrow(new IOException()).when(outputStream).close();
+      outputStream.close();
+  }
+  ```
+
+> Spring提供的`@MockBean`很方便的mock被注解的字段.
+
+> 参考[Mockito教程](https://blog.csdn.net/xiang__liu/article/details/81147933)
+
+### Spring Test
+
+主要是`MockMvc`类, 默认HTTP请求, 同时断言, 如
+
+```java
+mvc.perform(get("/api/employees")
+            .contentType(MediaType.APPLICATION_JSON))
+    .andExpect(status().isOk())
+    .andExpect(jsonPath("$", hasSize(1)))
+    .andExpect(jsonPath("$[0].name", is(alex.getName())));
+```
+
+## 实战
+
+### 测试Dao
 
 通常使用内存数据库H2作为测试数据库. 可以通过配置指定数据库的Scheme和Data. 也可以通过`@Sql`注解指定测试用例要加载的数据.
 
@@ -1131,10 +1234,97 @@ public void selectMessageUsercodePage() {
 }
 ```
 
+### 测试Service
+
+仅测试Service时, 依赖的Dao可以mock掉.
+
+```java
+@SpringBootTest
+@RunWith(SpringRunner.class)
+public class EmployeeServiceTest{
+    //mock依赖
+    @MockBean
+    private EmployeeRepository employeeRepository;
+    
+    //执行测试用例前, 先准备好依赖调用的结果
+    @Before
+    public void setUp() {
+        Employee alex = new Employee("alex");
+        Mockito.when(employeeRepository.findByName(alex.getName()))
+          .thenReturn(alex);
+    }
+    
+    //执行测试用例
+    @Test
+    public void test() {
+        //查询数据
+        String name = "alex";
+        Employee found = employeeService.getEmployeeByName(name);
+		//断言
+        assertThat(found.getName())
+          .isEqualTo(name);
+    }
+}
+```
+
+### 测试Controller
+
+仅测试Controller, mock其依赖即可
+
+```java
+@SpringBootTest
+@RunWith(SpringRunner.class)
+public class EmployeeRestControllerIntegrationTest {
+ 	//用于模拟HTTP请求
+    @Autowired
+    private MockMvc mvc;
+ 	//mock依赖
+    @MockBean
+    private EmployeeService service;
+ 	//执行测试用例
+    @Test
+    public void test() throws Exception {
+
+        Employee alex = new Employee("alex");
+
+        List<Employee> allEmployees = Arrays.asList(alex);
+
+        given(service.getAllEmployees()).willReturn(allEmployees);
+
+        mvc.perform(get("/api/employees")
+          .contentType(MediaType.APPLICATION_JSON))
+          .andExpect(status().isOk())
+          .andExpect(jsonPath("$", hasSize(1)))
+          .andExpect(jsonPath("$[0].name", is(alex.getName())));
+    }
+}
+```
+
+### 集成测试
+
+集成测试, 就是基本不mock依赖, 直接测试Dao, Service, Controller三层代码. 当然, 若是微服务, 外部依赖还是要mock的.
+
+```java
+@SpringBootTest
+@RunWith(SpringRunner.class)
+public class EmployeeRestControllerIntegrationTest {
+ 	//用于模拟HTTP请求
+    @Autowired
+    private MockMvc mvc;
+ 	//依赖, 不mock了
+    @Autowired
+    private EmployeeRepository repository;
+ 
+    // write test cases here
+}
+```
+
 ## 参考
 
 * [Testing](https://docs.spring.io/spring-boot/docs/2.2.6.RELEASE/reference/html/spring-boot-features.html#boot-features-testing)
 * [Testing2](https://docs.spring.io/spring/docs/5.2.5.RELEASE/spring-framework-reference/testing.html#testing-introduction)
+* [Testing in Spring Boot](https://www.baeldung.com/spring-boot-testing)
+* [Mockito教程](https://blog.csdn.net/xiang__liu/article/details/81147933)
 
 # 其他
 
