@@ -23,3 +23,20 @@
 
   Command-Q 关闭当前程序
 
+* 查单词
+
+  Option-Z （需要存在有道词典）
+
+*  打开搜索
+
+  Command-Space
+
+# 命令
+
+* 打开Finder
+
+  ```shell
+  open <path>
+  ```
+
+  
