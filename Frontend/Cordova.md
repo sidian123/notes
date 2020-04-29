@@ -1,63 +1,4 @@
-# 引言
-
-* 介绍
-
-  提供以web技术编写移动端应用的功能.
-
-* 原理
-
-  将web页面嵌入到APP中, 通过WebView渲染, 同时以插件的方式将原生系统组件暴露出来
-
-* 使用方式
-
-  * 打包成完整APP
-  * 仅嵌入到原生APP中
-
-# 基础使用
-
-* 安装Cordova
-
-  ```shell
-  npm install -g cordova
-  ```
-
-* 新建项目
-
-  ```shell
-  cordova create MyApp
-  ```
-
-* 添加目标平台
-
-  ```shell
-  cordova platform add browser
-  ```
-
-  > 除此之外, 还有ios, android
-
-* 运行browser
-
-  ```shell
-  cordova run browser
-  ```
-
-* 查看支持/已安装的平台
-
-  ```shell
-  cordova platform ls
-  ```
-
-# 环境安装
-
-* 构建之前, 必须安装对应平台的SDK. 其中, `browser`无需任何SDK.
-
-  检查平台构建的必备条件
-
-  ```shell
-  cordova requirements
-  ```
-
-# 转载的
+# 基本操作
 
 安装cordova
 
@@ -215,3 +156,79 @@ cordova run android
 cordova emulate
 ```
 
+# 踩坑
+
+用的Cordova写的跨平台应用, 写IOS应用特别恶心!!!!! IOS真是垃圾中的战斗机!!!!
+
+## 后端证书无效
+
+* for IOS
+
+    编译后, 在Xcode中, 找到`Classess/AppDelegate.m`文件, 添加
+
+    ```objective-c
+    @implementation NSURLRequest(DataController)
+    + (BOOL)allowsAnyHTTPSCertificateForHost:(NSString *)host
+    {
+        return YES;
+    }
+    @end
+    ```
+    
+* for Android
+
+    找到并修改`project/platforms/android/CordovaLib/src/org/apache/cordova/engine/SystemWebViewClient.java`文件
+
+    ```java
+    public void onReceivedSslError(WebView view, SslErrorHandler handler, SslError error) {
+      final String packageName = this.cordova.getActivity().getPackageName();
+      final PackageManager pm = this.cordova.getActivity().getPackageManager();
+    
+      ApplicationInfo appInfo;
+      try {
+        appInfo = pm.getApplicationInfo(packageName, PackageManager.GET_META_DATA);
+        if ((appInfo.flags & ApplicationInfo.FLAG_DEBUGGABLE) != 0) {
+          // debug = true
+          handler.proceed();
+          return;
+        } else {
+          // debug = false
+          // THIS IS WHAT YOU NEED TO CHANGE:
+          // 1. COMMENT THIS LINE
+          // super.onReceivedSslError(view, handler, error);
+          // 2. ADD THESE TWO LINES
+          // ---->
+          handler.proceed();
+          return;
+          // <----
+        }
+      } catch (NameNotFoundException e) {
+        // When it doubt, lock it out!
+        super.onReceivedSslError(view, handler, error);
+      }
+    }
+    ```
+
+> 参考:
+>
+> * [Ignoring invalid SSL certificates on Cordova for Android and iOS](http://ivancevich.me/articles/ignoring-invalid-ssl-certificates-on-cordova-android-ios/)
+>
+> * [Cordova/PhoneGap iOS HTTPS/SSL issues](https://stackoverflow.com/questions/12627774/cordova-phonegap-ios-https-ssl-issues)
+
+## Xcode不能打包
+
+不能打包, 按钮灰的
+
+设置选择*Generic iOS Device*
+
+## 无网络连
+
+请求权限, 安装` cordova-plugin-whitelist`, 并在`config.xml`文件中添加
+
+```xml
+<allow-navigation href="*" />
+<allow-intent href="http://*/*" />
+<allow-intent href="https://*/*" />
+```
+
+接着, 还要为IOS单独添加`cordova-plugin-ios-plist`插件

@@ -51,6 +51,35 @@ Docker Engine是一个提供容器服务的客户端, 主要由三部分组成:
 2. 提供与守护进程交互的Rest API
 3. 提供与守护进程交互的命令行客户端.
 
+## 架构
+
+![Docker Architecture Diagram](.Docker/architecture-1588163684644.svg)
+
+一眼就能看懂的CS架构
+
+* Client
+
+  客户端
+
+* Docker Host
+
+  服务端, Docker Engine提供服务, 同时管理镜像和容器
+
+* Registry
+
+  镜像注册中心, 如Docker Hub
+
+## Docker对象
+
+* 镜像Images
+
+  * 是一个可读的模板, 指导Docker创建容器.
+  * 镜像可以基于其他镜像构建, 或者直接构建
+
+* 容器Containers
+
+  
+
 ## 安装
 
 ### Docker Desktop
