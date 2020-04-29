@@ -237,12 +237,14 @@ css处理前：
             //是否修改Host头部，可选
             changeOrgin:true,
             //修改请求路径,支持正则
-            pathRewrite:{'/api/':''}
+            pathRewrite:{'/api/':''},
+            //是否忽略掉Https证书问题
+            //secure: false
           }
         }
-      }
+    }
   ```
-
+  
   > 由于是服务器代理请求的，因此没有同源政策的限制。
   
   > 一般目的URL=target+拦截的url, 若存在路径修改, 则=target+修改过的url
