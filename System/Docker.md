@@ -1,4 +1,4 @@
-# 概述
+# 开始
 
 ## 介绍
 
@@ -45,9 +45,15 @@
 
 ![Docker Engine Components Flow](.Docker/engine-components-flow.png)
 
-# 安装
+Docker Engine是一个提供容器服务的客户端, 主要由三部分组成:
 
-## Docker Desktop
+1. 运行容器的守护进程`dockerd`
+2. 提供与守护进程交互的Rest API
+3. 提供与守护进程交互的命令行客户端.
+
+## 安装
+
+### Docker Desktop
 
 * 介绍
 
@@ -99,7 +105,7 @@
   
   > 参考: [How to completely remove Docker in Windows 10](https://success.docker.com/article/how-to-completely-remove-docker-in-windows-10)
 
-## Docker Toolbox
+### Docker Toolbox
 
 * 介绍
 
@@ -126,6 +132,16 @@
   * Ok, 安装完毕. 但是每次重启, 都需要通过Docker Quickstart Terminal来启动Docker. 之后可以在该Terminal中执行Docker命令, 或者在其他终端中执行. ( 命令已添加到PATH下)
 
 > 参考[Docker Toolbox overview](https://docs.docker.com/toolbox/overview/)
+
+### Linux
+
+```shell
+apt install docker
+```
+
+# 使用
+
+
 
 # 参考
 
