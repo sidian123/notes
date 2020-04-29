@@ -402,6 +402,10 @@ Idea会自动去`node_modules`中查找eslint的包, 和当前工作目录和父
 
 若要自动修复当前页面, 使其符合eslint要求, 右键, 选择`Fix ESLint Problems`
 
+首先确保Idea的eslint功能是打开的
+
+![image-20200429095759821](.Idea/image-20200429095759821.png)
+
 #  其他
 
 ## 清除缓存
