@@ -134,7 +134,17 @@ linux中一个传输数据的工具，支持多种协议，还支持代理、用
 
 * 凭证
   
-* `-b,--cookie <data>`：设置cookie，默认为上次请求设置的cookie。`data`的格式为`NAME1=VALUE1; NAME2=VALUE2`
+  * Cookie
+    
+    `-b,--cookie <data>`：设置cookie，默认为上次请求设置的cookie。`data`的格式为`NAME1=VALUE1; NAME2=VALUE2`
+    
+  * 不使用SSL
+  
+    ```shell
+    curl --insecure url
+    或
+    curl -k url
+    ```
   
 * 其他
   * `-I`：仅获得头部
