@@ -43,3 +43,26 @@
 # 密钥导入导出
 
 https://www.digicert.com/kb/ssl-support/p12-import-export-mac-server.htm
+
+# IOS开发
+
+用的Cordova写的跨平台应用, 写IOS应用特别恶心!!!!! IOS真是垃圾中的战斗机!!!!
+
+* 后端使用无效证书的解决方案
+
+  编译后, 在Xcode中, 找到`Classess/AppDelegate.m`文件, 添加
+
+  ```objective-c
+  @implementation NSURLRequest(DataController)
+  + (BOOL)allowsAnyHTTPSCertificateForHost:(NSString *)host
+  {
+      return YES;
+  }
+  @end
+  ```
+
+  > [Cordova/PhoneGap iOS HTTPS/SSL issues](https://stackoverflow.com/questions/12627774/cordova-phonegap-ios-https-ssl-issues)
+
+* 不能打包, 按钮灰的
+
+  设置选择*Generic iOS Device*
