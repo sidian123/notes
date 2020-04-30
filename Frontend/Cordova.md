@@ -302,13 +302,30 @@ Cordova提供了两种方式, 从不同方面去配置
 
   > 注意, 第一个是默认值啊
 
-  
 
+### 我的配置
 
+最稳妥的配置, 就是基本权限全开....
 
+1. 首先必须存在`cordova-plugin-whitelist`
 
+2. `config.xml`文件中添加
 
+   ```xml
+   <allow-navigation href="*" />
+   <allow-intent href="*" />
+   <access origin="*" />
+   ```
 
+3. 入口html页面中添加
+
+   ```html
+   <meta http-equiv="Content-Security-Policy" content="default-src *; frame-src *; style-src * 'self' 'unsafe-inline' 'unsafe-eval';  script-src * 'self' 'unsafe-inline' 'unsafe-eval';">
+   ```
+
+   > 注意, `Content-Security-Policy`大小写敏感!!!!
+
+> 参考[Cordova 5.3.1 Android app can't access the internet](https://stackoverflow.com/questions/32605034/cordova-5-3-1-android-app-cant-access-the-internet)
 
 # IOS
 
@@ -453,9 +470,13 @@ xcode中提供了两种方式打开
 
 设置选择*Generic iOS Device*
 
-## 无网络连
+## 无网络连接
 
-请求权限, 安装` cordova-plugin-whitelist`, 并在`config.xml`文件中添加
+参考上述白名单插件的配置
+
+----------
+
+~~请求权限, 安装` cordova-plugin-whitelist`, 并在`config.xml`文件中添加~~
 
 ```xml
 <allow-navigation href="*" />
@@ -463,4 +484,8 @@ xcode中提供了两种方式打开
 <allow-intent href="https://*/*" />
 ```
 
-接着, 还要为IOS单独添加`cordova-plugin-ios-plist`插件
+~~接着, 还要为IOS单独添加`cordova-plugin-ios-plist`插件~~
+
+## 跨域, 证书问题
+
+存在跨域问题, 但是按照上述白名单中*Content Security Policy*的配置, 可以解决. 不被信任证书的问题就不知道了, 没有仔细测试过了.
