@@ -1,4 +1,6 @@
-# 基本操作
+# Cordova
+
+## 基本操作
 
 安装cordova
 
@@ -155,6 +157,236 @@ cordova run android
 ```bash
 cordova emulate
 ```
+
+## Config.xml
+
+# 插件
+
+## cordova-plugin-whitelist
+
+用于配置App在外部可访问的资源, 即白名单(whitelist)
+
+### 安装
+
+```shell
+$ cordova plugin add cordova-plugin-whitelist
+$ cordova prepare
+```
+
+### 可导航的白名单
+
+控制WebView可被导航到哪个URL上, 默认仅被允许导航到`file://`
+
+可在`config.xml`中修改
+
+```xml
+<widget ...>
+    <!-- Allow links to example.com -->
+    <allow-navigation href="http://example.com/*" />
+
+    <!-- Wildcards are allowed for the protocol, as a prefix
+         to the host, or as a suffix to the path -->
+    <allow-navigation href="*://*.example.com/*" />
+
+    <!-- A wildcard can be used to whitelist the entire network,
+         over HTTP and HTTPS.
+         *NOT RECOMMENDED* -->
+    <allow-navigation href="*" />
+
+    <!-- The above is equivalent to these three declarations -->
+    <allow-navigation href="http://*/*" />
+    <allow-navigation href="https://*/*" />
+    <allow-navigation href="data:*" />
+</widget>
+```
+
+> Quirks: on Android it also applies to iframes for non-http(s) schemes.
+
+### Intent Whitelist
+
+控制哪个URL, App允许系统去在浏览器中打开. 配置如下
+
+```xml
+<widget ...>
+	<!-- Allow links to web pages to open in a browser -->
+    <allow-intent href="http://*/*" />
+    <allow-intent href="https://*/*" />
+
+    <!-- Allow links to example.com to open in a browser -->
+    <allow-intent href="http://example.com/*" />
+
+    <!-- Wildcards are allowed for the protocol, as a prefix
+         to the host, or as a suffix to the path -->
+    <allow-intent href="*://*.example.com/*" />
+
+    <!-- Allow SMS links to open messaging app -->
+    <allow-intent href="sms:*" />
+
+    <!-- Allow tel: links to open the dialer -->
+    <allow-intent href="tel:*" />
+
+    <!-- Allow geo: links to open maps -->
+    <allow-intent href="geo:*" />
+
+    <!-- Allow all unrecognized URLs to open installed apps
+         *NOT RECOMMENDED* -->
+    <allow-intent href="*" />
+</widget>
+```
+
+若无`,allow-intent`元素, 外部资源将不被在浏览器中打开. 但Cordova为你配置了一些.
+
+### 网络请求白名单(重点)
+
+控制哪个资源可被App请求到, 如images, XHRs等. 
+
+Cordova提供了两种方式, 从不同方面去配置
+
+* 请求URL配置
+
+  > 这个是通过Cordova的回调方法配置到生成的平台相关的配置中的
+
+  ```xml
+  <widget ...>
+  	<!-- Allow images, xhrs, etc. to google.com -->
+      <access origin="http://google.com" />
+      <access origin="https://google.com" />
+  
+      <!-- Access to the subdomain maps.google.com -->
+      <access origin="http://maps.google.com" />
+  
+      <!-- Access to all the subdomains on google.com -->
+      <access origin="http://*.google.com" />
+  
+      <!-- Enable requests to content: URLs -->
+      <access origin="content:///*" />
+  
+      <!-- Don't block any requests -->
+      <access origin="*" />
+  </widget>
+  ```
+
+  无`access`元素, 将仅允许请求`file://`资源, 但Cordova默认添加`<access origin="*">`
+
+* Content Security Policy
+
+  > 这些配置是通过WebView自身功能实现的
+
+  需要在入口`.html`页面中配置
+
+  ```html
+  <!-- Good default declaration:
+      * gap: is required only on iOS (when using UIWebView) and is needed for JS->native communication
+      * https://ssl.gstatic.com is required only on Android and is needed for TalkBack to function properly
+      * Disables use of eval() and inline scripts in order to mitigate risk of XSS vulnerabilities. To change this:
+          * Enable inline JS: add 'unsafe-inline' to default-src
+          * Enable eval(): add 'unsafe-eval' to default-src
+  -->
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self' data: gap: https://ssl.gstatic.com; style-src 'self' 'unsafe-inline'; media-src *">
+  
+  <!-- Allow everything but only from the same origin and foo.com -->
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self' foo.com">
+  
+  <!-- This policy allows everything (eg CSS, AJAX, object, frame, media, etc) except that 
+      * CSS only from the same origin and inline styles,
+      * scripts only from the same origin and inline styles, and eval()
+  -->
+  <meta http-equiv="Content-Security-Policy" content="default-src *; style-src 'self' 'unsafe-inline'; script-src 'self' 'unsafe-inline' 'unsafe-eval'">
+  
+  <!-- Allows XHRs only over HTTPS on the same domain. -->
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self' https:">
+  
+  <!-- Allow iframe to https://cordova.apache.org/ -->
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; frame-src 'self' https://cordova.apache.org">
+  ```
+
+  > 注意, 第一个是默认值啊
+
+  
+
+
+
+
+
+
+
+# IOS
+
+## 权限配置info.plist
+
+IOS APP开发过程中需要用到手机的某些功能, 需要先在`info.plist`中授权才可用. 
+
+`info.plist`中通过键值对的方式配置. 它的值可以是`string`, `array`, `dict`等
+
+> 参考[[iOS干货]—info.plist简单使用,以及访问权限的配置](https://blog.csdn.net/Super_career/article/details/88102624?utm_medium=distribute.pc_relevant.none-task-blog-BlogCommendFromMachineLearnPai2-2&depth_1-utm_source=distribute.pc_relevant.none-task-blog-BlogCommendFromMachineLearnPai2-2)
+
+### 打开方式
+
+xcode中提供了两种方式打开
+
+* 属性列表模式
+
+  ![默认打开方式](.Cordova/20190304095311464.png)
+
+* 源代码模式
+
+  ![Source Code代码形式](.Cordova/20190304095901304.png)
+
+  > 紧接着`key`的元素为`key`的值
+
+### 常用属性
+
+| 属性                                    | 具体作用                                                     |
+| --------------------------------------- | ------------------------------------------------------------ |
+| Localization native development region  | 与本地化设置有关，为默认的开发语言                           |
+| Executable file                         | 程序安装包的名称                                             |
+| InfoDictionary version                  | 版本信息                                                     |
+| Bundle identifier                       | 软件唯一的标识，是根据公司的标识与项目名称自动生成的，在上传和测试的时候会用到 |
+| Bundle name                             | App安装后显示的名称                                          |
+| Bundle OS Type code                     | 用来标识软件包类型                                           |
+| Bundle versions string, short           | 发布的版本字符串                                             |
+| Bundle creator OS Type code             | 创建者的标识                                                 |
+| Bundle version                          | 应用程序版本号                                               |
+| Application requires iPhone environment | 用于指示程序包是否只能运行在iPhone OS 系统上，默认为YES      |
+| Launch screen interface file base name  | 欢迎界面的文件名称                                           |
+| Main storyboard file base name          | 默认情况下程序的主入口                                       |
+| Supported interface orientations        | 设置程序默认支持的方向                                       |
+
+### 权限属性
+
+![各种权限获取截图](.Cordova/20190304101642740.png)
+
+对应代码
+
+```xml
+<key>NSAppTransportSecurity</key>
+<dict>
+    <key>NSAllowsArbitraryLoads</key>
+    <true/>
+</dict>
+<key>NSContactsUsageDescription</key>
+<string>请求访问通讯录权限</string>
+<key>NSMicrophoneUsageDescription</key>
+<string>请求访问麦克风权限</string>
+<key>NSPhotoLibraryUsageDescription</key>
+<string>请求访问相册权限</string>
+<key>NSCameraUsageDescription</key>
+<string>请求访问相机权限</string>
+<key>NSLocationAlwaysUsageDescription</key>
+<string>始终访问地理位置权限</string>
+<key>NSLocationWhenInUseUsageDescription</key>
+<string>在使用期间访问地理位置权限</string>
+<key>NSCalendarsUsageDescription</key>
+<string>请求访问日历权限</string>
+<key>NSRemindersUsageDescription</key>
+<string>请求访问注意事项权限</string>
+<key>NSBluetoothPeripheralUsageDescription</key>
+<string>请求访问蓝牙权限</string>
+```
+
+> `NSAppTransportSecurity`表示是否允许HTTPS请求
+>
+> 其他的都是配置请求对应资源时的描述语`Description`, 应该是没有描述就丁点机会都没有?
 
 # 踩坑
 
