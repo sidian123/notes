@@ -301,6 +301,8 @@ Cordova提供了两种方式, 从不同方面去配置
   ```
 
   > 注意, 第一个是默认值啊
+  
+  > 详细CSP配置说明见[Content Security Policy Reference](https://content-security-policy.com/#source_list)
 
 
 ### 我的配置
@@ -326,6 +328,49 @@ Cordova提供了两种方式, 从不同方面去配置
    > 注意, `Content-Security-Policy`大小写敏感!!!!
 
 > 参考[Cordova 5.3.1 Android app can't access the internet](https://stackoverflow.com/questions/32605034/cordova-5-3-1-android-app-cant-access-the-internet)
+
+# Android
+
+## 环境搭建
+
+### JDK
+
+* 必须使用JDK8，参考[macOS OpenJDK8](https://www.jianshu.com/p/cc4bcab6adcc)
+
+### Gradle
+
+Gradle是访问不了国外仓库的， 因此需要配置国内镜像。
+
+* 全局配置， 在`$HOME/.gradle`下配置`init.gradle`文件
+
+  ```
+  buildscript {
+      repositories {
+          maven { url 'http://maven.aliyun.com/nexus/content/groups/public/' }
+          maven { url 'http://maven.aliyun.com/nexus/content/repositories/jcenter'}
+      }
+  
+      dependencies {
+          classpath 'com.android.tools.build:gradle:3.2.0-alpha16'
+      }
+  }
+  
+  allprojects {
+      repositories {
+          maven { url 'http://maven.aliyun.com/nexus/content/groups/public/' }
+          maven { url 'http://maven.aliyun.com/nexus/content/repositories/jcenter'}
+  
+      }
+  }
+  ```
+
+  > 上面规定死`om.android.tools.build:gradle`版本， 是因为国内镜像源还没有那么新。
+
+* 局部配置，配置优先级更高， 在Cordova项目中必须配置，否则会被项目中的配置覆盖全局配置。
+
+  按照上述方式， 修改`platforms/android/build.gradle`文件即可。
+
+> 参考[Could not resolve all artifacts for configuration ':classpath'.](https://www.oschina.net/question/114943_2303892?nocache=1551403814162)
 
 # IOS
 
@@ -404,6 +449,20 @@ xcode中提供了两种方式打开
 > `NSAppTransportSecurity`表示是否允许HTTPS请求
 >
 > 其他的都是配置请求对应资源时的描述语`Description`, 应该是没有描述就丁点机会都没有?
+
+## 调试
+
+* 启动iMAC上Safari的调试模式， 在`Safari/Preferences/Advanced`中勾选`Show Develop menu in menu bar`
+
+* 启动iOS上Safari的调试模式，在`Settings/Safari/Advanced`中勾选`JavaScript`和`Web Inspector`
+
+* 启动iOS上的H5应用，在iMac的Safari上可以找到手机端打开的页面
+
+  ![img](.Cordova/inspect-device.jpg)
+
+  > 注意，必须是Debug版本的APP
+
+> 参考[Apache Cordova and Remote Debugging on iOS](https://geeklearning.io/apache-cordova-and-remote-debugging-on-ios/)
 
 # 踩坑
 

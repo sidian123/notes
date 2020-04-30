@@ -164,7 +164,9 @@ VSCode会自动检测部分Shell, 如Cmd,WSL和Bash等. 至于其他Shell, 需�
 
 > 执行Cmder的bash, 和初始化的脚本.
 
+## CLI中添加code
 
+在命令面板中， 输入`Install ‘code' command in PATH`
 
 ## 疑问
 

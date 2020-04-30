@@ -130,6 +130,12 @@ ssh -D [bind_address:]port [user@]hostname [command]
 > ssh -4 -D 8081 user@8.8.8.8
 > ```
 
+> 关于`channel 39: open failed: connect failed: Connection timed out`的错误， 这是正常现象， 有些服务器设置了超时时间， 导致异常信息在Shell中打印。 可以设置静默模式`-q`， 如
+>
+> ```shell
+> ssh user@xx.yy.zz.41 -p 1234 -D 9898 -q
+> ```
+
 ## 其他
 
 ### 实战之socks5代理
