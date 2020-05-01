@@ -923,7 +923,13 @@ Example提供了特定的方式在Java代码中构建`where`条件语句, 将条
 
 构造器可由插件自动生成; 至于API使用,,,, 这还用的着举例吗? 看懂了代码啥都会了, 况且生成的代码量并不多....
 
-> 实在不会, 还是可以参考下[mybatis Example 使用方法](https://www.jianshu.com/p/d022fbbc3f8c), 但是这篇文章还是没有详尽所有的使用方式.
+一般插件生成的Example无Builder, 通用Mapper提供的Example有.
+
+> 详细用法可参考
+>
+> * [mybatis Example 使用方法](https://www.jianshu.com/p/d022fbbc3f8c) 未详尽所有的使用方式.
+>
+> * [example](https://github.com/abel533/Mapper/wiki/6.example) 通用Mapper提供的Example用法
 
 # 演化
 
