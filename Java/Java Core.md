@@ -459,6 +459,12 @@ Jvm会维护所处环境的信息, 称之为系统属性, 可通过`System`类�
 | `"user.home"`       | User home directory                                          |
 | `"user.name"`       | User account name                                            |
 
+命令行指定系统属性的方法如下:
+
+```
+java -jar app.jar -Dname="Spring"
+```
+
 # 安全
 
 * `MessageDigest` 生成摘要的工具
