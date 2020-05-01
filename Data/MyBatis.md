@@ -925,6 +925,20 @@ Example提供了特定的方式在Java代码中构建`where`条件语句, 将条
 
 > 实在不会, 还是可以参考下[mybatis Example 使用方法](https://www.jianshu.com/p/d022fbbc3f8c), 但是这篇文章还是没有详尽所有的使用方式.
 
+# 演化
+
+### 概述
+
+
+
+## 手撸SQL
+
+## 代码生成器
+
+## 通用Mapper
+
+## Mybatis-Plus
+
 # 其他
 
 ## `collection`与`List<Integer>`

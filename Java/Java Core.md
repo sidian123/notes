@@ -374,6 +374,10 @@ public class Employee {
 > * [PropertyUtils](http://commons.apache.org/proper/commons-beanutils/javadocs/v1.9.4/apidocs/org/apache/commons/beanutils/PropertyUtils.html)
 > * [BeanUtils](http://commons.apache.org/proper/commons-beanutils/javadocs/v1.9.4/apidocs/org/apache/commons/beanutils/BeanUtils.html)
 
+# Guava
+
+Google提供的一个工具, 先记录下. 一般引入了Swagger的项目都引入Guava.
+
 # 进程相关
 
 ## Process
