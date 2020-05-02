@@ -935,9 +935,66 @@ Example提供了特定的方式在Java代码中构建`where`条件语句, 将条
 
 ## 概述
 
-## 手撸SQL
+![image-20200502235737427](.MyBatis/image-20200502235737427.png)
+
+一开始学Mybatis都是手撸Mapper文件的, 每张表基本都需要编写大量毫无逻辑的重复代码, 如单表增删改查.
+
+Mybatis-generator用于自动生成这些重复代码. 但是问题来了, 当表结构重构时, 需要重新生成代码, 且可能会覆盖掉自己新增的代码.
+
+于是通用Mapper和Mybatis-Plus都出来了, 都提供了常见的通用操作, 以及复杂条件构造器. 表字段改变后, 仅需修改实体类与数据库的映射关系即可. 
+
+从功能上看, Mybatis-Plus确实完善点, 但是我觉得通用Mapper文档更有条理点, Mybatis-Plus文档存在大量描述性内容, 但较少量逻辑原理的讲解. 所以我选择了使用通用Mapper.
 
 ## 代码生成器
+
+这里介绍的是代码生成器的集大成者MyBatisCodeHelper-Pro, 它用到了上述的Mybatis-generator, 并且做出了极大的增强.
+
+MyBatisCodeHelper-Pro是idea中辅助mybatis编写的插件, 最主要的几个特点:
+
+* 从Java类中生成建表语句
+* 支持从数据库中生成crud代码
+* 从方法名中生成crud代码
+* 支持通用Mapper的代码生成
+* 支持Mybatis-Plus的代码生成
+* 支持代码比对, 来应对字段的新增, 而不是直接覆盖代码.
+
+**配置**
+
+* 配置idea中的`database`, 提供数据库信息给插件
+* `setting->Language & Frameworks->SQL Dialects`为MySQL, 使得xml中SQL语句正确解析
+* 插件的`database`也配置成MySQL, 指导xml中SQL生成.
+* 然后插件设置中, 配置与CRUD生成相关的细节
+
+---
+
+下面是我的配置:
+
+![1570543145100](.MyBatis/1570543145100.png)
+
+![1570542632327](.MyBatis/1570542632327.png)
+
+**使用**
+
+* 从Java类中生成建表语句
+  * 在Java类中按`alt+insert`
+  * 仅支持部分引用类型, 见文档
+
+* 从数据库中生成model,dao,service代码
+  * 在database中右键数据库, 选择`Mybatis generator`, 然后指定存放位置的包.
+  * 多次生成, 会与之前的代码合并. 合并细节如下
+    * 自己的mapper方法和xml sql语句不会被删除, 自动生成的xml语句通过` @mbg generated`注释识别, 因此生成文件时一定要勾选生成注释.
+    
+    * 实体会保留`static`,`transient`字段与方法
+    
+      > 因此, 实体合并的功能最好关闭, 考虑到使用其他注解会被覆盖的问题
+* 从方法名中生成crud代码
+  
+  * 在mapper接口中, 输入符合一定规范的方法名, 按`alt+enter->Generate mybatis sql`生成.
+  * 具体方法规范见[方法名生成sql](https://gejun123456.github.io/MyBatisCodeHelper-Pro/#/methodNameToSql)
+
+其他特性, 见文档
+
+> 参考: [MyBatisCodeHelper-Pro](https://gejun123456.github.io/MyBatisCodeHelper-Pro/#/README?id=mybatiscodehelper-pro)
 
 ## 通用Mapper
 
@@ -1018,35 +1075,300 @@ Example提供了特定的方式在Java代码中构建`where`条件语句, 将条
 
 ### 使用
 
-* 设计表
 
-  ```sql
-  CREATE TABLE `country`
-  (
-      `id`           int(11) NOT NULL AUTO_INCREMENT COMMENT '主键',
-      `country_name` varchar(255) DEFAULT NULL COMMENT '名称',
-      `country_code` varchar(255) DEFAULT NULL COMMENT '代码',
-      PRIMARY KEY (`Id`)
-  ) ENGINE = InnoDB
-    AUTO_INCREMENT = 10011
-    DEFAULT CHARSET = utf8 COMMENT ='国家信息';
+#### 数据库映射
+
+* 介绍
+
+  通用Mapper自动生成通用的SQl映射, 是需要通过实体类提供的. 存在一个映射关系. 
+
+* 表名映射
+
+  默认使用实体类名. `name`配置表名, `catalog`和`scheme`配置数据库名, `catalog`优先级高
+
+  ```java
+  @Table(name = "sys_user")
+  public class User
   ```
 
-  
 
+* 字段映射方式
 
+  支持以下方式映射, 默认原值映射
 
+  ```
+  normal,                     //原值(默认)
+  camelhump,                  //驼峰转下划线
+  uppercase,                  //转换为大写
+  lowercase,                  //转换为小写
+  camelhumpAndUppercase,      //驼峰转下划线大写形式
+  camelhumpAndLowercase,      //驼峰转下划线小写形式
+  ```
 
+  配置方式一, 在类上添加注解
 
+  ```java
+  @NameStyle(Style.camelhumpAndUppercase)
+  public class Country
+  ```
 
+  配置方式二, 使用全局配置
+
+  ```yaml
+  mapper.style=camelhumpAndUppercase
+  ```
+
+* 字段映射
+
+  映射默认使用上述规则, 通过`@Column`可修改, 如
+
+  ```java
+  @Column(name = "user_name")
+  private String name;
+  ```
+
+  或
+
+  ```java
+  @Column(name = "`order`")
+  private String order;
+  ```
+
+  > 关键字需要用数据库对应的规则进行转义
+
+  > 全局配置`wrapKeyword`可实现字段转换, 但经测试, 貌似无效
+
+* 忽略的字段
+
+  通用Mapper仅映射简单类型的字段, 基本类型和复杂类型字段会被忽略. 
+
+  若还想忽略其他字段映射, 可使用`@Transient`注解
+
+  ```java
+  @Transient
+  private String otherThings; //非数据库表中字段
+  ```
+
+* 主键字段
+
+  通用Mapper没啥获知主键信息, 需要`@Id`注解配置.
+
+  主键配置
+
+  ```java
+  @Id
+  private Integer id;
+  ```
+
+  联合主键配置
+
+  ```java
+  @Id
+  private Integer userId;
+  @Id
+  private Integer roleId;
+  ```
+
+  若无`@Id`注解的字段, 则默认所有的字段为联合主键.
+
+#### 主键生成策略
+
+插入数据后, 怎么获取其主键? 要分很多中情况. 
+
+> 提供`@KeySql`和`@GeneratedValue`两种注解配置, `@keySql`更为方便, 这里仅介绍`@KeySql`
+
+1. 数据库支持自增, 且支持JDBC的`getGeneratedKeys`方法
+
+   如MySql, SqlServer, 用法如下
+
+   ```java
+   @Id
+   @KeySql(useGeneratedKeys = true)
+   private Long id;
+   ```
+
+   对应对应Mybatis代码
+
+   ```xml
+   <insert id="insert" useGeneratedKeys="true" keyProperty="id">
+       insert into country (id, countryname, countrycode)
+       values (#{id},#{countryname},#{countrycode})
+   </insert>
+   ```
+
+2. 数据库仅支持自增
+
+   新增数据后, 可通过对应SQL查出id, 下面是支持自增和查询的SQL
+
+   - **DB2**: `VALUES IDENTITY_VAL_LOCAL()`
+   - **MYSQL**: `SELECT LAST_INSERT_ID()`
+   - **SQLSERVER**: `SELECT SCOPE_IDENTITY()`
+   - **CLOUDSCAPE**: `VALUES IDENTITY_VAL_LOCAL()`
+   - **DERBY**: `VALUES IDENTITY_VAL_LOCAL()`
+   - **HSQLDB**: `CALL IDENTITY()`
+   - **SYBASE**: `SELECT @@IDENTITY`
+   - **DB2_MF**: `SELECT IDENTITY_VAL_LOCAL() FROM SYSIBM.SYSDUMMY1`
+   - **INFORMIX**: `select dbinfo('sqlca.sqlerrd1') from systables where tabid=1`
+
+   配置方式一
+
+   ```java
+   @Id
+   @KeySql(dialect = IdentityDialect.MYSQL)
+   private Integer id;
+   ```
+
+   配置方式二, 全局配置
+
+   ```yaml
+   mapper.IDENTITY=MYSQL
+   mapper.order=AFTER
+   ```
+
+   对应Mybatis
+
+   ```xml
+   <insert id="insertAuthor">
+       <selectKey keyProperty="id" resultType="int" order="AFTER">
+         SELECT LAST_INSERT_ID()
+       </selectKey>
+       insert into country (id, countryname, countrycode)
+       values (#{id},#{countryname},#{countrycode})
+   </insert>
+   ```
+
+3. 都不支持, 只能通过自定义SQL获取
+
+   Oracle通过序列获取
+
+   ```java
+   @Id
+   @KeySql(sql = "select SEQ_ID.nextval from dual", order = ORDER.BEFORE)
+   private Integer id;
+   ```
+
+   > 这里必须先生成主键
+
+   对应Mybatis
+
+   ```java
+   <insert id="insertAuthor">
+     <selectKey keyProperty="id" resultType="int" order="BEFORE">
+       select SEQ_ID.nextval from dual
+     </selectKey>
+     insert into country (id, countryname, countrycode)
+     values (#{id},#{countryname},#{countrycode})
+   </insert>
+   ```
+
+   -------
+
+   通过UUID获取
+
+   ```java
+   @Id
+   @GeneratedValue(strategy = GenerationType.IDENTITY,generator = "select uuid()")
+   private String id;
+   ```
+
+4. 通过自定义Java方法获取
+
+   即`@keySql`的`genId`属性执行一个实现了`GenId`的类, 来提供生成Id的方法.
+
+   略, 见[genId](https://github.com/abel533/Mapper/wiki/2.5-genId)
+
+#### Mapper
+
+自己的Mapper只要继承*通用Mapper*接口即可
+
+```java
+import com.example.hello.tkmapper.model.Country;
+import org.apache.ibatis.annotations.Mapper;
+
+@Mapper
+public interface CountryMapper extends tk.mybatis.mapper.common.Mapper<Country> {
+}
+```
+
+> 通用Mapper会通过泛型获取实体类信息, 继而产生各种通用方法.
+
+然后直接使用通用Mapper接口提供的方法即可, 通用Mapper已经提供了实现.
+
+-------------
+
+除了通用Mapper提供了常见单表操作外, 新增新方法的方法与Mybatis一样, 如通过注解或XML提供SQL. 详细步骤如下
+
+1. 接口新增方法
+
+   ```java
+   import com.example.hello.tkmapper.model.Country;
+   import org.apache.ibatis.annotations.Mapper;
+   
+   @Mapper
+   public interface CountryMapper extends tk.mybatis.mapper.common.Mapper<Country> {
+       Country selectByCountryName(String countryname);
+   }
+   ```
+
+2. 使用注解方式
+
+   ```java
+   import com.example.hello.tkmapper.model.Country;
+   import org.apache.ibatis.annotations.Mapper;
+   
+   @Mapper
+   public interface CountryMapper extends tk.mybatis.mapper.common.Mapper<Country> {
+       @Select("select * from country where countryname = #{countryname}")
+       Country selectByCountryName(String countryname);
+   }
+   ```
+
+3. 使用XML方法
+
+   ```java
+   <!DOCTYPE mapper
+           PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+           "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+   <mapper namespace="tk.mybatis.sample.mapper.CountryMapper">
+       <select id="selectByCountryName" resultType="tk.mybatis.model.Country">
+           select * from country where countryname = #{countryname}
+       </select>
+   </mapper>
+   ```
+
+除此之外, 还可使用接口的默认方法, 如
+
+```java
+public interface CountryMapper extends Mapper<Country> {
+    //这个示例适合参考实现对乐观锁方法封装
+    default void updateSuccess(Country country){
+        Assert.assertEquals(1, updateByPrimaryKey(country));
+    }
+}
+```
+
+### 扩展通用Mapper
+
+看看通用Mapper提供的通用Mapper接口是怎么实现的, 就知道怎么用了...
+
+注意, @RegisterMapper 注解可以避免 mappers 参数配置，通用 Mapper 检测到该接口被继承时，会自动注册。
+
+### Example
+
+通用Mapper提供的条件构造器, 上述已有专门小节讲过Example, 除此之外, 通用Mapper还提供了Buidler方法.
 
 ### 参考
 
-* 
+* [通用Mapper Wiki](https://github.com/abel533/Mapper/wiki)
 
-* > [MyBatis 通用 Mapper 实现原理](https://blog.csdn.net/isea533/article/details/78493852)
+* [MyBatis 为什么需要通用 Mapper ?](https://blog.csdn.net/isea533/article/details/83045335)
+
+* [MyBatis 通用 Mapper 实现原理](https://blog.csdn.net/isea533/article/details/78493852)
+* [通用Mapper全局配置](https://github.com/abel533/Mapper/wiki/3.config)
 
 ## Mybatis-Plus
+
+略, 不想用!!!
 
 # 其他
 
@@ -1076,53 +1398,6 @@ Example提供了特定的方式在Java代码中构建`where`条件语句, 将条
 个人感觉, 尽管简单的CRUD被直接提供了, 但是对于稍微复杂的SQL语句来说, 需要将SQL拆分, 混合Java代码来构建, 反而将问题复杂化了.
 
 弃!
-
-## [MyBatisCodeHelper-Pro](https://gejun123456.github.io/MyBatisCodeHelper-Pro/#/README?id=mybatiscodehelper-pro)
-
-是idea中辅助mybatis编写的插件, 最主要的几个特点:
-
-* 从Java类中生成建表语句
-
-* 支持从数据库中生成crud代码
-* 从方法名中生成crud代码
-
-**配置**
-
-* 配置idea中的`database`, 提供数据库信息给插件
-* `setting->Language & Frameworks->SQL Dialects`为MySQL, 使得xml中SQL语句正确解析
-* 插件的`database`也配置成MySQL, 指导xml中SQL生成.
-* 然后插件设置中, 配置与CRUD生成相关的细节
-
----
-
-下面是我的配置:
-
-![1570543145100](.MyBatis/1570543145100.png)
-
-![1570542632327](.MyBatis/1570542632327.png)
-
-**使用**
-
-* 从Java类中生成建表语句
-  * 在Java类中按`alt+insert`
-  * 仅支持部分引用类型, 见文档
-
-* 从数据库中生成model,dao,service代码
-  * 在database中右键数据库, 选择`Mybatis generator`, 然后指定存放位置的包.
-  * 多次生成, 会与之前的代码合并. 合并细节如下
-    * 自己的mapper方法和xml sql语句不会被删除, 自动生成的xml语句通过` @mbg generated`注释识别, 因此生成文件时一定要勾选生成注释.
-    
-    * 实体会保留`static`,`transient`字段与方法
-    
-      > 因此, 实体合并的功能最好关闭, 考虑到使用其他注解会被覆盖的问题
-* 从方法名中生成crud代码
-  
-  * 在mapper接口中, 输入符合一定规范的方法名, 按`alt+enter->Generate mybatis sql`生成.
-  * 具体方法规范见[方法名生成sql](https://gejun123456.github.io/MyBatisCodeHelper-Pro/#/methodNameToSql)
-
-其他特性, 见文档
-
-> 参考: [MyBatisCodeHelper-Pro](https://gejun123456.github.io/MyBatisCodeHelper-Pro/#/README?id=mybatiscodehelper-pro)
 
 ## 日期&时区
 
