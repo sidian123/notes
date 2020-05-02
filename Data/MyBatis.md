@@ -933,15 +933,118 @@ Example提供了特定的方式在Java代码中构建`where`条件语句, 将条
 
 # 演化
 
-### 概述
-
-
+## 概述
 
 ## 手撸SQL
 
 ## 代码生成器
 
 ## 通用Mapper
+
+### 开始
+
+* 概述
+
+  通用Mapper, 如其名, 提供表所有的通用操作. 只要继承通用Mapper, 不用写SQL, 就能对表进行操作.
+
+  > 只对单表有用, 无多表操作
+
+* 原理
+
+  先说Mybatis, Mybatis扫描Mapper后, 会对每个方法建模`MappedStatement`, 对方法映射的SQL建模`SqlSource`. 然后将生成的对象存入`Configuration`中
+
+  通用Mapper的思路就是, 想尽各种方式获取到`Configuration`, 继而获取`MappedStatement`, 判断该Statement是通用Mapper的方法, 就替换掉它的`SqlSource`实现.
+
+  看起来像是Mybatis的一个插件
+
+  > 详细参考[MyBatis 通用 Mapper 实现原理](https://blog.csdn.net/isea533/article/details/78493852)
+
+### 集成
+
+实现原理上述说过了, 就是想方设法替换`SqlSource`, 这里剖析各种方式, 但仅详尽Spring Boot的使用方法.
+
+* Java集成方式
+
+  * 方法一, `SqlSessionFactory`构建后
+
+    通过`sqlSessionFactory`打开一个会话, 通过会话得到内部的`Configuration`对象, 然后改造它
+
+    ```java
+    //从刚刚创建的 sqlSessionFactory 中获取 session
+    session = sqlSessionFactory.openSession();
+    //配置通用Mapper
+    MapperHelper mapperHelper = new MapperHelper();
+    ...
+    //修改Configuration
+    mapperHelper.processConfiguration(session.getConfiguration());
+    ```
+
+  * 方法二, `SqlSessionFactory`构建前
+
+    使用通用Mapper提供的`Configuration,` 即`tk.mybatis.mapper.session.Configuration`
+
+    ```java
+    //正常的Mybatis配置
+    Configuration configuration = new Configuration();
+    ...
+    //通用Mapper的配置
+    configuration.setMapperHelper(new MapperHelper());
+    ...
+    //构建SqlSessionFactory
+    sqlSessionFactory = new SqlSessionFactoryBuilder().build(configuration);
+    ```
+
+* Spring 集成方式
+
+  思路是替换掉`MapperScannerConfigurer`和`MapperFactoryBean`, 略
+
+* Spring Boot集成
+
+  只需添加通用Mapepr的Starter依赖, 该依赖引入了Mybatis, 且会自动配置Mybatis.
+
+  ```xml
+  <dependency>
+    <groupId>tk.mybatis</groupId>
+    <artifactId>mapper-spring-boot-starter</artifactId>
+    <version>2.1.5</version>
+  </dependency>
+  ```
+
+  > 不必引入`mybatis-spring-boot-starter`, 即使没有冲突, 但会造成官方的Starter自动配置生效
+  >
+  > 查看通用Mapper的Starter自动配置源码, 会发现, 大部分都是从`mybatis-spring-boot-starter`中拷贝过来的, 注释都没改.
+  >
+  > 因此, 官方Starter的配置项仍然可用.
+
+### 使用
+
+* 设计表
+
+  ```sql
+  CREATE TABLE `country`
+  (
+      `id`           int(11) NOT NULL AUTO_INCREMENT COMMENT '主键',
+      `country_name` varchar(255) DEFAULT NULL COMMENT '名称',
+      `country_code` varchar(255) DEFAULT NULL COMMENT '代码',
+      PRIMARY KEY (`Id`)
+  ) ENGINE = InnoDB
+    AUTO_INCREMENT = 10011
+    DEFAULT CHARSET = utf8 COMMENT ='国家信息';
+  ```
+
+  
+
+
+
+
+
+
+
+### 参考
+
+* 
+
+* > [MyBatis 通用 Mapper 实现原理](https://blog.csdn.net/isea533/article/details/78493852)
 
 ## Mybatis-Plus
 
@@ -1020,6 +1123,18 @@ Example提供了特定的方式在Java代码中构建`where`条件语句, 将条
 其他特性, 见文档
 
 > 参考: [MyBatisCodeHelper-Pro](https://gejun123456.github.io/MyBatisCodeHelper-Pro/#/README?id=mybatiscodehelper-pro)
+
+## 日期&时区
+
+在Mysql中, `date`、`time`、`datetime`没有时区信息，类似java中的`Local...`类；`timestamp`含有时区信息。
+
+在Mybatis中, 底层都是使用`java.util.Date`接收的, 它内部是以时间戳的形式表示的. 
+
+也就是说, Mysql中不含时区的数据类型, 映射到Java `Date`类型的时间戳形式, 需要执行一个时区. 这里的时区来自JVM提供的系统时区. 至于`timestamp`, 无需转化, 直接可转化为`Date`对象.
+
+至于Mybatis支持其他类型Java对象, 如`LocalDateTime`, 都是通过Mybatis的TypeHandler转化的, 它本质还是先转化为`Date`, 然后再转化到其他时间类型, 如`LocalDateTime`.
+
+> 以上是我的猜测啊, 哈哈....
 
 # 参考
 mybatis：http://www.mybatis.org/mybatis-3/index.html

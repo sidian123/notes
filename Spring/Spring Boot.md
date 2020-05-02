@@ -456,6 +456,7 @@ spring boot也提供了常用的应用属性配置，并且这些属性是日记
 - `logging.level.*`：为具体的某个包设置日记级别，如：
 
   ```properties
+  # 全局
   logging.level.root=WARN
   logging.level.org.springframework.web=DEBUG
   logging.level.org.hibernate=ERROR
