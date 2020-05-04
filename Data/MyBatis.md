@@ -452,10 +452,10 @@ collection属性指定集合类型，如果是数组类型的，`index`为索引
   * `e1%e2`
 * 属性访问
   * `e.method(args)` 调用对象方法
-* `e.property` 对象属性值
-* `e1[ e2 ]`按索引取值，List,数组和Map都适用
-* `@class@method(args)` 调用类的静态方法
-* `@class@field` 调用类的静态字段值
+  * `e.property` 对象属性值
+  * `e1[ e2 ]`按索引取值，List,数组和Map都适用
+  * `@class@method(args)` 调用类的静态方法
+  * `@class@field` 调用类的静态字段值
 
 上述内容只是合适在MyBatis中使用的OGNL表达式，完整的表达式点击[这里](https://commons.apache.org/proper/commons-ognl/language-guide.html)。
 
