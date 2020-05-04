@@ -202,8 +202,9 @@ Boolean()可以显示转化值为布尔值，但是很少使用，因为会自�
 `Date`提供了以本地时区和UTC时区操作时间戳的方法, 如
 
 * 创建当前时间
-  * `new Date()`
-
+  
+* `new Date()`
+  
 * 本地时区相关
   * `setDate()`, `getDate()` 
   * `setMonth()`, `getMonth()` 
@@ -220,7 +221,24 @@ Boolean()可以显示转化值为布尔值，但是很少使用，因为会自�
 * 其他有意思的一些方法
   
   * `getDay()` 返回这周的第几天, 对应关系:`Sunday - Saturday : 0 - 6`
+  
   * `getTime()` 返回自[Unix Epoch](https://en.wikipedia.org/wiki/Unix_time)到现在毫秒数.
+  
+  * 当月天数
+  
+    ```javascript
+    /**
+     * 获取某月的天数
+     * @param month 月份,以1开始
+     * @param year 年份
+     * @return {number}
+     */
+    getDaysInMonth(month,year) {
+        return new Date(year, month-1, 0).getDate();
+    }
+    ```
+  
+    > 参考[JavaScript: Get the number of days in a month](https://www.w3resource.com/javascript-exercises/javascript-date-exercise-3.php)
 
 > 参考[Date](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date)
 
