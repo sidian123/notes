@@ -415,9 +415,99 @@ mybaits提供了根据参数内容动态拼接sql语句的功能。
 ```
 collection属性指定集合类型，如果是数组类型的，`index`为索引，`item`为值；如果是map，则`index`为键，`item`为值。
 
+## bind
+
+`bind`元素用于通过OGNL表达式计算变量, 并绑定到上下文中, 如
+
+```xml
+<select id="selectBlogsLike" resultType="Blog">
+  <bind name="pattern" value="'%' + _parameter.getTitle() + '%'" />
+  SELECT * FROM BLOG
+  WHERE title LIKE #{pattern}
+</select>
+```
+
 # 六 OGNL表达式
 
+## 常用表达式
 
+* 逻辑表达式
+  * `e1 or e2` 或
+  * `e1 and e2` 与
+  * `!e`,`not e`：非，求反
+* 条件表达式
+  * `e1 == e2`,`e1 eq e2` 等于
+  * `e1 != e2`,`e1 neq e2` 不等于
+  * `e1 lt e2` 小于
+  * `e1 lte e2` 大于等于
+  *  `gt`（大于）,`gte`（大于等于）
+* 包含关系
+  * `e1 in e2`
+  * `e1 not in e2`
+* 算术表达式
+  * `e1 + e2`
+  * `e1 * e2`
+  * `e1/e2`
+  * `e1 - e2`
+  * `e1%e2`
+* 属性访问
+  * `e.method(args)` 调用对象方法
+* `e.property` 对象属性值
+* `e1[ e2 ]`按索引取值，List,数组和Map都适用
+* `@class@method(args)` 调用类的静态方法
+* `@class@field` 调用类的静态字段值
+
+上述内容只是合适在MyBatis中使用的OGNL表达式，完整的表达式点击[这里](https://commons.apache.org/proper/commons-ognl/language-guide.html)。
+
+## 使用
+
+Mybatis中经在两处可使用OGNL表达式
+
+- 动态SQL表达式中
+- `${param}`参数中
+
+例子
+
+```xml
+<select id="xxx" ...>
+    select id,name,... from country
+    <where>
+        <if test="name != null and name != ''">
+            name like concat('%', #{name}, '%')
+        </if>
+    </where>
+</select>
+```
+
+```xml
+<select id="xxx" ...>
+    select id,name,... from country
+    <bind name="nameLike" value="'%' + name + '%'"/>
+    <where>
+        <if test="name != null and name != ''">
+            name like #{nameLike}
+        </if>
+    </where>
+</select>
+```
+
+```xml
+<bind name="username_bind" 
+      value='@java.util.UUID@randomUUID().toString().replace("-", "")' />
+```
+
+```xml
+<select id="xxx" ...>
+    select id,name,... from country
+    <where>
+        <if test="name != null and name != ''">
+            name like '${'%' + name + '%'}'
+        </if>
+    </where>
+</select>
+```
+
+> 参考[MyBatis中的OGNL教程](https://blog.csdn.net/isea533/article/details/50061705)
 
 # 七 logging
 mybatis可以使用的日记有很多，mybatis会在classpath下查找日记实现的jar包，使用第一个被找到的jar包。
@@ -565,7 +655,7 @@ MapperFactoryBean需要注入SqlSessionFactory或SqlSessionTemplate都行，如�
 
 
 
-# 分页
+# 九 分页
 
 ## 介绍
 
