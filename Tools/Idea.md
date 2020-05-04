@@ -514,7 +514,15 @@ file->setting->editor->file encodings下把transparent native-to-ascll conversio
 
 > 参考[详解Intellij IDEA中.properties文件中文显示乱码问题的解决](https://www.cnblogs.com/telwanggs/p/11201032.html)
 
-## Program
+## Program Arguments Vs. VM Arguments
+
+```shell
+java -Dvmarg=111 -jar app.jar 123 234
+```
+
+`-Dvmarg`是VM参数, `123 234`是程序参数.
+
+> 参考[What's the difference between program arguments and VM arguments?](https://stackoverflow.com/questions/5751851/whats-the-difference-between-program-arguments-and-vm-arguments)
 
 # 参考
 
