@@ -260,13 +260,26 @@ mybatis最强大的功能就是映射语句，配置好映射文件后，就可�
 * select – A mapped SELECT statement.
 
 ## 参数
-在编写映射语句时，不必指出参数类型，因为mybatis可以推断出，但是参数为Map时，必须给出参数类型，即map。
-* 当参数是基本类型时，sql语句中占位符名可以任意。
-* 当参数是pojo或javaBean时，占位符名为对象属性。
-* 当参数是map是（此时参数类型必须给出），占位符名为map的key。
-* 当参数有多个时，每个参数的占位符名为`#{paramN}`；如果编译时，启用了`-Parameter`选项，占位符名就是参数名；还可以通过`@Param`注解指定参数名。
+* 参数类型
 
-> JDBC规定, 如果参数传入`null`时, 必须指定其JDBC类型, 见[setNull](https://docs.oracle.com/en/java/javase/11/docs/api/java.sql/java/sql/PreparedStatement.html#setNull(int,int)). 而JDBC已经为我们设置了`OTHER`作为默认值, 见3.2小节
+  在编写映射语句时，不必指出参数类型，因为mybatis可以推断出，但是参数为Map时，必须给出参数类型，即map。
+
+* 参数类型与使用
+  * 当参数是基本类型时，sql语句中占位符名可以任意。
+  * 当参数是pojo或javaBean时，占位符名为对象属性。
+  * 当参数是map是（此时参数类型必须给出），占位符名为map的key。
+  * 当参数有多个时，每个参数的占位符名为`#{paramN}`；如果编译时，启用了`-Parameter`选项，占位符名就是参数名；还可以通过`@Param`注解指定参数名。
+
+* 关于`null`
+
+  JDBC规定, 如果参数传入`null`时, 必须指定其JDBC类型, 见[setNull](https://docs.oracle.com/en/java/javase/11/docs/api/java.sql/java/sql/PreparedStatement.html#setNull(int,int)). 而JDBC已经为我们设置了`OTHER`作为默认值, 见3.2小节
+
+* 内置参数
+
+  * `_parameter` 代表整个参数
+    * 若方法传入的是单个参数, `_parameter`就是该参数
+    * 若方法传入的是多个参数, 则参数将被封装为一个Map, `_parameter`就是该Map
+  * `_databaseId` 代表配置了的`databaseIdProvider`标签
 
 ## 联级
 将结果集映射到简单对象时不需要联级，但是有时候对象中属性不简单时，就需要联级。mybatis有三种联级：`association`、`collection`、`discriminator`。当属性对象和对象有一对一的关系时，使用association定义映射关系；当属性对象是个集合时，使用collection定义映射关系；当需要根据结果集某个属性映射不同的属性时，使用discrimination。
@@ -402,7 +415,11 @@ mybaits提供了根据参数内容动态拼接sql语句的功能。
 ```
 collection属性指定集合类型，如果是数组类型的，`index`为索引，`item`为值；如果是map，则`index`为键，`item`为值。
 
-# 六 logging
+# 六 OGNL表达式
+
+
+
+# 七 logging
 mybatis可以使用的日记有很多，mybatis会在classpath下查找日记实现的jar包，使用第一个被找到的jar包。
 
 在很多环境中，会在所有应用能够访问的目录下提供Commons Logging日记jar包。那么Commons Logging会成为第一个被发现的jar包，其他的日记将不会使用，此时你的log4j配置将无效。
@@ -430,7 +447,7 @@ log4j.appender.stdout=org.apache.log4j.ConsoleAppender
 log4j.appender.stdout.layout=org.apache.log4j.PatternLayout
 log4j.appender.stdout.layout.ConversionPattern=%5p [%t] - %m%n
 ```
-# 七 mybatis-spring
+# 八 mybatis-spring
 mybatis-spring是mybatis社区自动发起的一个项目，主要是为了让mybatis能够参与到spring的事务管理中，让事务管理更加的方便。
 
 使用之前，需要导入mybatis-spring的jar包：
@@ -546,183 +563,9 @@ MapperFactoryBean需要注入SqlSessionFactory或SqlSessionTemplate都行，如�
 	</bean>
 	```
 
-# 八 映射语句
-## 注意点
 
-- 在xml中，语句必须指定结果类型（resultType、resultMap），参数类型不用指定。因为在用SqlSession的selectList、selectOne等方法时，可以从参数中反射推断类型，但不能推断返回值的类型（泛型）。
 
-- 在注解中，sql语句绑定到了具体某个Dao的接口方法中，不能出现泛型，才能够推断出参数、结果类型。
-
-- 注解不能使用动态SQL，因此可以考虑xml和注解混合使用。
-
-- 自动映射：默认`PARTIAL` ，即除了嵌套层外，只要结果类型字段与sql结果列一致，就能自动映射。因此在使用级联时，需手动设置。
-
-- 在resultMap中，id的使用很关键，尽管能自动映射，也要手动给出id的映射。
-
-- 返回值
-
-  查询语句中, 若无结果时, 返回`null`; 请注意结果本身就是`null`的情况
-
-  其他语句中, 将返回被影响记录项的数量.
-
-## 例子
-
-### 查询
-
-- 简单查询：
-
-  ```xml
-  <select id="allGroupByRoomID" resultType="Ticket">
-      select roomID,movieID,price,playTime,count(*) as `column`,sum(IF(purchaseTime is not null,1,0)) as `row`
-      from ticket
-      group by roomID,playTime
-      <if test="offset !=null and count!=null">
-          limit #{offset},#{count}
-      </if>
-  </select>
-  ```
-
-- 注解：注意每一句后的空格
-
-  ```java
-  @Select("select * " +
-          "from chatMessage " +
-          "where id=#{id}")
-  ChatMessage selectById(int id);
-  ```
-
-- 一对多简单映射：开启了嵌套映射的自动映射（collection元素），注意手动给出id映射
-
-  ```xml
-  <select id="selectUser2WithNoRead" resultMap="User2Map">
-      select `user`.id,
-      `user`.name,
-      `user`.headUrl,
-      chatMessage.id as msg_id,
-      chatMessage.`from`,
-      chatMessage.content,
-      chatMessage.time
-      from `user` inner join chatMessage
-      on `user`.id=chatMessage.buyer
-      where `from`=0 and isRead=0
-  </select>
-  <resultMap id="User2Map" type="User2" autoMapping="true">
-      <id property="id" column="id"/>
-      <collection property="msgs" autoMapping="true" ofType="ChatMessage2">
-          <id property="id" column="msg_id"/>
-      </collection>
-  </resultMap>
-  ```
-
-- collection映射到`List<String>`，而不是对象的数组，因此无ID：
-
-  ```xml
-  <select id="selectGoods2" resultMap="goods2Map">
-      select goods.*,mediaUrl.url
-      from goods left join mediaUrl on goods.id=mediaUrl.goodsId
-      where goods.size>0
-      <if test="offset!=null and count!=null">
-          limit #{offset},#{count}
-      </if>
-  </select>
-  <resultMap id="goods2Map" type="Goods2" autoMapping="true">
-      <id property="id" column="id"/>
-      <collection property="mediaUrls" ofType="String">
-          <result column="url"/>
-      </collection>
-  </resultMap>
-  ```
-
-- 级联映射时，使用了前缀`columnPrefix`：
-
-  ```xml
-  <select id="selectNoPayOrder2ByUserId" resultMap="Order2Map">
-      select `order`.*
-      ,goods.id as goods2_id
-      ,goods.name as goods2_name
-      ,goods.type as goods2_type
-      ,goods.description as goods2_description
-      ,goods.size as goods2_size
-      ,goods.price as goods2_price
-      ,mediaUrl.url as goods2_mediaUrl
-      from `order` left join goods on `order`.goodsId=goods.id
-      left join mediaUrl on `order`.goodsId=mediaUrl.goodsId
-      where userId=#{userId} and `order`.isPay=0
-  </select>
-  
-  <resultMap id="Order2Map" type="Order2" autoMapping="true">
-      <id column="id" property="id"/>
-      <association property="goods2" javaType="Goods2" autoMapping="true" columnPrefix="goods2_">
-          <id column="id" property="id"/>
-          <collection property="mediaUrls" ofType="String">
-              <result column="mediaUrl"/>
-          </collection>
-      </association>
-  </resultMap>
-  ```
-
-### 插入
-
-- 简单插入：插入后产生的id返回到参数对象中（`useGeneratedKeys`的作用），`keyProperty`指定id赋值给参数对象的哪个字段上。
-
-  ```xml
-  <insert id="add" useGeneratedKeys="true" keyProperty="id">
-      insert
-      into customer(name,password,sex,birthday,phone,email,isAdmin)
-      values(#{name},#{password},#{sex},#{birthday},#{phone},#{email},#{isAdmin})
-  </insert>
-  ```
-
-- 注解版：
-
-  ```java
-  @Options(useGeneratedKeys = true,keyProperty = "id")
-  @Insert("insert " +
-          "into chatMessage(buyer,seller,`from`,content,`time`,isRead) " +
-          "values(#{buyer},#{seller},#{from},#{content},#{time},#{isRead})")
-  int insert(ChatMessage chatMessage);
-  ```
-
-### 修改
-
-- xml版：使用到了mybatis提供的动态sql
-
-  ```xml
-  <update id="update">
-      update media
-      <set>
-          <if test="name!=null">name=#{name},</if>
-          <if test="content!=null">content=#{content},</if>
-          <if test="type!=null">type=#{type}</if>
-      </set>
-      where id=#{id}
-  </update>
-  ```
-
-- 注解版：目前没写过，因为注解不能使用动态sql，因此略。。
-
-### 删除
-
-- xml版：
-
-  ```xml
-  <delete id="delete">
-      delete
-      from movie
-      where id=#{id}
-  </delete>
-  ```
-
-- 注解版：
-
-  ```java
-  @Delete("delete " +
-          "from chatMessage " +
-          "where id=#{id}")
-  int deleteById(int id);
-  ```
-
-# 九 分页
+# 分页
 
 ## 介绍
 
@@ -1359,6 +1202,13 @@ public interface CountryMapper extends Mapper<Country> {
 
 通用Mapper提供的条件构造器, 上述已有专门小节讲过Example, 除此之外, 通用Mapper还提供了Buidler方法.
 
+### 分表
+
+参考
+
+* [基于tk.mybatis插件改造实现数据库分表](https://blog.csdn.net/luckyxiaobaiyang/article/details/82896791)
+* [MyBatis中的OGNL教程](https://blog.csdn.net/isea533/article/details/50061705)
+
 ### 参考
 
 * [通用Mapper Wiki](https://github.com/abel533/Mapper/wiki)
@@ -1372,9 +1222,185 @@ public interface CountryMapper extends Mapper<Country> {
 
 略, 不想用!!!
 
-# 其他
+# 实战
+## 注意点
 
-## `collection`与`List<Integer>`
+- 在xml中，语句必须指定结果类型（resultType、resultMap），参数类型不用指定。因为在用SqlSession的selectList、selectOne等方法时，可以从参数中反射推断类型，但不能推断返回值的类型（泛型）。
+
+- 在注解中，sql语句绑定到了具体某个Dao的接口方法中，不能出现泛型，才能够推断出参数、结果类型。
+
+- 注解不能使用动态SQL，因此可以考虑xml和注解混合使用。
+
+- 自动映射：默认`PARTIAL` ，即除了嵌套层外，只要结果类型字段与sql结果列一致，就能自动映射。因此在使用级联时，需手动设置。
+
+- 在resultMap中，id的使用很关键，尽管能自动映射，也要手动给出id的映射。
+
+- 返回值
+
+  查询语句中, 若无结果时, 返回`null`; 请注意结果本身就是`null`的情况
+
+  其他语句中, 将返回被影响记录项的数量.
+
+## Crud Demo
+
+### 查询
+
+- 简单查询：
+
+  ```xml
+  <select id="allGroupByRoomID" resultType="Ticket">
+      select roomID,movieID,price,playTime,count(*) as `column`,sum(IF(purchaseTime is not null,1,0)) as `row`
+      from ticket
+      group by roomID,playTime
+      <if test="offset !=null and count!=null">
+          limit #{offset},#{count}
+      </if>
+  </select>
+  ```
+
+- 注解：注意每一句后的空格
+
+  ```java
+  @Select("select * " +
+          "from chatMessage " +
+          "where id=#{id}")
+  ChatMessage selectById(int id);
+  ```
+
+- 一对多简单映射：开启了嵌套映射的自动映射（collection元素），注意手动给出id映射
+
+  ```xml
+  <select id="selectUser2WithNoRead" resultMap="User2Map">
+      select `user`.id,
+      `user`.name,
+      `user`.headUrl,
+      chatMessage.id as msg_id,
+      chatMessage.`from`,
+      chatMessage.content,
+      chatMessage.time
+      from `user` inner join chatMessage
+      on `user`.id=chatMessage.buyer
+      where `from`=0 and isRead=0
+  </select>
+  <resultMap id="User2Map" type="User2" autoMapping="true">
+      <id property="id" column="id"/>
+      <collection property="msgs" autoMapping="true" ofType="ChatMessage2">
+          <id property="id" column="msg_id"/>
+      </collection>
+  </resultMap>
+  ```
+
+- collection映射到`List<String>`，而不是对象的数组，因此无ID：
+
+  ```xml
+  <select id="selectGoods2" resultMap="goods2Map">
+      select goods.*,mediaUrl.url
+      from goods left join mediaUrl on goods.id=mediaUrl.goodsId
+      where goods.size>0
+      <if test="offset!=null and count!=null">
+          limit #{offset},#{count}
+      </if>
+  </select>
+  <resultMap id="goods2Map" type="Goods2" autoMapping="true">
+      <id property="id" column="id"/>
+      <collection property="mediaUrls" ofType="String">
+          <result column="url"/>
+      </collection>
+  </resultMap>
+  ```
+
+- 级联映射时，使用了前缀`columnPrefix`：
+
+  ```xml
+  <select id="selectNoPayOrder2ByUserId" resultMap="Order2Map">
+      select `order`.*
+      ,goods.id as goods2_id
+      ,goods.name as goods2_name
+      ,goods.type as goods2_type
+      ,goods.description as goods2_description
+      ,goods.size as goods2_size
+      ,goods.price as goods2_price
+      ,mediaUrl.url as goods2_mediaUrl
+      from `order` left join goods on `order`.goodsId=goods.id
+      left join mediaUrl on `order`.goodsId=mediaUrl.goodsId
+      where userId=#{userId} and `order`.isPay=0
+  </select>
+  
+  <resultMap id="Order2Map" type="Order2" autoMapping="true">
+      <id column="id" property="id"/>
+      <association property="goods2" javaType="Goods2" autoMapping="true" columnPrefix="goods2_">
+          <id column="id" property="id"/>
+          <collection property="mediaUrls" ofType="String">
+              <result column="mediaUrl"/>
+          </collection>
+      </association>
+  </resultMap>
+  ```
+
+### 插入
+
+- 简单插入：插入后产生的id返回到参数对象中（`useGeneratedKeys`的作用），`keyProperty`指定id赋值给参数对象的哪个字段上。
+
+  ```xml
+  <insert id="add" useGeneratedKeys="true" keyProperty="id">
+      insert
+      into customer(name,password,sex,birthday,phone,email,isAdmin)
+      values(#{name},#{password},#{sex},#{birthday},#{phone},#{email},#{isAdmin})
+  </insert>
+  ```
+
+- 注解版：
+
+  ```java
+  @Options(useGeneratedKeys = true,keyProperty = "id")
+  @Insert("insert " +
+          "into chatMessage(buyer,seller,`from`,content,`time`,isRead) " +
+          "values(#{buyer},#{seller},#{from},#{content},#{time},#{isRead})")
+  int insert(ChatMessage chatMessage);
+  ```
+
+### 修改
+
+- xml版：使用到了mybatis提供的动态sql
+
+  ```xml
+  <update id="update">
+      update media
+      <set>
+          <if test="name!=null">name=#{name},</if>
+          <if test="content!=null">content=#{content},</if>
+          <if test="type!=null">type=#{type}</if>
+      </set>
+      where id=#{id}
+  </update>
+  ```
+
+- 注解版：目前没写过，因为注解不能使用动态sql，因此略。。
+
+### 删除
+
+- xml版：
+
+  ```xml
+  <delete id="delete">
+      delete
+      from movie
+      where id=#{id}
+  </delete>
+  ```
+
+- 注解版：
+
+  ```java
+  @Delete("delete " +
+          "from chatMessage " +
+          "where id=#{id}")
+  int deleteById(int id);
+  ```
+
+## 其他Demo
+
+### collection与`List<Integer>`
 
 当使用collection来收集id为数组时，如何办？
 
@@ -1387,19 +1413,36 @@ public interface CountryMapper extends Mapper<Country> {
 
 > 参考：[Select List of Integers as Collection inside another result Map in Mybatis](https://stackoverflow.com/a/48617170/10248407)
 
-## MyBatis-Plus
+### Colletion与前缀
 
-来自[官网介绍](https://mybatis.plus/)
+有时候, 想将所有拥有同一前缀的字段收集到一个集合中, 如何做? 
 
-> 只做增强不做改变，引入它不会对现有工程产生影响，如丝般顺滑。
->
-> 只需简单配置，即可快速进行 CRUD 操作，从而节省大量时间。
->
-> 热加载、代码生成、分页、性能分析等功能一应俱全。
+假设实体
 
-个人感觉, 尽管简单的CRUD被直接提供了, 但是对于稍微复杂的SQL语句来说, 需要将SQL拆分, 混合Java代码来构建, 反而将问题复杂化了.
+```java
+@Data
+public class A{
+    Map<String,Object> aMap;
+    Map<String,Object> bMap;
+}
+```
 
-弃!
+Mybatis XML
+
+```xml
+<resultMap id="AResultMap" type="XXX.XXX.A">
+    <collection property="aMap" autoMapping="true" columnPrefix="A_" />
+    <collection property="bMap" autoMapping="true" columnPrefix="B_" />
+</resultMap>
+<select id="selectA" resultMap="AResultMap">
+    select A_a,A_b,A_c,
+    	   B_a,B_b,B_c
+    from XXX
+    where XXX
+</select>
+```
+
+# 其他
 
 ## 日期&时区
 
