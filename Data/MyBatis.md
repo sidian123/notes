@@ -1503,9 +1503,9 @@ public interface CountryMapper extends Mapper<Country> {
 
 > 参考：[Select List of Integers as Collection inside another result Map in Mybatis](https://stackoverflow.com/a/48617170/10248407)
 
-### Colletion与前缀
+### Colletion收集一行
 
-有时候, 想将所有拥有同一前缀的字段收集到一个集合中, 如何做? 
+一般collection, 在多行间收集数据成集合, 也可以在一行中, 将多个列收集为一个集合.
 
 假设实体
 
