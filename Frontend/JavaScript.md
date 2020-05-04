@@ -201,6 +201,9 @@ Boolean()可以显示转化值为布尔值，但是很少使用，因为会自�
 
 `Date`提供了以本地时区和UTC时区操作时间戳的方法, 如
 
+* 创建当前时间
+  * `new Date()`
+
 * 本地时区相关
   * `setDate()`, `getDate()` 
   * `setMonth()`, `getMonth()` 
