@@ -435,8 +435,6 @@ sudo apt-get install rabbitmq-server
   }
   ```
 
-
-
 ## 可靠性保证
 
 * 消费者确认
@@ -482,7 +480,7 @@ sudo apt-get install rabbitmq-server
 
   * Publisher Returns
 
-    接着开启Publisher Returns后, 此时消息是强制的 ( mandatory ), 将在发送确认之前发送return
+    在Confirm的基础上, 接着开启Publisher Returns, 此时消息是强制的 ( mandatory ), 若消息不可路由, 将在发送确认之前发送return
     
     > 配置:
     >
