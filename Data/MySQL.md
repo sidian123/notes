@@ -485,6 +485,23 @@
   # 我是注释
   ```
 
+# 详细语法
+
+## limit
+
+```sql
+SELECT 
+    select_list
+FROM
+    table_name
+LIMIT [offset,] row_count;
+```
+
+- The `offset` specifies the offset of the first row to return. The `offset` of the first row is 0, not 1.
+- The `row_count` specifies the maximum number of rows to return.
+
+![image-20200505094810437](.MySQL/image-20200505094810437.png)
+
 
 
 # 四 MySQL Server管理
