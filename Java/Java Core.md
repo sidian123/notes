@@ -378,9 +378,16 @@ public class Employee {
 
 Google提供的一个工具, 先记录下. 一般引入了Swagger的项目都引入Guava.
 
-# 进程相关
+> 参考
+>
+> * [Javadoc](https://guava.dev/releases/snapshot-jre/api/docs/)
+> * [wiki](https://github.com/google/guava/wiki)
 
-## Process
+# 原生工具
+
+## 进程相关
+
+### Process
 
 [ProcessBuilder.start()](https://docs.oracle.com/javase/8/docs/api/java/lang/ProcessBuilder.html#start--)和[Runtime.exec](https://docs.oracle.com/javase/8/docs/api/java/lang/Runtime.html#exec-java.lang.String:A-java.lang.String:A-java.io.File-)方法将创建本地进程, 并返回`Process`实例. 
 
@@ -397,7 +404,7 @@ Google提供的一个工具, 先记录下. 一般引入了Swagger的项目都引
 
 进程的状态一般不受Java进程影响, 两则是并行执行的, 即使Java结束了, 没有显示销毁被创建的进程, 它就不会被杀死.
 
-## Runtime
+### Runtime
 
 代表Java程序的运行环境, 通过它可启动新进程并执行, 即执行命令.
 
@@ -423,7 +430,7 @@ Google提供的一个工具, 先记录下. 一般引入了Swagger的项目都引
 
   注册JVM关闭回调
 
-## System
+### System
 
 提供了有用的字段和方法, 一个helper类
 
@@ -434,9 +441,9 @@ Google提供的一个工具, 先记录下. 一般引入了Swagger的项目都引
 * 获取`logger`
 * ...
 
-# 平台环境
+## 平台环境
 
-## System Properties
+### System Properties
 
 Jvm会维护所处环境的信息, 称之为系统属性, 可通过`System`类获取.
 
@@ -465,11 +472,11 @@ Jvm会维护所处环境的信息, 称之为系统属性, 可通过`System`类�
 java -Dname="Spring" -jar app.jar
 ```
 
-# 安全
+## 安全
 
 * `MessageDigest` 生成摘要的工具
 
-# System Tray
+## System Tray
 
 * 用于控制系统托盘. 
 
