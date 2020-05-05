@@ -720,8 +720,10 @@ MapperFactoryBean需要注入SqlSessionFactory或SqlSessionTemplate都行，如�
   ```
 
   返回`PageInfo`对象
-
----------------------
+  
+  ```java
+  pageInfo = PageHelper.startPage(1, 10).doSelectPageInfo(() -> userMapper.selectGroupBy());
+  ```
 
 * `Page` vs. `PageInfo`
 
