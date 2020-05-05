@@ -321,6 +321,8 @@ taskService.complete(task.getId(), taskVariables);
 
 ## 未完待续
 
+https://segmentfault.com/a/1190000013839729
+
 # 参考
 
 * [Javadoc](https://www.activiti.org/javadocs/)
