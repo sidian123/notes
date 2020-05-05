@@ -244,8 +244,6 @@ public class DefaultServiceLocator {
 </beans>
 ```
 
-
-
 **参数类型匹配**
 
 在constructor-arg中指定类型type就行了
@@ -256,8 +254,6 @@ public class DefaultServiceLocator {
     <constructor-arg type="java.lang.String" value="42"/>
 </bean>
 ```
-
-
 
 **参数索引**
 
@@ -270,8 +266,6 @@ public class DefaultServiceLocator {
 </bean>
 ```
 
-
-
 **参数名字**
 
 通过name指定参数名
@@ -283,15 +277,13 @@ public class DefaultServiceLocator {
 </bean>
 ```
 
-
-
 最后文档说到，要使用参数名匹配参数，需要编译时设置debug标志，然后spring才能够查看参数名。我在eclipse中没有使用debug模式运行时也能成功运行。不知是不是我理解错了。
 
 ### 基于setter的依赖注入
 
 在Bean实例化后，会调用setter进行依赖注入。通过<property>标签来指定依赖。
 
-```
+```xml
 <bean id="exampleBean" class="examples.ExampleBean">
     <!-- setter injection using the nested ref element -->
     <property name="beanOne">
@@ -590,12 +582,10 @@ public class SomeClass {
 
 depends-on强制一个或多个bean先于使用了depends-on属性的Bean初始化，无论是否需要depends-on指定的bean作为依赖注入。在下面的例子中，就算test2为原型作用域或者lazy-initialized，也要先于test初始化。
 
-```
+```xml
 	<bean id="test" class="com.luo.main.Test" depends-on="test2" ></bean>
 	<bean id="test2" class="com.luo.main.Test2" scope="prototype"></bean>
 ```
-
-
 
 在Bean销毁时，Bean也要优先于deponds-on的Beans，**但是仅限于为singleton的Bean！！千万注意。**
 
@@ -603,21 +593,17 @@ depends-on强制一个或多个bean先于使用了depends-on属性的Bean初始�
 
 默认Bean是singleton单实例和预加载的，但是lazy-init属性可以实现懒加载
 
-```
+```xml
 <bean id="lazy" class="com.something.ExpensiveToCreateBean" lazy-init="true"/>
 ```
 
+在`<beans/>`标签中使用default-lazy-init可以设置**该元素**中的bean默认为懒加载
 
-
-在<beans/>标签中使用default-lazy-init可以设置**该元素**中的bean默认为懒加载
-
-```
+```xml
 <beans default-lazy-init="true">
     <!-- no beans will be pre-instantiated... -->
 </beans>
 ```
-
-
 
 ## 自动装配
 
@@ -638,7 +624,7 @@ depends-on强制一个或多个bean先于使用了depends-on属性的Bean初始�
 
 ### 自动装配的限制和缺点
 
-- 显示使用<property/>和<constructor-arg/>设置总是会覆盖自动装配的结果
+- 显示使用`<property/>`和`<constructor-arg/>`设置总是会覆盖自动装配的结果
 - 自动装配不太精确
 - 产生文档的工具不能导出装配信息。
 - 如果依赖是数组或集合，多个Bean可能会被自动装配。其他依赖，必须要恰好一个依赖才能装配。
@@ -647,14 +633,14 @@ depends-on强制一个或多个bean先于使用了depends-on属性的Bean初始�
 
 - 避免使用自动装配
 - 通过autowire-candidate减少可以参与匹配的Bean个数，参考4.5.2小节
-- 设置一个<bean/>的属性primary为true，那么多个匹配的Bean中该bean会被注入（优先权高）。
+- 设置一个`<bean/>`的属性`primary`为`true`，那么多个匹配的Bean中该bean会被注入（优先权高）。
 -  通过使用注解得到更加细粒度的控制。
 
 ### 从自动装配中排除Bean
 
-<bean/>元素的属性autowire-candidate有三种值：default、false、true。当设置bean的autowire-candidate为false时，该bean不会作为其他Bean依赖的匹配项的考虑范围（也不作为注解@Autowired的考虑范围）。autowire-candidate只影响**基于类型**的自动装配，不影响**基于名字**的自动装配。
+<bean/>`元素的属性autowire-candidate有三种值：default、false、true。当设置bean的autowire-candidate为false时，该bean不会作为其他Bean依赖的匹配项的考虑范围（也不作为注解@Autowired的考虑范围）。autowire-candidate只影响**基于类型**的自动装配，不影响**基于名字**的自动装配。
 
-也可以设置一群通过了模式匹配的Bean才能作为byType的考虑范围。通过<beans/>元素得default-autowire-candidates属性设置。比如限制可匹配的bean必须以Repository结尾，那么设置属性值为*Repository。如果要使用多个模式，那么以逗号分隔。通过显示设置bean的*autowire-candidate*属性可以覆盖<beans/>的设置。
+也可以设置一群通过了模式匹配的Bean才能作为byType的考虑范围。通过`<beans/>`元素得default-autowire-candidates属性设置。比如限制可匹配的bean必须以Repository结尾，那么设置属性值为*Repository。如果要使用多个模式，那么以逗号分隔。通过显示设置bean的*autowire-candidate*属性可以覆盖`<beans/>`的设置。
 
 即使一个Bean设置了*autowire-candidate*为false，但是他本身可以使用自动装配。
 
@@ -675,8 +661,6 @@ depends-on强制一个或多个bean先于使用了depends-on属性的Bean初始�
 ```java
 <public|protected> [abstract] <return-type> theMethodName(no-arguments);
 ```
-
-
 
 举个例子，如下面的类：
 
@@ -700,11 +684,9 @@ public abstract class CommandManager {
 }
 ```
 
-
-
 然后注入方法：
 
-```
+```xml
 <!-- a stateful bean deployed as a prototype (non-singleton) -->
 <bean id="myCommand" class="fiona.apple.AsyncCommand" scope="prototype">
     <!-- inject dependencies here as required -->
@@ -744,7 +726,9 @@ public abstract class CommandManager {
 
 就是能够任意替换Bean中的方法，听起来好像spring无所不能，，，，但是他就是有这功能，但不常用，这里只给出链接：https://docs.spring.io/spring-framework/docs/current/spring-framework-reference/core.html#beans-factory-arbitrary-method-replacement
 
-# [五 Bean作用域](https://docs.spring.io/spring-framework/docs/current/spring-framework-reference/core.html#beans-factory-scopes)
+# 五 Bean作用域
+
+> 参考[Bean作用域](https://docs.spring.io/spring-framework/docs/current/spring-framework-reference/core.html#beans-factory-scopes)
 
 scope到底是什么，我也不清楚，感觉像生存范围吧。一个有6种scope，其中4种只能在WebApplicationContext中使用。
 
@@ -767,21 +751,19 @@ prototype作用域的Bean在来一个请求就会创建一个Bean实例。于其
 
 当用一个singleton Bean，注入一个prototype的依赖时，由于singleton的bean只会进行一次实例化和依赖注入，而如果每次需要一个新的prototype的Bean，依赖注入则不能完成此任务。因此需要使用方法注入，如4.6小节所示。
 
-## request、session、application作用域
+## request,session,application作用域
 
 和web相关的作用域，需要使用WebApplicationContext容器。为了支持这些作用域，定义Bean之前小小的配置是需要的。在SpringMVC中，你可以web应用中的web.xml文件中声明`DispatcherServlet`, `RequestContextListener`, 或 `RequestContextFilter`其中的任意一个都行，这几个。。东西都做了同一件事，就是绑定http请求对象到处理该请求的线程中（我懵懂中。。）。
 
 request作用域中的Bean每来一个请求时会被创建，不同请求中Bean互不相扰，请求被处理结束后，bean会被销毁。可以通过如下方式配置：
 
-```
+```xml
 <bean id="loginAction" class="com.something.LoginAction" scope="request"/>
 ```
 
-
-
 或
 
-```
+```java
 @RequestScope
 @Component
 public class LoginAction {
@@ -789,19 +771,15 @@ public class LoginAction {
 }
 ```
 
-
-
 session作用域的Bean在会话开启时被创建，不同会话之间互不相扰，会话结束后Bean销毁。通过如下配置：
 
-```
+```xml
 <bean id="userPreferences" class="com.something.UserPreferences" scope="session"/>
 ```
 
-
-
 或
 
-```
+```java
 @SessionScope
 @Component
 public class UserPreferences {
@@ -809,19 +787,15 @@ public class UserPreferences {
 }
 ```
 
-
-
 一个application作用域的Bean在一个web应用中只有一个实例，被存入ServletContext中作为属性。如下配置：
 
-```
+```java
 <bean id="appPreferences" class="com.something.AppPreferences" scope="application"/>
 ```
 
-
-
 或
 
-```
+```java
 @ApplicationScope
 @Component
 public class AppPreferences {
@@ -829,15 +803,13 @@ public class AppPreferences {
 }
 ```
 
-
-
 ## Scoped Beans作为依赖
 
 短生命周期的作为长生命周期的Bean的依赖，总会出现点问题的。除了使用方法注入，还可以使用AOP代理。通过AOP代理，同样会产生代理类，然后需要注入的Bean都是对代理类操作，代理类会在相应的作用域中取出真正的Bean实例，然后将方法传给真实对象。我猜想不同作用域中的Bean的生命周期都是由容器管理的，因此代理类每次取出都是正确作用域的Bean。
 
 如下面所示，直接在bean中加入<aop:scoped-proxy/>就行了
 
-```
+```xml
 <bean id="userPreferences" class="com.something.UserPreferences" scope="session">
     <aop:scoped-proxy/>
 </bean>
@@ -847,13 +819,11 @@ public class AppPreferences {
 </bean>
 ```
 
+> 注意，AOP代理默认使用的CGIB，CGIB代理只会拦截public的方法。
 
+也可以设置`proxy-target-class="false"`来使用标准JDK的代理，但是jdk的代理需要提供接口，如下面所示：
 
-注意，AOP代理默认使用的CGIB，CGIB代理只会拦截public的方法。
-
-也可以设置*proxy-target-class="false"*来使用标准JDK的代理，但是jdk的代理需要提供接口，如下面所示：
-
-```
+```xml
 <!-- DefaultUserPreferences implements the UserPreferences interface -->
 <bean id="userPreferences" class="com.stuff.DefaultUserPreferences" scope="session">
     <aop:scoped-proxy proxy-target-class="false"/>
@@ -864,9 +834,13 @@ public class AppPreferences {
 </bean>
 ```
 
+> 我猜想。。jdk代理会实现`userPreferences`接口，而他的实现类则作为调用处理器。。。
 
+----------
 
-我猜想。。jdk代理会实现userPreferences接口，而他的实现类则作为调用处理器。。。
+或者直接通过`@Autowire`, `@Resource`注入即可
+
+> 可以看看[Quick Guide to Spring Bean Scopes](https://www.baeldung.com/spring-bean-scopes)
 
 # 六 Bean生命周期
 
@@ -1485,6 +1459,8 @@ public class AppConfig {
 # 十二 其他
 
 ## 父子容器
+
+> 这是以前SSM的情况了, 现在Spring Boot仅存在`WebApplicationContext`容器
 
 一个容器可以有父容器，比如springMVC中就有两个容器，一个web应用对应一个ApplicationContext容器，为父容器，每个DispatcherServlet对应一个WebApplicationContext容器，为子容器。父容器中定义的Bean都可以被子容器访问到，也可被子容器隐藏。在ApplicationContext中可以定义和业务逻辑、数据访问有关的Bean，而WebApplicationContext 中可以定义和控制器与视图解析器有关的Bean.
 
