@@ -45,15 +45,15 @@
 
 ![Docker Engine Components Flow](.Docker/engine-components-flow.png)
 
-Docker Engine是一个提供容器服务的客户端, 主要由三部分组成:
+Docker Engine是一个提供容器服务的软件, 主要由三部分组成:
 
-1. 运行容器的守护进程`dockerd`
-2. 提供与守护进程交互的Rest API
-3. 提供与守护进程交互的命令行客户端.
+1. 运行容器的守护进程dockerd
+2. 提供与dockerd交互的Rest API
+3. 提供与dockerd交互的命令行客户端.
 
 ## 架构
 
-![Docker Architecture Diagram](.Docker/architecture-1588163684644.svg)
+![image-20200505145548991](.Docker/image-20200505145548991.png)
 
 一眼就能看懂的CS架构
 
@@ -78,6 +78,12 @@ Docker Engine是一个提供容器服务的客户端, 主要由三部分组成:
 
 * 容器Containers
 
+  * 镜像的运行实例
+  * 可以创建, 开始i, 停止, 移动和删除镜像
+  * 可以连接容器到网络, 添加存储
+  * 默认容器间是隔离的
+  * 当容器被删除时, 未写入到持久层的数据都将消失
+  
   
 
 ## 安装
@@ -170,7 +176,161 @@ apt install docker
 
 # 使用
 
+## 镜像操作
 
+* 列出镜像
+
+  ```shell
+  docker image ls -a
+  ```
+
+  ![docker列出镜像](.Docker/20180825190236927.png)
+
+  - REPOSITORY：镜像所在的仓库名称, 也即完整镜像名.
+  - TAG：镜像标签
+  - IMAGEID：镜像ID
+  - CREATED：镜像的创建日期(不是获取该镜像的日期)
+  - SIZE：镜像大小
+
+  镜像有不同版本, 通过标签来表示. 可通过`ubuntu:12.04`的方式使用某具体版本的镜像.
+
+* 拉取镜像
+
+  ```shell
+  docker image pull library/hello-world
+  ```
+
+  其中, `library`是镜像所在组, `hello-world`是镜像名. 
+
+  组可省略, 此时默认组`library`, 该组由官方提供.
+
+* 删除镜像
+
+  ```shell
+  docker image rm <容器名或容器id>
+  ```
+
+  > 正在运行容器的镜像是无法删除的
+
+## 容器操作
+
+* 创建容器
+
+  ```shell
+  docker run [option] <镜像名> [向启动容器中传入的命令]
+  ```
+
+  > 若镜像不存在, 会自动从你配置的仓库中下拉
+
+  常用可选参数
+
+  * `-i` 以交互模式运行, 即连接容器的输入输出流.
+
+  * `-t` 在容器中创建一个伪终端.
+
+    ----------------
+
+  * `--name=<容器名>` 为创建的容器命名
+
+  * `-d` 容器守护进程化
+
+  * `-e` 为容器设置环境变量
+
+    --------------------
+
+  * `-v <主机目录>|<容器内目录>` 目录映射, 该选项可存在多个
+
+  * `-p <主机端口>|<容器端口>` 端口映射, 该选项可存在多个
+
+  * `--network=host` 将主机的网络环境映射到容器中，容器的网络与主机相同.
+
+    > 貌似默认连接到当前主机的.
+
+  例子
+
+  * 交互式容器
+
+    创建一个交互式容器，并命名为mycentos
+
+    ```shell
+    docker run -it --name=mycentos centos /bin/bash
+    ```
+
+    > 容器中可以随意执行linux命令，就是一个ubuntu的环境，当执行exit命令退出时，该容器也随之停止。
+
+  * 守护式容器
+
+    创建一个守护式容器，并命名为mycentos2
+
+    ```shell
+    docker run -dit --name=mycentos2 centos
+    ```
+
+    > 创建一个守护式容器:如果对于一个需要长期运行的容器来说，我们可以创建一个守护式容器。在容器内部exit退出时，容器也不会停止。
+
+* 进入已运行的容器中
+
+  ```shell
+  docker exec -it <容器名或容器id> <进入后执行的第一个命令>
+  ```
+
+  如
+
+  ```shell
+  docker exec -it mycentos2 /bin/bash
+  ```
+
+* 查看容器
+
+  ```shell
+  列出本机正在运行的容器
+  docker container ls
+  列出本机所有容器，包括已经终止运行的
+  docker container ls --all
+  ```
+
+* 停止与启动容器
+
+  ```shell
+  停止一个已经在运行的容器
+  docker container stop 容器名或容器id
+  
+  启动一个已经停止的容器
+  docker container start 容器名或容器id
+  
+  kill掉一个已经在运行的容器
+  docker container kill 容器名或容器id
+  ```
+
+* 删除容器
+
+  ```shell
+  docker container rm 容器名或容器id
+  ```
+
+## 容器To镜像
+
+通过如下命令将容器保存为镜像
+
+```
+docker commit 容器名 镜像名
+```
+
+## 镜像备份与迁移
+
+可以通过save命令将镜像打包成文件，拷贝给别人使用
+
+```shell
+docker save -o 保存的文件名 镜像名
+```
+
+> 例如：`docker save -o ./centos.tar centos`
+
+对方在拿到镜像文件后，可以通过load方法，将镜像加载到本地
+
+```shell
+docker load -i ./centos.tar
+```
 
 # 参考
 
