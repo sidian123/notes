@@ -144,6 +144,10 @@ include:
 > * [Authorizing OAuth Apps](https://developer.github.com/apps/building-oauth-apps/authorizing-oauth-apps/)
 > * [Building OAuth Apps](https://developer.github.com/apps/building-oauth-apps/)
 
+## API v3
+
+https://segmentfault.com/a/1190000013839729
+
 # 参考
 [github guide](https://guides.github.com/)：最基本的指导
 [github help](https://help.github.com/)：最详细的文档
