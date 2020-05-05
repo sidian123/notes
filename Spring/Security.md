@@ -300,6 +300,10 @@ Spring Security通过`DelegatingFilterProxy`类作为Servelt Filter与容器中B
   }
   ```
 
+  > `hasRole()`的角色名会自动添加`ROLE_`前缀, 同样的, `GrantedAuthority`中数据也需要携带前缀. 后面会介绍如何配置默认前缀.
+  >
+  > 而`hasAuthority()` 无前缀添加
+
 - [退出登录](<https://docs.spring.io/spring-security/site/docs/5.2.0.BUILD-SNAPSHOT/reference/htmlsingle/#jc-logout>)（`.logout()`）：默认提供，URL为`logout`，登出后重定向到，可自行配置：
 
   ```java
@@ -369,6 +373,8 @@ Spring Security通过`DelegatingFilterProxy`类作为Servelt Filter与容器中B
 
 * **其他配置**: 略.
 
+-------------
+
 例子一
 
 ```java
@@ -427,6 +433,8 @@ protected void configure(AuthenticationManagerBuilder auth) throws Exception {
 > **注意**
 >
 > 通过查看源码`org.springframework.security.access.vote.vote()`, 发现, 注解的角色名必须以`ROLE_`开头, 导致`UserDetailsService.loadUserByUsername()`中返回的`UserDetails`的角色必须也已`ROLE_`为前缀, 注解才能生效, 坑!!!!
+>
+> 后面会介绍修改前缀的方法
 
 ## 其他
 
@@ -435,6 +443,19 @@ protected void configure(AuthenticationManagerBuilder auth) throws Exception {
 ```java
 SecurityContextHolder.getContext().getAuthentication().getPrincipal()
 ```
+
+### 角色&权限前缀修改
+
+在Spring Security中, `GrantedAuthority`默认表示为角色的概念. 若要理解为权限的概念也行, 然后配合修改下前缀, 如
+
+```java
+@Bean
+GrantedAuthorityDefaults grantedAuthorityDefaults() {
+    return new GrantedAuthorityDefaults(""); // Remove the ROLE_ prefix
+}
+```
+
+> 详细参考:[How do I remove the ROLE_ prefix from Spring Security with JavaConfig?](https://stackoverflow.com/questions/38134121/how-do-i-remove-the-role-prefix-from-spring-security-with-javaconfig)
 
 # 四 集成JWT
 
