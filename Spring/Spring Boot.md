@@ -1395,6 +1395,10 @@ server:
 > * [Create a Custom Auto-Configuration with Spring Boot](https://www.baeldung.com/spring-boot-custom-auto-configuration) 如何创建自动配置的依赖
 > * [SpringBoot自动配置的原理及实现](https://blog.csdn.net/zjcjava/article/details/84028222) 原理没有说清楚, 可以瞅瞅
 
+## 条件注入
+
+
+
 # 参考
 
 - [Building an Application with Spring Boot](<https://spring.io/guides/gs/spring-boot/>)：入门文档

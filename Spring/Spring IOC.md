@@ -1487,10 +1487,6 @@ public class AppConfig {
 
   `@Configuration`类比普通Bean要早装配, 其依赖的Bean来不及被代理就被注入了, 而注入后的Bean不会再被代理了, 因此此时代理失效了, 包括其依赖Bean的依赖.
 
-# 待补充
-
-## 条件注入
-
 # 参考
 
 * [官方文档](https://docs.spring.io/spring-framework/docs/current/spring-framework-reference/core.html#beans)
