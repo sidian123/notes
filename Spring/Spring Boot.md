@@ -1397,7 +1397,58 @@ server:
 
 ## 条件注入
 
-根据某个条件自动注入
+* 介绍
+
+  是否注入Bean, 需要通过条件来判断.
+
+* 常用注解
+
+  Spring Boot提供了很多条件注解, 见`spring-boot-autoconfigure`包. 下面列出常用的
+
+  * `@ConditionalOnBean` 当容器中存在指定的Bean时, 注入该Bean
+  * `@ConditionalOnMissingBean` 当容器中不存在指定的Bean时, 注入该Bean
+  * `@ConditionalOnProperty` 根据配置判断是否注入Bean
+
+* 自定义条件注解
+
+  实现`Condition`接口, 提供匹配实现; 然后使用`@Conditional`, 注解Bean上, 是否注入的条件由`Condition`接口实现类提供. 如
+
+  ```java
+  public class HelloCondition implements Condition {
+      public boolean matches(ConditionContext context, AnnotatedTypeMetadata metadata) {
+          return Arrays.stream(context.getEnvironment().getActiveProfiles())
+                  .anyMatch("local"::equals);
+      }
+  }
+  ```
+
+  ```java
+  @Component
+  @Conditional(HelloCondition.class)
+  public class HelloService {
+      public void sayHi() {
+          LoggerFactory.getLogger(HelloService.class).info("Hello World!");
+      }
+  }
+  ```
+
+  ```java
+  @RunWith(SpringRunner.class)
+  @SpringBootTest
+  public class ApplicationTest {
+      @Autowired(required = false)
+      private HelloService helloService;
+  
+      @Test
+      public void test() {
+          Assert.assertTrue(null == helloService);
+      }
+  }
+  ```
+
+  > 若`spring.profiles.active=local`, 则匹配成功, 将成功注入`HelloService `Bean
+
+> 参考[Springboot学习笔记（五）-条件化注入](https://www.cnblogs.com/yw0219/p/9062322.html)
 
 # 参考
 
