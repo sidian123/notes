@@ -1083,6 +1083,20 @@ var vm = new Vue({
 
 > 参考[mixins](https://vuejs.org/v2/api/#mixins)
 
+## Wrapper组件
+
+若要增强组件功能, 但又不影响使用, 可以将被包装组件的属性和事件暴露出来, 如
+
+```html
+<div class="my-cascader">
+  <el-cascader
+    v-bind="$attrs"
+    v-on="$listeners"
+    ...
+  >
+</div>
+```
+
 ## Demo
 
 * 指令与vue实例
