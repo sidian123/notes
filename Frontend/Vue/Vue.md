@@ -701,7 +701,31 @@ Vue.component('alert-box', {
 </keep-alive>
 ```
 
+## 异步组件
+
+全局注册
+
+```javascript
+Vue.component(
+  'async-webpack-example',
+  // The `import` function returns a Promise.
+  () => import('./my-async-component')
+)
+```
+
+局部注册
+
+```javascript
+new Vue({
+  // ...
+  components: {
+    'my-component': () => import('./my-async-component')
+  }
+})
+```
+
 ## DOM模板解析问题
+
 在html元素中，`ul`,`ol`,`table`,`select`规定了什么元素能够存在，如`li`,`tr`,`option`。解决办法是使用`is`属性。
 
 但在其他模板中无这种问题：

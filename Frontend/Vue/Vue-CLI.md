@@ -298,7 +298,7 @@ eslint帮助减少隐藏错误.
 
     3. 移除`@vlue/cli-plugin-eslint`包
 
-    4. 将目录添加到`eslintignore`目录
+    4. 将要忽略目录或文件添加到`eslintignore`文件
 
         ```
         /build/
