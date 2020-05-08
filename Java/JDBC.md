@@ -117,6 +117,7 @@ ResultSet提供了一系列获得结果集中列的方法，这里给出了MySQL
 
 ## 隔离性
 隔离性主要为了让事务之间互不干扰，但良好的隔离性和性能不可兼得，因此出现了不同的隔离级别，解决不同的问题：
+
 | Isolation Level              | 丢失修改 | Dirty Reads | Non-Repeatable Reads | Phantom Reads |
 | :--------------------------- | :------- | :---------- | :------------------- | :------------ |
 | TRANSACTION_NONE             | ×        | ×           | ×                    | ×             |
@@ -124,6 +125,7 @@ ResultSet提供了一系列获得结果集中列的方法，这里给出了MySQL
 | TRANSACTION_READ_COMMITTED   | ✔        | ✔           | ×                    | ×             |
 | TRANSACTION_REPEATABLE_READ  | ✔        | ✔           | ✔                    | ×             |
 | TRANSACTION_SERIALIZABLE     | ✔        | ✔           | ✔                    | ✔             |
+
 ×表示未解决，✔表示能够解决
 >mysql的默认隔离级别：repeatable_read。
 
