@@ -11,7 +11,7 @@ Iconfont是阿里打造的图标平台，拥有大量的图片，提供将图片
 1. 进入项目，生成在线链接，如：`//at.alicdn.com/t/font_1199749_deo2fjl10md.css`
 2. 在vue组件的`style`元素中，使用`@import`引入在线css
 	```css
-	@import "//at.alicdn.com/t/font_1199749_deo2fjl10md.css";
+	@import url("//at.alicdn.com/t/font_1199749_deo2fjl10md.css");
 	```
 3. `template`元素中使用方式如下：
     ```html
