@@ -12,15 +12,15 @@
 
 * 截图
 
-  Command-Shift-4 截取所选屏幕区域到一个文件　　
+  * Command-Shift-4 截取所选屏幕区域到一个文件　　
 
-  Command-Shift-3 截取全部屏幕到文件　　
+  * Command-Shift-3 截取全部屏幕到文件　　
 
-  Command-Shift-Control-3 截取全部屏幕到剪贴板　　
+  * Command-Shift-Control-3 截取全部屏幕到剪贴板　　
 
-  Command-Shift-4 截取所选屏幕区域到一个文件，或按空格键仅捕捉一个窗口　　
+  * Command-Shift-4 截取所选屏幕区域到一个文件，或按空格键仅捕捉一个窗口　　
 
-  Command-Shift-Control-4 截取所选屏幕区域到剪贴板，或按空格键仅捕捉一个窗
+  * Command-Shift-Control-4 截取所选屏幕区域到剪贴板，或按空格键仅捕捉一个窗
 
 * 隐藏
 
