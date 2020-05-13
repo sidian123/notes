@@ -341,3 +341,111 @@ docker load -i ./centos.tar
 * [Docker Quick Start](https://hub.docker.com/?overlay=onboarding) 官方入门
 * [Docker最全教程——从理论到实战(一)](https://www.cnblogs.com/codelove/p/10030439.html) 
 
+# ----我是帅气的分割线-----
+
+# Docker overview
+
+* Docker Engine
+
+  ![Docker Engine Components Flow](.Docker/engine-components-flow-1589383299573.png)
+
+  Client-Server程序, 组成部分如下
+
+  * Server, 一个长期运行的守护进程`dockerd`
+  * Rest API, 与server交互的接口
+  * CLI, 与server交互的命令行接口, 通过Rest API实现
+
+* Docker网络拓扑
+
+  ![Docker Architecture Diagram](.Docker/architecture-1589383375951.svg)
+
+  Client发起命令请求给Docker daemon, daemon执行命令, 如构建镜像, 创建容器.  镜像可自己构建, 可来自本地, 或远程的仓库Registry.
+
+* Docker对象
+
+  * 镜像
+
+    只读的模板, 用于创建容器
+
+  * 容器
+
+    镜像的运行实例. 容器可以连接到多个网络networks, 附上存储volumes, 或基于当前容器创建镜像
+
+  * Services
+
+    暂不清楚
+
+* 例子: 容器创建过程
+
+  以交互的形式创建`ubuntu`的容器, 并在容器中运行`bash`
+
+  ```shell
+  $ docker run -i -t ubuntu /bin/bash
+  ```
+
+  执行过程如下:
+
+  1. 若本地不存在`Ubuntu`, 将从Registry中拉去镜像, 并创建容器.
+
+  2. 为容器创建可读写文件系统, 作为最终层. 允许容器在该层中读写文件目录.
+
+     > 该层存储非持久的, 容器删除后将消失.
+
+  3. 在容器中创建*网络接口network interface* , 同时分配该接口范围内的IP给容器.
+
+     > 容器可通过该接口, 与主机网络交互, 和访问外部网络.
+
+  4. 启动容器, 并执行`bash`, 由于`-i`和`-t`的作用, 你可以与`bash`交互
+
+  5. 输入`exit`, 容器将被停止
+
+     > 注意, 不是被删除, 被停止的容器还能够再次被运行.
+
+  6. 
+
+* 底层原理
+
+  * Namespaces
+
+    名字空间提供隔离层, 让容器工作在自己的工作环境中, 在Linux中用到的名字空间如下
+
+    - **The `pid` namespace:** Process isolation (PID: Process ID).
+    - **The `net` namespace:** Managing network interfaces (NET: Networking).
+    - **The `ipc` namespace:** Managing access to IPC resources (IPC: InterProcess Communication).
+    - **The `mnt` namespace:** Managing filesystem mount points (MNT: Mount).
+    - **The `uts` namespace:** Isolating kernel and version identifiers. (UTS: Unix Timesharing System).
+
+  * Control groups
+
+    cgroups限制应用对特殊资源的使用, 如限制容器对内存的使用量
+
+  * Union file systems
+
+    创建容器时添加的读写层(非持久).
+
+  * 容器格式
+
+    Docker Engine组合namespaces, cgroups和UnionFS成容器的方式, 即为容器格式.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

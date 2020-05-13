@@ -662,7 +662,7 @@ Maven默认的资源插件, 负责将**项目资源**拷贝到**输出文件的c
 > * [阿里仓库使用指南](https://help.aliyun.com/document_detail/102512.html?spm=a2c40.aliyun_maven_repo.0.0.361830542K9g7c)
 > * [所有仓库](https://maven.aliyun.com/mvn/view)
 
-## 使用
+## 简单使用
 
 * 生成一个简单的Maven项目
 
@@ -734,6 +734,12 @@ maven中可以指定JDK**编译版本**，还需要确定一下IDE中JDK的**使
 * [javac source and target options](https://stackoverflow.com/questions/15492948/javac-source-and-target-options)
 * [man javac](https://docs.oracle.com/javase/6/docs/technotes/tools/windows/javac.html)
 * [How to cross-compile for older platform versions](https://blogs.oracle.com/darcy/how-to-cross-compile-for-older-platform-versions)
+
+## 查看依赖树
+
+```shell
+mvn dependency:tree
+```
 
 ## 父、子POM(废弃)
 
