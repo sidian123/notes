@@ -149,25 +149,44 @@ for(let i=0;i<10;i++)｛
 ```
 
 ### Number
-根据说明书，数值都是用双精度浮点数表示的，但是实际上整数还是被当做32位int。但也不用担心`3/2=1`问题的出现，并且整数可以使用按位运算。
 
-一些内置函数可以将字符转化为Number，如`parseInt()`,`parseFloat()`。`+`，`Number()`也可以将字符转化为数值。如：
-```javascript
-parseInt('123', 10); // 123
-parseInt('010', 10); // 10，忽略0，不会当做八进制
-parseInt('0x10'); // 16 ，会当作十六进制
-parseInt('11', 2); // 3，指定二进制
-+ '42';   // 42
-+ '010';  // 10，同样，不当作八进制。。
-+ '0x10'; // 16
-Number('123');//123
-```
-运算过程中会出现一些特殊值：`NaN`（Not a Number）、`Infinity`（无穷大）和`-Infinity`（负无穷大），如：
-```javascript
-parseInt('hello', 10); // NaN
-1 / 0; //  Infinity
--1 / 0; // -Infinity
-```
+* 介绍
+
+  在Javascript中，数值都是用双精度浮点数表示的，但是实际上整数还是被当做32位int。但也不用担心`3/2=1`问题的出现，并且整数可以使用按位运算。
+
+* String to Number
+
+  一些内置函数可以将字符转化为Number，如`parseInt()`,`parseFloat()`。`+`，`Number()`也可以将字符转化为数值。如：
+
+    ```javascript
+    parseInt('123', 10); // 123
+    parseInt('010', 10); // 10，忽略0，不会当做八进制
+    parseInt('0x10'); // 16 ，会当作十六进制
+    parseInt('11', 2); // 3，指定二进制
+    + '42';   // 42
+    + '010';  // 10，同样，不当作八进制。。
+    + '0x10'; // 16
+    Number('123');//123
+    ```
+  
+* 特殊数值
+
+  运算过程中会出现一些特殊值：`NaN`（Not a Number）、`Infinity`（无穷大）和`-Infinity`（负无穷大），如：
+
+    ```javascript
+    parseInt('hello', 10); // NaN
+    1 / 0; //  Infinity
+    -1 / 0; // -Infinity
+    ```
+  
+* 其他
+
+  * `Math.ceil()`
+
+    向上取整
+
+    
+
 > 参考：[Number](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number)
 
 ### Boolean
