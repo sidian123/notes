@@ -222,6 +222,12 @@ apt install docker
 
 * 发布镜像
 
+  发布镜像前, 必须通过[docker tag](https://docs.docker.com/engine/reference/commandline/tag/) 打上标签, 通过[docker push](https://docs.docker.com/engine/reference/commandline/push/) 推送上去.
+
+  与构建镜像时打的标签不一样, 构建打的标签尽在本地用, `docker tag`的标签包含更多的信息, 如远程注册中心, 仓库名等信息, 在推送时需要用到.
+
+  若标签步不指定版本, 则默认添加`latest`
+
 ## 容器操作
 
 * 创建容器
@@ -290,7 +296,7 @@ apt install docker
   docker exec -it mycentos2 /bin/bash
   ```
 
-* 查看容器
+* [查看容器](https://docs.docker.com/engine/reference/commandline/ps/)
 
   ```shell
   列出本机正在运行的容器
@@ -447,7 +453,7 @@ docker load -i ./centos.tar
 
 *  Dockerfile
 
-  `dockerfile` 文件提供构建镜像的指令
+  `Dockerfile` 文件提供构建镜像的指令
 
   ```dockerfile
   # 该镜像基于node镜像构建
@@ -478,9 +484,62 @@ docker load -i ./centos.tar
 
   > 参考https://stackoverflow.com/a/47594352/12574399
 
+# Best Practices
 
+## 保持镜像足够小
 
+* 使用恰当的基础镜像
 
+  如仅需JDK, 使用`openjdk`即可, 而不是`ubuntu`, 然后之上安装`openjdk`.
+
+* 使用多阶段构建
+
+  如, 使用`maven`镜像构建Java程序, 然后重置到`tomcat`镜像中, 将构建的Java包放入正确的目录下. 所有步骤都写在同一个dockerfile中
+
+  若使用的Docker版本不支持多阶段构建, 可以通过合并`RUN`命令的形式减少镜像层数.
+
+* 抽离公共部分
+
+  若多个镜像存在公共部分, 可将之抽离成基础镜像, 其他镜像引入. 这样该基础镜像在第一次被使用后, 可以缓存起来, 导致构建速度加快.
+
+* 标签最好不要依赖自动生成的`latest`标签.
+
+## 持久化数据
+
+有三种存储数据的方式
+
+* 使用容器的可读可写层.
+* 使用Volumes
+* 使用挂载(bind mounts)
+
+尽量避免使用容器的读写层, 有三点原因:
+
+1. 容器删除后, 数据将消失
+2. 将增加容器大小
+3. IO访问是低效的
+
+开发环境推荐使用挂载目录的方式, 生产环境使用Volumes. 
+
+> secrets, configs 是什么? 
+
+# Dockerfile Best Practices
+
+* Docker镜像由多个只读层组成, 每层都代表一个Dockerfile指令. 每一层都是上一次的增量Delta
+
+* 例子
+
+  ```dockerfile
+  # 从ubuntu:18.04中创建一层
+  FROM ubuntu:18.04
+  # 在新一层中添加目录
+  COPY . /app
+  # 在新一层中添加make后的结果
+  RUN make /app
+  # 在新一层中添加运行的命令
+  CMD python /app/app.py
+  ```
+
+  生成容器时, 也会新增一层可读写层(container layer)
 
 
 
