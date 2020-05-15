@@ -211,6 +211,16 @@ apt install docker
   ```
 
   > 正在运行容器的镜像是无法删除的
+  
+* 构建镜像
+
+  ```
+  docker build --tag bulletinboard:1.0
+  ```
+
+  > 同时指定版本
+
+* 发布镜像
 
 ## 容器操作
 
@@ -429,7 +439,44 @@ docker load -i ./centos.tar
 
 
 
+# Quick Start
 
+* 镜像&文件系统
+
+  镜像有自己的文件系统, 构建时, 可以将本地的文件克隆到镜像中. 容器实例化时, 也会产生存储层, 从镜像的文件系统中克隆的.
+
+*  Dockerfile
+
+  `dockerfile` 文件提供构建镜像的指令
+
+  ```dockerfile
+  # 该镜像基于node镜像构建
+  FROM node:current-slim
+  
+  # 设置在镜像中操作时的工作目录
+  WORKDIR /usr/src/app
+  
+  # 拷贝本机文件到当前目录中
+  COPY package.json .
+  
+  # 构建镜像时运行的命令
+  RUN npm install
+  
+  # 貌似仅做申明, 给自己看的, 没啥作用
+  EXPOSE 8080
+  
+  # 指定启动容器时执行的命令
+  CMD [ "npm", "start" ]
+  
+  # 拷贝剩余文件到镜像中
+  COPY . .
+  ```
+
+* 关于网络
+
+  貌似`EXPOSE`没啥用, `-p`才能映射端口. 若是都不存在, 容器将默认映射内容内的端口到本机中.
+
+  > 参考https://stackoverflow.com/a/47594352/12574399
 
 
 
