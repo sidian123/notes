@@ -367,7 +367,7 @@ docker load -i ./centos.tar
 
 * Docker网络拓扑
 
-  ![Docker Architecture Diagram](.Docker/architecture-1589383375951.svg)
+  ![image-20200505145548991](.Docker/image-20200505145548991.png)
 
   Client发起命令请求给Docker daemon, daemon执行命令, 如构建镜像, 创建容器.  镜像可自己构建, 可来自本地, 或远程的仓库Registry.
 
