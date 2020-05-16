@@ -226,6 +226,8 @@ apt install docker
 
   与构建镜像时打的标签不一样, 构建打的标签尽在本地用, `docker tag`的标签包含更多的信息, 如远程注册中心, 仓库名等信息, 在推送时需要用到.
 
+  > 好像这里说的不对.
+  
   若标签步不指定版本, 则默认添加`latest`
 
 ## 容器操作
@@ -261,6 +263,10 @@ apt install docker
   * `--network=host` 将主机的网络环境映射到容器中，容器的网络与主机相同.
 
     > 貌似默认连接到当前主机的.
+    
+    ------------
+    
+  * `--rm` 当容器结束后自动删除
 
   例子
 
@@ -417,8 +423,6 @@ docker load -i ./centos.tar
 
      > 注意, 不是被删除, 被停止的容器还能够再次被运行.
 
-  6. 
-
 * 底层原理
 
   * Namespaces
@@ -451,7 +455,9 @@ docker load -i ./centos.tar
 
   镜像有自己的文件系统, 构建时, 可以将本地的文件克隆到镜像中. 容器实例化时, 也会产生存储层, 从镜像的文件系统中克隆的.
 
-*  Dockerfile
+* Dockerfile
+
+  > 文件名也是`Dockerfile`
 
   `Dockerfile` 文件提供构建镜像的指令
 
@@ -540,18 +546,204 @@ docker load -i ./centos.tar
   ```
 
   生成容器时, 也会新增一层可读写层(container layer)
+  
+* 仅`RUN`, `COPY`, `ADD`命令会创建层, 其他命令不会, 也不会增加构建镜像的大小.
 
+# multi-stage builds
 
+> 要求Docker 17.05+
 
+```dockerfile
+FROM golang:1.11-alpine AS build
 
+# Install tools required for project
+# Run `docker build --no-cache .` to update dependencies
+RUN apk add --no-cache git
+RUN go get github.com/golang/dep/cmd/dep
 
+# List project dependencies with Gopkg.toml and Gopkg.lock
+# These layers are only re-built when Gopkg files are updated
+COPY Gopkg.lock Gopkg.toml /go/src/project/
+WORKDIR /go/src/project/
+# Install library dependencies
+RUN dep ensure -vendor-only
 
+# Copy the entire project and build it
+# This layer is rebuilt when a file changes in the project directory
+COPY . /go/src/project/
+RUN go build -o /bin/project
 
+# This results in a single layer image
+FROM scratch
+COPY --from=build /bin/project /bin/project
+ENTRYPOINT ["/bin/project"]
+CMD ["--help"]
+```
 
+> Dockerfile构建的镜像, 最终来至于最后一个`From`与之后的命令. 之前的构建过程可以被引入, 但最终会消失.
 
+Dockerfile中可存在多个`From`指令, 每个`Form`使用不同的`base`, 同时开启新的构建*阶段 stage*. 你可从某个阶段的中拷贝文件到后面的阶段中. 最终构建的镜像来自于最后的那个阶段.
 
+引入上个阶段构建的内容, 有两种方式
 
+1. 使用索引, 索引以0开始
 
+   ```dockerfile
+   COPY --from=0 /java/scr/target/demo.jar  ./
+   ```
 
+2. 命名阶段, 以名字索引
 
+   ```dockerfile
+   FROM golang:1.7.3 AS builder
+   ...
+   
+   FROM alpine:latest  
+   ...
+   COPY --from=builder /go/src/app ./
+   ```
+
+可以从外部镜像中拷贝文件
+
+```dockerfile
+COPY --from=nginx:latest /etc/nginx/nginx.conf /nginx.conf
+```
+
+# Create a base image
+
+创建基础镜像, 有两种方式
+
+* 从当前环境创建
+
+  如把本机系统的Ubuntu发行版打包成镜像
+
+  ```dockerfile
+  $ sudo debootstrap xenial xenial > /dev/null
+  $ sudo tar -C xenial -c . | docker import - xenial
+  
+  a29c15f1bf7a
+  
+  $ docker run xenial cat /etc/lsb-release
+  
+  DISTRIB_ID=Ubuntu
+  DISTRIB_RELEASE=16.04
+  DISTRIB_CODENAME=xenial
+  DISTRIB_DESCRIPTION="Ubuntu 16.04 LTS"
+  ```
+
+  > 具体在干啥我看不懂
+
+  重点就是`docker import`, 它支持从归档文件tarball中创建镜像.
+
+* 从`scratch`镜像中创建
+
+  `scratch`是最基础, 最小的镜像, 应该啥都没有
+
+  > 文件系统是镜像必备的
+
+  ```dockerfile
+  FROM scratch
+  ADD hello /
+  CMD ["/hello"]
+  ```
+
+# Kubernetes
+
+* 介绍
+
+  k8s用于管理, Scale和维护容器化应用
+
+* 启动
+
+  Docker Desktop都内置了k8s的所有功能, 在*Preferences/Kubernetes*中启动
+
+  > 生产环境呢? 暂不知道.
+
+* 操作
+
+  * 创建k8s对象
+
+    ```shell
+    kubectl apply -f bb.yaml
+    ```
+
+  * 查看deployments对象
+
+    ```shell
+    kubectl get deployments
+    ```
+
+  * 查看services对象
+
+    ```shell
+    kubectl get services
+    ```
+
+  * 查看pods对象
+
+    ```shell
+    kubectl get pods
+    ```
+
+  * 查看pod日志
+
+    ```shell
+    kubectl logs demo
+    ```
+
+  * 删除k8s对象
+
+    ```shell
+    kubectl delete -f bb.yaml
+    ```
+
+* yaml配置
+
+  配置通用模式
+
+  * `apiVersion` 解析该对象的k8s API
+  * `kind` 对象类型
+  * `metadata` 元数据, 如对象名
+  * `spec` 对象的所有参数和配置
+
+  例子
+
+  ```yaml
+  apiVersion: apps/v1
+  kind: Deployment
+  metadata:
+    name: bb-demo
+    namespace: default
+  spec:
+    replicas: 1
+    selector:
+      matchLabels:
+        bb: web
+    template:
+      metadata:
+        labels:
+          bb: web
+      spec:
+        containers:
+        - name: bb-site
+          image: bulletinboard:1.0
+  ---
+  apiVersion: v1
+  kind: Service
+  metadata:
+    name: bb-entrypoint
+    namespace: default
+  spec:
+    type: NodePort
+    selector:
+      bb: web
+    ports:
+    - port: 8080
+      targetPort: 8080
+      nodePort: 30001
+  ```
+
+  > 该文件定义了两个对象, 以`---`分隔
+
+  
 
