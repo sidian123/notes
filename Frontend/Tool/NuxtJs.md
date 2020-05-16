@@ -223,7 +223,9 @@ export const mutations = {
 
 ## 代理
 
-> 我信你个鬼, 可以代理访问百度,csdn, 但是后台访问永远只是504, 网关超时
+> 我信你个鬼, 可以代理访问百度,csdn, 但是后台访问永远只是504, 网关超时.
+>
+> 貌似这个可以解决? https://github.com/nuxt-community/modules/issues/136
 
 通过代理解决跨域问题.
 
