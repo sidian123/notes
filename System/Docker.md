@@ -354,6 +354,22 @@ docker save -o 保存的文件名 镜像名
 docker load -i ./centos.tar
 ```
 
+## 其他
+
+* 查看容器资源使用
+
+  ```shell
+  docker stats redis1 redis2
+  ```
+
+  
+
+# Dockerfile
+
+* 主程序
+
+  `ENTRYPOINT`, `CMD`
+
 # 参考
 
 * [Docker 入门教程](http://www.ruanyifeng.com/blog/2018/02/docker-tutorial.html)
@@ -745,5 +761,105 @@ COPY --from=nginx:latest /etc/nginx/nginx.conf /nginx.conf
 
   > 该文件定义了两个对象, 以`---`分隔
 
-  
+
+
+# 容器配置
+
+## 自动启动容器
+
+* 使用
+
+  在`docker run`上添加`--restart`选项, 可选值有
+
+  | Flag             | Description                                                  |
+  | :--------------- | :----------------------------------------------------------- |
+  | `no`             | 不自动重启容器(默认)                                         |
+  | `on-failure`     | 容器因错误结束 (返回值非0) 时重启.                           |
+  | `always`         | 当容器停止时便重启. 特例: 若被手动停止, 只能手动启动, 或Docker重启时启动. |
+  | `unless-stopped` | 类似`alwaus`, 但若手动停止, 只能手动重启.                    |
+
+* 注意点
+
+  * 上述重启策略生效, 仅当容器启动成功. 启动成功意味着容器运行10以上, 且Docker已启动监听.
+  * 手动停止容器, 不会立即重启.
+  * 重启策略仅作用于容器. swarm service需要通过其他方式配置.
+
+## 容器存活
+
+当Docker进程结束时, 默认将关闭所有运行的容器. 有两种方法可以配置, 让容器存活下来
+
+1. 添加配置
+
+   在`/etc/docker/daemon.json`文件中, 添加
+
+   ```json
+   {
+     "live-restore": true
+   }
+   ```
+
+   重启Docker进程, 如
+
+   ```shell
+   systemctl reload docker
+   ```
+
+2. 手动运行`dockerd`, 添加参数`--live-restore`
+
+## 运行多个进程
+
+* 原则上, 一个容器含有一个进程即可, 通过`ENTRYPOINT`或`CMD`指定. 但也允许多个.
+
+* 可通过Bash脚本运行多个进程, 如
+
+  ```dockerfile
+  FROM ubuntu:latest
+  COPY my_first_process my_first_process
+  COPY my_second_process my_second_process
+  COPY my_wrapper_script.sh my_wrapper_script.sh
+  # 该脚本运行上述两个脚本
+  CMD ./my_wrapper_script.sh
+  ```
+
+* 通过容器类的进程管理器, 如
+
+  ```dockerfile
+  FROM ubuntu:latest
+  RUN apt-get update && apt-get install -y supervisor
+  RUN mkdir -p /var/log/supervisor
+  COPY supervisord.conf /etc/supervisor/conf.d/supervisord.conf
+  COPY my_first_process my_first_process
+  COPY my_second_process my_second_process
+  CMD ["/usr/bin/supervisord"]
+  ```
+
+* 为防止多个进程不能随容器关闭而结束, 可添加`--init`参数, docker会添加一个小的init进程, 帮助关闭容器内所有进程.
+
+## 日志
+
+`docker logs` 显示运行容器的日志信息.  日志来自于`STDOUT`和`STDERR`. 若容器的进程不打印日志stdout, stderr中, 该命令将看不到日志.
+
+这种日志收集方式, 可以通过logging driver控制, 略.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
