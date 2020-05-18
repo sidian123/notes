@@ -364,6 +364,10 @@ docker load -i ./centos.tar
   docker stats redis1 redis2
   ```
 
+* 资源检查
+
+  打印Docker对象的JSON表示, 一般命名中含有`inspect`关键字
+
   
 
 # Dockerfile
@@ -847,94 +851,118 @@ COPY --from=nginx:latest /etc/nginx/nginx.conf /nginx.conf
 
 # 网络
 
-* 介绍
+## 介绍
 
-  Docker提供了多种网络驱动Network drivers, 用于控制容器间如何进行网络访问.
+Docker提供了多种网络驱动Network drivers, 用于控制容器间如何进行网络访问.
 
-  * `bridge`
+* `bridge`
 
-    默认的网络驱动. 容器间以桥接的方式连接, 类似网桥的概念, 即同一网桥内的容器可以相互访问, 处于同一网段; 不同网桥的容器处于不同网段, 不能相互访问.
+  默认的网络驱动. 容器间以桥接的方式连接, 类似网桥的概念, 即同一网桥内的容器可以相互访问, 处于同一网段; 不同网桥的容器处于不同网段, 不能相互访问.
 
-    > 容器依然与主机隔离, 需要映射才能访问到容器.
+  > 容器依然与主机隔离, 需要映射才能访问到容器.
 
-  * `host`
+* `host`
 
-    容器直接运行在主机的网络环境中.
+  容器直接运行在主机的网络环境中.
 
-  * `overlay`
+* `overlay`
 
-    用于swarm services间的网路访问
+  用于swarm services间的网路访问
 
-  * `macvlan`
+* `macvlan`
 
-    允许给容器配置MAC地址, 使容器感觉运行在一个物理设备上
+  允许给容器配置MAC地址, 使容器感觉运行在一个物理设备上
 
-  * `none`
+* `none`
 
-    禁用网络连接, 只能用loopback网络接口.
+  禁用网络连接, 只能用loopback网络接口.
 
-* bridge网络详解
+## bridge网络详解
 
-  启动Docker后, 存在一个默认的bridge网络, 叫`bridge`.  也可以自定义自己的bridge网络. 并且两者是有区别的.
+启动Docker后, 存在一个默认的bridge网络, 叫`bridge`.  也可以自定义自己的bridge网络. 并且两者是有区别的.
 
-  自定义bridge提供自动DNS解析, 即支持容器名作为域名使用; 默认bridge只能通过IP访问
+自定义bridge提供自动DNS解析, 即支持容器名作为域名使用; 默认bridge只能通过IP访问
 
-  * 创建自定义bridge
+* 创建自定义bridge
 
-    ```shell
-    docker network create --driver bridge my-net
-    ```
+  ```shell
+  docker network create --driver bridge my-net
+  ```
 
-    > 由于`bridge`是默认的驱动, 因此`--driver`选项可以省略
+  > 由于`bridge`是默认的驱动, 因此`--driver`选项可以省略
 
-  * 连接容器到自定义bridge上
+* 连接容器到自定义bridge上
 
-    在创建时连接
+  在创建时连接`--network`
 
-    ```shell
-    $ docker create --name my-nginx \
-      --network my-net \
-      --publish 8080:80 \
-      nginx:latest
-    ```
+  ```shell
+  $ docker create --name my-nginx \
+    --network my-net \
+    --publish 8080:80 \
+    nginx:latest
+  ```
 
-    在运行后连接
+  在运行后连接
 
-    ```shell
-    docker network connect my-net my-nginx
-    ```
+  ```shell
+  docker network connect my-net my-nginx
+  ```
 
-    > 貌似这个只会在原有基础上新增bridge网络, 与主机连接到多个网桥类似.
+  > 貌似这个只会在原有基础上新增bridge网络, 与主机连接到多个网桥类似.
 
-* 其他操作
+## host网络详解
 
-  * 为容器添加网络接口
+```shell
+docker run --rm -d --network host --name my_nginx nginx
+```
 
-    ```shell
-    docker network connect my-net my-nginx
-    ```
+## 其他操作
 
-  * 删除网络接口
+* 为容器添加网络接口
 
-    ```shell
-    docker network rm alpine-net
-    ```
+  ```shell
+  docker network connect my-net my-nginx
+  ```
 
-  * 查看所有网络接口
+* 删除网络接口
 
-    ```shell
-    docker network ls
-    ```
+  ```shell
+  docker network rm alpine-net
+  ```
 
-  * 检查某个网络接口信息
+* 查看所有网络接口
 
-    ```shell
-    docker network inspect alpine-net
-    ```
+  ```shell
+  docker network ls
+  ```
 
-    
+* 检查某个网络接口信息
+
+  ```shell
+  docker network inspect alpine-net
+  ```
 
 
+## 容器网络
+
+* 映射端口
+
+  容器无论使用哪种网络驱动, 容器的服务都不被外部访问, 需要进行端口映射
+
+  | Flag value                      | Description                                                  |
+  | ------------------------------- | ------------------------------------------------------------ |
+  | `-p 8080:80`                    | Map TCP port 80 in the container to port 8080 on the Docker host. |
+  | `-p 192.168.1.100:8080:80`      | Map TCP port 80 in the container to port 8080 on the Docker host for connections to host IP 192.168.1.100. |
+  | `-p 8080:80/udp`                | Map UDP port 80 in the container to port 8080 on the Docker host. |
+  | `-p 8080:80/tcp -p 8080:80/udp` | Map TCP port 80 in the container to TCP port 8080 on the  Docker host, and map UDP port 80 in the container to UDP port 8080 on  the Docker host. |
+
+* IP地址和域名
+
+  只要连接到Docker网络接口上的容器, 都会被分配个IP已经域名. IP默认从网络接口的IP池上获取, 也可通过`--ip`显式指定. 域名默认从容器ID上获取, 也可通过`--hostname`显式指定.
+
+* DNS配置
+
+  容器默认继承Docker守护进程的DNS配置. 也可修改, 略.
 
 
 
