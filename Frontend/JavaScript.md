@@ -1472,7 +1472,10 @@ console.log(bb);
     import bb, {repeat, shout} from './test.js';
 </script>
 ```
+> 注意, 引入的js, 必须带上后缀如`.js`, `.mjs` , 否则将报错, 见[JS import problem](https://www.freecodecamp.org/forum/t/js-import-problem/347176)
+
 >参考：
+>
 >* [Using JavaScript modules on the web](https://developers.google.com/web/fundamentals/primers/modules)
 >* [MDN import](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/import)
 >* [MDN export](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/export)
