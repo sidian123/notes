@@ -906,6 +906,32 @@ COPY --from=nginx:latest /etc/nginx/nginx.conf /nginx.conf
 
     > 貌似这个只会在原有基础上新增bridge网络, 与主机连接到多个网桥类似.
 
+* 其他操作
+
+  * 为容器添加网络接口
+
+    ```shell
+    docker network connect my-net my-nginx
+    ```
+
+  * 删除网络接口
+
+    ```shell
+    docker network rm alpine-net
+    ```
+
+  * 查看所有网络接口
+
+    ```shell
+    docker network ls
+    ```
+
+  * 检查某个网络接口信息
+
+    ```shell
+    docker network inspect alpine-net
+    ```
+
     
 
 
