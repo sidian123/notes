@@ -845,13 +845,68 @@ COPY --from=nginx:latest /etc/nginx/nginx.conf /nginx.conf
 
 
 
+# 网络
 
+* 介绍
 
+  Docker提供了多种网络驱动Network drivers, 用于控制容器间如何进行网络访问.
 
+  * `bridge`
 
+    默认的网络驱动. 容器间以桥接的方式连接, 类似网桥的概念, 即同一网桥内的容器可以相互访问, 处于同一网段; 不同网桥的容器处于不同网段, 不能相互访问.
 
+    > 容器依然与主机隔离, 需要映射才能访问到容器.
 
+  * `host`
 
+    容器直接运行在主机的网络环境中.
+
+  * `overlay`
+
+    用于swarm services间的网路访问
+
+  * `macvlan`
+
+    允许给容器配置MAC地址, 使容器感觉运行在一个物理设备上
+
+  * `none`
+
+    禁用网络连接, 只能用loopback网络接口.
+
+* bridge网络详解
+
+  启动Docker后, 存在一个默认的bridge网络, 叫`bridge`.  也可以自定义自己的bridge网络. 并且两者是有区别的.
+
+  自定义bridge提供自动DNS解析, 即支持容器名作为域名使用; 默认bridge只能通过IP访问
+
+  * 创建自定义bridge
+
+    ```shell
+    docker network create --driver bridge my-net
+    ```
+
+    > 由于`bridge`是默认的驱动, 因此`--driver`选项可以省略
+
+  * 连接容器到自定义bridge上
+
+    在创建时连接
+
+    ```shell
+    $ docker create --name my-nginx \
+      --network my-net \
+      --publish 8080:80 \
+      nginx:latest
+    ```
+
+    在运行后连接
+
+    ```shell
+    docker network connect my-net my-nginx
+    ```
+
+    > 貌似这个只会在原有基础上新增bridge网络, 与主机连接到多个网桥类似.
+
+    
 
 
 
