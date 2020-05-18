@@ -160,7 +160,7 @@
     }
     ```
 
-* 注解: 以`#`开始的行为注解
+* 注释: 以`#`开始的行为注释
 
 > 注意, 指令的语义可以含有继承关系
 
@@ -657,6 +657,51 @@ server {
 >
 > * [Module ngx_http_upstream_module](http://nginx.org/en/docs/http/ngx_http_upstream_module.html)
 > * [What does upstream mean in nginx?](https://stackoverflow.com/questions/5877929/what-does-upstream-mean-in-nginx)
+
+## gzip压缩
+
+* `gzip`
+
+  是否开启压缩功能, 默认`off`
+
+* `gzip_buffers`
+
+  压缩时使用到的缓存大小, 默认`4k`或`8k`
+
+* `gzip_comp_level`
+
+  压缩等级, 默认1 (最低)
+
+* `gzip_disable`
+
+  设置配置模式, `User-Agent`上匹配到的请求不压缩.
+
+* `gzip_min_length`
+
+  要压缩的响应必须满足的大小下限, 默认20Byte
+
+* `gzip_proxied`
+
+  是否启动反向代理的压缩. 默认`off`, 不压缩
+
+* `gzip_types`
+
+  什么样的响应需要压缩, 默认`text/html`
+
+* `gzip_vary`
+
+  压缩的响应中是否添加头字段`Vary: Accept-Encoding`
+
+例子
+
+```nginx
+gzip            on; # 开启压缩
+gzip_min_length 1k; # 1k以上的才压缩
+gzip_proxied    expired no-cache no-store private auth; # 部分代理请求要压缩,主要压缩后端允许缓存的内容
+gzip_types text/plain text/html application/javascript text/css application/xml text/javascript image/jpeg image/gif image/png; # 网页,图片都压缩
+gzip_comp_level 2; # 提高压缩率
+gzip_vary on;
+```
 
 # 其他
 
