@@ -686,7 +686,7 @@ server {
 
 * `gzip_types`
 
-  什么样的响应需要压缩, 默认`text/html`
+  什么样的响应需要压缩, `text/html`总是会被压缩, 无需特别指定.
 
 * `gzip_vary`
 
@@ -698,7 +698,7 @@ server {
 gzip            on; # 开启压缩
 gzip_min_length 1k; # 1k以上的才压缩
 gzip_proxied    expired no-cache no-store private auth; # 部分代理请求要压缩,主要压缩后端允许缓存的内容
-gzip_types text/plain text/html application/javascript text/css application/xml text/javascript image/jpeg image/gif image/png; # 网页,图片都压缩
+gzip_types text/plain application/javascript text/css application/xml text/javascript image/jpeg image/gif image/png; # 网页,图片都压缩
 gzip_comp_level 2; # 提高压缩率
 gzip_vary on;
 ```
