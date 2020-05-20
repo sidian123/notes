@@ -964,9 +964,293 @@ docker run --rm -d --network host --name my_nginx nginx
 
   容器默认继承Docker守护进程的DNS配置. 也可修改, 略.
 
+# 数据管理
+
+## 介绍
+
+容器的数据默认存储在容器的读写层中, 但有如下缺点 
+
+* 一旦容器被删除, 数据将消失
+* 容器会数据的增加而变大, 且数据不容易被移到其他地方去
+* 读写层访问, 需要经过[storage driver](https://docs.docker.com/storage/storagedriver/), 增加了性能消耗.
+
+Docker提供了多种持久化数据的方式, 如Volumes, Bind mounts等
+
+## 挂载类型
+
+都是将外部存储挂载到容器内的某个目录上, 即使挂载类型不同, 但在容器看来, 使用上并无区别, 参考Linux的挂载.
+
+* Volume
+
+  Volume由Docker**创建**和**管理**. Volume被存储在Docker主机的某个目录上. 即使容器被删除, Volume也不会消失. 
+
+  Volume可以同时挂载到多个容器上共享数据.
+
+  Volume可以显式创建`docker volume create`, 也可以在创建容器时自动创建 (需要对应选项).
+
+  Volume被创建时可指定名字, 若未指定(匿名), Docker将给与该Volume一个唯一的名字
+
+  Volume支持`volume drivers`的使用, 可达到将数据存储到远程主机或远端的目的.
+
+* Bind Mount
+
+  Bind Mount就是将主机的某个目录挂载到容器的某个目录上. 
+
+  指定目录时, 必须使用完整的路径名; 主机上被挂载的目录也可不必存在, 在需要的时候会自动创建.
+
+* tmpfs mount
+
+  `tmpfs`挂载内存到容器的某个目录上, 使用内存存储数据. 当容器停止时, 数据将消失
+
+* named pipe
+
+  略, 不重要
+
+## 使用策略
+
+* 多个容器间共享数据, 用volume
+* 远程存储数据, 用volume
+* 由主机提供容器所需配置文件, 用bind mount
+* 开发时共享源代码和构建的artifact, 用bind mount
+
+* 不想持久化数据, 侧重于安全性和性能, 使用tmpfs
+
+## 详细操作
+
+以下挂载类型都支持两种使用方式:  `-v`和`--mount`(推荐)
+
+### volume
+
+* 参数使用
+
+  * `-v`或`--volume`
+
+    由三个以`:`分隔的字段组成
+
+    1. 第一个字段, 指定volume的名字, 若匿名, 可忽略.
+    2. 第二个字段, 指定容器中要挂载的目录(全路径名)
+    3. 第三个字段, 指定可选的参数, 如只读`ro`, 多个参数以`,`分隔
+
+  * `--mount`
+
+    由键值对`<key>=<value>`组成, 多个键值对以`,`分隔.
+
+    * `type`  指定挂载类型, 这里为`volume`
+    * `source` volume名, 若匿名, 则忽略.
+    * `destination` 容器中要挂载的目录(全路径名)
+    * `readonly` 只读. 非键值对, 存在即为生效
+    * `volume-opt` 略
+
+* 显式创建Volume
+
+  ```shell
+  $ docker volume create my-vol
+  ```
+
+* 启动时创建Volume并使用
+
+  ```shell
+  $ docker run -d \
+    --name devtest \
+    --mount source=myvol2,target=/app \
+    nginx:latest
+  ```
+
+  或
+
+  ```shell
+  $ docker run -d \
+    --name devtest \
+    -v myvol2:/app \
+    nginx:latest
+  ```
+
+
+* 查看所有volume
+
+  ```shell
+  $ docker volume ls
+  
+  local               my-vol
+  ```
+
+* 检查volume对象
+
+  ```shell
+  $ docker volume inspect my-vol
+  [
+      {
+          "Driver": "local",
+          "Labels": {},
+          "Mountpoint": "/var/lib/docker/volumes/my-vol/_data",
+          "Name": "my-vol",
+          "Options": {},
+          "Scope": "local"
+      }
+  ]
+  ```
+
+* 删除Volume
+
+  
+  * 删除有名的volume
+  
+      ```shell
+      $ docker volume rm my-vol
+      ```
+      
+  * 自动删除匿名Volume
+  
+      使用`--rm`, 容器被删除后, 也将删除匿名volume
+  
+      ```shell
+      $ docker run --rm -v /foo -v awesome:/bar busybox top
+      ```
+  
+      > 容器被删除后, 挂载到`/foo`的volume也将被删除, 而`awesome`不会
+  
+  * 删除所有未被使用的volume
+  
+      ```shell
+      $ docker volume prune
+      ```
+  
+* 使用只读volume
+
+  ```shell
+  $ docker run -d \
+    --name=nginxtest \
+    --mount source=nginx-vol,destination=/usr/share/nginx/html,readonly \
+    nginx:latest
+  ```
+
+  或
+
+  ```shell
+  $ docker run -d \
+    --name=nginxtest \
+    -v nginx-vol:/usr/share/nginx/html:ro \
+    nginx:latest
+  ```
+
+  
+
+### bind mount
+
+* 参数使用
+
+  * `-v`或`--volume`
+
+    由三个以`:`分隔的字段组成
+
+    1. 第一个字段, 指定主机上的目录名(全路径名)
+    2. 第二个字段, 指定容器中要挂载的目录名(全路径名)
+    3. 第三个字段, 指定可选的, `,`分隔的参数, 如`ro`(只读), `consistent`, `delegated`, `cached`, `z`等
+
+  * `--mount`
+
+    由键值对`<key>=<value>`组成, 多个键值对以`,`分隔.
+
+    * `type`  指定挂载类型, 这里为`bind`
+    * `source` 主机上的目录名(全路径名)
+    * `destination` 容器中要挂载的目录(全路径名)
+    * `readonly` 只读. 非键值对, 存在即为生效
+    * 其他参数, 略
+
+* 开启容器的同时挂载
+
+  ```shell
+  $ docker run -d \
+    -it \
+    --name devtest \
+    --mount type=bind,source="$(pwd)"/target,target=/app \
+    nginx:latest
+  ```
+
+  或
+
+  ```shell
+  $ docker run -d \
+    -it \
+    --name devtest \
+    -v "$(pwd)"/target:/app \
+    nginx:latest
+  ```
+
+* 查看挂载信息
+
+  ```shell
+  $ docker inspect devtest
+  "Mounts": [
+      {
+          "Type": "bind",
+          "Source": "/tmp/source/target",
+          "Destination": "/app",
+          "Mode": "",
+          "RW": true,
+          "Propagation": "rprivate"
+      }
+  ],
+  ```
+
+* 只读挂载
+
+  ```shell
+  $ docker run -d \
+    -it \
+    --name devtest \
+    --mount type=bind,source="$(pwd)"/target,target=/app,readonly \
+    nginx:latest
+  ```
+
+  或
+
+  ```shell
+  $ docker run -d \
+    -it \
+    --name devtest \
+    -v "$(pwd)"/target:/app:ro \
+    nginx:latest
+  ```
+
+  
+
+### tmpfs
+
+tmpfs能将内存挂载到容器的某个目录上, 如
+
+> 使用方式类似, 同上
+
+```shell
+$ docker run -d \
+  -it \
+  --name tmptest \
+  --mount type=tmpfs,destination=/app \
+  nginx:latest
+```
+
+或
+
+```shell
+$ docker run -d \
+  -it \
+  --name tmptest \
+  --tmpfs /app \
+  nginx:latest
+```
+
+此外, `tmpfs-size`和`tmpfs-mode`分别可控制内存使用量, 和文件默认mode, 详细略.
 
 
 
+
+
+## 其他
+
+### 数据传播
+
+* 当挂载一个**空volume**到容器的目录中, 且该目录有数据时, 这些数据将传播(拷贝)到volume中.
+* 当使用**bind mount或非空volume**挂载容器的目录中, 且该目录有数据时, 这些数据将被隐藏掉. 即数据未消失, 但暂时访问不到, 参考Linux的mount.
 
 
 
