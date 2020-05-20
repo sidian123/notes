@@ -646,6 +646,78 @@ class FillAndEmpty {
 
 ### Lock
 
+* 介绍
+
+  `Lock`是一个接口, 代表独占锁. 比`synchronized`更为灵活
+
+  * 可以手动释放锁
+  * 可非阻塞抢占锁
+  * 抢占锁时可被中断等.
+
+  JDK提供了实现类`ReentrantLock`, 是可重入的独占锁
+
+* 加锁&释放锁
+
+  ```java
+   Lock l = new ReentrantLock();
+   l.lock(); // 加锁
+   try {
+     // access the resource protected by this lock
+   } finally {
+     l.unlock(); // 释放锁
+   }
+  ```
+
+* 其他加锁方式
+
+  * `lockInterruptibly()` 阻塞时可被中断
+  * `tryLock()` 非阻塞尝试性加锁
+  * `tryLock(long timeout, TimeUnit timeUnit)` 阻塞性加锁, 直到获取到锁, 或超时
+
+### ReadWriteLock
+
+* 介绍
+
+  继承至`Lock`的接口, 提供更高级的锁机制, 将锁细分为读写锁. 有如下特性
+
+  | Lock type  | read-lock | write-lock |
+  | ---------- | --------- | ---------- |
+  | read-lock  |           | X          |
+  | write-lock | X         | X          |
+
+  > X 表示不兼容
+
+  即加了读锁的仍可被其他线程加读锁, 其他的锁组合是不行的.
+
+* 使用
+
+  ```java
+  ReadWriteLock readWriteLock = new ReentrantReadWriteLock();
+  
+  // 加读锁
+  readWriteLock.readLock().lock();
+  
+      // multiple readers can enter this section
+      // if not locked for writing, and not writers waiting
+      // to lock for writing.
+  // 释放读锁
+  readWriteLock.readLock().unlock();
+  
+  // 加写锁
+  readWriteLock.writeLock().lock();
+  
+      // only one writer can enter this section,
+      // and only if no threads are currently reading.
+  // 释放写锁
+  readWriteLock.writeLock().unlock();
+  ```
+
+  > 注意, 一个`ReentrantReadWriteLock`仅携带一对读写锁.
+
+### ReadWriteLock
+
+
+
 ## Executor
 
 执行任务`Runnable`的接口, 提供一种将**任务如何运行**与**任务提交**, **线程使用细节**, **调度** 解耦开来的方案. 
