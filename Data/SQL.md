@@ -62,6 +62,21 @@
 
 > 不加锁, 是可以直接读写的, 获得锁后才读写, 只是为了保证隔离性的一个约定
 
+-----------
+
+理解原理之前，需要知道，一般DBMS使用两端封锁协议（[Two-phase locking](https://en.wikipedia.org/wiki/Two-phase_locking)）来实现并发控制。主要存在两种锁：写锁（独占锁）和读锁（共享锁）。一个对象可能会被加多个锁，或者只有一个锁，说明有的锁是兼容的，有的不是，如下锁兼容性表所示：
+
+| Lock type  | read-lock | write-lock |
+| ---------- | --------- | ---------- |
+| read-lock  |           | X          |
+| write-lock | X         | X          |
+
+> x表示不兼容
+
+一个事务尝试对已加过锁的对象加锁时，会判断两者是否兼容，如果不兼容就被阻塞，该事务加入到对象的等待队列中。
+
+另外，不要被锁的名字给迷惑，并不是说加了写锁的对象就一定只能写入。锁只是表明一种意图，而不是规定它的操作。一般对数据增删改(DML)时会加写锁，对数据查(DQL)时会加读锁
+
 > 参考：
 >
 > * [Isolation (database systems)](https://en.wikipedia.org/wiki/Isolation_(database_systems)#Repeatable_reads)
