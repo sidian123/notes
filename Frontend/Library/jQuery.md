@@ -70,9 +70,9 @@ $( window ).on( "load", function() {
 ## 操作DOM
 jQuery对象提供了一些列操作DOM元素的方法。
 
-参考：
-[Manipulation](https://api.jquery.com/category/manipulation/)
-[Manipulating Elements](https://learn.jquery.com/using-jquery-core/manipulating-elements/)
+> 参考：
+> [Manipulation](https://api.jquery.com/category/manipulation/)
+> [Manipulating Elements](https://learn.jquery.com/using-jquery-core/manipulating-elements/)
 
 ### getting和setting
 下面的一些方法都可以获得元素对应的信息，也可以设置元素的内容。当获得信息时，一般是获得元素集中第一个元素的信息，除了例外`.text`（它将所有元素的文本拼接而成）；当设置信息时，会分别对元素集中所有元素设置。
@@ -109,6 +109,10 @@ $( "#myList li:first" ).clone().appendTo( "#myList" );
 `.remove()`,`.detach()`都可以删除元素，然后返回对应jQuery对象。但是前者在删除元素后不会保存关联的数据和事件处理器，后者保存。`.detach()`可以方便的恢复被删除的元素。
 
 `.empty()`可以删除元素内所有子元素（包括文字）。
+
+### 元素替换
+
+[.replaceWith()](https://api.jquery.com/replaceWith/)
 
 ### attributes
 `.attr()`可以获得或者设置属性。
