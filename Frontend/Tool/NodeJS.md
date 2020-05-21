@@ -405,6 +405,8 @@ nvm (nodejs version manager) 用于管理多版本nodejs的工具
 
 仅Linux和macOS用户可用, 略
 
+> 补充, 有Windows的替代品[Windows环境下nvm的安装及使用](https://www.jianshu.com/p/0d591ad6d60d)
+
 ## 编译node-sass失败
 
 `install`或`update` `node-sass`时, 会编译该package, 如果运行环境中缺少对应的工具, 将报错.
