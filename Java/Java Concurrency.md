@@ -714,8 +714,6 @@ class FillAndEmpty {
 
   > 注意, 一个`ReentrantReadWriteLock`仅携带一对读写锁.
 
-### ReadWriteLock
-
 
 
 ## Executor
