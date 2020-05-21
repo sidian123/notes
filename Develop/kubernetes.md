@@ -63,80 +63,54 @@ k8s集群由一个主节点和多个工作节点组成
 
 ### Deployment
 
-
+* 管理Pods的创建和扩展, 即管理Pod实例个数.
+* Pod健康检查和重启
 
 ### Service
 
+* 介绍
+  * Service功能由kube-proxy提供, 而kube-proxy位于每个工作节点上.
+  * 提供让一组Pod被访问的网络功能. 该组Pod通常是同一个Pod的多个拷贝, 由Deployment规定.
+  * 一个Pod只能位于一个工作节点上, 而一个Service的Pod集合可以分散在多个工作节点上. 因为Service的网络映射规则与节点位置关系不大.
+  * Service通过`label selector`来选择要应用网络规则的Pod.
+  * 一个Service被分配一个IP地址(cluster IP), 用于服务将调用
+  * 支持DNS映射, 即Service名作为域名.
+  * Service能够负载均衡的将请求转发到Service内具体的一个Pod上.
 
+  把Pod看作逻辑主机, 可将Service看作逻辑路由器... 
 
-# k8s对象
+* Service类型
 
-* Pod
-  
-* Service
+  * ClusterIP (default)
 
-  提供服务端负载均衡和服务发现功能
+    一个Service被分配个IP, 在同一k8s集群中, 可被其他Service访问
 
-* Volume
+  * NodePort
 
-* Namespace
+    将工作节点IP上的某个端口与该Service关联. 
 
-* Deployment
-  * 管理Pods的创建和扩展
-  * 检查Pod的健康, 或重启Pod
-  
-* DaemenSet
+  * LoadBalancer
 
-* StatefulSet
+    看不懂
 
-* ReplicaSet
+  * ExternalName
 
-* Job
+    将域名映射到Service, 如`foo.bar.example.com`
 
-* k8s功能
+* 实现原理
 
-  * 服务发现和负载均衡
-  * 健康检查&自我修复
-  * 自动滚动或回滚
-  * ...
+  kube-proxy的提供的功能, 而ExternalName需要其他组件的协助
 
+* 参考
 
-# k8s集群
+  [Kubernetes Services: A Beginner’s Guide](https://www.bmc.com/blogs/kubernetes-services/)
 
-![Components of Kubernetes](.kubernetes/components-of-kubernetes.png)
+### Namespace
 
-由一个Master节点和多个非Master节点组成
+提供在一个集群中划分多个虚拟k8s集群的功能, 用于满足不同环境不同用户使用的隔离需求. 
 
-* 主节点(Master Node)
+# 使用
 
-  负责维护k8s集群到你描述的状态, 组成如下
+# 参考
 
-  * kube-apiserver
-
-    Master的API接口, 可通过`kubectl` CLI与之交互.
-
-  * etcd
-
-    高可用的键值对缓存
-
-  * kube-controller-manager
-
-  * kube-scheduler 
-
-    调度器
-
-* 工作节点(Worker Node)
-
-  负责运行Pod, 由两个进程组成
-
-  * kubelet 
-
-    负责与Master交互
-
-  * kube-proxy
-
-    网络代理
-
-* 待学习
-
-  [A Kubernetes Basics Tutorial](https://www.bmc.com/blogs/what-is-kubernetes/) 
+[A Kubernetes Basics Tutorial](https://www.bmc.com/blogs/what-is-kubernetes/) 
