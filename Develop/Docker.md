@@ -669,6 +669,94 @@ COPY --from=nginx:latest /etc/nginx/nginx.conf /nginx.conf
   CMD ["/hello"]
   ```
 
+
+
+# Swarm
+
+## 介绍
+
+* Docker原生的容器编排技术
+
+* Service
+
+  同时提供调度和网络功能.
+
+  > 在k8s中, Service仅提供网络功能, Deployment提供调度功能.
+
+## 操作
+
+* 检查Swarm是否启动
+
+  ```shell
+  docker system info
+  ```
+
+  > 接着查看`Swarm`字段
+
+* 启动Swarm
+
+  ```shelll
+  docker swarm init
+  ```
+
+  此时该节点成为管理节点
+
+* 创建Service
+
+  ```shell
+  docker service create --name demo alpine:3.5 ping 8.8.8.8
+  ```
+
+* 列出Service
+
+  ```shell
+  docker service ps demo
+  ```
+
+* 查看Service日志
+
+  ```shell
+  docker service logs demo
+  ```
+
+* 删除Service
+
+  ```shell
+  docker service rm demo
+  ```
+
+## stack文件
+
+用于描述Swarm对象, 如`bb-stack.yaml`
+
+```yaml
+version: '3.7'
+
+services:
+  bb-app:
+    image: bulletinboard:1.0
+    ports:
+      - "8000:8080"
+```
+
+运行
+
+```shell
+$ docker stack deploy -c bb-stack.yaml demo
+Creating network demo_default
+Creating service demo_bb-app
+```
+
+> 创建了一个service和network
+
+删除
+
+```shell
+$ docker stack rm demo
+```
+
+
+
 # Kubernetes
 
 * 介绍
