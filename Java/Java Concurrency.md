@@ -865,6 +865,10 @@ class FillAndEmpty {
 
 ## Atomic
 
+`java.util.concurrent.atomic`包下定义了一系列对单变量进行原子操作的类. 
+
+原子类的`get()`,`set()`方法能保证*happen before*关系; `compareAndSet()`是原子操作, 且保证数据一致性. 除此之外, 还有其他原子操作.
+
 ## 其他
 
 ### ThreadLocal
