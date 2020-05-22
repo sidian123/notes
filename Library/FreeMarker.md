@@ -270,3 +270,25 @@ ${str!"我是默认值"}
 ```
 ${num+1}
 ```
+
+# 其他
+
+## $ 冲突解决
+
+JavaScript中的`$`与Freemarker冲突, 可以给Freemarker换种语法, 如
+
+Java API方式
+
+```java
+Configuration cfg;
+// ...
+cfg.setInterpolationSyntax(SQUARE_BRACKET_INTERPOLATION_SYNTAX);
+```
+
+Spring Boot方式
+
+```properties
+spring.freemarker.settings.interpolationSyntax = squareBracket
+```
+
+> 参考https://stackoverflow.com/a/6953137/12574399
