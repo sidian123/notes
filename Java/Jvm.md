@@ -220,6 +220,12 @@ G1的工作过程如下：
 
     对象引用直接存放对象在堆中的地址，这是HotSpot虚拟机使用的方式。
 
+## 类加载器
+
+* [类加载器](https://blog.csdn.net/jdbdh/article/details/82593573)
+
+* [类加载过程](https://blog.csdn.net/jdbdh/article/details/82622473)
+
 # 参考
 
 *《深入理解java虚拟机》周志明*
