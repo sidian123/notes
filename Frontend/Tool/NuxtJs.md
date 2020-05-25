@@ -391,6 +391,66 @@ export default {
 
     > 参考[You are using the runtime-only build of Vue...](https://github.com/nuxt/nuxt.js/issues/1142)
 
+## 环境变量
+
+* 介绍
+
+  环境变量能够在客户端和服务端中被使用
+
+* 环境变量定义
+
+  `nuxt.config.js`
+
+  ```javascript
+  export default {
+    env: {
+      baseUrl: process.env.BASE_URL || 'http://localhost:3000'
+    }
+  }
+  ```
+
+* 使用
+
+  通过`process.env.XXX`的方式, 如
+
+  ```javascript
+  import axios from 'axios'
+  
+  export default axios.create({
+    baseURL: process.env.baseUrl
+  })
+  ```
+
+* 原理
+
+  使用了webpack的`definePlugin`插件, 在编译的时候, 将`process.env.XXX`替换成对应的字符串, 如
+
+  未编译前
+
+  ```javascript
+  if (process.env.test == 'testing123')
+  ```
+
+  编译后
+
+  ```javascript
+  if ('testing123' == 'testing123')
+  ```
+
+  **因此**`process.env`未被编译和替换, 且值为`{}`
+
+* 预定义变量
+
+  * `process.env.BASE_URL`
+
+    服务端的`BASE_URL`
+
+  * `process.env.NODE_ENV`
+
+    当前环境, 生产环境时值为`production`, 开发`development`
+
+  * ...
+
 # 其他
 
 ## 元数据head
