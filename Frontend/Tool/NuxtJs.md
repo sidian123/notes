@@ -223,48 +223,57 @@ export const mutations = {
 
 ## 代理
 
-> 我信你个鬼, 可以代理访问百度,csdn, 但是后台访问永远只是504, 网关超时.
->
-> 貌似这个可以解决? https://github.com/nuxt-community/modules/issues/136
+* 介绍
 
-通过代理解决跨域问题.
+  通过代理解决跨域问题.
 
-首先安装依赖
+* 依赖安装
 
-```bash
-npm i @nuxtjs/axios @nuxtjs/proxy -D
-```
+    ```bash
+    npm i @nuxtjs/axios @nuxtjs/proxy -D
+    ```
+    
+* 配置
 
-在`nuxt.config.js`文件中
+    在`nuxt.config.js`文件中
 
-```java
-modules: [
-    '@nuxtjs/axios',
-    '@nuxtjs/proxy'
-],
-proxy: {
-    '/api/': {
-        target: 'http://example.com',
-        pathRewrite: {
-            '^/api/' : '/'
+    ```java
+    modules: [
+        '@nuxtjs/axios',
+        '@nuxtjs/proxy'
+    ],
+    proxy: {
+        '/api/': {
+            target: 'http://example.com',
+            pathRewrite: {
+                '^/api/' : '/'
+            }
         }
     }
-}
-```
+    ```
 
->注意点
->
->1. 以下选项默认为`true`
->
->	 * `changeOrigin`: 是否设置`host`头字段为target url
->	 * `ws`: 是否代理websockets
->
->2. `pathRewrite`的key可以使用正则
->
->3. 匹配问题
->
-> 	* 顺序匹配, 先匹配的有效. 即`/api`后的`/api2`永远不会被匹配.
-> 	* 注意重写, `'/api'`最好重写为`''`, `'/api/'`重写为`'/'`
+    注意点
+
+    1. 以下选项默认为`true`
+
+       * `changeOrigin`: 是否设置`host`头字段为target url
+        * `ws`: 是否代理websockets
+
+    2. `pathRewrite`的key可以使用正则
+
+    3. 匹配问题
+
+       * 顺序匹配, 先匹配的有效. 即`/api`后的`/api2`永远不会被匹配.
+       * 注意重写, `'/api'`最好重写为`''`, `'/api/'`重写为`'/'`
+    
+* 解决Axios请求失效的问题
+
+    Axios的`baseURL`未设置时, 默认访问80端口, 导致请求未经Node代理, 从而失效.
+
+    可考虑将`baseURL`设置为`http://localhost:3000`, 或`/` (没试过)
+
+    > 参考https://github.com/nuxt-community/modules/issues/136
+
 
 ## CSS
 
@@ -390,6 +399,66 @@ export default {
     ```
 
     > 参考[You are using the runtime-only build of Vue...](https://github.com/nuxt/nuxt.js/issues/1142)
+
+## 环境变量
+
+* 介绍
+
+  环境变量能够在客户端和服务端中被使用
+
+* 环境变量定义
+
+  `nuxt.config.js`
+
+  ```javascript
+  export default {
+    env: {
+      baseUrl: process.env.BASE_URL || 'http://localhost:3000'
+    }
+  }
+  ```
+
+* 使用
+
+  通过`process.env.XXX`的方式, 如
+
+  ```javascript
+  import axios from 'axios'
+  
+  export default axios.create({
+    baseURL: process.env.baseUrl
+  })
+  ```
+
+* 原理
+
+  使用了webpack的`definePlugin`插件, 在编译的时候, 将`process.env.XXX`替换成对应的字符串, 如
+
+  未编译前
+
+  ```javascript
+  if (process.env.test == 'testing123')
+  ```
+
+  编译后
+
+  ```javascript
+  if ('testing123' == 'testing123')
+  ```
+
+  **因此**`process.env`未被编译和替换, 且值为`{}`
+
+* 预定义变量
+
+  * `process.env.BASE_URL`
+
+    服务端的`BASE_URL`
+
+  * `process.env.NODE_ENV`
+
+    当前环境, 生产环境时值为`production`, 开发`development`
+
+  * ...
 
 # 其他
 
