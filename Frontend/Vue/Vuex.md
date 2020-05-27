@@ -299,7 +299,7 @@ mutations: {
 }
 ```
 
-如果状态是对象, 那么需要特定的方法或者直接覆盖状态, 才会触发响应reactive
+如果状态是对象, 当新增属性时, 需要特定的方法或者直接覆盖状态, 才会触发响应reactive
 
 ```javascript
 state.obj = { ...state.obj, newProp: 123 }
