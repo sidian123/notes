@@ -110,7 +110,7 @@
     > 本质上就是在节点上添加了指向前继,后继节点的指针, 其他的都是`Hashset`的功能, 只不过多了维护双向链表的逻辑
     >
   
-> 查看其源码, 会发现, `Set`都是通过对应`Map`来实现的, 将`Map`的`Value`置为了一个固定的对象.
+  > 查看其源码, 会发现, `Set`都是通过对应`Map`来实现的, 将`Map`的`Value`置为了一个固定的对象.
 
 * 常用于集合间去重, `LinkedHashSet`可以在去重的同时保留其他排序关系
 
@@ -164,7 +164,7 @@
   
   > 与`Set`类似, 略
   
-*  [`HashMap`](https://docs.oracle.com/javase/8/docs/api/java/util/HashMap.html) 
+  * [`HashMap`](https://docs.oracle.com/javase/8/docs/api/java/util/HashMap.html) 
   * [`TreeMap`](https://docs.oracle.com/javase/8/docs/api/java/util/TreeMap.html)
   * [`LinkedHashMap`](https://docs.oracle.com/javase/8/docs/api/java/util/LinkedHashMap.html) 
   

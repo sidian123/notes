@@ -299,7 +299,7 @@ mutations: {
 }
 ```
 
-如果状态是对象, 那么需要特定的方法或者直接覆盖状态, 才会触发响应reactive
+如果状态是对象, 当新增属性时, 需要特定的方法或者直接覆盖状态, 才会触发响应reactive
 
 ```javascript
 state.obj = { ...state.obj, newProp: 123 }
@@ -334,7 +334,7 @@ state.obj = { ...state.obj, newProp: 123 }
 
 ## actions
 
-actions函数允许异步, 第一个参数为context, 该对象同样提供了`state`,`getters`和`commit`对象, 同时也提供了`dispatch`对象用于执行action函数. 但`context`并不是`store`对象.
+actions函数允许异步, 第一个参数为context, 该对象同样提供了`state`,`getters`和`commit`对象, 同时也提供了`dispatch`方法用于执行action函数. 但`context`并不是`store`对象.
 
 ```javascript
 actions: {
