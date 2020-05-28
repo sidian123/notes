@@ -1343,7 +1343,13 @@ y(7); // ?
 x(6); // returns 11
 y(7); // returns 27
 ```
+> 注意
+>
+> 1. lambda表达式也存在闭包
+> 2. 即使变量是number类型, 闭包的结果也是按引用闭包, 而非按值闭包.
+
 ##  strict mode
+
 strict mode限制了一些JavaScript语法的使用，并且赋予了普通代码新的含义。strict mode的一些规则或作用：
 1. 一些错误（silent errors）会被忽视，但strict mode抛出该错误
 2. 更好的优化效率
