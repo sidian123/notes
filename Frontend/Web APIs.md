@@ -814,9 +814,36 @@ html5后引入了web storage（本地储存），比cookies更好用。本地存
 
 * **搜索文件**`Ctrl+P`
 
-## 判断元素或子元素被点击
+## 检测元素或子元素被点击
 
+纯JS版
 
+```javascript
+// Get arbitrary element with id "my-element"
+var myElementToCheckIfClicksAreInsideOf = document.querySelector('#my-element');
+// Listen for click events on body
+document.body.addEventListener('click', function (event) {
+    if (myElementToCheckIfClicksAreInsideOf.contains(event.target)) {
+        console.log('clicked inside');
+    } else {
+        console.log('clicked outside');
+    }
+});
+```
+
+JQuery版
+
+```js
+  $('body').click(function(e){
+    var clickedOn = $(e.target);
+    if (clickedOn.parents().andSelf().is('#foo')){
+      console.log( "Clicked on", clickedOn[0], "inside the div" );
+    }else{
+      console.log( "Clicked outside the div" );
+  });
+```
+
+> 参考[Detect click inside/outside of element with single event handler](https://stackoverflow.com/questions/4660633/detect-click-inside-outside-of-element-with-single-event-handler)
 
 # 参考
 
