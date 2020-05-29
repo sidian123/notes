@@ -545,6 +545,10 @@ xcode中提供了两种方式打开
 
 ~~接着, 还要为IOS单独添加`cordova-plugin-ios-plist`插件~~
 
+-----------------------
+
+[Android高版本http网络请求失败的Cordova配置处理](https://www.jianshu.com/p/12ab6718e81c)
+
 ## 跨域, 证书问题
 
 存在跨域问题, 但是按照上述白名单中*Content Security Policy*的配置, 可以解决. 不被信任证书的问题就不知道了, 没有仔细测试过了.
