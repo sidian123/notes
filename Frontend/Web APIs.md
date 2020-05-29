@@ -78,7 +78,8 @@ DOM接口大致分为两类：DOM核心接口和与html元素相关的接口。D
   * Document.createElement()
   * Node.appendChild()
   * Node.removeChild()
-  * ` ChildNode.remove()`删除自身
+  * ` Element.remove()`删除自身
+  * `Node.contains()` 判断子节点或当前节点是否包含参数代表的节点.
 
 -----------
 
