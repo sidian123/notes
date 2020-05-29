@@ -814,6 +814,10 @@ html5后引入了web storage（本地储存），比cookies更好用。本地存
 
 * **搜索文件**`Ctrl+P`
 
+## 判断元素或子元素被点击
+
+
+
 # 参考
 
 * [Web APIs](https://developer.mozilla.org/en-US/docs/Web/API)
