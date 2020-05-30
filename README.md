@@ -29,9 +29,9 @@
   - [x] 关于原子类的内容
 - [x] JVM知识整理
 - [x] RabbitMQ消费者确认-继续熟悉
-- [ ] Vue
+- [x] Vue
   - [x] 复习
-  - [ ] Vue国际化
+  - [x] Vue国际化
   - [x] Vue.extend和Vue.Component的区别
   - [x] Vue插件详解
   - [x] 编辑器&运行时
