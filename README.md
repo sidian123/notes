@@ -32,6 +32,8 @@
 - [ ] Vue
   - [ ] 复习
   - [ ] Vue国际化
+  - [ ] Vue.extend和Vue.Component的区别
+  - [ ] Vue插件详解
 - [x] 前端UI框架Vant学习
 - [ ] TCP三次握手如何保证可靠
 

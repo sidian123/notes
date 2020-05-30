@@ -38,102 +38,106 @@ vue指令以`v-`开始，用于渲染DOM或绑定数据，定义在元素或组�
 * **组件本质上是一个vue实例，含有预定义好的选项**。但有些选项是特定于根组件的,如（`el`），根组件只能使用`new`创建。
 
 ## 组件实例
-* 组件实例化有三种方式：
-    * **html元素**：在html，则将组件名当作新的html标签，然后创建该元素。但这种实例方式不能作为根组件，需要放入额外一个Vue实例下。
-	    >注意，组件作为`<ul>`的子元素实例化会出现问题，因此需使用`is`，如：
-	    
-	    ```html
-	     <ul>
-		    <li
-		      is="todo-item"
-		      v-for="(todo, index) in todos"
-		      v-bind:key="todo.id"
-		      v-bind:title="todo.title"
-		      v-on:remove="todos.splice(index, 1)"
-		    ></li>
-	  </ul>
-		```
-		>`is`指定组件，实例化后该组件会取代`li`元素。
-		
-    * **Vue实例**：在javascript中，与`new Vue({...})`类似，`new`一个组件，并传入选项对象，绑定到一个html元素上(使用`el`选项)。此时被绑定的元素会被模板`template`替代。
-    
-    * **Vue子类实例**：Vue实例只能用于根组件，而Vue子类实例可以用于其他组件。`Vue.extend()`中传入选项对象，返回一个Vue子类。然后实例化，并用`$mount`挂载到DOM上。如下所示：
-    	
-    	> 所谓的根组件, 指的是有`el`选项的组件.
-    	
-    	```html
-		<div id="mount-point"></div>
-		```
-		```css
-		// create constructor
-		var Profile = Vue.extend({
-		  template: '<p>{{firstName}} {{lastName}} aka {{alias}}</p>',
-		  data: function () {
-		    return {
-		      firstName: 'Walter',
-		      lastName: 'White',
-		      alias: 'Heisenberg'
-		    }
-    	  }
-    	})
-    	// create an instance of Profile and mount it on an element
-    	new Profile().$mount('#mount-point')
-    	```
-    	>注意data为函数。
-    	>如果想手动销毁实例，则使用`$destroy`生命周期方法，但DOM元素仍未去除。
-    	
-    * 动态生成组件
-    
-        ```javascript
-        var Child = Vue.extend({
-        	template: '<div>Hello!</div>',
-        });
-        
-        new Vue({
-          el: '#demo',
-          ready: function() {
-          	var child = new Child({
-            	el: this.$el.querySelector('.child-host'),
-            	parent: this,
-            });
-          },
-        });
-        ```
-    
-        > * `parent`用于建立父子组件关系, 父组件销毁时, 应该子组件就会销毁. 也可手动销毁, 则使用[vm.$destroy](https://vuejs.org/v2/api/#vm-destroy)函数.
-        >
-        > * 也可以使用全局组件, 即
-        >
-        > ```javascript
-        > var Child=Vue.component('com_name',{
-        >     template: '<div>Hello!</div>',
-        > })
-        > ```
-* 定义组件：
-    ```javascript
-    //定义一个叫todo-item的组件，成为新的html元素。还传入了一个选项对象。
-    Vue.component('todo-item', {
-        //该组件作为html元素可以接收的属性。
-        props: ['todo'],
-        //组件使用的html模板
-        template: '<li>{{ todo.text }}</li>'
-    })
-    ```
-    现在可以将组件名作为html元素使用：
-    ```html
-    <ol>
-      <!--组件实例话-->
-      <todo-item></todo-item>
-    </ol>
-    ```
-* 组件之间数据作用域是隔开的，父子组件通过`props`通信
+### 组件实例化
 
-## Data and Methods
-* vue实例被创建时，会将`data`对象的属性添加到vue实例上和响应式系统中，即这些属性改变，视图也会改变。而之后vue实例添加的属性不会存在于响应式系统中。
-* 除了选项对象提供的`data`,`methods`，vue实例也有一些有用的属性和方法，以`$`为开头。部分如下：
-    * `$data`：选项对象中的data
-    * `$el`：挂载在DOM中的html元素
-* Vue方法传给其他对象使用时, `this`也指向vue实例, 因为实际传递的是一个Wrapper方法.
+有三种方式：
+
+* **html元素**：在html，则将组件名当作新的html标签，然后创建该元素。但这种实例方式不能作为根组件，需要放入额外一个Vue实例下。
+  
+    >注意，组件作为`<ul>`的子元素实例化会出现问题，因此需使用`is`，如：
+    
+    ```html
+	 <ul>
+	    <li
+	      is="todo-item"
+	      v-for="(todo, index) in todos"
+	      v-bind:key="todo.id"
+	      v-bind:title="todo.title"
+	      v-on:remove="todos.splice(index, 1)"
+      ></li>
+	</ul>
+	```
+	>`is`指定组件，实例化后该组件会取代`li`元素。
+	
+* **Vue实例**：在javascript中，与`new Vue({...})`类似，`new`一个组件，并传入选项对象，绑定到一个html元素上(使用`el`选项)。此时被绑定的元素会被模板`template`替代。
+
+* **Vue子类实例**：Vue实例只能用于根组件，而Vue子类实例可以用于其他组件。`Vue.extend()`中传入选项对象，返回一个Vue子类。然后实例化，并用`$mount`挂载到DOM上。如下所示：
+	
+	> 所谓的根组件, 指的是有`el`选项的组件.
+	
+	```html
+	<div id="mount-point"></div>
+	```
+	```css
+	// create constructor
+	var Profile = Vue.extend({
+	  template: '<p>{{firstName}} {{lastName}} aka {{alias}}</p>',
+	  data: function () {
+	    return {
+	      firstName: 'Walter',
+	      lastName: 'White',
+	      alias: 'Heisenberg'
+	    }
+	  }
+	})
+	// create an instance of Profile and mount it on an element
+	new Profile().$mount('#mount-point')
+	```
+	>注意data为函数。
+	>如果想手动销毁实例，则使用`$destroy`生命周期方法，但DOM元素仍未去除。
+	
+
+### 动态生成组件
+
+```javascript
+var Child = Vue.extend({
+	template: '<div>Hello!</div>',
+});
+
+new Vue({
+  el: '#demo',
+  ready: function() {
+  	var child = new Child({
+    	el: this.$el.querySelector('.child-host'),
+    	parent: this,
+    });
+  },
+});
+```
+
+> * `parent`用于建立父子组件关系, 父组件销毁时, 应该子组件就会销毁. 也可手动销毁, 则使用[vm.$destroy](https://vuejs.org/v2/api/#vm-destroy)函数.
+>
+> * 也可以使用全局组件, 即
+>
+>   ```javascript
+>   var Child=Vue.component('com_name',{
+>       template: '<div>Hello!</div>',
+>   })
+>   ```
+>
+
+### 定义组件
+
+一个组件的选项对象可描述(定义)好组件, 然后再通过全局或局部的方式注册组件. 下面给出全局注册的例子: 
+
+```javascript
+//定义一个叫todo-item的组件，成为新的html元素。还传入了一个选项对象。
+Vue.component('todo-item', {
+    //该组件作为html元素可以接收的属性。
+    props: ['todo'],
+    //组件使用的html模板
+    template: '<li>{{ todo.text }}</li>'
+})
+```
+现在可以将组件名作为html元素使用：
+```html
+<ol>
+  <!--组件实例话-->
+  <todo-item></todo-item>
+</ol>
+```
+
+> 组件之间数据作用域是隔开的，父子组件通过`props`通信
 
 ## 生命周期
 
@@ -254,7 +258,17 @@ modifiers是指令的特殊后缀，以`.`表示，指示指令绑定的一些�
 
 此时不需要冒号分隔指令与参数。
 
-# 五 computed、watch
+# 五 选项参数
+
+## Data,Methods
+
+* vue实例被创建时，会将`data`对象的属性添加到vue实例上和响应式系统中，即这些属性改变，视图也会改变。而之后vue实例添加的属性不会存在于响应式系统中。
+* 除了选项对象提供的`data`,`methods`，vue实例也有一些有用的属性和方法，以`$`为开头。部分如下：
+  * `$data`：选项对象中的data
+  * `$el`：挂载在DOM中的html元素
+* Vue方法传给其他对象使用时, `this`也指向vue实例, 因为实际传递的是一个Wrapper方法.
+
+## computed,watch
 
 > 响应式属性指`data`,`computed`,`props`中的属性
 
@@ -296,7 +310,9 @@ modifiers是指令的特殊后缀，以`.`表示，指示指令绑定的一些�
     }
     // ...
     ```
+    
 * **方法**：模板中也可以执行方法，达到和computed属性同样的效果。但computed属性会根据它用到的依赖缓存起来，只有依赖改变时才重新计算。而方法在每一次re-render发生时会执行。
+
 * `watch`：监听vue实例属性，改变时调用回调函数。`data`中一些属性的改变是基于其他属性的，可在`watch`中配置，如：
   
     ```javascript
@@ -319,9 +335,45 @@ modifiers是指令的特殊后缀，以`.`表示，指示指令绑定的一些�
     ```
     上面配置了firstName和lastName改变时如何影响fullName改变。
 
-# 六 class和style数据绑定
+## props
+
+> props在挂载后才初始化
+
+props选项属性定义组件作为html元素收到的属性。属性的命令规则同上。
+
+属性可以为数组或对象。对象可以额外设置属性类型、默认值、是否必须、验证函数。
+
+属性值常与`v-bind`一起使用。
+
+如果在组件上使用props未定义的属性，那么属性会被添加到组件的根元素上。如果根元素已定义该属性，则被覆盖；`style`,`class`属性除外，它会被合并在一起。
+
+`inheritAttrs: false`会阻止未定义属性作用在组件根元素上的行为，而`$attrs`接收未定义属性的赋值，因此此时可以将它手动绑定到组件中的一个元素上，如：
+
+```javascript
+Vue.component('base-input', {
+  inheritAttrs: false,
+  props: ['label', 'value'],
+  template: `
+    <label>
+      {{ label }}
+      <input
+        v-bind="$attrs"
+        v-bind:value="value"
+        v-on:input="$emit('input', $event.target.value)"
+      >
+    </label>
+  `
+})
+```
+>注意，都不会影响`class`和`style`属性。
+
+> 参考：[props](https://vuejs.org/v2/api/#props);
+
+# 六 模板操作
+
+## class和style数据绑定
 html的class和style都是属性，因此可以使用`v-bind`来绑定vue属性，并且不仅string、还可以绑定object or array到html属性上。
-## class数据绑定
+### class数据绑定
 * 文本绑定：
     ```html
     <div v-bind:class="activeClass"></div>
@@ -363,7 +415,7 @@ html的class和style都是属性，因此可以使用`v-bind`来绑定vue属性�
     ```
     这里绑定的是父组件的实例属性。并且该class会被添加到组件模板的根元素上。
 
-## styles数据绑定
+### styles数据绑定
 * 对象绑定语法  
     ```html
     <div v-bind:style="{ color: activeColor, fontSize: fontSize + 'px' }"></div>
@@ -378,8 +430,8 @@ html的class和style都是属性，因此可以使用`v-bind`来绑定vue属性�
     有些样式在不同浏览器中有不同的前缀的，vue会自动添加。
 * 一些样式的属性也有前缀，但需要自己手动添加，略。
 
-# 七 条件性渲染
-## v-if
+## 条件性渲染
+### v-if
 * 含有`v-if`指令的元素，只有在属性值为true时才会被渲染。
 
 * 如果需要一个`v-if`指令条件渲染多个html元素，可使用`template`包裹起来：
@@ -406,11 +458,12 @@ html的class和style都是属性，因此可以使用`v-bind`来绑定vue属性�
     ```
     但label还是会被复用
 
-## v-show
+### v-show
 含`v-show`的元素还是会被渲染到dom中，但会条件性的选择是否显示它，使用了css的`display`属性。因此隐藏或显示后，事件监听器还是存在的。
 
-# 八 list渲染
-## v-for与数组
+## list渲染
+### v-for与数组
+
 使用方式如下
 * `v-for`可以将数组映射为Elements，最基本形式如下：
 	```html
@@ -429,7 +482,7 @@ html的class和style都是属性，因此可以使用`v-bind`来绑定vue属性�
 	```html
 	<div v-for="item of items"></div>
 	```
-## v-for与对象
+### v-for与对象
 * 基本形式：
 	```html
 	  <li v-for="value in object">
@@ -456,7 +509,7 @@ html的class和style都是属性，因此可以使用`v-bind`来绑定vue属性�
 	</div>
 	```
 	
-## key
+### key
 这里再次强调一下，虚拟DOM应用到DOM时会patch/reuse元素，达到对DOM的最少操作。元素（如input）或组件的内部状态可能会被保存，使用`key`属性可以将防止这种优化，如：
 ```html
 <div v-for="item in items" :key="item.id">
@@ -464,7 +517,7 @@ html的class和style都是属性，因此可以使用`v-bind`来绑定vue属性�
 </div>
 ```
 
-## 数组中元素改变探测
+### 数组中元素改变探测
 >对下面的话，做个总结：简而言之，vue检测不到`data`中数组属性中元素的修改，需要其他手段。对于对象也是同样的道理
 
 我们知道，选项对象的`data`中的属性会被添加到响应式系统，这些属性的改变会造成视图的重新渲染。但如果`data`中存在**数组属性**，对**数组元素**的修改(如, 增删)不会造成数据本身引用地址的改变（参考c++引用），因此vue不能通过数组属性检查数组元素是否改变。检测方法如下：
@@ -488,7 +541,7 @@ html的class和style都是属性，因此可以使用`v-bind`来绑定vue属性�
 		```
 		它在删除元素的同时也在对应位置添加了`newValue`
 
-## 对象中属性更改检测
+### 对象中属性更改检测
 
 Vue实例创建过程中, 会通过`Object.defineProperty`在Ractive对象的属性上包裹一层逻辑, 因此可以检测到Reactive对象的属性修改(以及属性的属性). 但是若之后动态添加或删除对象属性, Vue将检测不到.
 
@@ -498,12 +551,12 @@ Vue提供了`App.set()`方法来添加Reactive对象, 即动态中通过`App.set
 
 > 参考[For Objects](https://vuejs.org/v2/guide/reactivity.html#For-Objects)
 
-## 其他
+### 其他
 * `v-for`也可以使用`<template>`元素聚合html元素块。
 * 当`v-for`与`v-if`一起作用到同一个元素中，`v-for`优先级高
 * 当`v-for`与组件搭配使用时，`key`属性必须加上，保证组件的更改随视图更新而更新。组件之间的数据作用域是隔开的，如果父组件想将`v-for`的索引值传入子组件，需绑定子组件的属性，子组件的属性由选项对象的`props`设置。
 
-# 九 事件处理
+# 七 事件处理
 `v-on`绑定的事件在虚拟DOM删除（real-DOM中reuse），事件也会被清除。
 
 ## 事件处理器
@@ -555,7 +608,7 @@ Vue提供了`App.set()`方法来添加Reactive对象, 即动态中通过`App.set
 	
 * 系统键值modifiers、鼠标按键modifers：[System Modifier Keys](https://vuejs.org/v2/guide/events.html#System-Modifier-Keys)
 
-# 十一 组件基础
+# 八 组件进阶
 * 尽管组件本质上是一个Vue实例。但在html中仍不能单独使用，需要放入vue实例的html元素中；组件通过js代码实例化可以作为根组件。
 * Vue实例有特定于自己的根选项：`el`
 * 组件的`data`选项必须是一个函数，以致于每个组件实例都有自己的数据拷贝。
@@ -646,161 +699,27 @@ Vue.component('base-checkbox', {
 ```
 
 ## slots
-html中，组件中含有内容时，组件可通过`<slot>`获取。如：
-```html
-<alert-box>
-  Something bad happened.
-</alert-box>
-```
-```javascript
-Vue.component('alert-box', {
-  template: `
-    <div class="demo-alert-box">
-      <strong>Error!</strong>
-      <slot></slot>
-    </div>
-  `
-})
-```
-
-## 动态组件
-动态切换组件，使用`is`属性，如：
-```html
-<div id="app">
-   <component  v-bind:is="which"></component >
-   <select name="" id="" v-model="which">
-       <option>my-content1</option>
-       <option>my-content2</option>
-       <option>my-content3</option>
-   </select>
-</div>
-```
-```javascript
-    let vm=new Vue({
-        el:"#app",
-        data:{
-            which:"my-content1"
-        },
-        components:{
-            "my-content1":{
-                template:`<div>content1</div>`
-            },
-            "my-content2":{
-                template:`<div>content2</div>`
-            },
-            "my-content3":{
-                template:`<div>content3</div>`
-            }
-        }
-    })
-```
-每次切换时，vue会重新生成组件实例，那么之前的状态不会被保存，需要使用`<keep-alive>`内置组件包裹它，使模板缓存起来：
-```html
-<keep-alive>
-  <component v-bind:is="currentTabComponent"></component>
-</keep-alive>
-```
-
-## 异步组件
-
-全局注册
-
-```javascript
-Vue.component(
-  'async-webpack-example',
-  // The `import` function returns a Promise.
-  () => import('./my-async-component')
-)
-```
-
-局部注册
-
-```javascript
-new Vue({
-  // ...
-  components: {
-    'my-component': () => import('./my-async-component')
-  }
-})
-```
-
-## DOM模板解析问题
-
-在html元素中，`ul`,`ol`,`table`,`select`规定了什么元素能够存在，如`li`,`tr`,`option`。解决办法是使用`is`属性。
-
-但在其他模板中无这种问题：
-* 字符串模板，如`template:'....'`
-* 单组件文件`.vue`
-* `<script type="text/x-template">`
-
-
-## 组件注册
-### 全局注册
-```javascript
-Vue.component('my-component-name', { /* ... */ })
-```
-第一个参数为组件名，第二个参数为选项对象。全局注册的组件，可以直接在其他组件中使用。
-
-### 局部注册
-创建Vue实例时，可将组件传给选项对象的components数组，如：
-```javascript
-//选项对象
-var ComponentA = { /* ... */ }
-var ComponentB = { /* ... */ }
-var ComponentC = { /* ... */ }
-
-new Vue({
-  el: '#app',
-  components: {
-    'component-a': ComponentA,
-    'component-b': ComponentB
-  }
-})
-```
-并且该组件只能在注册的父组件中使用。
-### 组件名
-* kebab-case（推荐）：注册组件名如`my-component-name`，可以在html和模板中直接使用。
-* PascalCase：注册组件名如`MyComponentName`，此时在html中只能使用对应的kebab-case命令，但在模板中两则都可使用。(即存在自动转换过程)
-
->注意，html中元素和属性名都大小写不敏感。
-
-# 十三 Props
-
-> props在挂载后才初始化
-
-props选项属性定义组件作为html元素收到的属性。属性的命令规则同上。
-
-属性可以为数组或对象。对象可以额外设置属性类型、默认值、是否必须、验证函数。
-
-属性值常与`v-bind`一起使用。
-
-如果在组件上使用props未定义的属性，那么属性会被添加到组件的根元素上。如果根元素已定义该属性，则被覆盖；`style`,`class`属性除外，它会被合并在一起。
-
-`inheritAttrs: false`会阻止未定义属性作用在组件根元素上的行为，而`$attrs`接收未定义属性的赋值，因此此时可以将它手动绑定到组件中的一个元素上，如：
-
-```javascript
-Vue.component('base-input', {
-  inheritAttrs: false,
-  props: ['label', 'value'],
-  template: `
-    <label>
-      {{ label }}
-      <input
-        v-bind="$attrs"
-        v-bind:value="value"
-        v-on:input="$emit('input', $event.target.value)"
-      >
-    </label>
-  `
-})
-```
->注意，都不会影响`class`和`style`属性。
-
-参考：[props](https://vuejs.org/v2/api/#props);
-
-# 十五 slots
 
 > 理解下述语句时, 请区分组件元素和组件模板
+
+* 基本介绍
+
+    html中，组件中含有内容时，组件可通过`<slot>`获取。如：
+    ```html
+    <alert-box>
+      Something bad happened.
+    </alert-box>
+    ```
+    ```javascript
+    Vue.component('alert-box', {
+      template: `
+        <div class="demo-alert-box">
+          <strong>Error!</strong>
+          <slot></slot>
+        </div>
+      `
+    })
+    ```
 
 * 在HTML中, **组件元素**有内容时, 可在**组件模板**中使用`<slot>`元素接收. 若无, 则默认忽略它. 
 
@@ -903,7 +822,112 @@ Vue.component('base-input', {
 
 * `v-slot:`的缩写为`#`，使用时后面必须存在参数。
 
-# 十六 数据共享
+
+
+## 动态组件
+
+动态切换组件，使用`is`属性，如：
+```html
+<div id="app">
+   <component  v-bind:is="which"></component >
+   <select name="" id="" v-model="which">
+       <option>my-content1</option>
+       <option>my-content2</option>
+       <option>my-content3</option>
+   </select>
+</div>
+```
+```javascript
+    let vm=new Vue({
+        el:"#app",
+        data:{
+            which:"my-content1"
+        },
+        components:{
+            "my-content1":{
+                template:`<div>content1</div>`
+            },
+            "my-content2":{
+                template:`<div>content2</div>`
+            },
+            "my-content3":{
+                template:`<div>content3</div>`
+            }
+        }
+    })
+```
+每次切换时，vue会重新生成组件实例，那么之前的状态不会被保存，需要使用`<keep-alive>`内置组件包裹它，使模板缓存起来：
+```html
+<keep-alive>
+  <component v-bind:is="currentTabComponent"></component>
+</keep-alive>
+```
+
+## 异步组件
+
+全局注册
+
+```javascript
+Vue.component(
+  'async-webpack-example',
+  // The `import` function returns a Promise.
+  () => import('./my-async-component')
+)
+```
+
+局部注册
+
+```javascript
+new Vue({
+  // ...
+  components: {
+    'my-component': () => import('./my-async-component')
+  }
+})
+```
+
+## DOM模板解析问题
+
+在html元素中，`ul`,`ol`,`table`,`select`规定了什么元素能够存在，如`li`,`tr`,`option`。解决办法是使用`is`属性。
+
+但在其他模板中无这种问题：
+* 字符串模板，如`template:'....'`
+* 单组件文件`.vue`
+* `<script type="text/x-template">`
+
+
+## 组件注册
+### 全局注册
+```javascript
+Vue.component('my-component-name', { /* ... */ })
+```
+第一个参数为组件名，第二个参数为选项对象。全局注册的组件，可以直接在其他组件中使用。
+
+### 局部注册
+创建Vue实例时，可将组件传给选项对象的components数组，如：
+```javascript
+//选项对象
+var ComponentA = { /* ... */ }
+var ComponentB = { /* ... */ }
+var ComponentC = { /* ... */ }
+
+new Vue({
+  el: '#app',
+  components: {
+    'component-a': ComponentA,
+    'component-b': ComponentB
+  }
+})
+```
+并且该组件只能在注册的父组件中使用。
+### 组件名
+* kebab-case（推荐）：注册组件名如`my-component-name`，可以在html和模板中直接使用。
+* PascalCase：注册组件名如`MyComponentName`，此时在html中只能使用对应的kebab-case命令，但在模板中两则都可使用。(即存在自动转换过程)
+
+>注意，html中元素和属性名都大小写不敏感。
+
+
+# 九 数据共享
 
 > 又称*子父组件数据双向绑定*
 
@@ -1054,7 +1078,7 @@ this.$emit('update:title', newTitle)
 
 > 详细参考[provide/inject](https://vuejs.org/v2/api/#provide-inject)
 
-# 十七 其他
+# 其他
 ## 获取元素
 * `$root`：访问组件的根实例
 * `$parent`：访问子组件的父组件
