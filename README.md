@@ -30,10 +30,10 @@
 - [x] JVM知识整理
 - [x] RabbitMQ消费者确认-继续熟悉
 - [ ] Vue
-  - [ ] 复习
+  - [x] 复习
   - [ ] Vue国际化
   - [x] Vue.extend和Vue.Component的区别
-  - [ ] Vue插件详解
+  - [x] Vue插件详解
   - [x] 编辑器&运行时
 - [x] 前端UI框架Vant学习
 - [ ] TCP三次握手如何保证可靠
