@@ -237,7 +237,7 @@ CommonTool mounted
 ```html
 <a v-bind:[attributeName]="url"> ... </a>
 ```
-这里的`attributeName`是js表达式，表达式值必须为string，null表示删除绑定。
+这里的`attributeName`是js表达式，表达式值必须为string，null表示删除绑定, 可基于响应式变量更新。
 
 限制：`[]`内不能存在`spaces, quotes, <, >, / or =`
 
@@ -1078,16 +1078,153 @@ this.$emit('update:title', newTitle)
 
 > 详细参考[provide/inject](https://vuejs.org/v2/api/#provide-inject)
 
+# 十 扩展&复用
+
+## 自定义指令
+
+### 指令注册
+
+有全局, 局部注册两种方式, 如
+
+`Vue.directive`全局注册
+
+```javascript
+// Register a global custom directive called `v-focus`
+Vue.directive('focus', {
+  // When the bound element is inserted into the DOM...
+  inserted: function (el) {
+    // Focus the element
+    el.focus()
+  }
+})
+```
+
+`directives`选项局部注册
+
+```javascript
+directives: {
+  focus: {
+    // directive definition
+    inserted: function (el) {
+      el.focus()
+    }
+  }
+}
+```
+
+使用
+
+```
+<input v-focus>
+```
+
+### 钩子函数
+
+即注册的指令何时触发
+
+- `bind`: 仅触发一次, 仅当指定绑定到元素时触发.
+
+- `inserted`: 指令绑定的元素插入到父节点时触发(不保证父节点一定在DOM中)
+
+- `update`: 指令绑定的元素的containing元素更新时触发.
+
+  > 因此会出现指令触发, 但指令值未改变的情况
+
+- `componentUpdated`: 指令绑定的元素的containing元素及其所有子VNodes更新后触发
+- `unbind`: 指令解绑元素时触发
+
+### 钩子函数参数
+
+- `el`: The element the directive is bound to. This can be used to directly manipulate the DOM.
+
+- `binding`:
+
+   An object containing the following properties.
+
+  - `name`: The name of the directive, without the `v-` prefix.
+  - `value`: The value passed to the directive. For example in `v-my-directive="1 + 1"`, the value would be `2`.
+  - `oldValue`: The previous value, only available in `update` and `componentUpdated`. It is available whether or not the value has changed.
+  - `expression`: The expression of the binding as a string. For example in `v-my-directive="1 + 1"`, the expression would be `"1 + 1"`.
+  - `arg`: The argument passed to the directive, if any. For example in `v-my-directive:foo`, the arg would be `"foo"`.
+  - `modifiers`: An object containing modifiers, if any. For example in `v-my-directive.foo.bar`, the modifiers object would be `{ foo: true, bar: true }`.
+
+- `vnode`: The virtual node produced by Vue’s compiler. See the [VNode API](https://vuejs.org/v2/api/#VNode-Interface) for full details.
+
+- `oldVnode`: The previous virtual node, only available in the `update` and `componentUpdated` hooks.
+
+## mixins
+
+混合选项到组件中, 包含钩子, 并且先于组件的钩子调用. 注意, mixin可以是一个完整的选项对象.
+
+```javascript
+var mixin = {
+  created: function () { console.log(1) }
+}
+var vm = new Vue({
+  created: function () { console.log(2) },
+  mixins: [mixin]
+})
+// => 1
+// => 2
+```
+
+> 参考[mixins](https://vuejs.org/v2/api/#mixins)
+
+## 插件
+
+* 介绍
+
+  使用`Vue.use()`注册插件, 它必须在`new Vue()`调用前执行.
+
+* `Vue.use`调用形式
+
+  ```javascript
+  Vue.use(MyPlugin, { someOption: true })
+  ```
+
+  * 第一个参数为插件, 可以是函数, 将被直接调用; 可以是对象, 该对象必须有`install()`方法
+  * 第二个为可选的, 传给插件安装方法的参数.
+
+* 插件安装方法
+
+  方法第一个参数为`Vue`本身, 第二个为额外的参数.
+
+  ```javascript
+  MyPlugin.install = function (Vue, options) {
+    // 1. add global method or property
+    Vue.myGlobalMethod = function () {
+      // some logic ...
+    }
+  
+    // 2. add a global asset
+    Vue.directive('my-directive', {
+      bind (el, binding, vnode, oldVnode) {
+        // some logic ...
+      }
+      ...
+    })
+  
+    // 3. inject some component options
+    Vue.mixin({
+      created: function () {
+        // some logic ...
+      }
+      ...
+    })
+  
+    // 4. add an instance method
+    Vue.prototype.$myMethod = function (methodOptions) {
+      // some logic ...
+    }
+  }
+  ```
+
 # 其他
 ## 获取元素
 * `$root`：访问组件的根实例
 * `$parent`：访问子组件的父组件
 * `$refs`：子元素或子组件上添加`ref`属性，指定引用id，可通过`$refs`来获取该DOM元素或组件实例。
 * 	`$el`：组件的根DOM元素
-
-## 插件
-
-* `Vue.use()`注册插件
 
 ## 动态Vue实例与销毁
 
@@ -1113,23 +1250,7 @@ https://github.com/kazupon/vue-i18n
 
 https://vuejs.org/v2/guide/custom-directive.html
 
-## mixins
 
-混合选项到组件中, 包含钩子, 并且先于组件的钩子调用.
-
-```javascript
-var mixin = {
-  created: function () { console.log(1) }
-}
-var vm = new Vue({
-  created: function () { console.log(2) },
-  mixins: [mixin]
-})
-// => 1
-// => 2
-```
-
-> 参考[mixins](https://vuejs.org/v2/api/#mixins)
 
 ## Wrapper组件
 
