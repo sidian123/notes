@@ -1173,6 +1173,54 @@ var vm = new Vue({
     })
     ```
 
+## Vue.extend & Vue.component
+
+* `Vue.extend(options)` 创建Vue的子类
+
+* `Vue.component( id, [definition] )` 注册全局组件. 内部也会调用`Vue.extend()`并放回该Vue子类.
+
+  > 即`Vue.component()`比`Vue.extend()`多了个注册功能.
+
+## 模板编译与运行时
+
+Vue模板可通过三种方式提供, 以优先级递减的顺序给出
+
+1. `render` 选项(function)
+
+   JavaScript编程式的渲染方式, 最终返回`VNode`
+
+2. `template` 选项
+
+   模板字符串.
+
+3. 都不存在, 但有`el`选项
+
+   使用DOM中的HTML模板
+
+-----------
+
+方式2,3需要编译 生成`render()`函数, 然后再经过运行时渲染到DOM中.
+
+在使用`vue-loader` 或 `vueify`时, `*.vue`文件的模板字符串(方式2), 会在构建时预编译好, 运行时只需运行时.
+
+但仍可以配置Webpack构建时将编译器加入到运行环境中, 如
+
+```javascript
+module.exports = {
+  // ...
+  resolve: {
+    alias: {
+      'vue$': 'vue/dist/vue.esm.js' // 'vue/dist/vue.common.js' for webpack 1
+    }
+  }
+}
+```
+
+> 参考
+>
+> * [render](https://vuejs.org/v2/api/#render)
+> * [Runtime+Compiler vs. Runtime-only](https://vuejs.org/v2/guide/installation.html#Runtime-Compiler-vs-Runtime-only)
+
 # Vue3
 
 Vue3采用Composition API的方式组织代码, 以解决以下问题:
