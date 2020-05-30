@@ -1244,13 +1244,63 @@ var vm = new Vue({
 
 ## 国际化i18n
 
-https://github.com/kazupon/vue-i18n
+* 安装
 
-## 自定义指令
+  ```shell
+  npm install vue-i18n
+  ```
 
-https://vuejs.org/v2/guide/custom-directive.html
+* 安装i18n插件
 
+  ```js
+  import Vue from 'vue'
+  import VueI18n from 'vue-i18n'
+  
+  Vue.use(VueI18n)
+  ```
 
+* 声明国际化资源
+
+  ```javascript
+  
+  // 准备国际化资源
+  const messages = {
+    en: {
+      message: {
+        hello: 'hello world'
+      }
+    },
+    ja: {
+      message: {
+        hello: 'こんにちは、世界'
+      }
+    }
+  }
+  
+  // 设置使用哪个语言的资源
+  const i18n = new VueI18n({
+    locale: 'ja', // set locale
+    messages, // set locale messages
+  })
+  
+  
+  // 注入到Vue中
+  new Vue({ i18n }).$mount('#app')
+  ```
+
+* 使用
+
+  通过`vm.$t()`方法使用
+
+  ```html
+  <div id="app">
+    <p>{{ $t("message.hello") }}</p>
+  </div>
+  ```
+
+* 未完待续...
+
+> 参考[vue-i18n](http://kazupon.github.io/vue-i18n/)
 
 ## Wrapper组件
 
