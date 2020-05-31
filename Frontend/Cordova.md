@@ -585,9 +585,45 @@ vconsole
      $ sudo npm install -g cordova
   ```
 
+* 创建App
+
+  ```shell
+  $ cordova create hello com.example.hello HelloWorld
+  ```
+
+  > 生成的脚手架中, `www/index.html`文件为入口页面.
+
+* 添加App的目标平台
+
+  ```bash
+  $ cordova platform add ios
+  $ cordova platform add android
+  $ cordova platform add browser # 无需任何SDK
+  ```
+
+  > 这些平台信息将被保存在`config.xml` 和 `package.json`中; 
+  >
+  > 同时平台文件被存入`/platforms/`目录中, 不要试着去修改平台文件, 因为修改的内容容易被覆盖.
+
+* 安装必备环境
+
+  构建时, 对应平台的构建环境必须搭建. 通过`cordova requirements`可检查缺少什么环境. 其中平台`browser`无需任何SDK配置
+
+  ```bash
+  $ cordova requirements
+  Requirements check results for android:
+  Java JDK: installed .
+  Android SDK: installed
+  Android target: installed android-19,android-21,android-22,android-23,Google Inc.:Google APIs:19,Google Inc.:Google APIs (x86 System Image):19,Google Inc.:Google APIs:23
+  Gradle: installed
   
+  Requirements check results for ios:
+  Apple OS X: not installed
+  Cordova tooling for iOS requires Apple OS X
+  Error: Some of requirements check failed
+  ```
 
-
+  
 
 # 其他
 
@@ -595,9 +631,16 @@ vconsole
   * [plugin search](https://cordova.apache.org/plugins/)
   * [npm](https://www.npmjs.com/search?q=ecosystem%3Acordova)
 
+* 获取`cordova`命令帮助
 
+  ```shell
+  # 使用简述
+  cordova
+  # 具体命令使用
+  cordova help <command>
+  ```
 
-
+  或看文档[CLI Reference](https://cordova.apache.org/docs/en/latest/reference/cordova-cli/index.html)
 
 
 
