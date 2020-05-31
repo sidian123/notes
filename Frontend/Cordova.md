@@ -364,7 +364,7 @@ Gradle是访问不了国外仓库的， 因此需要配置国内镜像。
   }
   ```
 
-  > 上面规定死`om.android.tools.build:gradle`版本， 是因为国内镜像源还没有那么新。
+  > 上面写死了`om.android.tools.build:gradle`版本， 是因为国内镜像源还没有那么新。
 
 * 局部配置，配置优先级更高， 在Cordova项目中必须配置，否则会被项目中的配置覆盖全局配置。
 
@@ -582,13 +582,13 @@ vconsole
 * 安装`cordova`命令行工具
 
   ```shell
-     $ sudo npm install -g cordova
+  sudo npm install -g cordova
   ```
 
 * 创建App
 
   ```shell
-  $ cordova create hello com.example.hello HelloWorld
+  cordova create hello com.example.hello HelloWorld
   ```
 
   > 生成的脚手架中, `www/index.html`文件为入口页面.
@@ -596,9 +596,9 @@ vconsole
 * 添加App的目标平台
 
   ```bash
-  $ cordova platform add ios
-  $ cordova platform add android
-  $ cordova platform add browser # 无需任何SDK
+  cordova platform add ios
+  cordova platform add android
+  cordova platform add browser # 无需任何SDK
   ```
 
   > 这些平台信息将被保存在`config.xml` 和 `package.json`中; 
@@ -623,7 +623,129 @@ vconsole
   Error: Some of requirements check failed
   ```
 
-  
+* 构建App
+
+  为所有平台构架App
+
+  ```shell
+  cordova build
+  ```
+
+  仅为一个平台构建App
+
+  ```shell
+  cordova build ios
+  ```
+
+* 测试App
+
+  在模拟器中运行
+
+  ```shell
+  cordova emulate android
+  ```
+
+  在真机中运行, 电脑需要连接上设备.
+
+  ```shell
+  cordova run android
+  ```
+
+* 插件操作
+
+  插件将原生SDK功能, 通过Javascript API暴露出来
+
+  搜索插件
+
+  ```shell
+  cordova plugin search camera
+  ```
+
+  添加插件
+
+  ```shell
+  cordova plugin add cordova-plugin-camera
+  ```
+
+  列举已安装插件
+
+  ```shell
+  cordova plugin ls
+  ```
+
+* 根据不同平台自定义化
+
+  在构建不同平台APP时, `/merges`下平台相关的文件夹内的内容, 都将被**移入**或**覆盖**到`/www`对应目录下.
+
+  例子, 构建IOS APP时, `/merges/ios/css/a.css`文件将被移入或覆盖到`/www/css/`目录下.
+
+* 更新
+
+  更新cordova命令行工具, 使用`npm`更新的方式即可
+
+  更新平台:
+
+  ```bash
+  $ cordova platform update android --save
+  $ cordova platform update ios --save
+  ```
+
+# App模板
+
+## 介绍
+
+`cordova create`创建项目时, 使用默认模板[cordova-app-hello-world](https://github.com/apache/cordova-app-hello-world)生成的项目.
+
+也可使用其他模板, 模板可来自于NPM仓库, Git仓库或本地:
+
+```shell
+$ cordova create hello com.example.hello HelloWorld --template <npm-package-name>
+$ cordova create hello com.example.hello HelloWorld --template <git-remote-url>
+$ cordova create hello com.example.hello HelloWorld --template <path-to-template>
+```
+
+NPM仓库中的模板可在[npm](https://www.npmjs.com/search?q=cordova%3Atemplate) 搜索
+
+## 创建模板
+
+模板结构
+
+```
+template_package
+├── package.json (生产模板时需要的依赖)
+├── index.js (模板生成入口, 需要提供模板地址)
+└── template_src (index.js中指定的模板地址, 含App所需的所有模板)
+    ├── package.json
+    ├── config.xml
+    └── (files and folders that make up the template)
+```
+
+重点在于`index.js`文件
+
+```javascript
+const path = require('path');
+
+module.exports = {
+    dirname : path.join(__dirname, 'template_src') //提供模板地址
+};
+```
+
+`package.json`最好添加关键字`"cordova:template"`, 这样, 模板上传到NPM仓库时, 便于搜索出来, 如
+
+```json
+{
+    "name": "cordova-example-template",
+    "version": "1.0.0",
+    "...": "...",
+    "keywords": [
+        "cordova:template"
+    ]
+}
+```
+
+注意, 模板目录(`template_src`下都会被拷贝到新建的项目中, 但模板文件`.gitignore`必须重命名为`gitignore`, 以避免冲突. 生成项目时, 会自动为你恢复命名.
+
+> 详细参考[cordova-app-hello-world](https://github.com/apache/cordova-app-hello-world)
 
 # 其他
 

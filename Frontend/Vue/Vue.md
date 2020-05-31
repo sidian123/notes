@@ -1387,6 +1387,8 @@ module.exports = {
 }
 ```
 
+> 或者在`vue.config.js`中配置`runtimeCompiler`属性
+
 > 参考
 >
 > * [render](https://vuejs.org/v2/api/#render)
