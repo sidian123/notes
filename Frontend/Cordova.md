@@ -692,6 +692,8 @@ vconsole
 
 # App模板
 
+> NPM上提供的仓库大部分都很老了, 不建议使用. 且Cordova+Vue集成超级简单.
+
 ## 介绍
 
 `cordova create`创建项目时, 使用默认模板[cordova-app-hello-world](https://github.com/apache/cordova-app-hello-world)生成的项目.
