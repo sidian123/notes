@@ -556,3 +556,68 @@ xcode中提供了两种方式打开
 # 调试神器
 
 vconsole
+
+# ---第二次学习的分割线---
+
+# Overview
+
+## 架构
+
+![img](.Cordova/cordovaapparchitecture.png)
+
+* Plugins扩充WebView能力, 让Js可调用OS原生功能
+
+## 开发方式
+
+* 跨平台工作流
+
+  一切操作都通过`cordova`命令行工具上进行, 能保证打多个平台的包
+
+* 聚焦特定平台的工作流
+
+  将Cordova嵌入到原生应用中(embedding webbiew).
+
+# 创建第一个APP
+
+* 安装`cordova`命令行工具
+
+  ```shell
+     $ sudo npm install -g cordova
+  ```
+
+  
+
+
+
+# 其他
+
+* Cordova Plugins的搜索
+  * [plugin search](https://cordova.apache.org/plugins/)
+  * [npm](https://www.npmjs.com/search?q=ecosystem%3Acordova)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
