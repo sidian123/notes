@@ -336,6 +336,7 @@ Cordova提供了两种方式, 从不同方面去配置
 ### JDK
 
 * 必须使用JDK8，参考[macOS OpenJDK8](https://www.jianshu.com/p/cc4bcab6adcc)
+* 设置`JAVA_HOME`变量
 
 ### Gradle
 
@@ -371,6 +372,35 @@ Gradle是访问不了国外仓库的， 因此需要配置国内镜像。
   按照上述方式， 修改`platforms/android/build.gradle`文件即可。
 
 > 参考[Could not resolve all artifacts for configuration ':classpath'.](https://www.oschina.net/question/114943_2303892?nocache=1551403814162)
+
+### SDK
+
+安装Android Studio, 找到Android SDK Manager (`Tools > SDK Manager`) 
+
+确保下述被安装
+
+1. Android Platform SDK for your targeted version of Android
+2. Android SDK build-tools version 19.1.0 or higher
+3. Android Support Repository (found under the "SDK Tools" tab)
+
+设置环境变量
+
+* 设置`ANDROID_HOME`变量, 即Android SDK的安装位置.
+* 将SDK的`tools`, `tools/bin`和`platform-tools` 添加到`PATH`路径下
+
+## 模拟器
+
+* 创建Android虚拟设备(AVD), 见[managing AVDs](https://developer.android.com/studio/run/managing-avds.html), [configuring the emulator](https://developer.android.com/studio/run/emulator.html#about)和[setting up hardware acceleration](https://developer.android.com/studio/run/emulator-acceleration.html)
+
+* 运行Cordova应用到模拟器上
+
+  ```shell
+  $ cordova run --emulator
+  ```
+
+  
+
+
 
 # IOS
 
