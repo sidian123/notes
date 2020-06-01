@@ -7,3 +7,7 @@
   * 主题，图标
 
     https://blog.csdn.net/qq_42527676/article/details/91356154
+  
+* 手势
+
+  https://blog.csdn.net/small_dong_0_o/article/details/83342228
