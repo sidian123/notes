@@ -572,14 +572,22 @@ cd "$typora_home"
 * 最好使用`"`, 保证字符串不被分割
 * 字符串中还要注意**替换语法**
 
-## 疑问
+## 代理
 
-* 多次见人使用`exec`, 这个有何用?
+如何让命令走代理呢? 设置环境变量
 
-  ```shell
-  exec zsh
-  source .zshrc
-  ```
+```shell
+export http_proxy="http://localhost:port"
+export https_proxy="http://localhost:port"
+```
+
+或
+
+```shell
+export ALL_PROXY=socks5://127.0.0.1:1080
+```
+
+命令还需认识该环境变量, 才能走代理. 或者命令自身可以配置代理.
 
 # 待学习 
 
