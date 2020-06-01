@@ -2,6 +2,8 @@
 
 ## 基本操作
 
+> 参考[CLI Reference](https://cordova.apache.org/docs/en/latest/reference/cordova-cli/index.html)
+
 安装cordova
 
 ```undefined
@@ -369,7 +371,7 @@ Gradle是访问不了国外仓库的， 因此需要配置国内镜像。
 
 * 局部配置，配置优先级更高， 在Cordova项目中必须配置，否则会被项目中的配置覆盖全局配置。
 
-  按照上述方式， 修改`platforms/android/build.gradle`文件即可。
+  按照上述方式， 修改`platforms/android/build.gradle`文件即可。然而配置文件有被覆盖的可能.
 
 > 参考[Could not resolve all artifacts for configuration ':classpath'.](https://www.oschina.net/question/114943_2303892?nocache=1551403814162)
 
@@ -398,7 +400,14 @@ Gradle是访问不了国外仓库的， 因此需要配置国内镜像。
   $ cordova run --emulator
   ```
 
-  
+
+## 签名
+
+应用必须用证书签名后, 才能安装到设备上. (开发时可用*开发证书*)
+
+
+
+
 
 
 
