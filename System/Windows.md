@@ -557,8 +557,12 @@ Win->计算机管理->计划任务
 * 介绍
 
   * Windows上的命令行程序安装器. 
-
-  * Scoop将命令安装在`$HOME/scoop`目录下 ; 并且将命令添加到PATH路径下
+  * Scoop的所有数据都存在`$HOME/scoop/`目录下
+  * `$HOME/scoop/`目录结构
+    * `apps/` 存安装的命令, 每个命令版本不同, 分别存于不同目录, 符号链接`current`指向当前使用版本命令的家目录
+    * `buckets/` 存在所有仓库的信息, 默认有`main`仓库
+    * `cache/` 缓存数据
+    * `shims/` 该目录位于PATH路径下, 并且提供了运行对应命令的脚本, 运行`apps/`目录下当前使用的命令.
 
 * 安装
 
@@ -614,7 +618,6 @@ Win->计算机管理->计划任务
   update      Update apps, or Scoop itself
   virustotal  Look for app's hash on virustotal.com
   which       Locate a shim/executable (similar to 'which' on Linux)
-  
   
   Type 'scoop help <command>' to get help for a specific command.
   ```
