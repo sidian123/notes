@@ -40,7 +40,7 @@
 - [x] TCP三次握手如何保证可靠
 - [ ] Cordova深入学习
 - [ ] [Keys, certificates, and keystores](https://developer.android.com/studio/publish/app-signing.html#certificates-keystores) 了解
-- [ ] 
+- [ ] 研究下代理
 
 # 人生规划
 
