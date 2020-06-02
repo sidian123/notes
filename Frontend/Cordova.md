@@ -337,12 +337,14 @@ Cordova提供了两种方式, 从不同方面去配置
 
 ### JDK
 
-* 必须使用JDK8，参考[macOS OpenJDK8](https://www.jianshu.com/p/cc4bcab6adcc)
-* 设置`JAVA_HOME`变量
+* 使用Jdk8+以上版本
+* 设置`JAVA_HOME`变量, 并添加PATH路径
 
 ### Gradle
 
 Gradle是访问不了国外仓库的， 因此需要配置国内镜像。
+
+安装后需添加PATH路径
 
 * 全局配置， 在`$HOME/.gradle`下配置`init.gradle`文件
 
