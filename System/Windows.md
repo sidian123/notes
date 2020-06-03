@@ -585,6 +585,8 @@ Win->计算机管理->计划任务
   > `https://get.scoop.sh`会重定向一个具体的脚本地址上, 然后执行.
   >
   > 若安装失败, 先删除`$HOME/scoop`目录, 并将该地址替换为重定向的地址. 地址可在浏览器中打开, 能够看到重定向后的地址.
+  
+  > 或者DNS被污染了, 就是找不到, 解决方案可参考[解决GitHub的raw.githubusercontent.com无法连接问题](http://www.manongjc.com/detail/16-uunentgmtficver.html)
 
 ### 命令详解
 
