@@ -344,40 +344,58 @@ Cordova提供了两种方式, 从不同方面去配置
 
 ### Gradle
 
-安装后需添加PATH路径
+安装后需添加PATH路径.
 
-Gradle是访问不了国外仓库的， 因此需要配置国内镜像。
+然后配置使用阿里仓库源, 修改`$HOME/.gradle/init.gradle`文件
 
-* 全局配置， 在`$HOME/.gradle`下配置`init.gradle`文件
+```gradle
+allprojects{
+    repositories {
+        def ALIYUN_REPOSITORY_URL = 'http://maven.aliyun.com/nexus/content/groups/public'
+        def ALIYUN_JCENTER_URL = 'http://maven.aliyun.com/nexus/content/repositories/jcenter'
+        all { ArtifactRepository repo ->
+            if(repo instanceof MavenArtifactRepository){
+                def url = repo.url.toString()
+                if (url.startsWith('https://repo1.maven.org/maven2')) {
+                    project.logger.lifecycle "Repository ${repo.url} replaced by $ALIYUN_REPOSITORY_URL."
+                    remove repo
+                }
+                if (url.startsWith('https://jcenter.bintray.com/')) {
+                    project.logger.lifecycle "Repository ${repo.url} replaced by $ALIYUN_JCENTER_URL."
+                    remove repo
+                }
+            }
+        }
+        maven {
+            url ALIYUN_REPOSITORY_URL
+            url ALIYUN_JCENTER_URL
+        }
+    }
+}
+```
 
-  ```
-  buildscript {
-      repositories {
-          maven { url 'http://maven.aliyun.com/nexus/content/groups/public/' }
-          maven { url 'http://maven.aliyun.com/nexus/content/repositories/jcenter'}
-      }
-  
-      dependencies {
-          classpath 'com.android.tools.build:gradle:3.2.0-alpha16'
-      }
-  }
-  
-  allprojects {
-      repositories {
-          maven { url 'http://maven.aliyun.com/nexus/content/groups/public/' }
-          maven { url 'http://maven.aliyun.com/nexus/content/repositories/jcenter'}
-  
-      }
-  }
-  ```
+或者(不推荐使用, 没上个配置好用)
 
-  > 上面写死了`om.android.tools.build:gradle`版本， 是因为国内镜像源还没有那么新。
+```
+buildscript {
+    repositories {
+        maven { url 'http://maven.aliyun.com/nexus/content/groups/public/' }
+        maven { url 'http://maven.aliyun.com/nexus/content/repositories/jcenter'}
+    }
 
-* 局部配置，配置优先级更高， 在Cordova项目中必须配置，否则会被项目中的配置覆盖全局配置。
+    dependencies {
+        classpath 'com.android.tools.build:gradle:3.2.0-alpha16'
+    }
+}
 
-  按照上述方式， 修改`platforms/android/build.gradle`文件即可。然而配置文件有被覆盖的可能.
+allprojects {
+    repositories {
+        maven { url 'http://maven.aliyun.com/nexus/content/groups/public/' }
+        maven { url 'http://maven.aliyun.com/nexus/content/repositories/jcenter'}
 
-> 参考[Could not resolve all artifacts for configuration ':classpath'.](https://www.oschina.net/question/114943_2303892?nocache=1551403814162)
+    }
+}
+```
 
 ### SDK
 
