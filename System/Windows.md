@@ -249,6 +249,16 @@ PowerShell的命令拥有自己的一套命令规则, 同时也提供了匿名, 
     set b=%a% world
     echo %b%
     ```
+    
+  * 判断变量是否未定义, 或为空
+  
+    ```cmd
+    if not  defined  var  echo 未定义哦
+    ```
+  
+    > `defined`判断变量是否存在
+  
+  > 若`a`未被声明为变量, `echo %a%`将打印`%a%`
   
 * 变量类型
 
@@ -284,16 +294,44 @@ PowerShell的命令拥有自己的一套命令规则, 同时也提供了匿名, 
 
 * 字符串
 
-  无变量替换功能, 引号将被忽略.
+  字符串声明, 可以使用**双**引号, 或者不使用, 单引号将作为字符串的一部分. 支持变量替换
+  
+  `==` 能且仅能用于判断字符串是否相等 (`equ`可以用于字符串和数值)
   
 * 运算
 
   支持算数, 关系, 逻辑, 赋值和按位运算
 
-  详细见[Batch Script - Operators](https://www.tutorialspoint.com/batch_script/batch_script_operators.htm)
+  > 详细见[Batch Script - Operators](https://www.tutorialspoint.com/batch_script/batch_script_operators.htm)
 
-* 控制语句
+* 分支语句
 
+  ```cmd
+  if %abc% equ "yes" (
+      ...
+  ) else (
+      ...
+  )
+  ```
+  
+  > `()`将多个语句视作为一个语句
+  
+  ```cmd
+  set varA=B
+  if "%varA%"=="A" (
+      echo %varA% is A
+      echo AAA
+  ) else if "%varA%"=="B" (
+      echo %varA% is B
+      echo BBB
+  ) else (
+      echo %varA% is C
+      echo CCC
+  )
+  ```
+  
+  
+  
   见[Batch Script - Decision Making](https://www.tutorialspoint.com/batch_script/batch_script_decision_making.htm)
 
 ## 其他
