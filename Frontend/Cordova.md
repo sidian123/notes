@@ -335,16 +335,18 @@ Cordova提供了两种方式, 从不同方面去配置
 
 ## 环境搭建
 
+可通过`cordova requirements`命令, 获取所需环境要求
+
 ### JDK
 
-* 使用Jdk8+以上版本
+* 必须使用Jdk8, 否则不兼容
 * 设置`JAVA_HOME`变量, 并添加PATH路径
 
 ### Gradle
 
-Gradle是访问不了国外仓库的， 因此需要配置国内镜像。
-
 安装后需添加PATH路径
+
+Gradle是访问不了国外仓库的， 因此需要配置国内镜像。
 
 * 全局配置， 在`$HOME/.gradle`下配置`init.gradle`文件
 
@@ -390,7 +392,7 @@ Gradle是访问不了国外仓库的， 因此需要配置国内镜像。
 设置环境变量
 
 * 设置`ANDROID_HOME`变量, 即Android SDK的安装位置.
-* 将SDK的`tools`, `tools/bin`和`platform-tools` 添加到`PATH`路径下
+* 可选, 将SDK的`tools`, `tools/bin`和`platform-tools` 添加到`PATH`路径下
 
 ----------------
 
