@@ -554,89 +554,143 @@ Win->计算机管理->计划任务
 
 ## Scoop
 
-* 介绍
+### 介绍
 
-  * Windows上的命令行程序安装器. 
+* Windows上的命令行程序安装器. 
+* Scoop的所有数据都存在`$HOME/scoop/`目录下
+* `$HOME/scoop/`目录结构
+  * `apps/` 存安装的命令, 每个命令版本不同, 分别存于不同目录, 符号链接`current`指向当前使用版本命令的家目录
+  * `buckets/` 存在所有仓库的信息, 默认有`main`仓库
+  * `cache/` 缓存数据
+  * `shims/` 该目录位于PATH路径下, 并且提供了运行对应命令的脚本, 运行`apps/`目录下当前使用的命令.
 
-  * Scoop将命令安装在`$HOME/scoop`目录下 ; 并且将命令添加到PATH路径下
+### 安装
 
-* 安装
+* 运行PowerShell.
 
-  * 运行PowerShell.
+  因为Scoop是通过Powershell脚本安装的
 
-    因为Scoop是通过Powershell脚本安装的
-
-  * 提升权限, 允许运行远程脚本
-
-    ```shell
-    Set-ExecutionPolicy RemoteSigned -scope CurrentUser
-    ```
-
-  * 远程下载脚本并执行安装
-
-    ```shell
-    Invoke-Expression (New-Object System.Net.WebClient).DownloadString('https://get.scoop.sh')
-    ```
-
-    > `https://get.scoop.sh`会重定向一个具体的脚本地址上, 然后执行.
-    >
-    > 若安装失败, 先删除`$HOME/scoop`目录, 并将该地址替换为重定向的地址. 地址可在浏览器中打开, 能够看到重定向后的地址.
-
-* 命令详解
+* 提升权限, 允许运行远程脚本
 
   ```shell
-  λ scoop
-  Usage: scoop <command> [<args>]
-  
-  Some useful commands are:
-  
-  alias       Manage scoop aliases
-  bucket      Manage Scoop buckets
-  cache       Show or clear the download cache
-  checkup     Check for potential problems
-  cleanup     Cleanup apps by removing old versions
-  config      Get or set configuration values
-  create      Create a custom app manifest
-  depends     List dependencies for an app
-  export      Exports (an importable) list of installed apps
-  help        Show help for a command
-  hold        Hold an app to disable updates
-  home        Opens the app homepage
-  info        Display information about an app
-  install     Install apps
-  list        List installed apps
-  prefix      Returns the path to the specified app
-  reset       Reset an app to resolve conflicts
-  search      Search available apps
-  status      Show status and check for new app versions
-  unhold      Unhold an app to enable updates
-  uninstall   Uninstall an app
-  update      Update apps, or Scoop itself
-  virustotal  Look for app's hash on virustotal.com
-  which       Locate a shim/executable (similar to 'which' on Linux)
-  
-  
-  Type 'scoop help <command>' to get help for a specific command.
+  Set-ExecutionPolicy RemoteSigned -scope CurrentUser
   ```
 
-* 卸载Scoop
-
-  与卸载其他命令一样的卸载Scoop
+* 远程下载脚本并执行安装
 
   ```shell
-  scoop uninstall scoop
+  Invoke-Expression (New-Object System.Net.WebClient).DownloadString('https://get.scoop.sh')
   ```
 
-* 仓库
+  > `https://get.scoop.sh`会重定向一个具体的脚本地址上, 然后执行.
+  >
+  > 若安装失败, 先删除`$HOME/scoop`目录, 并将该地址替换为重定向的地址. 地址可在浏览器中打开, 能够看到重定向后的地址.
 
-  Scoop自带`main`参数, 但软件较少, 可添加其他仓库, 如
+### 命令详解
 
-  ```shell
-  # 官方维护的仓库
-  scoop bucket add extras
-  # 第三方维护的仓库
-  scoop bucket add scoopbucket https://github.com/yuanying1199/scoopbucket
-  ```
+```shell
+λ scoop
+Usage: scoop <command> [<args>]
 
-> 参考[scoop——强大的Windows命令行包管理工具]()
+Some useful commands are:
+
+alias       Manage scoop aliases
+bucket      Manage Scoop buckets
+cache       Show or clear the download cache
+checkup     Check for potential problems
+cleanup     Cleanup apps by removing old versions
+config      Get or set configuration values
+create      Create a custom app manifest
+depends     List dependencies for an app
+export      Exports (an importable) list of installed apps
+help        Show help for a command
+hold        Hold an app to disable updates
+home        Opens the app homepage
+info        Display information about an app
+install     Install apps
+list        List installed apps
+prefix      Returns the path to the specified app
+reset       Reset an app to resolve conflicts
+search      Search available apps
+status      Show status and check for new app versions
+unhold      Unhold an app to enable updates
+uninstall   Uninstall an app
+update      Update apps, or Scoop itself
+virustotal  Look for app's hash on virustotal.com
+which       Locate a shim/executable (similar to 'which' on Linux)
+
+Type 'scoop help <command>' to get help for a specific command.
+```
+
+### 卸载Scoop
+
+与卸载其他命令一样的卸载Scoop
+
+```shell
+scoop uninstall scoop
+```
+
+### 下载加速
+
+安装`aria2`后, scoop将使用它进行多线程下载
+
+```shell
+scoop install aria2
+```
+
+若下载中遇到问题, 可关闭aria2下载功能
+
+```shell
+scoop config aria2-enabled false
+```
+
+> 直接删除aria2也行
+
+也可设置代理
+
+```shell
+scoop config proxy localhost:10800
+```
+
+> 好像不支持socks5代理
+
+### 仓库
+
+Scoop自带`main`参数, 但软件较少, 可添加其他仓库, 如
+
+```shell
+# 官方维护的仓库
+scoop bucket add extras
+# 第三方维护的仓库
+scoop bucket add scoopbucket https://github.com/yuanying1199/scoopbucket
+```
+
+查看所有已知仓库
+
+```shell
+$ scoop bucket known
+main
+extras
+versions
+nightlies
+nirsoft
+php
+nerd-fonts
+nonportable
+java
+games
+jetbrains
+```
+
+### 版本切换
+
+据说可以切换`current`和`shims/`下命令指向的命令的版本. 经过测试, 貌似没啥子用...
+
+见[Switching Ruby and Python Versions](https://github.com/lukesampson/scoop/wiki/Switching-Ruby-And-Python-Versions)
+
+### 参考
+
+* [scoop——强大的Windows命令行包管理工具](https://www.jianshu.com/p/50993df76b1c)
+
+* [Windows下非常好用的包管理器scoop介绍](https://blog.csdn.net/u011054333/article/details/105237122)
 
