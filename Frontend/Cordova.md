@@ -390,6 +390,10 @@ Gradle是访问不了国外仓库的， 因此需要配置国内镜像。
 * 设置`ANDROID_HOME`变量, 即Android SDK的安装位置.
 * 将SDK的`tools`, `tools/bin`和`platform-tools` 添加到`PATH`路径下
 
+----------------
+
+
+
 ## 模拟器
 
 * 创建Android虚拟设备(AVD), 见[managing AVDs](https://developer.android.com/studio/run/managing-avds.html), [configuring the emulator](https://developer.android.com/studio/run/emulator.html#about)和[setting up hardware acceleration](https://developer.android.com/studio/run/emulator-acceleration.html)
