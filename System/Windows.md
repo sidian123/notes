@@ -250,9 +250,51 @@ PowerShell的命令拥有自己的一套命令规则, 同时也提供了匿名, 
     echo %b%
     ```
   
+* 变量类型
+
+  变量类型是动态的, 在不同的环境下为不同的类型
+
+  作为字符串
+
+  ```cmd
+  set a=hello
+  set b=%a% world
+  echo %b%
+  ```
+
+  作为数字运算
+
+  ```cmd
+  @echo off
+  SET /A a = 5
+  SET /A b = 10
+  SET /A c = %a%+%b%
+  echo %c%
+  SET /A c = %a%-%b%
+  echo %c%
+  SET /A c = %b%*%a%
+  echo %c%
+  SET /A c = %b%/%a%
+  echo %c%
+  SET /A c =%b% %% %a%
+  echo %c%
+  ```
+
+  > 为了避免被当作字符串操作, 需要添加`/A`
+
 * 字符串
 
-  无变量替换功能
+  无变量替换功能, 引号将被忽略.
+  
+* 运算
+
+  支持算数, 关系, 逻辑, 赋值和按位运算
+
+  详细见[Batch Script - Operators](https://www.tutorialspoint.com/batch_script/batch_script_operators.htm)
+
+* 控制语句
+
+  见[Batch Script - Decision Making](https://www.tutorialspoint.com/batch_script/batch_script_decision_making.htm)
 
 ## 其他
 
