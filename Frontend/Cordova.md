@@ -424,7 +424,7 @@ allprojects {
 
 ## 模拟器
 
-* 创建Android虚拟设备(AVD), 见[managing AVDs](https://developer.android.com/studio/run/managing-avds.html), [configuring the emulator](https://developer.android.com/studio/run/emulator.html#about)和[setting up hardware acceleration](https://developer.android.com/studio/run/emulator-acceleration.html)
+* 在Android Studio中创建虚拟设备AVD
 
 * 运行Cordova应用到模拟器上
 
@@ -432,7 +432,7 @@ allprojects {
   $ cordova run --emulator
   ```
   
-  > 需要提前启动模拟器
+  > 需要提前启动模拟器.
 
 
 ## 签名
