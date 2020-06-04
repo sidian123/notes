@@ -431,6 +431,8 @@ allprojects {
   ```shell
   $ cordova run --emulator
   ```
+  
+  > 需要提前启动模拟器
 
 
 ## 签名
