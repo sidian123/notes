@@ -422,7 +422,9 @@ allprojects {
 
 > 若下载不了, 可考虑修改下hosts文件.
 
-## 模拟器
+## 运行
+
+### 模拟器
 
 * 在Android Studio中创建虚拟设备AVD
 
@@ -434,18 +436,91 @@ allprojects {
   
   > 需要提前启动模拟器.
 
+### 真机
+
+1. 通过USB线, 将安卓和开发机连接起来
+
+2. 打开真机的开发者模式和允许USB调试
+
+3. 运行命令
+
+   ```shell
+   $ cordova run --device
+   ```
 
 ## 签名
 
-应用必须用证书签名后, 才能安装到设备上. (开发时可用*开发证书*)
+### 签名的作用
 
+* 应用升级时, 确保更新的应用来自于相同的提供者
+* 被相同证书签名的APK, 将运行在同一进程中, 被操作系统视作单个应用. 也就是一个应用可分模块部署, 分模块更新.
+* 证书用于权限授权. 即类型角色的概念, 可以未证书授各种权限. 被该证书签名的应用将拥有赋予证书的权限.
+* 在应用分发平台中分发应用时, 必须使用开发证书签名, 否则不允许应用分发
 
+### 证书类型
 
+* 开发证书
 
+  开发时用的证书, 开发时, 会提供一个默认的开发证书. 但被默认开发证书签名的应用不允许发送到分发平台中.
 
+* release证书
 
+  生产时需要用到的证书
+
+### 生成证书
+
+- 使用JDK的`keytool`生成, 但使用Android Studio的界面使用更为方便
+
+  在`build > generate signed Bundle / APK`中添加证书信息
+
+  ![image-20200605233703842](.Cordova/image-20200605233703842.png)
+
+### 使用证书
+
+* 命令行方式
+
+  ```shell
+  cordova run android --release -- --keystore=../my-release-key.keystore --storePassword=password --alias=alias_name --password=password
+  ```
+
+* 配置文件`build.json`(项目根目录下)
+
+  ```json
+  {
+      "android": {
+          "debug": {
+              "keystore": "../android.keystore",
+              "storePassword": "android",
+              "alias": "mykey1",
+              "password" : "password",
+              "keystoreType": ""
+          },
+          "release": {
+              "keystore": "../android.keystore",
+              "storePassword": "",
+              "alias": "mykey2",
+              "password" : "password",
+              "keystoreType": ""
+          }
+      }
+  }
+  ```
+
+* 混合命令行和上述配置文件
+
+  命令行参数优先级高.
+
+* 使用Gradle配置文件
+
+  略
+
+  
 
 # IOS
+
+## 证书
+
+[iOS之从创建（Development、Distribution）证书到发布](https://www.jianshu.com/p/304ec98842e1)
 
 ## 权限配置info.plist
 
