@@ -740,6 +740,23 @@ nginx中可以定义变量, 也提供了代表请求头字段的变量.
 
 > 参考:[Nginx出现403 forbidden](https://blog.csdn.net/qq_35843543/article/details/81561240)
 
+## 常用配置
+
+location或server中常用配置
+
+```nginx
+proxy_http_version 1.1;
+#静态站点访问策略一般一个页面会有多个jpg,css,js等,开启会话保持
+proxy_set_header Connection "Keep-Alive"; 
+#nginx参数，使用客户端的Host
+proxy_set_header Host $host; 
+#L7负载常用配置，由于waf反向代理，X-Real-IP需要在F5进行开启
+proxy_set_header X-Real-IP $remote_addr;
+#X-Forwarded-For 是一个 HTTP 扩展头部，用来表示 HTTP 请求端真实 IP
+#格式X-Forwarded-For: client, proxy1, proxy2
+proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+```
+
 # 参考
 
 * [所有指令](http://nginx.org/en/docs/http/ngx_http_core_module.html)
