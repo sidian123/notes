@@ -64,7 +64,7 @@ cordova platform rm android
 cordova platform save
 ```
 
-恢复平台
+恢复平台和插件
 
 ```undefined
 cordova prepare
@@ -79,8 +79,10 @@ cordova platform update
 添加cordova插件
 
 ```csharp
-cordova plugin add cordova-hot-code-push-plugin【热更新插件】
+cordova plugin add cordova-hot-code-push-plugin
 ```
+
+> 热更新插件
 
 或者使用repo url直接安装（不稳定）
 
@@ -514,7 +516,10 @@ allprojects {
 
   略
 
-  
+
+## 调试
+
+可通过Chrome调试APK中的页面, 暂时略.
 
 # IOS
 
