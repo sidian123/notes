@@ -38,8 +38,8 @@
   - [ ] [进阶学习](https://zhuanlan.zhihu.com/p/136851734)
 - [x] 前端UI框架Vant学习
 - [x] TCP三次握手如何保证可靠
-- [ ] Cordova深入学习
-- [ ] [Keys, certificates, and keystores](https://developer.android.com/studio/publish/app-signing.html#certificates-keystores) 了解
+- [x] Cordova深入学习
+- [x] [Keys, certificates, and keystores](https://developer.android.com/studio/publish/app-signing.html#certificates-keystores) 了解
 - [x] 研究下代理
 
 # 人生规划
