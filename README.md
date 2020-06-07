@@ -43,7 +43,8 @@
 - [x] 研究下代理
 - [ ] ECharts
 - [ ] Express/Koa2
-- [ ] 研究[A.CTable](https://gitee.com/sunchenbin/mybatis-enhance)框架
+- [ ] ~~研究[A.CTable](https://gitee.com/sunchenbin/mybatis-enhance)框架~~
+- [ ] 深入Spring Data JPA
 
 # 人生规划
 
