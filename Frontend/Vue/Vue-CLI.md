@@ -298,17 +298,18 @@ eslint帮助减少隐藏错误.
 
     3. 移除`@vlue/cli-plugin-eslint`包
 
-    4. 将要忽略目录或文件添加到`eslintignore`文件
+    4. 将要忽略目录或文件添加到`.eslintignore`文件
 
         ```
+        myfile.js
+        *.test.js
+        data/*
         /build/
-        /config/
-        /dist/
-        /*.js
+        /config
         /test/unit/coverage/
-        
-        /000-xyz/ 
         ```
+        
+        > 上面提供了多种写法, 其中相对路径是相对于`.eslintignore`文件的
 
 > 参考：
 >
