@@ -1489,13 +1489,17 @@ console.log(bb);
 
 ##  Promise
 
-promise相当于一个代理，表示一个**异步**操作成功或失败的结果，即使不能立马获得promise表示的值，但可以为promise附上成功或失败的回调函数。
+### 介绍
+
+promise表示一个操作 ( 同步或异步 ) 成功或失败的结果，不知直接获取到操作的结果. 需要为promise附上成功或失败的回调函数
 
 成功后将回调`.then(callback)`参数中的回调函数, 失败则回调`.catch(callback)`参数中的回调函数.
 
-> 也就是说, Promise是异步执行的, 其次, Promise一旦定义, 便已触发异步执行了, 而不是调用`then()`方法才执行的.
+> Promise代表的操作可以是异步或同步的, 但为结果附着的回调函数是异步的. 且, 一旦Promise对象被创建, 构造函数的回调函数就被立即执行.
 
 ### 例子
+
+#### 异步操作
 
 ```javascript
 function myAsyncFunction(url) {
@@ -1507,11 +1511,7 @@ function myAsyncFunction(url) {
     xhr.send();
   });
 }
-```
 
-`myAsyncFunction`函数返回一个promise，它代表xhr异步请求后的结果。在promise对象被创建后，它的`executor`函数（第一个参数）会立马被执行。因为这是异步请求，因此不能立马获得结果。但你可以附上处理函数，一般产生结果或失败时执行，如：
-
-```javascript
 myAsyncFunction("localhost/api/get")
 .then(function(successData){
     console.log(succssData);
@@ -1521,59 +1521,122 @@ myAsyncFunction("localhost/api/get")
 });
 ```
 
-当promise的executor函数中的异步结果出现后，即执行了`resolve(data)`，data为promise的结果，会执行`then`的第一个参数（函数），来处理成功的结果。
+`myAsyncFunction`函数创建并返回一个promise，它代表xhr异步请求后的结果。
 
-当`myAsyncFunction`函数中执行了`reject(data)`或抛出异常时，会执行`then`的第二个参数（函数），来处理异步操作的错误。`.catch(onRejected)`是`then.(undefined,onRejected)`的简写。
+在promise对象被创建后，它的`executor`函数（第一个参数）会立马被执行。最终通过`resolve`或`reject`设置结果.
 
-### Promise
+为了拿到结果, 需要附上结果的处理函数, 它会被异步调用.
 
-```javascript
-new Promise(executor)
-```
+> 也可使用`setTimeout(()=>{...},0)`来达到异步执行效果.
 
-当promise被创建时，executor函数会被立刻执行，executor函数将被传入`resolve`和`reject`方法。当executor中的异步操作结束后，需要调用`resolve`或`reject`方法设置解析promise成功或失败后的值。这两个方法一旦被调用，则通过`then`方法附着在promise上的处理器(`then`的两个参数之一)会被调用。这两个函数(`resolve`和`reject`)执行时传入的参数会被处理器(同上)接收。
-
-### then
+#### 同步操作
 
 ```javascript
-p.then(onFulfilled[, onRejected]);
+function myPromise(){
+    return new Promise((resolve,reject)=>{
+        console.log('hello in promise');
+        resolve('hello result');
+    })
+}
 
-p.then((value) => {
-  // fulfillment
-}, (reason) => {
-  // rejection
-});
+console.log('before promise');
+myPromise().then(value=>console.log(value));
+console.log('after promise');
 ```
 
---------------
+Promise的回调函数被立即执行, 且执行内容是同步的.
 
-**参数：**
+输出
 
-- `onFulfilled`：promise的executor执行resolve后执行该处理器。方法的参数为resolve执行时传入的参数。
-- `onRejected`；promise的executor执行reject后（或抛出异常）执行该处理器。方法的参数为reject执行时传入的参数（或异常）。
+```
+before promise
+hello in promise
+after promise
+hello result
+```
 
-----------------
+### 使用
 
-**返回值：**
+#### 创建Promise
 
-返回一个promise对象，因此可以**链式**使用`then`方法。但此时先搞懂promise代表什么值，当处理器：
+略, 见上
 
-> 重申下, 这里的处理器指`then`的两个回调函数
+#### 挂载处理器
 
-- 返回一个值时，promise表示该值
+`Promise`有三个实例方法
 
-  > 即处理器的返回值会被包裹(wrap)
+* `then()`
 
-- 不返回值时，promise表示undefined
+  挂载处理器到Promise正确结果上
 
-- 抛出异常时，promise表示失败了（reject）, 值为`error`的值
+* `catch()`
 
-- 返回promise，该promise的最终结果，就是`then`返回的promise的最终结果。
+  挂载处理器到Promise失败结果上
 
-> 貌似一个失败了（reject）的promise不被then的`onRejected`处理器处理时~~（即onRejected不存在）~~，会继续传给下一个。
+* `finally()`
 
-> 参考
->- [Using promises](<https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Using_promises>)
+  挂载处理器到Promise上, 无论失败.
+
+这些方法同样会返回Promise, 反复调用这些方法将形成一个**Promise链**, 如
+
+```javascript
+const myPromise = 
+  (new Promise(myExecutorFunc))
+  .then(handleFulfilledA,handleRejectedA)
+  .then(handleFulfilledB,handleRejectedB)
+  .then(handleFulfilledC,handleRejectedC);
+
+// or, perhaps better ...
+
+const myPromise =
+  (new Promise(myExecutorFunc))
+  .then(handleFulfilledA)
+  .then(handleFulfilledB)
+  .then(handleFulfilledC)
+  .catch(handleRejectedAny);
+```
+
+> 第一个例子, 为Promise同时挂载了成功和失败的处理器. 第二个例子, 仅为Promise挂载一个处理器
+>
+> 当一个`then`处理器失败了, 接下来遇到成功处理器则跳过, 遇到失败处理器则被捕获.
+
+链式Promise传递中, 每个处理器返回的结果是什么呢? 无论处理器的回调方法返回什么类型数据, 处理器都会将之包装为Promise. 如, 当处理器
+
+- 返回一个值时，promise表示该值, 成功的结果.
+
+  > 即处理器的返回值会被Promise包裹(wrap)
+
+- 不返回值时，promise表示undefined, 成功的结果.
+
+- 抛出异常时，promise表示异常的`error`值, 失败的结果
+
+- 返回promise，不用包装了, 直接传递该Promise，结果类型与之一致.
+
+#### 静态方法
+
+* `Promise.all()`
+
+  传入Promise集合, 若全部成功, 则返回resolve的Promise; 否则有一个失败, 就返回reject的Promise.
+
+* `Promise.allSetted()`
+
+  传入Promise集合, 等待所有Promise resolve或reject, 才返回
+
+* `Promise.race()`
+
+  传入Promise集合, 只要有一个resolve或reject, 就返回.
+
+* `Promise.reject()`
+
+  直接返回一个reject的Promise对象
+
+* `Promise.resolve()`
+
+  直接返回一个resolve的Promise对象
+
+### 参考
+
+> - [Using promises](<https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Using_promises>)
 >- [Promise](<https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise>)
 >- [then](<https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise/then>)
 >- [catch](<https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise/catch>)
