@@ -42,9 +42,9 @@
 - [x] [Keys, certificates, and keystores](https://developer.android.com/studio/publish/app-signing.html#certificates-keystores) 了解
 - [x] 研究下代理
 - [ ] ECharts
-- [ ] Express/Koa2
+- [x] Express/Koa2
 - [ ] ~~研究[A.CTable](https://gitee.com/sunchenbin/mybatis-enhance)框架~~
-- [ ] ~~深入Spring Data JPA~~
+- [ ] 深入Spring Data JPA
 - [ ] github仓库克隆, API方式
 
 # 人生规划
