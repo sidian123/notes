@@ -24,7 +24,7 @@ sudo apt-get install -y nodejs
 [312]:https://nodejs.org/en/download/
 [313]:https://nodejs.org/en/download/package-manager/
 
-# 二 模块
+# 二 模块剖析
 **模块**（module）是一个可复用的功能模块，一个模块对应一个Js文件，模块可导出模块内的变量、函数、对象给其他模块使用。
 
 一个**package**（包）可含有一个或多个module，但只暴露某个模块（通过`package.json`中的`main`属性）。`package.json`记录该包的所有属性，如包依赖、作者等。
@@ -87,9 +87,9 @@ fs.readFile('./file.txt', 'utf-8', (err, data) => {
 
 ### import ?
 
-`exports`的内容能够被`import`吗? 经测试, 能! 
+Node能用ES的`import`语法吗?
 
-为什么? 这好像是webpack提供的模块加载功能, 允许多种加载方式.
+不能, 但是在使用了Webpack的项目中可以, 它提供了多种模块加载功能, 其中就允许`import`的使用. 并且底层还是由Node原始的模块加载功能实现.
 
 ## package
 一个package包含多个module，使用package.json记录该package关键的信息。
@@ -108,7 +108,7 @@ package安装有全局安装(`npm install --global`)和局部安装（默认）�
 
 >之所以可以直接执行Node.js脚本，是因为在linux环境中，解析型脚本在首部添加了`#!/usr/bin/env Interpreter`，它会在执行时使用指定解析器。
 
-# 三 npm使用
+# 三 NPM使用
 
 npm (nodejs package manager) 包管理工具
 
@@ -330,6 +330,35 @@ npm install cnpm -registry=https://registry.npm.taobao.org
 
 ```shell
 npm help <command>
+```
+
+# API
+
+## http
+
+用于创建HTTP服务器
+
+```javascript
+// Load HTTP module
+const http = require("http");
+
+const hostname = "127.0.0.1";
+const port = 8000;
+
+// Create HTTP server 
+const server = http.createServer((req, res) => {
+
+   // Set the response HTTP header with HTTP status and Content type
+   res.writeHead(200, {'Content-Type': 'text/plain'});
+   
+   // Send the response body "Hello World"
+   res.end('Hello World\n');
+});
+
+// Prints a log once the server starts listening
+server.listen(port, hostname, () => {
+   console.log(`Server running at http://${hostname}:${port}/`);
+})
 ```
 
 # 其他
