@@ -784,6 +784,10 @@ jdbc:mysql://localhost:3306/database_name?useSSL=false&serverTimezone=GMT%2B8&al
 * `allowPublicKeyRetrieval`不知道
 
 > <span style="color:red">注意</span>, 如果出现链接错误, 可能是`useSSL`造成的, 其他选项可以不用, 仅设置时区也行.
+>
+> ```
+> jdbc:mysql://localhost:3306/database_name?serverTimezone=GMT%2B8
+> ```
 
 # 坑
 
