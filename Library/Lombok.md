@@ -65,15 +65,22 @@
 
   产生建造者, 来构建对象.
 
-  > 注意, 必须存在接受所有字段的构造函数. 默认会创建, 但是会导致无默认构造函数; 并且, 显式声明其他构造函数时, 会造成构造函数消失.
-  >
-  > 因此解决办法如下:
-  >
-  > ```java
-  > @Builder
-  > @NoArgsConstructor
-  > @AllArgsConstructor
-  > ```
+  注意, 必须存在接受所有字段的构造函数. 默认会创建, 但是会导致无默认构造函数; 并且, 显式声明其他构造函数时, 会造成构造函数消失.
+
+  因此解决办法如下:
+
+  ```java
+  @Builder
+  @NoArgsConstructor
+  @AllArgsConstructor
+  ```
+
+  若要建造者使用默认值, 可加上注解`@Builder.Default`, 如
+
+  ```java
+  @Builder.Default
+  private Map<String, Table> tables = new LinkedHashMap<>();
+  ```
 
 * `@NonNull`
 
