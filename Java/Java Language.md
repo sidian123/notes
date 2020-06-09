@@ -2836,6 +2836,15 @@ package package_name;
 
 > 注意, 该文件内不要有其他的内容了.
 
+## 断言
+
+断言某个条件必须满足, 否则抛出运行时异常, 如
+
+```java
+assert classLoader != null;
+File[] files = directory.listFiles();
+```
+
 # 参考
 
 * [Java Tutorial Oracle.com](https://docs.oracle.com/javase/tutorial/index.html)
