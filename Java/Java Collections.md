@@ -122,9 +122,33 @@
   * 更具体的遍历器
   * 范围操作
   * 排序`sort()`
+  
 * 实现类
   *  `ArrayList` 数组, 适合访问元素较多的情况
   * `LinkedList` 链表, 适合增删元素较多的情况
+  
+* 操作
+
+  * `toArray()`
+
+    转化为数据, 有两种重载形式.
+
+    第一种, 转化无类型信息
+
+    ```java
+    List<String> list = Arrays.asList("C", "C++", "Java");
+    Object[] array = list.toArray();
+    ```
+
+    第二种, 转化有类型信息
+
+    ```java
+    List<String> list = Arrays.asList("C", "C++", "Java");
+    String[] array = list.toArray(new String[list.size()]);
+    System.out.println(Arrays.toString(array));
+    ```
+
+    > 类型信息由参数提供, 且若元素能在参数的数组中存的下, 则存入并返回该参数; 否则新建一个对象.
 
 ## 队列
 
