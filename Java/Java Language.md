@@ -2845,6 +2845,10 @@ assert classLoader != null;
 File[] files = directory.listFiles();
 ```
 
+若不满足, 通常表示代码有bug.
+
+与运行时异常相比, 断言是给开发者用的, 运行时异常是给库的使用者捕获用的. 侧重点不同.
+
 # 参考
 
 * [Java Tutorial Oracle.com](https://docs.oracle.com/javase/tutorial/index.html)
