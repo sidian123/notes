@@ -144,7 +144,7 @@
 
     ```java
     List<String> list = Arrays.asList("C", "C++", "Java");
-    String[] array = list.toArray(new String[list.size()]);
+    String[] array = list.toArray(new String[]{});
     System.out.println(Arrays.toString(array));
     ```
 
