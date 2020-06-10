@@ -43,9 +43,10 @@
 - [x] 研究下代理
 - [ ] ECharts
 - [x] Express/Koa2
-- [ ] ~~研究[A.CTable](https://gitee.com/sunchenbin/mybatis-enhance)框架~~
-- [ ] 深入Spring Data JPA
+- [ ] ~~研究[A.CTable](https://gitee.com/sunchenbin/mybatis-enhance)框架~~ 打算自己写一个
+- [ ] ~~深入Spring Data JPA~~ 在国内Mybatis生态比较丰富
 - [ ] github仓库克隆, API方式
+- [ ] 微信小程序
 
 # 人生规划
 
