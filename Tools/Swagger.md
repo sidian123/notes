@@ -148,6 +148,14 @@ public class SpringFoxConfig {
   * `example` 为该字段的值举个例子
   * `hidden` 不显示该字段
 
+# 其他
+
+## knife4j
+
+[knife4j](https://gitee.com/xiaoym/knife4j) 也是一种Swagger文档的呈现形式, 界面内容更充实, 美观.
+
+但与Springfox相比, knife4j没有在线调试的功能.
+
 # 参考
 
 * [Swagger介绍及使用](https://www.jianshu.com/p/349e130e40d5) 侧重Swagger缘由脉络
