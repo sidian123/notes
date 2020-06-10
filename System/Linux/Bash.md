@@ -329,6 +329,7 @@ shell变量用于存储字面值、参与计算。bash为我们提供了一些�
 * `-d <file>` 文件存在且为目录
 * `<string> = <string>` 字符串相等
 * `<string> = <string>` 字符串不等
+* `!` 对上述结果取反
 
 ## 替换Expansion
 
