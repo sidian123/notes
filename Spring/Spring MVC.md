@@ -1,16 +1,16 @@
 [TOC]
 
-# 一、介绍
+# 一 介绍
 
 spring mvc源于mvc设计理念，通过将web应用分为模型层（M）、视图层（V）和控制层（C），实现了视图（比如jsp）和java Bean的解耦合、java和html的解耦合。mvc的根本好处在于前后台得到了一定的分离，大量的java代码得到了复用。现在前后端都采用了JSON数据交互，使得前后端的耦合度大大降低了。
 
-# 二、初始化和流程
+## 初始化和流程
 
 学习spring mvc，必须要了解它的初始化和流程。下面是我根据**自己的理解**描述的流程图，可能会**有不对的地方**，但大致如此。
 
 spring mvc的组件和流程图如下所示:
 
-![spring mvc的组件和流程图](.Spring MVC/20181029210526929.png)
+![spring mvc的组件和流程图](.Spring%20MVC/20181029210526929.png)
 
 spring mvc框架的主要是由**DispatcherServlet**来完成请求的响应。DispatcherServlet是一个**调度器**，负责将请求分配给**控制器**处理，然后将控制器处理的模型渲染到**视图**中，最后返回给客户端。貌似很简单，但是它确实很复杂的，因为它实现了mvc分层与解耦，下面详细介绍。
 
@@ -26,11 +26,11 @@ DispatcherServlet在初始化时，会扫出描控制器，从控制器上的注
 
 这里再谈谈Converter和Formatter，一般请求到来时，参数会先经过HttpMessageConverter的处理，在处理器对控制器方法进行传参时，如果不是字符串类型的，会涉及到类型转化的过程，由Converter和Formatter完成，而Formatter内部又由Converter完成。spring mvc已经提供了很多converter来满足一般的使用，但是也可以自定义。如果有@ResponseBody注解的话，控制器返回的对象会直接被HttpMessageConverter转化为响应消息体，这样便没有接下来视图解析、渲染的过程了。
 
-# 三、配置
+## Spring MVC配置
 
 要配置spring mvc的环境，首先需要配置所需的jar包，关于jar包会在另一篇博客中谈到。spring mvc的关键类为DispatcherServlet，它是一个Servlet，需要在web.xml的配置文件中配置（尽管从servlet3.0开始，可以使用注解配置web.xml的内容，但是这里不谈及）。一般spring mvc应用会存在上下文层次结构（[Context Hierarchy](https://docs.spring.io/spring/docs/current/spring-framework-reference/web.html#mvc-servlet-context-hierarchy)），即存在一个顶层容器和servlet容器。顶层容器一般含有服务层服务、数据访问层对象等，servlet容器含有控制层控制器、视图解析器、处理器映射器等。也就是说存在spring ioc的容器和spring mvc的容器，不过两个容器都是WebApplicationContext的实例。当然可以只存在spring mvc的容器，只需要不配置spring ioc。
 
-## web.xml配置
+### web.xml配置
 
 和spring ioc配置相关的类为**ContextLoaderListener**，是一个servlet的上下文的监听器；和spring mvc配置相关的类为**DispatcherServlet**，是一个servlet。都是在web.xml中配置的，下面给出配置文件：
 
@@ -95,7 +95,7 @@ DispatcherServlet在初始化时，会扫出描控制器，从控制器上的注
 
 如果只想使用spring mvc容器，那么不必配置ContextLoaderListener。
 
-## spring ioc配置
+### spring ioc配置
 
 在web.xml中指定了spring ioc的配置文件为applicationContext.xml，这里暂不配置任何内容，ssm总配置会在另一篇博客中谈及。
 
@@ -118,7 +118,7 @@ DispatcherServlet在初始化时，会扫出描控制器，从控制器上的注
 </beans>
 ```
 
-## spring mvc配置
+### spring mvc配置
 
 在web.xml中指定了spring mvc的配置文件为springmvc-config.xml，基本内容如注解所示：
 
@@ -161,7 +161,7 @@ DispatcherServlet在初始化时，会扫出描控制器，从控制器上的注
 </beans>
 ```
 
-# 四、控制器开发
+# 二 控制器开发
 
 spring mvc简化了处理请求和响应结果的过程，开发者只需要在方法定义中声明自己所需的参数（参数类型有一定限制，不是想要什么就有什么），spring mvc就能根据参数类型正确的传入参数。方法返回时，开发者只需要放回ModelAndView，或者视图名，或者一个pojo对象，spring mvc都会正确的生成响应结果。
 
@@ -607,7 +607,91 @@ public Map<...> addMember(Member member) {
 
 
 
-# 五、其他
+# 三 MVC配置
+
+> [MVC配置](https://docs.spring.io/spring/docs/current/spring-framework-reference/web.html#mvc-config)
+
+## 拦截器
+
+> [拦截器](https://docs.spring.io/spring/docs/current/spring-framework-reference/web.html#mvc-config-interceptors)
+
+spring mvc启动期间会通过@RequestMapping注解和配置文件找到和URI对应的处理器与拦截器，构建一条执行链（HandlerExecutionChain对象）。其中，拦截器需要实现HandlerIntercept接口：
+
+| Modifier and Type | Method and Description                                       |
+| ----------------- | ------------------------------------------------------------ |
+| `default boolean` | `preHandle(HttpServletRequest request, HttpServletResponse response, java.lang.Object handler)`处理器执行之前执行。返回true，让剩下的拦截器或处理器执行；false则表明已经处理了响应，不在继续执行 |
+| `default void`    | `postHandle(HttpServletRequest request, HttpServletResponse response, java.lang.Object handler, ModelAndView modelAndView)`处理器结束后执行. |
+| `default void`    | `afterCompletion(HttpServletRequest request, HttpServletResponse response, java.lang.Object handler, java.lang.Exception ex)`Callback after completion of request processing, that is, after rendering the view.处理请求结束后，一般在渲染了视图之后执行。 |
+
+
+单个拦截器执行过程：
+
+![img](.Spring%20MVC/20181031094538654-1568130707491.png)
+
+多个拦截器执行过程：
+
+preHandler1-->preHandler2-->preHandler3-->handler-->postHandler3-->postHanlder2-->postHandler1-->afterCompletion3-->afterCompletion2-->afterCompletion1
+
+拦截器配置：
+
+```xml
+<mvc:interceptors>
+	<!-- 全局拦截器配置 -->
+    <bean class="org.springframework.web.servlet.i18n.LocaleChangeInterceptor"/>
+	<!-- 只拦截匹配url -->
+    <mvc:interceptor>
+        <mvc:mapping path="/**"/>
+        <mvc:exclude-mapping path="/admin/**"/>
+        <bean class="org.springframework.web.servlet.theme.ThemeChangeInterceptor"/>
+    </mvc:interceptor>
+    <mvc:interceptor>
+        <mvc:mapping path="/secure/*"/>
+        <bean class="org.example.SecurityInterceptor"/>
+    </mvc:interceptor>
+</mvc:interceptors>
+```
+
+path路径参考4.1.1小结。
+
+## Content Types
+
+> [Content Types](https://docs.spring.io/spring/docs/current/spring-framework-reference/web.html#mvc-config-content-negotiation)
+
+spring mvc通过media类型来决定使用何种HttpMessageConverter来解析或生成消息体，但必须有对应的jar包位于classpath下。判断过程如下：
+
+1. 首先检查URL的路径扩展，如xxx.json,xxx.xml,xxx.rss等等。
+
+2. 然后才检查Accept头字段。
+
+3. 最后使用默认Content-Type。默认为第一个找到的与HttpMessageConverter相关的ar包
+
+ 通过配置[ContentNegotiationManagerFactoryBean](https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/web/accept/ContentNegotiationManagerFactoryBean.html#setMediaTypes-java.util.Properties-)可以更改它的默认行为，如下所示：
+
+![img](.Spring%20MVC/20190226143027977-1568130800542.png)
+
+下面通过xml配置，关闭步骤一的行为，设置默认`Content-Type`为`application/json`：
+
+```xml
+<mvc:annotation-driven content-negotiation-manager="contentNegotiationManager">
+	<!-- 不使用后缀匹配 -->
+	<mvc:path-matching suffix-pattern="false"/>
+</mvc:annotation-driven>
+
+<!--配置Content Type解析行为-->
+<bean id="contentNegotiationManager" class="org.springframework.web.accept.ContentNegotiationManagerFactoryBean">
+    <property name="favorPathExtension" value="false"/><!--关闭url路径扩展-->
+    <property name="defaultContentType"><!--配置默认Content Type-->
+        <bean class="org.springframework.http.MediaType">
+            <constructor-arg value="application"/>
+            <constructor-arg value="json"/>
+        </bean>
+    </property>
+</bean>
+```
+
+> 如果在浏览器中测试发现，即使设置默认使用json，也返回xml，请检查下请求的头字段。在chrome中，默认会发送接收xml的accept。本人在linux中使用curl测试正确。
+
+# 其他
 
 ## [Model和请求、会话范围](https://www.intertech.com/Blog/understanding-spring-mvc-model-and-session-attributes/)
 
@@ -888,82 +972,6 @@ headers.setCacheControl(CacheControl.maxAge(30, TimeUnit.DAYS));//设置缓存�
 ```
 
 
-# [六 MVC配置](https://docs.spring.io/spring/docs/current/spring-framework-reference/web.html#mvc-config)
-
-## [拦截器](https://docs.spring.io/spring/docs/current/spring-framework-reference/web.html#mvc-config-interceptors)
-
-spring mvc启动期间会通过@RequestMapping注解和配置文件找到和URI对应的处理器与拦截器，构建一条执行链（HandlerExecutionChain对象）。其中，拦截器需要实现HandlerIntercept接口：
-
-|Modifier and Type|	Method and Description|
-|---|--|
-|`default boolean`|	`preHandle(HttpServletRequest request, HttpServletResponse response, java.lang.Object handler)`处理器执行之前执行。返回true，让剩下的拦截器或处理器执行；false则表明已经处理了响应，不在继续执行 |
-| `default void`	|`postHandle(HttpServletRequest request, HttpServletResponse response, java.lang.Object handler, ModelAndView modelAndView)`处理器结束后执行. |
-| `default void`	|`afterCompletion(HttpServletRequest request, HttpServletResponse response, java.lang.Object handler, java.lang.Exception ex)`Callback after completion of request processing, that is, after rendering the view.处理请求结束后，一般在渲染了视图之后执行。|
-
-
-单个拦截器执行过程：
-
-![img](.Spring%20MVC/20181031094538654-1568130707491.png)
-
-多个拦截器执行过程：
-
-preHandler1-->preHandler2-->preHandler3-->handler-->postHandler3-->postHanlder2-->postHandler1-->afterCompletion3-->afterCompletion2-->afterCompletion1
-
-拦截器配置：
-
-```xml
-<mvc:interceptors>
-	<!-- 全局拦截器配置 -->
-    <bean class="org.springframework.web.servlet.i18n.LocaleChangeInterceptor"/>
-	<!-- 只拦截匹配url -->
-    <mvc:interceptor>
-        <mvc:mapping path="/**"/>
-        <mvc:exclude-mapping path="/admin/**"/>
-        <bean class="org.springframework.web.servlet.theme.ThemeChangeInterceptor"/>
-    </mvc:interceptor>
-    <mvc:interceptor>
-        <mvc:mapping path="/secure/*"/>
-        <bean class="org.example.SecurityInterceptor"/>
-    </mvc:interceptor>
-</mvc:interceptors>
-```
-
-path路径参考4.1.1小结。
-
-## [Content Types](https://docs.spring.io/spring/docs/current/spring-framework-reference/web.html#mvc-config-content-negotiation)
-spring mvc通过media类型来决定使用何种HttpMessageConverter来解析或生成消息体，但必须有对应的jar包位于classpath下。判断过程如下：
-
-1. 首先检查URL的路径扩展，如xxx.json,xxx.xml,xxx.rss等等。
-
-2. 然后才检查Accept头字段。
-
-3. 最后使用默认Content-Type。默认为第一个找到的与HttpMessageConverter相关的ar包
-
- 通过配置[ContentNegotiationManagerFactoryBean](https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/web/accept/ContentNegotiationManagerFactoryBean.html#setMediaTypes-java.util.Properties-)可以更改它的默认行为，如下所示：
-
-![img](.Spring%20MVC/20190226143027977-1568130800542.png)
-
-下面通过xml配置，关闭步骤一的行为，设置默认`Content-Type`为`application/json`：
-
-```xml
-<mvc:annotation-driven content-negotiation-manager="contentNegotiationManager">
-	<!-- 不使用后缀匹配 -->
-	<mvc:path-matching suffix-pattern="false"/>
-</mvc:annotation-driven>
-
-<!--配置Content Type解析行为-->
-<bean id="contentNegotiationManager" class="org.springframework.web.accept.ContentNegotiationManagerFactoryBean">
-    <property name="favorPathExtension" value="false"/><!--关闭url路径扩展-->
-    <property name="defaultContentType"><!--配置默认Content Type-->
-        <bean class="org.springframework.http.MediaType">
-            <constructor-arg value="application"/>
-            <constructor-arg value="json"/>
-        </bean>
-    </property>
-</bean>
-```
-
-> 如果在浏览器中测试发现，即使设置默认使用json，也返回xml，请检查下请求的头字段。在chrome中，默认会发送接收xml的accept。本人在linux中使用curl测试正确。
 
 # 参考
 * 《Java EE 互联网轻量级框架整合开发 --SSM框架和Redis实现》 杨开振

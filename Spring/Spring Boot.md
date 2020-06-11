@@ -770,6 +770,42 @@ public class ClientApplication {
 * 若想提供与映射相关的组件, 需注入` WebMvcRegistrationsAdapter `
 * 若想完全控制Spring MVC的配置, 需提供` @EnableWebMvc `注解的`@ Configuration `配置类.
 
+Demo
+
+```java
+@Bean
+public WebMvcConfigurer corsConfigurer() {
+    return new WebMvcConfigurer() {
+        /**
+        * 跨域配置
+        */
+        @Override
+        public void addCorsMappings(CorsRegistry registry) {
+            registry.addMapping("/**")
+                .allowCredentials(true);
+        }
+        
+        /**
+        * 注册拦截器
+        */
+        @Override
+        public void addInterceptors(InterceptorRegistry registry) {
+            registry.addInterceptor(myHandlerInterceptor);
+        }
+
+        /**
+        * 注册异常处理器
+        */
+        @Override
+        public void extendHandlerExceptionResolvers(List<HandlerExceptionResolver> resolvers) {//扩展异常处理功能, 而不是替换
+            resolvers.add(myExceptionHandlerResolver);
+        }
+    };
+}
+```
+
+
+
 ## HttpMessageConverters
 
 `HttpMessageConverter` 用于转化HTTP请求或响应。默认对象会被转化为JSON或XML（如果存在Jackson xml），至于什么时候转化为什么类型，见[spring mvc-Content Types](https://blog.csdn.net/jdbdh/article/details/83512464#6.2%20Content%20Types)。字符编码默认使用`UTF-8`
