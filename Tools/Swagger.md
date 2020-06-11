@@ -152,9 +152,7 @@ public class SpringFoxConfig {
 
 ## knife4j
 
-[knife4j](https://gitee.com/xiaoym/knife4j) 也是一种Swagger文档的呈现形式, 界面内容更充实, 美观.
-
-但与Springfox相比, knife4j没有在线调试的功能.
+[knife4j](https://gitee.com/xiaoym/knife4j) 也是一种Swagger文档的呈现形式, 界面内容更充实, 美观. 推荐使用
 
 # 参考
 
