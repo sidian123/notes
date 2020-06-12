@@ -1761,6 +1761,181 @@ f().catch(alert); // TypeError: failed to fetch // (*)
 
 > 参考: [Async/await](https://JavaScript.info/async-await)
 
+## 装饰器
+
+### 介绍
+
+为类或类的成员提供额外的功能. 即有两类装饰器, 类成员装饰器, 类装饰器.
+
+> 用法有点像Java的注解, 但有本地的区别. Java注解用于提供元数据, 而JavaScript的装饰器仅提供额外功能 (装配器模式)
+
+### 原理
+
+见一个例子, 解释装饰器的原理
+
+```javascript
+// 业务方法
+function doSomething(name) {
+  console.log('Hello, ' + name);
+}
+// 业务方法的装配器
+function loggingDecorator(wrapped) {
+  return function() {
+    console.log('Starting');
+    const result = wrapped.apply(this, arguments);
+    console.log('Finished');
+    return result;
+  }
+}
+// 调用装配器方法
+const wrapped = loggingDecorator(doSomething);
+```
+
+如上所示, 装饰器就是在被装饰的元素上添加一定逻辑. **在JavaScript中, 程序启动后, 会立即将元素(有装饰器标注)替换成装饰器.**
+
+### 类成员装饰器
+
+类成员装饰器就是让装饰器替换成员
+
+* 简单形式(装饰器无参数)
+
+  ```javascript
+  function readonly(target, name, descriptor) {
+    descriptor.writable = false;
+    return descriptor;
+  }
+  ```
+
+  函数本身就是装饰器, 需要返回描述符, 用于覆盖成员.
+
+  其中
+
+  * `target` 成员所属的类
+  * `name` 成员名
+  * `descriptor` 成员描述符. 之后会传入到`Object.defineProperty`中覆盖被装饰的成员.
+
+  使用如下
+
+  ```javascript
+  class Example {
+    a() {}
+    @readonly
+    b() {}
+  }
+  
+  const e = new Example();
+  e.a = 1;
+  e.b = 2;
+  // TypeError: Cannot assign to read only property 'b' of object '#<Example>'
+  ```
+
+  > 这里的`@readonly`无参数
+
+* 复杂形式(装饰器有参数)
+
+  ```javascript
+  function log(name) {
+    return function decorator(t, n, descriptor) {
+      const original = descriptor.value;
+      if (typeof original === 'function') {
+        descriptor.value = function(...args) {
+          console.log(`Arguments for ${name}: ${args}`);
+          try {
+            const result = original.apply(this, args);
+            console.log(`Result from ${name}: ${result}`);
+            return result;
+          } catch (e) {
+            console.log(`Error from ${name}: ${e}`);
+            throw e;
+          }
+        }
+      }
+      return descriptor;
+    };
+  }
+  
+  ```
+
+  `log`函数返回的函数为装饰器, 函数的参数为装饰器的参数(使用时提供). 注意, 装饰器仍要返回描述符.
+
+  使用
+
+  ```javascript
+  class Example {
+    @log('some tag')
+    sum(a, b) {
+      return a + b;
+    }
+  }
+  
+  const e = new Example();
+  e.sum(1, 2);
+  // Arguments for some tag: 1,2
+  // Result from some tag: 3
+  ```
+
+### 类装饰器
+
+类装饰器就是让装饰器替换类的构造函数
+
+* 简单形式(无参数)
+
+  ```javascript
+  function log(Class) {
+    return (...args) => {
+      console.log(args);
+      return new Class(...args);
+    };
+  }
+  ```
+
+  `log`返回的方法为装饰器, `log`的参数为类, 装饰器的参数为构造函数的参数, 装饰器需要返回对象.
+
+  使用
+
+  ```javascript
+  @log
+  class Example {
+    constructor(name, age) {
+    }
+  }
+  
+  const e = new Example('Graham', 34);
+  // [ 'Graham', 34 ]
+  console.log(e);
+  // Example {}
+  ```
+
+* 复杂形式(有参数)
+
+  ```javascript
+  function log(name) {
+    return function decorator(Class) {
+      return (...args) => {
+        console.log(`Arguments for ${name}: args`);
+        return new Class(...args);
+      };
+    }
+  }
+  
+  @log('Demo')
+  class Example {
+    constructor(name, age) {}
+  }
+  
+  const e = new Example('Graham', 34);
+  // Arguments for Demo: args
+  console.log(e);
+  // Example {}
+  ```
+
+  与上述类型, 除了又多包裹了一层函数, 用于提供装饰器的参数.
+
+### 参考
+
+* [What is a Decorator?](https://www.sitepoint.com/javascript-decorators-what-they-are/)
+* [Core Decorators](https://www.npmjs.com/package/core-decorators) 提供一些常用装饰器.
+
 # 八 其他
 ## 一些概念
 * JavaScript：语言
