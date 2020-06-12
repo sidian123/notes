@@ -1935,6 +1935,8 @@ const wrapped = loggingDecorator(doSomething);
 
 * [What is a Decorator?](https://www.sitepoint.com/javascript-decorators-what-they-are/)
 * [Core Decorators](https://www.npmjs.com/package/core-decorators) 提供一些常用装饰器.
+* [@babel/plugin-proposal-decorators](https://babeljs.io/docs/en/next/babel-plugin-proposal-decorators.html) Vue目前使用的装饰器支持包.
+* [babel-plugin-transform-decorators-legacy](https://github.com/loganfsmyth/babel-plugin-transform-decorators-legacy) 另一种装饰器支持包.
 
 # 八 其他
 ## 一些概念
