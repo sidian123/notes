@@ -49,6 +49,8 @@
 - [ ] github仓库克隆, API方式
 - [ ] 微信小程序
 - [ ] elasticsearch
+- [ ] Vue动画
+- [ ] JavaScript Decorator
 
 # 人生规划
 
