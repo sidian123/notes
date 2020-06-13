@@ -1283,11 +1283,10 @@ var vm = new Vue({
     messages, // set locale messages
   })
   
-  
   // 注入到Vue中
   new Vue({ i18n }).$mount('#app')
   ```
-
+  
 * 使用
 
   通过`vm.$t()`方法使用
@@ -1304,7 +1303,7 @@ var vm = new Vue({
 
 ## Wrapper组件
 
-若要增强组件功能, 但又不影响使用, 可以将被包装组件的属性和事件暴露出来, 如
+若要增强组件功能, 但又不影响使用, 可以将Wrapper组件的属性和事件全部绑定到子组件中, 如
 
 ```html
 <div class="my-cascader">
