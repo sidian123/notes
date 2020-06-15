@@ -355,6 +355,21 @@ const router = new VueRouter({
 })
 ```
 
+# 其他
+
+## Demo
+
+```javascript
+{
+    path: 'drug-ingredient-category',
+    name: 'DrugIngredientCategory',
+    meta: {
+    title: '药物成分分类'
+    },
+    component: () => import('../views/DrugManage/DrugIngredientCategory/DrugIngredientCategory')
+}
+```
+
 # 参考
 
 * [Vue Router](https://router.vuejs.org/)
