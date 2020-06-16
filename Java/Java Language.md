@@ -2840,16 +2840,31 @@ package package_name;
 
 ## 断言
 
-断言某个条件必须满足, 否则抛出运行时异常, 如
+* 介绍
 
-```java
-assert classLoader != null;
-File[] files = directory.listFiles();
-```
+  断言某个条件必须满足, 否则抛出运行时异常`AssertionError`
 
-若不满足, 通常表示代码有bug.
+* 使用
 
-与运行时异常相比, 断言是给开发者用的, 运行时异常是给库的使用者捕获用的. 侧重点不同.
+    `assert`关键字后接条件表达式
+    
+    ```java
+    assert classLoader != null;
+    File[] files = directory.listFiles();
+    ```
+    
+    提供抛出异常时携带的字符串
+    
+    ```java
+    public void setup() {
+        Connection conn = getConnection();
+        assert conn != null : "Connection is null";
+    }
+    ```
+    
+* 适用范围
+
+    断言使用更为简单, 但携带的信息比较少, 因此断言是给开发者用的. 若要将代码封装为库, 提供给其他人使用, 则应抛出运行时异常比较好.
 
 # 参考
 
