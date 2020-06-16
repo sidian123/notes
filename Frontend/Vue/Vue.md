@@ -698,131 +698,165 @@ Vue.component('base-checkbox', {
 <base-checkbox v-model="lovingVue"></base-checkbox>
 ```
 
-## slots
+## slot
 
-> 理解下述语句时, 请区分组件元素和组件模板
+### 基本介绍
 
-* 基本介绍
+* 当组件中含有内容时，可通过`slot`元素获取。如：
 
-    html中，组件中含有内容时，组件可通过`<slot>`获取。如：
+  组件使用中, 传入内容
+
     ```html
-    <alert-box>
+  <alert-box>
       Something bad happened.
-    </alert-box>
+  </alert-box>
     ```
+  
+  组件的定义中, 以`slot`元素获取内容
+  
     ```javascript
-    Vue.component('alert-box', {
+  Vue.component('alert-box', {
       template: `
-        <div class="demo-alert-box">
+          <div class="demo-alert-box">
           <strong>Error!</strong>
           <slot></slot>
-        </div>
+          </div>
       `
-    })
+  })
     ```
 
-* 在HTML中, **组件元素**有内容时, 可在**组件模板**中使用`<slot>`元素接收. 若无, 则默认忽略它. 
+* 若组件定义中, 未声明`slot`元素, 将忽略使用中传递过来的内容; 组件定义中的`slot`元素可有默认内容, 使用过程中可覆盖.
 
-* **组件元素**中的文本插值的变量作用域仍位于父组件
+* 组件使用中的文本插值的变量作用域仍位于父组件
 
-* 模板中`<slot>`元素中可有默认内容，组件元素中可覆盖这些内容。
+### 多插槽
 
-* 当有多个`<slot>`元素时，使用元素的`name`属性来区分，允许其中一个`<slot>`无`name`值，则默认`default`；那么**组件元素**的内容中需要使用`<template>`围绕部分内容，`v-slot`指令指定对应`slot`元素。如：
-	**模板**
-	
-	```html
-	<div class="container">
-	  <header>
-	    <slot name="header"></slot>
-	  </header>
-	  <main>
-	  	<!--默认名default-->
-	    <slot></slot>
-	  </main>
-	  <footer>
-	    <slot name="footer"></slot>
-	  </footer>
-	</div>
-	```
-	**父组件模板**
-	```html
-	<base-layout>
-	  <template v-slot:header>
-	    <h1>Here might be a page title</h1>
-	  </template>
-	
-	  <template v-slot:default>
-	    <p>A paragraph for the main content.</p>
-	    <p>And another one.</p>
-	  </template>
-	
-	  <template v-slot:footer>
-	    <p>Here's some contact info</p>
-	  </template>
-	</base-layout>
-	```
-	同样允许无`<template>`元素围绕的部分存在，对应default slot
-	```html
-	<base-layout>
-	  <template v-slot:header>
-	    <h1>Here might be a page title</h1>
-	  </template>
-	
-	  <p>A paragraph for the main content.</p>
-	  <p>And another one.</p>
-	
-	  <template v-slot:footer>
-	    <p>Here's some contact info</p>
-	  </template>
-	</base-layout>
-	```
-	
-* ~~`<slot>`元素中的属性会被绑定到一个对象中，组件元素中`v-slot`可以获取该对象，实现了父组件中的组件元素使用组件内的数据。如：~~
-	
-	所有绑定到`<slot>`元素的属性上的对象, 都会被存入一个对象中(如下面的`slotProps`), 在父组件的模板中可以通过`v-slot`指令取出, 实现了子组件通过`slot`元素为父组件提供数据. 例子如下:
-	
-	**模板**
-	
-	```html
-	<!-- 有一个user属性 -->
-	<span>
-	  <slot v-bind:user="user">
-	    {{ user.lastName }}
-	  </slot>
-	</span>
-	```
-	**父组件模板中**
-	```html
-	<current-user>
-	  <template v-slot:default="slotProps">
-	    {{ slotProps.user.firstName }}
-	  </template>
-	</current-user>
-	```
-	当只有一个slot元素时，可缩写成：
-	```html
-	<current-user v-slot:default="slotProps">
-	  {{ slotProps.user.firstName }}
-	</current-user>
-	```
-	也可省略default
-	```html
-	<current-user v-slot="slotProps">
-	  {{ slotProps.user.firstName }}
-	</current-user>
-	```
-	上面传入的slotProps对象含有slot元素的属性值，可以使用es5的解构语法获得单个属性：
-	```html
-	<current-user v-slot="{ user }">
-	  {{ user.firstName }}
-	</current-user>
-	```
-	
+* 介绍
+
+  组件定义中, 可存在多个`slot`元素, 以`name`属性区分.
+
+  > 其中, 可存在一个无`name`属性的`slot`, 默认其`name`为`default`
+
+  组件使用中, 传入的内容以`template`元素包裹, `v-slot`指定组件对应的`slot`元素
+
+  > `v-slot`指令需给出`slot`名. 其中, 对应`default slot`时, 无需给出. 甚至内容可不用`template`元素包裹
+
+* Demo
+
+  组件定义(`base-layout`)中, 提供多个`slot`
+
+    ```html
+  <div class="container">
+      <header>
+          <slot name="header"></slot>
+      </header>
+      <main>
+          <!--默认名default-->
+          <slot></slot>
+      </main>
+      <footer>
+          <slot name="footer"></slot>
+      </footer>
+  </div>
+    ```
+  > 其中, 有个默认`slot`, 无需`name`
+
+  组件使用中, `v-slot`指定组件对应`slot`元素
+
+    ```html
+  <base-layout>
+      <template v-slot:header>
+          <h1>Here might be a page title</h1>
+      </template>
+  
+      <!-- 相当于v-slot:default -->
+      <template v-slot>
+          <p>A paragraph for the main content.</p>
+          <p>And another one.</p>
+      </template>
+  
+      <template v-slot:footer>
+          <p>Here's some contact info</p>
+      </template>
+  </base-layout>
+    ```
+  默认内容也可不用`template`元素包裹
+
+  ```html
+  <base-layout>
+    <template v-slot:header>
+      <h1>Here might be a page title</h1>
+    </template>
+  
+    <p>A paragraph for the main content.</p>
+    <p>And another one.</p>
+  
+    <template v-slot:footer>
+      <p>Here's some contact info</p>
+    </template>
+  </base-layout>
+  ```
+  
+### 数据传递
+
+* 介绍
+
+  上面例子都是, 使用者可将内容通过`template`元素传给组件, 组件也可以将数据通过`slot`元素传给使用者.
+
+  组件可将数据绑定到`slot`元素的属性上, `slot`会将之收集成`slotProps`; 使用者可通过`v-slot`指令取出`slotProps`对象.
+
+* Demo
+
+  组件定义中, 绑定数据到`slot`的属性上.
+
+  ```html
+  <span>
+    <slot v-bind:user="user">
+      {{ user.lastName }}
+    </slot>
+  </span>
+  ```
+
+  > 这里绑定了`user`属性, 将被移入到`slotProps`中.
+
+  组件使用中, 获取`slotProps`对象
+
+  ```html
+  <current-user>
+    <template v-slot:default="slotProps">
+      {{ slotProps.user.firstName }}
+    </template>
+  </current-user>
+  ```
+
+  当只有一个slot元素时，可缩写成：
+
+  ```html
+  <current-user v-slot:default="slotProps">
+    {{ slotProps.user.firstName }}
+  </current-user>
+  ```
+
+  省略掉default
+
+  ```html
+  <current-user v-slot="slotProps">
+    {{ slotProps.user.firstName }}
+  </current-user>
+  ```
+
+  通过E5的解构语法, 获取单个属性
+
+  ```html
+  <current-user v-slot="{ user }">
+    {{ user.firstName }}
+  </current-user>
+  ```
+
+### 其他
+
 * `v-slot`的参数可以是动态的，如`v-slot:[dynamicSlotName]`
-
 * `v-slot:`的缩写为`#`，使用时后面必须存在参数。
-
-
 
 ## 动态组件
 
