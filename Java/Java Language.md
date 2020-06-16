@@ -2842,7 +2842,7 @@ package package_name;
 
 * 介绍
 
-  断言某个条件必须满足, 否则抛出运行时异常`AssertionError`
+  断言某个条件必须满足, 否则抛出运行时异常`AssertionError`. 此时, 通常表示代码有bug.
 
 * 使用
 
