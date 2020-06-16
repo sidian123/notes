@@ -1255,7 +1255,94 @@ var vm = new Vue({
   }
   ```
 
+## 函数组件
+
+* 介绍
+
+  函数组件是无状态的 (即无响应式数据) 和无实例化的 (即无`this`上下文), 因此也无生命周期和方法. 
+
+  是一种随外部变化而变化的轻量级组件.
+
+* 上下文
+
+  函数组件没有实例化后的`this`上下文, 但有其他的上下文, 获取函数组件的信息.
+
+  上下文常用的属性如下
+
+  * `props` 函数组件的属性. (用到的属性无需注册, Vue会自我检测)
+  * `parent` 函数组件的父组件
+
+  不常用的如下
+
+  * `children`: An array of the VNode children
+
+  * `slots`: A function returning a slots object
+
+  * `scopedSlots`: (2.6.0+) An object that exposes passed-in scoped slots. Also exposes normal slots as functions.
+  * `data`: The entire [data object](https://vuejs.org/v2/guide/render-function.html#The-Data-Object-In-Depth), passed to the component as the 2nd argument of `createElement`
+  * `listeners`: (2.3.0+) An object containing parent-registered event listeners. This is an alias to `data.on
+
+  * `injections`: (2.3.0+) if using the [`inject`](https://vuejs.org/v2/api/#provide-inject) option, this will contain resolved injections.
+
+* Demo
+
+  函数组件`List.vue`
+
+  ```vue
+  <template functional>
+    <div class="list">
+      <div>{{props.text}}</div>
+      <div>{{JSON.stringify(data)}}</div>
+      <button @click="parent.hello">sss</button>
+    </div>
+  </template>
+  
+  <style scoped>
+    .list{
+      color:red
+    }
+  </style>
+  ```
+
+  > `script`无需写了
+
+  `App.vue`中使用
+
+  ```vue
+  <template>
+    <div id="app">
+      <list :text="text"></list>
+    </div>
+  </template>
+  
+  <script>
+    import List from './components/List'
+    export default {
+      name: "App",
+      components:{List},
+      data(){
+        return{
+          text:'sss'
+        }
+      },
+      methods:{
+        hello(){
+          console.log('hello world')
+        }
+      }
+  };
+  </script>
+  ```
+
+> 参考
+>
+> * [Functional Components Vue.js](https://vuejs.org/v2/guide/render-function.html#Functional-Components)
+> * [10个Vue开发技巧](https://mp.weixin.qq.com/s?__biz=MzU2NTc4NjM5OQ==&mid=2247483973&idx=1&sn=a45bb930e3d566355199599fe1454fa4&chksm=fcb72035cbc0a92307097d3f5e3f06a396b18c2c64b3966a8680e71d29138beabad29d299ab0&mpshare=1&scene=23&srcid=&sharer_sharetime=1592144740303&sharer_shareid=e22f24a31ebc3c050a04c9a4e7f37053#rd)
+> * [Vue.js functional components: What, Why, and When?](https://stegosource.com/vue-js-functional-components-what-why-and-when/)
+> * [Functional Components in Vue Loader](https://vue-loader.vuejs.org/guide/functional.html)
+
 # 其他
+
 ## 获取元素
 * `$root`：访问组件的根实例
 * `$parent`：访问子组件的父组件
