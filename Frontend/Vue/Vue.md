@@ -816,6 +816,7 @@ Vue.component('base-checkbox', {
       {{ user.lastName }}
     </slot>
   </span>
+  ```
 ```
   
 > 这里绑定了`user`属性, 将被移入到`slotProps`中.
@@ -829,25 +830,25 @@ Vue.component('base-checkbox', {
     </template>
   </current-user>
 ```
-  
+
 当只有一个slot元素时，可缩写成：
-  
+
   ```html
   <current-user v-slot:default="slotProps">
     {{ slotProps.user.firstName }}
   </current-user>
-```
-  
+  ```
+
 省略掉default
-  
+
   ```html
   <current-user v-slot="slotProps">
     {{ slotProps.user.firstName }}
   </current-user>
-```
-  
+  ```
+
 通过E5的解构语法, 获取单个属性
-  
+
   ```html
   <current-user v-slot="{ user }">
     {{ user.firstName }}
@@ -1465,3 +1466,6 @@ Vue3采用Composition API的方式组织代码, 以解决以下问题:
   * [React.js与Vue.js：流行框架的比较](https://baijiahao.baidu.com/s?id=1608099200125495014&wfr=spider&for=pc)
 
   * [Vue中数据响应式原理---对象的变化侦测](https://blog.csdn.net/Riona_cheng/article/details/102882160)
+
+* 待学
+  * [10个Vue开发技巧](https://mp.weixin.qq.com/s?__biz=MzU2NTc4NjM5OQ==&mid=2247483973&idx=1&sn=a45bb930e3d566355199599fe1454fa4&chksm=fcb72035cbc0a92307097d3f5e3f06a396b18c2c64b3966a8680e71d29138beabad29d299ab0&mpshare=1&scene=23&srcid=&sharer_sharetime=1592144740303&sharer_shareid=e22f24a31ebc3c050a04c9a4e7f37053#rd)
