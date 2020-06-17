@@ -1280,7 +1280,7 @@ var vm = new Vue({
 
   * `scopedSlots`: (2.6.0+) An object that exposes passed-in scoped slots. Also exposes normal slots as functions.
   * `data`: The entire [data object](https://vuejs.org/v2/guide/render-function.html#The-Data-Object-In-Depth), passed to the component as the 2nd argument of `createElement`
-  * `listeners`: (2.3.0+) An object containing parent-registered event listeners. This is an alias to `data.on
+  * `listeners`: (2.3.0+) An object containing parent-registered event listeners. This is an alias to `data.on`
 
   * `injections`: (2.3.0+) if using the [`inject`](https://vuejs.org/v2/api/#provide-inject) option, this will contain resolved injections.
 
