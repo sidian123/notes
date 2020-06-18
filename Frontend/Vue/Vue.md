@@ -350,6 +350,16 @@ modifiers是指令的特殊后缀，以`.`表示，指示指令绑定的一些�
         immediate: true
     },
     ```
+    
+    深度监听, 对象内部属性改变时也触发函数调用
+    
+    ```javascript
+    // the callback will be called whenever any of the watched object properties change regardless of their nested depth
+    c: {
+        handler: function (val, oldVal) { /* ... */ },
+        deep: true
+    },
+    ```
 
 ## props
 
