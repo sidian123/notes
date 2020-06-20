@@ -736,13 +736,13 @@ html5后引入了web storage（本地储存），比cookies更好用。本地存
 
 * 元素自身模型大小
 
-  * `getComputedStyle().height`元素内容的高
+  * `window.getComputedStyle().height`元素内容的高
 
-  * `getComputedStyle().paddingTop`元素的padding高
+  * `window.getComputedStyle().paddingTop`元素的padding高
 
-  * `getComputedStyle().borderTopWidth`或`clientTop`元素的border高
+  * `window.getComputedStyle().borderTopWidth`或`clientTop`元素的border高
 
-  * `getComputedStyle().marginTop`元素的边距高
+  * `window.getComputedStyle().marginTop`元素的边距高
 
     -------
 
