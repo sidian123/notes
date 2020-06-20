@@ -797,7 +797,7 @@ html5后引入了web storage（本地储存），比cookies更好用。本地存
 
 * `offsetY`离元素padding边缘的距离
 * `layerY`离元素border边缘的距离
-* `clienty`离视窗边缘的距离
+* `clientY`离视窗边缘的距离
 * `pageY`离整个页面的距离
 * `window.pageYOffset`视窗离页面的距离
 
