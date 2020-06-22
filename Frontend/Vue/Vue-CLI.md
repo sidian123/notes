@@ -235,7 +235,7 @@ css处理前：
             //是否代理websockets,可选
             ws:true,
             //是否修改Host头部，可选
-            changeOrgin:true,
+            changeOrigin:true,
             //修改请求路径,支持正则
             pathRewrite:{'/api/':''},
             //是否忽略掉Https证书问题
