@@ -12,6 +12,8 @@
 
 # Spring Data Commons
 
+## 入门
+
 * 介绍
 
   Spring Data是抽象接口,类等等元数据定义的地方, 规定了Spring Data所有项目通用的使用方法. 该项目被其他所有子项目所依赖.
@@ -21,40 +23,44 @@
   * 提供Repository和自定义对象映射抽象
   * 从Repository派生出的动态查询
 
-* 主要内容
+* 内容
 
-  * 底层数据模型如何映射到对象模型, 由其他子项目规定和实现. Spring Data Commons规定了对象的创建, 属性填充等过程
+  底层数据模型如何映射到对象模型, 由其他子项目规定和实现. 
 
-  * 如何使用Repository
+  Spring Data Commons规定了对象的创建, 属性填充等过程
 
-    1. 声明继承` Repository `的接口, 类型形参传入实体类和ID类型
+* 如何使用Repository
 
-    2. 可自行依照规定补充数据方法.
+  1. 声明继承` Repository `的接口, 类型形参传入实体类和ID类型
 
-       > 这些方法将在第3步, 由框架实现
+  2. 可自行依照规定补充数据方法, Spring Data子项目将自动实现这些方法.
 
-    3. 配置, 去生成接口的代理实例对象
+     > 这些方法将在第3步, 由框架实现
 
-       ```javascript
-       @EnableJpaRepositories
-       class Config { … }
-       ```
+  3. 启动功能, 如生成`@Repository`标注接口的代理实例对象
 
-       > * 这里启动`Jap`,可自行更改, 格式: ` @Enable${store}Repositories `, 如` @EnableRedisRepositories `
-       >
-       > * 未指定要扫描的包时, 它会扫描当前类所在的包, 并生成实例
-       >
-       > * 貌似JPA中可不用这个注解, 接口有`@Repository`标注也会生效.
+     ```javascript
+     @EnableJpaRepositories
+     class Config { … }
+     ```
 
-    4. 注入实例到其他对象中使用.
+     > * 这里启动`Jap`,可自行更改, 格式: ` @Enable${store}Repositories `, 如` @EnableRedisRepositories `
+     >
+     > * 未指定要扫描的包时, 它会扫描当前类所在的包, 并生成实例
+     >
+     > * 貌似JPA中可不用这个注解, 接口有`@Repository`标注也会生效.
 
+  4. 注入实例到其他对象中使用.
+  
 * 参考
 
   [Spring Data Commons - Reference Documentation](https://docs.spring.io/spring-data/commons/docs/current/reference/html/#project)
 
-----------------------------
+## 深入
 
 * Dao类标注
+
+  使用Dao类继承一下接口即可, 不同接口提供了不同的功能, 或聚合了其他接口功能. 其他接口都派生于`Repository`接口.
 
   * `Repository`接口
 
@@ -69,10 +75,10 @@
     提供分页和排序功能
 
   * 与具体持久化相关的
-
-    * `JpaRepository`
+  
+  * `JpaRepository`
     * `MongoRepository`
-
+  
   
 
 # Spring Data JPA
@@ -177,7 +183,53 @@
 
 
 
-> 参考https://www.jianshu.com/p/c14640b63653 
+## 多表连接
+
+## 自定义查询
+
+
+
+## 其他
+
+### 设计理念
+
+[引言](https://stackoverflow.com/a/11881628):
+
+> Perhaps I should elaborate on overall semantics of JPA. There are two main approaches to design of persistence APIs:
+>
+> - **insert/update approach**. When you need to modify the database you should call methods of persistence API explicitly: you call `insert` to insert an object, or `update` to save new state of the object to the database.
+> - **Unit of Work approach**. In this case you have a set of objects *managed* by persistence library. All changes you make to these objects will be  flushed to the database automatically at the end of Unit of Work (i.e.  at the end of the current transaction in typical case). When you need to insert new record to the database, you make the corresponding object *managed*. *Managed* objects are identified by their primary keys, so that if you make an object with predefined primary key *managed*, it will be associated with the database record of the same id, and  state of this object will be propagated to that record automatically.
+
+在Jpa中, 使用的第二种方案, JPa会监控持久化的实体, 若有修改, 在事务结束时会自动提交. 
+
+例子:
+
+```java
+@Test
+@Transactional // 必须要加上事务
+// @Rollback(false) // 默认Test中事务回滚, 这里使用默认行为
+void contextLoads() {
+    User user = userDao.findById(1).orElse(new User());
+    user.setName("杀杀杀钉钉"); // 事务结束后会同步到数据库中.
+    //userDao.save(user); // 无需save
+    User user1 = userDao.findById(1).orElse(new User()); // 查询的内容也是修改过的实体.
+    System.out.println(user1);
+}
+```
+
+输出:
+
+```
+User(id=1, name=杀杀杀钉钉)
+```
+
+那问题来了, 有人说, 修改一个数据, 需要查出来, 然后更新. 相当于查了两次, 影响性能. 那我就来反驳了... 首先查的次数远大于写, 这是毋庸置疑的. 写的次数很少, 那么这点性能消耗相对于高效的开发来说, 是可以接受的. 
+
+多表查询呢? 目前我不清楚, 但是现在的趋势是单表查询. TODO
+
+## 参考
+
+* [SpringBoot 中 JPA 的使用](https://www.jianshu.com/p/c14640b63653)
 
 # Spring Data Redis
 
