@@ -12,40 +12,170 @@
 
 # Spring Data Commons
 
-Spring Data是抽象接口,类等等元数据定义的地方, 规定了Spring Data所有项目通用的使用方法. 该项目被其他所有子项目所依赖.
+* 介绍
 
-主要内容:
+  Spring Data是抽象接口,类等等元数据定义的地方, 规定了Spring Data所有项目通用的使用方法. 该项目被其他所有子项目所依赖.
 
-* 底层数据模型如何映射到对象模型, 由其他子项目规定和实现. Spring Data Commons规定了对象的创建, 属性填充等过程
+* 特点
 
-* 如何使用Repository
+  * 提供Repository和自定义对象映射抽象
+  * 从Repository派生出的动态查询
 
-  1. 声明继承` Repository `的接口, 类型形参传入实体类和ID类型
+* 主要内容
 
-  2. 可自行依照规定补充数据方法.
+  * 底层数据模型如何映射到对象模型, 由其他子项目规定和实现. Spring Data Commons规定了对象的创建, 属性填充等过程
 
-     > 这些方法将在第3步, 由框架实现
+  * 如何使用Repository
 
-  3. 配置, 去生成接口的代理实例对象
+    1. 声明继承` Repository `的接口, 类型形参传入实体类和ID类型
 
-     ```javascript
-     @EnableJpaRepositories
-     class Config { … }
-     ```
+    2. 可自行依照规定补充数据方法.
 
-     > * 这里启动`Jap`,可自行更改, 格式: ` @Enable${store}Repositories `, 如` @EnableRedisRepositories `
-     >
-     > * 未指定要扫描的包时, 它会扫描当前类所在的包, 并生成实例
-     >
-     > * 貌似JPA中可不用这个注解, 接口有`@Repository`标注也会生效.
+       > 这些方法将在第3步, 由框架实现
 
-  4. 注入实例到其他对象中使用.
+    3. 配置, 去生成接口的代理实例对象
 
->参考[Spring Data Commons - Reference Documentation](https://docs.spring.io/spring-data/commons/docs/current/reference/html/#project)
+       ```javascript
+       @EnableJpaRepositories
+       class Config { … }
+       ```
+
+       > * 这里启动`Jap`,可自行更改, 格式: ` @Enable${store}Repositories `, 如` @EnableRedisRepositories `
+       >
+       > * 未指定要扫描的包时, 它会扫描当前类所在的包, 并生成实例
+       >
+       > * 貌似JPA中可不用这个注解, 接口有`@Repository`标注也会生效.
+
+    4. 注入实例到其他对象中使用.
+
+* 参考
+
+  [Spring Data Commons - Reference Documentation](https://docs.spring.io/spring-data/commons/docs/current/reference/html/#project)
+
+----------------------------
+
+* Dao类标注
+
+  * `Repository`接口
+
+    用于标注实体类, 获取实体和ID类型
+
+  * `CrudRepository`接口
+
+    提供CRUD功能.
+
+  * `PagingAndSortingRepository`接口
+
+    提供分页和排序功能
+
+  * 与具体持久化相关的
+
+    * `JpaRepository`
+    * `MongoRepository`
+
+  
 
 # Spring Data JPA
 
-Java Persistent API规范的一种实现, 让使用者仅通过操作实体对象便可实现对数据库的操作.
+## Get Start
+
+* 介绍
+
+  Java Persistent API规范的一种实现, 让使用者仅通过操作实体对象便可实现对数据库的操作.
+
+* 配置
+
+  * Maven依赖
+
+    ```xml
+    <dependency>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-data-jpa</artifactId>
+    </dependency>
+    <dependency>
+        <groupId>mysql</groupId>
+        <artifactId>mysql-connector-java</artifactId>
+        <scope>runtime</scope>
+    </dependency>
+    ```
+
+  * 项目配置
+
+    ```properties
+    # 目标数据库名字, 默认会自动探测, 可为空
+    # spring.jpa.database-platform=org.hibernate.dialect.MySQL5InnoDBDialect
+    # 是否显示执行的SQL语句
+    spring.jpa.show-sql=true
+    # 对结构的操作, 默认为none
+    spring.jpa.hibernate.ddl-auto=update
+    ```
+
+    `ddl-auto`可取值
+
+    * *validate*: validate the schema, makes no changes to the database.
+    * *update*: update the schema. 若表不存在, 会自动创建.
+    * *create*: creates the schema, destroying previous data.
+    * *create-drop*: drop the schema when the SessionFactory is closed explicitly, typically when the application is stopped.
+    * *none*: does nothing with the schema, makes no changes to the database
+
+* 启动Jpa功能
+
+  在`@Configuration`类上添加`@EnableJpaRepositories`注解, 如
+
+  ```java
+  @EnableJpaRepositories
+  @SpringBootApplication
+  public class HelloSpringDataApplication {
+  
+      public static void main(String[] args) {
+          SpringApplication.run(HelloSpringDataApplication.class, args);
+      }
+  }
+  ```
+
+* 实体类创建
+
+  ```java
+  @Data
+  @Builder
+  @NoArgsConstructor
+  @AllArgsConstructor
+  @Entity
+  public class User {
+      @Id
+      @GeneratedValue
+      Integer id;
+      String name;
+  }
+  ```
+
+  > 使用的`javax.persistence`包的注解
+
+* Dao类创建
+
+  ```java
+  @Repository
+  public interface UserDao extends JpaRepository<User, Integer> {}
+  ```
+  
+* 使用Demo
+
+  ```java
+  @SpringBootTest
+  class HelloSpringDataApplicationTests {
+      @Autowired
+      UserDao userDao;
+  
+      @Test
+      void contextLoads() {
+          userDao.save(User.builder().name("张三").build());
+      }
+  }
+  ```
+
+## 查询方法
+
+
 
 > 参考https://www.jianshu.com/p/c14640b63653 
 

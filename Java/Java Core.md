@@ -560,3 +560,16 @@ UUID存在不同的变体( variant ), 不管哪种变体, 都有4中版本, 而J
 * `suspend=n` JVM启动后不暂停, 之后Idea可随时连接上
 * `suspend=y` JVM启动后暂停, Idea远程连接后才继续执行下去.
 
+## Optional
+
+值的容器, 常用在方法的返回值上. 常用方法如下
+
+* `isPresent()` 若值存在, 则`true`
+
+* `orElse(other)`
+
+  若值不为空`null`, 则返回; 否则返回默认值`other`
+
+* `ifPresent(action)`
+
+  若值存在, 则执行动作`action`

@@ -1356,6 +1356,12 @@ public class EmployeeRestControllerIntegrationTest {
 }
 ```
 
+## 其他
+
+### 事务回滚
+
+在测试用例中, `@Transactional`的方法在结束后默认会回滚. 可加上`@Rollback(false)`来阻止这种行为.
+
 ## 参考
 
 * [Testing](https://docs.spring.io/spring-boot/docs/2.2.6.RELEASE/reference/html/spring-boot-features.html#boot-features-testing)
