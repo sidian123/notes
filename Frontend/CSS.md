@@ -1827,6 +1827,12 @@ body {
 user-select: none;
 ```
 
+## 不作为事件触发的对象
+
+```css
+pointer-events: none;
+```
+
 # 参考
 
 [MDN教程](https://developer.mozilla.org/en-US/docs/Learn)
