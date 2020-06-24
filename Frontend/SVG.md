@@ -1,3 +1,9 @@
+# 元素
+
+## text
+
+* 当`text`元素存在`tspan`元素时, `text`的`x`, `y`将失效.
+
 # How to
 
 ## text元素居中
