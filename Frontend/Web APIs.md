@@ -106,18 +106,24 @@ DOM接口大致分为两类：DOM核心接口和与html元素相关的接口。D
 
 ----------
 
+* 日志
+
+  * console.log() 通用日志
+* console.debug() 
+  * console.warn()
+* console.error()
+  * console.info()
+
 * 其他
 
   * window.content
 
   * window.onload
 
-  * console.log()
-
   * `Element.scrollTo()` 滚动元素内容, 如平滑滚动
 
     ```javascript
-    element.scrollTo({
+  element.scrollTo({
       top: 100,
       left: 100,
       behavior: 'smooth'
