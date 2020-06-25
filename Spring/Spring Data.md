@@ -58,6 +58,8 @@
 
 ## 深入
 
+### Dao层定义
+
 * Dao类标注
 
   使用Dao类继承一下接口即可, 不同接口提供了不同的功能, 或聚合了其他接口功能. 其他接口都派生于`Repository`接口.
@@ -76,9 +78,108 @@
 
   * 与具体持久化相关的
   
-  * `JpaRepository`
-    * `MongoRepository`
+  * `JpaRepository` 标注是JPA的Repository
+    
+  * `MongoRepository` 标注是Mongo的Repository
   
+* dao接口定义
+
+  * dao类必须继承`Repository`接口, 可以继承`Repository`的子接口来暴露更多的实体操作方法.  或者使用`@RepositoryDefinition`, 与dao类继承`Repository`接口是一样的效果.
+
+* 自定义/裁剪Repository接口
+
+  即暴露部分方法, 如`CrudRepository`的方法. 只要是底层实现支持的方法即可, 如JPA中`SimpleJpaRepository`的方法
+
+  ```java
+  @NoRepositoryBean
+  interface MyBaseRepository<T, ID> extends Repository<T, ID> {
+  
+    Optional<T> findById(ID id);
+  
+    <S extends T> S save(S entity);
+  }
+  
+  interface UserRepository extends MyBaseRepository<User, Long> {
+    User findByEmailAddress(EmailAddress emailAddress);
+  }
+  ```
+
+  自定义的接口以`@NoRepositoryBean`标注, 
+
+* 多Spring Data Module
+
+  当使用了多个Spring Data Module, 如JPA, Elasticsearch, 那么dao类使用哪个数据源呢? 有三种方法区分
+
+  * dao类继承和具体模块相关的`Repository`接口, 如JPA的`JpaRepository`
+
+  * 实体类被具体模块相关的注解, 如JPA的`@Entity`, MongoDB的`@Document`
+
+    > 实体类若同时标注了多个模块的注解, 则需要具体的`Repository`接口来区分.
+
+  * 约束模块扫描的包
+
+    ```java
+    @EnableJpaRepositories(basePackages = "com.acme.repositories.jpa")
+    @EnableMongoRepositories(basePackages = "com.acme.repositories.mongo")
+    class Configuration { … }
+    ```
+
+### 查询方法定义
+
+* 查询策略
+
+  由`Enable${store}Repositories`注解的`queryLookupStrategy`属性配置
+
+  * `CREATE`
+
+    从方法名中构建
+
+  * `USE_DECLARED_QUERY`
+
+    使用查询语句, 如SQL, 通常以注解来定义. 若未找到, 则抛出异常.
+
+  * `CREATE_IF_NOT_FOUND` (默认)
+
+    组合上述两种行为, 首先看是否有查询语句, 若无则从方法名中构建.
+
+* 查询方法名构建
+
+  * 动作指示
+
+    方法名以`find…By`, `read…By`, `query…By`, `count…By`, and `get…By` 为前缀
+
+  * 表达式
+
+    方法名之后接表达式, 如字段名. 多个表达式以`Or`或`And`组合.
+
+  Demo
+
+  ```java
+  interface PersonRepository extends Repository<Person, Long> {
+  
+    List<Person> findByEmailAddressAndLastname(EmailAddress emailAddress, String lastname);
+  
+    // Enables the distinct flag for the query
+    List<Person> findDistinctPeopleByLastnameOrFirstname(String lastname, String firstname);
+    List<Person> findPeopleDistinctByLastnameOrFirstname(String lastname, String firstname);
+  
+    // Enabling ignoring case for an individual property
+    List<Person> findByLastnameIgnoreCase(String lastname);
+    // Enabling ignoring case for all suitable properties
+    List<Person> findByLastnameAndFirstnameAllIgnoreCase(String lastname, String firstname);
+  
+    // Enabling static ORDER BY for a query
+    List<Person> findByLastnameOrderByFirstnameAsc(String lastname);
+    List<Person> findByLastnameOrderByFirstnameDesc(String lastname);
+  }
+  ```
+
+  
+
+
+
+* 创建repository实例
+
   
 
 # Spring Data JPA
