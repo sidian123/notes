@@ -21,7 +21,7 @@
       neo4j
   ```
 
-  启动后, Neo4j提供了一个访问界面 http://localhost:7474/
+  启动后, Neo4j提供了一个访问界面 http://localhost:7474/  ; `7687`是数据的访问端口
 
 
 * 参考
