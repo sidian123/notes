@@ -1,7 +1,25 @@
 * 介绍
 
+  * 基本概念
+  * Nodes - graph data records
+    * Relationships - connect nodes
+  * Properties - named data values
+  * 图数据库
+    * Nodes are the name for data records in a graph
+    * Data is stored as Properties
+    * Properties are simple name/value pairs
+    * Similar nodes can have different properties
+    * Properties can be strings, numbers, or booleans
+    * Neo4j can store billions of nodes
+  * 标签
+    * A node can have zero or more labels
+    * Labels do not have any properties
+  * 关系
+    * Relationships always have direction
+    * Relationships always have a type
+    * Relationships form patterns of data
+    * 关系也有属性
   * 以节点, 关系和属性的形式存储数据.
-
   * 属性图模型(Property graph model )规则
     * 表示节点，关系和属性中的数据
     * 节点和关系都包含属性
