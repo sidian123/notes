@@ -110,10 +110,12 @@ DOM接口大致分为两类：DOM核心接口和与html元素相关的接口。D
 
   * console.log() 通用日志
 * console.debug() 
+  
   * console.warn()
 * console.error()
-  * console.info()
-
+  
+* console.info()
+  
 * 其他
 
   * window.content
@@ -727,6 +729,20 @@ html5后引入了web storage（本地储存），比cookies更好用。本地存
 * 从Object URL中获取Blob
 
   见[How to get a file or blob from an object URL?](https://stackoverflow.com/questions/11876175/how-to-get-a-file-or-blob-from-an-object-url)
+
+## 表单
+
+* 添加字段
+
+  * `FormData.append()`
+
+    添加字段值, 若值已存在, 则添加到值的集合中.
+
+  * `FormData.set()`
+
+    添加字段值, 若值已存在, 覆盖.
+
+> [FormData](https://developer.mozilla.org/en-US/docs/Web/API/FormData)
 
 # 其他
 
