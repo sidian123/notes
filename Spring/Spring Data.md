@@ -523,8 +523,10 @@ spring.redis.timeout=500
   ```properties
   spring.data.neo4j.username=neo4j
   spring.data.neo4j.password=123456
-  # spring.data.neo4j.uri
+  # spring.data.neo4j.uri=neo4j://localhost:7687
   ```
+
+  > 若neo4j运行在本地, 且端口7687, 那么uri配置可省略.
 
 * 依赖引入
 
@@ -555,19 +557,20 @@ spring.redis.timeout=500
   
   	private String name;
   
+      @EqualsAndHashCode.Exclude
   	@Relationship(type = "TEAMMATE", direction = Relationship.UNDIRECTED)
   	public Set<Person> teammates;
   }
-  ```
-
-  * `NodeEntity`注解
-
-    定义Neo4j的实体类
-
-  * `Id`, `GeneratedValue`注解
-
-    `Id`声明主键, 是一个唯一约束. 当保存实体时, 会触发`merge`语句, 存在实体则修改, 无则新增.
-
+```
+  
+* `NodeEntity`注解
+  
+  定义Neo4j的实体类
+  
+* `Id`, `GeneratedValue`注解
+  
+  `Id`声明主键, 是一个唯一约束. 当保存实体时, 会触发`merge`语句, 存在实体则修改, 无则新增.
+  
     `GeneratedValue`表示新增时主键自动产生
   
   * `Relationship`注解
