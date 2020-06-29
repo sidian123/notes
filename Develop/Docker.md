@@ -371,17 +371,16 @@ docker load -i ./centos.tar
 
 * 查看日志
 
-  `docker log`
-
-# Dockerfile
-
-* 主程序
-
   ```
   docker logs [OPTIONS] CONTAINER
   ```
   
   * `--follow , -f` 持续输出日志
+
+# Dockerfile
+
+* 主程序
+
 
 # 参考
 
