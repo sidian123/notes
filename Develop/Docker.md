@@ -677,7 +677,11 @@ COPY --from=nginx:latest /etc/nginx/nginx.conf /nginx.conf
   CMD ["/hello"]
   ```
 
+# Docker Compose
 
+Docker Compose 是单主机容器编排工具, Docker Swarm和Kubernetes可以跨主机编排容器.
+
+参考[Docker，Docker Compose，Docker Swarm，Kubernetes之间的区别](https://blog.csdn.net/notsaltedfish/article/details/80959913)
 
 # Swarm
 
