@@ -150,6 +150,14 @@ docker run \
 
   给定模式, 现在图中搜索, 若找到, 则返回, 否则创建.
 
+* `delete`
+
+  删除全部节点和关系
+
+  ```cql
+  MATCH (n) DETACH DELETE n
+  ```
+
 * 其他
 
   * delete 删除
