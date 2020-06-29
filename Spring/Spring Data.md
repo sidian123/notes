@@ -184,7 +184,7 @@
 
 # Spring Data JPA
 
-## Get Start
+## Getting Start
 
 * 介绍
 
@@ -502,17 +502,74 @@ spring.redis.timeout=500
 
 > 参考[Too many RedisCommandTimeoutException in lettuce](https://stackoverflow.com/questions/49811076/too-many-rediscommandtimeoutexception-in-lettuce)
 
-# Spring Data Neo4j
-
-
-
-
-
 ## 参考
 
 * [Spring Data Redis](https://docs.spring.io/spring-data/redis/docs/2.2.0.RELEASE/reference/html/#introduction)
 * [Spring Boot（八）集成Spring Cache 和 Redis](https://www.cnblogs.com/ashleyboy/p/9595584.html)
 * [Cache Abstraction](https://docs.spring.io/spring/docs/5.2.0.RELEASE/spring-framework-reference/integration.html#cache)
+
+
+
+# Spring Data Neo4j
+
+## Getting Start
+
+* 介绍
+  * 支持Spring Data Common的Repository使用方式, 支持派生方法
+
+* 依赖引入
+
+  ```xml
+  <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-data-neo4j</artifactId>
+  </dependency>
+  ```
+
+* 实体定义
+
+  ```java
+  import org.neo4j.ogm.annotation.GeneratedValue;
+  import org.neo4j.ogm.annotation.Id;
+  import org.neo4j.ogm.annotation.NodeEntity;
+  import org.neo4j.ogm.annotation.Relationship;
+  
+  @Data
+  @Builder
+  @NoArgsConstructor
+  @AllArgsConstructor
+  @NodeEntity
+  public class Person {
+  
+  	@Id @GeneratedValue
+  	private Long id;
+  
+  	private String name;
+  
+  	@Relationship(type = "TEAMMATE", direction = Relationship.INCOMING)
+  	public Set<Person> teammates;
+  }
+  ```
+
+  * `NodeEntity`注解
+
+    定义Neo4j的实体类
+
+  * `Id`, `GeneratedValue`注解
+
+    `Id`声明主键, 是一个唯一约束. 当保存实体时, 会触发`merge`语句, 存在实体则修改, 无则新增.
+
+    `GeneratedValue`表示组件自增
+
+
+
+
+
+
+
+
+
+
 
 
 
