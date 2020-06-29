@@ -368,13 +368,20 @@ docker load -i ./centos.tar
 
   打印Docker对象的JSON表示, 一般命名中含有`inspect`关键字
 
-  
+
+* 查看日志
+
+  `docker log`
 
 # Dockerfile
 
 * 主程序
 
-  `ENTRYPOINT`, `CMD`
+  ```
+  docker logs [OPTIONS] CONTAINER
+  ```
+  
+  * `--follow , -f` 持续输出日志
 
 # 参考
 
@@ -934,8 +941,6 @@ $ docker stack rm demo
 `docker logs` 显示运行容器的日志信息.  日志来自于`STDOUT`和`STDERR`. 若容器的进程不打印日志stdout, stderr中, 该命令将看不到日志.
 
 这种日志收集方式, 可以通过logging driver控制, 略.
-
-
 
 # 网络
 
