@@ -304,6 +304,8 @@ apt install docker
   docker exec -it mycentos2 /bin/bash
   ```
 
+  > 加上选项`-u 0` 将以root身份登录shell.
+
 * [查看容器](https://docs.docker.com/engine/reference/commandline/ps/)
 
   ```shell
