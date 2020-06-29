@@ -515,7 +515,16 @@ spring.redis.timeout=500
 ## Getting Start
 
 * 介绍
-  * 支持Spring Data Common的Repository使用方式, 支持派生方法
+  
+* 支持Spring Data Common的Repository使用方式, 支持派生方法
+  
+* 配置
+
+  ```properties
+  spring.data.neo4j.username=neo4j
+  spring.data.neo4j.password=123456
+  # spring.data.neo4j.uri
+  ```
 
 * 依赖引入
 
@@ -546,7 +555,7 @@ spring.redis.timeout=500
   
   	private String name;
   
-  	@Relationship(type = "TEAMMATE", direction = Relationship.INCOMING)
+  	@Relationship(type = "TEAMMATE", direction = Relationship.UNDIRECTED)
   	public Set<Person> teammates;
   }
   ```
@@ -559,11 +568,34 @@ spring.redis.timeout=500
 
     `Id`声明主键, 是一个唯一约束. 当保存实体时, 会触发`merge`语句, 存在实体则修改, 无则新增.
 
-    `GeneratedValue`表示组件自增
+    `GeneratedValue`表示新增时主键自动产生
+  
+  * `Relationship`注解
+  
+    声明实体间的关系. 
+  
+    原则上, Neo4j的关系除了有类型, 方向外, 还支持属性. 但这里没有提供关系属性定义的支持.
+  
+    在Neo4j中, 关系不支持双向(或无向)的, 因此这里的`Relationship.UNDIRECTED`仅表示查询时无向(即任意方向匹配) , 新增时仍为`OUTGOING`(流出).
+  
+    > 最好不要用`UNDIRECTED`, 容易入坑
+  
+* Dao类定义
+
+  ```java
+  public interface PersonRepository extends CrudRepository<Person, Long> {
+  	Person findByName(String name);
+  }
+  ```
+
+  符合Spring Data Commons规范, 可自行扩充方法
 
 
 
+## 参考
 
+* [Accessing Data with Neo4j](https://spring.io/guides/gs/accessing-data-neo4j/) 一个了解Neo4j的Demo案例
+* 
 
 
 

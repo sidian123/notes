@@ -60,6 +60,12 @@
       @Setter(AccessLevel.NONE)
       private int mySecret;
       ```
+      
+  * 生成`equals`, `hashCode`方法时, 忽略某些属性
+
+      ```
+      @EqualsAndHashCode.Exclude
+      ```
 
 * `@Builder`
 
