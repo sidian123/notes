@@ -56,8 +56,8 @@
   ```
 
   打开http://localhost:5601可访问到kibana
-
-
+  
+  > 注意, 还需要将elasticsearch和kibana加入到同一自定义bridge网络中, 否则荣期间无法通信. (见[docker网络知识](https://sidian.live/article/?id=268#head-15-0-0-0-0-0))
 
 # 参考
 
