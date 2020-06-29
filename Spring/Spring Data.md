@@ -561,8 +561,8 @@ spring.redis.timeout=500
   	@Relationship(type = "TEAMMATE", direction = Relationship.UNDIRECTED)
   	public Set<Person> teammates;
   }
-```
-  
+  ```
+
 * `NodeEntity`注解
   
   定义Neo4j的实体类
@@ -590,21 +590,14 @@ spring.redis.timeout=500
   	Person findByName(String name);
   }
   ```
-
-  符合Spring Data Commons规范, 可自行扩充方法
-
-
+  
+  符合Spring Data Commons规范, 可自行扩充方法.
+  
+  > 注意的是, 与`Repository`提供的方法不同, 派生方法查询出来的实体, 遍历图的深度默认为1. 可通过`Depth`注解修改遍历升读.
 
 ## 参考
 
 * [Accessing Data with Neo4j](https://spring.io/guides/gs/accessing-data-neo4j/) 一个了解Neo4j的Demo案例
-* 
-
-
-
-
-
-
-
+* [Spring Data Neo4j Reference Documentation](https://docs.spring.io/spring-data/neo4j/docs/5.3.1.RELEASE/reference/html/#reference)
 
 
