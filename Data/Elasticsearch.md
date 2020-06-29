@@ -1,21 +1,23 @@
 # Getting Start
 
-* 介绍
+## 介绍
 
-  * Elasticsearch是一个分布式文档数据库
-  * 常用作[全文检索](https://baike.baidu.com/item/%E5%85%A8%E6%96%87%E7%B4%A2%E5%BC%95/1140318?fr=aladdin), 和日志存储
-  * 提供Rest API的方式访问数据库
-  * 若需要对中文进行全文索引, 需安装中文分词插件(原因见全文索引原理), 然后建立Type时, 设置需要全文索引的字段使用中文分词器.
-  
-* 安装 & 运行
+* Elasticsearch是一个分布式文档数据库
+* 常用作[全文检索](https://baike.baidu.com/item/%E5%85%A8%E6%96%87%E7%B4%A2%E5%BC%95/1140318?fr=aladdin), 和日志存储
+* 提供Rest API的方式访问数据库
+* 若需要对中文进行全文索引, 需安装中文分词插件(原因见全文索引原理), 然后建立Type时, 设置需要全文索引的字段使用中文分词器.
 
-  ```shell
-  docker run -d --name elasticsearch  -p 9200:9200 -p 9300:9300 -e "discovery.type=single-node" elasticsearch:7.8.0
-  ```
-  
-  > 上述运行单实例Elasticsearch, 生产环境需配置多个实例
-  
-  接着, 运行`curl localhost:9200`命令, 检查程序是否启动成功
+## 安装 & 运行
+
+```shell
+docker run -d --name elasticsearch  -p 9200:9200 -p 9300:9300 -e "discovery.type=single-node" elasticsearch:7.8.0
+```
+
+> 上述运行单实例Elasticsearch, 生产环境需配置多个实例
+
+接着, 运行`curl localhost:9200`命令, 检查程序是否启动成功
+
+若要可视化查看Elasticsearch, 可安装Kibana, 见下.
 
 # 基本概念
 
@@ -65,13 +67,13 @@ Type是对Document某个字段不同的取值而做出的虚拟分组, 可类比
 
 对指定`_id`的文档修改或新增, `_version`会自增
 
-Fields
+## Fields
 
 每个Document都类似一个JSON结构，它包含了许多字段，每个字段都有其对应的值，多个字段组成了一个 Document，可以类比关系型数据库数据表中的字段。
 
-* 关系数据库与Elasticsearch类比
+## 关系数据库与Elasticsearch对比
 
-  ![img](.Elasticsearch/9419034-4f8eb4926bc326de.png)
+![img](.Elasticsearch/9419034-4f8eb4926bc326de.png)
 
 # Rest API
 
