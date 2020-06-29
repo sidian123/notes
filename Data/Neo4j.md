@@ -86,13 +86,17 @@ docker run \
 
 * 变量
 
-  模式中用到的变量, 可在语句中产生.
+  节点模式声明中可声明变量, 如上所示; 也可将整个模式赋值给变量, 如下
 
-  在`match`语句中, 未赋值的变量表示所有; 在`create`语句中, 未赋值的变量表示空
+  ```
+  acted_in = (:Person)-[:ACTED_IN]->(:Movie)
+  ```
+  
+  > 在`match`语句中, 未赋值的变量表示所有; 在`create`语句中, 未赋值的变量表示空; 执行后, 变量会被赋值.
 
 ## 语句
 
-* create 创建节点, 关系
+* 创建节点
 
   多个节点`,`分隔
 
@@ -106,10 +110,21 @@ docker run \
   create (node:label {key:value,key2:value2}
   ```
 
-  创建关系
+* 创建关系
 
-  ```
+  ```cql
   CREATE (node1)-[:RelationshipType]->(node2) 
+  ```
+
+  > 若节点不存在, 会创建
+
+  为已知节点创建关系, 需要通过`match`获取节点
+
+  ```cql
+  MATCH (a:LabeofNode1), (b:LabeofNode2) 
+     WHERE a.name = "nameofnode1" AND b.name = " nameofnode2" 
+  CREATE (a)-[: Relation]->(b) 
+  RETURN a,b 
   ```
 
 * `return` 返回变量结果
@@ -118,19 +133,27 @@ docker run \
   CREATE (Node:Label{properties. . . . }) RETURN Node 
   ```
 
-  
+* `match`
 
+  根据节点或关系信息过滤出**图**来
 
+  ```cql
+  MATCH (n:player)  // 查询单个节点
+  MATCH (node:label)<-[: Relationship]-(n)  // 提供后继节点和关系, 查询图. 其中查询出的前继节点以n表示
+  MATCH (n) RETURN n // 匹配所有节点, 返回图
+  MATCH p=()-[r:BATSMAN_OF]->() RETURN p LIMIT 25
+  ```
 
-## 函数
+* `merge`
 
+  给定模式, 现在图中搜索, 若找到, 则返回, 否则创建.
 
+* 其他
 
-
-
-
-
-
+  * delete 删除
+  * where 缩小模式匹配范围
+  * limit 限制显示个数
+  * ...
 
 # 参考
 
