@@ -131,7 +131,7 @@ http://localhost:9200/accounts/person/24
   docker run -d --name kibana -p 5601:5601 kibana:7.8.0
   ```
 
-  打开http://localhost:5601可访问到kibana
+  打开http://localhost:5601 可访问到kibana
   
   > 注意, 还需要将elasticsearch和kibana加入到同一自定义bridge网络中, 否则容器间无法通信. (见[docker网络知识](https://sidian.live/article/?id=268#head-15-0-0-0-0-0))
   
