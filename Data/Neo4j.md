@@ -58,6 +58,78 @@ docker run \
 
 # CQL
 
+## 匹配模式
+
+匹配模式用于描述节点和关系, 用于具体的操作语句中.
+
+* 节点模式
+
+  ```CQL
+  ()   // 表示匿名的节点
+  (matrix) // matrix为节点模式变量 
+  (:Movie) // :Movie表示节点标签为Movie
+  (matrix:Movie)
+  (matrix:Movie {title: "The Matrix"}) // {...}声明节点属性
+  (matrix:Movie {title: "The Matrix", released: 1997})
+  ```
+
+* 关系模式
+
+  ```CQL
+  --> // 匿名的关系, 方向右
+  -- // 匿名的关系, 无向
+  -[role]-> // role为关系模式变量
+  -[:ACTED_IN]-> // :ACTED_IN表示关系类型
+  -[role:ACTED_IN]->
+  -[role:ACTED_IN {roles: ["Neo"]}]-> // {...}声明关系属性
+  ```
+
+* 变量
+
+  模式中用到的变量, 可在语句中产生.
+
+  在`match`语句中, 未赋值的变量表示所有; 在`create`语句中, 未赋值的变量表示空
+
+## 语句
+
+* create 创建节点, 关系
+
+  多个节点`,`分隔
+
+  ```CQL
+  CREATE (pattern)
+  ```
+
+  节点带有标签, 属性
+
+  ```cql
+  create (node:label {key:value,key2:value2}
+  ```
+
+  创建关系
+
+  ```
+  CREATE (node1)-[:RelationshipType]->(node2) 
+  ```
+
+* `return` 返回变量结果
+
+  ```cql
+  CREATE (Node:Label{properties. . . . }) RETURN Node 
+  ```
+
+  
+
+
+
+## 函数
+
+
+
+
+
+
+
 
 
 # 参考
