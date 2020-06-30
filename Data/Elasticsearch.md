@@ -162,7 +162,49 @@ http://localhost:9200/accounts/person/24
   * [Configure Kibana](https://www.elastic.co/guide/en/kibana/current/settings.html) kibana的配置
   * [Install Kibana with Docker](https://www.elastic.co/guide/en/kibana/current/docker.html)
 
+# ------------
+
+* Elastic技术栈
+
+  * [Beats 7.8](https://www.elastic.co/guide/en/beats/libbeat/7.8/index.html)
+  * [APM Server 7.8](https://www.elastic.co/guide/en/apm/server/7.0/index.html)
+  * [Elasticsearch 7.8](https://www.elastic.co/guide/en/elasticsearch/reference/7.8/index.html)
+  * [Elasticsearch Hadoop 7.8](https://www.elastic.co/guide/en/elasticsearch/hadoop/7.8/index.html)
+  * [Kibana 7.8](https://www.elastic.co/guide/en/kibana/7.8/index.html)
+  * [Logstash 7.8](https://www.elastic.co/guide/en/logstash/7.8/index.html)
+
+* 安装
+
+  * Elasticsearch ([install instructions](https://www.elastic.co/guide/en/elasticsearch/reference/7.8/install-elasticsearch.html))
+  * Kibana ([install](https://www.elastic.co/guide/en/kibana/7.8/install.html))
+  * Logstash ([install](https://www.elastic.co/guide/en/logstash/7.8/installing-logstash.html))
+  * Beats ([install instructions](https://www.elastic.co/guide/en/beats/libbeat/7.8/getting-started.html))
+  * APM Server ([install instructions](https://www.elastic.co/guide/en/apm/server/7.0/installing.html))
+  * Elasticsearch Hadoop ([install instructions](https://www.elastic.co/guide/en/elasticsearch/hadoop/7.8/install.html))
+
+  > 必须同一版本
+
+* ELK
+
+  指Elasticsearch, Kibana, Logstash(或Beats)
+
+  * [Elasticsearch](https://www.elastic.co/products/elasticsearch) is a real-time, distributed storage, search, and analytics engine.
+
+  * [Kibana](https://www.elastic.co/products/kibana) is an open source analytics and visualization platform designed to work with Elasticsearch.
+
+  * The Beats are open source data shippers that you install as agents on your servers to send operational data to Elasticsearch. Beats can send data directly to Elasticsearch or via Logstash, where you can further process and enhance the data.
+
+    > Logstash adds powerful data parsing and transformation features, but usually isn’t required
+
+* 全文索引
+
+  https://zhuanlan.zhihu.com/p/94181307
+
+
+
 # 参考
+
+* [Elastic Stack and Product Documentation](https://www.elastic.co/guide/index.html)
 
 * [全文搜索引擎 Elasticsearch 入门教程 阮一峰](http://www.ruanyifeng.com/blog/2017/08/elasticsearch.html)
 * [Elasticsearch简介与实战](https://www.jianshu.com/p/d48c32423789)
