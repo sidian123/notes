@@ -524,6 +524,12 @@ java -Dvmarg=111 -jar app.jar 123 234
 
 > 参考[What's the difference between program arguments and VM arguments?](https://stackoverflow.com/questions/5751851/whats-the-difference-between-program-arguments-and-vm-arguments)
 
+## 全局搜索Ctrl+Shift+F不可用
+
+我的情况是被系统自带的输入法占用了, 关了即可
+
+![image-20200630164630467](.Idea/image-20200630164630467.png)
+
 # 参考
 
 * [idea download][1]
