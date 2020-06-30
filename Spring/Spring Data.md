@@ -186,44 +186,44 @@
 
 ## Getting Start
 
-* 介绍
+### 介绍
 
-  Java Persistent API规范的一种实现, 让使用者仅通过操作实体对象便可实现对数据库的操作.
+Java Persistent API规范的一种实现, 让使用者仅通过操作实体对象便可实现对数据库的操作.
 
-* 配置
+### 配置
 
-  * Maven依赖
+* Maven依赖
 
-    ```xml
-    <dependency>
-        <groupId>org.springframework.boot</groupId>
-        <artifactId>spring-boot-starter-data-jpa</artifactId>
-    </dependency>
-    <dependency>
-        <groupId>mysql</groupId>
-        <artifactId>mysql-connector-java</artifactId>
-        <scope>runtime</scope>
-    </dependency>
-    ```
+  ```xml
+  <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-data-jpa</artifactId>
+  </dependency>
+  <dependency>
+      <groupId>mysql</groupId>
+      <artifactId>mysql-connector-java</artifactId>
+      <scope>runtime</scope>
+  </dependency>
+  ```
 
-  * 项目配置
+* 项目配置
 
-    ```properties
-    # 目标数据库名字, 默认会自动探测, 可为空
-    # spring.jpa.database-platform=org.hibernate.dialect.MySQL5InnoDBDialect
-    # 是否显示执行的SQL语句
-    spring.jpa.show-sql=true
-    # 对结构的操作, 默认为none
-    spring.jpa.hibernate.ddl-auto=update
-    ```
+  ```properties
+  # 目标数据库名字, 默认会自动探测, 可为空
+  # spring.jpa.database-platform=org.hibernate.dialect.MySQL5InnoDBDialect
+  # 是否显示执行的SQL语句
+  spring.jpa.show-sql=true
+  # 对结构的操作, 默认为none
+  spring.jpa.hibernate.ddl-auto=update
+  ```
 
-    `ddl-auto`可取值
+  `ddl-auto`可取值
 
-    * *validate*: validate the schema, makes no changes to the database.
-    * *update*: update the schema. 若表不存在, 会自动创建.
-    * *create*: creates the schema, destroying previous data.
-    * *create-drop*: drop the schema when the SessionFactory is closed explicitly, typically when the application is stopped.
-    * *none*: does nothing with the schema, makes no changes to the database
+  * *validate*: validate the schema, makes no changes to the database.
+  * *update*: update the schema. 若表不存在, 会自动创建.
+  * *create*: creates the schema, destroying previous data.
+  * *create-drop*: drop the schema when the SessionFactory is closed explicitly, typically when the application is stopped.
+  * *none*: does nothing with the schema, makes no changes to the database
 
 * 启动Jpa功能
 
@@ -240,45 +240,49 @@
   }
   ```
 
-* 实体类创建
+### 实体类创建
 
-  ```java
-  @Data
-  @Builder
-  @NoArgsConstructor
-  @AllArgsConstructor
-  @Entity
-  public class User {
-      @Id
-      @GeneratedValue
-      Integer id;
-      String name;
-  }
-  ```
+```java
+@Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
+@Entity
+public class User {
+    @Id
+    @GeneratedValue
+    Integer id;
+    String name;
+}
+```
 
-  > 使用的`javax.persistence`包的注解
+> 使用的`javax.persistence`包的注解
 
-* Dao类创建
+* 名字映射
 
-  ```java
-  @Repository
-  public interface UserDao extends JpaRepository<User, Integer> {}
-  ```
-  
-* 使用Demo
+  未显示给出名字时, 采用首字母小写, 驼峰转下划线的方案, 见`ImplicitNamingStrategyJpaCompliantImpl`
 
-  ```java
-  @SpringBootTest
-  class HelloSpringDataApplicationTests {
-      @Autowired
-      UserDao userDao;
-  
-      @Test
-      void contextLoads() {
-          userDao.save(User.builder().name("张三").build());
-      }
-  }
-  ```
+### Dao类创建
+
+```java
+@Repository
+public interface UserDao extends JpaRepository<User, Integer> {}
+```
+
+### 使用Demo
+
+```java
+@SpringBootTest
+class HelloSpringDataApplicationTests {
+    @Autowired
+    UserDao userDao;
+
+    @Test
+    void contextLoads() {
+        userDao.save(User.builder().name("张三").build());
+    }
+}
+```
 
 ## 查询方法
 
