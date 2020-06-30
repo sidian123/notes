@@ -63,9 +63,17 @@ Type是对Document某个字段不同的取值而做出的虚拟分组, 可类比
 
 ## Document metadata
 
-文档元数据为_index, _type, _id, 这三者可以唯一表示一个文档，_index表示文档在哪存放，_type表示文档的对象类别，_id为文档的唯一标识。
+* `_index, _type, _id`
 
-对指定`_id`的文档修改或新增, `_version`会自增
+  文档元数据为, 这三者可以唯一表示一个文档，_index表示文档在哪存放，_type表示文档的对象类别，_id为文档的唯一标识。
+
+* `_id`
+
+  对指定`_id`的文档修改或新增, `_version`会自增
+
+* `_score`
+
+  查询时对文档打的分数, 分数越高, 排序越靠前
 
 ## Fields
 
@@ -135,6 +143,20 @@ http://localhost:9200/accounts/person/24
   
   > 注意, 还需要将elasticsearch和kibana加入到同一自定义bridge网络中, 否则容器间无法通信. (见[docker网络知识](https://sidian.live/article/?id=268#head-15-0-0-0-0-0))
   
+* 基本使用
+
+  * Index Patterns (*Management/Kibana/Index Patterns*)
+
+    Index patterns定义匹配Index的模式, 聚集一组Index, 以便查询. 
+
+    支持通配符`*`, 匹配0到多个字符
+
+  * Discover
+
+    查询文档, 这里用到了上述定义的Patterns. 
+
+    还支持按字段查询.
+
 * 参考
 
   * [Configure Kibana](https://www.elastic.co/guide/en/kibana/current/settings.html) kibana的配置
