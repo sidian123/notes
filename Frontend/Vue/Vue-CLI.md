@@ -272,15 +272,18 @@ eslint帮助减少隐藏错误.
     javascript code // eslint-disable-line
     ```
     
-2. 禁止整个文件的eslint校验
+2. 禁止多行的eslint校验
+
+    * `eslint-disable` 禁止该行下面的eslint校验
+    * `eslint-enable` 启动该行下面的eslint校验
+
+    例子:
 
     ```javascript
     /* eslint-disable */
     your code
-    /* eslint-disable */
+    /* eslint-enable */
     ```
-
-    > 好像文件尾也不用添加注释
 
 3. 禁用eslint, 有多种方案
 
