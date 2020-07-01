@@ -318,6 +318,12 @@ random[2][2];
 * Reduce
 
   对集合中的每个元素执行Reduce操作, 最终得到一个值
+  
+* 去重
+
+  ![image-20200701120518532](.JavaScript/image-20200701120518532.png)
+
+  
 
 > 参考[Array](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array)
 
