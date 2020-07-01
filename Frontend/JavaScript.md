@@ -321,10 +321,8 @@ random[2][2];
   
 * 去重
 
-  > 下面的代码有问题, 仅具参考意义.
-
   ![image-20200701120518532](.JavaScript/image-20200701120518532.png)
-  
+
   
 
 > 参考[Array](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array)
