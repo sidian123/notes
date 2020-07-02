@@ -1367,6 +1367,132 @@ var vm = new Vue({
 > * [Vue.js functional components: What, Why, and When?](https://stegosource.com/vue-js-functional-components-what-why-and-when/)
 > * [Functional Components in Vue Loader](https://vue-loader.vuejs.org/guide/functional.html)
 
+# 过渡&动画
+
+## transition组件
+
+* 介绍
+
+  提供对元素或组件**插入**或**删除**的**过渡**或**动画**效果.
+
+  仅在如下环境下的元素或组件生效:
+
+  * 条件渲染`v-if`
+  * 条件显示`v-show`
+  * 动态组件`v-for`, `is`等
+  * Component root nodes ???
+
+* 过渡类
+
+  `transition`在元素不同时期会作用于不同的css类
+
+  * 元素插入时
+    * `v-enter` 元素插入前添加, 下一帧删除
+
+    * `v-enter-active` 作用于整个过渡时期. 元素插入前添加, 过渡结束后删除.
+
+    * `v-enter-to` 元素插入后添加, 过渡结束后删除
+
+      > 与`v-enter`被删除为同一时期
+
+    ![image-20200702161013937](.Vue/image-20200702161013937.png)
+
+  * 元素删除时
+
+    * `v-leave` 过渡效果触发时立即添加
+
+    * `v-leave-active` 作用于整个过渡时期. 过渡效果触发时立即添加, 过渡结束时删除.
+
+    * `v-leave-to` 过渡效果触发后的下一帧添加, 过渡结束后删除.
+
+      > 添加时与`v-leave`被删除为同一时期.
+
+    ![image-20200702161113244](.Vue/image-20200702161113244.png)
+
+  > Vue自己每调用一次`nextTick`, 算一帧.
+
+* 使用
+
+  `transition`组件的`name`字段设置过度类的前缀, 上述的`v-`是默认前缀. 该组件会自动查找对应的类.
+
+  如, `<transition name="my-transition">` 此时`v-enter`将为`my-transition-enter`
+
+## 实战之过渡
+
+```html
+<div id="example-1">
+  <button @click="show = !show">
+    Toggle render
+  </button>
+  <transition name="slide-fade">
+    <p v-if="show">hello</p>
+  </transition>
+</div>
+```
+
+```javascript
+new Vue({
+  el: '#example-1',
+  data: {
+    show: true
+  }
+})
+```
+
+```css
+.slide-fade-enter-active {
+  transition: all .3s ease;
+}
+.slide-fade-leave-active {
+  transition: all .8s cubic-bezier(1.0, 0.5, 0.8, 1.0);
+}
+.slide-fade-enter, .slide-fade-leave-to
+/* .slide-fade-leave-active below version 2.1.8 */ {
+  transform: translateX(10px);
+  opacity: 0;
+}
+```
+
+## 实战之动画
+
+```html
+<div id="example-2">
+  <button @click="show = !show">Toggle show</button>
+  <transition name="bounce">
+    <p v-if="show">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris facilisis enim libero, at lacinia diam fermentum id. Pellentesque habitant morbi tristique senectus et netus.</p>
+  </transition>
+</div>
+```
+
+```javascript
+new Vue({
+  el: '#example-2',
+  data: {
+    show: true
+  }
+})
+```
+
+```css
+.bounce-enter-active {
+  animation: bounce-in .5s;
+}
+.bounce-leave-active {
+  animation: bounce-in .5s reverse;
+}
+@keyframes bounce-in {
+  0% {
+    transform: scale(0);
+  }
+  50% {
+    transform: scale(1.5);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+```
+
 # 其他
 
 ## 获取元素
