@@ -1369,7 +1369,42 @@ var vm = new Vue({
 
 # 过渡&动画
 
-## transition组件
+## 过度类
+
+`transition`在元素不同时期会作用于不同的css类.
+
+自定义过度类时, 需将下面的`v`前缀替换.
+
+* 元素插入时
+  * `v-enter` 元素插入前添加, 下一帧删除
+
+  * `v-enter-active` 作用于整个过渡时期. 元素插入前添加, 过渡结束后删除.
+
+  * `v-enter-to` 元素插入后添加, 过渡结束后删除
+
+    > 与`v-enter`被删除为同一时期
+
+  ![image-20200702161013937](.Vue/image-20200702161013937.png)
+
+* 元素删除时
+
+  * `v-leave` 过渡效果触发时立即添加
+
+  * `v-leave-active` 作用于整个过渡时期. 过渡效果触发时立即添加, 过渡结束时删除.
+
+  * `v-leave-to` 过渡效果触发后的下一帧添加, 过渡结束后删除.
+
+    > 添加时与`v-leave`被删除为同一时期.
+
+  ![image-20200702161113244](.Vue/image-20200702161113244.png)
+
+> Vue自己每调用一次`nextTick`, 算一帧.
+
+## 单元素/组件过渡
+
+过渡/动画效果, 仅作用于单个元素或组件.
+
+### transition组件
 
 * 介绍
 
@@ -1378,38 +1413,16 @@ var vm = new Vue({
   仅在如下环境下的元素或组件生效:
 
   * 条件渲染`v-if`
+
   * 条件显示`v-show`
-  * 动态组件`v-for`, `is`等
+
+  * 动态组件`is` ?
+
+    > 应该不能用于`v-for`
+
   * Component root nodes ???
 
-* 过渡类
-
-  `transition`在元素不同时期会作用于不同的css类
-
-  * 元素插入时
-    * `v-enter` 元素插入前添加, 下一帧删除
-
-    * `v-enter-active` 作用于整个过渡时期. 元素插入前添加, 过渡结束后删除.
-
-    * `v-enter-to` 元素插入后添加, 过渡结束后删除
-
-      > 与`v-enter`被删除为同一时期
-
-    ![image-20200702161013937](.Vue/image-20200702161013937.png)
-
-  * 元素删除时
-
-    * `v-leave` 过渡效果触发时立即添加
-
-    * `v-leave-active` 作用于整个过渡时期. 过渡效果触发时立即添加, 过渡结束时删除.
-
-    * `v-leave-to` 过渡效果触发后的下一帧添加, 过渡结束后删除.
-
-      > 添加时与`v-leave`被删除为同一时期.
-
-    ![image-20200702161113244](.Vue/image-20200702161113244.png)
-
-  > Vue自己每调用一次`nextTick`, 算一帧.
+  该组件不会被渲染出HTML元素.
 
 * 使用
 
@@ -1417,7 +1430,7 @@ var vm = new Vue({
 
   如, `<transition name="my-transition">` 此时`v-enter`将为`my-transition-enter`
 
-## 实战之过渡
+### 实战之过渡
 
 ```html
 <div id="example-1">
@@ -1453,7 +1466,7 @@ new Vue({
 }
 ```
 
-## 实战之动画
+### 实战之动画
 
 ```html
 <div id="example-2">
@@ -1490,6 +1503,61 @@ new Vue({
   100% {
     transform: scale(1);
   }
+}
+```
+
+## 列表过渡
+
+### transition-group组件
+
+* 介绍
+
+  为一组元素或组件作用过渡或动画效果
+
+* 注意点
+  * 在`v-for`的环境下使用
+  * 该组件会渲染出HTML元素, 默认`span`, 可由`tag`属性修改
+  * 每个元素必须提供唯一的`key`属性
+  * 过渡类作用于槽内的元素, 而非该组件本身.
+
+### Entering/Leaving过渡
+
+见[List Entering/Leaving Transitions](https://vuejs.org/v2/guide/transitions.html#List-Entering-Leaving-Transitions)
+
+### Move过渡
+
+`transition-group`还支持过度类`v-move`, 当元素位置改变时作用.
+
+demo:
+
+```html
+<div id="flip-list-demo" class="demo">
+  <button v-on:click="shuffle">Shuffle</button>
+  <transition-group name="flip-list" tag="ul">
+    <li v-for="item in items" v-bind:key="item">
+      {{ item }}
+    </li>
+  </transition-group>
+</div>
+```
+
+```javascript
+new Vue({
+  el: '#flip-list-demo',
+  data: {
+    items: [1,2,3,4,5,6,7,8,9]
+  },
+  methods: {
+    shuffle: function () {
+      this.items = _.shuffle(this.items)
+    }
+  }
+})
+```
+
+```css
+.flip-list-move {
+  transition: transform 1s;
 }
 ```
 
