@@ -228,7 +228,7 @@ css处理前：
         port:8000,
         //配置代理
         proxy:{
-          //拦截的url
+          //拦截的url, 匹配前缀,支持正则
           '/api/':{
             //转发到目标服务器的url
             target:"http://localhost:8080/",
