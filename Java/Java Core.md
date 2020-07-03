@@ -383,6 +383,10 @@ Google提供的一个工具, 先记录下. 一般引入了Swagger的项目都引
 > * [Javadoc](https://guava.dev/releases/snapshot-jre/api/docs/)
 > * [wiki](https://github.com/google/guava/wiki)
 
+# Hutool (神器)
+
+[Hutool Doc](https://hutool.cn/docs/#/)
+
 # 原生工具
 
 ## 进程相关
