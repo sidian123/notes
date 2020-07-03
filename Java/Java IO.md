@@ -106,6 +106,30 @@
 * `Path resolve(Path other)` 
 
   连接该`Path`与`other`.
+  
+* 名字
+
+  * 获取文件名
+
+    ```java
+    path.getFileName.toString();
+    ```
+
+  * 获取文件名的字符表示, 可能相对, 可能绝对
+
+    ```java
+    path.getName();
+    ```
+
+### Files
+
+* 获取文件属性
+
+  ```java
+  Files.readAttributes(path, BasicFileAttributes.class)
+  ```
+
+  可以读取文件的常用属性
 
 ## 坑
 
