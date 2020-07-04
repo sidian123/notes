@@ -85,6 +85,10 @@ Type是对Document某个字段不同的取值而做出的虚拟分组, 可类比
 
 ![img](.Elasticsearch/9419034-4f8eb4926bc326de.png)
 
+## 例子
+
+![image-20200704221909926](.Elasticsearch/image-20200704221909926.png)
+
 # Rest API
 
 ## 插入数据
