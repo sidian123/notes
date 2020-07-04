@@ -179,6 +179,31 @@ DROP INDEX table_name.index_name;
 
   > 但IDEA中建议使用双引号和非关键字, 因为语法支持不是很好
 
+# 多表连接
+
+假设表A与表B进行多表查询, 则连接规则如下:
+
+* A中取一项, 遍历A中所有项, 并比较
+* 之后A中再取一项, 进行上述过程, 直到A遍历完
+
+那么不同的连接类型如下
+
+* (Inner) Join
+
+  仅查询连接过程中符合条件的**组合项**
+
+* Left (Outer) Join
+
+  除了Inner Join的组合项以外, 还包含A表中未匹配的项
+
+* Right (Outer) Join
+
+  除了Inner Join的组合项以外, 还包含B表中未匹配的项
+
+* Full (Outer) Join
+
+  除了Inner Join的组合项以外, 还包含A,B表中未匹配的项
+
 # 其他
 
 * `union [all]`连接两个集合, 每项字段类型需一致, 无`all`时会去重
