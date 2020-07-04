@@ -290,6 +290,74 @@ class HelloSpringDataApplicationTests {
 
 ## 多表连接
 
+> 关于文档中的Bidirectional Relationships, 我不是很理解. 但是我弄清楚了注解的使用, 和原理
+
+表之间的关系有多种, 一一对应多种注解
+
+* 一对一 `@OneToOne`
+* 一对多 `@OneToMany`
+* 多对多 `@ManyToMany`
+* 多对一 `@ManyToOne`
+
+每种注解使用后, 就产生一个外键, 即被注解的字段指向字段类型代表的表的主键. 外键名通常由字段名加上后缀`_id`得到. 外键名也可由
+
+若不想生成外键, 则需要在应用层上提供关系的另一端的信息. 由注解的`mappedBy`属性提供.
+
+**小结**: 即在一个实体中, 关系的提供有两种方式: 一, 是提供数据库的外键提供; 二, 提供应用层中注解的`mappedBy`属性提供
+
+--------
+
+例子
+
+部门表
+
+```java
+@Data
+@Entity
+public class Department {
+
+    @Id
+    @Column(name = "id")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private long id;
+
+    @Column(name = "name")
+    private String name;
+
+    @Column(name = "description")
+    private String description;
+	// 部门与职工是一对多的关系, 关系由mappedBy提供
+    @OneToMany(mappedBy = "department")
+    private Set<Employee> employees;
+}
+```
+
+职工表
+
+```java
+@Data
+@Entity
+public class Employee {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private long id;
+
+    @Column(name = "name")
+    private String name;
+
+    @Column(name = "email")
+    private String email;
+
+    @Column(name = "address")
+    private String address;
+	// 职工与部门是多对一的关系, 关系由外键提供.
+    @ManyToOne
+    @JoinColumn(name="dep_id")
+    private Department department;
+}
+```
+
 ## 自定义查询
 
 
