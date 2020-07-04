@@ -645,15 +645,15 @@ spring.redis.timeout=500
   
     `GeneratedValue`表示新增时主键自动产生
   
-  * `Relationship`注解
-  
-    声明实体间的关系. 
-  
-    原则上, Neo4j的关系除了有类型, 方向外, 还支持属性. 但这里没有提供关系属性定义的支持.
-  
-    在Neo4j中, 关系不支持双向(或无向)的, 因此这里的`Relationship.UNDIRECTED`仅表示查询时无向(即任意方向匹配) , 新增时仍为`OUTGOING`(流出).
-  
-    > 最好不要用`UNDIRECTED`, 容易入坑
+* `Relationship`注解
+
+  声明实体间的关系. 
+
+  原则上, Neo4j的关系除了有类型, 方向外, 还支持属性. 但这里没有提供关系属性定义的支持.
+
+  在Neo4j中, 关系不支持双向(或无向)的, 因此这里的`Relationship.UNDIRECTED`仅表示查询时无向(即任意方向匹配) , 新增时仍为`OUTGOING`(流出).
+
+  > 最好不要用`UNDIRECTED`, 容易入坑
   
 * Dao类定义
 
