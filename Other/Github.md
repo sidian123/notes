@@ -148,6 +148,8 @@ include:
 
 https://segmentfault.com/a/1190000015144126?utm_source=tag-newest
 
+* [SSH Keys管理](https://developer.github.com/v3/users/keys/)
+
 # 参考
 [github guide](https://guides.github.com/)：最基本的指导
 [github help](https://help.github.com/)：最详细的文档
