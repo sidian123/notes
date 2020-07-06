@@ -327,6 +327,22 @@ random[2][2];
 
 > 参考[Array](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array)
 
+### Set
+
+* 介绍
+
+  一组唯一值的集合.
+
+* 方法
+
+  * `size` 元素个数
+  * `add()` 添加值
+  * `clear()` 清空所有值
+  * `delete()` 删除值
+  * `has()` 是否有该值
+
+> 参考[Set](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Set)
+
 ### Null&Undefined
 
 `null`和`undefined`都可以对任意变量赋值. `null`表示**故意设置**的、不存在的值；`undefined`表示变量还未初始化，函数没有返回值时也会返回`undefined`。
