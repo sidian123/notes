@@ -80,3 +80,11 @@ svg {
 ## 变换
 
 svg元素上有`transform`属性, 语法与css的相近, 但确实不同.
+
+
+
+
+
+# 资料
+
+* [SVG Tutorial](http://tutorials.jenkov.com/svg/index.html)
