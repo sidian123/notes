@@ -520,7 +520,7 @@ XShell传输文件的一种方法如下：[xshell如何传输文件](https://jin
 >
 >   可能处于外网的服务端会得到NAT更多的"关爱"吧...
 
-#### 解决方案
+#### 解决方案一
 
 * 服务端
 
@@ -567,6 +567,16 @@ XShell传输文件的一种方法如下：[xshell如何传输文件](https://jin
   > 	ClientAliveInterval 30
   > 	ClientAliveCountMax 86400
   > ```
+
+#### 解决方案二
+
+上述使用修改配置的方式解决, 这里在连接服务器的时候设置:
+
+```bash
+ssh -D 1050 -N -o ExitOnForwardFailure=yes -o TCPKeepAlive=no -o ServerAliveInterval=30 root@hk.sidian.live
+```
+
+> 无关参数请忽略
 
 # 其他
 
