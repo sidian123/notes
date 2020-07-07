@@ -138,10 +138,16 @@
   * `ExecuteResultHandler`
 
     用于处理进程结束的结果. 该参数存在时`execute()`**异步**执行, 否则**同步**执行.
-    
-    > 一般使用实现类`DefaultExecuteResultHandler`, 覆盖父类方法时, 最好调用下其父方法.
-    >
-    > 注意, 被看门狗杀死时, 并不会触发该处理器执行.
+
+    * 异步执行
+
+      命令正常结束, 会调用`DefaultExecuteResultHandler.onProcessComplete()`方法; 异常结束, 会调用`DefaultExecuteResultHandler.onProcessFailed()`方法
+
+      > 注意, 1) 覆盖父类方法时, 最好调用下其父方法. 2) 被看门狗杀死时, 并不会触发该处理器执行.
+
+    * 同步执行
+
+      正常结束后, 会返回状态码, 否则抛出异常
 
 * 工作目录和环境变量
   
