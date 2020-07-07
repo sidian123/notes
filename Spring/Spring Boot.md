@@ -1431,6 +1431,11 @@ server:
 
   1. 在自己依赖的`META-INF/spring.factories`文件中添加上述属性, 指定该依赖的自动配置类
   2. 通过condition注解, 根据条件判断是否注入相应的Bean
+  
+* 注意点
+
+  spring boot启动并不会读取自动配置的依赖的配置文件.
+
 
 > 参考
 >
