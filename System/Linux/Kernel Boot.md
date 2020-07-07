@@ -145,6 +145,20 @@ systemd也是有参数的，不过systemd是内核执行的，因此可以在GRU
 * `systemd.unit=`：设置启动的unit，默认default.target。
 * ...：没了？？。。是的，你没看错。
 
+### Demo
+
+```
+[Unit]
+Description=ngrok
+After=network.target
+
+[Service]
+ExecStart=/myweb/ngrok/bin/ngrokd -tlsKey=/myweb/ngrok/server.key -tlsCrt=/myweb/ngrok/server.crt -domain="weixin.yangjiace.xyz" -httpAddr=":80" -httpsAddr=":443"
+
+[Install]
+WantedBy=multi-user.target
+```
+
 ## systemctl
 
 用于控制systemd系统和服务的管理器。命令如下：
