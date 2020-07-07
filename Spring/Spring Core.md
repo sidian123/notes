@@ -837,3 +837,11 @@ public static void main(String[] args) {
 * 仅在`SpringApplication`初始化的容器中使用
 * `ApplicationArguments`与`CommandLineRunner`类似, 但提供了更便捷的方式获取命令行参数
 
+## Spring Boot 退出
+
+```java
+SpringApplication.exit(this.applicationContext,() -> 0);
+```
+
+
+
