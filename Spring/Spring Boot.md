@@ -1425,7 +1425,7 @@ server:
 
 * 原理
 
-  扫描每个依赖的`classpath:META-INF/spring.factories`文件, 找到`org.springframework.boot.autoconfigure.EnableAutoConfiguration`属性, 自动配置的类通过该属性指定.
+  扫描每个依赖的`classpath:META-INF/spring.factories`文件, 找到`org.springframework.boot.autoconfigure.EnableAutoConfiguration`属性, 自动配置的类通过该属性指定. 多个配置类以`,`隔开
 
 * 使用
 
