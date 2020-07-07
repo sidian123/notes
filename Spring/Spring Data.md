@@ -261,6 +261,24 @@ public class User {
 * 名字映射
 
   未显示给出名字时, 采用首字母小写, 驼峰转下划线的方案, 见`ImplicitNamingStrategyJpaCompliantImpl`
+  
+* `GeneratedValue` 主键自动生成
+
+  `strategy`属性指定生成策略, 有四种取值:
+
+  * `GenerationType.TABLE` 使用特定的数据库表来存主键序号
+
+  * `GenerationType.SEQUENCE` 使用数据库自身提供*序列*机制生成主键
+
+    > Oracle支持, MySQL不支持
+
+  * `GenerationType.IDENTITY` 插入时自增方式
+
+    > MySQL支持, Oracle不支持
+
+  * `GenerationType.AUTO` 让持久化引擎 (如hibernate) 自己决定. 多半使用的`Table`方式
+
+  > 参考[GenerationType四中类型](https://www.cnblogs.com/hongchengshise/p/10612301.html)
 
 ### Dao类创建
 
