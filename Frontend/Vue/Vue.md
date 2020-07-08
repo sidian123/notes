@@ -1767,7 +1767,13 @@ Vue3采用Composition API的方式组织代码, 以解决以下问题:
 
 ## 组件变量失效
 
-因为我的变量以`_`开头的, 然后失效了, 具体为什么这样不可行., 不清楚.
+变量不能以`_`和`$`为前缀, 否则将不被代理
+
+```
+Property "_this" must be accessed with "$data._this" because properties starting with "$" or "_" are not proxied in the Vue instance to prevent conflicts with Vue internals.
+```
+
+
 
 # 参考
 
