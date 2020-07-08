@@ -81,9 +81,9 @@ svg {
 
 svg元素上有`transform`属性, 语法与css的相近, 但确实不同.
 
+## SVG自适应
 
-
-
+在flex布局中, svg会溢出, 请在有`flex-grow`属性的地方加上`overflow:hidden`
 
 # 资料
 
