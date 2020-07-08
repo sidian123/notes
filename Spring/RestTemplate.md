@@ -223,13 +223,37 @@ public class BlogApplicationTests {
 `exchange()`的例子
 
 ```java
-        GithubUser user = restTemplate.exchange(
-                RequestEntity
-                        .get(URI.create("https://api.github.com/user"))
-                        .header("Authorization", "token "+access_token).build(),
-                GithubUser.class
-        ).getBody();
+GithubUser user = restTemplate.exchange(
+    RequestEntity
+    .get(URI.create("https://api.github.com/user"))
+    .header("Authorization", "token "+access_token).build(),
+    GithubUser.class
+).getBody();
 ```
+
+url参数的例子
+
+```java
+Map<String, String> params = new HashMap<>();
+params.put("msisdn", msisdn);
+params.put("email", email);
+params.put("clientVersion", clientVersion);
+params.put("clientType", clientType);
+params.put("issuerName", issuerName);
+params.put("applicationName", applicationName);
+
+UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(url);
+for (Map.Entry<String, String> entry : params.entrySet()) {
+    builder.queryParam(entry.getKey(), entry.getValue());
+}
+
+HttpHeaders headers = new HttpHeaders();
+headers.set("Accept", "application/json");
+
+HttpEntity<String> response = restTemplate.exchange(builder.toUriString(), HttpMethod.GET, new HttpEntity(headers), String.class);
+```
+
+
 
 # 五 其他
 
