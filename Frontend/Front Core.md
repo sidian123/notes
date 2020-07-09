@@ -17,3 +17,7 @@
 * 时间格式化
 
   [date-format](https://www.npmjs.com/package/date-format)
+
+* 拷贝到剪贴板
+
+  [v-clipboard](https://www.npmjs.com/package/v-clipboard)
