@@ -1833,6 +1833,18 @@ user-select: none;
 pointer-events: none;
 ```
 
+## 子元素滚动, 但阻止父元素滚动
+
+* 场景
+
+  自己实现的svg有视图缩放的功能, 但缩放的同时会导致父元素上下滚动
+
+* 解决
+
+  当鼠标位于svg元素上时, 设置父元素的的`overflow`为`hidden`
+
+> [Disable scroll only by JS](https://stackoverflow.com/questions/52997598/disable-scroll-only-by-js)
+
 # 参考
 
 [MDN教程](https://developer.mozilla.org/en-US/docs/Learn)
