@@ -21,3 +21,7 @@
 * 拷贝到剪贴板
 
   [v-clipboard](https://www.npmjs.com/package/v-clipboard)
+
+* 导出SVG到PNG
+
+  [saveSvgAsPng](https://www.npmjs.com/package/save-svg-as-png)
