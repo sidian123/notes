@@ -1845,6 +1845,16 @@ pointer-events: none;
 
 > [Disable scroll only by JS](https://stackoverflow.com/questions/52997598/disable-scroll-only-by-js)
 
+## transition失效??
+
+* `left`失效
+
+  首先设置元素`position`为`relative`或`absolute`等，然后初始化，如`left=0;`
+
+* width失效
+
+  设置`width`为100%
+
 # 参考
 
 [MDN教程](https://developer.mozilla.org/en-US/docs/Learn)
