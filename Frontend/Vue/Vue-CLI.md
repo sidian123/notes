@@ -165,7 +165,12 @@ vue cli项目中，会同时安装可执行文件`vue-cli-service`，它是用�
 
 
 ## Scoped css
+
+### 介绍
+
 当`style`元素加上`scoped`属性时，组件的css只会作用到该组件的单个实例上。它是通过**后css处理器**实现的。
+
+### 原理
 
 css处理前：
 ```html
@@ -197,12 +202,39 @@ css处理前：
 
 因此父组件想影响有`scoped`的子组件的样式时，需要设法加重选择器的重要性，比如`!important`
 
-注意：
+### 注意点
+
 * 组件的不同的实例的css样式都不重复，会导致解析速度下降。
 * 对于动态生产的组件不会起作用，因为scoped是在打包时作用的。
 * 编写容器组件（包括含`<slot>`的组件）时，容器组件的根class不要与子组件的根class同名，因为子组件的根class仍会拥有容器组件的唯一标识属性，导致子组件样式被覆盖。因此，最好容器组件的class唯一或选择器唯一。
 
->参考：[Scoped CSS](https://vue-loader.vuejs.org/guide/scoped-css.html#mixing-local-and-global-styles)
+### 样式穿透
+
+有时候, 需要在scope样式中, 作用于第三方组件, 即样式穿透到第三方组件.
+
+* 在含scope的sass/scss中, 用`::v-deep`
+
+  ```scss
+  ::v-deep .child-class {
+      background-color: #000;
+  }
+  ```
+
+* 除此之外, 如css, 可使用`>>>`
+
+  ```css
+  >>> .child-class {
+      background-color: #000;
+  }
+  ```
+
+> 至于`/deep` 是被弃用的
+
+### 参考
+
+* [Scoped CSS](https://vue-loader.vuejs.org/guide/scoped-css.html#mixing-local-and-global-styles)
+* [How do I use /deep/ or >>> in Vue.js?](https://stackoverflow.com/questions/48032006/how-do-i-use-deep-or-in-vue-js)
+
 # 九 vue配置
 
 * 配置文件`vue.config.js`
