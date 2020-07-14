@@ -1851,9 +1851,9 @@ pointer-events: none;
 
   首先设置元素`position`为`relative`或`absolute`等，然后初始化，如`left=0;`
 
-* width失效
+* `width`失效
 
-  设置`width`为100%
+  `width`必须有个初始化值, 如`5rem`, `100%` , 不能用`auto`. 并且元素不能为`inline`
 
 # 参考
 
