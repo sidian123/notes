@@ -1,5 +1,35 @@
 # 元素
 
+## svg
+
+* 元素尺寸
+
+  * `width` 宽
+  * `height`高
+
+* 视图范围
+
+  * `viewBox="x y width height"`
+
+    分别定义了视图的左上角坐标 `(x,y)` , 和视图大小`width`, `height`
+
+  * `preserveAspectRatio="<align> [<meetOrSlice>]"`
+
+    定义视图比例和svg元素比例不匹配的行为.
+
+    * align
+
+      定义视图在元素中的对其方式, 如水平或竖直居中啥的.
+
+      默认`xMidYMid`, 即视图水平垂直居中
+
+    * meetOrSlice
+
+      元素填充方式
+
+      * `meet`(默认) 以保留视图比例的方式放大视图, 直到一边碰到边界. 未填充的部分继续延长视图边界, 直到填充完整.
+      * `slice` 以保留视图比例的方式方法视图, 直到视图全部填充元素. 超出的部分被截掉.
+
 ## text
 
 * 当`text`元素存在`tspan`元素时, `text`的`x`, `y`将失效.
