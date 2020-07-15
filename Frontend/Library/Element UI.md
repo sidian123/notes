@@ -368,3 +368,22 @@ Element会为`Vue.prototype`添加了全局方法`$notify`, 通过该方法, 并
 
 > 其中`placement`值形式为`方向[-对齐位置]`; 方向可选`top`、`left`、`right`、`bottom`; 对齐位置可选`start`, `end`
 
+# 踩坑
+
+## Form中Input回车自动刷新
+
+`el-form`中仅存在一个`el-input`的情况下, 会触发原生的`submit`事件, 阻止即可, 如
+
+```html
+<el-form
+   ref='tableForm'
+   :model='tableForm'
+   @submit.native.prevent
+   >
+   <el-form-item prop='search'>
+     <el-input  ref="searchInput" placeholder='请输入姓名' v-model='tableForm.midValue'></el-input>
+   </el-form-item>
+</el-form>
+```
+
+> 参考[element-ui 阻止 表单输入框搜索后自动刷新页面](https://blog.csdn.net/FutureLilian/article/details/88025043)
