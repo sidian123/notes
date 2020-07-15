@@ -703,6 +703,13 @@ gzip_comp_level 2; # 提高压缩率
 gzip_vary on;
 ```
 
+## 超时时间
+
+nginx默认有超时时间, 可修改
+
+    proxy_read_timeout 600;
+    proxy_connect_timeout 600;
+    proxy_ignore_client_abort on;
 # 其他
 
 ## 变量
