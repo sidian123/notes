@@ -342,6 +342,118 @@ Python的解释器很多，但使用最广泛的还是CPython。如果要和Java
   a, b = 0, 1
   ```
 
+## 控制语句
+
+### if
+
+```python
+if x < 0:
+    x = 0
+    print('Negative changed to zero')
+elif x == 0:
+    print('Zero')
+elif x == 1:
+    print('Single')
+else:
+    print('More')
+```
+
+`elif`可有0到多个, `else`可选
+
+### for
+
+* 使用
+
+  ```python
+  for w in words:
+  	print(w, len(w))
+  ```
+
+  > `words`可以是任意序列(字符串或list)
+
+* 操作
+
+  支持遍历同时修改元素, 如删除元素
+
+  ```python
+  for user, status in users.copy().items():
+      if status == 'inactive':
+          del users[user]
+  ```
+
+* 通过索引遍历
+
+  用到了[range()](https://docs.python.org/3.8/library/stdtypes.html#range)和`len()`方法
+
+  ```python
+  a = ['Mary', 'had', 'a', 'little', 'lamb']
+  for i in range(len(a)):
+      print(i, a[i])
+  ```
+
+* [iterable](https://docs.python.org/3.8/glossary.html#term-iterable)
+
+  能够在`for`中遍历的对象. `range()`返回的就是这种类型的对象
+
+### while
+
+```python
+while a < 10:
+    print(a)
+    a, b = b, a+b
+```
+
+### break, continue, else
+
+* `break` 打破最近的循环
+
+* `continue` 跳过, 直接继续下一循环
+
+* 循环语句中的`else`
+
+  一般在循环结束后会执行`else`从句, 但由`break`造成的循环结束, 不会导致`else`从句的执行.
+
+  * `for`: 遍历完后执行
+  * `white`: 条件变`false`后执行
+
+### pass
+
+不做任何事, 相当于代码的占位符.
+
+```python
+while True:
+    pass  # Busy-wait for keyboard interrupt (Ctrl+C)
+
+class MyEmptyClass:
+    pass
+
+def initlog(*args):
+    pass   # Remember to implement this!
+```
+
+## 函数
+
+* 定义
+
+  `def`定义函数, 函数体的第一行可以为字符串(可选), 作为该方法的文档.
+
+  ```python
+  def fib(n):    # write Fibonacci series up to n
+      """Print a Fibonacci series up to n."""
+      a, b = 0, 1
+      while a < n:
+          print(a, end=' ')
+          a, b = b, a+b
+      print()
+  
+  # Now call the function we just defined:
+  fib(2000)
+  ```
+
+  
+
+
+
 ## 其他
 
 * 语句结束判断
