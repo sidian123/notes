@@ -3,8 +3,13 @@
 ## 介绍
 
 * 动态类型
-* 缩进作为语句开始或结束标志
+
+* 缩进作为语句开始或结束标志.
+
+  > 相同块中语句缩进对齐即可, 不限制具体缩进长度
+
 * 无变量声明
+
 * 优缺点
   * 优点: 使用简单, 三方库强大
   * 缺点: 运行速度慢
@@ -324,13 +329,26 @@ Python的解释器很多，但使用最广泛的还是CPython。如果要和Java
 * 判断
   * 非0整数为true
   * 非空序列, 如string,list, 为true
-* 操作
+  * 两个常量: `True`, `False`
+* 比较操作
   * `<` (less than)
   * `>` (greater than)
   * `==` (equal to)
   * `<=` (less than or equal to)
   * `>=` (greater than or equal to)
   * `!=` (not equal to)
+* 逻辑操作
+  * `and` 与
+  * `or` 或
+  * `not` 非
+
+### 内置常量
+
+* `None` 常作用函数返回值, 表示值得缺失
+* `False` bool的false值
+* `True` bool的true值
+
+> 参考[Built-in Constants](https://docs.python.org/2/library/constants.html)
 
 ### 操作
 
@@ -341,6 +359,10 @@ Python的解释器很多，但使用最广泛的还是CPython。如果要和Java
   ```python
   a, b = 0, 1
   ```
+  
+* `is` , `==`
+
+  判断对象一致性, 基本类型判断值是否相同, 对象判断引用地址是否相同.
 
 ## 控制语句
 
@@ -433,24 +455,219 @@ def initlog(*args):
 
 ## 函数
 
-* 定义
+### 介绍
 
-  `def`定义函数, 函数体的第一行可以为字符串(可选), 作为该方法的文档.
+`def`定义函数
 
-  ```python
-  def fib(n):    # write Fibonacci series up to n
-      """Print a Fibonacci series up to n."""
-      a, b = 0, 1
-      while a < n:
-          print(a, end=' ')
-          a, b = b, a+b
-      print()
-  
-  # Now call the function we just defined:
-  fib(2000)
+```python
+def fib(n):    # write Fibonacci series up to n
+    """Print a Fibonacci series up to n."""
+    a, b = 0, 1
+    while a < n:
+        print(a, end=' ')
+        a, b = b, a+b
+    print()
+
+# Now call the function we just defined:
+fib(2000)
+```
+
+* 函数文档
+
+  函数体的第一行可以为字符串(可选), 作为该函数的文档.
+
+* 参数
+
+  实参按值传递, 对象传的是引用; 实参位于函数体的局部作用域内. 
+
+  普通参数是必须的, 调用时必须提供
+
+* 函数名
+
+  函数本质就是个对象, 函数名就是对象的引用名, 可赋值给其他对象
+
+* 返回值
+
+  每个函数都有返回值, 可通过`return`返回; 若未使用`return`, 或使用但不提供值, 函数都将默认返回`None`
+
+### 参数定义
+
+#### 默认参数
+
+```python
+def ask_ok(prompt, retries=4, reminder='Please try again!'):
+    pass
+```
+
+* 默认参数是可选的, 未提供实参时, 使用默认值
+* 若默认值是变量, 将在函数声明时通过变量初始化参数默认值
+
+#### 按关键字&位置传参
+
+* 介绍
+
+  函数调用时, 可以按照位置传参, 按照关键字传参, 或两种方式混合使用.
+
+* Demo
+
+    如函数定义
+
+    ```python
+    def parrot(voltage, state='a stiff', action='voom', type='Norwegian Blue'):
+        print("-- This parrot wouldn't", action, end=' ')
+        print("if you put", voltage, "volts through it.")
+        print("-- Lovely plumage, the", type)
+        print("-- It's", state, "!")
+    ```
+
+    函数使用
+
+    ```python
+    parrot(1000)                                          # 1 positional argument
+    parrot(voltage=1000)                                  # 1 keyword argument
+    parrot(voltage=1000000, action='VOOOOOM')             # 2 keyword arguments
+    parrot(action='VOOOOOM', voltage=1000000)             # 2 keyword arguments
+    parrot('a million', 'bereft of life', 'jump')         # 3 positional arguments
+    parrot('a thousand', state='pushing up the daisies')  # 1 positional, 1 keyword
+    ```
+
+    **注意**, 一个参数不能被传递多次, 两种方式混合使用时尤其需要注意.
+
+* 特殊关键字参数
+
+  * `**name`
+
+    包含所有未匹配函数参数列表的**关键字参数**, 组成的一个dict
+
+  * `*name`
+
+    包含所有按位置未匹配到参数的**位置参数**, 组成的一个tuple
+
+    > `*name`必须出现在`**name`前
+
+  * Demo
+
+    ```python
+    def cheeseshop(kind, *arguments, **keywords):
+        print("-- Do you have any", kind, "?")
+        print("-- I'm sorry, we're all out of", kind)
+        for arg in arguments:
+            print(arg)
+        print("-" * 40)
+        for kw in keywords:
+            print(kw, ":", keywords[kw])
+    ```
+
+    ```python
+    cheeseshop("Limburger", "It's very runny, sir.",
+               "It's really very, VERY runny, sir.",
+               shopkeeper="Michael Palin",
+               client="John Cleese",
+               sketch="Cheese Shop Sketch")
+    ```
+
+    输出
+
+    ```python
+    -- Do you have any Limburger ?
+    -- I'm sorry, we're all out of Limburger
+    It's very runny, sir.
+    It's really very, VERY runny, sir.
+    ----------------------------------------
+    shopkeeper : Michael Palin
+    client : John Cleese
+    sketch : Cheese Shop Sketch
+    ```
+
+#### 参数顺序
+
+* 声明时, 参数声明顺序
+
+  * 必需参数, 必须在前面; 接着默认参数; 接着特殊的关键字参数`*name`, `**name`
+
+  * `*name`后也可以接必需或默认参数, 那么这些参数只能按关键字传参了. 如
+
+    ```python
+    >>> def concat(*args, sep="/"):
+    ...     return sep.join(args)
+    ...
+    >>> concat("earth", "mars", "venus")
+    'earth/mars/venus'
+    >>> concat("earth", "mars", "venus", sep=".")
+    'earth.mars.venus'
+    ```
+
+* 传参时, 实参传递方式
+
+  一般来说, 一个参数, 使用位置或关键字传参, 都是可以的.
+
+  但我们可通过特殊参数约束参数传递方式, 如
+
+  ```
+  def f(pos1, pos2, /, pos_or_kwd, *, kwd1, kwd2):
+        -----------    ----------     ----------
+          |             |                  |
+          |        Positional or keyword   |
+          |                                - Keyword only
+           -- Positional only
   ```
 
+  `/`和`*`都是可选的, 且仅作指示和约束作用. 
+
+  * `/`前的参数只能按位传参
+  * `/`后`*`前的参数, 都可
+  * `*`后的只能按关键字传参
+
+
+
+
+
+## 作用域
+
+* 并不是所有语句块都产生作用域, 模块, 类和函数才有作用域, 如
+
+  ```python
+  if 1:
+      x=2 # 在全局作用域内
+  print(x) # 2
+  ```
+
+* 可见性
+
+  * 局部作用域内可访问外层作用域的变量
+  * 访问一个变量, 先从局部向外的方向查找变量
+
+* [global](https://docs.python.org/3.8/reference/simple_stmts.html#the-global-statement)
+
+  声明标识符位于全局作用域, 也就是在局部作用域内定义全局变量, 如
+
+  ```python
+  def test():
+      global x # 声明为全局变量
+      x=2 # 必须赋值, 否则算作未定义
   
+  test()
+  print(x) # 2
+  ```
+
+  两个**规范** ( 不强制, 但最好遵守 )
+
+  * 相同作用域内, 声明的全局变量不能在`global`之前出现.
+
+  * 声明的全局变量不能与其他全局变量冲突
+
+* [nonlocal](https://docs.python.org/3.8/reference/simple_stmts.html#the-nonlocal-statement)
+
+  声明一个标识符, 绑定到最近外层作用域 (非全局作用域) 的同名变量上.
+
+  两个**约束**:
+
+  * 外层 (非全局) 必须存在对应变量
+  * `nonlocal`声明前, 不能存在同名的变量.
+
+  
+
+
 
 
 
@@ -460,7 +677,13 @@ def initlog(*args):
 
   同一缩进的语句处于同一语句块中
 
-  
+* 注释
+
+  ```python
+  # 我是注释
+  ```
+
+* `**{'name': 2}` 解构???
 
 
 
