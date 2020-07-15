@@ -589,8 +589,6 @@ const instance = axios.create();
 instance.interceptors.request.use(function () {/*...*/});
 ```
 
-经测试, 多次注册拦截器, 前面的会被覆盖掉.
-
 ## Cancellation
 
 You can cancel a request using a *cancel token*.
