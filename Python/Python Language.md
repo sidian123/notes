@@ -116,13 +116,13 @@ Python的解释器很多，但使用最广泛的还是CPython。如果要和Java
 * 运行语句, 值为`-c`
 * 无脚本, 值为`''`
 
-# 语法
 
-## 内置类型
+
+# 内置类型
 
 > [Built-in Types](https://docs.python.org/3.8/library/stdtypes.html#set-types-set-frozenset)
 
-### Numbers
+## Numbers
 
 * 运算
 
@@ -150,9 +150,9 @@ Python的解释器很多，但使用最广泛的还是CPython。如果要和Java
 
     另外, `/`运算总是返回`float`. 即使两个整数相除
 
-### Strings
+## Strings
 
-#### 声明
+### 声明
 
 * 单引号
 
@@ -194,7 +194,7 @@ Python的解释器很多，但使用最广泛的还是CPython。如果要和Java
 
   
 
-#### 转义&&转义字符
+### 转义&&转义字符
 
 `\`用于转义特殊字符, 如`'str\'ing'` , 此时不会冲突
 
@@ -202,7 +202,7 @@ Python的解释器很多，但使用最广泛的还是CPython。如果要和Java
 
 > 仅在引号围绕的字符串中使用.
 
-#### 操作
+### 操作
 
 * `+` 连接字符串
 
@@ -235,7 +235,7 @@ Python的解释器很多，但使用最广泛的还是CPython。如果要和Java
 
   `len(str)`
 
-#### 索引 & slice 访问
+### 索引 & slice 访问
 
 > 字符串是不可变的, 可以访问, 但不可修改某个字符
 
@@ -290,41 +290,191 @@ Python的解释器很多，但使用最广泛的还是CPython。如果要和Java
     string[:]
     ```
 
-### Lists
+## Lists
+
+### 介绍
+
+列表是多个元素的集合, 并且元素类型可以不一致
+
+```
+[1, 3, 4, '23', 23, '的士大夫十分']
+[1,2,3,[4,5,6]]
+```
+
+与字符串相比, list是可变的, 即可以改变list中的元素.
+
+### 访问, 支持索引和切片
+
+使用见[Strings]
+
+### 操作
+
+* 连接两个list, 组成大list
+
+  ```
+  [1,2,3]+[4,5,6]
+  ```
+
+* 对元素片段替换
+
+  ```
+  list[i:i2]=[1,3,4] # 替换
+  list[i:i2]=[] # 删除
+  ```
+  
+* `append(x)` list尾部新增元素. 相当于`a[len(a):]=[x]`
+
+* `extend(iterable)` 新增可遍历对象的所有元素. 相当于`a[len(a):]=iterable`
+
+* `insert()` 指定位置插入元素
+
+* `remove()` 删除指定值的元素
+
+* `pop()` 在指定索引上删除元素
+
+* `clear()` 清空list中所有元素. 相当于`del a[:]`
+
+* `index()` 查找元素, 返回索引
+
+* `count()` 计算某个元素出现的次数
+
+* `sort()` 排序list中的元素.
+
+  > list元素类型不一致时, 无法排序; 有些类型, 本身无排序规则, 如复数`3+4j`
+
+* `reverse()` 倒置list元素
+
+* `copy()` 返回浅拷贝对象. 相当于`a[:]`
+
+> 参考[More on Lists](https://docs.python.org/3.8/tutorial/datastructures.html)
+
+### 复合操作
 
 * 介绍
 
-  列表是多个元素的集合, 并且元素类型可以不一致
+  即简化由多个`for`, `if`组成, 最终生成list的操作.
+
+* 语法 & 计算规则
+
+  每个`for`, `if`语句都嵌套在上一个`for`, `if`语句中. 最终由第一个表达式得到结果并存入list中. 
+
+  例子如下
+
+  ```python
+  >>> [(x, y) for x in [1,2,3] for y in [3,1,4] if x != y]
+  [(1, 3), (1, 4), (2, 3), (2, 1), (2, 4), (3, 1), (3, 4)]
+  ```
+
+  等于
+
+  ```python
+  >>> combs = []
+  >>> for x in [1,2,3]:
+  ...     for y in [3,1,4]:
+  ...         if x != y:
+  ...             combs.append((x, y))
+  ...
+  >>> combs
+  [(1, 3), (1, 4), (2, 3), (2, 1), (2, 4), (3, 1), (3, 4)]
+  ```
+
+* 嵌套复合操作
+
+  即第一个表达式也是复合操作, 如
+
+  ```shell
+  >>> matrix = [
+  ...     [1, 2, 3, 4],
+  ...     [5, 6, 7, 8],
+  ...     [9, 10, 11, 12],
+  ... ]
+  >>> [[row[i] for row in matrix] for i in range(4)]
+  [[1, 5, 9], [2, 6, 10], [3, 7, 11], [4, 8, 12]]
+  ```
+
+  等于
 
   ```
-  [1, 3, 4, '23', 23, '的士大夫十分']
-  [1,2,3,[4,5,6]]
+  >>> transposed = []
+  >>> for i in range(4):
+  ...     transposed.append([row[i] for row in matrix])
+  ...
+  >>> transposed
+  [[1, 5, 9], [2, 6, 10], [3, 7, 11], [4, 8, 12]]
   ```
 
-  与字符串相比, list是可变的, 即可以改变list中的元素.
+  又等于
 
-* 访问, 支持索引和切片
+  ```python
+  >>> transposed = []
+  >>> for i in range(4):
+  ...     # the following 3 lines implement the nested listcomp
+  ...     transposed_row = []
+  ...     for row in matrix:
+  ...         transposed_row.append(row[i])
+  ...     transposed.append(transposed_row)
+  ...
+  >>> transposed
+  [[1, 5, 9], [2, 6, 10], [3, 7, 11], [4, 8, 12]]
+  ```
 
-  使用见[Strings]
+## tuple
+
+* 介绍
+
+  类似list, 但tuple是不可变的
+
+  > 但tuple的元素可以是可变的, 如`([1,2,3],4,5)`
+
+* 使用
+
+  ```python
+  # 完整赋值
+  t=(1,2,3,4)
+  # 自动pack
+  t=1,2,3,4 # (1,2,3,4)
+  # 无元素必须加括号
+  t=()
+  # 一个元素, 可不加括号, 但要加逗号区分
+  t=1, # (1,)
+  ```
+
+## set
+
+* 介绍
+
+  含无序不重复元素的集合.
 
 * 操作
 
-  * 连接两个list, 组成大list
+  * 对象创建
 
-    ```
-    [1,2,3]+[4,5,6]
-    ```
+    以`{}`围绕的集合, 或通过`set()`创建. 但空set必须由`set()`创建, 因为`{}`表示dict
 
-  * 新增元素`append()`
-
-  * 对元素片段替换
-
-    ```
-    list[i:i2]=[1,3,4] # 替换
-    list[i:i2]=[] # 删除
+    ```python
+    basket = {'apple', 'orange', 'apple', 'pear', 'orange', 'banana'}
+    a = set('abracadabra')
     ```
 
-### Booleans
+  * 包含测试
+
+  * 清除重复元素
+
+  * 求并集
+
+    ![Image result for set  union](.Python%20Language/Thu,%2016%20Jul%202020%20160547.png)
+
+  * 求差集
+
+    ![img](.Python%20Language/250px-Venn0010.svg.png)
+
+  * 求对称差分
+
+    ![img](.Python%20Language/220px-Venn0110.svg.png)
+
+
+
+## Booleans
 
 * 判断
   * 非0整数为true
@@ -342,7 +492,9 @@ Python的解释器很多，但使用最广泛的还是CPython。如果要和Java
   * `or` 或
   * `not` 非
 
-### 内置常量
+## tuple dict ??
+
+## 内置常量
 
 * `None` 常作用函数返回值, 表示值得缺失
 * `False` bool的false值
@@ -350,12 +502,14 @@ Python的解释器很多，但使用最广泛的还是CPython。如果要和Java
 
 > 参考[Built-in Constants](https://docs.python.org/2/library/constants.html)
 
-### 操作
+## 操作
 
 * multiple assignment
 
-  按位置赋值, 如
+  > 实质上就是tuple pack和unpack的一个过程
 
+  按位置赋值, 如
+  
   ```python
   a, b = 0, 1
   ```
@@ -363,10 +517,68 @@ Python的解释器很多，但使用最广泛的还是CPython。如果要和Java
 * `is` , `==`
 
   判断对象一致性, 基本类型判断值是否相同, 对象判断引用地址是否相同.
+  
+* `del`
 
-## 控制语句
+  * 删除list中元素
 
-### if
+    ```python
+    >>> del a[:]
+    >>> a
+    []
+    ```
+
+  * 整个对象
+
+    ```python
+    >>> del a
+    ```
+
+  * 对象字段?
+
+* `in`
+
+  * 在`for`从句中, 依次取集合元素
+
+  * 单独使用, 判断元素是否存在
+
+    ```python
+    basket = {'apple', 'orange', 'apple', 'pear', 'orange', 'banana'}
+    'orange' in basket                 # fast membership testing
+    ```
+
+### 解构(unpack) & pack
+
+sequence类型对象都可解构, 如
+
+```python
+a,b,c=(1,2,3) # a=1 b=2 c=3
+a,b,c=[1,2,3] # a=1 b=2 c=3
+a,b,c='123'   # a='1' b='2' c='3'
+```
+
+要求: `=`左边有与右边sequence等量的变量, 如:
+
+```python
+>>> a,b='123'
+Traceback (most recent call last):
+  File "<stdin>", line 1, in <module>
+ValueError: too many values to unpack (expected 2)
+```
+
+---------
+
+只有tuple才能pack, 如
+
+```python
+>>> a=1,2,3,4
+>>> a
+(1, 2, 3, 4)
+```
+
+# 控制语句
+
+## if
 
 ```python
 if x < 0:
@@ -382,7 +594,7 @@ else:
 
 `elif`可有0到多个, `else`可选
 
-### for
+## for
 
 * 使用
 
@@ -417,7 +629,7 @@ else:
 
   能够在`for`中遍历的对象. `range()`返回的就是这种类型的对象
 
-### while
+## while
 
 ```python
 while a < 10:
@@ -425,7 +637,7 @@ while a < 10:
     a, b = b, a+b
 ```
 
-### break, continue, else
+## break, continue, else
 
 * `break` 打破最近的循环
 
@@ -438,7 +650,7 @@ while a < 10:
   * `for`: 遍历完后执行
   * `white`: 条件变`false`后执行
 
-### pass
+## pass
 
 不做任何事, 相当于代码的占位符.
 
@@ -453,9 +665,9 @@ def initlog(*args):
     pass   # Remember to implement this!
 ```
 
-## 函数
+# 函数
 
-### 介绍
+## 介绍
 
 `def`定义函数
 
@@ -474,7 +686,7 @@ fib(2000)
 
 * 函数文档
 
-  函数体的第一行可以为字符串(可选), 作为该函数的文档.
+  函数体的第一行可以为字符串(可选), 作为该函数的文档. 可通过`<funcName>.__doc__`获取
 
 * 参数
 
@@ -490,9 +702,9 @@ fib(2000)
 
   每个函数都有返回值, 可通过`return`返回; 若未使用`return`, 或使用但不提供值, 函数都将默认返回`None`
 
-### 参数定义
+## 参数定义
 
-#### 默认参数
+### 默认参数
 
 ```python
 def ask_ok(prompt, retries=4, reminder='Please try again!'):
@@ -502,7 +714,7 @@ def ask_ok(prompt, retries=4, reminder='Please try again!'):
 * 默认参数是可选的, 未提供实参时, 使用默认值
 * 若默认值是变量, 将在函数声明时通过变量初始化参数默认值
 
-#### 按关键字&位置传参
+### 按关键字&位置传参
 
 * 介绍
 
@@ -579,7 +791,7 @@ def ask_ok(prompt, retries=4, reminder='Please try again!'):
     sketch : Cheese Shop Sketch
     ```
 
-#### 参数顺序
+### 参数顺序
 
 * 声明时, 参数声明顺序
 
@@ -618,11 +830,92 @@ def ask_ok(prompt, retries=4, reminder='Please try again!'):
   * `/`后`*`前的参数, 都可
   * `*`后的只能按关键字传参
 
+## 其他
+
+### 可变参数
+
+就是上述的`*name`, 若`*name`还存在必需或默认参数, 那只能按关键字传参
+
+```shell
+>>> def concat(*args, sep="/"):
+...     return sep.join(args)
+...
+>>> concat("earth", "mars", "venus")
+'earth/mars/venus'
+>>> concat("earth", "mars", "venus", sep=".")
+'earth.mars.venus'
+```
+
+### 解构(unpack)
+
+* list或tuple解构, 转化为一个个位置实参
+
+  ```python
+  >>> print(*[1,2,3])
+  1 2 3
+  ```
+
+* dict解构, 转化为一个个关键字实参
+
+  ```python
+  >>> def parrot(voltage, state='a stiff', action='voom'):
+  ...     print("-- This parrot wouldn't", action, end=' ')
+  ...     print("if you put", voltage, "volts through it.", end=' ')
+  ...     print("E's", state, "!")
+  ...
+  >>> d = {"voltage": "four million", "state": "bleedin' demised", "action": "VOOM"}
+  >>> parrot(**d)
+  -- This parrot wouldn't VOOM if you put four million volts through it. E's bleedin' demised !
+  ```
+
+### lambda表达式
+
+> 功能很简陋的lambda表达式
+
+* 是一个表达式, 应该不产生新的作用域
+
+* 函数体是一个表达式, 表达式的值是函数的返回值
+
+* 例子
+
+  ```python
+  lambda a, b: a+b
+  ```
+
+  > `a`, `b` 是两个参数
+
+### 函数注解
+
+* 介绍
+
+  函数注解实际上, 就是为函数的参数, 返回值提供**类型信息**和**约束**
+
+* 使用
+
+  ```python
+  def f(ham: str, eggs: str = 'eggs') -> str:
+      print("Annotations:", f.__annotations__)
+      print("Arguments:", ham, eggs)
+      return ham + ' and ' + eggs
+  
+  f('spam')
+  # Annotations: {'ham': <class 'str'>, 'eggs': <class 'str'>, 'return': <class 'str'>}
+  # Arguments: spam eggs
+  
+  f(11111) # 报错, 类型错误
+  ```
+
+  参数`:`后的标识符, 定义了参数的类型; 标识符后的`='eggs'`定义参数默认值.
+
+  
 
 
 
 
-## 作用域
+
+
+
+# 作用域
 
 * 并不是所有语句块都产生作用域, 模块, 类和函数才有作用域, 如
 
@@ -665,13 +958,13 @@ def ask_ok(prompt, retries=4, reminder='Please try again!'):
   * 外层 (非全局) 必须存在对应变量
   * `nonlocal`声明前, 不能存在同名的变量.
 
-  
 
 
 
 
 
-## 其他
+
+# 其他
 
 * 语句结束判断
 
@@ -683,7 +976,8 @@ def ask_ok(prompt, retries=4, reminder='Please try again!'):
   # 我是注释
   ```
 
-* `**{'name': 2}` 解构???
+
+
 
 
 
@@ -696,3 +990,7 @@ def ask_ok(prompt, retries=4, reminder='Please try again!'):
 * [The Python Tutorial](https://docs.python.org/3.8/tutorial/index.html)
 
 * [Python教程 廖雪峰](https://www.liaoxuefeng.com/wiki/1016959663602400)
+
+# 代办
+
+* [Built-in Types](https://docs.python.org/3.8/library/stdtypes.html#set-types-set-frozenset)
