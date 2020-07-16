@@ -1008,6 +1008,8 @@ def ask_ok(prompt, retries=4, reminder='Please try again!'):
   # Annotations: {'ham': <class 'str'>, 'eggs': <class 'str'>, 'return': <class 'str'>}
   # Arguments: spam eggs
   
+  ```
+
 f(11111) # 报错, 类型错误
   ```
 
@@ -1171,13 +1173,142 @@ if __name__ == "__main__":
 
 * 指向目录的符号链接不会被搜索
 
-## package
+## 包(package)
 
+### 介绍
 
+* 模块(module)是一个名字空间, 防止全局变量间名字冲突. 而包(package)是模块的名字空间, 防止模块间名字冲突.
 
+* 包的名字空间除了模块外, 也可以有自己的全局变量, 函数等, 需要在`__init__.py`文件中给出.
 
+### 包声明
 
+当目录下存在`__init__.py`文件时, 表示该目录代表包.
 
+例子如下, 由很多包组成
+
+```
+sound/                          Top-level package
+      __init__.py               Initialize the sound package
+      formats/                  Subpackage for file format conversions
+              __init__.py
+              wavread.py
+              wavwrite.py
+              aiffread.py
+              aiffwrite.py
+              auread.py
+              auwrite.py
+              ...
+      effects/                  Subpackage for sound effects
+              __init__.py
+              echo.py
+              surround.py
+              reverse.py
+              ...
+      filters/                  Subpackage for filters
+              __init__.py
+              equalizer.py
+              vocoder.py
+              karaoke.py
+              ...
+```
+
+### `__init__.py`
+
+* 该文件为包声明的标志, 文件内容可为空, 或含有一些包初始化代码
+
+* 与模块一样, 第一次访问包或包下内容时, 将执行对应包的`__init__.py`代码, 且仅执行一次, 之后的访问不再执行.
+
+### 包引入
+
+* 简单引入模块
+
+  ```python
+  import sound.effects.echo
+  ```
+
+  使用模块时, 必需给出全名
+
+  ```python
+  sound.effects.echo.echofilter(input, output, delay=0.7, atten=4)
+  ```
+
+* (推荐) 无需全名使用的引用方式
+
+  ```python
+  from sound.effects import echo
+  ```
+
+  ```python
+  echo.echofilter(input, output, delay=0.7, atten=4)
+  ```
+
+* 引入模块中变量
+
+  ```python
+  from sound.effects.echo import echofilter
+  ```
+
+  ```python
+  echofilter(input, output, delay=0.7, atten=4)
+  ```
+
+* 修改引入模块名
+
+  ```python
+  import sound.effects.echo as echo
+  ```
+
+### 注意点
+
+* `from package import item` 时的查找循序
+
+  先在`package`包的`__init__.py`下查找, 未找到, 则尝试去加载包下模块.
+
+* `import item.subitem.subsubitem`时
+
+  * 路径中, 除了最后一项`subsubitem`, 都必须是包
+  * 最后一项`subsubitem`可以是模块或包, 但不能是其他的, 如函数, 类, 变量等.
+
+* `from sound.effects import *`
+
+  会将`sound.effects`包下的所有模块引入吗? 不会, 默认仅引入包自身的内容(`__init__.py`) , 其他模块需要在`__init__.py`中显示声明, 如
+
+  ```python
+  __all__ = ["echo", "surround", "reverse"]
+  ```
+
+  > 将额外引入`sound.effects`包下的直接模块`echo`, `surround`, `reverse`
+
+  除此之外, `__init__.py`中引入的包, 也会被引入, 即使无`__all__`声明.
+
+### 包间引入
+
+不同包下的模块要相互引用, 有两种方式:
+
+* 绝对引用
+
+  以入口模块所在的目录为根路径, 写全模块名, 如
+
+  ```python
+  from sound.effects import echo
+  ```
+
+  > 注意, `sound`包应与入口模块同级
+
+* 相对引用
+
+  以`.`表示使用相对引用. 一个点`.`相对于当前包, 两个点`..`相对于上级包, 三个点`...`相对于上上级包, 以此类推.
+
+  例子:
+
+  ```python
+  from .moduleY import spam # 引入当前包下的moduleY模块的spam变量
+  from . import moduleY # 引入当前包下的moduleY模块
+  from .. subpackage2.moduleZ import eggs # 引入上级包subpackage2下模块moduleZ的变量eggs
+  ```
+
+  > 注意, 包名寻找, 实际上用到了`__name__`变量, 而入口模块的`__name__`一直为`__main__`, 因此入口模块只能使用绝对引用.
 
 
 
@@ -1186,8 +1317,12 @@ if __name__ == "__main__":
 * 语句结束判断
 
   同一缩进的语句处于同一语句块中
-  
-* 一些模块需要编译!!! 还有缓存!!!....
+
+## 编译缓存
+
+模块加载时会编译... 然后编译的结果会缓存起来, 放在对应模块同级的目录`__pycache__`下.	
+
+> 详细参考[“Compiled” Python files](https://docs.python.org/3.8/tutorial/modules.html#compiled-python-files)
 
 
 ## 注释
