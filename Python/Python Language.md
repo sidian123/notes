@@ -474,8 +474,13 @@ Python的解释器很多，但使用最广泛的还是CPython。如果要和Java
   * 包含测试
 
     ```python
+    
+    ```
   >>> 'orange' in basket                 # fast membership testing
     True
+  
+  ```
+  
   ```
   
 * 清除重复元素
@@ -484,7 +489,7 @@ Python的解释器很多，但使用最广泛的还是CPython。如果要和Java
     >>> basket = {'apple', 'orange', 'apple', 'pear', 'orange', 'banana'}
   >>> print(basket)                      # show that duplicates have been removed
     {'orange', 'banana', 'pear', 'apple'}
-    ```
+  ```
   
     
   
@@ -991,6 +996,8 @@ def ask_ok(prompt, retries=4, reminder='Please try again!'):
 
 * 使用
 
+  `<funcName>.__annotations__`可以获取约束信息
+  
   ```python
   def f(ham: str, eggs: str = 'eggs') -> str:
       print("Annotations:", f.__annotations__)
@@ -1001,11 +1008,11 @@ def ask_ok(prompt, retries=4, reminder='Please try again!'):
   # Annotations: {'ham': <class 'str'>, 'eggs': <class 'str'>, 'return': <class 'str'>}
   # Arguments: spam eggs
   
-  f(11111) # 报错, 类型错误
+f(11111) # 报错, 类型错误
   ```
 
   参数`:`后的标识符, 定义了参数的类型; 标识符后的`='eggs'`定义参数默认值.
-
+  
   
 
 
@@ -1061,11 +1068,12 @@ def ask_ok(prompt, retries=4, reminder='Please try again!'):
 
 ## 介绍
 
-* 模块就是Python代码的集合, 单独放入一个文件中. 本质也是脚本, 但被其他脚本引入时, 那么它就是模块.
-* 模块可以引入其他模块; 脚本可以引入模块
-* 文件名 = 模块名 + `.py`  ;  在模块中, 可通过全局变量`__name__`获取模块名
-* 引入模块后, 模块内的全局变量都挂到了模块名下的名字空间中.
-* 引入后, 模块内的语句会被执行一次, 且仅一次. 即使在不同地方多次引入, 也仅执行一次. 
+* 模块就是一个Python脚本. 可以被其他模块或脚本引入.
+  * 作为模块引入时, 在模块中, 可通过全局变量`__name__`获取模块名. 模块名为去掉后缀的文件名
+  * 直接作为脚本执行时, `__name__`值为`__main__` , 即主入口的意思.
+* 模块被引入时, 模块的语句会被执行一次, 且仅一次, 再次引入时, 将不在执行.
+
+* 一般的, 引入模块后, 模块内的全局变量都挂到了模块名下的名字空间中.
 
 ## 入门使用
 
@@ -1135,6 +1143,36 @@ def ask_ok(prompt, retries=4, reminder='Please try again!'):
   from fibo import fib as fibonacci
   ```
 
+## 使用策略
+
+让一个脚本既可以作为模块供人使用, 也可作为主入口文件直接执行, 可添加`__name__`的条件判断, 如
+
+```python
+if __name__ == "__main__":
+    import sys
+    fib(int(sys.argv[1]))
+```
+
+## 模块搜索顺序
+
+引入模块时, 只需提供模块名, python会自动寻找模块位置.
+
+寻找顺序如下:
+
+1. 查看内置模块
+2. 查找`sys.path`中指定的目录列表. 初始化时, `sys.path`会被赋值为以下目录
+   1. 正在执行的脚本所在的目录
+   2. 环境变量`PYTHONPATH`指定的目录, 它是一组目录的集合, 类似`PATH
+   3. The installation-dependent default ??? 
+
+注意点
+
+* 仅搜索目录下的直接文件, 不会深度搜索.
+
+* 指向目录的符号链接不会被搜索
+
+## package
+
 
 
 
@@ -1148,6 +1186,8 @@ def ask_ok(prompt, retries=4, reminder='Please try again!'):
 * 语句结束判断
 
   同一缩进的语句处于同一语句块中
+  
+* 一些模块需要编译!!! 还有缓存!!!....
 
 
 ## 注释
