@@ -95,6 +95,8 @@ Python的解释器很多，但使用最广泛的还是CPython。如果要和Java
 
   脚本必须是可执行的, 且第一行指定执行脚本的命令, 如
 
+  > 其他执行方式, 没有这个约束
+
   ```python
   #!/usr/bin/env python3
   
@@ -121,6 +123,10 @@ Python的解释器很多，但使用最广泛的还是CPython。如果要和Java
 # 内置类型
 
 > [Built-in Types](https://docs.python.org/3.8/library/stdtypes.html#set-types-set-frozenset)
+
+* Sequence Type
+
+  There are six **sequence types**: strings, Unicode strings, lists, tuples, buffers, and xrange objects
 
 ## Numbers
 
@@ -150,7 +156,7 @@ Python的解释器很多，但使用最广泛的还是CPython。如果要和Java
 
     另外, `/`运算总是返回`float`. 即使两个整数相除
 
-## Strings
+## string
 
 ### 声明
 
@@ -290,7 +296,7 @@ Python的解释器很多，但使用最广泛的还是CPython。如果要和Java
     string[:]
     ```
 
-## Lists
+## list
 
 ### 介绍
 
@@ -345,6 +351,13 @@ Python的解释器很多，但使用最广泛的还是CPython。如果要和Java
 * `reverse()` 倒置list元素
 
 * `copy()` 返回浅拷贝对象. 相当于`a[:]`
+
+* 遍历索引和值
+
+  ```python
+  for i, v in enumerate(['tic', 'tac', 'toe']):
+      print(i, v)
+  ```
 
 > 参考[More on Lists](https://docs.python.org/3.8/tutorial/datastructures.html)
 
@@ -447,32 +460,95 @@ Python的解释器很多，但使用最广泛的还是CPython。如果要和Java
 
 * 操作
 
+  * 支持复合操作, 见list
+
   * 对象创建
 
     以`{}`围绕的集合, 或通过`set()`创建. 但空set必须由`set()`创建, 因为`{}`表示dict
-
+  
     ```python
     basket = {'apple', 'orange', 'apple', 'pear', 'orange', 'banana'}
-    a = set('abracadabra')
+  a = set('abracadabra')
     ```
 
   * 包含测试
 
-  * 清除重复元素
-
-  * 求并集
-
+    ```python
+  >>> 'orange' in basket                 # fast membership testing
+    True
+  ```
+  
+* 清除重复元素
+  
+  ```python
+    >>> basket = {'apple', 'orange', 'apple', 'pear', 'orange', 'banana'}
+  >>> print(basket)                      # show that duplicates have been removed
+    {'orange', 'banana', 'pear', 'apple'}
+    ```
+  
+    
+  
+  * 求并集 `a|b`
+  
     ![Image result for set  union](.Python%20Language/Thu,%2016%20Jul%202020%20160547.png)
-
-  * 求差集
-
+  
+  * 求差集 `a-b`
+  
     ![img](.Python%20Language/250px-Venn0010.svg.png)
-
-  * 求对称差分
-
+  
+  * 求交集 `a & b`
+  
+  * 求对称差分 `a^b`
+  
     ![img](.Python%20Language/220px-Venn0110.svg.png)
 
+## dict
 
+* 介绍
+
+  * 为键值对的集合, 通过键来访问值
+  * 键必须为不可变类型的值, 如string, number, 或不含可变类型元素的tuple
+
+* 操作
+
+  * 支持复合操作
+
+    ```python
+    >>> {x: x**2 for x in (2, 4, 6)}
+    {2: 4, 4: 16, 6: 36}
+    ```
+
+  * 创建
+
+    ```python
+    a={}
+    tel = {'jack': 4098, 'sape': 4139}
+    dict([('sape', 4139), ('guido', 4127), ('jack', 4098)]) # {'sape': 4139, 'guido': 4127, 'jack': 4098}
+    ```
+
+  * 访问
+
+    ```python
+    >>> tel['jack']
+    4098
+    >>> tel['guido'] = 4127
+    ```
+
+  * 删除
+
+    ```python
+    del tel['sape']
+    ```
+
+  * 获取所有键 `list(d)` ; 获取排序过的键`sorted(d)`
+
+  * 遍历键值
+
+    ```python
+    knights = {'gallahad': 'the pure', 'robin': 'the brave'}
+    for k, v in knights.items():
+        print(k, v)
+    ```
 
 ## Booleans
 
@@ -480,6 +556,7 @@ Python的解释器很多，但使用最广泛的还是CPython。如果要和Java
   * 非0整数为true
   * 非空序列, 如string,list, 为true
   * 两个常量: `True`, `False`
+  
 * 比较操作
   * `<` (less than)
   * `>` (greater than)
@@ -487,12 +564,32 @@ Python的解释器很多，但使用最广泛的还是CPython。如果要和Java
   * `<=` (less than or equal to)
   * `>=` (greater than or equal to)
   * `!=` (not equal to)
+  
+* 包含操作
+
+  `in`, `not in` 检查变量是否在sequence中存在
+
 * 逻辑操作
   * `and` 与
   * `or` 或
   * `not` 非
+  
+  > 优先级: not > and > or
+  
+* 条件可以串联
 
-## tuple dict ??
+  如 ` a < b == c` , 等于`a < b and b == c`
+
+* 在添加比较过程中赋值, 必须使用`:=` , 而非`=`
+
+  ```python
+  a=0
+  while a:=1:
+      print(True)
+      break
+  ```
+
+* 还支持sequence类型对象之间的比较, [略](https://docs.python.org/3.8/tutorial/datastructures.html#comparing-sequences-and-other-types)
 
 ## 内置常量
 
@@ -535,6 +632,8 @@ Python的解释器很多，但使用最广泛的还是CPython。如果要和Java
     ```
 
   * 对象字段?
+
+  * dict键值
 
 * `in`
 
@@ -958,6 +1057,86 @@ def ask_ok(prompt, retries=4, reminder='Please try again!'):
   * 外层 (非全局) 必须存在对应变量
   * `nonlocal`声明前, 不能存在同名的变量.
 
+# 模块
+
+## 介绍
+
+* 模块就是Python代码的集合, 单独放入一个文件中. 本质也是脚本, 但被其他脚本引入时, 那么它就是模块.
+* 模块可以引入其他模块; 脚本可以引入模块
+* 文件名 = 模块名 + `.py`  ;  在模块中, 可通过全局变量`__name__`获取模块名
+* 引入模块后, 模块内的全局变量都挂到了模块名下的名字空间中.
+* 引入后, 模块内的语句会被执行一次, 且仅一次. 即使在不同地方多次引入, 也仅执行一次. 
+
+## 入门使用
+
+* 定义模块文件`fibo.py`
+
+  ```python
+  # Fibonacci numbers module
+  
+  def fib(n):    # write Fibonacci series up to n
+      a, b = 0, 1
+      while a < n:
+          print(a, end=' ')
+          a, b = b, a+b
+      print()
+  
+  def fib2(n):   # return Fibonacci series up to n
+      result = []
+      a, b = 0, 1
+      while a < n:
+          result.append(a)
+          a, b = b, a+b
+      return result
+  ```
+
+* 其他模块或脚本中, 引入模块
+
+  ```python
+  import fibo
+  ```
+
+* 使用, 通过模块名找到模块的全局变量, 如函数
+
+  ```python
+  fibo.fib(1000)
+  
+  fibo.fib2(100)
+  
+  fibo.__name__
+  ```
+
+## import使用
+
+* 仅引入模块名
+
+  ```python
+  import fibo
+  ```
+
+* 引入模块中的全局变量
+
+  ```python
+  from fibo import fib, fib2
+  ```
+
+  > 注意, 未引入模块名`fibo`
+
+* 引入模块中全部全局变量, 除了以`_`为前缀命名的变量
+
+  ```python
+  from fibo import *
+  ```
+
+* 引入的同时修改名字, 原名将不可用.
+
+  ```python
+  import fibo as fib
+  from fibo import fib as fibonacci
+  ```
+
+
+
 
 
 
@@ -970,11 +1149,12 @@ def ask_ok(prompt, retries=4, reminder='Please try again!'):
 
   同一缩进的语句处于同一语句块中
 
-* 注释
 
-  ```python
-  # 我是注释
-  ```
+## 注释
+
+```python
+# 我是注释
+```
 
 
 
@@ -985,10 +1165,9 @@ def ask_ok(prompt, retries=4, reminder='Please try again!'):
 
 # 参考
 
-* [Python 3.8.4 documentation](https://docs.python.org/3.8/)
-
-* [The Python Tutorial](https://docs.python.org/3.8/tutorial/index.html)
-
+* [Python 3.8.4 documentation](https://docs.python.org/3.8/) 所有文档
+* [The Python Tutorial](https://docs.python.org/3.8/tutorial/index.html) 教程
+* [The Python Standard Library](https://docs.python.org/3/library/index.html) 标准库
 * [Python教程 廖雪峰](https://www.liaoxuefeng.com/wiki/1016959663602400)
 
 # 代办
