@@ -158,6 +158,8 @@ Python的解释器很多，但使用最广泛的还是CPython。如果要和Java
 
 ## string
 
+> [str](https://docs.python.org/3.8/library/stdtypes.html#str)
+
 ### 声明
 
 * 单引号
@@ -620,26 +622,6 @@ Python的解释器很多，但使用最广泛的还是CPython。如果要和Java
 
   判断对象一致性, 基本类型判断值是否相同, 对象判断引用地址是否相同.
   
-* `del`
-
-  * 删除list中元素
-
-    ```python
-    >>> del a[:]
-    >>> a
-    []
-    ```
-
-  * 整个对象
-
-    ```python
-    >>> del a
-    ```
-
-  * 对象字段?
-
-  * dict键值
-
 * `in`
 
   * 在`for`从句中, 依次取集合元素
@@ -650,6 +632,34 @@ Python的解释器很多，但使用最广泛的还是CPython。如果要和Java
     basket = {'apple', 'orange', 'apple', 'pear', 'orange', 'banana'}
     'orange' in basket                 # fast membership testing
     ```
+
+### del
+
+* 删除list中元素
+
+  ```python
+  >>> del a[:]
+  >>> a
+  []
+  ```
+
+* 整个对象
+
+  ```python
+  >>> del a
+  ```
+
+* 对象字段
+
+  ```python
+  del modname.the_answer
+  ```
+
+* dict键值
+
+  ```python
+  del tel['sape']
+  ```
 
 ### 解构(unpack) & pack
 
@@ -1008,21 +1018,11 @@ def ask_ok(prompt, retries=4, reminder='Please try again!'):
   # Annotations: {'ham': <class 'str'>, 'eggs': <class 'str'>, 'return': <class 'str'>}
   # Arguments: spam eggs
   
-  ```
-
-f(11111) # 报错, 类型错误
+  f(11111) # 报错, 类型错误
   ```
 
   参数`:`后的标识符, 定义了参数的类型; 标识符后的`='eggs'`定义参数默认值.
   
-  
-
-
-
-
-
-
-
 # 作用域
 
 * 并不是所有语句块都产生作用域, 模块, 类和函数才有作用域, 如
@@ -1065,6 +1065,44 @@ f(11111) # 报错, 类型错误
 
   * 外层 (非全局) 必须存在对应变量
   * `nonlocal`声明前, 不能存在同名的变量.
+  
+* 例子
+
+  ```python
+  def scope_test():
+      def do_local():
+          spam = "local spam"
+  
+      def do_nonlocal():
+          nonlocal spam
+          spam = "nonlocal spam"
+  
+      def do_global():
+          global spam
+          spam = "global spam"
+  
+      spam = "test spam"
+      do_local()
+      print("After local assignment:", spam)
+      do_nonlocal()
+      print("After nonlocal assignment:", spam)
+      do_global()
+      print("After global assignment:", spam)
+  
+  scope_test()
+  print("In global scope:", spam)
+  ```
+
+  输出结果
+
+  ```python
+  After local assignment: test spam
+  After nonlocal assignment: nonlocal spam
+  After global assignment: nonlocal spam
+  In global scope: global spam
+  ```
+
+  
 
 # 模块
 
@@ -1309,6 +1347,16 @@ sound/                          Top-level package
   ```
 
   > 注意, 包名寻找, 实际上用到了`__name__`变量, 而入口模块的`__name__`一直为`__main__`, 因此入口模块只能使用绝对引用.
+
+# 类
+
+* 类的定义被执行后才生效
+
+
+
+
+
+# 错误&异常
 
 
 
