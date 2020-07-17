@@ -557,7 +557,9 @@ Python的解释器很多，但使用最广泛的还是CPython。如果要和Java
         print(k, v)
     ```
 
-## Booleans
+## bool
+
+> [bool](https://docs.python.org/3.8/library/functions.html#bool)
 
 * 判断
   * 非0整数为true
@@ -1394,8 +1396,13 @@ sound/                          Top-level package
 * 类可以实例化对象, 实例化过程如下:
 
   * 创建空对象
+
   * 将类的所有属性赋值到对象中, 方法会被wrapper, 第一个参数传入对象自身.
+
+    > 官方教程说的与我这里描述的不一致, 但如果按照官方教程的解释, 我将无法理解下面的Demo例子
+
   * 修改对象的一些特殊属性, 如`__class__`指向实例化的对象
+
   * 若类中存在`__init__`方法, 则执行它.
 
 * Demo
@@ -1429,6 +1436,159 @@ sound/                          Top-level package
   > `self`表示实例化的对象, 参数名可以换成其他的, 无所谓.
 
 ## 继承
+
+* 继承过程
+
+  假设A继承B,C, B继承D.
+
+  1. 创建空对象
+
+  2. 根据继承链, 从左到右, 深度优先的顺序, 获取到遍历链, 反过来得到的链(C, D, B) 依次将该类的所有属性赋值给空对象
+
+     > 方法会wrapper, 同名的会被后赋值类覆盖.
+
+  3. **仅**执行派生类A的`__init__`方法.
+
+  > 还是一样, 我的解析与官方文档不一致... 但这种描述能解释大部分语法现象...
+
+* MRO ( Method Resolution Order)
+
+  方法解析顺序, 上述提到了, 从左到右, 深度优先遍历得到的顺序. 如, (B, D, C)
+
+* `super(type,object)`
+
+  返回一个代理对象, 代理方法调用到父类或兄弟类的**方法**上. 说白了, 就是在实例化过程中, 调用父类方法的.
+
+  首先得到MRO顺序, 如上所示. 给定`type`, 那么返回MRO顺序中`type`后面的那个类型. 如`type`为D, 那么`super()`返回C的代理对象.
+
+  `object`只要是`type`的直接或间接实例即可, 在实例化的环境下, 多半为`self`
+
+  若不传参数, `super()`, 默认`type`为当前类, `object`为`self`, 那么在上个例子中, 将返回`B`.
+
+* Demo
+
+  ```python
+  class D:
+      def method(self):
+          print('d')
+          super().method()
+  
+  class A(D):
+      a=23
+      def method(self):
+          print('a')
+          super().method()
+  
+      def __init__(self,width):
+          print('a initial')
+  
+  class B:
+      a=11
+      b=33
+      def method(self):
+          print('b')
+        
+  
+  class C(A,B):
+      b=55
+      d=66
+      def method(self):
+          print('c')
+          super(A,self).method()
+  
+      def __init__(self):
+          print(self.a)
+          super().__init__(32)
+          print('c initial')
+  
+  obj=C()
+  obj.a=obj.a+1
+  print(obj.a)
+  obj.method()
+  obj2=C()
+  print(obj2.a)
+  ```
+
+  ```
+  23
+  a initial
+  c initial
+  24
+  c
+  d
+  b
+  23
+  a initial
+  c initial
+  23
+  ```
+
+## 进阶
+
+### 私有变量
+
+Python中没有私有变量的强制约束, 但是有类似的方案:
+
+1. 以`_`为前缀, 如`_name`
+
+   不是强制的, 需要用户间约定和遵守
+
+2. 以`__`为前缀, 如`__name`
+
+   会被Python转化为`_classname_name`的形式, 保证类被其他类继承后, 不会冲突.
+
+### Iterator
+
+* 介绍
+
+  可遍历类型的实例可以在`for`语句中使用. 
+
+* 原理
+
+  * `for`语句调用容器对象的`iter()`方法, 获取迭代器
+  * 调用迭代器的`__next__()`方法, 获取容器内的一个元素
+
+  > 因此仅需实现两个方法, 便可在`for`中使用
+
+* Demo
+
+  ```python
+  class Reverse:
+      """Iterator for looping over a sequence backwards."""
+      def __init__(self, data):
+          self.data = data
+          self.index = len(data)
+  
+      def __iter__(self):
+          return self
+  
+      def __next__(self):
+          if self.index == 0:
+              raise StopIteration
+          self.index = self.index - 1
+          return self.data[self.index]
+  ```
+
+  ```
+  >>> rev = Reverse('spam')
+  >>> iter(rev)
+  <__main__.Reverse object at 0x00A1DB50>
+  >>> for char in rev:
+  ...     print(char)
+  ...
+  m
+  a
+  p
+  s
+  ```
+
+### Generator
+
+
+
+
+
+
 
 
 
