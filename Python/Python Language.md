@@ -1698,27 +1698,44 @@ Python中没有私有变量的强制约束, 但是有类似的方案:
 
   实例化异常时的参数可通过
 
-* 抛出异常
+* `finally`从句
 
-  * 捕获的`except`从句中, `raise`可再次抛出被捕获的异常.
+  * 无论`try`语句是否抛出异常, 都执行
 
-    ```python
-    try:
-        raise NameError('HiThere')
-    except NameError:
-        print('An exception flew by!')
-        raise
-    ```
+  * 若`try`语句中有跳转语句, `break`, `continue`, `return`, 在跳转前会去执行`finally`从句
+  * 若`finally`和`try`中都有`return`, 那么真正的返回值来之`finally`中的`return`
 
-  * `raise`后接异常类的实例或异常类(继承`Exception`的类). 若接异常类, `raise`会隐式调用该类的无参构建函数来生成实例
+## 抛出异常
 
-    ```python
-    raise ValueError  # shorthand for 'raise ValueError()'
-    ```
+* 捕获的`except`从句中, `raise`可再次抛出被捕获的异常.
 
-    
+  ```python
+  try:
+      raise NameError('HiThere')
+  except NameError:
+      print('An exception flew by!')
+      raise
+  ```
 
+* `raise`后接异常类的实例或异常类 (直接或间接继承`Exception`的类) . 若接异常类, `raise`会隐式调用该类的无参构建函数来生成实例
 
+  ```python
+  raise ValueError  # shorthand for 'raise ValueError()'
+  ```
+
+## 自动清理资源
+
+类似Java的try-with-resources
+
+```python
+with open("myfile.txt") as f:
+    for line in f:
+        print(line, end="")
+```
+
+当资源`f`退出`with`语句块后, 无论正常或异常退出, 都会关闭资源`f`.
+
+> 这种对象的类型必须实现一些特殊方法, 详细见[with](https://docs.python.org/3/reference/compound_stmts.html#with)
 
 # 其他
 
@@ -1732,7 +1749,6 @@ Python中没有私有变量的强制约束, 但是有类似的方案:
   obj=object()
   ```
 
-  
 
 ## 编译缓存
 
@@ -1794,13 +1810,6 @@ Python中没有私有变量的强制约束, 但是有类似的方案:
   sum(i*i for i in range(10)) # sum传入迭代器, 计算平方和
   ```
 
-  
-
-
-
-
-
-
 
 
 # 参考
@@ -1813,5 +1822,3 @@ Python中没有私有变量的强制约束, 但是有类似的方案:
 # 代办
 
 * [Built-in Types](https://docs.python.org/3.8/library/stdtypes.html#set-types-set-frozenset)
-
-* 对象哪个字段记录了类信息?
