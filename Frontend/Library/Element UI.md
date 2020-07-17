@@ -368,6 +368,10 @@ Element会为`Vue.prototype`添加了全局方法`$notify`, 通过该方法, 并
 
 > 其中`placement`值形式为`方向[-对齐位置]`; 方向可选`top`、`left`、`right`、`bottom`; 对齐位置可选`start`, `end`
 
+## v-loading
+
+显示元素加载状态, 指令值为`true`时, 进入加载状态
+
 # 踩坑
 
 ## Form中Input回车自动刷新
