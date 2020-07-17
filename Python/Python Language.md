@@ -1520,7 +1520,7 @@ sound/                          Top-level package
   a initial
   c initial
   23
-  ```
+```
 
 ## 进阶
 
@@ -1568,18 +1568,18 @@ Python中没有私有变量的强制约束, 但是有类似的方案:
           return self.data[self.index]
   ```
 
-  ```
-  >>> rev = Reverse('spam')
-  >>> iter(rev)
-  <__main__.Reverse object at 0x00A1DB50>
-  >>> for char in rev:
-  ...     print(char)
-  ...
-  m
-  a
-  p
-  s
-  ```
+    ```
+    >>> rev = Reverse('spam')
+    >>> iter(rev)
+    <__main__.Reverse object at 0x00A1DB50>
+    >>> for char in rev:
+    ...     print(char)
+    ...
+    m
+    a
+    p
+    s
+    ```
 
 ### Generator
 
