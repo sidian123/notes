@@ -11,6 +11,7 @@
 * 无变量声明
 
 * 优缺点
+
   * 优点: 使用简单, 三方库强大
   * 缺点: 运行速度慢
 
@@ -238,7 +239,7 @@ Python的解释器很多，但使用最广泛的还是CPython。如果要和Java
   >>> text
   'Put several strings within parentheses to have them joined together.'
   ```
-  
+
 * 获取长度
 
   `len(str)`
@@ -249,41 +250,41 @@ Python的解释器很多，但使用最广泛的还是CPython。如果要和Java
 
 * 索引访问
 
-    * 下表从0开始
+  * 下表从0开始
 
-      ```shell
-      >>> word = 'Python'
-      >>> word[0]  # character in position 0
-      'P'
-      >>> word[5]  # character in position 5
-      'n'
-      ```
+    ```shell
+    >>> word = 'Python'
+    >>> word[0]  # character in position 0
+    'P'
+    >>> word[5]  # character in position 5
+    'n'
+    ```
 
-    * 负索引, 从`-1`开始, 表示最后一个字符
+  * 负索引, 从`-1`开始, 表示最后一个字符
 
-      ```shell
-      >>> word[-1]  # last character
-      'n'
-      >>> word[-2]  # second-last character
-      'o'
-      >>> word[-6]
-      'P'
-      ```
+    ```shell
+    >>> word[-1]  # last character
+    'n'
+    >>> word[-2]  # second-last character
+    'o'
+    >>> word[-6]
+    'P'
+    ```
 
 * slice访问
 
   * 使用
-  
+
     ```
     string[i1:i2] # 从i1(包含)到i2(不包含)截取字符串
     string[:i]    # 从0(包含)到i(不包含)截取字符串
-  string[i:]    # 从i(包含)到最后一个元素(包含)截取字符串
+    string[i:]    # 从i(包含)到最后一个元素(包含)截取字符串
     ```
 
     即, 左边索引缺省为0, 右边索引缺省为字符串长度`len(str)`
 
   * 正负索引Demo如下:
-  
+
     ```
      +---+---+---+---+---+---+
      | P | y | t | h | o | n |
@@ -291,9 +292,9 @@ Python的解释器很多，但使用最广泛的还是CPython。如果要和Java
      0   1   2   3   4   5   6
     -6  -5  -4  -3  -2  -1
     ```
-  
+
   * 浅拷贝
-  
+
     ```
     string[:]
     ```
@@ -329,7 +330,7 @@ Python的解释器很多，但使用最广泛的还是CPython。如果要和Java
   list[i:i2]=[1,3,4] # 替换
   list[i:i2]=[] # 删除
   ```
-  
+
 * `append(x)` list尾部新增元素. 相当于`a[len(a):]=[x]`
 
 * `extend(iterable)` 新增可遍历对象的所有元素. 相当于`a[len(a):]=iterable`
@@ -469,10 +470,10 @@ Python的解释器很多，但使用最广泛的还是CPython。如果要和Java
   * 对象创建
 
     以`{}`围绕的集合, 或通过`set()`创建. 但空set必须由`set()`创建, 因为`{}`表示dict
-  
+
     ```python
     basket = {'apple', 'orange', 'apple', 'pear', 'orange', 'banana'}
-  a = set('abracadabra')
+    a = set('abracadabra')
     ```
 
   * 包含测试
@@ -481,7 +482,7 @@ Python的解释器很多，但使用最广泛的还是CPython。如果要和Java
     >>> 'orange' in basket                 # fast membership testing
     True
     ```
-  
+
   * 清除重复元素
 
     ```python
@@ -489,21 +490,21 @@ Python的解释器很多，但使用最广泛的还是CPython。如果要和Java
     >>> print(basket)        # show that duplicates have been removed
     {'orange', 'banana', 'pear', 'apple'}
     ```
+
     
-    
-    
+
   * 求并集 `a|b`
-  
+
     ![Image result for set  union](.Python%20Language/Thu,%2016%20Jul%202020%20160547.png)
-  
+
   * 求差集 `a-b`
-  
+
     ![img](.Python%20Language/250px-Venn0010.svg.png)
-  
+
   * 求交集 `a & b`
-  
+
   * 求对称差分 `a^b`
-  
+
     ![img](.Python%20Language/220px-Venn0110.svg.png)
 
 ## dict
@@ -559,29 +560,32 @@ Python的解释器很多，但使用最广泛的还是CPython。如果要和Java
 > [bool](https://docs.python.org/3.8/library/functions.html#bool)
 
 * 判断
+
   * 非0整数为true
   * 非空序列, 如string,list, 为true
   * 两个常量: `True`, `False`
-  
+
 * 比较操作
+
   * `<` (less than)
   * `>` (greater than)
   * `==` (equal to)
   * `<=` (less than or equal to)
   * `>=` (greater than or equal to)
   * `!=` (not equal to)
-  
+
 * 包含操作
 
   `in`, `not in` 检查变量是否在sequence中存在
 
 * 逻辑操作
+
   * `and` 与
   * `or` 或
   * `not` 非
-  
+
   > 优先级: not > and > or
-  
+
 * 条件可以串联
 
   如 ` a < b == c` , 等于`a < b and b == c`
@@ -612,15 +616,15 @@ Python的解释器很多，但使用最广泛的还是CPython。如果要和Java
   > 实质上就是tuple pack和unpack的一个过程
 
   按位置赋值, 如
-  
+
   ```python
   a, b = 0, 1
   ```
-  
+
 * `is` , `==`
 
   判断对象一致性, 基本类型判断值是否相同, 对象判断引用地址是否相同.
-  
+
 * `in`
 
   * 在`for`从句中, 依次取集合元素
@@ -839,28 +843,28 @@ def ask_ok(prompt, retries=4, reminder='Please try again!'):
 
 * Demo
 
-    如函数定义
+  如函数定义
 
-    ```python
-    def parrot(voltage, state='a stiff', action='voom', type='Norwegian Blue'):
-        print("-- This parrot wouldn't", action, end=' ')
-        print("if you put", voltage, "volts through it.")
-        print("-- Lovely plumage, the", type)
-        print("-- It's", state, "!")
-    ```
+  ```python
+  def parrot(voltage, state='a stiff', action='voom', type='Norwegian Blue'):
+      print("-- This parrot wouldn't", action, end=' ')
+      print("if you put", voltage, "volts through it.")
+      print("-- Lovely plumage, the", type)
+      print("-- It's", state, "!")
+  ```
 
-    函数使用
+  函数使用
 
-    ```python
-    parrot(1000)                                          # 1 positional argument
-    parrot(voltage=1000)                                  # 1 keyword argument
-    parrot(voltage=1000000, action='VOOOOOM')             # 2 keyword arguments
-    parrot(action='VOOOOOM', voltage=1000000)             # 2 keyword arguments
-    parrot('a million', 'bereft of life', 'jump')         # 3 positional arguments
-    parrot('a thousand', state='pushing up the daisies')  # 1 positional, 1 keyword
-    ```
+  ```python
+  parrot(1000)                                          # 1 positional argument
+  parrot(voltage=1000)                                  # 1 keyword argument
+  parrot(voltage=1000000, action='VOOOOOM')             # 2 keyword arguments
+  parrot(action='VOOOOOM', voltage=1000000)             # 2 keyword arguments
+  parrot('a million', 'bereft of life', 'jump')         # 3 positional arguments
+  parrot('a thousand', state='pushing up the daisies')  # 1 positional, 1 keyword
+  ```
 
-    **注意**, 一个参数不能被传递多次, 两种方式混合使用时尤其需要注意.
+  **注意**, 一个参数不能被传递多次, 两种方式混合使用时尤其需要注意.
 
 * 特殊关键字参数
 
@@ -1010,7 +1014,7 @@ def ask_ok(prompt, retries=4, reminder='Please try again!'):
 * 使用
 
   `<funcName>.__annotations__`可以获取约束信息
-  
+
   ```python
   def f(ham: str, eggs: str = 'eggs') -> str:
       print("Annotations:", f.__annotations__)
@@ -1025,7 +1029,7 @@ def ask_ok(prompt, retries=4, reminder='Please try again!'):
   ```
 
   参数`:`后的标识符, 定义了参数的类型; 标识符后的`='eggs'`定义参数默认值.
-  
+
 # 作用域
 
 * 并不是所有语句块都产生作用域, 模块, 类和函数才有作用域, 如
@@ -1074,7 +1078,7 @@ def ask_ok(prompt, retries=4, reminder='Please try again!'):
 
   * 外层 (非全局) 必须存在对应变量
   * `nonlocal`声明前, 不能存在同名的变量.
-  
+
 * 例子
 
   ```python
@@ -1504,7 +1508,7 @@ sound/                          Top-level package
   obj2=C()
   print(obj2.a)
   ```
-  
+
   ```
   23
   a initial
@@ -1518,7 +1522,7 @@ sound/                          Top-level package
   c initial
   23
   ```
-  
+
   
 
 ## 进阶
@@ -1587,6 +1591,133 @@ Python中没有私有变量的强制约束, 但是有类似的方案:
 
 # 错误&异常
 
+## 异常类型
+
+* 语法错误 syntax errors
+
+  解析时的语法错误
+
+* 异常 exceptions
+
+  运行时的抛出的异常, 可以被捕获
+
+## 异常捕获基础
+
+* 介绍
+  * 无异常, `catch`从句不执行.
+  * 有异常, 未被捕获, 异常往上抛
+  * 有异常, 被捕获, 执行对应`catch`从句, `try`语句结束
+
+* 基本Demo
+
+  ```python
+  while True:
+      try:
+          x = int(input("Please enter a number: "))
+          break
+      except ValueError:
+          print("Oops!  That was no valid number.  Try again...")
+  ```
+
+  ```python
+  except (RuntimeError, TypeError, NameError):
+      pass
+  ```
+
+## 捕获进阶
+
+* 继承`Exception`的类可作为异常抛出
+
+* `except`上的基类, 能捕获子类, 如
+
+  ```
+  class B(Exception):
+      pass
+  
+  class C(B):
+      pass
+  
+  class D(C):
+      pass
+  
+  for cls in [B, C, D]:
+      try:
+          raise cls()
+      except B:
+          print("B")
+      except D:
+          print("D")
+      except C:
+          print("C")
+  ```
+
+  一直输出B,B,B
+
+  -----------------
+
+* `except`可以有多个, 一个`except`可捕获多个异常
+
+* 最后一个`except`可不声明异常, 作用通配符
+
+  ```python
+  import sys
+  
+  try:
+      f = open('myfile.txt')
+      s = f.readline()
+      i = int(s.strip())
+  except OSError as err:
+      print("OS error: {0}".format(err))
+  except ValueError:
+      print("Could not convert data to an integer.")
+  except:
+      print("Unexpected error:", sys.exc_info()[0])
+      raise # 重新抛出该异常
+  ```
+
+  -------
+
+* `else`从句
+
+  仅当`try`语句中未抛出异常时执行
+
+* 获取捕获的异常实例
+
+  ```python
+  try:
+      raise Exception('spam', 'eggs')
+  except Exception as inst:
+      print(type(inst))    # the exception instance
+      print(inst.args)     # arguments stored in .args
+      print(inst)          # __str__ allows args to be printed directly,
+                           # but may be overridden in exception subclasses
+      x, y = inst.args     # unpack args
+      print('x =', x)
+      print('y =', y)
+  ```
+
+  实例化异常时的参数可通过
+
+* 抛出异常
+
+  * 捕获的`except`从句中, `raise`可再次抛出被捕获的异常.
+
+    ```python
+    try:
+        raise NameError('HiThere')
+    except NameError:
+        print('An exception flew by!')
+        raise
+    ```
+
+  * `raise`后接异常类的实例或异常类(继承`Exception`的类). 若接异常类, `raise`会隐式调用该类的无参构建函数来生成实例
+
+    ```python
+    raise ValueError  # shorthand for 'raise ValueError()'
+    ```
+
+    
+
 
 
 # 其他
@@ -1594,7 +1725,7 @@ Python中没有私有变量的强制约束, 但是有类似的方案:
 * 语句结束判断
 
   同一缩进的语句处于同一语句块中
-  
+
 * 创建空对象
 
   ```python
@@ -1619,8 +1750,10 @@ Python中没有私有变量的强制约束, 但是有类似的方案:
 ## 生成器(Generator)
 
 * 介绍
+
   * 生成器就是个普通方法, 除了有`yield`表达式. 
   * 或者说, 生成器是特殊的迭代器 (iterator), 会自动生成`__iter__()`, `__next__()`方法
+  * 每次执行`next()`时, 执行顺序从方法头或上次终止处(`yield`)开始, 直到碰到`yield`, 返回结果后终止执行
 
 * 使用Demo
 
@@ -1632,9 +1765,33 @@ Python中没有私有变量的强制约束, 但是有类似的方案:
           yield data[index]
   ```
 
+  在`for`中使用
+
   ```python
   for char in reverse('golf'):
       print(char)
+  ```
+
+  或者分步进行
+
+  ```python
+  def reverse(data):
+      for index in range(len(data)-1, -1, -1):
+          yield data[index]
+  
+  iter=reverse('abc') # 获取迭代器
+  print(next(iter)) # c 第一次迭代
+  print(next(iter)) # b 第二次迭代
+  print(next(iter)) # a 第三次迭代
+  ```
+
+* 生成表达式
+
+  语法类似list复合操作, 不过该表达式得到的结果是迭代器, 且以`()`为标志
+
+  ```python
+  (i*i for i in range(10)) # 生成平方的迭代器
+  sum(i*i for i in range(10)) # sum传入迭代器, 计算平方和
   ```
 
   
