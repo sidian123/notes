@@ -437,9 +437,11 @@ Python的解释器很多，但使用最广泛的还是CPython。如果要和Java
 
 * 介绍
 
-  类似list, 但tuple是不可变的
+  * 类似list, 但tuple是不可变的
 
-  > 但tuple的元素可以是可变的, 如`([1,2,3],4,5)`
+    > 但tuple的元素可以是可变的, 如`([1,2,3],4,5)`
+
+  * 貌似不支持复合操作
 
 * 使用
 
@@ -476,25 +478,20 @@ Python的解释器很多，但使用最广泛的还是CPython。如果要和Java
   * 包含测试
 
     ```python
-    
-    ```
-  >>> 'orange' in basket                 # fast membership testing
+    >>> 'orange' in basket                 # fast membership testing
     True
+    ```
   
-  ```
-  
-  ```
-  
-* 清除重复元素
-  
-  ```python
+  * 清除重复元素
+
+    ```python
     >>> basket = {'apple', 'orange', 'apple', 'pear', 'orange', 'banana'}
-  >>> print(basket)                      # show that duplicates have been removed
+    >>> print(basket)        # show that duplicates have been removed
     {'orange', 'banana', 'pear', 'apple'}
-  ```
-  
+    ```
     
-  
+    
+    
   * 求并集 `a|b`
   
     ![Image result for set  union](.Python%20Language/Thu,%2016%20Jul%202020%20160547.png)
@@ -1508,7 +1505,7 @@ sound/                          Top-level package
   print(obj2.a)
   ```
   
-```
+  ```
   23
   a initial
   c initial
@@ -1520,7 +1517,9 @@ sound/                          Top-level package
   a initial
   c initial
   23
-```
+  ```
+  
+  
 
 ## 进阶
 
@@ -1545,9 +1544,14 @@ Python中没有私有变量的强制约束, 但是有类似的方案:
 * 原理
 
   * `for`语句调用容器对象的`__iter__()`方法, 获取迭代器
+
+    > `iter()`会调用该方法
+
   * 调用迭代器的`__next__()`方法, 获取容器内的一个元素
 
-  > 因此仅需实现两个方法, 便可在`for`中使用
+    > `next()`会调用该方法
+
+  > 因此仅需实现两个方法, 便可在`for`中使用; `for`内部就是调用了`iter()`, `next()`两个方法
 
 * Demo
 
@@ -1569,29 +1573,17 @@ Python中没有私有变量的强制约束, 但是有类似的方案:
   ```
 
     ```
-    >>> rev = Reverse('spam')
-    >>> iter(rev)
-    <__main__.Reverse object at 0x00A1DB50>
-    >>> for char in rev:
-    ...     print(char)
-    ...
-    m
-    a
-    p
-    s
+  >>> rev = Reverse('spam')
+  >>> iter(rev)
+  <__main__.Reverse object at 0x00A1DB50>
+  >>> for char in rev:
+  ...     print(char)
+  ...
+  m
+  a
+  p
+  s
     ```
-
-### Generator
-
-
-
-是的
-
-
-
-
-
-
 
 # 错误&异常
 
@@ -1623,6 +1615,29 @@ Python中没有私有变量的强制约束, 但是有类似的方案:
 ```python
 # 我是注释
 ```
+
+## 生成器(Generator)
+
+* 介绍
+  * 生成器就是个普通方法, 除了有`yield`表达式. 
+  * 或者说, 生成器是特殊的迭代器 (iterator), 会自动生成`__iter__()`, `__next__()`方法
+
+* 使用Demo
+
+  生成器定义
+
+  ```python
+  def reverse(data):
+      for index in range(len(data)-1, -1, -1):
+          yield data[index]
+  ```
+
+  ```python
+  for char in reverse('golf'):
+      print(char)
+  ```
+
+  
 
 
 
