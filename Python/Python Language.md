@@ -690,6 +690,10 @@ ValueError: too many values to unpack (expected 2)
 (1, 2, 3, 4)
 ```
 
+### dir()
+
+若无参数, 返回当前作用域下的所有名字; 若提供参数, 返回参数代表的作用域下的所有名字.
+
 # 控制语句
 
 ## if
@@ -1038,6 +1042,12 @@ def ask_ok(prompt, retries=4, reminder='Please try again!'):
   * 局部作用域内可访问外层作用域的变量
   * 访问一个变量, 先从局部向外的方向查找变量
 
+* 挂载
+
+  一些作用域内的变量会挂载到作用域的名字空间中, 如class下的类属性和方法, 模块/包下的变量和函数. 其他的不会有挂载行为.
+
+  挂载后, 可通过`name.name`的形式访问挂载的变量
+
 * [global](https://docs.python.org/3.8/reference/simple_stmts.html#the-global-statement)
 
   声明标识符位于全局作用域, 也就是在局部作用域内定义全局变量, 如
@@ -1350,7 +1360,75 @@ sound/                          Top-level package
 
 # 类
 
-* 类的定义被执行后才生效
+## 介绍&原理
+
+* 类是一个特殊的函数, 类的定义被执行后才生效.
+
+* 执行类时, 创建了一层作用域, 且类定义执行的过程中产生的变量将被挂载到类名上, 如
+
+  ```python
+  class Test:
+      i=3
+      def hello():
+          print('hello:',Test.i)
+  
+  Test.hello() # hello: 3
+  print(Test.i) # 3
+  ```
+
+* 对象就是个键值对, 与dict类型, 但对象是通过`.`访问属性和方法的; 对象可动态新增属性, 动态删除属性, 如
+
+  ```python
+  class Test:
+      pass
+  
+  x = Test()
+  x.a=23
+  print(x.a)
+  del x.a
+  print(x.a) # 错误, 属性已经被删除了
+  ```
+
+  > 有的对象不允许实例化后修改属性, 不知道怎么设置的
+
+* 类可以实例化对象, 实例化过程如下:
+
+  * 创建空对象
+  * 将类的所有属性赋值到对象中, 方法会被wrapper, 第一个参数传入对象自身.
+  * 修改对象的一些特殊属性, 如`__class__`指向实例化的对象
+  * 若类中存在`__init__`方法, 则执行它.
+
+* Demo
+
+  ```python
+  class Test:
+      """我是类的文档"""
+      i=23 # 类属性, 但对象实例时会赋值给对象, 可在实例化过程中被覆盖
+      ii=11
+  
+      def __init__(self):
+          self.ii=22 # 覆盖从类继承类的ii字段
+          self.aa=222 # 新增字段
+  
+      def mehtod():
+          print(Test.i)
+      def method2(self):
+          print(self.i)
+  
+  obj= Test()
+  print(obj.ii) # 22 实例化时值被覆盖了
+  obj.i=999
+  obj.method2() # 999
+  print(Test.i) # 23 对象的修改一般不会影响类的属性
+  Test.method() # 23
+  obj.mehtod() # 错误, 对象的方法被wrapper了, 多传了个参数(对象本身), 因此报错: TypeError: mehtod() takes 0 positional arguments but 1 was given
+  func=obj.method2
+  func() # 对象的方法是包裹过的, 赋值给其他变量, 方法的第一个参数也指向对象本身.
+  ```
+
+  > `self`表示实例化的对象, 参数名可以换成其他的, 无所谓.
+
+## 继承
 
 
 
@@ -1365,6 +1443,14 @@ sound/                          Top-level package
 * 语句结束判断
 
   同一缩进的语句处于同一语句块中
+  
+* 创建空对象
+
+  ```python
+  obj=object()
+  ```
+
+  
 
 ## 编译缓存
 
@@ -1396,3 +1482,5 @@ sound/                          Top-level package
 # 代办
 
 * [Built-in Types](https://docs.python.org/3.8/library/stdtypes.html#set-types-set-frozenset)
+
+* 对象哪个字段记录了类信息?
