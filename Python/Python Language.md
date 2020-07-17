@@ -1488,7 +1488,6 @@ sound/                          Top-level package
       def method(self):
           print('b')
         
-  
   class C(A,B):
       b=55
       d=66
@@ -1508,8 +1507,8 @@ sound/                          Top-level package
   obj2=C()
   print(obj2.a)
   ```
-
-  ```
+  
+```
   23
   a initial
   c initial
