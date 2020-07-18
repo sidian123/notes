@@ -381,7 +381,18 @@ docker load -i ./centos.tar
 
 # Dockerfile
 
-* 主程序
+```dockerfile
+FROM java:8
+VOLUME /tmp
+MAINTAINER stefan "XXXXXXX@qq.com"
+ADD ./target/drug-service-0.0.1-SNAPSHOT.jar drug-service.jar
+ENV SPRING_APPLICATION_NAME="drug-service"
+ENV JAVA_OPTS="-Xmx512m -Xms512m"
+WORKDIR /root/apps/terminology-server
+EXPOSE 8000
+RUN ln -sf /usr/share/zoneinfo/Asia/Shanghai  /etc/localtime
+ENTRYPOINT [ "sh", "-c", "java -jar /drug-service.jar","-Djava.security.egd=file:/dev/./urandom","-Dspring.profiles.active=dev","-Dswagger.doc-url=http://119.3.200.75:8009/","--spring.application.name=${SPRING_APPLICATION_NAME}"]
+```
 
 
 # 参考
