@@ -1215,8 +1215,8 @@ if __name__ == "__main__":
 1. 查看内置模块
 2. 查找`sys.path`中指定的目录列表. 初始化时, `sys.path`会被赋值为以下目录
    1. 正在执行的脚本所在的目录
-   2. 环境变量`PYTHONPATH`指定的目录, 它是一组目录的集合, 类似`PATH
-   3. The installation-dependent default ??? 
+   2. 环境变量`PYTHONPATH`指定的目录, 它是一组目录的集合, 类似`PATH`
+   3. Python安装目录下的目录, 如`DLLs`, `lib`, `current`, `sit-packages`等
 
 注意点
 
@@ -1736,6 +1736,111 @@ with open("myfile.txt") as f:
 当资源`f`退出`with`语句块后, 无论正常或异常退出, 都会关闭资源`f`.
 
 > 这种对象的类型必须实现一些特殊方法, 详细见[with](https://docs.python.org/3/reference/compound_stmts.html#with)
+
+# 依赖&管理
+
+## pip
+
+> 若`pip`命令存在`PATH`, 可以去掉前缀`python -m`
+
+* 介绍
+
+  pip是python安装三方模块的工具, 或内置模块
+
+* 安装
+
+    * 安装最新版模块
+
+      ```shell
+      python -m pip install SomePackage
+      ```
+
+    * 指定版本安装
+
+      ```shell
+      python -m pip install SomePackage==1.0.4    # == 指定特定版本
+      python -m pip install "SomePackage>=1.0.4"  # >= 指定安装版本的下线
+      ```
+
+      > 若已存在不同版本的包, 会被删掉; 若已存在, 则无任何动作.
+
+    * 更新模块到最新
+
+      ```shell
+      python -m pip install --upgrade SomePackage
+      ```
+
+* 查看
+
+  * 查看某个模块详细信息
+
+    ```shell
+    python -m pip show requests
+    ```
+
+  * 列出所有已安装模块
+
+    ```shell
+    python -m pip list
+    ```
+
+* 搜索
+
+  ```shell
+  python -m pip search astronomy
+  ```
+
+* 保存项目依赖? 见*虚拟环境*
+
+* 模块作用范围
+
+  安装的模块默认全用户可用, 若仅为当前用户安装模块, 可加上选项`--user`
+
+  若为某个项目单独安装模块呢? 需要用到**虚拟环境**, 见下
+
+## 虚拟环境
+
+* 原理
+
+  上述提到过, 引来的包, 会在执行脚本当前目录, `PYTHONPATH`环境变量指定的目录和Python安装目录下寻找模块.
+
+  pip安装的第三方模块一般会被安装到Python家目录下.
+
+  内置模块`venv`创建虚拟环境时, 创建一个轻量级的Python"家目录", 然后执行该目录下的特定脚本`activate`, 来修改环境变量. 此时命令`python`, `pip`指向该目录下的命名的. `pip`安装模块, 也会安装到该目录下.
+
+* 创建虚拟环境
+
+  如, 创建python3的虚拟环境
+
+  ```shell
+  python3 -m venv tutorial-env
+  ```
+
+  > `tutorial-env`是虚拟环境名
+
+* 进入虚拟环境
+
+  执行脚本`activate`即可, 它会修改环境变量, 将虚拟环境作用Python家目录
+
+  ```shell
+  source Scripts/activate
+  ```
+
+* 保存项目依赖
+
+  * 导出依赖
+
+    ```shell
+    pip freeze > requirements.txt
+    ```
+
+  * 安装依赖
+
+    ```shell
+    pip install -r requirements.txt
+    ```
+
+  > 最好在虚拟环境下操作
 
 # 其他
 
