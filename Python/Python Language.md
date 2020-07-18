@@ -1873,7 +1873,7 @@ with open("myfile.txt") as f:
 * 介绍
 
   * 生成器就是个普通方法, 除了有`yield`表达式. 
-  * 或者说, 生成器是特殊的迭代器 (iterator), 会自动生成`__iter__()`, `__next__()`方法
+  * 或者说, 生成器是特殊的**迭代器** (iterator), 会自动生成`__iter__()`, `__next__()`方法
   * 每次执行`next()`时, 执行顺序从方法头或上次终止处(`yield`)开始, 直到碰到`yield`, 返回结果后终止执行
 
 * 使用Demo
@@ -1915,7 +1915,73 @@ with open("myfile.txt") as f:
   sum(i*i for i in range(10)) # sum传入迭代器, 计算平方和
   ```
 
+## 装饰器
 
+> 用法类型Java注解, 与Javascript装饰器一样
+
+* 介绍
+
+  对函数或方法进行装饰, 增强它的功能
+
+* 原理
+
+  装饰一个函数/方法, 通过返回该函数/方法的wrapper函数/方法实现.
+
+* 使用
+
+  * 无参装饰器
+
+    定义
+
+    ```python
+    def log(func):
+        def wrapper(*args, **kw):
+            print('call %s():' % func.__name__)
+            return func(*args, **kw)
+        return wrapper
+    ```
+
+    使用
+
+    ```python
+    @log
+    def now():
+        print('2015-3-25')
+    ```
+
+  * 有参装饰器
+
+    定义
+
+    ```python
+    import functools
+    
+    def log(func):
+        @functools.wraps(func)
+        def wrapper(*args, **kw):
+            print('call %s():' % func.__name__)
+            return func(*args, **kw)
+        return wrapper
+    ```
+
+    使用
+
+    ```python
+    import functools
+    
+    def log(text):
+        def decorator(func):
+            @functools.wraps(func)
+            def wrapper(*args, **kw):
+                print('%s %s():' % (text, func.__name__))
+                return func(*args, **kw)
+            return wrapper
+        return decorator
+    ```
+
+    > 装饰器的定义和传参方式与函数一致
+
+> 参考[装饰器](https://www.liaoxuefeng.com/wiki/1016959663602400/1017451662295584)
 
 # 参考
 
