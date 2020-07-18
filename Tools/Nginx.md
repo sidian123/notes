@@ -554,7 +554,7 @@ server {
 
 * `proxy_set_header`
 
-  该指令可修改或新增头部字段.
+  该指令可修改或新增头部字段. 
 
   如, 代理默认不转发`host`头部, 现在让Niginx转发
 
@@ -563,6 +563,21 @@ server {
     ```
   
   > 这种方式有弊端, 若请求未存在`host`字段, 也不会被转发.
+  >
+  > `$XXX`变量详细请见 [其他/变量]
+  
+* Demo
+
+  代理时经常重写的头字段
+
+  ```nginx
+  proxy_set_header   Host                 $host;
+  proxy_set_header   X-Real-IP            $remote_addr;
+  proxy_set_header   X-Forwarded-For      $proxy_add_x_forwarded_for;
+  proxy_set_header   X-Forwarded-Proto    $scheme;
+  ```
+
+  
 
 > 参考
 >
