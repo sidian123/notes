@@ -1,7 +1,18 @@
 * 安装
 
+  安装`SQLAlchemy`
+
   ```shell
   pip install SQLAlchemy
+  ```
+
+  安装MySQL驱动包
+
+  ```shell
+  # 未使用Flask时
+  pip install mysqlclient
+  # 使用了Flask
+  pip install Flask-SQLAlchemy
   ```
 
 * Overview
@@ -20,3 +31,5 @@
 
 * [学习资料概述](https://www.sqlalchemy.org/library.html#tutorials)
 * [官方文档](https://docs.sqlalchemy.org/en/13/)
+
+* [SQLALchemy之Python连接MySQL](https://blog.csdn.net/weixin_44080811/article/details/90030744)
