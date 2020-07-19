@@ -149,4 +149,4 @@ def show_subpath(subpath):
 * [Flask Docs](https://flask.palletsprojects.com/en/1.1.x/)
 
 * [Flask-SQLAlchemy](https://flask-sqlalchemy.palletsprojects.com/)
-* [SQLAlchemy API文档](https://docs.sqlalchemy.org/en/13/genindex.html)
+* [SQLAlchemy API](https://docs.sqlalchemy.org/en/13/genindex.html)
