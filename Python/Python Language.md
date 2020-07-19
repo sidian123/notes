@@ -1743,6 +1743,8 @@ with open("myfile.txt") as f:
 
 > 若`pip`命令存在`PATH`, 可以去掉前缀`python -m`
 
+### 开始
+
 * 介绍
 
   pip是python安装三方模块的工具, 或内置模块
@@ -1769,6 +1771,10 @@ with open("myfile.txt") as f:
       ```shell
       python -m pip install --upgrade SomePackage
       ```
+
+* 仓库中心: https://pypi.org/
+
+### 使用
 
 * 查看
 
@@ -1837,6 +1843,8 @@ with open("myfile.txt") as f:
       ```shell
       pip config set global.index-url https://mirrors.aliyun.com/pypi/simple/
       ```
+
+### 其他
 
 * 保存项目依赖? 见*虚拟环境*
 
