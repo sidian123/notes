@@ -1790,6 +1790,54 @@ with open("myfile.txt") as f:
   python -m pip search astronomy
   ```
 
+* 配置
+
+    > 默认操作的是当前用户的配置.
+
+    * 查看当前激活的配置
+
+        ```shell
+        python -m pip config list
+        ```
+
+    * 打开编辑器编辑配置文件
+
+        ```shell
+        python -m pip config edit
+        ```
+
+    * 获取配置值
+
+        ```shell
+        python -m pip config get name
+        ```
+
+    * 设置配置值
+
+        ```shell
+        python -m pip config set name value
+        ```
+
+    * 删除配置项
+
+        ```shell
+        python -m pip config unset name
+        ```
+
+* 换源
+
+    * 安装时临时使用
+
+      ```shell
+      pip install -i https://pypi.tuna.tsinghua.edu.cn/simple requests
+      ```
+
+    * 永久生效
+
+      ```shell
+      pip config set global.index-url https://mirrors.aliyun.com/pypi/simple/
+      ```
+
 * 保存项目依赖? 见*虚拟环境*
 
 * 模块作用范围
