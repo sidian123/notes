@@ -102,6 +102,51 @@ def show_subpath(subpath):
    1. 若匹配不到, 则返回404; 
    2. 若匹配到了, 则重定向到有`/`的url上.
 
+# Flask-SQLAlchemy
+
+* 介绍
+
+  Flask-SQLAlchemy将SQLAlchemy集成到了Flask, 并简化了SQLAlchemy的使用
+
+* 安装
+
+  ```shell
+  pip install Flask-SQLAlchemy
+  ```
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 # 参考
 
-[Flask Docs](https://flask.palletsprojects.com/en/1.1.x/)
+* [Flask Docs](https://flask.palletsprojects.com/en/1.1.x/)
+
+* [Flask-SQLAlchemy](https://flask-sqlalchemy.palletsprojects.com/)
+* [SQLAlchemy API文档](https://docs.sqlalchemy.org/en/13/genindex.html)
