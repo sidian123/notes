@@ -756,6 +756,8 @@ is_nice = True
 state = "nice" if is_nice else "not nice"
 ```
 
+> 参考[Ternary Operators](https://book.pythontips.com/en/latest/ternary_operators.html)
+
 # 控制语句
 
 ## if
