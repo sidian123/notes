@@ -118,29 +118,39 @@ def show_subpath(subpath):
 
 ## 查询
 
-> [Query API](https://docs.sqlalchemy.org/en/13/orm/query.html)
->
-> [Column Elements and Expressions](https://docs.sqlalchemy.org/en/13/core/sqlelement.html#sqlalchemy.sql.expression.or_)
+* 语句描述
+  * `Query.filter(*criterion)`
 
-* `filter(*criterion)`
+    * 支持复杂传参, 如 `==`, `>`
 
-  * 支持复杂传参, 如 `==`, `>`
+      ```python
+      session.query(MyClass).filter(MyClass.name == 'some name', MyClass.id > 5)
+      ```
 
-    ```python
-    session.query(MyClass).filter(MyClass.name == 'some name', MyClass.id > 5)
-    ```
+      > 这应该是`Column`类的操作
 
-    > 这应该是`Column`类的操作
+    * 多个参数是`and`关系, 用`and_()`函数连接其他. 其他表达式, 如`or_()`, 需要显式使用
 
-  * 多个参数是`and`关系, 用`and_()`函数连接其他. 其他表达式, 如`or_()`, 需要显式使用
+      ```python
+      session.query(MyClass).filter(or_(MyClass.name == 'some name', MyClass.id > 5))
+      ```
 
-    ```python
-    session.query(MyClass).filter(or_(MyClass.name == 'some name', MyClass.id > 5))
-    ```
+  * `Query.filter_by(**kwargs)`
 
-* `filter_by(**kwargs)`
+    类似`filter()`, 但不支持`_and()`, `or_()` 以及表达式`>`, `==`等等. 略
 
-  类似`filter()`, 但不支持`_and()`, `or_()` 以及表达式`>`, `==`等等. 略
+* 语句执行
+
+  * `Query.first()` 查询, 获取第一条数据, 或返回`None`
+  * `Query.all()` 查询, 返回所有记录
+
+* 参考
+
+  * [Query API](https://docs.sqlalchemy.org/en/13/orm/query.html)
+
+  * [Column Elements and Expressions](https://docs.sqlalchemy.org/en/13/core/sqlelement.html#sqlalchemy.sql.expression.or_)
+
+
 
 # 参考
 
