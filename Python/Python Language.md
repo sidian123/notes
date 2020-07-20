@@ -733,6 +733,16 @@ ValueError: too many values to unpack (expected 2)
 'SchemaDefinition:%s' % self.name_zh
 ```
 
+### len
+
+获取元素长度, 如
+
+```python
+len([]) # 0
+```
+
+
+
 # 控制语句
 
 ## if
