@@ -772,7 +772,7 @@ MySQL变量分为系统变量和会话变量.
 在编程语言中, 连接MySQL server需要提供URL, 常用URL如
 
 ```url
-jdbc:mysql://localhost:3306/database_name?useSSL=false&serverTimezone=GMT%2B8&allowPublicKeyRetrieval=true&createDatabaseIfNotExist=true
+jdbc:mysql://localhost:3306/database_name?useSSL=false&serverTimezone=GMT%2B8&allowPublicKeyRetrieval=true&createDatabaseIfNotExist=true&charset=utf8
 ```
 
 * `useSSL`是否使用安全套接字
@@ -784,6 +784,8 @@ jdbc:mysql://localhost:3306/database_name?useSSL=false&serverTimezone=GMT%2B8&al
 * `allowPublicKeyRetrieval`不知道
 
 * `createDatabaseIfNotExist` 若数据库不存在, 则自动创建
+
+* `charset`设置字符编码
 
 > <span style="color:red">注意</span>, 如果出现链接错误, 可能是`useSSL`造成的, 其他选项可以不用, 仅设置时区也行.
 >
