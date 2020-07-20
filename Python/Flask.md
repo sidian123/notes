@@ -119,6 +119,8 @@ def show_subpath(subpath):
 ## 查询
 
 > [Query API](https://docs.sqlalchemy.org/en/13/orm/query.html)
+>
+> [Column Elements and Expressions](https://docs.sqlalchemy.org/en/13/core/sqlelement.html#sqlalchemy.sql.expression.or_)
 
 * `filter(*criterion)`
 
@@ -139,18 +141,6 @@ def show_subpath(subpath):
 * `filter_by(**kwargs)`
 
   类似`filter()`, 但不支持`_and()`, `or_()` 以及表达式`>`, `==`等等. 略
-
-
-
-
-
-
-
-
-
-
-
-
 
 # 参考
 
