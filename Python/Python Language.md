@@ -2040,8 +2040,10 @@ with open("myfile.txt") as f:
         return wrapper
     ```
 
-    使用
+    > `wraps`用于修改`wrapper()`方法的元数据, 如`__name__`
 
+    使用
+    
     ```python
     import functools
     
@@ -2052,9 +2054,9 @@ with open("myfile.txt") as f:
                 print('%s %s():' % (text, func.__name__))
                 return func(*args, **kw)
             return wrapper
-        return decorator
+    return decorator
     ```
-
+    
     > 装饰器的定义和传参方式与函数一致
 
 > 参考[装饰器](https://www.liaoxuefeng.com/wiki/1016959663602400/1017451662295584)
