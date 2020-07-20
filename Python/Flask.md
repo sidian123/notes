@@ -138,7 +138,21 @@ def show_subpath(subpath):
   * `Query.filter_by(**kwargs)`
 
     类似`filter()`, 但不支持`_and()`, `or_()` 以及表达式`>`, `==`等等. 略
-
+  
+  * `Column`
+  
+    声明Model对象时, 用的`Column`, 它代表字段, 提供了一些和查询相关的方法, 如`in_()`
+  
+    ```python
+    property_list=db_session.query(SchemaDefinition) \
+    .filter(and_(
+        SchemaDefinition.schema_id == schema_id,
+        SchemaDefinition.id.in_(property_ids),
+        SchemaDefinition.category == 'link',
+        SchemaDefinition.version != 'skip'
+    )).all()
+    ```
+  
 * 语句执行
 
   * `Query.first()` 查询, 获取第一条数据, 或返回`None`
