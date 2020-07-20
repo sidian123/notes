@@ -621,20 +621,48 @@ Python的解释器很多，但使用最广泛的还是CPython。如果要和Java
   a, b = 0, 1
   ```
 
-* `is` , `==`
 
-  判断对象一致性, 基本类型判断值是否相同, 对象判断引用地址是否相同.
+### is , ==
 
-* `in`
+判断对象一致性, 基本类型判断值是否相同, 对象判断引用地址是否相同.
 
-  * 在`for`从句中, 依次取集合元素
+### in
 
-  * 单独使用, 判断元素是否存在
+* 在`for`从句中, 依次取集合元素
 
-    ```python
-    basket = {'apple', 'orange', 'apple', 'pear', 'orange', 'banana'}
-    'orange' in basket                 # fast membership testing
-    ```
+* 单独使用, 判断元素是否存在
+
+  ```python
+  basket = {'apple', 'orange', 'apple', 'pear', 'orange', 'banana'}
+  'orange' in basket                 # fast membership testing
+  ```
+
+### type, isinstance 
+
+* `type`判断对象类型
+
+  ```python
+  print(type('string') is str)
+  # True
+  
+  print(type('string') is int)
+  # False
+  ```
+
+* `isinstance `功能类似, 判断是否为某一类型的实例或子实例
+
+  ```python
+  print(isinstance('string', str))
+  # True
+  
+  print(isinstance(100, str))
+  # False
+  
+  print(isinstance(100, (int, str))) # 判断多个, 匹配人一个都true
+  # True
+  ```
+
+  
 
 ### del
 
