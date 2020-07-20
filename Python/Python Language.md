@@ -697,6 +697,14 @@ ValueError: too many values to unpack (expected 2)
 
 若无参数, 返回当前作用域下的所有名字; 若提供参数, 返回参数代表的作用域下的所有名字.
 
+### %
+
+用于拼接字符串
+
+```python
+'SchemaDefinition:%s' % self.name_zh
+```
+
 # 控制语句
 
 ## if
