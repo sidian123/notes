@@ -741,7 +741,20 @@ ValueError: too many values to unpack (expected 2)
 len([]) # 0
 ```
 
+### 三元运算
 
+语法
+
+```python
+value_if_true if condition else value_if_false
+```
+
+例子
+
+```python
+is_nice = True
+state = "nice" if is_nice else "not nice"
+```
 
 # 控制语句
 
