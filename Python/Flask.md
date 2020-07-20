@@ -116,21 +116,29 @@ def show_subpath(subpath):
 
   
 
+## 查询
 
+> [Query API](https://docs.sqlalchemy.org/en/13/orm/query.html)
 
+* `filter(*criterion)`
 
+  * 支持复杂传参, 如 `==`, `>`
 
+    ```python
+    session.query(MyClass).filter(MyClass.name == 'some name', MyClass.id > 5)
+    ```
 
+    > 这应该是`Column`类的操作
 
+  * 多个参数是`and`关系, 用`and_()`函数连接其他. 其他表达式, 如`or_()`, 需要显式使用
 
+    ```python
+    session.query(MyClass).filter(or_(MyClass.name == 'some name', MyClass.id > 5))
+    ```
 
+* `filter_by(**kwargs)`
 
-
-
-
-
-
-
+  类似`filter()`, 但不支持`_and()`, `or_()` 以及表达式`>`, `==`等等. 略
 
 
 
@@ -150,3 +158,5 @@ def show_subpath(subpath):
 
 * [Flask-SQLAlchemy](https://flask-sqlalchemy.palletsprojects.com/)
 * [SQLAlchemy API](https://docs.sqlalchemy.org/en/13/genindex.html)
+
+* [SQLALchemy之Python连接MySQL](https://blog.csdn.net/weixin_44080811/article/details/90030744)
