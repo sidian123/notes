@@ -2011,24 +2011,25 @@ with open("myfile.txt") as f:
 
     ```python
     def log(func):
+        @functools.wraps(func)
         def wrapper(*args, **kw):
             print('call %s():' % func.__name__)
             return func(*args, **kw)
         return wrapper
-    ```
-
-    使用
-
+  ```
+  
+  使用
+  
     ```python
     @log
     def now():
         print('2015-3-25')
-    ```
-
-  * 有参装饰器
-
-    定义
-
+  ```
+  
+* 有参装饰器
+  
+  定义
+  
     ```python
     import functools
     
@@ -2038,10 +2039,10 @@ with open("myfile.txt") as f:
             print('call %s():' % func.__name__)
             return func(*args, **kw)
         return wrapper
-    ```
-
-    > `wraps`用于修改`wrapper()`方法的元数据, 如`__name__`
-
+  ```
+  
+  > `wraps`用于修改`wrapper()`方法的元数据, 如`__name__`
+  
     使用
     
     ```python
