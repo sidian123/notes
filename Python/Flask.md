@@ -114,7 +114,52 @@ def show_subpath(subpath):
   pip install Flask-SQLAlchemy
   ```
 
+  还需要安装驱动, 若用的mysql, 有多种驱动可供选择, 如`mysqlclient`
   
+  ```shell
+  pip install mysqlclient
+  ```
+
+## 连接&&配置
+
+* url格式
+
+  ```
+  dialect[+driver]://user:password@host/dbname[?key=value..]
+  ```
+
+  * `dialect` 数据库名, 如mysql, oracle等
+  * `driver` 驱动, 如`mysqldb`
+
+* Engine
+
+  可看作数据源, 支持多种数据库, 和连接池. 之后, 可直接通过Engine与数据库交互, 或者传入Session, 通过ORM来访问数据库.
+
+  ![../_images/sqla_engine_arch.png](.Flask/sqla_engine_arch.png)
+
+* 创建Engine
+
+  ```
+  engine = create_engine("mysql://scott:tiger@hostname/dbname",echo=True)
+  ```
+
+  * `encoding` 访问数据库用的编码, 默认`utf-8`
+
+  * `echo` 是否打印执行的SQL, 默认`False`
+
+  * `pool_size` 连接池内能支持存在的个数, 默认5
+
+  * `max_overflow` 超出`pool_size`, 即溢出的连接个数, 默认10
+
+    > 会话close后, 溢出的连接会直接关闭, 未溢出时才会回到连接池吧.
+
+  * `pool_timeout` 获取连接的超时时长, 默认30
+
+  * `pool_recycle` 连接池中连接的刷新时间, 默认`-1`, 即不刷新. 这可能会造成连接自动断开.
+
+* 参考
+
+  [Engine Configuration](https://docs.sqlalchemy.org/en/13/core/engines.html)
 
 ## 查询
 
