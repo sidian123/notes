@@ -1852,6 +1852,20 @@ with open("myfile.txt") as f:
 
 > 这种对象的类型必须实现一些特殊方法, 详细见[with](https://docs.python.org/3/reference/compound_stmts.html#with)
 
+## 自定义异常
+
+```python
+class APIResponseException(Exception):
+    def __init__(self,code:int,msg:str,result:str):
+        self.code=code
+        self.msg=msg
+        self.result=result
+    def __str__(self):
+        return {'code':self.code,'msg':self.msg,'result':self.result}
+```
+
+
+
 # 依赖&管理
 
 ## pip
