@@ -442,7 +442,10 @@ sudo apt-get install rabbitmq-server
   * Spring AMQP默认在监听器执行完后才发送确认消息, 而非获取消息时.
 
   * 一般情况下, 当抛出异常时, 监听器将发送拒绝确认. 而消息将重回队列, 等待重新分发
+
   * 当抛出` AmqpRejectAndDontRequeueException `异常时, 消息则不会重回队列
+
+    > 但会进入私信队列, 见[rabbitmq死信队列详解与使用](https://blog.csdn.net/zhangcongyi420/article/details/100126666)
 
 * 消息持久化
 
