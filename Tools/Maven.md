@@ -628,7 +628,13 @@ Maven默认的资源插件, 负责将**项目资源**拷贝到**输出文件的c
 
 > 参考[Maven packaging without test (skip tests)](https://stackoverflow.com/questions/7456006/maven-packaging-without-test-skip-tests)
 
-# 六 其他
+# 进阶
+
+## 仓库
+
+[Maven中的库（repository）详解](https://www.cnblogs.com/winner-0715/p/7493387.html)
+
+# 其他
 
 ## 安装与配置
 
