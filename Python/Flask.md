@@ -209,7 +209,15 @@ def show_subpath(subpath):
 
   * [Column Elements and Expressions](https://docs.sqlalchemy.org/en/13/core/sqlelement.html#sqlalchemy.sql.expression.or_)
 
+## Session
 
+* `Session.commit()` 提交会话
+
+* `Session.rollback()` 事务回滚
+
+* `Session.close()` 关闭会话
+
+  > 不等同关闭连接
 
 # 参考
 
