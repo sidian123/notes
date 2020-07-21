@@ -243,6 +243,8 @@ Python的解释器很多，但使用最广泛的还是CPython。如果要和Java
 * 获取长度
 
   `len(str)`
+  
+* 是否相等`==` , `!=`
 
 ### 索引 & slice 访问
 
@@ -538,15 +540,19 @@ Python的解释器很多，但使用最广泛的还是CPython。如果要和Java
       ```python
       >>> tel['jack']
       4098
+      ```
     >>> tel['guido'] = 4127
+    
+      ```
+      
       ```
 
     * `get()`
-  
+
       与索引访问不用, 键不存在时, 该方法不会抛出异常`KeyError`
-
+  
   * 删除
-
+  
     ```python
   del tel['sape']
     ```
