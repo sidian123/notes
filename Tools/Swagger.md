@@ -154,6 +154,8 @@ public class SpringFoxConfig {
 
 [knife4j](https://gitee.com/xiaoym/knife4j) 也是一种Swagger文档的呈现形式, 界面内容更充实, 美观. 推荐使用
 
+文档地址: `/doc.html`
+
 # 参考
 
 * [Swagger介绍及使用](https://www.jianshu.com/p/349e130e40d5) 侧重Swagger缘由脉络
