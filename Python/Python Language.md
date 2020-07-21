@@ -1674,6 +1674,36 @@ Python中没有私有变量的强制约束, 但是有类似的方案:
 
   当`__str__()`与`__repr__()`同时存在时, 优先调用`__str__()`方法
 
+### 属性&方法类型
+
+```python
+class MyClass:
+    a=23 # 类变量
+    def method(self): # 实例方法
+        self.a=11
+        return 'instance method called', self
+
+    @classmethod
+    def classmethod(cls): # 类方法
+        return 'class method called', cls
+
+    @staticmethod
+    def staticmethod(): # 静态方法
+        return 'static method called'
+
+a=MyClass()
+print(a.a) # 23
+a.method()
+print(a.a) # 11
+print(MyClass.a) #23
+```
+
+* 实例方法: 可以访问实例
+* 类方法/变量: 每个实例都有类变量的拷贝, 无类方法的拷贝. 类方法通过`cls`, 可以访问到类变量, 和该类
+* 静态方法: 类仅作用静态方法的名字空间
+
+> 参考[Python's Instance, Class, and Static Methods Demystified](https://realpython.com/instance-class-and-static-methods-demystified/)
+
 # 错误&异常
 
 ## 异常类型
