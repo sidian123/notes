@@ -571,7 +571,7 @@ server {
   代理时经常重写的头字段
 
   ```nginx
-  proxy_set_header   Host                 $host;
+  proxy_set_header   Host                 $host:$server_port;
   proxy_set_header   X-Real-IP            $remote_addr;
   proxy_set_header   X-Forwarded-For      $proxy_add_x_forwarded_for;
   proxy_set_header   X-Forwarded-Proto    $scheme;
@@ -742,6 +742,11 @@ nginx中可以定义变量, 也提供了代表请求头字段的变量.
   代表URL上的host. 与`$http_host`相比, 无port
 
   > `$http_host` vs. `$host` , 见[What's the difference of $host and $http_host in Nginx](https://stackoverflow.com/questions/15414810/whats-the-difference-of-host-and-http-host-in-nginx)
+  
+* 端口
+
+  * `$proxy_port` 被代理服务器的端口, 即`proxy_pass`上指定的端口
+  * `$server_port` server监听的端口
 
 > 见[Embedded Variables](https://nginx.org/en/docs/http/ngx_http_core_module.html?&_ga=2.36392416.114713352.1578467350-2037701528.1578467350#variables)
 
@@ -771,7 +776,7 @@ proxy_http_version 1.1;
 #静态站点访问策略一般一个页面会有多个jpg,css,js等,开启会话保持
 proxy_set_header Connection "Keep-Alive"; 
 #nginx参数，使用客户端的Host
-proxy_set_header Host $host; 
+proxy_set_header Host $host:$server_port; 
 #L7负载常用配置，由于waf反向代理，X-Real-IP需要在F5进行开启
 proxy_set_header X-Real-IP $remote_addr;
 #X-Forwarded-For 是一个 HTTP 扩展头部，用来表示 HTTP 请求端真实 IP
