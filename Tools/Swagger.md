@@ -127,6 +127,31 @@ public class SpringFoxConfig {
   > `@ApiParam`仅含语义, 并无约束, 所以常常配置`@RequestParam`注解使用, 达到描述与其功能一致性
   
   请最好配合`@RequestParam`使用, 否则参数将被当作请求体参数!!!
+  
+* 另一种请求参数描述方式
+
+  ```java
+  @ApiOperation(value = "分页获取数据列表", notes = "分页获取数据列表", produces = "application/json")
+  @ApiImplicitParams({
+      @ApiImplicitParam(name = "tid", value = "Token Id", dataType = "String", required = true, paramType = "header"),
+      @ApiImplicitParam(name = "name", paramType = "name", dataType = "String"),
+      @ApiImplicitParam(name = "type", paramType = "数据类型,1-指南,2-普通文本", dataType = "int"),
+      @ApiImplicitParam(name = "pageNum", paramType = "query", dataType = "int", defaultValue = "1"),
+      @ApiImplicitParam(name = "pageSize", paramType = "query", dataType = "int", defaultValue = "10"),
+  })
+  @RequestMapping(value = "/data", method = RequestMethod.GET)
+  public HttpResponseTemp<ItemsPageEntity<DataResultEntity>> getDataListByPage(
+      @RequestParam(value = "name", required = false) String name,
+      @RequestParam(value = "type", required = false) Integer type,
+      @RequestParam(value = "pageNum", required = false, defaultValue = "1") int pageNum,
+      @RequestParam(value = "pageSize", required = false, defaultValue = "10") int pageSize) {
+      ControllerHelper.validatePageSize(pageNum, pageSize);
+      ItemsPageEntity<DataResultEntity> itemsPageEntity = dataService.getDataList(name, type, pageNum, pageSize);
+      return HttpResponseTemp.success(itemsPageEntity);
+  }
+  ```
+
+  
 
 ## Model相关
 
