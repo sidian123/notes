@@ -454,6 +454,12 @@ nohup COMMAND &
 * 使用
 
   nohup默认将准输入流重定向到`/dev/null`，标准输出流重定向到nohup.out，标准错误流重定向到标准输出。若不满足使用, 需自己需改重定向.
+  
+* demo
+
+  ```shell
+  nohup java -jar xxx.jar 2>&1 > log.txt &
+  ```
 
 ### exec
 
