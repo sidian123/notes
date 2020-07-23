@@ -841,6 +841,8 @@ public static void main(String[] args) {
 * 仅在`SpringApplication`初始化的容器中使用
 * `ApplicationArguments`与`CommandLineRunner`类似, 但提供了更便捷的方式获取命令行参数
 
+> 踩坑笔记: 注意, 当配置类实现了`CommandLineRunner`, 配置类实现的其他和容器声明周期的方法将失效.
+
 ## Spring Boot 退出
 
 ```java
