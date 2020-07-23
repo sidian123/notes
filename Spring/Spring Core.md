@@ -97,7 +97,7 @@ Spring提供了注解来异步执行和调度任务.
           executor.setThreadNamePrefix("MyExecutor-");
           //线程数达到最大数量时,在调用者自己的线程中执行
           executor.setRejectedExecutionHandler(new ThreadPoolExecutor.CallerRunsPolicy());
-          //当关闭时,等待所有任务完成才关闭,而不是中断
+          //当关闭时,等待正在处理任务的线程完成, 而不是中断线程. 且队列清空
           executor.setWaitForTasksToCompleteOnShutdown(true);
           //初始化
           executor.initialize();
