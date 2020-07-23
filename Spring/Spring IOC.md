@@ -1226,7 +1226,13 @@ public class SimpleMovieLister {
 }
 ```
 
+# Lazy
 
+* 配合注入注解(如`@Autowired`)使用时, 属性仅在被调用时才正在的被注入对象中.
+
+* 注入到Bean定义上时, 仅在Bean真正被其他Bean用到时才注入容器
+
+  
 
 # [十 classpath扫描和component管理](https://docs.spring.io/spring-framework/docs/current/spring-framework-reference/core.html#beans-classpath-scanning)
 
