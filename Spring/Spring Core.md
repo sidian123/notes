@@ -16,6 +16,8 @@
 
     简单的为每个任务开启一个线程. 有并发上限, 达到上线时将阻塞调用者线程, 直到有线程结束.
 
+    > 注意, 该执行器不会复用线程
+
   * `ThreadPoolTaskExecutor`
 
     适配了`ThreadPoolExecutor`, 并提供Bean属性用于配置.
