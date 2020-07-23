@@ -161,6 +161,52 @@ def show_subpath(subpath):
 
   [Engine Configuration](https://docs.sqlalchemy.org/en/13/core/engines.html)
 
+## 实体创建
+
+需要继承`Base`类
+
+```python
+class SchemaDefinition(Base):
+    __tablename__ = 'tbl_schema_definition'
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    version = Column(String(10), nullable=True)
+    category = Column(String(10), nullable=True)
+    schema_id = Column(Integer, nullable=True)
+    name = Column(String(50), nullable=True)
+    super = Column(String(50), nullable=True)
+    name_zh = Column(String(50), nullable=True)
+    omahaschema_name = Column(String(50), nullable=True)
+    description_zh = Column(String(50), nullable=True)
+    link_range = Column(String(50), nullable=True)
+    color = Column(String(50), nullable=True)
+    border_color = Column(String(50), nullable=True)
+    system_mapping_id = Column(Integer, nullable=True)
+    ts_create = Column(BigInteger, nullable=True)
+    ts_update = Column(BigInteger, nullable=True)
+
+    def __repr__(self):
+        return 'SchemaDefinition:%s' % self.name_zh
+```
+
+`Base`类提供了以关键字参数的方式构建对象, 如
+
+```python
+definition = SchemaDefinition(
+    version="v0.1",
+    category=category,
+    schema_id=schema_id,
+    name=name,
+    super=super,
+    name_zh=name_zh,
+    omahaschema_name=omahaschema_name,
+    description_zh=description,
+    color=color,
+    border_color=border_color,
+    ts_create=(int(round(time.time() * 1000))),
+    ts_update=(int(round(time.time() * 1000)))
+)
+```
+
 ## 查询
 
 * 语句描述
