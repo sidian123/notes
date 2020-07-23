@@ -262,6 +262,8 @@ public class User {
 
   未显示给出名字时, 采用首字母小写, 驼峰转下划线的方案, 见`ImplicitNamingStrategyJpaCompliantImpl`
   
+* `@Entity` 标注Jpa实体
+
 * `GeneratedValue` 主键自动生成
 
   `strategy`属性指定生成策略, 有四种取值:
@@ -279,6 +281,8 @@ public class User {
   * `GenerationType.AUTO` 让持久化引擎 (如hibernate) 自己决定. 多半使用的`Table`方式
 
   > 参考[GenerationType四中类型](https://www.cnblogs.com/hongchengshise/p/10612301.html)
+
+* `Column` 标注列
 
 ### Dao类创建
 
