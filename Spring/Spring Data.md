@@ -242,6 +242,8 @@ Java Persistent API规范的一种实现, 让使用者仅通过操作实体对�
 
 ### 实体类创建
 
+#### 定义
+
 ```java
 @Data
 @Builder
@@ -283,6 +285,50 @@ public class User {
   > 参考[GenerationType四中类型](https://www.cnblogs.com/hongchengshise/p/10612301.html)
 
 * `Column` 标注列
+
+#### jdbcType <=> javaType
+
+| Hibernate type (org.hibernate.type) | JDBC type                                            | Java type                                         |
+| ----------------------------------- | ---------------------------------------------------- | ------------------------------------------------- |
+| StringType                          | VARCHAR                                              | String                                            |
+| MaterializedClob                    | CLOB                                                 | String                                            |
+| TextType                            | LONGVARCHAR                                          | String                                            |
+| CharacterType                       | CHAR                                                 | char or Character                                 |
+| BooleanType                         | BIT                                                  | boolean or Boolean                                |
+| NumericBooleanType                  | INTEGER (e.g. 0 = false and 1 = true)                | boolean or Boolean                                |
+| YesNoType                           | CHAR (e.g. ‘N’ or ‘n’ = false and ‘Y’ or ‘y’ = true) | boolean or Boolean                                |
+| TrueFalseType                       | CHAR (e.g. ‘F’ or ‘f’ = false and ‘T’ or ‘t’ = true) | boolean or Boolean                                |
+| ByteType                            | TINYINT                                              | byte or Byte                                      |
+| ShortType                           | SMALLINT                                             | short or Short                                    |
+| IntegerType                         | INTEGER                                              | int or Integer                                    |
+| LongType                            | BIGINT                                               | long or Long                                      |
+| FloatType                           | FLOAT                                                | float or Float                                    |
+| DoubleType                          | DOUBLE                                               | double or Double                                  |
+| BigIntegerType                      | NUMERIC                                              | BigInteger                                        |
+| BigDecimalType                      | NUMERIC                                              | BigDecimal                                        |
+| TimestampType                       | TIMESTAMP                                            | java.sql.Timestamp or java.util.Date              |
+| TimeType                            | TIME                                                 | java.sql.Time                                     |
+| DateType                            | DATE                                                 | java.sql.Date                                     |
+| CalendarType                        | TIMESTAMP                                            | java.util.Calendar or java.util.GregorianCalendar |
+| CalendarType                        | DATE                                                 | java.util.Calendar or java.util.GregorianCalendar |
+| CurrencyType                        | VARCHAR                                              | java.util.Currency                                |
+| LocaleType                          | VARCHAR                                              | java.util.Locale                                  |
+| TimeZoneType                        | VARCHAR                                              | java.util.TimeZone                                |
+| UrlType                             | VARCHAR                                              | java.net.URL                                      |
+| ClassType                           | VARCHAR                                              | java.lang.Class                                   |
+| BlobType                            | BLOB                                                 | java.sql.Blob                                     |
+| ClobType                            | CLOB                                                 | java.sql.Clob                                     |
+| BinaryType                          | VARBINARY                                            | byte[] or Byte[]                                  |
+| BinaryType                          | BLOB                                                 | byte[] or Byte[]                                  |
+| BinaryType                          | LONGVARBINARY                                        | byte[] or Byte[]                                  |
+| BinaryType                          | LONGVARBINARY                                        | byte[] or Byte[]                                  |
+| CharArrayType                       | VARCHAR                                              | char[] or Character[]                             |
+| UUIDBinaryType                      | BINARY                                               | java.util.UUID                                    |
+| UUIDBinaryType                      | CHAR or VARCHAR                                      | java.util.UUID                                    |
+| UUIDBinaryType                      | PostgreSQL UUID                                      | java.util.UUID                                    |
+| SerializableType                    | VARBINARY                                            | Serializable                                      |
+
+> 参考[A beginner’s guide to Hibernate Types](https://vladmihalcea.com/a-beginners-guide-to-hibernate-types/)
 
 ### Dao类创建
 
