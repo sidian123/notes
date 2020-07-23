@@ -359,10 +359,10 @@ class HelloSpringDataApplicationTests {
 * 分页, 需要传入`pageable`类型的对象, 如 
 
   ```java
-  symptomDao.findAll(PageRequest.of(1,10));
+  symptomDao.findAll(PageRequest.of(0,10));
   ```
 
-  
+  > 注意, 分页从`0`开始
 
 
 
