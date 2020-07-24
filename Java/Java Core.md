@@ -543,6 +543,19 @@ java -Dname="Spring" -jar app.jar
 
 * 基本使用
 
+  Server监听端口, `accpet()`会阻塞, 直到建立一个socket连接
+
+  ```java
+  Socket clientSocket = serverSocket.accept();  
+  ```
+
+  之后Server和Client都可通过`Socket`通信.
+
+  * `Socket.getOutputStream()` 获取输出流
+  * `Socket.getInputStream()` 获取输入流
+
+  在读取过程中, 若对方未返回数据, 会被堵塞.
+
 # 其他
 
 ## java vs. javaw
