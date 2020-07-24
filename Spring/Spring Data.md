@@ -364,7 +364,17 @@ class HelloSpringDataApplicationTests {
 
   > 注意, 分页从`0`开始
 
+## 其他操作
 
+### save
+
+执行`save()`方法时, 若对象不存在, 则新增; 若存在, 则更新.
+
+更新时, 为了防止一些字段被更新, 可以配置字段如下:
+
+```java
+@Column(updatable=false)
+```
 
 ## 多表连接
 
