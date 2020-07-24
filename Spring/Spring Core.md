@@ -14,7 +14,7 @@
 
   * `SimpleAsyncTaskExecutor`
 
-    简单的为每个任务开启一个线程. 有并发上限, 达到上线时将阻塞调用者线程, 直到有线程结束.
+    简单的为每个任务开启一个线程. 支持设置并发上限, 达到上线时将阻塞调用者线程, 直到有线程结束. 默认并发无上限
 
     > 注意, 该执行器不会复用线程
 
@@ -117,7 +117,7 @@ Spring提供了注解来异步执行和调度任务.
 
 * `@EnableScheduling`使能任务调度
 
-* `SchedulingConfigurer`用于配置
+* `SchedulingConfigurer`用于配置使用的调度器
 
 * 例子:
 
@@ -127,8 +127,6 @@ Spring提供了注解来异步执行和调度任务.
     public class AppConfig {
     }
     ```
-
-> 貌似上述的`Executor`也需要配置?
 
 ### 使用
 
