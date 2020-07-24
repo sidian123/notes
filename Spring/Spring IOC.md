@@ -896,7 +896,45 @@ public final class Boot {
 
 ## Aware接口
 
-还有什么Aware接口，继承后可以通过接口方法获得一些对象，比如容器本身啥的。
+继承了`XXXAware`接口的Bean, 在注入到容器时, 会通过接口方法注入对应的对象到Bean中. 如继承`ApplicationContextAware`可获得`ApplicationContext`实例
+
+## 应用事件
+
+Spring容器启动过程中会触发一些事件. 有两种方式可以捕获事件.
+
+1. 泛型方式
+
+   继承的接口, 传入什么泛型参数, 那么监听的就是什么事件.
+
+   ```java
+   @Component
+   public class MyListener 
+           implements ApplicationListener<ContextRefreshedEvent> {
+     
+       public void onApplicationEvent(ContextRefreshedEvent event) {
+           ...
+       }
+   }
+   ```
+
+2. 注解驱动
+
+   通过方法参数指定监听的事件
+
+   ```java
+   @Component
+   public class MyListener {
+     
+       @EventListener
+       public void handleContextRefresh(ContextRefreshedEvent event) {
+           ...
+       }
+   }
+   ```
+
+好像可以自定义事件? 略
+
+> 参考[Better application events in Spring Framework 4.2](https://spring.io/blog/2015/02/11/better-application-events-in-spring-framework-4-2)
 
 ## 参考
 
