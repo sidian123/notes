@@ -1081,7 +1081,7 @@ spring:
     
 mybatis:
   type-aliases-package: com.example.demo2.entity
-  mapper-locations: classpath:mapper/**/*.xml
+  mapper-locations: classpath:mapperxml/**/*.xml
 ```
 
 mybatis注册mapper接口时，也会检测同包下是否存在对应xml文件，如果需要，还需配置maven，见[maven之允许src目录下xml文件输出到target目录](<https://blog.csdn.net/jdbdh/article/details/89068289>)
