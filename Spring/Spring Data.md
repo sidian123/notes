@@ -284,7 +284,40 @@ public class User {
 
   > 参考[GenerationType四中类型](https://www.cnblogs.com/hongchengshise/p/10612301.html)
 
-* `Column` 标注列
+* `@Column` 标注列
+
+* `@Index` 声明索引
+
+  定义多个单列索引
+
+  ```java
+  @Entity
+  @Table(name = "region",
+         indexes = {@Index(name = "my_index_name",  columnList="iso_code", unique = true),
+                    @Index(name = "my_index_name2", columnList="name",     unique = false)})
+  public class Region{
+  
+      @Column(name = "iso_code", nullable = false)
+      private String isoCode;
+  
+      @Column(name = "name", nullable = false)
+      private String name;
+  
+  } 
+  ```
+
+  声明一个聚簇索引
+
+  ```java
+  @Entity
+  @Table(name    = "company__activity", 
+         indexes = {@Index(name = "i_company_activity", columnList = "activity_id,company_id")})
+  public class CompanyActivity{
+  	...
+  }
+  ```
+
+  
 
 #### jdbcType <=> javaType
 
