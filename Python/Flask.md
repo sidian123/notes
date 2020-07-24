@@ -102,6 +102,34 @@ def show_subpath(subpath):
    1. 若匹配不到, 则返回404; 
    2. 若匹配到了, 则重定向到有`/`的url上.
 
+# 请求数据
+
+* 引入模块
+
+  ```python
+  from flask import request
+  ```
+
+* 获取请求方法 `request.method`
+
+* 获取url参数 `request.args`
+
+  `args`为`dict`类型
+
+  ```python
+  searchword = request.args.get('key', '')
+  ```
+
+* 获取表单字段 `request.form`
+
+  `form`为`dict`类型
+
+  ```python
+  request.form['username']
+  ```
+
+* 获取Json消息体 `request.json`
+
 # Flask-SQLAlchemy
 
 * 介绍
