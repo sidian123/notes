@@ -104,6 +104,8 @@ def show_subpath(subpath):
 
 # 请求数据
 
+## 常用数据
+
 * 引入模块
 
   ```python
@@ -130,9 +132,38 @@ def show_subpath(subpath):
 
 * 获取Json消息体 `request.json`
 
+## 文件
+
 * 获取文件 `request.files`
 
   `files`为`dict`类型, 每个元素为[FileStorage](https://werkzeug.palletsprojects.com/en/1.0.x/datastructures/#werkzeug.datastructures.FileStorage.save)类型
+  
+  ```python
+  from flask import request
+  
+  @app.route('/upload', methods=['GET', 'POST'])
+  def upload_file():
+      if request.method == 'POST':
+          f = request.files['the_file']
+          f.save('/var/www/uploads/uploaded_file.txt')
+      ...
+  ```
+  
+* 踩坑点
+
+  貌似文件名必须时ASCII码, 否则报错, 需要使用`secure_filename`处理文件名, 如
+
+  ```python
+  from flask import request
+  from werkzeug.utils import secure_filename
+  
+  @app.route('/upload', methods=['GET', 'POST'])
+  def upload_file():
+      if request.method == 'POST':
+          f = request.files['the_file']
+          f.save('/var/www/uploads/' + secure_filename(f.filename))
+      ...
+  ```
 
 # Flask-SQLAlchemy
 
