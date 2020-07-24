@@ -52,7 +52,7 @@
 
 * 参考
 
-  * [read_excel]((https://pandas.pydata.org/docs/reference/api/pandas.read_excel.html#pandas.read_excel))
+  * [read_excel](https://pandas.pydata.org/docs/reference/api/pandas.read_excel.html#pandas.read_excel)
   * [DataFrame](https://pandas.pydata.org/docs/reference/frame.html)
   * [How To Loop Through Pandas Rows? or How To Iterate Over Pandas Rows?](https://cmdlinetips.com/2018/12/how-to-loop-through-pandas-rows-or-how-to-iterate-over-pandas-rows/)
 
