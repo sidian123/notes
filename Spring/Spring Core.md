@@ -75,7 +75,7 @@ Spring提供了注解来异步执行和调度任务.
   默认使用的Bean, 以优先级降低的方式列出
 
     1. 若存在实现了`AsyncConfigurer`的Bean, 则使用该Bean提供的执行器.
-    2. 若容器中唯一存在`TaskExecutor`, 则使用该Bean
+    2. 若容器中唯一存在`TaskExecutor`类型的Bean, 则使用该Bean
     3. 否则使用Bean名为`taskExecutor`的Bean
     4. 否则`SimpleAsyncTaskExecutor`将被使用
   
