@@ -380,6 +380,8 @@ class HelloSpringDataApplicationTests {
 
 > 关于文档中的Bidirectional Relationships, 我不是很理解. 但是我弄清楚了注解的使用, 和原理
 
+### 介绍
+
 表之间的关系有多种, 一一对应多种注解
 
 * 一对一 `@OneToOne`
@@ -393,9 +395,11 @@ class HelloSpringDataApplicationTests {
 
 **小结**: 即在一个实体中, 关系的提供有两种方式: 一, 是提供数据库的外键提供; 二, 提供应用层中注解的`mappedBy`属性提供
 
---------
+### 懒加载
 
-例子
+多表连接默认全部加载, 上述注解的`fetch`属性可配置懒加载....
+
+### 例子
 
 部门表
 
