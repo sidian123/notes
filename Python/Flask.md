@@ -130,6 +130,10 @@ def show_subpath(subpath):
 
 * 获取Json消息体 `request.json`
 
+* 获取文件 `request.files`
+
+  `files`为`dict`类型, 每个元素为[FileStorage](https://werkzeug.palletsprojects.com/en/1.0.x/datastructures/#werkzeug.datastructures.FileStorage.save)类型
+
 # Flask-SQLAlchemy
 
 * 介绍
