@@ -725,7 +725,7 @@ LIMIT [offset,] row_count;
 
 MySQL变量分为系统变量和会话变量. 
 
-系统变量操作:
+### 系统变量
 
 * 查看所有系统变量
 
@@ -747,7 +747,7 @@ MySQL变量分为系统变量和会话变量.
   mysql> SELECT @@GLOBAL.time_zone;
   ```
 
-会话变量操作:
+### 会话变量
 
 * 查看所有会话变量: ??? 不会
 
@@ -765,7 +765,15 @@ MySQL变量分为系统变量和会话变量.
   SELECT @@SESSION.time_zone;
   ```
 
-> 其他的以后补充了
+### 其他
+
+* 模糊查询
+
+  ```shell
+  show variables like '%Aborted%';
+  ```
+
+  
 
 ## 连接参数
 
