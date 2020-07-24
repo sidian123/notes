@@ -556,6 +556,8 @@ java -Dname="Spring" -jar app.jar
 
   在读取过程中, 若对方未返回数据, 会被堵塞.
 
+> 参考[oracle socket tutorial](https://docs.oracle.com/javase/tutorial/networking/sockets/index.html)
+
 # 其他
 
 ## java vs. javaw
