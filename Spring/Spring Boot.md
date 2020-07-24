@@ -1065,7 +1065,7 @@ public interface UserDao {
 
 mybatis与spring boot整合后，也可以在spring boot的配置文件中配置mybatis。部分属性如下：
 
-- `mapper-locations`：xml Mapper的位置, 如`classpath:mapper/**/*.xml`
+- `mapper-locations`：xml Mapper的位置, 如`classpath:mapperxml/**/*.xml`
 
 - `type-aliases-package`：类型匿名所在位置
 - `configuration`：传给`Configuration`Bean的属性配置，见 [MyBatis reference page](http://www.mybatis.org/mybatis-3/configuration.html#settings)
@@ -1081,6 +1081,7 @@ spring:
     
 mybatis:
   type-aliases-package: com.example.demo2.entity
+  mapper-locations: classpath:mapper/**/*.xml
 ```
 
 mybatis注册mapper接口时，也会检测同包下是否存在对应xml文件，如果需要，还需配置maven，见[maven之允许src目录下xml文件输出到target目录](<https://blog.csdn.net/jdbdh/article/details/89068289>)
