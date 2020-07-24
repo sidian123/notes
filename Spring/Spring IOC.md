@@ -1226,7 +1226,7 @@ public class SimpleMovieLister {
 }
 ```
 
-# Lazy
+## Lazy
 
 * 配合注入注解(如`@Autowired`)使用时, 属性仅在被调用时才正在的被注入对象中.
 
