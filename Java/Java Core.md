@@ -529,7 +529,19 @@ java -Dname="Spring" -jar app.jar
 
 # Socket
 
+* Socket定义
 
+  套接字(Socket)是网络上运行的两个程序之间的双向通信链路的一个端点。
+
+  套接字会绑定到端口上, 让数据能发送到正确的端口上.
+
+* 交互
+
+  Server监听本机的一个端口, 当Client通过该端口与Server成功建立连接后, Server和Client都会产生Socket, 用于交互. 
+
+  Client的Socket临时会绑定到一个端口上 ( 由系统分配 ), 此时该端口不可被其他程序使用. Server则不同, 一个端口可建立无数个连接, 即仍会监听端口, 继续产生新的Socket.
+
+* 基本使用
 
 # 其他
 
