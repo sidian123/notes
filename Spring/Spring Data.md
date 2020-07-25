@@ -220,7 +220,7 @@ Java Persistent API规范的一种实现, 让使用者仅通过操作实体对�
   `ddl-auto`可取值
 
   * *validate*: validate the schema, makes no changes to the database.
-  * *update*: update the schema. 若表不存在, 会自动创建.
+  * *update*: update the schema; 但是实体类未声明的字段, 数据库中存在时, 并不会删除该字段哦. 若表不存在, 会自动创建. 
   * *create*: creates the schema, destroying previous data.
   * *create-drop*: drop the schema when the SessionFactory is closed explicitly, typically when the application is stopped.
   * *none*: does nothing with the schema, makes no changes to the database
