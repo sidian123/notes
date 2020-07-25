@@ -22,6 +22,22 @@
 | Objects          | [ObjectInputStream](http://tutorials.jenkov.com/java-io/objectinputstream.html) | [ObjectOutputStream](http://tutorials.jenkov.com/java-io/objectoutputstream.html) |                                                              |                                                              |
 | Utilities        | [SequenceInputStream](http://tutorials.jenkov.com/java-io/sequenceinputstream.html) |                                                              |                                                              |                                                              |
 
+## PushbackInputStream
+
+`PushbackInputStream`有能力让你将读出来的字节压回流中, 如
+
+```java
+PushbackInputStream inputstream = new PushbackInputStream(
+                                new FileInputStream("c:\\data\\input.txt"));
+
+int data = inputstream.read();
+
+inputstream.unread(data);
+```
+
+* `read()` 读出字节
+* `unread()` 让字节放回去
+
 # 二 文件
 
 * `java.nio.file`: Defines interfaces and classes for the Java virtual machine to access files, file attributes, and file systems.
