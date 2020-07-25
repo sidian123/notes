@@ -96,7 +96,9 @@ Map<String, ResultValue> results = mapper.readValue(jsonSource,
 
 > 所有注解参考[Jackson Annotations](https://github.com/FasterXML/jackson-docs/wiki/JacksonAnnotations)
 
-## 更改属性名
+## 序列化相关
+
+### 更改属性名
 
 * 方式一
 
@@ -110,7 +112,7 @@ Map<String, ResultValue> results = mapper.readValue(jsonSource,
       /****setter and getter****/
     ...
   }
-    ```
+  ```
   
 * 方式二
 
@@ -133,9 +135,11 @@ Map<String, ResultValue> results = mapper.readValue(jsonSource,
       }
   }
   ```
-## 忽略属性
 
-### 默认规则
+
+### 忽略属性
+
+#### 默认规则
 
 即`DEFAULT_VIEW_INCLUSION`, 表示没有被显式注解的属性都将参与到序列化与解析的过程中.
 
@@ -148,7 +152,7 @@ Jackson可识别的属性:
 
 可以显示声明属性, 如上面的`@JsonProperty`不传参数; 可显式忽略属性, 如下面的`@JsonIgnore`
 
-### 静态忽略
+#### 静态忽略
 
 即使用时, 将序列化的属性已经固定死了, 用于微调默认行为. 常用的注解如下:
 
@@ -173,7 +177,7 @@ class Student{
 	...
 }
 ```
-### 动态忽略-view
+#### 动态忽略-view
 
 `@JsonView`可定义好不同的视图, 有不同的序列化和解析规则. 使用时可指定不同的view, 即可实现动态解析.
 
@@ -261,6 +265,28 @@ public class ItemController {
 >
 > - https://github.com/FasterXML/jackson-databind/
 > - http://www.cowtowncoder.com/blog/archives/2011/02/entry_443.html
+
+## 反序列化相关
+
+### 忽略未知属性
+
+类上添加`@JsonIgnoreProperties(ignoreUnknown = true)`, 如
+
+```java
+@JsonIgnoreProperties(ignoreUnknown = true)
+public class LKClassData {
+
+    public String description;
+    public String primaryKey;
+
+    @Override
+    public String toString() {
+        return description;
+    }
+}
+```
+
+
 
 ## 序列化或解析方式
 
