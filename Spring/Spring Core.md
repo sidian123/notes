@@ -847,5 +847,32 @@ public static void main(String[] args) {
 SpringApplication.exit(this.applicationContext,() -> 0);
 ```
 
+更为优化的方式, 如下:
 
+```java
+@Component
+public class SpringUtil implements ApplicationContextAware {
+    static ApplicationContext applicationContext;
+
+    @Override
+    public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
+        SpringUtil.applicationContext=applicationContext;
+    }
+
+    public static void closeApplication(int exit){
+        SpringApplication.exit(applicationContext, () -> exit);
+    }
+    public static void closeApplication(){
+        closeApplication(0);
+    }
+}
+```
+
+然后使用
+
+```java
+SpringUtil.closeApplication();
+```
+
+> 参考[Shutdown a Spring Boot Application](https://www.baeldung.com/spring-boot-shutdown)
 
