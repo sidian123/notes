@@ -149,6 +149,12 @@
     ```
 
     > 类型信息由参数提供, 且若元素能在参数的数组中存的下, 则存入并返回该参数; 否则新建一个对象.
+    
+  * `List<Integer>` to `int[]`
+  
+    ```java
+    int[] array = list.stream().mapToInt(i->i).toArray();
+    ```
 
 ## 队列
 
