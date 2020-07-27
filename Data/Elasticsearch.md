@@ -483,7 +483,11 @@ docker run -d --name elasticsearch  -p 9200:9200 -p 9300:9300 -e "discovery.type
 > * [ElasticSearch 字段类型介绍](https://www.jianshu.com/p/bfef6a890b42)
 > * [Field data types](https://www.elastic.co/guide/en/elasticsearch/reference/current/mapping-types.html)
 
-## fields
+## 映射参数
+
+> [Mapping parameters](https://www.elastic.co/guide/en/elasticsearch/reference/current/mapping.html)
+
+### fields
 
 当一个字段有不同使用情况时, 可使用`fields`, 如
 
@@ -535,6 +539,37 @@ GET my_index/_search
 ```
 
 相当于多声明了一个字段`city.raw`, 但比仅多声明字段有更多的功能. 如上述`city.raw`是`city`的关键字类型的版本, `city`全文索引时, 可以按照`city.raw`排序和分组.
+
+### properties
+
+`properties`用来声明map类型字段的, 如:
+
+```json
+PUT my_index
+{
+  "mappings": {
+    "properties": { 
+      "manager": {
+        "properties": { 
+          "age":  { "type": "integer" },
+          "name": { "type": "text"  }
+        }
+      }
+    }
+  }
+}
+
+PUT my_index/_doc/1 
+{
+  "region": "US",
+  "manager": {
+    "name": "Alice White",
+    "age": 30
+  }
+}
+```
+
+
 
 # Kibana
 
