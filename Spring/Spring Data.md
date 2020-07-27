@@ -832,6 +832,11 @@ spring.redis.timeout=500
 
 > 转载至[Spring Data Elasticsearch基本使用](https://www.cnblogs.com/ifme/p/12005026.html)
 
+## 介绍
+
+* 无事务
+* 弱类型映射, 即使Java实体映射到ES索引的类型是错误的, 也没关系....
+
 ## 配置
 
 * 引入依赖
