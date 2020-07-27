@@ -56,6 +56,8 @@
 * vs. 关系数据库
 
   ![img](.Elasticsearch/9419034-4f8eb4926bc326de.png)
+  
+  **注意**, 其实这样的类比是不合理的, 因为Indices中的文档类型最好一样, 否则会导致搜索效率降低. 不像关系数据库的表一样, 不同表间结构可以完全不同. 因此7.0将弃用Type, 8.0完全移除. 见[Removal of mapping types](https://www.elastic.co/guide/en/elasticsearch/reference/7.3/removal-of-types.html#removal-of-types)
 
 ## 原理
 
@@ -200,7 +202,9 @@ docker run -d --name elasticsearch  -p 9200:9200 -p 9300:9300 -e "discovery.type
 
     > `mappings`包含所有类型信息
 
-## 类型
+## 类型(弃用)
+
+> 在7.0将弃用, 8.0彻底移除
 
 * 所有的类型
 
