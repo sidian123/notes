@@ -137,7 +137,7 @@ docker run -d --name elasticsearch  -p 9200:9200 -p 9300:9300 -e "discovery.type
 
 > 若要可视化查看Elasticsearch, 可安装Kibana, 见下.
 
-# 操作
+# 结构化操作
 
 > 新建文档时, 若索引和类型不存在, 会自动创建
 
@@ -151,7 +151,7 @@ docker run -d --name elasticsearch  -p 9200:9200 -p 9300:9300 -e "discovery.type
     $ curl -X PUT 'localhost:9200/weather'
     ```
 
-    新建的同时配置字段
+    新建的同时配置类型和字段
 
     ```bash
     $ curl -X PUT 'localhost:9200/accounts' -d '
@@ -191,6 +191,14 @@ docker run -d --name elasticsearch  -p 9200:9200 -p 9300:9300 -e "discovery.type
     ```bash
     $ curl -X GET 'http://localhost:9200/_cat/indices?v'
     ```
+    
+* 查看索引信息
+
+    ```python
+    curl -X GET "http://127.0.0.1:9200/productindex/_mapping?pretty" 
+    ```
+
+    > `mappings`包含所有类型信息
 
 ## 类型
 
@@ -199,6 +207,57 @@ docker run -d --name elasticsearch  -p 9200:9200 -p 9300:9300 -e "discovery.type
   ```bash
   $ curl 'localhost:9200/_mapping?pretty=true'
   ```
+  
+* 为索引添加类型
+
+  ```shell
+  curl -XPOST "http://127.0.0.1:9200/productindex/product/_mapping?pretty" -d ' 
+  {
+      "product": {
+              "properties": {
+                  "title": {
+                      "type": "string",
+                      "store": "yes"
+                  },
+                  "description": {
+                      "type": "string",
+                      "analyzer": "standard"
+                  },
+                  "price": {
+                      "type": "double"
+                  },
+                  "onSale": {
+                      "type": "boolean"
+                  },
+                  "type": {
+                      "type": "integer"
+                  },
+                  "createDate": {
+                      "type": "date"
+                  }
+              }
+          }
+    }
+  }'
+  ```
+
+* 新增一个字段
+
+  ```shell
+  curl -X POST "http://127.0.0.1:9200/productindex/product/_mapping -d '
+  
+  {
+       "product": {
+                  "properties": {
+                       "amount":{
+                          "type":"integer"
+                     }
+                  }
+      }
+  }'
+  ```
+
+* 修改字段? 不被允许的, 否则必将导致所有数据都要重新索引一遍
 
 ## 文档
 
@@ -305,7 +364,7 @@ docker run -d --name elasticsearch  -p 9200:9200 -p 9300:9300 -e "discovery.type
 
   > `_score`为匹配度
 
-## 全文索引
+# 查询
 
 > 参考[Query DSL](https://www.elastic.co/guide/en/elasticsearch/reference/5.5/query-dsl.html#query-dsl)
 
