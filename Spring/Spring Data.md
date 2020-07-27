@@ -174,13 +174,36 @@
   }
   ```
 
-  
-
-
 
 * 创建repository实例
 
-  
+
+## 其他
+
+### 分页&排序
+
+* 分页&排序
+
+  ```java
+  @Repository
+  public interface RelationshipDao extends JpaRepository<Relationship,Long> {
+      Page<Relationship> findAll(Pageable page);
+  }
+  ```
+
+  ```java
+  List<Relationship> relationship = relationshipDao.findBy(PageRequest.of(0,1,Sort.by(Sort.Direction.DESC,"id"))).getContent();
+  ```
+
+* 仅排序
+
+  ```java
+  age<Relationship> findAllByName(String name,Pageable page);
+  ```
+
+  ```java
+  relationshipDao.findAll(Sort.by(Sort.Direction.DESC,"id"));
+  ```
 
 # Spring Data JPA
 
