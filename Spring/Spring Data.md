@@ -874,7 +874,9 @@ spring.redis.timeout=500
 
 ## 实体类创建
 
-首先我们准备好实体类：
+> 参考[Mapping Annotation Overview](https://docs.spring.io/spring-data/elasticsearch/docs/4.0.2.RELEASE/reference/html/#elasticsearch.mapping.meta-model.annotations)
+
+### Demo
 
 ```java
 package com.example.elasticsearch.pojo;
@@ -915,6 +917,8 @@ public class Item {
 }
 ```
 
+### 常用注解
+
 Spring Data通过注解来声明字段的映射属性，有下面的三个注解：
 
 - `@Document`
@@ -937,11 +941,13 @@ Spring Data通过注解来声明字段的映射属性，有下面的三个注解
 - `@Field` 标注文档字段
 
    - `name` 字段名, 默认Java字段名
-   - `type`：字段类型
+   - `type`：字段类型, 默认`FieldType.Auto`. 即每种类型都对应一种默认的ES类型, 其中, `String`对应`keyword`
    - `format`: 字段为`Date`类型时, 必须使用该属性设置字段的格式化方式
    - `analyzer`：分词器名称, 中文环境下常用`ik_max_word`
 
-> 参考[Mapping Annotation Overview](https://docs.spring.io/spring-data/elasticsearch/docs/4.0.2.RELEASE/reference/html/#elasticsearch.mapping.meta-model.annotations)
+### 其他
+
+当保存实体时, 若字段不存在, 会自动创建. 若字段存在, 但类型不匹配, 不会去修改字段, 仅仅写入这类型不一致的值.
 
 ## Dao类创建
 
