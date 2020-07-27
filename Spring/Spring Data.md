@@ -938,6 +938,7 @@ Spring Data通过注解来声明字段的映射属性，有下面的三个注解
 
    - `name` 字段名, 默认Java字段名
    - `type`：字段类型
+   - `format`: 字段为`Date`类型时, 必须使用该属性设置字段的格式化方式
    - `analyzer`：分词器名称, 中文环境下常用`ik_max_word`
 
 > 参考[Mapping Annotation Overview](https://docs.spring.io/spring-data/elasticsearch/docs/4.0.2.RELEASE/reference/html/#elasticsearch.mapping.meta-model.annotations)
