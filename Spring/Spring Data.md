@@ -941,8 +941,23 @@ Spring Data通过注解来声明字段的映射属性，有下面的三个注解
 - `@Field` 标注文档字段
 
    - `name` 字段名, 默认Java字段名
-   - `type`：字段类型, 默认`FieldType.Auto`. 即每种类型都对应一种默认的ES类型, 其中, `String`对应`keyword`
+   
+   - `type`：字段类型, 默认`FieldType.Auto`. 即每种类型都对应一种默认的ES类型, 其中, `String`类型字段会映射到`Text`, 同时有`keyword`的版本, 如
+   
+     ```
+     "branch": {
+         "type": "text",
+         "fields": {
+             "keyword": {
+                 "type": "keyword",
+                 "ignore_above": 256
+             }
+         }
+     }
+     ```
+   
    - `format`: 字段为`Date`类型时, 必须使用该属性设置字段的格式化方式
+   
    - `analyzer`：分词器名称, 中文环境下常用`ik_max_word`
 
 ### 其他
