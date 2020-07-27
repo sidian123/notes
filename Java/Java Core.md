@@ -555,6 +555,14 @@ java -Dname="Spring" -jar app.jar
   * `Socket.getInputStream()` 获取输入流
 
   在读取过程中, 若对方未返回数据, 会被堵塞.
+  
+* `Socket.close()` vs. `Socket.shutdownOutput()` vs. `InputStream.close()`或`OutputSream close()`
+
+  `close()`会关闭socket和输入输出流, 此时另一端读取会返回`-1`, 即EOF
+
+  `shutdownOutput()` 关闭输出流, 另一端将读取到EOF. 但是不影响输入流的读取.
+
+  调用`InputStream.close()`或`outputStream.close()`在关闭流的同时, 也会关闭socket.
 
 > 参考[oracle socket tutorial](https://docs.oracle.com/javase/tutorial/networking/sockets/index.html)
 
