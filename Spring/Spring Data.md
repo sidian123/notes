@@ -895,6 +895,7 @@ import org.springframework.data.elasticsearch.annotations.FieldType;
 @Document(indexName = "item",type = "docs", shards = 1, replicas = 0)
 public class Item {
     @Id
+    @Field(type=FieldType.Long)
     private Long id;
 
     @Field(type = FieldType.Text, analyzer = "ik_max_word")
