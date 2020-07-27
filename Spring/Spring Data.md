@@ -872,6 +872,35 @@ spring.redis.timeout=500
         		#password: 123456
   ```
 
+-----------------
+
+上述使用的Rest API接口来访问Elasticsearch, 但对老版本ES不兼容. 下面提供TCP连接的方法.
+
+* 降低Spring boot版本到`2.2.9.RELEASE`, 因为之后的版本不支持TCP连接了
+
+  ```xml
+  <parent>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-parent</artifactId>
+      <version>2.2.9.RELEASE</version>
+      <relativePath/> <!-- lookup parent from repository -->
+  </parent>
+  ```
+
+* 配置
+
+  ```yaml
+  spring:
+    data:
+      elasticsearch:
+  #      repositories:
+  #        enabled: true # 是否启用repository使用方式
+        cluster-nodes: 119.3.200.75:9600 # es的tcp ip和端口
+        cluster-name: gi-es-cluster # 集群名
+  ```
+
+  这里的`spring.data.elasticsearch.repositories.enabled`也可以使用上述用到的`@EnableElasticsearchRepositories`启动
+
 ## 实体类创建
 
 > 参考[Mapping Annotation Overview](https://docs.spring.io/spring-data/elasticsearch/docs/4.0.2.RELEASE/reference/html/#elasticsearch.mapping.meta-model.annotations)
