@@ -949,6 +949,8 @@ Spring Data通过注解来声明字段的映射属性，有下面的三个注解
 public interface ItemRepository extends ElasticsearchRepository<Item,Long> {}
 ```
 
+> 注意, 修改操作没有Jpa那样的理念哦, 即数据修改后, 必须显式保存`save()`
+
 ## 测试创建索引
 
 ```java
