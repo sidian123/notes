@@ -373,7 +373,7 @@ docker run -d --name elasticsearch  -p 9200:9200 -p 9300:9300 -e "discovery.type
 * Query DSL
 
   * 字段类查询
-    * 单次匹配(Term Level Query) 不对查询的内容进行分词
+    * 单词匹配(Term Level Query) 不对查询的内容进行分词
     * 全文索引(Full Text Query) 对查询的内容进行分词, 如查询"我在马路边", 被分词为"我", "在", "马路"等, 然后再去匹配.
   * 复合查询
 
@@ -401,9 +401,25 @@ docker run -d --name elasticsearch  -p 9200:9200 -p 9300:9300 -e "discovery.type
 
 ## 字段类查询
 
+[Elastic Search之Search API(Query DSL)、字段类查询、复合查询](https://blog.csdn.net/fanrenxiang/article/details/86477019)
+
+### 全文匹配
+
+
+
+
+
+
+
+### 单词匹配
+
+
+
 ## 复合查询
 
 
+
+## 其他
 
 * 简单查询形式
 
