@@ -832,82 +832,42 @@ spring.redis.timeout=500
 
 > 转载至[Spring Data Elasticsearch基本使用](https://www.cnblogs.com/ifme/p/12005026.html)
 
-## 创建工程
+## 配置
 
-我们使用spring脚手架新建一个demo，学习Elasticsearch
- ![img](.Spring%20Data/1580998-20191208103853285-184898013.png)
+* 引入依赖
 
-![img](.Spring%20Data/1580998-20191208103956723-1924752696.png)
+  ```xml
+  <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-data-elasticsearch</artifactId>
+  </dependency>
+  ```
 
-![img](.Spring%20Data/1580998-20191208104053392-1940449069.png)
- 一路NEXT
- pom.xml如下
+* 启用Elasticsearch
 
-```xml
-<?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
-    <modelVersion>4.0.0</modelVersion>
-    <parent>
-        <groupId>org.springframework.boot</groupId>
-        <artifactId>spring-boot-starter-parent</artifactId>
-        <version>2.0.7.RELEASE</version>
-        <relativePath/> <!-- lookup parent from repository -->
-    </parent>
-    <groupId>com.example</groupId>
-    <artifactId>elasticsearch</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
-    <name>elasticsearch</name>
-    <description>Demo project for Spring Boot</description>
+  ```java
+  @EnableElasticsearchRepositories
+  @SpringBootApplication
+  public class HelloSpringDataApplication {
+  
+      public static void main(String[] args) {
+          SpringApplication.run(HelloSpringDataApplication.class, args);
+      }
+  }
+  ```
 
-    <properties>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-        <java.version>1.8</java.version>
-    </properties>
+* 配置文件
 
-    <dependencies>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-data-elasticsearch</artifactId>
-        </dependency>
+  ```yaml
+  spring:
+  	elasticsearch:
+      	rest:
+        		uris: http://localhost:9600
+        		#username: root
+        		#password: 123456
+  ```
 
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-test</artifactId>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>junit</groupId>
-            <artifactId>junit</artifactId>
-            <version>4.12</version>
-            <scope>test</scope>
-        </dependency>
-    </dependencies>
-
-    <build>
-        <plugins>
-            <plugin>
-                <groupId>org.springframework.boot</groupId>
-                <artifactId>spring-boot-maven-plugin</artifactId>
-            </plugin>
-        </plugins>
-    </build>
-
-</project>
-```
-
-## 配置application.yaml文件
-
-```yaml
-spring:
-  data:
-    elasticsearch:
-      cluster-name: elasticsearch
-      cluster-nodes: 192.168.0.22:9300
-```
-
-## 实体类及注解
+## 实体类声明
 
 首先我们准备好实体类：
 
