@@ -184,6 +184,8 @@
 
 * 分页&排序
 
+  > 注意, 页码从0开始
+
   ```java
   @Repository
   public interface RelationshipDao extends JpaRepository<Relationship,Long> {
