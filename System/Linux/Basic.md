@@ -326,7 +326,7 @@ pwd（print working directory）打印当前工作目录。
 >grep [OPTIONS] PATTERN [FILE...]
 >
 >* `-i`：忽略大小写
->* `-v`：Invert the sense of matching, to select non-matching lines.
+>* `-v`：Invert the sense of matching, to select non-matching lines. 反向匹配
 >* `-E`(`egrep`)：使用扩展正规表达式
 
 看了`man grep`后，发现**基本正则**（grep）和**扩展正则**（egrep）基本没什么区别，但grep更符合我的预期。所有语言的正则语法都差不多，可参考：[正则表达式--java][2]
