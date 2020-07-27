@@ -916,20 +916,25 @@ Spring Data通过注解来声明字段的映射属性，有下面的三个注解
    作用在类，标记实体类为文档对象，一般有四个属性
 
   - indexName：对应索引库名称
-  - type：对应在索引库中的类型
+  - type：~~对应在索引库中的类型~~
   - shards：分片数量，默认5
   - replicas：副本数量，默认1
 
 - `@Id` 作用在成员变量，标记一个字段作为id主键
 
-- `@Field`
+   > spring data里的`Id`注解
 
-   作用在成员变量，标记为文档的字段，并指定字段映射属性：
+   > [spring data `id` vs. es `_id`](https://stackoverflow.com/questions/37277017/spring-data-elasticsearch-id-vs-id)
+   >
+   > spring data中被`@Id`注解的主键被设置值后, 在ES产生的文档中, `_id`与`_source.id`值一致. 若主键没有值, 那么ES产生的文档中, `_id`被ES自动生成, `_source.id`由于没有设置值, 因为为`null`.
 
-  - type：字段类型，取值是枚举：FieldType
-  - index：是否索引，布尔类型，默认是true
-  - store：是否存储，布尔类型，默认是false
-  - analyzer：分词器名称：ik_max_word
+- `@Field` 标注文档字段
+
+   - `name` 字段名, 默认Java字段名
+   - `type`：字段类型
+   - `analyzer`：分词器名称, 中文环境下常用`ik_max_word`
+
+> 参考[Mapping Annotation Overview](https://docs.spring.io/spring-data/elasticsearch/docs/4.0.2.RELEASE/reference/html/#elasticsearch.mapping.meta-model.annotations)
 
 ## 测试创建索引
 
