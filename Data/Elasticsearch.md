@@ -483,7 +483,60 @@ docker run -d --name elasticsearch  -p 9200:9200 -p 9300:9300 -e "discovery.type
 > * [ElasticSearch 字段类型介绍](https://www.jianshu.com/p/bfef6a890b42)
 > * [Field data types](https://www.elastic.co/guide/en/elasticsearch/reference/current/mapping-types.html)
 
-## Kibana
+## fields
+
+当一个字段有不同使用情况时, 可使用`fields`, 如
+
+```console
+PUT my_index
+{
+  "mappings": {
+    "properties": {
+      "city": {
+        "type": "text",
+        "fields": {
+          "raw": { 
+            "type":  "keyword"
+          }
+        }
+      }
+    }
+  }
+}
+
+PUT my_index/_doc/1
+{
+  "city": "New York"
+}
+
+PUT my_index/_doc/2
+{
+  "city": "York"
+}
+
+GET my_index/_search
+{
+  "query": {
+    "match": {
+      "city": "york" 
+    }
+  },
+  "sort": {
+    "city.raw": "asc" 
+  },
+  "aggs": {
+    "Cities": {
+      "terms": {
+        "field": "city.raw" 
+      }
+    }
+  }
+}
+```
+
+相当于多声明了一个字段`city.raw`, 但比仅多声明字段有更多的功能. 如上述`city.raw`是`city`的关键字类型的版本, `city`全文索引时, 可以按照`city.raw`排序和分组.
+
+# Kibana
 
 * 介绍
 
