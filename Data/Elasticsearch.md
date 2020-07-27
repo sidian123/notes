@@ -478,7 +478,10 @@ docker run -d --name elasticsearch  -p 9200:9200 -p 9300:9300 -e "discovery.type
   * `text` 用于全文索引
   * `keyword` 用于精确匹配.
 
-> 详细见[ElasticSearch 字段类型介绍](https://www.jianshu.com/p/bfef6a890b42)
+> 详细见
+>
+> * [ElasticSearch 字段类型介绍](https://www.jianshu.com/p/bfef6a890b42)
+> * [Field data types](https://www.elastic.co/guide/en/elasticsearch/reference/current/mapping-types.html)
 
 ## Kibana
 
