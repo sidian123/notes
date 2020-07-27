@@ -867,7 +867,7 @@ spring.redis.timeout=500
         		#password: 123456
   ```
 
-## 实体类声明
+## 实体类创建
 
 首先我们准备好实体类：
 
@@ -935,6 +935,13 @@ Spring Data通过注解来声明字段的映射属性，有下面的三个注解
    - `analyzer`：分词器名称, 中文环境下常用`ik_max_word`
 
 > 参考[Mapping Annotation Overview](https://docs.spring.io/spring-data/elasticsearch/docs/4.0.2.RELEASE/reference/html/#elasticsearch.mapping.meta-model.annotations)
+
+## Dao类创建
+
+```java
+@Repository
+public interface ItemRepository extends ElasticsearchRepository<Item,Long> {}
+```
 
 ## 测试创建索引
 
