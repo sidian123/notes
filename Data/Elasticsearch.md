@@ -465,6 +465,17 @@ docker run -d --name elasticsearch  -p 9200:9200 -p 9300:9300 -e "discovery.type
 
 # 其他
 
+## 字段类型
+
+![img](.Elasticsearch/6591571-3631938ca804c184.png)
+
+* 字符串
+  * ~~`string`已弃用~~
+  * `text` 用于全文索引
+  * `keyword` 用于精确匹配.
+
+> 详细见[ElasticSearch 字段类型介绍](https://www.jianshu.com/p/bfef6a890b42)
+
 ## Kibana
 
 * 介绍
