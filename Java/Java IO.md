@@ -192,7 +192,7 @@ inputstream.unread(data);
   
 * EOF
 
-  读到EOF, 会返回`-1` , 并且EOF仍在流中, 下次读还是一样的结果.
+  读到EOF, 会返回`-1` , 并且EOF仍在流中, 下次读还是一样的结果. 此外, 输入输出流都处于EOF状态并不代表Socket处于close状态, 仍需手动关闭.
 
 > 参考[oracle socket tutorial](https://docs.oracle.com/javase/tutorial/networking/sockets/index.html)
 
