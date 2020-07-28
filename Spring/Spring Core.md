@@ -216,7 +216,7 @@ Spring提供了注解来异步执行和调度任务.
   }	
   ```
   
-  > 除此之外, 还有`org.springframework.util.concurrent.ListenableFuture`和`java.util.concurrent.CompletableFuture`
+  > 除此之外, 返回类型还可以是`org.springframework.util.concurrent.ListenableFuture`和`java.util.concurrent.CompletableFuture`
 
   指定使用的执行器, 而不是`AsyncConfigurer`配置的默认执行器
 
@@ -242,6 +242,12 @@ Spring提供了注解来异步执行和调度任务.
       }
   }
   ```
+
+* 等待所有任务完成
+
+  方法需返回`CompletableFuture`, 接着调用静态方法`CompletableFuture.allOf(...).join()`
+
+  > 参考[Waiting on a list of Future](https://stackoverflow.com/questions/19348248/waiting-on-a-list-of-future)
 
 * 注意点
 
