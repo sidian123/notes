@@ -1,4 +1,4 @@
-# 一 流
+# 流
 
 * `java.io`: 含有对文件, 网络流, 内存缓存进行输入输出操作的类. 
 * 流分为字节流和字符流, 字符流也就是在字节流的基础上多了个编码或节码器.
@@ -38,7 +38,7 @@ inputstream.unread(data);
 * `read()` 读出字节
 * `unread()` 让字节放回去
 
-# 二 文件
+# 文件
 
 * `java.nio.file`: Defines interfaces and classes for the Java virtual machine to access files, file attributes, and file systems.
 
@@ -152,6 +152,45 @@ inputstream.unread(data);
 * `Files.getParent()`根据地址计算的, 不会考虑系统真实情况. 如`./`的`getParent()`将返回`null`. 因此最好将`Path`转化为绝对路径再计算.
 
   > 其他方法估计也是这样的
+
+# Socket
+
+* Socket定义
+
+  套接字(Socket)是网络上运行的两个程序之间的双向通信链路的一个端点。
+
+  套接字会绑定到端口上, 让数据能发送到正确的端口上.
+
+* 交互
+
+  Server监听本机的一个端口, 当Client通过该端口与Server成功建立连接后, Server和Client都会产生Socket, 用于交互. 
+
+  Client的Socket临时会绑定到一个端口上 ( 由系统分配 ), 此时该端口不可被其他程序使用. Server则不同, 一个端口可建立无数个连接, 即仍会监听端口, 继续产生新的Socket.
+
+* 基本使用
+
+  Server监听端口, `accpet()`会阻塞, 直到建立一个socket连接
+
+  ```java
+  Socket clientSocket = serverSocket.accept();  
+  ```
+
+  之后Server和Client都可通过`Socket`通信.
+
+  * `Socket.getOutputStream()` 获取输出流
+  * `Socket.getInputStream()` 获取输入流
+
+  在读取过程中, 若对方未返回数据, 会被堵塞.
+  
+* `Socket.close()` vs. `Socket.shutdownOutput()` vs. `InputStream.close()`或`OutputSream close()`
+
+  `close()`会关闭socket和输入输出流, 此时另一端读取会返回`-1`, 即EOF
+
+  `shutdownOutput()` 关闭输出流, 另一端将读取到EOF. 但是不影响输入流的读取.
+
+  调用`InputStream.close()`或`outputStream.close()`在关闭流的同时, 也会关闭socket.
+
+> 参考[oracle socket tutorial](https://docs.oracle.com/javase/tutorial/networking/sockets/index.html)
 
 # 参考
 
