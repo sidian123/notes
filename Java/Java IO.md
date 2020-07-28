@@ -189,6 +189,10 @@ inputstream.unread(data);
   `shutdownOutput()` 关闭输出流, 另一端将读取到EOF. 但是不影响输入流的读取.
 
   调用`InputStream.close()`或`outputStream.close()`在关闭流的同时, 也会关闭socket.
+  
+* EOF
+
+  读到EOF, 会返回`-1` , 并且EOF仍在流中, 下次读还是一样的结果.
 
 > 参考[oracle socket tutorial](https://docs.oracle.com/javase/tutorial/networking/sockets/index.html)
 
