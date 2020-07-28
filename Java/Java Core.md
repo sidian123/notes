@@ -391,7 +391,11 @@ Google提供的一个工具, 先记录下. 一般引入了Swagger的项目都引
 
 # Hutool (神器)
 
-[Hutool Doc](https://hutool.cn/docs/#/)
+> [Hutool Doc](https://hutool.cn/docs/#/)
+
+## ArrayUtil
+
+* 包装类数组 --> 基本类型数组 `unWrap()`
 
 # 原生工具
 
