@@ -342,7 +342,6 @@ public class User {
   }
   ```
 
-  
 
 #### jdbcType <=> javaType
 
@@ -578,6 +577,50 @@ User(id=1, name=杀杀杀钉钉)
 那问题来了, 有人说, 修改一个数据, 需要查出来, 然后更新. 相当于查了两次, 影响性能. 那我就来反驳了... 首先查的次数远大于写, 这是毋庸置疑的. 写的次数很少, 那么这点性能消耗相对于高效的开发来说, 是可以接受的. 
 
 多表查询呢? 目前我不清楚, 但是现在的趋势是单表查询. TODO
+
+### 自定义ID生成器
+
+一般的, 插入一条记录时, 若数据库不存在, 则插入, 否则更新; 但是, 插入时, 无论实体是否设置了id, 插入时用的还是自动生成的.
+
+下面实现一个ID生成器, 若实体设置了ID, 则插入该ID; 若为设置, 则使用`GenerationType.IDENTITY`策略
+
+```java
+/**
+ *  自定义的主键生成策略，如果填写了主键id，如果数据库中没有这条记录，则新增指定id的记录；否则更新记录
+ *
+ *  如果不填写主键id，则利用数据库本身的自增策略指定id
+ *
+ * Created by @author yihui in 20:51 19/11/13.
+ */
+public class ManulInsertGenerator extends IdentityGenerator {
+
+    @Override
+    public Serializable generate(SharedSessionContractImplementor s, Object obj) throws HibernateException {
+        // 获取实体id
+        Serializable id = s.getEntityPersister(null, obj).getClassMetadata().getIdentifier(obj, s);
+
+        if (id != null) { // id不为空
+            // 使用该id
+            return id;
+        } else { // id为空
+            // 使用IdentityGenerator自己的生成策略
+            return super.generate(s, obj);
+        }
+    }
+}
+```
+
+声明ID时, 同时配置使用的生成器
+
+```java
+@Id
+@GeneratedValue(strategy = GenerationType.AUTO, generator = "myid")
+@GenericGenerator(name = "myid", strategy = "com.git.hui.boot.jpa.generator.ManulInsertGenerator")
+@Column(name = "id")
+private Integer id;
+```
+
+> 来源: [SpringBoot系列教程JPA之指定id保存](https://juejin.im/post/5dd5400d6fb9a05a92108429)
 
 ## 参考
 
