@@ -292,6 +292,7 @@ char capitalC = 'C';
 byte b = 100;
 short s = 10000;
 int i = 100000;
+long l= 1000L;
 int[] myIntArray = {1, 2, 3};
 String[] myStringArray = {"a", "b", "c"};
 ```
