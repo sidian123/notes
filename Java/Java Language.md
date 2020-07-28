@@ -1853,7 +1853,7 @@ public @interface Schedules {
  %[flags][width][.precision]conversion
 ```
 
-* `flags`:控制参数显示的标识符
+* `flags`: 设置参数输出格式, 即排版
 * `width`: 输出数字的最小个数. 浮点数中指整数和小数部分, 不包括小数点.
 * `.presision`: 浮点数中小数部分精度, 貌似默认6位
 * `conversion`: 参数如何被格式化, 取决于该参数的类型
@@ -1884,6 +1884,7 @@ public @interface Schedules {
 
 * `-`左对齐
 * `+`总是包含符号
+* `0`空白字符以`0`填充
 
 例子见[ormatting Numeric Print Output](https://docs.oracle.com/javase/tutorial/java/data/numberformat.html)
 
