@@ -620,6 +620,8 @@ public class ManulInsertGenerator extends IdentityGenerator {
 private Integer id;
 ```
 
+> `strategy = GenerationType.AUTO`可省略
+
 > 来源: [SpringBoot系列教程JPA之指定id保存](https://juejin.im/post/5dd5400d6fb9a05a92108429)
 
 ## 参考
