@@ -311,6 +311,8 @@ public class User {
 
 * `@Column` 标注列
 
+* `@Temporal` 设置`Date`映射到数据库的类型, 如`Date`(默认), `TIME`, `TIMESTAMP`
+
 * `@Index` 声明索引
 
   定义多个单列索引
