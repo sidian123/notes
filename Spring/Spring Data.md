@@ -648,6 +648,12 @@ public class Employee {
 3. 配置其他数据源`term` 
 
    不详细给出代码了, 只需将里面的`drug`替换为`term`, 以及去掉`@Primary`
+   
+4. 事务, 使用`@Transactional`时, 会使用主数据源的事务管理器, 因为有`@Primary`. 使用其他事务管理器, 需要显示指定事务管理器
+
+   ```java
+   @Transactional(transactionManager = "termTransactionManager")
+   ```
 
 > 参考如下, 参数链接的内容已经不适用了, 仅做参考
 >
