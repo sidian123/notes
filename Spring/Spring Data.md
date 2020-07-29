@@ -540,7 +540,119 @@ public class Employee {
 
 ## 自定义查询
 
+## 多数据源
 
+> 一般情况下建议不要使用多数据源!!!!! 它不符合微服务理念, 且这里实现的多数据源方案, 指不定就那里会出问题
+
+一般的, 实现多数据源有两种方案: 
+
+1. 一个数据库对应一个数据源, 一个事务管理器, 一个JPA实体管理器.
+
+2. 一个数据库对应一个数据源, 多个数据库共享同一个事务管理器和JPA实体管理器. 
+
+但问题时是, Hibernate封装太深了, 第一个方案比较方便. 像Mybatis, 适合第二个方案.  但无论哪个方案, 都会对数据源交叉使用的事务造成影响.
+
+这里介绍第一个方案, 要注意的是, 多数据源造成了大部分自动配置失效了.
+
+1. 配置文件
+
+   定义两个数据源, 和配置JPA. 注意, 请不要漏掉其中任何一个属性.
+
+   ```yaml
+   spring:
+     jpa:
+       show-sql: false
+       hibernate:
+         ddl-auto: validate
+       database-platform: org.hibernate.dialect.MySQL57Dialect
+   datasource:
+     drug:
+       url: jdbc:mysql://localhost:3306/db_drug?useUnicode=true&characterEncoding=utf-8&allowMultiQueries=true&&useSSL=false&serverTimezone=CTT
+       username: root
+       password: jingyi@2020
+     term:
+       url: jdbc:mysql://localhost:3306/db_term?useUnicode=true&characterEncoding=utf-8&allowMultiQueries=true&&useSSL=false&serverTimezone=CTT
+       username: root
+       password: jingyi@2020
+   ```
+
+2. 配置主数据源`drug`
+
+   ```java
+   import com.clinical.jingyi.term.collect_symptom.infrastructure.Constant;
+   import org.springframework.boot.context.properties.ConfigurationProperties;
+   import org.springframework.boot.orm.jpa.EntityManagerFactoryBuilder;
+   import org.springframework.context.annotation.Bean;
+   import org.springframework.context.annotation.Configuration;
+   import org.springframework.context.annotation.Primary;
+   import org.springframework.core.env.Environment;
+   import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
+   import org.springframework.jdbc.datasource.DriverManagerDataSource;
+   import org.springframework.orm.jpa.JpaTransactionManager;
+   import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
+   import org.springframework.transaction.PlatformTransactionManager;
+   import org.springframework.transaction.annotation.EnableTransactionManagement;
+   
+   import javax.annotation.Resource;
+   import javax.sql.DataSource;
+   import java.util.Properties;
+   
+   /**
+    * @author sidian
+    * @date 2020/7/29 13:02
+    */
+   @Configuration
+   @EnableTransactionManagement
+   @EnableJpaRepositories(
+           entityManagerFactoryRef = "drugEntityManagerFactory",
+           transactionManagerRef = "drugTransactionManager",
+           basePackages = {Constant.DAO_PACKAGE_NAME+"."+"drug"})
+   public class DrugDatasourceConfiguration {
+       @Resource
+       Environment environment;
+   
+       @Bean
+       @Primary
+       @ConfigurationProperties(prefix = "datasource.drug")
+       DataSource drugDatasource() {
+           return new DriverManagerDataSource();
+       }
+   
+       @Bean
+       @Primary
+       LocalContainerEntityManagerFactoryBean drugEntityManagerFactory(EntityManagerFactoryBuilder builder) {
+           LocalContainerEntityManagerFactoryBean em = builder
+                   .dataSource(drugDatasource())
+                   .packages(Constant.DAO_PACKAGE_NAME+"."+"drug")
+                   .build();
+           // 将spring data jpa配置转化为hibernate配置. 其他的自行补充
+           Properties properties = new Properties();
+           properties.setProperty("hibernate.hbm2ddl.auto", environment.getProperty("spring.jpa.hibernate.ddl-auto"));
+           properties.setProperty("hibernate.dialect",environment.getProperty("spring.jpa.database-platform"));
+           properties.setProperty("hibernate.show_sql",environment.getProperty("spring.jpa.show-sql"));
+           properties.setProperty("hibernate.physical_naming_strategy", "org.springframework.boot.orm.jpa.hibernate.SpringPhysicalNamingStrategy"); // 与spring data jpa名字映射一致
+           em.setJpaProperties(properties);
+           return em;
+       }
+   
+       @Bean
+       @Primary
+       PlatformTransactionManager drugTransactionManager(EntityManagerFactoryBuilder builder) {
+           JpaTransactionManager txManager = new JpaTransactionManager();
+           txManager.setEntityManagerFactory(drugEntityManagerFactory(builder).getObject());
+           return txManager;
+       }
+   }
+   ```
+
+3. 配置其他数据源`term` 
+
+   不详细给出代码了, 只需将里面的`drug`替换为`term`, 以及去掉`@Primary`
+
+> 参考如下, 参数链接的内容已经不适用了, 仅做参考
+>
+> * [Spring JPA – Multiple Databases](https://www.baeldung.com/spring-data-jpa-multiple-databases)
+> * [springboot项目使用spring-data-jpa如何连接多数据源](https://www.imooc.com/article/43065)
 
 ## 其他
 
