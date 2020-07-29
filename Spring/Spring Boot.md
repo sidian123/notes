@@ -164,11 +164,11 @@ spring boot整合了spring框架和三方库后，提供了自动配置的功能
 
   > 同名属性覆盖顺序参考：[Externalized Configuration](<https://docs.spring.io/spring-boot/docs/2.0.5.RELEASE/reference/htmlsingle/#boot-features-external-config>)
 
-- 获取`Environment`中属性值的两种方式：
+- 获取`Environment`中属性值的方式：
 
   - `@Value`：将属性绑定到类的字段上，配合SpEL表达式使用。
   - `@ConfigurationProperties`：将一组属性绑定到类上。
-  - 这两个玩意，复杂的呀~~皮！
+  - 直接注入`Environment`
 
 - 一般使用配置文件`application.properties`,`application.yml`
 
