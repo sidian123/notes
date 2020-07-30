@@ -540,6 +540,111 @@ public class Employee {
 
 ## 自定义查询
 
+* 介绍
+
+  `@Query`中可声明`JPQL `语句(默认), 和原生SQL语句; JPQL的具体使用见下
+
+* 实体类`Employee`
+
+  ```java
+  @Data
+  public class Employee {
+      private  Integer id;
+      private String name;
+      private Integer age;
+  }
+  ```
+
+* 基本查询
+
+  ```java
+  @Query("select o from Employee o where id=(select max(id) from Employee t1)")
+  Employee getEmployeeById();
+  ```
+
+  > `Employee`表示类
+
+* 参数传递
+
+  数字表示位置, `1`表示第一个
+
+  ```java
+  @Query("select o from Employee o where o.name=?1 and o.age=?2")
+  List<Employee> queryParams1(String name, Integer age);
+  ```
+
+  或者使用参数名
+
+  ```java
+  @Query("select o from Employee o where o.name=:name and o.age=:age")
+  List<Employee> queryParams2(@Param("name") String name, @Param("age") Integer age);
+  ```
+
+  > `@Param`据说可忽略?
+
+* like查询
+
+  ```java
+  @Query("select o from Employee o where o.name like %?1%")
+  List<Employee> queryLike1(String name);
+  ```
+
+* 分页&排序
+
+  ```java
+  @Query( "SELECT * FROM USERS WHERE LASTNAME = ?1")
+  Page<User> findByLastname(String lastname, Pageable pageable);
+  ```
+
+  ```java
+  @Query("select u from User u where u.lastname like ?1%")
+  List<User> findByAndSort(String lastname, Sort sort);
+  ```
+
+* 更新
+
+  必须提供`@Modifying`注解
+
+  ```java
+  @Modifying
+  @Query("update Employee o set o.age = :age where o.id = :id")
+  void update(@Param("id") Integer id, @Param("age") Integer age);
+  ```
+
+* 删除
+
+  必须提供`@Modifying`注解
+
+  ```java
+  @Modifying
+  @Query("delete from Employee o where o.id = :id")
+  void delete(@Param("id") Integer id);
+  ```
+
+* 支持SpEL, 以及提供`#entityName`表示实体代表的表名
+
+  ```java
+  @Query("select u from #{#entityName} u where u.lastname = ?1")
+  List<User> findByLastname(String lastname);
+  ```
+
+  > 好处: 当实体类名改变时, 不用再修改JPQL了
+
+* 原生SQL
+
+  没有了解析过程, 不能使用类名当作表, 类属性作为字段名, 分页功能了. 但是参数获取的方式还是一样.
+
+  ```java
+  @Query(value = "SELECT * FROM USERS WHERE EMAIL_ADDRESS = ?1", nativeQuery = true)
+  User findByEmailAddress(String emailAddress);
+  ```
+
+> 参考:
+>
+> * [SpringData JPA @Query 注解实现自定义查询方法](https://www.jianshu.com/p/f93a62a7ec39)
+>
+> * [Using @Query](https://docs.spring.io/spring-data/jpa/docs/2.3.2.RELEASE/reference/html/#jpa.query-methods.at-query)
+
 ## 多数据源
 
 > 一般情况下建议不要使用多数据源!!!!! 它不符合微服务理念, 且这里实现的多数据源方案, 指不定就那里会出问题
