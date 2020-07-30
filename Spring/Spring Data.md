@@ -548,6 +548,7 @@ public class Employee {
 
   ```java
   @Data
+  @Entity
   public class Employee {
       private  Integer id;
       private String name;
@@ -562,7 +563,9 @@ public class Employee {
   Employee getEmployeeById();
   ```
 
-  > `Employee`表示类
+  > `Employee`表示实体类的表明, 若实体类用`@Entity`配置了其他表名, 则JPQL中需要添加该表名.
+  >
+  > sql中可使用`<tableName>.entityField`的方式设置字段名.
 
 * 参数传递
 
@@ -628,11 +631,11 @@ public class Employee {
   List<User> findByLastname(String lastname);
   ```
 
-  > 好处: 当实体类名改变时, 不用再修改JPQL了
+  > 好处: 当实体表明改变时, 不用再修改JPQL了
 
 * 原生SQL
 
-  没有了解析过程, 不能使用类名当作表, 类属性作为字段名, 分页功能了. 但是参数获取的方式还是一样.
+  没有了解析过程, 不能以`.`的方式获取字段名, 和使用分页功能了. 但是参数获取的方式还是一样.
 
   ```java
   @Query(value = "SELECT * FROM USERS WHERE EMAIL_ADDRESS = ?1", nativeQuery = true)
