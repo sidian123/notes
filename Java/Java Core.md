@@ -397,6 +397,76 @@ Google提供的一个工具, 先记录下. 一般引入了Swagger的项目都引
 
 * 包装类数组 --> 基本类型数组 `unWrap()`
 
+## Excel
+
+### start
+
+* 需要额外引入依赖
+
+  ```xml
+  <dependency>
+      <groupId>org.apache.poi</groupId>
+      <artifactId>poi-ooxml</artifactId>
+      <version>4.1.2</version>
+  </dependency>
+  ```
+
+* `ExcelUtil`
+
+  提供便利方法, 获取`ExcelReader`和`ExcelWriter`
+
+### ExcelWriter
+
+* 基本操作
+
+  * `merge()` 合并单元格
+  * `write()` 写入数据
+  * `flush()` 刷新到流中
+  * `close()` 关闭资源, 也会将数据写入到流中.
+
+  > 仅在调用`flush()`或`close()`后, 数据才真正的写入到了流.
+
+* 操作行
+
+  默认位于第0行.
+
+  * `getCurrentRow()` 获取当前操作行
+  * `passCurrentRow()` 跳过当前行
+  * `passRows()` 跳过指定行数
+
+* 标题
+
+  * 输出方式
+
+    * 方式一
+
+      `write()` 写出数据的同时写出标题. 不同数据类型, 获取标题方式不同, 如`List`的第一行被当作标题, `Map`的key作为标题, Bean的字段名作为标题
+
+    * 方式二
+
+      `merge()` 合并单元格后填充标题
+
+    * 方式三
+
+      直接写入标题.
+
+  * 自定义Bean的key别名 & 写入顺序
+
+    ```java
+    //自定义标题别名
+    writer.addHeaderAlias("name", "姓名");
+    writer.addHeaderAlias("age", "年龄");
+    writer.addHeaderAlias("score", "分数");
+    writer.addHeaderAlias("isPass", "是否通过");
+    writer.addHeaderAlias("examDate", "考试时间");
+    ```
+
+    若仅保证顺序, 不修改标题名
+
+    ```java
+    writer.addHeaderAlias("age", "age")
+    ```
+
 # 原生工具
 
 ## 进程相关
