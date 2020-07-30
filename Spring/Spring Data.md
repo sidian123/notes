@@ -396,6 +396,12 @@ public class User {
 public interface UserDao extends JpaRepository<User, Integer> {}
 ```
 
+* 删除操作
+  * `CrudRepository.deleteAll()()` 删除全部, 每次仅删除一条(低效)
+  * `JpaRepository.deleteAllInBatch()` 删除全部, 仅一条语句完成.(高效)
+
+
+
 ### 使用Demo
 
 ```java
