@@ -318,7 +318,7 @@ spring mvc会在url模式后默认添加 .* 后缀匹配，因此模式/person�
 
 ### [@RequestParam](https://docs.spring.io/spring/docs/current/spring-framework-reference/web.html#mvc-ann-requestparam)
 
-该注解用于将**请求参数**绑定到控制器**方法参数**上，如果参数是POJO，则绑定到对象属性上。
+该注解用于将**请求参数**或**Form表单**参数绑定到控制器**方法参数**上，如果参数是POJO，则绑定到对象属性上。
 
 如下例子中, 请求参数`petId`将传入到方法参数`petId`上:
 
