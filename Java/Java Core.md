@@ -420,7 +420,8 @@ Google提供的一个工具, 先记录下. 一般引入了Swagger的项目都引
 * 基本操作
 
   * `merge()` 合并单元格
-  * `write()` 写入数据
+  * `write()` 写入数据(二维)
+  * `writeRow()` 写入一行
   * `flush()` 刷新到流中
   * `close()` 关闭资源, 也会将数据写入到流中.
 
@@ -440,7 +441,7 @@ Google提供的一个工具, 先记录下. 一般引入了Swagger的项目都引
 
     * 方式一
 
-      `write()` 写出数据的同时写出标题. 不同数据类型, 获取标题方式不同, 如`List`的第一行被当作标题, `Map`的key作为标题, Bean的字段名作为标题
+      `writeRow()` 写出数据的同时写出标题. 不同数据类型, 获取标题方式不同, 如`List`的第一行被当作标题, `Map`的key作为标题, Bean的字段名作为标题
 
     * 方式二
 
@@ -466,6 +467,10 @@ Google提供的一个工具, 先记录下. 一般引入了Swagger的项目都引
     ```java
     writer.addHeaderAlias("age", "age")
     ```
+
+### ExcelReader
+
+* `read()`读取所有数据
 
 # 原生工具
 
