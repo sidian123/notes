@@ -414,6 +414,10 @@ Google提供的一个工具, 先记录下. 一般引入了Swagger的项目都引
 * `ExcelUtil`
 
   提供便利方法, 获取`ExcelReader`和`ExcelWriter`
+  
+* sheet操作
+
+  * `setSheet()` 设置当前操作sheet
 
 ### ExcelWriter
 
