@@ -319,7 +319,7 @@ Feign是一个**声明式**的Rest API的客户端, 支持Spring MVC的注解, �
 只需写Rest API对应的接口+注解, 然后在接口上加上`@FeignClient`, 如
 
 ```java
-@FeignClient(value = "service-client",fallback = Fallback.class,path = "/user")
+@FeignClient(name = "service-client",fallback = Fallback.class,path = "/user")
 @ResponseBody
 public interface UserService {
     @GetMapping("/")
@@ -335,14 +335,12 @@ public interface UserService {
 
 然后注入该bean并使用即可.
 
-* 存在服务
+* `name` 服务名
+* `path` 微服务的上下文
 
-  * `value` 指定微服务名
-  * `path` 指定微服务上下文
+* `url` 不存在服务发现时, 服务的具体url前缀, 如`http://localhost:8080/user`
 
-* 不存在服务
-
-  `url` 服务url前缀, 如`http://localhost:8080/user`
+  > `path`与`url`在不同情况下, 仅设置一个即可. 
 
 > `path="/user"`相当于`@RequestMapping("/user")`
 >
