@@ -329,6 +329,15 @@ public interface UserService {
 
 然后注入该bean并使用即可.
 
+* 存在服务
+
+  * `value` 指定微服务名
+  * `path` 指定微服务上下文
+
+* 不存在服务
+
+  `url` 服务url前缀, 如`http://localhost:8080/user`
+
 > `path="/user"`相当于`@RequestMapping("/user")`
 >
 > `fallback`属性是配置Hystrix的, 见下节
