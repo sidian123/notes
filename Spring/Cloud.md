@@ -308,6 +308,12 @@ Feign是一个**声明式**的Rest API的客户端, 支持Spring MVC的注解, �
 </dependency>
 ```
 
+启用Feign
+
+```java
+@EnableFeignClients
+```
+
 ## 使用
 
 只需写Rest API对应的接口+注解, 然后在接口上加上`@FeignClient`, 如
