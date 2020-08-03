@@ -52,6 +52,7 @@
 - [x] Vue动画
 - [x] JavaScript Decorator
 - [ ] elasticsearch query dsl
+- [ ] gitlab + teamcity + nginx + nexus + dockerhub
 
 # 人生规划
 
