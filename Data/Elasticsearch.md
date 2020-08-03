@@ -475,6 +475,8 @@ docker run -d --name elasticsearch  -p 9200:9200 -p 9300:9300 -e "discovery.type
 
 ## 备份&恢复
 
+[elasticsearch备份与恢复](https://www.jianshu.com/p/22444c665ac3)
+
 ### 介绍
 
 * 可对整个集群备份, 或对单个索引备份
