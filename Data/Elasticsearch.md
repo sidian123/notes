@@ -647,6 +647,8 @@ PUT my_index/_doc/1
 
 [Windows下ElasticSearch的Head安装及基本使用](https://www.cnblogs.com/hong-fithing/p/11221020.html)
 
+[elasticsearch-head的使用](https://www.cnblogs.com/xuwenjin/p/8792919.html)
+
 # 参考
 
 * [Elastic Stack and Product Documentation](https://www.elastic.co/guide/index.html) 官方文档
