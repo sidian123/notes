@@ -1706,11 +1706,27 @@ print(MyClass.a) #23
 
 ## 其他
 
-### 通过属性名获取属性值
+### objct vs. dict
 
-```python
-getattr(myobject, my_str)
-```
+* 通过属性名获取对象属性值
+
+  ```python
+  getattr(myobject, my_str)
+  ```
+
+* 对象转化为dict
+
+  ```python
+  a.__dict__
+  ```
+
+  或
+
+  ```python
+  vars(a)
+  ```
+
+  
 
 # 错误&异常
 
