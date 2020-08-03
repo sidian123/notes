@@ -494,7 +494,9 @@ docker run -d --name elasticsearch  -p 9200:9200 -p 9300:9300 -e "discovery.type
 * 恢复快照
 * 删除快照
 
+# 集群
 
+[Elasticsearch集群配置](https://www.jianshu.com/p/15d6241e7844)
 
 # 其他
 
@@ -598,7 +600,9 @@ PUT my_index/_doc/1
 }
 ```
 
+## elasticsearch-head
 
+**[elasticsearch-head](https://github.com/mobz/elasticsearch-head)**
 
 # Kibana
 
