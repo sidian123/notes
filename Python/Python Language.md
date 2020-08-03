@@ -1704,6 +1704,14 @@ print(MyClass.a) #23
 
 > 参考[Python's Instance, Class, and Static Methods Demystified](https://realpython.com/instance-class-and-static-methods-demystified/)
 
+## 其他
+
+### 通过属性名获取属性值
+
+```python
+getattr(myobject, my_str)
+```
+
 # 错误&异常
 
 ## 异常类型
