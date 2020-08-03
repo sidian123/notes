@@ -469,6 +469,8 @@ docker run -d --name elasticsearch  -p 9200:9200 -p 9300:9300 -e "discovery.type
 
 # 备份&恢复
 
+## 介绍
+
 * 可对整个集群备份, 或对单个索引备份
 
   > 备份数据包含索引
@@ -485,7 +487,12 @@ docker run -d --name elasticsearch  -p 9200:9200 -p 9300:9300 -e "discovery.type
 
   ![image-20200803172706495](.Elasticsearch/image-20200803172706495.png)
 
+## 操作
 
+* 注册仓库
+* 创建快照
+* 恢复快照
+* 删除快照
 
 
 
