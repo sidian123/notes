@@ -546,21 +546,31 @@ Python的解释器很多，但使用最广泛的还是CPython。如果要和Java
     
       与索引访问不用, 键不存在时, 该方法不会抛出异常`KeyError`
     
-* 删除
-  
-  ```python
-  del tel['sape']
+  * 删除
+    
+    ```python
+    del tel['sape']
     ```
+    
+    * 获取所有键 `list(d)` ; 获取排序过的键`sorted(d)`
+    
+    * 遍历键值
+    
+      ```python
+      knights = {'gallahad': 'the pure', 'robin': 'the brave'}
+      for k, v in knights.items():
+          print(k, v)
+      ```
   
-  * 获取所有键 `list(d)` ; 获取排序过的键`sorted(d)`
+  * 合并
   
-  * 遍历键值
+    通过解构操作, 合并dict
   
     ```python
-    knights = {'gallahad': 'the pure', 'robin': 'the brave'}
-    for k, v in knights.items():
-        print(k, v)
+    z = {**x, **y}
     ```
+  
+    
 
 ## bool
 
