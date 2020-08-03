@@ -467,9 +467,15 @@ docker run -d --name elasticsearch  -p 9200:9200 -p 9300:9300 -e "discovery.type
   }'
   ```
 
-# 备份&恢复
+# 进阶
 
-## 介绍
+* 集群 & 节点
+* 分片
+* 备份
+
+## 备份&恢复
+
+### 介绍
 
 * 可对整个集群备份, 或对单个索引备份
 
@@ -487,14 +493,14 @@ docker run -d --name elasticsearch  -p 9200:9200 -p 9300:9300 -e "discovery.type
 
   ![image-20200803172706495](.Elasticsearch/image-20200803172706495.png)
 
-## 操作
+### 操作
 
 * 注册仓库
 * 创建快照
 * 恢复快照
 * 删除快照
 
-# 集群
+## 集群
 
 [Elasticsearch集群配置](https://www.jianshu.com/p/15d6241e7844)
 
@@ -600,10 +606,6 @@ PUT my_index/_doc/1
 }
 ```
 
-## elasticsearch-head
-
-**[elasticsearch-head](https://github.com/mobz/elasticsearch-head)**
-
 # Kibana
 
 * 介绍
@@ -638,6 +640,12 @@ PUT my_index/_doc/1
 
   * [Configure Kibana](https://www.elastic.co/guide/en/kibana/current/settings.html) kibana的配置
   * [Install Kibana with Docker](https://www.elastic.co/guide/en/kibana/current/docker.html)
+
+# elasticsearch-head
+
+**[elasticsearch-head](https://github.com/mobz/elasticsearch-head)**
+
+[Windows下ElasticSearch的Head安装及基本使用](https://www.cnblogs.com/hong-fithing/p/11221020.html)
 
 # 参考
 
