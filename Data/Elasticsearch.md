@@ -529,7 +529,11 @@ docker run -d --name elasticsearch  -p 9200:9200 -p 9300:9300 -e "discovery.type
 
     > 创建了仓库`es_backup`
 
-    配置详细见[Shared file system repository](https://www.elastic.co/guide/en/elasticsearch/reference/current/snapshots-register-repository.html#snapshots-filesystem-repository)
+    * `type` : `fs`表示使用本地文件系统
+
+    * `location` : 仓库地址, 必须在`path.repo`指定的目录下. 可以为相对地址, 相对于`path.repo`
+
+      > 配置详细见[Shared file system repository](https://www.elastic.co/guide/en/elasticsearch/reference/current/snapshots-register-repository.html#snapshots-filesystem-repository)
 
   * 仓库修改
 
