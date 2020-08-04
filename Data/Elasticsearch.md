@@ -407,7 +407,9 @@ pkill -F pid
 
   * 字段类查询
     * 单词匹配(Term Level Query) 不对查询的内容进行分词
-    * 全文索引(Full Text Query) 对查询的内容进行分词, 如查询"我在马路边", 被分词为"我", "在", "马路"等, 然后再去匹配.
+    * 全文匹配(Full Text Query) 对查询的内容进行分词, 如查询"我在马路边", 被分词为"我", "在", "马路"等, 然后再去匹配.
+    
+    > 不要将**全文匹配**和**全文索引**混淆, 全文匹配是对查询内容分词, 全文索引是对存储数据进行分词. 题外话, `text`类型的字段, 使用的全文索引.
   * 复合查询
 
 * 查询URL
@@ -437,6 +439,19 @@ pkill -F pid
 [Elastic Search之Search API(Query DSL)、字段类查询、复合查询](https://blog.csdn.net/fanrenxiang/article/details/86477019)
 
 ### 全文匹配
+
+基本用法, 
+
+```dsl
+GET /_search
+{
+	"query":{
+		"match":{
+			"message":"this is a test"
+		}
+	}
+}
+```
 
 
 
