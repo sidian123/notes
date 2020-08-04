@@ -656,7 +656,7 @@ path.repo: ["/usr/local/backups/es_backup"]
 
 * 字符串
   * ~~`string`已弃用~~
-  * `text` 用于全文索引
+  * `text` 用于全文索引, 字段内容会经过分词器拆分. 该类型字段不用于排序, 很少用于聚合
   * `keyword` 用于精确匹配.
 
 > 详细见
