@@ -502,23 +502,23 @@ docker run -d --name elasticsearch  -p 9200:9200 -p 9300:9300 -e "discovery.type
 
 * 注册仓库
 
-  * 配置快照存储位置 (必须)
+  配置快照存储位置 (必须)
 
-    ```yaml
-    path.repo: ["/usr/local/backups/es_backup"]
-    ```
+  ```yaml
+  path.repo: ["/usr/local/backups/es_backup"]
+  ```
 
-    为目录分配权限
-
-    ```shell
-    chmod 755 /usr/local/backups/es_backup
-    chown es:es /usr/local/backups/es_backup
-    ```
+  > 不用手动创建目录, 若目录已存在, 需配置下权限
+  >
+  > ```shell
+  > chmod 755 /usr/local/backups/es_backup
+  > chown es:es /usr/local/backups/es_backup
+  > ```
 
   * 创建仓库
 
     ```
-    curl -X PUT http://192.168.43.125:9200/_snapshot/es_backup
+    curl -X PUT http://localhost:9200/_snapshot/es_backup
     {
         "type": "fs",
         "settings": {
@@ -534,7 +534,7 @@ docker run -d --name elasticsearch  -p 9200:9200 -p 9300:9300 -e "discovery.type
   * 仓库修改
 
     ```
-    curl -X POST http://192.168.43.125:9200/_snapshot/es_backup/ -d '
+    curl -X POST http://localhost:9200/_snapshot/es_backup/ -d '
     {
         "type": "fs",
         "settings": {
@@ -550,19 +550,19 @@ docker run -d --name elasticsearch  -p 9200:9200 -p 9300:9300 -e "discovery.type
   在仓库es_backup中, 创建快照`snapshot_1` . 默认是后台运行的
 
   ```
-  curl -XPUT http://192.168.43.125:9200/_snapshot/es_backup/snapshot_1
+  curl -XPUT http://localhost:9200/_snapshot/es_backup/snapshot_1
   ```
 
   若要与api同步执行, 加`wait_for_completion`参数
 
   ```
-  curl -XPUT http://192.168.43.125:9200/_snapshot/es_backup/snapshot_1?wait_for_completion=true
+  curl -XPUT http://localhost:9200/_snapshot/es_backup/snapshot_1?wait_for_completion=true
   ```
 
   仅备份部分索引
 
   ```
-  curl -XPUT http://192.168.43.125:9200/_snapshot/es_backup/snapshot_2 -d '
+  curl -XPUT http://localhost:9200/_snapshot/es_backup/snapshot_2 -d '
   {
   	"indices": "index_1,index_2"
   }'
@@ -571,19 +571,19 @@ docker run -d --name elasticsearch  -p 9200:9200 -p 9300:9300 -e "discovery.type
 * 删除快照
 
   ```
-  curl -XDELETE http://192.168.43.125:9200/_snapshot/es_backup/snapshot_1
+  curl -XDELETE http://localhost:9200/_snapshot/es_backup/snapshot_1
   ```
 
 * 恢复快照
 
   ```
-  curl -XPOST http://192.168.43.125:9200/_snapshot/es_backup/snapshot_1/_restore
+  curl -XPOST http://localhost:9200/_snapshot/es_backup/snapshot_1/_restore
   ```
 
 * 查看快照信息
 
   ```
-  curl -XGET http://192.168.43.125:9200/_snapshot/es_backup/snapshot_1
+  curl -XGET http://localhost:9200/_snapshot/es_backup/snapshot_1
   ```
 
 ## 集群
