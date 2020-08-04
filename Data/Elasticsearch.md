@@ -440,7 +440,7 @@ pkill -F pid
 
 ### 全文匹配
 
-基本用法, 
+基本用法, 各个单词匹配的结果默认进行"或"运算
 
 ```dsl
 GET /_search
@@ -448,6 +448,20 @@ GET /_search
 	"query":{
 		"match":{
 			"message":"this is a test"
+		}
+	}
+}
+```
+
+设置"与"运算
+
+```
+GET /_search
+{
+	"query":{
+		"match":{
+			"message":"this is a test",
+			"operator":"and"
 		}
 	}
 }
