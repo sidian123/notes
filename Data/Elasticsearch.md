@@ -500,7 +500,7 @@ docker run -d --name elasticsearch  -p 9200:9200 -p 9300:9300 -e "discovery.type
 
 ### 操作
 
-* 注册仓库
+* 仓库操作
 
   配置快照存储位置 (必须)
 
@@ -547,6 +547,12 @@ docker run -d --name elasticsearch  -p 9200:9200 -p 9300:9300 -e "discovery.type
             "max_restore_bytes_per_sec" : "50mb"
         }
     }'
+    ```
+    
+  * 查看所有仓库信息
+
+    ```
+    GET /_snapshot/_all
     ```
 
 * 创建快照
