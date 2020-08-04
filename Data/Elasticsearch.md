@@ -552,7 +552,7 @@ docker run -d --name elasticsearch  -p 9200:9200 -p 9300:9300 -e "discovery.type
   * 查看所有仓库信息
 
     ```
-    GET /_snapshot/_all
+    GET /_snapshot
     ```
 
 * 创建快照
