@@ -555,6 +555,8 @@ path.repo: ["/usr/local/backups/es_backup"]
 
 ### 快照操作
 
+> 以下操作都支持添加参数`wait_for_completion=true` , 让请求阻塞, 直到操作完成
+
 * 创建快照
 
   在仓库es_backup中, 创建快照`snapshot_1` . 默认是后台运行的
