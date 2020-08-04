@@ -475,7 +475,10 @@ docker run -d --name elasticsearch  -p 9200:9200 -p 9300:9300 -e "discovery.type
 
 ## 备份&恢复
 
-[elasticsearch备份与恢复](https://www.jianshu.com/p/22444c665ac3)
+* [elasticsearch备份与恢复](https://www.jianshu.com/p/22444c665ac3)
+
+* [Snapshot and restore](https://www.elastic.co/guide/en/elasticsearch/reference/current/snapshot-restore.html)
+* [elasticsearch数据备份和恢复](https://blog.csdn.net/jiahao1186/article/details/81058022)
 
 ### 介绍
 
@@ -483,7 +486,7 @@ docker run -d --name elasticsearch  -p 9200:9200 -p 9300:9300 -e "discovery.type
 
   > 备份数据包含索引
 
-* 创建**快照**之前, 必须注册快照仓库
+* 创建**快照**之前, 必须注册快照**仓库**
 
 * 快照可存在本地或远程仓库. 远程仓库使用Amazon S3, HDFS等网络文件系统存放, 其他快照存储方式可由插件提供.
 
@@ -498,9 +501,90 @@ docker run -d --name elasticsearch  -p 9200:9200 -p 9300:9300 -e "discovery.type
 ### 操作
 
 * 注册仓库
+
+  * 配置快照存储位置
+
+    ```yaml
+    path.repo: ["/usr/local/backups/es_backup"]
+    ```
+
+    为目录分配权限
+
+    ```shell
+    chmod 755 /usr/local/backups/es_backup
+    chown es:es /usr/local/backups/es_backup
+    ```
+
+  * 创建仓库
+
+    ```
+    curl -X PUT http://192.168.43.125:9200/_snapshot/es_backup
+    {
+        "type": "fs",
+        "settings": {
+            "location": "/usr/local/backups/es_backup"
+        }
+    }
+    ```
+
+    > 创建了仓库`es_backup`
+
+    配置详细见[Shared file system repository](https://www.elastic.co/guide/en/elasticsearch/reference/current/snapshots-register-repository.html#snapshots-filesystem-repository)
+
+  * 仓库修改
+
+    ```
+    curl -X POST http://192.168.43.125:9200/_snapshot/es_backup/ -d '
+    {
+        "type": "fs",
+        "settings": {
+        "location": "/usr/local/backups/es_backup",
+            "max_snapshot_bytes_per_sec" : "50mb",
+            "max_restore_bytes_per_sec" : "50mb"
+        }
+    }'
+    ```
+
 * 创建快照
-* 恢复快照
+
+  在仓库es_backup中, 创建快照`snapshot_1` . 默认是后台运行的
+
+  ```
+  curl -XPUT http://192.168.43.125:9200/_snapshot/es_backup/snapshot_1
+  ```
+
+  若要与api同步执行, 加`wait_for_completion`参数
+
+  ```
+  curl -XPUT http://192.168.43.125:9200/_snapshot/es_backup/snapshot_1?wait_for_completion=true
+  ```
+
+  仅备份部分索引
+
+  ```
+  curl -XPUT http://192.168.43.125:9200/_snapshot/es_backup/snapshot_2 -d '
+  {
+  	"indices": "index_1,index_2"
+  }'
+  ```
+
 * 删除快照
+
+  ```
+  curl -XDELETE http://192.168.43.125:9200/_snapshot/es_backup/snapshot_1
+  ```
+
+* 恢复快照
+
+  ```
+  curl -XPOST http://192.168.43.125:9200/_snapshot/es_backup/snapshot_1/_restore
+  ```
+
+* 查看快照信息
+
+  ```
+  curl -XGET http://192.168.43.125:9200/_snapshot/es_backup/snapshot_1
+  ```
 
 ## 集群
 
