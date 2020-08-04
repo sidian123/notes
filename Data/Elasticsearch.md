@@ -498,62 +498,62 @@ docker run -d --name elasticsearch  -p 9200:9200 -p 9300:9300 -e "discovery.type
 
   ![image-20200803172706495](.Elasticsearch/image-20200803172706495.png)
 
-### 操作
+### 仓库操作
 
-* 仓库操作
+配置快照存储位置 (必须)
 
-  配置快照存储位置 (必须)
+```yaml
+path.repo: ["/usr/local/backups/es_backup"]
+```
 
-  ```yaml
-  path.repo: ["/usr/local/backups/es_backup"]
+> 不用手动创建目录, 若目录已存在, 需配置下权限
+>
+> ```shell
+> chmod 755 /usr/local/backups/es_backup
+> chown es:es /usr/local/backups/es_backup
+> ```
+
+* 创建仓库
+
+  ```
+  curl -X PUT http://localhost:9200/_snapshot/es_backup
+  {
+      "type": "fs",
+      "settings": {
+          "location": "/usr/local/backups/es_backup"
+      }
+  }
   ```
 
-  > 不用手动创建目录, 若目录已存在, 需配置下权限
-  >
-  > ```shell
-  > chmod 755 /usr/local/backups/es_backup
-  > chown es:es /usr/local/backups/es_backup
-  > ```
+  > 创建了仓库`es_backup`
 
-  * 创建仓库
+  * `type` : `fs`表示使用本地文件系统
 
-    ```
-    curl -X PUT http://localhost:9200/_snapshot/es_backup
-    {
-        "type": "fs",
-        "settings": {
-            "location": "/usr/local/backups/es_backup"
-        }
-    }
-    ```
+  * `location` : 仓库地址, 必须在`path.repo`指定的目录下. 可以为相对地址, 相对于`path.repo`
 
-    > 创建了仓库`es_backup`
+    > 配置详细见[Shared file system repository](https://www.elastic.co/guide/en/elasticsearch/reference/current/snapshots-register-repository.html#snapshots-filesystem-repository)
 
-    * `type` : `fs`表示使用本地文件系统
+* 仓库修改
 
-    * `location` : 仓库地址, 必须在`path.repo`指定的目录下. 可以为相对地址, 相对于`path.repo`
+  ```
+  curl -X POST http://localhost:9200/_snapshot/es_backup/ -d '
+  {
+      "type": "fs",
+      "settings": {
+      "location": "/usr/local/backups/es_backup",
+          "max_snapshot_bytes_per_sec" : "50mb",
+          "max_restore_bytes_per_sec" : "50mb"
+      }
+  }'
+  ```
+  
+* 查看所有仓库信息
 
-      > 配置详细见[Shared file system repository](https://www.elastic.co/guide/en/elasticsearch/reference/current/snapshots-register-repository.html#snapshots-filesystem-repository)
+  ```
+  GET /_snapshot/_all
+  ```
 
-  * 仓库修改
-
-    ```
-    curl -X POST http://localhost:9200/_snapshot/es_backup/ -d '
-    {
-        "type": "fs",
-        "settings": {
-        "location": "/usr/local/backups/es_backup",
-            "max_snapshot_bytes_per_sec" : "50mb",
-            "max_restore_bytes_per_sec" : "50mb"
-        }
-    }'
-    ```
-    
-  * 查看所有仓库信息
-
-    ```
-    GET /_snapshot
-    ```
+### 快照操作
 
 * 创建快照
 
@@ -592,9 +592,26 @@ docker run -d --name elasticsearch  -p 9200:9200 -p 9300:9300 -e "discovery.type
 
 * 查看快照信息
 
+  当前正在运行的快照
+  
+  ```
+  GET /_snapshot/es_backup/_current
+  ```
+  
+  某个快照的详细信息
+  
   ```
   curl -XGET http://localhost:9200/_snapshot/es_backup/snapshot_1
   ```
+  
+  查看一堆快照信息(支持通配符)
+  
+  ```
+  GET /_snapshot/es_backup/snapshot_*,some_other_snapshot
+  GET /_snapshot/es_backup/_all
+  ```
+  
+  
 
 ## 集群
 
