@@ -1548,6 +1548,10 @@ Mybatis XML
 
 > 以上是我的猜测啊, 哈哈....
 
+## 多数据源
+
+[Springboot+Mybatis+通用Mapper多数据源实现数据同步](https://blog.csdn.net/qq904274014/article/details/86594776)
+
 # 参考
 mybatis：http://www.mybatis.org/mybatis-3/index.html
 mybatis-spring：http://www.mybatis.org/spring/sample.html
