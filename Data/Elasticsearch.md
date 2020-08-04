@@ -129,6 +129,8 @@ $ curl -X PUT 'localhost:9200/accounts' -d '
 
 ## 安装 & 运行
 
+### docker
+
 ```shell
 docker run -d --name elasticsearch  -p 9200:9200 -p 9300:9300 -e "discovery.type=single-node" elasticsearch:7.8.0
 ```
@@ -138,6 +140,33 @@ docker run -d --name elasticsearch  -p 9200:9200 -p 9300:9300 -e "discovery.type
 接着, 运行`curl localhost:9200`命令, 检查程序是否启动成功
 
 > 若要可视化查看Elasticsearch, 可安装Kibana, 见下.
+
+### archive
+
+下载&解压
+
+```
+wget https://artifacts.elastic.co/downloads/elasticsearch/elasticsearch-7.8.1-darwin-x86_64.tar.gz
+tar -xzf elasticsearch-7.8.1-darwin-x86_64.tar.gz
+```
+
+前台运行&日志输出到控制台
+
+```sh
+./bin/elasticsearch
+```
+
+后台运行, 日志打印到`logs/`下
+
+```
+./bin/elasticsearch -d -p pid
+```
+
+结束进程
+
+```
+pkill -F pid
+```
 
 # 结构化操作
 
