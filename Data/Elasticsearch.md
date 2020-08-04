@@ -524,6 +524,25 @@ GET /_search
     }
   }'
   ```
+  
+* 查询字段重复元素
+
+  ```
+  POST jy_description/_search
+  {
+      "size": 0,
+      "aggs": {
+          "duplicateNames": {
+              "terms": {
+                  "field": "term",
+                  "min_doc_count": 2
+              }
+          }
+      }
+  }
+  ```
+
+  `term`是字段名
 
 # 进阶
 
