@@ -502,7 +502,7 @@ docker run -d --name elasticsearch  -p 9200:9200 -p 9300:9300 -e "discovery.type
 
 * 注册仓库
 
-  * 配置快照存储位置
+  * 配置快照存储位置 (必须)
 
     ```yaml
     path.repo: ["/usr/local/backups/es_backup"]
