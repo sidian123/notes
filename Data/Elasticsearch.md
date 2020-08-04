@@ -745,6 +745,12 @@ PUT my_index/_doc/1
 
 [elasticsearch-head的使用](https://www.cnblogs.com/xuwenjin/p/8792919.html)
 
+# 踩坑
+
+## 分片副本UNASSIGNED
+
+[elasticsearch问题解决之分片副本UNASSIGNED](https://www.cnblogs.com/carryLess/p/9452000.html)
+
 # 参考
 
 * [Elastic Stack and Product Documentation](https://www.elastic.co/guide/index.html) 官方文档
