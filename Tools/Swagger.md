@@ -196,6 +196,22 @@ public class SpringFoxConfig {
   </dependency>
   ```
 
+* 配置
+
+  ```properties
+  ## 开启Swagger的Basic认证功能,默认是false
+  knife4j.basic.enable=true
+  ## Basic认证用户名
+  knife4j.basic.username=admin
+  ## Basic认证密码
+  knife4j.basic.password=123456
+  
+  #swagger page url
+  swagger.doc-url=http://localhost:8013/
+  #是否激活 swagger true or false
+  swagger.is.enable=true
+  ```
+
 * 使用示例
 
   ```java
