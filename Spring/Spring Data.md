@@ -1650,82 +1650,118 @@ public void testSort(){
 
 ## 聚合
 
-### 聚合为桶
+聚合操作的字段不能为`text`
 
-桶就是分组，比如这里我们按照品牌brand进行分组：
+> 参考[Spring Data Elasticsearch 聚合查询](https://www.cnblogs.com/steakliu/p/11558110.html)
 
-```java
-@Test
-public void testAgg(){
-    NativeSearchQueryBuilder queryBuilder = new NativeSearchQueryBuilder();
-    // 不查询任何结果
-    queryBuilder.withSourceFilter(new FetchSourceFilter(new String[]{""}, null));
-    // 1、添加一个新的聚合，聚合类型为terms，聚合名称为brands，聚合字段为brand
-    queryBuilder.addAggregation(
-        AggregationBuilders.terms("brands").field("brand"));
-    // 2、查询,需要把结果强转为AggregatedPage类型
-    AggregatedPage<Item> aggPage = (AggregatedPage<Item>) this.itemRepository.search(queryBuilder.build());
-    // 3、解析
-    // 3.1、从结果中取出名为brands的那个聚合，
-    // 因为是利用String类型字段来进行的term聚合，所以结果要强转为StringTerm类型
-    StringTerms agg = (StringTerms) aggPage.getAggregation("brands");
-    // 3.2、获取桶
-    List<StringTerms.Bucket> buckets = agg.getBuckets();
-    // 3.3、遍历
-    for (StringTerms.Bucket bucket : buckets) {
-        // 3.4、获取桶中的key，即品牌名称
-        System.out.println(bucket.getKeyAsString());
-        // 3.5、获取桶中的文档数量
-        System.out.println(bucket.getDocCount());
-    }
-
-}
-```
-
-显示的结果：
-
-![img](.Spring%20Data/1580998-20191208153413642-1883478842.png)
-
-### 嵌套聚合，求平均值
-
-代码：
+### 按字段分组
 
 ```java
-@Test
-public void testSubAgg(){
-    NativeSearchQueryBuilder queryBuilder = new NativeSearchQueryBuilder();
-    // 不查询任何结果
-    queryBuilder.withSourceFilter(new FetchSourceFilter(new String[]{""}, null));
-    // 1、添加一个新的聚合，聚合类型为terms，聚合名称为brands，聚合字段为brand
-    queryBuilder.addAggregation(
-        AggregationBuilders.terms("brands").field("brand")
-        .subAggregation(AggregationBuilders.avg("priceAvg").field("price")) // 在品牌聚合桶内进行嵌套聚合，求平均值
-    );
-    // 2、查询,需要把结果强转为AggregatedPage类型
-    AggregatedPage<Item> aggPage = (AggregatedPage<Item>) this.itemRepository.search(queryBuilder.build());
-    // 3、解析
-    // 3.1、从结果中取出名为brands的那个聚合，
-    // 因为是利用String类型字段来进行的term聚合，所以结果要强转为StringTerm类型
-    StringTerms agg = (StringTerms) aggPage.getAggregation("brands");
-    // 3.2、获取桶
-    List<StringTerms.Bucket> buckets = agg.getBuckets();
-    // 3.3、遍历
-    for (StringTerms.Bucket bucket : buckets) {
-        // 3.4、获取桶中的key，即品牌名称  3.5、获取桶中的文档数量
-        System.out.println(bucket.getKeyAsString() + "，共" + bucket.getDocCount() + "台");
+	@Autowired
+    private ElasticsearchTemplate elasticsearchTemplate;
 
-        // 3.6.获取子聚合结果：
-        InternalAvg avg = (InternalAvg) bucket.getAggregations().asMap().get("priceAvg");
-        System.out.println("平均售价：" + avg.getValue());
+	//聚合
+    public Map<String, Integer> polymerizationQuery() {
+        String aggName = "popularBrand";
+        NativeSearchQueryBuilder queryBuilder = new NativeSearchQueryBuilder();
+        //聚合
+        queryBuilder.addAggregation(AggregationBuilders.terms("popularBrand").field("brand"));
+        //查询并返回带聚合结果
+        AggregatedPage<Item> result = elasticsearchTemplate.queryForPage(queryBuilder.build(), Item.class);
+        //解析聚合
+        Aggregations aggregations = result.getAggregations();
+        //获取指定名称的聚合
+        StringTerms terms = aggregations.get(aggName);
+        //获取桶
+        List<StringTerms.Bucket> buckets = terms.getBuckets();
+        //遍历打印
+        Map<String, Integer> map = new HashMap<>();
+        for (StringTerms.Bucket bucket : buckets) {
+            map.put(bucket.getKeyAsString(), (int) bucket.getDocCount());
+            System.out.println("key = " + bucket.getKeyAsString());
+            System.out.println("DocCount = " + bucket.getDocCount());
+        }
+        return map;
     }
-
-}
 ```
 
-结果：
- ![img](.Spring%20Data/1580998-20191208153539986-690533759.png)
+> 上述的`Item`是ES实体类, 提供索引信息.
 
-  
+### 其他聚合方法
+
+上述`queryBuilder.addAggregation()`使用的按字段分组方法, 还有其他聚合方法:
+
+1. 统计某个字段的数量
+
+   ```java
+   ValueCountAggregationBuilder vcb=  AggregationBuilders.count("自定义").field("uid");
+   ```
+
+2. 去重统计某个字段的数量
+
+   ```java
+    CardinalityAggregationBuilder cb= AggregationBuilders.cardinality("distinct_count_uid").field("uid");
+   ```
+
+3. 聚合过滤
+
+   ```
+   FilterAggregationBuilder fab= AggregationBuilders.filter("uid_filter").filter(QueryBuilders.queryStringQuery("uid:001"));
+   ```
+
+4. 按某个字段分组
+
+   ```
+   TermsAggregationBuilder tb=  AggregationBuilders.terms("group_name").field("name");
+   ```
+
+5. 求和
+
+   ```
+   SumAggregationBuilder  sumBuilder=    AggregationBuilders.sum("sum_price").field("price");
+   ```
+
+6. 求平均
+
+   ```
+   AvgAggregationBuilder ab= AggregationBuilders.avg("avg_price").field("price");
+   ```
+
+7. 求最大值
+
+   ```
+   MaxAggregationBuilder mb= AggregationBuilders.max("max_price").field("price"); 
+   ```
+
+8. 求最小值
+
+   ```
+   MinAggregationBuilder min=    AggregationBuilders.min("min_price").field("price");
+   ```
+
+9. 按日期间隔分组
+
+   ```
+   DateHistogramAggregationBuilder dhb= AggregationBuilders.dateHistogram("dh").field("date");
+   ```
+
+10. 获取聚合里面的结果
+
+    ```
+    TopHitsBuilder thb=  AggregationBuilders.topHits("top_result");
+    ```
+
+11. 嵌套的聚合
+
+    ```
+    NestedAggregationBuilder nb= AggregationBuilders.nested("negsted_path").path("quests");
+    ```
+
+12. 反转嵌套
+
+    ```
+    AggregationBuilders.reverseNested("res_negsted").path("kps ");
+    ```
 
 # 参考
 

@@ -513,24 +513,31 @@ Bool Query是由一个或多个bool子句构成的，包括:
 
 * must、must_not语句里面如果包含多个条件，则各个条件间是且的关系，而should的多个条件是或的关系。
 
-## 其他
+## 聚合操作
 
-### offset & size
+[Bucket Aggregations](https://www.elastic.co/guide/en/elasticsearch/reference/6.8/search-aggregations-bucket.html)
 
-```bash
-$ curl 'localhost:9200/accounts/person/_search'  -d '
+### terms聚合
+
+> [Terms Aggregation](https://www.elastic.co/guide/en/elasticsearch/reference/6.8/search-aggregations-bucket-terms-aggregation.html)
+
+根据字段值聚合
+
+```
+GET /_search
 {
-  "query" : { "match" : { "desc" : "管理" }},
-  "from": 1,
-  "size": 1
-}'
+    "aggs" : {
+        "genres" : {
+            "terms" : { "field" : "genre" } 
+        }
+    }
+}
 ```
 
-* `query` 为查询语句集合; `match`是一个具体的语句, 表示动作; `desc`表示动作的描述
-* `size` 查询多少条, 默认10条
-* `from` 从哪个位置开始查询, 默认0
+* `field`为聚合字段, 可聚合的字段不适合为`text`类型的.
+* `genres`是该聚合名, 可随意更改
 
-### 查询去重
+例子: 
 
 ```
 POST jy_description/_search
@@ -547,7 +554,27 @@ POST jy_description/_search
 }
 ```
 
-`term`是字段名
+* 定义了一个聚合`duplicateNames` 
+*  `term`是字段名
+* `size`表示查询所有
+* `min_doc_count` 表示聚合的组必须有2个元素以上, 即重复
+
+## 其他
+
+### offset & size
+
+```bash
+$ curl 'localhost:9200/accounts/person/_search'  -d '
+{
+  "query" : { "match" : { "desc" : "管理" }},
+  "from": 1,
+  "size": 1
+}'
+```
+
+* `query` 为查询语句集合; `match`是一个具体的语句, 表示动作; `desc`表示动作的描述
+* `size` 查询多少条, 默认10条
+* `from` 从哪个位置开始查询, 默认0
 
 # 进阶
 
