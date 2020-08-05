@@ -784,6 +784,18 @@ proxy_set_header X-Real-IP $remote_addr;
 proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
 ```
 
+访问日志
+
+```nginx
+server{
+    ...
+        
+    access_log /data/log/nginx/logs/gitlab.access.log;
+}
+```
+
+
+
 # 参考
 
 * [所有指令](http://nginx.org/en/docs/http/ngx_http_core_module.html)
