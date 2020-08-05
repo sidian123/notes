@@ -577,7 +577,6 @@ server {
   proxy_set_header   X-Forwarded-Proto    $scheme;
   ```
 
-  
 
 > 参考
 >
@@ -725,6 +724,40 @@ nginx默认有超时时间, 可修改
     proxy_read_timeout 600;
     proxy_connect_timeout 600;
     proxy_ignore_client_abort on;
+## 访问日志
+
+```nginx
+server{
+    ...
+        
+    access_log /data/log/nginx/logs/gitlab.access.log;
+}
+```
+
+## 代理服务的常用配置
+
+```nginx
+location / {
+    proxy_pass http://192.168.0.177:7000/;
+    proxy_redirect http://119.3.200.75/ http://$host:$server_port/ ;
+	proxy_set_header   Host $host:$server_port; 
+    proxy_set_header   X-Real-IP   $remote_addr;
+    proxy_set_header   X-Forwarded-For $proxy_add_x_forwarded_for;
+}
+```
+
+其中, 
+
+* `proxy_redirect `修改响应的重定向地址, 保证正确的指向nginx
+
+* `X-Forwarded-For` 是一个 HTTP 扩展头部，用来表示 HTTP 请求端真实 IP , 格式:
+
+  ```
+  X-Forwarded-For: client, proxy1, proxy2
+  ```
+
+  
+
 # 其他
 
 ## 变量
@@ -767,7 +800,7 @@ nginx中可以定义变量, 也提供了代表请求头字段的变量.
 
 > 参考:[Nginx出现403 forbidden](https://blog.csdn.net/qq_35843543/article/details/81561240)
 
-## 常用配置
+## 常用配置(弃)
 
 location或server中常用配置
 
@@ -782,16 +815,6 @@ proxy_set_header X-Real-IP $remote_addr;
 #X-Forwarded-For 是一个 HTTP 扩展头部，用来表示 HTTP 请求端真实 IP
 #格式X-Forwarded-For: client, proxy1, proxy2
 proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
-```
-
-访问日志
-
-```nginx
-server{
-    ...
-        
-    access_log /data/log/nginx/logs/gitlab.access.log;
-}
 ```
 
 
