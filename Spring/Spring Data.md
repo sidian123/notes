@@ -1263,11 +1263,11 @@ Spring Data通过注解来声明字段的映射属性，有下面的三个注解
 
 - `@Id` 作用在成员变量，标记一个字段作为id主键
 
-   > spring data里的`Id`注解
+   > 使用的spring data里的`Id`注解
 
    > [spring data `id` vs. es `_id`](https://stackoverflow.com/questions/37277017/spring-data-elasticsearch-id-vs-id)
    >
-   > spring data中被`@Id`注解的主键被设置值后, 在ES产生的文档中, `_id`与`_source.id`值一致. 若主键没有值, 那么ES产生的文档中, `_id`被ES自动生成, `_source.id`由于没有设置值, 因为为`null`.
+   > spring data中被`@Id`注解的主键被设置值后, 在ES产生的文档中, `_id`与`_source.id`值一致. 若主键没有值, 那么ES产生的文档中, `_id`被ES自动生成, `_source.id`由于没有设置值, 因为为`null`. 但是取出来时, Spring Data 会读取`_id`, 传给客户端.
 
 - `@Field` 标注文档字段
 
