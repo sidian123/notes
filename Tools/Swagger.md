@@ -231,7 +231,7 @@ public class SpringFoxConfig {
                   .apiInfo(apiInfo())
                   .groupName("1.知识构建服务")
                   .select()
-                  .apis(RequestHandlerSelectors.basePackage("com.clinical.jingyi.ka.rest"))
+                  .apis(RequestHandlerSelectors.basePackage("com.ka.rest"))
                   .paths(PathSelectors.any())
                   .build();
       }
@@ -244,7 +244,7 @@ public class SpringFoxConfig {
                   .apiInfo(apiInfo())
                   .groupName("2.admin api")
                   .select()
-                  .apis(RequestHandlerSelectors.basePackage("com.clinical.jingyi.core.rest"))
+                  .apis(RequestHandlerSelectors.basePackage("com.core.rest"))
                   .paths(PathSelectors.any())
                   .build();
   
@@ -257,18 +257,18 @@ public class SpringFoxConfig {
                   .apiInfo(apiInfo())
                   .groupName("3.schema展示服务")
                   .select()
-                  .apis(RequestHandlerSelectors.basePackage("com.clinical.jingyi.schema.rest"))
+                  .apis(RequestHandlerSelectors.basePackage("com.schema.rest"))
                   .paths(PathSelectors.any())
                   .build();
       }
   
       private ApiInfo apiInfo() {
   
-          Contact contact = new Contact("井颐医疗信息技术(杭州)有限公司", "", "haiming.li@jyclinical.com");
+          Contact contact = new Contact("医疗信息技术(杭州)有限公司", "", "1234@qq.com");
   
           return new ApiInfoBuilder()
-                  .title("井颐知识构建服务服务接口文档")
-                  .description("井颐知识构建服务服务接口文档")
+                  .title("服务服务接口文档")
+                  .description("服务服务接口文档")
                   .termsOfServiceUrl(swaggerPageUrl)
                   .contact(contact)
                   .version("1.0")
