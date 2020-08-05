@@ -181,6 +181,87 @@ public class SpringFoxConfig {
 
 文档地址: `/doc.html`
 
+* `pom.xml`
+
+  ```xml
+  <dependency>
+      <groupId>io.springfox</groupId>
+      <artifactId>springfox-swagger2</artifactId>
+      <version>2.9.2</version>
+  </dependency>
+  <dependency>
+      <groupId>com.github.xiaoymin</groupId>
+      <artifactId>knife4j-spring-boot-starter</artifactId>
+      <version>2.0.3</version>
+  </dependency>
+  ```
+
+* 使用示例
+
+  ```java
+  @Configuration
+  @EnableKnife4j
+  @EnableSwagger2
+  public class SwaggerConfiguration {
+      @Value("${swagger.doc-url:http://localhost:8200}")
+      private String swaggerPageUrl;
+      @Value("${swagger.is.enable:true}")
+      private boolean swaggerIsEnable;
+  
+      @Bean(value = "1.知识构建服务")
+      public Docket kaAdminApi() {
+          return new Docket(DocumentationType.SWAGGER_2)
+                  .enable(swaggerIsEnable)
+                  .apiInfo(apiInfo())
+                  .groupName("1.知识构建服务")
+                  .select()
+                  .apis(RequestHandlerSelectors.basePackage("com.clinical.jingyi.ka.rest"))
+                  .paths(PathSelectors.any())
+                  .build();
+      }
+  
+      @Bean(value = "2.Admin API")
+      public Docket adminDocket() {
+  
+          return new Docket(DocumentationType.SWAGGER_2)
+                  .enable(swaggerIsEnable)
+                  .apiInfo(apiInfo())
+                  .groupName("2.admin api")
+                  .select()
+                  .apis(RequestHandlerSelectors.basePackage("com.clinical.jingyi.core.rest"))
+                  .paths(PathSelectors.any())
+                  .build();
+  
+      }
+  
+      @Bean(value = "3.schema展示服务")
+      public Docket schemaApi() {
+          return new Docket(DocumentationType.SWAGGER_2)
+                  .enable(swaggerIsEnable)
+                  .apiInfo(apiInfo())
+                  .groupName("3.schema展示服务")
+                  .select()
+                  .apis(RequestHandlerSelectors.basePackage("com.clinical.jingyi.schema.rest"))
+                  .paths(PathSelectors.any())
+                  .build();
+      }
+  
+      private ApiInfo apiInfo() {
+  
+          Contact contact = new Contact("井颐医疗信息技术(杭州)有限公司", "", "haiming.li@jyclinical.com");
+  
+          return new ApiInfoBuilder()
+                  .title("井颐知识构建服务服务接口文档")
+                  .description("井颐知识构建服务服务接口文档")
+                  .termsOfServiceUrl(swaggerPageUrl)
+                  .contact(contact)
+                  .version("1.0")
+                  .build();
+  
+      }
+  }
+  ```
+
 # 参考
 
 * [Swagger介绍及使用](https://www.jianshu.com/p/349e130e40d5) 侧重Swagger缘由脉络
