@@ -406,11 +406,17 @@ pkill -F pid
 * Query DSL
 
   * 字段类查询
+    
+    只针对一个字段查询
+    
     * 单词匹配(Term Level Query) 不对查询的内容进行分词
     * 全文匹配(Full Text Query) 对查询的内容进行分词, 如查询"我在马路边", 被分词为"我", "在", "马路"等, 然后再去匹配.
     
     > 不要将**全文匹配**和**全文索引**混淆, 全文匹配是对查询内容分词, 全文索引是对存储数据进行分词. 题外话, `text`类型的字段, 使用的全文索引.
+    
   * 复合查询
+
+    可以对一个或多个字段进行查询.
 
 * 查询URL
 
@@ -436,7 +442,9 @@ pkill -F pid
 
 ## 字段类查询
 
-[Elastic Search之Search API(Query DSL)、字段类查询、复合查询](https://blog.csdn.net/fanrenxiang/article/details/86477019)
+只针对一个字段查询
+
+>  参考[Elastic Search之Search API(Query DSL)、字段类查询、复合查询](https://blog.csdn.net/fanrenxiang/article/details/86477019)
 
 ### 全文匹配
 
@@ -467,82 +475,79 @@ GET /_search
 }
 ```
 
-
-
-
-
-
-
 ### 单词匹配
 
-
+```
+{
+	"query":{
+		"term":{
+			"your_field": "hello world"
+		}
+	}
+}
+```
 
 ## 复合查询
 
+可以对一个或多个字段进行查询.
 
+### bool查询
+
+Bool Query是由一个或多个bool子句构成的，包括:
+
+| 关键字   | 说明                                                         |
+| :------- | ------------------------------------------------------------ |
+| must     | 根据must中的条件过滤文档，返回的结果文档必须严格匹配条件，会影响相关性算分 |
+| filter   | 根据must中的条件过滤文档，返回的结果文档必须严格匹配条件，和must不同的是，filter不会影响相关性算分 |
+| should   | 根据should中的条件进行筛选，返回的结果文档应该包含should的条件，影响相关性 算分 |
+| must_not | 根据must_not中的条件过滤文档，返回的结果文档必须不包含must_not条件，会影响相关性算分 |
+
+![https://img-blog.csdnimg.cn/20190115095510379.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L2ZhbnJlbnhpYW5n,size_16,color_FFFFFF,t_70](.Elasticsearch/20190115095510379.png)
+
+* 每个bool字段由字段类查询语句组成
+* must、must_not、should支持数组，同时filter的查询语句，es会对其进行智能缓存，因此执行效率较高，在不需要算分的查询语句中，可以考虑使用filter替代普通的query语句;
+
+* 查询语句同时包含must和should时，可以不满足should的条件，因为must条件优先级高于should，但是如果也满足should的条件，则会提高相关性算分;
+
+* 可以使用minimum_should_match参数来控制应当满足条件的个数或百分比;
+
+* must、must_not语句里面如果包含多个条件，则各个条件间是且的关系，而should的多个条件是或的关系。
 
 ## 其他
 
-* 简单查询形式
+### offset & size
 
-  ```bash
-  $ curl 'localhost:9200/accounts/person/_search'  -d '
-  {
-    "query" : { "match" : { "desc" : "管理" }},
-    "from": 1,
-    "size": 1
-  }'
-  ```
+```bash
+$ curl 'localhost:9200/accounts/person/_search'  -d '
+{
+  "query" : { "match" : { "desc" : "管理" }},
+  "from": 1,
+  "size": 1
+}'
+```
 
-  * `query` 为查询语句集合; `match`是一个具体的语句, 表示动作; `desc`表示动作的描述
-  * `size` 查询多少条, 默认10条
-  * `from` 从哪个位置开始查询, 默认0
+* `query` 为查询语句集合; `match`是一个具体的语句, 表示动作; `desc`表示动作的描述
+* `size` 查询多少条, 默认10条
+* `from` 从哪个位置开始查询, 默认0
 
-* 逻辑运算
+### 查询去重
 
-  多个关键次以空格隔开, 表示`or`关系
-
-  ```bash
-  $ curl 'localhost:9200/accounts/person/_search'  -d '
-  {
-    "query" : { "match" : { "desc" : "软件 系统" }}
-  }'
-  ```
-
-  要执行`and`关系查询, 需使用布尔查询
-
-  ```bash
-  $ curl 'localhost:9200/accounts/person/_search'  -d '
-  {
-    "query": {
-      "bool": {
-        "must": [
-          { "match": { "desc": "软件" } },
-          { "match": { "desc": "系统" } }
-        ]
-      }
+```
+POST jy_description/_search
+{
+    "size": 0,
+    "aggs": {
+        "duplicateNames": {
+            "terms": {
+                "field": "term",
+                "min_doc_count": 2
+            }
+        }
     }
-  }'
-  ```
-  
-* 查询字段重复元素
+}
+```
 
-  ```
-  POST jy_description/_search
-  {
-      "size": 0,
-      "aggs": {
-          "duplicateNames": {
-              "terms": {
-                  "field": "term",
-                  "min_doc_count": 2
-              }
-          }
-      }
-  }
-  ```
-
-  `term`是字段名
+`term`是字段名
 
 # 进阶
 
@@ -849,12 +854,14 @@ PUT my_index/_doc/1
 
 # 参考
 
+* [Elasticsearch Reference](https://www.elastic.co/guide/en/elasticsearch/reference/current/index.html)
+
 * [Elastic Stack and Product Documentation](https://www.elastic.co/guide/index.html) 官方文档
 
 * [全文搜索引擎 Elasticsearch 入门教程 阮一峰](http://www.ruanyifeng.com/blog/2017/08/elasticsearch.html)
 * [Elasticsearch简介与实战](https://www.jianshu.com/p/d48c32423789)
 
-* [Query DSL](https://www.elastic.co/guide/en/elasticsearch/reference/5.5/query-dsl.html#query-dsl) 全文搜索语言
+* [Query DSL](https://www.elastic.co/guide/en/elasticsearch/reference/current/query-dsl.html) 全文搜索语言
 * [Elasticsearch(10) --- 内置分词器、中文分词器](https://www.cnblogs.com/qdhxhz/p/11585639.html)
 * [ElasticSearch中文分词](https://www.jianshu.com/p/bb89ad7a7f7d)
 
