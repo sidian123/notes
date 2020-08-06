@@ -701,6 +701,8 @@ path.repo: ["/usr/local/backups/es_backup"]
   curl -XPOST http://localhost:9200/_snapshot/es_backup/snapshot_1/_restore
   ```
 
+  > 可能会遇到问题, 说必须关闭或删除已存在的索引才能恢复. 关闭的API见[Open / Close Index API](https://www.elastic.co/guide/en/elasticsearch/reference/6.5/indices-open-close.html). 也可以使用elasticsearch-head来操纵
+
 * 查看快照信息
 
   当前正在运行的快照
