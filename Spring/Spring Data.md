@@ -1763,6 +1763,19 @@ public void testSort(){
     AggregationBuilders.reverseNested("res_negsted").path("kps ");
     ```
 
+## 踩坑指南
+
+### 搜索内容需要转移
+
+如`MAIN/20200420`, 需要转义才能搜索
+
+```java
+List<Description> descriptions = descriptionDao.findAllByTermAndBranchAndStatus("颅纵裂", QueryParser.escape("MAIN/20200420"), true);
+descriptions.forEach(System.out::println);
+```
+
+> 参考[Elasticsearch搜索异常-------org.elasticsearch.common.io.stream.NotSerializableExceptionWrapper: parse_exception](https://www.cnblogs.com/technologykai/p/10101009.html)
+
 # 参考
 
 * [Spring Data Elasticsearch基本使用](https://www.cnblogs.com/ifme/p/12005026.html)
