@@ -845,13 +845,14 @@ public class ManualInsertGenerator extends IdentityGenerator {
 
 ```java
 @Id
-@GeneratedValue(strategy = GenerationType.AUTO, generator = "myid")
-@GenericGenerator(name = "myid", strategy = "com.git.hui.boot.jpa.generator.ManulInsertGenerator")
+@GeneratedValue(strategy = GenerationType.AUTO, generator = "myIdGenerator")
+@GenericGenerator(name = "myIdGenerator", strategy = "com.jpa.generator.ManualInsertGenerator")
 @Column(name = "id")
 private Integer id;
 ```
 
-> `strategy = GenerationType.AUTO`可省略
+* `strategy = GenerationType.AUTO`可省略
+* `com.jpa.generator.ManualInsertGenerator`可以常量替代
 
 > 来源: [SpringBoot系列教程JPA之指定id保存](https://juejin.im/post/5dd5400d6fb9a05a92108429)
 
