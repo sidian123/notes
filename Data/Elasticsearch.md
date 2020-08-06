@@ -559,6 +559,40 @@ POST jy_description/_search
 * `size`表示查询所有
 * `min_doc_count` 表示聚合的组必须有2个元素以上, 即重复
 
+嵌套查询, 达到多个字段聚合的作用
+
+```
+{
+  "size": 0,
+  "aggs": {
+    "duplicateNames": {
+      "terms": {
+        "field": "conceptId1",
+        "min_doc_count": 2
+      },
+      "aggs": {
+        "name": {
+          "terms": {
+            "field": "conceptId2",
+            "min_doc_count": 2
+          },
+          "aggs": {
+            "name2": {
+              "terms": {
+                "field": "branch",
+                "min_doc_count": 2
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
+```
+
+
+
 ## 其他
 
 ### offset & size
