@@ -177,6 +177,74 @@
 
 * 创建repository实例
 
+## 自定义查询
+
+下述只是规范, 具体是否执行还看具体子项目是否支持.
+
+### 查询关键字
+
+| Logical keyword       | Keyword expressions                            |
+| --------------------- | ---------------------------------------------- |
+| `AND`                 | `And`                                          |
+| `OR`                  | `Or`                                           |
+| `AFTER`               | `After`, `IsAfter`                             |
+| `BEFORE`              | `Before`, `IsBefore`                           |
+| `CONTAINING`          | `Containing`, `IsContaining`, `Contains`       |
+| `BETWEEN`             | `Between`, `IsBetween`                         |
+| `ENDING_WITH`         | `EndingWith`, `IsEndingWith`, `EndsWith`       |
+| `EXISTS`              | `Exists`                                       |
+| `FALSE`               | `False`, `IsFalse`                             |
+| `GREATER_THAN`        | `GreaterThan`, `IsGreaterThan`                 |
+| `GREATER_THAN_EQUALS` | `GreaterThanEqual`, `IsGreaterThanEqual`       |
+| `IN`                  | `In`, `IsIn`                                   |
+| `IS`                  | `Is`, `Equals`, (or no keyword)                |
+| `IS_EMPTY`            | `IsEmpty`, `Empty`                             |
+| `IS_NOT_EMPTY`        | `IsNotEmpty`, `NotEmpty`                       |
+| `IS_NOT_NULL`         | `NotNull`, `IsNotNull`                         |
+| `IS_NULL`             | `Null`, `IsNull`                               |
+| `LESS_THAN`           | `LessThan`, `IsLessThan`                       |
+| `LESS_THAN_EQUAL`     | `LessThanEqual`, `IsLessThanEqual`             |
+| `LIKE`                | `Like`, `IsLike`                               |
+| `NEAR`                | `Near`, `IsNear`                               |
+| `NOT`                 | `Not`, `IsNot`                                 |
+| `NOT_IN`              | `NotIn`, `IsNotIn`                             |
+| `NOT_LIKE`            | `NotLike`, `IsNotLike`                         |
+| `REGEX`               | `Regex`, `MatchesRegex`, `Matches`             |
+| `STARTING_WITH`       | `StartingWith`, `IsStartingWith`, `StartsWith` |
+| `TRUE`                | `True`, `IsTrue`                               |
+| `WITHIN`              | `Within`, `IsWithin`                           |
+
+### 返回类型
+
+| Return type                                                  | Description                                                  |
+| ------------------------------------------------------------ | ------------------------------------------------------------ |
+| `void`                                                       | Denotes no return value.                                     |
+| Primitives                                                   | Java primitives.                                             |
+| Wrapper types                                                | Java wrapper types.                                          |
+| `T`                                                          | A unique entity. Expects the query method to return one result at most. If no result is found, `null` is returned. More than one result triggers an `IncorrectResultSizeDataAccessException`. |
+| `Iterator<T>`                                                | An `Iterator`.                                               |
+| `Collection<T>`                                              | A `Collection`.                                              |
+| `List<T>`                                                    | A `List`.                                                    |
+| `Optional<T>`                                                | A Java 8 or Guava `Optional`. Expects the query method to return one result at most. If no result is found, `Optional.empty()` or `Optional.absent()` is returned. More than one result triggers an `IncorrectResultSizeDataAccessException`. |
+| `Option<T>`                                                  | Either a Scala or Vavr `Option` type. Semantically the same behavior as Java 8’s `Optional`, described earlier. |
+| `Stream<T>`                                                  | A Java 8 `Stream`.                                           |
+| `Streamable<T>`                                              | A convenience extension of `Iterable` that directy exposes methods to stream, map and filter results, concatenate them etc. |
+| Types that implement `Streamable` and take a `Streamable` constructor or factory method argument | Types that expose a constructor or `….of(…)`/`….valueOf(…)` factory method taking a `Streamable` as argument. See [Returning Custom Streamable Wrapper Types](https://docs.spring.io/spring-data/commons/docs/current/reference/html/#repositories.collections-and-iterables.streamable-wrapper) for details. |
+| Vavr `Seq`, `List`, `Map`, `Set`                             | Vavr collection types. See [Support for Vavr Collections](https://docs.spring.io/spring-data/commons/docs/current/reference/html/#repositories.collections-and-iterables.vavr) for details. |
+| `Future<T>`                                                  | A `Future`. Expects a method to be annotated with `@Async` and requires Spring’s asynchronous method execution capability to be enabled. |
+| `CompletableFuture<T>`                                       | A Java 8 `CompletableFuture`. Expects a method to be annotated with `@Async` and requires Spring’s asynchronous method execution capability to be enabled. |
+| `ListenableFuture`                                           | A `org.springframework.util.concurrent.ListenableFuture`. Expects a method to be annotated with `@Async` and requires Spring’s asynchronous method execution capability to be enabled. |
+| `Slice`                                                      | A sized chunk of data with an indication of whether there is more data available. Requires a `Pageable` method parameter. |
+| `Page<T>`                                                    | A `Slice` with additional information, such as the total number of results. Requires a `Pageable` method parameter. |
+| `GeoResult<T>`                                               | A result entry with additional information, such as the distance to a reference location. |
+| `GeoResults<T>`                                              | A list of `GeoResult<T>` with additional information, such as the average distance to a reference location. |
+| `GeoPage<T>`                                                 | A `Page` with `GeoResult<T>`, such as the average distance to a reference location. |
+| `Mono<T>`                                                    | A Project Reactor `Mono` emitting zero or one element using reactive repositories. Expects the  query method to return one result at most. If no result is found, `Mono.empty()` is returned. More than one result triggers an `IncorrectResultSizeDataAccessException`. |
+| `Flux<T>`                                                    | A Project Reactor `Flux` emitting zero, one, or many elements using reactive repositories. Queries returning `Flux` can emit also an infinite number of elements. |
+| `Single<T>`                                                  | A RxJava `Single` emitting a single element using reactive repositories. Expects the  query method to return one result at most. If no result is found, `Mono.empty()` is returned. More than one result triggers an `IncorrectResultSizeDataAccessException`. |
+| `Maybe<T>`                                                   | A RxJava `Maybe` emitting zero or one element using reactive repositories. Expects the  query method to return one result at most. If no result is found, `Mono.empty()` is returned. More than one result triggers an `IncorrectResultSizeDataAccessException`. |
+| `Flowable<T>`                                                | A RxJava `Flowable` emitting zero, one, or many elements using reactive repositories. Queries returning `Flowable` can emit also an infinite number of elements. |
+
 
 ## 其他
 
@@ -206,6 +274,10 @@
   ```java
   relationshipDao.findAll(Sort.by(Sort.Direction.DESC,"id"));
   ```
+
+### 查询关键字
+
+
 
 # Spring Data JPA
 
