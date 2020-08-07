@@ -785,7 +785,7 @@ public class Employee {
 > - **insert/update approach**. When you need to modify the database you should call methods of persistence API explicitly: you call `insert` to insert an object, or `update` to save new state of the object to the database.
 > - **Unit of Work approach**. In this case you have a set of objects *managed* by persistence library. All changes you make to these objects will be  flushed to the database automatically at the end of Unit of Work (i.e.  at the end of the current transaction in typical case). When you need to insert new record to the database, you make the corresponding object *managed*. *Managed* objects are identified by their primary keys, so that if you make an object with predefined primary key *managed*, it will be associated with the database record of the same id, and  state of this object will be propagated to that record automatically.
 
-在Jpa中, 使用的第二种方案, JPa会监控持久化的实体, 若有修改, 在事务结束时会自动提交.  注意, 必须是手动提交的事务, auto commit.
+在Jpa中, 使用的第二种方案, JPa会监控持久化的实体, 若有修改, 在事务结束时会自动提交.  **注意, 必须是手动提交的事务, auto commit.**
 
 例子:
 
