@@ -275,8 +275,6 @@
   relationshipDao.findAll(Sort.by(Sort.Direction.DESC,"id"));
   ```
 
-### 查询关键字
-
 
 
 # Spring Data JPA
