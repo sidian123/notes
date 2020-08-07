@@ -476,6 +476,12 @@ Google提供的一个工具, 先记录下. 一般引入了Swagger的项目都引
 
 * `read()`读取所有数据
 
+## FileUtil
+
+* `touch()` 
+
+  默认是相对classpath路径的，可使用jdk的`new File()`构建File对象, 此时相对项目路径。
+
 # 原生工具
 
 ## 进程相关
