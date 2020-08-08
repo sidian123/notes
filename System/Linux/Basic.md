@@ -367,6 +367,8 @@ pwd（print working directory）打印当前工作目录。
     > 实时监控功能还是没有`tail`强, 如文件内容被清空时`less`不能检测到
 
   * `R`: 丢弃缓存, 重绘屏幕.
+  
+  * `-N` 打印行号
 
 ## head and tail
 
