@@ -480,7 +480,7 @@ Google提供的一个工具, 先记录下. 一般引入了Swagger的项目都引
 
 * `touch()` 
 
-  默认是相对classpath路径的，可使用jdk的`new File()`构建File对象, 此时相对项目路径。
+  默认是相对classpath路径的，可使用jdk的`new File().getCon`构建File对象, 此时相对项目路径。
 
 # 原生工具
 

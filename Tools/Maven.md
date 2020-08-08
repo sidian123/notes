@@ -628,11 +628,55 @@ Maven默认的资源插件, 负责将**项目资源**拷贝到**输出文件的c
 
 > 参考[Maven packaging without test (skip tests)](https://stackoverflow.com/questions/7456006/maven-packaging-without-test-skip-tests)
 
-# 进阶
-
-## 仓库
+# 仓库
 
 [Maven中的库（repository）详解](https://www.cnblogs.com/winner-0715/p/7493387.html)
+
+## 搜索顺序
+
+* 查找本地仓库
+* 若未找到, 所有**所有**的远程仓库. 若未找到报错
+* 找到后, 下载到本地仓库, 之后可被本地项目使用了.
+
+## 本地仓库
+
+本地仓库默认在`$HOME/.m2/repository`下, 可被修改,  有量汇总方式:
+
+1. 修改`$HOME/.m2/settings.xml`文件
+
+   ```xml
+   <settings>  
+     ...   
+     <localRepository>D:/java/repository</localRepository>  
+     ...   
+   </settings>  
+   ```
+
+2. 运行mvn时指定
+
+   ```shell
+   mvn clean install -Dmaven.repo.local=/home/juven/myrepo/
+   ```
+
+## 远程仓库
+
+maven的远程仓库默认指向了中央仓库.中央仓库信息是写死在maven中的, 如下所示
+
+```xml
+<repositories>  
+  <repository>  
+    <id>central</id>  
+    <name>Maven Repository Switchboard</name>  
+    <layout>default</layout>  
+    <url>http://repo1.maven.org/maven2</url>  
+    <snapshots>  
+      <enabled>false</enabled>  
+    </snapshots>  
+  </repository>  
+</repositories>
+```
+
+中央仓库id为`central`, `url`为http://repo1.maven.org/maven2, 且不允许下载快照包.
 
 # 其他
 
