@@ -232,107 +232,122 @@ apt install docker
 
 ## 容器操作
 
-* 创建容器
+### 创建容器
+
+```shell
+docker run [option] <镜像名> [向启动容器中传入的命令]
+```
+
+> 若镜像不存在, 会自动从你配置的仓库中下拉
+
+常用可选参数
+
+* `-i` 以交互模式运行, 即连接容器的输入输出流.
+
+* `-t` 在容器中创建一个伪终端.
+
+  ----------------
+
+* `--name=<容器名>` 为创建的容器命名
+
+* `-d` 容器守护进程化
+
+  > 貌似此时, `-it`将失效
+
+* `-e` 为容器设置环境变量
+
+  --------------------
+
+* `-v <主机目录>|<容器内目录>` 目录映射, 该选项可存在多个
+
+* `-p <主机端口>|<容器端口>` 端口映射, 该选项可存在多个
+
+* `--network=host` 将主机的网络环境映射到容器中，容器的网络与主机相同.
+
+  > 貌似默认连接到当前主机的.
+  
+  ------------
+  
+* `--rm` 当容器结束后自动删除
+
+例子
+
+* 交互式容器
+
+  创建一个交互式容器，并命名为mycentos
 
   ```shell
-  docker run [option] <镜像名> [向启动容器中传入的命令]
+  docker run -it --name=mycentos centos /bin/bash
   ```
 
-  > 若镜像不存在, 会自动从你配置的仓库中下拉
+  > 容器中可以随意执行linux命令，就是一个ubuntu的环境，当执行exit命令退出时，该容器也随之停止。
 
-  常用可选参数
+* 守护式容器
 
-  * `-i` 以交互模式运行, 即连接容器的输入输出流.
-
-  * `-t` 在容器中创建一个伪终端.
-
-    ----------------
-
-  * `--name=<容器名>` 为创建的容器命名
-
-  * `-d` 容器守护进程化
-
-    > 貌似此时, `-it`将失效
-
-  * `-e` 为容器设置环境变量
-
-    --------------------
-
-  * `-v <主机目录>|<容器内目录>` 目录映射, 该选项可存在多个
-
-  * `-p <主机端口>|<容器端口>` 端口映射, 该选项可存在多个
-
-  * `--network=host` 将主机的网络环境映射到容器中，容器的网络与主机相同.
-
-    > 貌似默认连接到当前主机的.
-    
-    ------------
-    
-  * `--rm` 当容器结束后自动删除
-
-  例子
-
-  * 交互式容器
-
-    创建一个交互式容器，并命名为mycentos
-
-    ```shell
-    docker run -it --name=mycentos centos /bin/bash
-    ```
-
-    > 容器中可以随意执行linux命令，就是一个ubuntu的环境，当执行exit命令退出时，该容器也随之停止。
-
-  * 守护式容器
-
-    创建一个守护式容器，并命名为mycentos2
-
-    ```shell
-    docker run -dit --name=mycentos2 centos
-    ```
-
-    > 创建一个守护式容器:如果对于一个需要长期运行的容器来说，我们可以创建一个守护式容器。在容器内部exit退出时，容器也不会停止。
-
-* 进入已运行的容器中
+  创建一个守护式容器，并命名为mycentos2
 
   ```shell
-  docker exec -it <容器名或容器id> <进入后执行的第一个命令>
+  docker run -dit --name=mycentos2 centos
   ```
 
-  如
+  > 创建一个守护式容器:如果对于一个需要长期运行的容器来说，我们可以创建一个守护式容器。在容器内部exit退出时，容器也不会停止。
 
-  ```shell
-  docker exec -it mycentos2 /bin/bash
+### 进入已运行的容器中
+
+```shell
+docker exec -it <容器名或容器id> <进入后执行的第一个命令>
+```
+
+如
+
+```shell
+docker exec -it mycentos2 /bin/bash
+```
+
+> 加上选项`-u 0` 将以root身份登录shell.
+
+### 查看容器
+
+> [查看容器](https://docs.docker.com/engine/reference/commandline/ps/)
+
+```shell
+列出本机正在运行的容器
+docker container ls
+列出本机所有容器，包括已经终止运行的
+docker container ls --all
+```
+
+### 停止与启动容器
+
+* 停止在运行的容器
+
   ```
-
-  > 加上选项`-u 0` 将以root身份登录shell.
-
-* [查看容器](https://docs.docker.com/engine/reference/commandline/ps/)
-
-  ```shell
-  列出本机正在运行的容器
-  docker container ls
-  列出本机所有容器，包括已经终止运行的
-  docker container ls --all
-  ```
-
-* 停止与启动容器
-
-  ```shell
-  停止一个已经在运行的容器
   docker container stop 容器名或容器id
-  
-  启动一个已经停止的容器
-  docker container start 容器名或容器id
-  
-  kill掉一个已经在运行的容器
+  ```
+
+  会向容器中主程序发送`SIGTERM`, 适当时间后, 继续发送`SIGKILL`
+
+  `--time, -t` 发送`SIGKILL`的间隔, 单位s, 默认10s.
+
+* 杀死正在运行的容器
+
+  ```
   docker container kill 容器名或容器id
   ```
 
-* 删除容器
+  直接发送`SIGKILL`信号, 可修改.
 
-  ```shell
-  docker container rm 容器名或容器id
+* 启动已停止的容器
+
   ```
+  docker container start 容器名或容器id
+  ```
+
+### 删除容器
+
+```shell
+docker container rm 容器名或容器id
+```
 
 ## 容器To镜像
 
