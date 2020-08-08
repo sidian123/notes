@@ -678,6 +678,52 @@ maven的远程仓库默认指向了中央仓库.中央仓库信息是写死在ma
 
 中央仓库id为`central`, `url`为http://repo1.maven.org/maven2, 且不允许下载快照包.
 
+## 自建私库
+
+### 安装
+
+* 简单运行
+
+  ```
+  $ docker run -d -p 8081:8081 --name nexus sonatype/nexus3
+  ```
+
+* 关闭
+
+  ```
+  docker stop --time=120 <CONTAINER_NAME>
+  ```
+
+  > 给与足够的时间让nexus关闭数据库.
+
+* 测试是否运行正常
+
+  ```
+  $ curl http://localhost:8081/
+  ```
+
+* 数据持久化
+
+  容器中, 数据存在于`/nexus-data` , 有两种方式:
+
+  * 卷组
+
+    ```shell
+    $ docker volume create --name nexus-data
+    $ docker run -d -p 8081:8081 --name nexus -v nexus-data:/nexus-data sonatype/nexus3
+    ```
+
+  * 挂载
+
+    ```shell
+    $ mkdir /some/dir/nexus-data && chown -R 200 /some/dir/nexus-data
+    $ docker run -d -p 8081:8081 --name nexus -v /some/dir/nexus-data:/nexus-data sonatype/nexus3
+    ```
+
+    第一步是创建目录以及修改拥有者, 因为容器运行时, nexus会以UID为200的身份运行.
+
+### 使用
+
 # 其他
 
 ## 安装与配置
