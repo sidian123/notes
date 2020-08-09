@@ -894,7 +894,7 @@ Nexus已经预提供了两个hosted仓库, 一个proxy仓库, 一个group仓库.
 
 * 一般不再POM中声明远程仓库, 而在settings.xml中配置, 两者语法不同, 但`profile`元素内允许配置POM文件的元素.
 
-### 复杂配置(不推荐)
+### 复杂配置
 
 settings.xml中
 
@@ -956,9 +956,67 @@ settings.xml中
 
   不对, `releases`和`snapshots`元素还有其他子元素, 控制不同远程仓库具体行为. 如`updatePolicy`元素控制本地仓库刷新本地缓存的方式. 应该默认缓存不刷新的吧.
 
-### 简单配置
+### 简单配置(推荐)
 
+settings.xml中
 
+```xml
+<mirrors>
+    <!-- 镜像, 修改所有远程仓库的URL, 到maven-public仓库(group类型) -->
+    <mirror>
+        <id>nexus</id>
+        <name>本地Nexus仓库哦</name>
+        <mirrorOf>*</mirrorOf>
+        <url>http://localhost:8081/repository/maven-public/</url>
+    </mirror>
+</mirrors>
+```
+
+直接配置指向group仓库的地址即可, 然后效果与上述配置一样. 但是父POM文件中, 明明是不允许的下载snapshot包的. 想不通就不想啦, 只要知道结果即可 ! .....
+
+### 部署配置
+
+若要部署Jar包, 游客身份(Anonymous Access)便不再适用啦. 需要配置更高权限的身份, 如管理员.
+
+settings.xml中, 声明release仓库和snapshot仓库的身份凭证
+
+```xml
+<servers>
+    <server>
+        <id>releases</id>
+        <username>admin</username>
+        <password>123456</password>
+    </server>
+    <server>
+        <id>Snapshots</id>
+        <username>admin</username>
+        <password>123456</password>
+    </server>
+</servers>
+```
+
+> `id`随意, 只要与接下里的配置一致即可.
+
+maven项目的pom.xml文件中, 声明release仓库和snapshot仓库的url.
+
+```xml
+<distributionManagement>
+    <repository>
+        <id>releases</id>
+        <url>http://localhost:8081/repository/maven-releases/</url>
+    </repository>
+    <snapshotRepository>
+        <id>Snapshots</id>
+        <url>http://localhost:8081/repository/maven-snapshots/</url>
+    </snapshotRepository>
+</distributionManagement>
+```
+
+> 其中, `id`必须与上述对应.
+
+然后`mvn deploy`后, 会根据不同的包名, 部署到不同的仓库中. 
+
+> **注意**, 这里必须是hosted类型的仓库, 因为其他类型仓库, 不具有部署包的功能.
 
 ## 其他
 
@@ -966,47 +1024,14 @@ settings.xml中
 
 在Nexus的管理页面中, 有这功能.
 
+## 参考
 
-
-## ---------------帅气的分割线---------------
-
+* [sonatype documentation](https://help.sonatype.com/docs) nexus 官方文档
+* [Repository Management](https://help.sonatype.com/repomanager3/repository-management) 讲述nexus仓库管理的概念, 和配置选项含义
+* [Maven Repositories](https://help.sonatype.com/repomanager3/formats/maven-repositories) Maven仓库的具体使用
 * [Maven中的库（repository）详解](https://www.cnblogs.com/winner-0715/p/7493387.html)
-* [sonatype doc](https://help.sonatype.com/docs)
-
-
-
-
-
-
-
-## 远程仓库
-
-maven的远程仓库默认指向了中央仓库.中央仓库信息是写死在maven中的, 如下所示
-
-```xml
-<repositories>  
-  <repository>  
-    <id>central</id>  
-    <name>Maven Repository Switchboard</name>  
-    <layout>default</layout>  
-    <url>http://repo1.maven.org/maven2</url>  
-    <snapshots>  
-      <enabled>false</enabled>  
-    </snapshots>  
-  </repository>  
-</repositories>
-```
-
-中央仓库id为`central`, `url`为http://repo1.maven.org/maven2, 且不允许下载快照包.
-
-## 自建私库
-
-
-### 配置
-
-[repository-management](https://help.sonatype.com/repomanager3/repository-management)
-
-### 使用
+* [maven的setting配置文件中mirror和repository的区别](https://www.jianshu.com/p/274c363ffd7c)
+* [Nexus安装和使用](https://www.cnblogs.com/grimm/p/11404862.html)
 
 # 其他
 
