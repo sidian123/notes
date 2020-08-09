@@ -702,6 +702,8 @@ maven的远程仓库默认指向了中央仓库.中央仓库信息是写死在ma
   $ curl http://localhost:8081/
   ```
 
+  > 账号`admin`, 初始密码在容器的`/nexus-data`目录下.
+
 * 数据持久化
 
   容器中, 数据存在于`/nexus-data` , 有两种方式:
