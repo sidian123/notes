@@ -630,7 +630,8 @@ Maven默认的资源插件, 负责将**项目资源**拷贝到**输出文件的c
 
 # 仓库
 
-[Maven中的库（repository）详解](https://www.cnblogs.com/winner-0715/p/7493387.html)
+* [Maven中的库（repository）详解](https://www.cnblogs.com/winner-0715/p/7493387.html)
+* [sonatype doc](https://help.sonatype.com/docs)
 
 ## 搜索顺序
 
