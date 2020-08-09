@@ -725,6 +725,10 @@ maven的远程仓库默认指向了中央仓库.中央仓库信息是写死在ma
 
     第一步是创建目录以及修改拥有者, 因为容器运行时, nexus会以UID为200的身份运行.
 
+### 配置
+
+[repository-management](https://help.sonatype.com/repomanager3/repository-management)
+
 ### 使用
 
 # 其他
