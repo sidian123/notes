@@ -1018,6 +1018,8 @@ maven项目的pom.xml文件中, 声明release仓库和snapshot仓库的url.
 
 > **注意**, 这里必须是hosted类型的仓库, 因为其他类型仓库, 不具有部署包的功能.
 
+可以将`distributionManagement`写入settings.xml文件中吗? 理论上可以, 但我还没试过.
+
 ## 其他
 
 ### 刷新索引
