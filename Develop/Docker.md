@@ -373,17 +373,21 @@ docker save -o 保存的文件名 镜像名
 docker load -i ./centos.tar
 ```
 
-## 其他
+## 资源查看
 
-* 查看容器资源使用
+* 容器资源使用
 
   ```shell
   docker stats redis1 redis2
   ```
 
-* 资源检查
+* Docker对象查看
 
-  打印Docker对象的JSON表示, 一般命名中含有`inspect`关键字
+  打印Docker对象的JSON表示, 可获得运行时设置的环境变量, 存储, 端口映射等信息.
+  
+  ```
+  docker inspect [OPTIONS] NAME|ID [NAME|ID...]
+  ```
 
 
 * 查看日志
