@@ -155,6 +155,14 @@
     ```java
     int[] array = list.stream().mapToInt(i->i).toArray();
     ```
+    
+  * toMap
+  
+    ```java
+    Map<Integer, Animal> map = list.stream()
+        .collect(Collectors.toMap(Animal::getId, animal -> animal));
+    return map;
+    ```
 
 ## 队列
 
