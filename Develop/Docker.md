@@ -491,489 +491,6 @@ ENTRYPOINT [ "sh", "-c", "java -jar /drug-service.jar","-Djava.security.egd=file
 
 * `volume` 创建一个匿名volume
 
-# 参考
-
-* [Docker 入门教程](http://www.ruanyifeng.com/blog/2018/02/docker-tutorial.html)
-* [Docker 微服务教程](http://www.ruanyifeng.com/blog/2018/02/docker-wordpress-tutorial.html)
-* [【 全干货 】5 分钟带你看懂 Docker ！](https://zhuanlan.zhihu.com/p/30713987)
-* [Docker Documentation](https://docs.docker.com/) 官方文档
-* [Docker Quick Start](https://hub.docker.com/?overlay=onboarding) 官方入门
-* [Docker最全教程——从理论到实战(一)](https://www.cnblogs.com/codelove/p/10030439.html) 
-
-# ----我是帅气的分割线-----
-
-# Docker overview
-
-* Docker Engine
-
-  ![Docker Engine Components Flow](.Docker/engine-components-flow-1589383299573.png)
-
-  Client-Server程序, 组成部分如下
-
-  * Server, 一个长期运行的守护进程`dockerd`
-  * Rest API, 与server交互的接口
-  * CLI, 与server交互的命令行接口, 通过Rest API实现
-
-* Docker网络拓扑
-
-  ![image-20200505145548991](.Docker/image-20200505145548991.png)
-
-  Client发起命令请求给Docker daemon, daemon执行命令, 如构建镜像, 创建容器.  镜像可自己构建, 可来自本地, 或远程的仓库Registry.
-
-* Docker对象
-
-  * 镜像
-
-    只读的模板, 用于创建容器
-
-  * 容器
-
-    镜像的运行实例. 容器可以连接到多个网络networks, 附上存储volumes, 或基于当前容器创建镜像
-
-  * Services
-
-    暂不清楚
-
-* 例子: 容器创建过程
-
-  以交互的形式创建`ubuntu`的容器, 并在容器中运行`bash`
-
-  ```shell
-  $ docker run -i -t ubuntu /bin/bash
-  ```
-
-  执行过程如下:
-
-  1. 若本地不存在`Ubuntu`, 将从Registry中拉去镜像, 并创建容器.
-
-  2. 为容器创建可读写文件系统, 作为最终层. 允许容器在该层中读写文件目录.
-
-     > 该层存储非持久的, 容器删除后将消失.
-
-  3. 在容器中创建*网络接口network interface* , 同时分配该接口范围内的IP给容器.
-
-     > 容器可通过该接口, 与主机网络交互, 和访问外部网络.
-
-  4. 启动容器, 并执行`bash`, 由于`-i`和`-t`的作用, 你可以与`bash`交互
-
-  5. 输入`exit`, 容器将被停止
-
-     > 注意, 不是被删除, 被停止的容器还能够再次被运行.
-
-* 底层原理
-
-  * Namespaces
-
-    名字空间提供隔离层, 让容器工作在自己的工作环境中, 在Linux中用到的名字空间如下
-
-    - **The `pid` namespace:** Process isolation (PID: Process ID).
-    - **The `net` namespace:** Managing network interfaces (NET: Networking).
-    - **The `ipc` namespace:** Managing access to IPC resources (IPC: InterProcess Communication).
-    - **The `mnt` namespace:** Managing filesystem mount points (MNT: Mount).
-    - **The `uts` namespace:** Isolating kernel and version identifiers. (UTS: Unix Timesharing System).
-
-  * Control groups
-
-    cgroups限制应用对特殊资源的使用, 如限制容器对内存的使用量
-
-  * Union file systems
-
-    创建容器时添加的读写层(非持久).
-
-  * 容器格式
-
-    Docker Engine组合namespaces, cgroups和UnionFS成容器的方式, 即为容器格式.
-
-
-
-# Quick Start
-
-* 镜像&文件系统
-
-  镜像有自己的文件系统, 构建时, 可以将本地的文件克隆到镜像中. 容器实例化时, 也会产生存储层, 从镜像的文件系统中克隆的.
-
-* Dockerfile
-
-  > 文件名也是`Dockerfile`
-
-  `Dockerfile` 文件提供构建镜像的指令
-
-  ```dockerfile
-  # 该镜像基于node镜像构建
-  FROM node:current-slim
-  
-  # 设置在镜像中操作时的工作目录
-  WORKDIR /usr/src/app
-  
-  # 拷贝本机文件到当前目录中
-  COPY package.json .
-  
-  # 构建镜像时运行的命令
-  RUN npm install
-  
-  # 貌似仅做申明, 给自己看的, 没啥作用
-  EXPOSE 8080
-  
-  # 指定启动容器时执行的命令
-  CMD [ "npm", "start" ]
-  
-  # 拷贝剩余文件到镜像中
-  COPY . .
-  ```
-
-* 关于网络
-
-  貌似`EXPOSE`没啥用, `-p`才能映射端口. 若是都不存在, 容器将默认映射内容内的端口到本机中.
-
-  > 参考https://stackoverflow.com/a/47594352/12574399
-
-# Best Practices
-
-## 保持镜像足够小
-
-* 使用恰当的基础镜像
-
-  如仅需JDK, 使用`openjdk`即可, 而不是`ubuntu`, 然后之上安装`openjdk`.
-
-* 使用多阶段构建
-
-  如, 使用`maven`镜像构建Java程序, 然后重置到`tomcat`镜像中, 将构建的Java包放入正确的目录下. 所有步骤都写在同一个dockerfile中
-
-  若使用的Docker版本不支持多阶段构建, 可以通过合并`RUN`命令的形式减少镜像层数.
-
-* 抽离公共部分
-
-  若多个镜像存在公共部分, 可将之抽离成基础镜像, 其他镜像引入. 这样该基础镜像在第一次被使用后, 可以缓存起来, 导致构建速度加快.
-
-* 标签最好不要依赖自动生成的`latest`标签.
-
-## 持久化数据
-
-有三种存储数据的方式
-
-* 使用容器的可读可写层.
-* 使用Volumes
-* 使用挂载(bind mounts)
-
-尽量避免使用容器的读写层, 有三点原因:
-
-1. 容器删除后, 数据将消失
-2. 将增加容器大小
-3. IO访问是低效的
-
-开发环境推荐使用挂载目录的方式, 生产环境使用Volumes. 
-
-> secrets, configs 是什么? 
-
-# Dockerfile Best Practices
-
-* Docker镜像由多个只读层组成, 每层都代表一个Dockerfile指令. 每一层都是上一次的增量Delta
-
-* 例子
-
-  ```dockerfile
-  # 从ubuntu:18.04中创建一层
-  FROM ubuntu:18.04
-  # 在新一层中添加目录
-  COPY . /app
-  # 在新一层中添加make后的结果
-  RUN make /app
-  # 在新一层中添加运行的命令
-  CMD python /app/app.py
-  ```
-
-  生成容器时, 也会新增一层可读写层(container layer)
-  
-* 仅`RUN`, `COPY`, `ADD`命令会创建层, 其他命令不会, 也不会增加构建镜像的大小.
-
-# multi-stage builds
-
-> 要求Docker 17.05+
-
-```dockerfile
-FROM golang:1.11-alpine AS build
-
-# Install tools required for project
-# Run `docker build --no-cache .` to update dependencies
-RUN apk add --no-cache git
-RUN go get github.com/golang/dep/cmd/dep
-
-# List project dependencies with Gopkg.toml and Gopkg.lock
-# These layers are only re-built when Gopkg files are updated
-COPY Gopkg.lock Gopkg.toml /go/src/project/
-WORKDIR /go/src/project/
-# Install library dependencies
-RUN dep ensure -vendor-only
-
-# Copy the entire project and build it
-# This layer is rebuilt when a file changes in the project directory
-COPY . /go/src/project/
-RUN go build -o /bin/project
-
-# This results in a single layer image
-FROM scratch
-COPY --from=build /bin/project /bin/project
-ENTRYPOINT ["/bin/project"]
-CMD ["--help"]
-```
-
-> Dockerfile构建的镜像, 最终来至于最后一个`From`与之后的命令. 之前的构建过程可以被引入, 但最终会消失.
-
-Dockerfile中可存在多个`From`指令, 每个`Form`使用不同的`base`, 同时开启新的构建*阶段 stage*. 你可从某个阶段的中拷贝文件到后面的阶段中. 最终构建的镜像来自于最后的那个阶段.
-
-引入上个阶段构建的内容, 有两种方式
-
-1. 使用索引, 索引以0开始
-
-   ```dockerfile
-   COPY --from=0 /java/scr/target/demo.jar  ./
-   ```
-
-2. 命名阶段, 以名字索引
-
-   ```dockerfile
-   FROM golang:1.7.3 AS builder
-   ...
-   
-   FROM alpine:latest  
-   ...
-   COPY --from=builder /go/src/app ./
-   ```
-
-可以从外部镜像中拷贝文件
-
-```dockerfile
-COPY --from=nginx:latest /etc/nginx/nginx.conf /nginx.conf
-```
-
-# Create a base image
-
-创建基础镜像, 有两种方式
-
-* 从当前环境创建
-
-  如把本机系统的Ubuntu发行版打包成镜像
-
-  ```dockerfile
-  $ sudo debootstrap xenial xenial > /dev/null
-  $ sudo tar -C xenial -c . | docker import - xenial
-  
-  a29c15f1bf7a
-  
-  $ docker run xenial cat /etc/lsb-release
-  
-  DISTRIB_ID=Ubuntu
-  DISTRIB_RELEASE=16.04
-  DISTRIB_CODENAME=xenial
-  DISTRIB_DESCRIPTION="Ubuntu 16.04 LTS"
-  ```
-
-  > 具体在干啥我看不懂
-
-  重点就是`docker import`, 它支持从归档文件tarball中创建镜像.
-
-* 从`scratch`镜像中创建
-
-  `scratch`是最基础, 最小的镜像, 应该啥都没有
-
-  > 文件系统是镜像必备的
-
-  ```dockerfile
-  FROM scratch
-  ADD hello /
-  CMD ["/hello"]
-  ```
-
-# Docker Compose
-
-Docker Compose 是单主机容器编排工具, Docker Swarm和Kubernetes可以跨主机编排容器.
-
-参考[Docker，Docker Compose，Docker Swarm，Kubernetes之间的区别](https://blog.csdn.net/notsaltedfish/article/details/80959913)
-
-# Swarm
-
-## 介绍
-
-* Docker原生的容器编排技术
-
-* Service
-
-  同时提供调度和网络功能.
-
-  > 在k8s中, Service仅提供网络功能, Deployment提供调度功能.
-
-## 操作
-
-* 检查Swarm是否启动
-
-  ```shell
-  docker system info
-  ```
-
-  > 接着查看`Swarm`字段
-
-* 启动Swarm
-
-  ```shelll
-  docker swarm init
-  ```
-
-  此时该节点成为管理节点
-
-* 创建Service
-
-  ```shell
-  docker service create --name demo alpine:3.5 ping 8.8.8.8
-  ```
-
-* 列出Service
-
-  ```shell
-  docker service ps demo
-  ```
-
-* 查看Service日志
-
-  ```shell
-  docker service logs demo
-  ```
-
-* 删除Service
-
-  ```shell
-  docker service rm demo
-  ```
-
-## stack文件
-
-用于描述Swarm对象, 如`bb-stack.yaml`
-
-```yaml
-version: '3.7'
-
-services:
-  bb-app:
-    image: bulletinboard:1.0
-    ports:
-      - "8000:8080"
-```
-
-运行
-
-```shell
-$ docker stack deploy -c bb-stack.yaml demo
-Creating network demo_default
-Creating service demo_bb-app
-```
-
-> 创建了一个service和network
-
-删除
-
-```shell
-$ docker stack rm demo
-```
-
-
-
-# Kubernetes
-
-* 介绍
-
-  k8s用于管理, Scale和维护容器化应用
-
-* 启动
-
-  Docker Desktop都内置了k8s的所有功能, 在*Preferences/Kubernetes*中启动
-
-  > 生产环境呢? 暂不知道.
-
-* 操作
-
-  * 创建k8s对象
-
-    ```shell
-    kubectl apply -f bb.yaml
-    ```
-
-  * 查看deployments对象
-
-    ```shell
-    kubectl get deployments
-    ```
-
-  * 查看services对象
-
-    ```shell
-    kubectl get services
-    ```
-
-  * 查看pods对象
-
-    ```shell
-    kubectl get pods
-    ```
-
-  * 查看pod日志
-
-    ```shell
-    kubectl logs demo
-    ```
-
-  * 删除k8s对象
-
-    ```shell
-    kubectl delete -f bb.yaml
-    ```
-
-* yaml配置
-
-  配置通用模式
-
-  * `apiVersion` 解析该对象的k8s API
-  * `kind` 对象类型
-  * `metadata` 元数据, 如对象名
-  * `spec` 对象的所有参数和配置
-
-  例子
-
-  ```yaml
-  apiVersion: apps/v1
-  kind: Deployment
-  metadata:
-    name: bb-demo
-    namespace: default
-  spec:
-    replicas: 1
-    selector:
-      matchLabels:
-        bb: web
-    template:
-      metadata:
-        labels:
-          bb: web
-      spec:
-        containers:
-        - name: bb-site
-          image: bulletinboard:1.0
-  ---
-  apiVersion: v1
-  kind: Service
-  metadata:
-    name: bb-entrypoint
-    namespace: default
-  spec:
-    type: NodePort
-    selector:
-      bb: web
-    ports:
-    - port: 8080
-      targetPort: 8080
-      nodePort: 30001
-  ```
-
-  > 该文件定义了两个对象, 以`---`分隔
-
 
 
 # 容器配置
@@ -1456,16 +973,495 @@ $ docker run -d \
 
 此外, `tmpfs-size`和`tmpfs-mode`分别可控制内存使用量, 和文件默认mode, 详细略.
 
-
-
-
-
 ## 其他
 
 ### 数据传播
 
 * 当挂载一个**空volume**到容器的目录中, 且该目录有数据时, 这些数据将传播(拷贝)到volume中.
 * 当使用**bind mount或非空volume**挂载容器的目录中, 且该目录有数据时, 这些数据将被隐藏掉. 即数据未消失, 但暂时访问不到, 参考Linux的mount.
+
+# 参考
+
+* [Docker 入门教程](http://www.ruanyifeng.com/blog/2018/02/docker-tutorial.html)
+* [Docker 微服务教程](http://www.ruanyifeng.com/blog/2018/02/docker-wordpress-tutorial.html)
+* [【 全干货 】5 分钟带你看懂 Docker ！](https://zhuanlan.zhihu.com/p/30713987)
+* [Docker Documentation](https://docs.docker.com/) 官方文档
+* [Docker Quick Start](https://hub.docker.com/?overlay=onboarding) 官方入门
+* [Docker最全教程——从理论到实战(一)](https://www.cnblogs.com/codelove/p/10030439.html) 
+
+# ----我是帅气的分割线-----
+
+# Docker overview
+
+* Docker Engine
+
+  ![Docker Engine Components Flow](.Docker/engine-components-flow-1589383299573.png)
+
+  Client-Server程序, 组成部分如下
+
+  * Server, 一个长期运行的守护进程`dockerd`
+  * Rest API, 与server交互的接口
+  * CLI, 与server交互的命令行接口, 通过Rest API实现
+
+* Docker网络拓扑
+
+  ![image-20200505145548991](.Docker/image-20200505145548991.png)
+
+  Client发起命令请求给Docker daemon, daemon执行命令, 如构建镜像, 创建容器.  镜像可自己构建, 可来自本地, 或远程的仓库Registry.
+
+* Docker对象
+
+  * 镜像
+
+    只读的模板, 用于创建容器
+
+  * 容器
+
+    镜像的运行实例. 容器可以连接到多个网络networks, 附上存储volumes, 或基于当前容器创建镜像
+
+  * Services
+
+    暂不清楚
+
+* 例子: 容器创建过程
+
+  以交互的形式创建`ubuntu`的容器, 并在容器中运行`bash`
+
+  ```shell
+  $ docker run -i -t ubuntu /bin/bash
+  ```
+
+  执行过程如下:
+
+  1. 若本地不存在`Ubuntu`, 将从Registry中拉去镜像, 并创建容器.
+
+  2. 为容器创建可读写文件系统, 作为最终层. 允许容器在该层中读写文件目录.
+
+     > 该层存储非持久的, 容器删除后将消失.
+
+  3. 在容器中创建*网络接口network interface* , 同时分配该接口范围内的IP给容器.
+
+     > 容器可通过该接口, 与主机网络交互, 和访问外部网络.
+
+  4. 启动容器, 并执行`bash`, 由于`-i`和`-t`的作用, 你可以与`bash`交互
+
+  5. 输入`exit`, 容器将被停止
+
+     > 注意, 不是被删除, 被停止的容器还能够再次被运行.
+
+* 底层原理
+
+  * Namespaces
+
+    名字空间提供隔离层, 让容器工作在自己的工作环境中, 在Linux中用到的名字空间如下
+
+    - **The `pid` namespace:** Process isolation (PID: Process ID).
+    - **The `net` namespace:** Managing network interfaces (NET: Networking).
+    - **The `ipc` namespace:** Managing access to IPC resources (IPC: InterProcess Communication).
+    - **The `mnt` namespace:** Managing filesystem mount points (MNT: Mount).
+    - **The `uts` namespace:** Isolating kernel and version identifiers. (UTS: Unix Timesharing System).
+
+  * Control groups
+
+    cgroups限制应用对特殊资源的使用, 如限制容器对内存的使用量
+
+  * Union file systems
+
+    创建容器时添加的读写层(非持久).
+
+  * 容器格式
+
+    Docker Engine组合namespaces, cgroups和UnionFS成容器的方式, 即为容器格式.
+
+
+
+# Quick Start
+
+* 镜像&文件系统
+
+  镜像有自己的文件系统, 构建时, 可以将本地的文件克隆到镜像中. 容器实例化时, 也会产生存储层, 从镜像的文件系统中克隆的.
+
+* Dockerfile
+
+  > 文件名也是`Dockerfile`
+
+  `Dockerfile` 文件提供构建镜像的指令
+
+  ```dockerfile
+  # 该镜像基于node镜像构建
+  FROM node:current-slim
+  
+  # 设置在镜像中操作时的工作目录
+  WORKDIR /usr/src/app
+  
+  # 拷贝本机文件到当前目录中
+  COPY package.json .
+  
+  # 构建镜像时运行的命令
+  RUN npm install
+  
+  # 貌似仅做申明, 给自己看的, 没啥作用
+  EXPOSE 8080
+  
+  # 指定启动容器时执行的命令
+  CMD [ "npm", "start" ]
+  
+  # 拷贝剩余文件到镜像中
+  COPY . .
+  ```
+
+* 关于网络
+
+  貌似`EXPOSE`没啥用, `-p`才能映射端口. 若是都不存在, 容器将默认映射内容内的端口到本机中.
+
+  > 参考https://stackoverflow.com/a/47594352/12574399
+
+# Best Practices
+
+## 保持镜像足够小
+
+* 使用恰当的基础镜像
+
+  如仅需JDK, 使用`openjdk`即可, 而不是`ubuntu`, 然后之上安装`openjdk`.
+
+* 使用多阶段构建
+
+  如, 使用`maven`镜像构建Java程序, 然后重置到`tomcat`镜像中, 将构建的Java包放入正确的目录下. 所有步骤都写在同一个dockerfile中
+
+  若使用的Docker版本不支持多阶段构建, 可以通过合并`RUN`命令的形式减少镜像层数.
+
+* 抽离公共部分
+
+  若多个镜像存在公共部分, 可将之抽离成基础镜像, 其他镜像引入. 这样该基础镜像在第一次被使用后, 可以缓存起来, 导致构建速度加快.
+
+* 标签最好不要依赖自动生成的`latest`标签.
+
+## 持久化数据
+
+有三种存储数据的方式
+
+* 使用容器的可读可写层.
+* 使用Volumes
+* 使用挂载(bind mounts)
+
+尽量避免使用容器的读写层, 有三点原因:
+
+1. 容器删除后, 数据将消失
+2. 将增加容器大小
+3. IO访问是低效的
+
+开发环境推荐使用挂载目录的方式, 生产环境使用Volumes. 
+
+> secrets, configs 是什么? 
+
+# Dockerfile Best Practices
+
+* Docker镜像由多个只读层组成, 每层都代表一个Dockerfile指令. 每一层都是上一次的增量Delta
+
+* 例子
+
+  ```dockerfile
+  # 从ubuntu:18.04中创建一层
+  FROM ubuntu:18.04
+  # 在新一层中添加目录
+  COPY . /app
+  # 在新一层中添加make后的结果
+  RUN make /app
+  # 在新一层中添加运行的命令
+  CMD python /app/app.py
+  ```
+
+  生成容器时, 也会新增一层可读写层(container layer)
+  
+* 仅`RUN`, `COPY`, `ADD`命令会创建层, 其他命令不会, 也不会增加构建镜像的大小.
+
+# multi-stage builds
+
+> 要求Docker 17.05+
+
+```dockerfile
+FROM golang:1.11-alpine AS build
+
+# Install tools required for project
+# Run `docker build --no-cache .` to update dependencies
+RUN apk add --no-cache git
+RUN go get github.com/golang/dep/cmd/dep
+
+# List project dependencies with Gopkg.toml and Gopkg.lock
+# These layers are only re-built when Gopkg files are updated
+COPY Gopkg.lock Gopkg.toml /go/src/project/
+WORKDIR /go/src/project/
+# Install library dependencies
+RUN dep ensure -vendor-only
+
+# Copy the entire project and build it
+# This layer is rebuilt when a file changes in the project directory
+COPY . /go/src/project/
+RUN go build -o /bin/project
+
+# This results in a single layer image
+FROM scratch
+COPY --from=build /bin/project /bin/project
+ENTRYPOINT ["/bin/project"]
+CMD ["--help"]
+```
+
+> Dockerfile构建的镜像, 最终来至于最后一个`From`与之后的命令. 之前的构建过程可以被引入, 但最终会消失.
+
+Dockerfile中可存在多个`From`指令, 每个`Form`使用不同的`base`, 同时开启新的构建*阶段 stage*. 你可从某个阶段的中拷贝文件到后面的阶段中. 最终构建的镜像来自于最后的那个阶段.
+
+引入上个阶段构建的内容, 有两种方式
+
+1. 使用索引, 索引以0开始
+
+   ```dockerfile
+   COPY --from=0 /java/scr/target/demo.jar  ./
+   ```
+
+2. 命名阶段, 以名字索引
+
+   ```dockerfile
+   FROM golang:1.7.3 AS builder
+   ...
+   
+   FROM alpine:latest  
+   ...
+   COPY --from=builder /go/src/app ./
+   ```
+
+可以从外部镜像中拷贝文件
+
+```dockerfile
+COPY --from=nginx:latest /etc/nginx/nginx.conf /nginx.conf
+```
+
+# Create a base image
+
+创建基础镜像, 有两种方式
+
+* 从当前环境创建
+
+  如把本机系统的Ubuntu发行版打包成镜像
+
+  ```dockerfile
+  $ sudo debootstrap xenial xenial > /dev/null
+  $ sudo tar -C xenial -c . | docker import - xenial
+  
+  a29c15f1bf7a
+  
+  $ docker run xenial cat /etc/lsb-release
+  
+  DISTRIB_ID=Ubuntu
+  DISTRIB_RELEASE=16.04
+  DISTRIB_CODENAME=xenial
+  DISTRIB_DESCRIPTION="Ubuntu 16.04 LTS"
+  ```
+
+  > 具体在干啥我看不懂
+
+  重点就是`docker import`, 它支持从归档文件tarball中创建镜像.
+
+* 从`scratch`镜像中创建
+
+  `scratch`是最基础, 最小的镜像, 应该啥都没有
+
+  > 文件系统是镜像必备的
+
+  ```dockerfile
+  FROM scratch
+  ADD hello /
+  CMD ["/hello"]
+  ```
+
+# Docker Compose
+
+Docker Compose 是单主机容器编排工具, Docker Swarm和Kubernetes可以跨主机编排容器.
+
+参考[Docker，Docker Compose，Docker Swarm，Kubernetes之间的区别](https://blog.csdn.net/notsaltedfish/article/details/80959913)
+
+# Swarm
+
+## 介绍
+
+* Docker原生的容器编排技术
+
+* Service
+
+  同时提供调度和网络功能.
+
+  > 在k8s中, Service仅提供网络功能, Deployment提供调度功能.
+
+## 操作
+
+* 检查Swarm是否启动
+
+  ```shell
+  docker system info
+  ```
+
+  > 接着查看`Swarm`字段
+
+* 启动Swarm
+
+  ```shelll
+  docker swarm init
+  ```
+
+  此时该节点成为管理节点
+
+* 创建Service
+
+  ```shell
+  docker service create --name demo alpine:3.5 ping 8.8.8.8
+  ```
+
+* 列出Service
+
+  ```shell
+  docker service ps demo
+  ```
+
+* 查看Service日志
+
+  ```shell
+  docker service logs demo
+  ```
+
+* 删除Service
+
+  ```shell
+  docker service rm demo
+  ```
+
+## stack文件
+
+用于描述Swarm对象, 如`bb-stack.yaml`
+
+```yaml
+version: '3.7'
+
+services:
+  bb-app:
+    image: bulletinboard:1.0
+    ports:
+      - "8000:8080"
+```
+
+运行
+
+```shell
+$ docker stack deploy -c bb-stack.yaml demo
+Creating network demo_default
+Creating service demo_bb-app
+```
+
+> 创建了一个service和network
+
+删除
+
+```shell
+$ docker stack rm demo
+```
+
+
+
+# Kubernetes
+
+* 介绍
+
+  k8s用于管理, Scale和维护容器化应用
+
+* 启动
+
+  Docker Desktop都内置了k8s的所有功能, 在*Preferences/Kubernetes*中启动
+
+  > 生产环境呢? 暂不知道.
+
+* 操作
+
+  * 创建k8s对象
+
+    ```shell
+    kubectl apply -f bb.yaml
+    ```
+
+  * 查看deployments对象
+
+    ```shell
+    kubectl get deployments
+    ```
+
+  * 查看services对象
+
+    ```shell
+    kubectl get services
+    ```
+
+  * 查看pods对象
+
+    ```shell
+    kubectl get pods
+    ```
+
+  * 查看pod日志
+
+    ```shell
+    kubectl logs demo
+    ```
+
+  * 删除k8s对象
+
+    ```shell
+    kubectl delete -f bb.yaml
+    ```
+
+* yaml配置
+
+  配置通用模式
+
+  * `apiVersion` 解析该对象的k8s API
+  * `kind` 对象类型
+  * `metadata` 元数据, 如对象名
+  * `spec` 对象的所有参数和配置
+
+  例子
+
+  ```yaml
+  apiVersion: apps/v1
+  kind: Deployment
+  metadata:
+    name: bb-demo
+    namespace: default
+  spec:
+    replicas: 1
+    selector:
+      matchLabels:
+        bb: web
+    template:
+      metadata:
+        labels:
+          bb: web
+      spec:
+        containers:
+        - name: bb-site
+          image: bulletinboard:1.0
+  ---
+  apiVersion: v1
+  kind: Service
+  metadata:
+    name: bb-entrypoint
+    namespace: default
+  spec:
+    type: NodePort
+    selector:
+      bb: web
+    ports:
+    - port: 8080
+      targetPort: 8080
+      nodePort: 30001
+  ```
+
+  > 该文件定义了两个对象, 以`---`分隔
 
 
 
