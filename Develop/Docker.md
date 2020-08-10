@@ -174,61 +174,113 @@ Docker Engine是一个提供容器服务的软件, 主要由三部分组成:
 apt install docker
 ```
 
-# 使用
+# 基本使用
+
+## 基础知识
+
+* `docker`命令在Client发起, 但在Docker Daemon中执行. 一般的, 每个Host都配套有Client和Daemon
+
+* `docker build`构建时, 会在本地Daemon中构建, 并产生一个唯一ID, 如`0e5574283393`, 也可在构建的同时加上名字或tag (`--tag`) . 之后也可以为镜像添加别名`docker tag`. 
+
+  > 构建的镜像只有提交并打上标签才会被保存下来, 如
+  >
+  > ```
+  > docker tag 0e5574283393 fedora/httpd:version1.0
+  > ```
+  >
+  > 或
+  >
+  > ```
+  > docker tag 0e5574283393 fedora/httpd:version1.0
+  > ```
+
+* 有私有Hub的别名, 配合`docker push`, 能将镜像发布到私有仓库中
+
+* 命令规则:
+
+  ```
+  myregistryhost:5000/fedora/httpd:version1.0
+  ```
+
+  * 第一个部分是私有仓库地址, 若不发布镜像, 则可省略, 镜像存在于本地Daemon中.
+  * 最后一部分是tag, 表示镜像版本号, 若省略, 则默认`latest`
+  * 中间是镜像名, `/`前的是组名, 可省略. 如官方Hub的`library`是默认的组, 可省略
+
+  > 参考[A quick introduction to Docker tags](https://www.freecodecamp.org/news/an-introduction-to-docker-tags-9b5395636c2a/)
+
+* docker很多命令的功能是重复的. 如`docker image push` <=>`docker push`
 
 ## 镜像操作
 
-* 列出镜像
+### 列出镜像
 
-  ```shell
-  docker image ls -a
-  ```
+```shell
+docker image ls -a
+```
 
-  ![docker列出镜像](.Docker/20180825190236927.png)
+![docker列出镜像](.Docker/20180825190236927.png)
 
-  - REPOSITORY：镜像所在的仓库名称, 也即完整镜像名.
-  - TAG：镜像标签
-  - IMAGEID：镜像ID
-  - CREATED：镜像的创建日期(不是获取该镜像的日期)
-  - SIZE：镜像大小
+- REPOSITORY：镜像所在的仓库名称, 也即完整镜像名.
+- TAG：镜像标签
+- IMAGEID：镜像ID
+- CREATED：镜像的创建日期(不是获取该镜像的日期)
+- SIZE：镜像大小
 
-  镜像有不同版本, 通过标签来表示. 可通过`ubuntu:12.04`的方式使用某具体版本的镜像.
+镜像有不同版本, 通过标签来表示. 可通过`ubuntu:12.04`的方式使用某具体版本的镜像.
 
-* 拉取镜像
+### 拉取镜像
 
-  ```shell
-  docker image pull library/hello-world
-  ```
+```shell
+docker image pull library/hello-world
+```
 
-  其中, `library`是镜像所在组, `hello-world`是镜像名. 
+其中, `library`是镜像所在组, `hello-world`是镜像名. 组可省略, 此时默认组`library`, 该组由官方提供.
 
-  组可省略, 此时默认组`library`, 该组由官方提供.
+拉去镜像时, 首先会从本地查找, 然后去官方Hub中查找
 
-* 删除镜像
+### 删除镜像
 
-  ```shell
-  docker image rm <容器名或容器id>
-  ```
+```shell
+docker image rm <容器名或容器id>
+```
 
-  > 正在运行容器的镜像是无法删除的
-  
-* 构建镜像
+> 正在运行容器的镜像是无法删除的
 
-  ```
-  docker build --tag bulletinboard:1.0
-  ```
+### 构建镜像
 
-  > 同时指定版本
+构建镜像的同时指定镜像名和版本号
 
-* 发布镜像
+```
+docker build --tag bulletinboard:1.0
+```
 
-  发布镜像前, 必须通过[docker tag](https://docs.docker.com/engine/reference/commandline/tag/) 打上标签, 通过[docker push](https://docs.docker.com/engine/reference/commandline/push/) 推送上去.
+从git仓库中构建
 
-  与构建镜像时打的标签不一样, 构建打的标签尽在本地用, `docker tag`的标签包含更多的信息, 如远程注册中心, 仓库名等信息, 在推送时需要用到.
+```
+$ docker build https://github.com/docker/rootfs.git#container:docker
+```
 
-  > 好像这里说的不对.
-  
-  若标签步不指定版本, 则默认添加`latest`
+Daemon会下载仓库并构建. 上述`#container`指定了版本信息, 最后的`docker`执行构建的工作目录, 默认为仓库根目录
+
+### 镜像别名
+
+为镜像赋予别名, 或添加私有Hub信息, 以便发布
+
+```
+$ docker tag rhel-httpd registry-host:5000/myadmin/rhel-httpd
+```
+
+> 镜像名可在构建时赋予
+
+### 发布镜像
+
+发布镜像到私有Hub前, 镜像的名字中必须含有hub地址信息, 才能发布到私有仓库中, 如
+
+```
+$ docker tag rhel-httpd registry-host:5000/myadmin/rhel-httpd
+
+$ docker push registry-host:5000/myadmin/rhel-httpd
+```
 
 ## 容器操作
 
@@ -398,6 +450,30 @@ docker load -i ./centos.tar
   
   * `--follow , -f` 持续输出日志
 
+# 自建Hub
+
+* 下载并运行Registry
+
+  ```
+  docker run -d -p 5000:5000 --restart always --name registry registry:2
+  ```
+
+* 然后发布镜像
+
+  ```
+  $ docker pull ubuntu
+  $ docker tag ubuntu localhost:5000/ubuntu
+  $ docker push localhost:5000/ubuntu
+  ```
+
+* 查看已有镜像
+
+  ```
+  http://localhost:5000/v2/_catalog
+  ```
+
+> 参考[registry](https://hub.docker.com/_/registry)
+
 # Dockerfile
 
 ```dockerfile
@@ -413,6 +489,7 @@ RUN ln -sf /usr/share/zoneinfo/Asia/Shanghai  /etc/localtime
 ENTRYPOINT [ "sh", "-c", "java -jar /drug-service.jar","-Djava.security.egd=file:/dev/./urandom","-Dspring.profiles.active=dev","-Dswagger.doc-url=http://119.3.200.75:8009/","--spring.application.name=${SPRING_APPLICATION_NAME}"]
 ```
 
+* `volume` 创建一个匿名volume
 
 # 参考
 
@@ -1174,6 +1251,10 @@ Docker提供了多种持久化数据的方式, 如Volumes, Bind mounts等
     * `destination` 容器中要挂载的目录(全路径名)
     * `readonly` 只读. 非键值对, 存在即为生效
     * `volume-opt` 略
+
+  > 容器结束后, 一般不会删除匿名volume. 运行时可加`--rm`, 达到自动删除的目的. 
+  >
+  > Dockerfile中也可以配置匿名volume.
 
 * 显式创建Volume
 
