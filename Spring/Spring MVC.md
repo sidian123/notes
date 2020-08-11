@@ -770,7 +770,7 @@ return new ResponseEntity<byte []>(null,headers,HttpStatus.FOUND);
 
 控制器为模型添加数据时，ModelAndView、ModelMap、Model和Map都能够添加数据到模型中，那它们的关联呢？看看一下类图：
 
-![img](.Spring MVC/20181031100516116.png)
+![img](.Spring%20MVC/20181031100516116.png)
 
 实际上，spring创建的是BindingAwareModelMap，因此它们之间都可以相互转化，都可以添加模型数据。
 
