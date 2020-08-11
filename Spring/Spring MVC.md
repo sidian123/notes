@@ -725,6 +725,7 @@ public class ResponseFilter{
 过滤器是Servlet容器层面上的, 但Spring提供了支持.
 
 ```java
+@Component
 @WebFilter(urlPatterns = {"/user/*"})
 @Order(1)
 public class TransactionFilter implements Filter {
@@ -750,10 +751,8 @@ public class TransactionFilter implements Filter {
 }
 ```
 
-* 过滤器继承`Filter`, 通过`@WebFilter`注入容器, 同时可配置匹配的URL, 默认`/*`
-
-  > `urlPatterns`等价于Servlet的`<url-pattern/>`元素, 目前只知道支持通配符`*`
-
+* 过滤器需继承`Filter`
+* `@WebFilter`用于配置匹配的URL, 默认`/*`, 即匹配所有URL. `urlPatterns`等价于Servlet的`<url-pattern/>`元素, 目前只知道支持通配符`*`
 * `@Order`定义过滤器执行顺序, 越小越先执行, 默认`Integer.MAX_VALUE`
 
 ## Content Types
