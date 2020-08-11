@@ -669,6 +669,31 @@ public class WebConfig implements WebMvcConfigurer {
 
 > path路径参考4.1.1小结。
 
+## ResponseBodyAdvice
+
+允许在有`@ResponseBody`或`@ResponseEntity`类型返回值的Controller方法执行后, 但实际写入到`HttpMessageConverter`前, 能够自定义结果
+
+配置类用`@ControllerAdvice`标注即可, 如
+
+```java
+@ControllerAdvice
+public class ResponseFilter implements ResponseBodyAdvice<Object> {
+
+
+    @Override
+    public boolean supports(MethodParameter returnType, Class converterType) {
+        return true;
+    }
+
+    @Override
+    public Object beforeBodyWrite(Object body, MethodParameter returnType, MediaType selectedContentType, Class selectedConverterType, ServerHttpRequest request, ServerHttpResponse response) {
+        return HttpResponseTemp.success(body);
+    }
+}
+```
+
+* 泛型表示要自定义的对象, 这里自定义全部.
+
 ## Content Types
 
 > [Content Types](https://docs.spring.io/spring/docs/current/spring-framework-reference/web.html#mvc-config-content-negotiation)
