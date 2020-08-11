@@ -709,13 +709,18 @@ public class BedAndBreakfast {
 
     // initialize to 10
     public static int capacity = 10;
+    
+    // 使用方法
+    public static int aaa=staticMethod();
 
     // initialize to false
     private boolean full = false;
 }
 ```
 
-但是初始化语句不止一行时, 该如何? 这里用到了初始化块
+但是初始化语句不止一行时, 该如何? 这里用到了初始化块.
+
+> 注意, 初始化块不能用于接口中, 但接口的字段可用静态方法初始化.
 
 ##### 静态初始化块
 
