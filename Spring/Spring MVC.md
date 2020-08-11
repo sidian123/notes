@@ -720,6 +720,42 @@ public class ResponseFilter{
 > * https://docs.spring.io/spring/docs/current/spring-framework-reference/web.html#mvc-ann-controller-advice
 > * [ResponseBodyAdvice](https://docs.spring.io/spring/docs/current/javadoc-api/org/springframework/web/servlet/mvc/method/annotation/ResponseBodyAdvice.html)
 
+## Filter
+
+过滤器是Servlet容器层面上的, 但Spring提供了支持.
+
+```java
+@WebFilter(urlPatterns = {"/user/*"})
+@Order(1)
+public class TransactionFilter implements Filter {
+
+    @Override
+    public void doFilter
+        ServletRequest request, 
+    ServletResponse response, 
+    FilterChain chain) throws IOException, ServletException {
+
+        HttpServletRequest req = (HttpServletRequest) request;
+        LOG.info(
+            "Starting a transaction for req : {}", 
+            req.getRequestURI());
+
+        chain.doFilter(request, response);
+        LOG.info(
+            "Committing a transaction for req : {}", 
+            req.getRequestURI());
+    }
+
+    // other methods 
+}
+```
+
+* 过滤器继承`Filter`, 通过`@WebFilter`注入容器, 同时可配置匹配的URL, 默认`/*`
+
+  > `urlPatterns`等价于Servlet的`<url-pattern/>`元素, 目前只知道支持通配符`*`
+
+* `@Order`定义过滤器执行顺序, 越小越先执行, 默认`Integer.MAX_VALUE`
+
 ## Content Types
 
 > [Content Types](https://docs.spring.io/spring/docs/current/spring-framework-reference/web.html#mvc-config-content-negotiation)
@@ -878,8 +914,6 @@ return new ResponseEntity<byte []>(null,headers,HttpStatus.FOUND);
     cache-period="31556926" />
 ```
 
-
-
 估计该url下的资源会被servlet容器的默认servlet处理吧， 没有找到相关资料。
 
 ### [配置默认servlet](https://docs.spring.io/spring/docs/current/spring-framework-reference/web.html#mvc-default-servlet-handler)
@@ -890,15 +924,11 @@ return new ResponseEntity<byte []>(null,headers,HttpStatus.FOUND);
 <mvc:default-servlet-handler/>
 ```
 
-
-
 该元素有个属性default-servlet-name可以指定默认servlet的名字，每个servlet容器的默认servlet名字都不相同，但是spring mvc使用一个常用的默认servlet名字**列表**来尝试检测默认serlvet。如果自己把默认servlet名字改了，可以显示指出，如：
 
 ```
 <mvc:default-servlet-handler default-servlet-name="myCustomDefaultServlet"/>
 ```
-
-
 
 ### 配置web.xml
 
@@ -915,8 +945,6 @@ servlet-mapping配置的url映射有先后关系，后面的可以覆盖前面�
     <url-pattern>*.css</url-pattern>
 </servlet-mapping>
 ```
-
-
 
 ## 文件上传
 
@@ -948,8 +976,6 @@ CommonsMultipartResolver用到了如下jar包：
 	</dependency>
 ```
 
-
-
 然后在spring mvc中配置MultipartResolver：
 
 ```
@@ -957,8 +983,6 @@ CommonsMultipartResolver用到了如下jar包：
     	<property name="defaultEncoding" value="UTF-8"/>
     </bean>
 ```
-
-
 
 CommonsMultipartResolver常用[属性](https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/web/multipart/commons/CommonsFileUploadSupport.html)：
 
@@ -985,8 +1009,6 @@ CommonsMultipartResolver常用[属性](https://docs.spring.io/spring-framework/d
 		return map;
 	}
 ```
-
-
 
 参考：
 [Multipart Resolver](https://docs.spring.io/spring/docs/current/spring-framework-reference/web.html#mvc-multipart)
@@ -1037,8 +1059,6 @@ headers.setContentDispositionFormData("attachment", URLEncoder.encode(name,"utf-
 ```java
 headers.setCacheControl(CacheControl.maxAge(30, TimeUnit.DAYS));//设置缓存时间
 ```
-
-
 
 # 参考
 * 《Java EE 互联网轻量级框架整合开发 --SSM框架和Redis实现》 杨开振
