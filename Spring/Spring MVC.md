@@ -714,6 +714,12 @@ public class ResponseFilter{
 
 * `RestControllerAdvice`表示异常处理器的结果直接渲染到消息体里
 
+> 参考
+>
+> * [Exception Handling in Spring MVC](https://spring.io/blog/2013/11/01/exception-handling-in-spring-mvc)
+> * https://docs.spring.io/spring/docs/current/spring-framework-reference/web.html#mvc-ann-controller-advice
+> * [ResponseBodyAdvice](https://docs.spring.io/spring/docs/current/javadoc-api/org/springframework/web/servlet/mvc/method/annotation/ResponseBodyAdvice.html)
+
 ## Content Types
 
 > [Content Types](https://docs.spring.io/spring/docs/current/spring-framework-reference/web.html#mvc-config-content-negotiation)
