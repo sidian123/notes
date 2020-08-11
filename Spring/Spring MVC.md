@@ -692,7 +692,27 @@ public class ResponseFilter implements ResponseBodyAdvice<Object> {
 }
 ```
 
-* 泛型表示要自定义的对象, 这里自定义全部.
+缩小作用域
+
+* 泛型表示要自定义的对象, 这里的`Object`表示全部.
+
+* `ControllerAdvice`的`basePackages`属性限制作用的包
+
+-------------
+
+在`ResponseBodyAdvice`中可以定义全局默认异常处理器, 如
+
+```java
+@RestControllerAdvice
+public class ResponseFilter{
+    @ExceptionHandler(value = Exception.class)
+    public Object defaultExceptionHandler(HttpServletRequest req, Exception e)  throws Exception{
+        return HttpResponseTemp.fail(500,e.getMessage());
+    }
+}
+```
+
+* `RestControllerAdvice`表示异常处理器的结果直接渲染到消息体里
 
 ## Content Types
 
