@@ -92,6 +92,22 @@
 
 # 命令
 
+## 连接Server
+
+* 连接到本地Server
+
+  ```shell
+  redis-cli
+  ```
+
+* 连接到远程Server
+
+  ```shell
+  redis-cli -h host -p port -a password
+  ```
+
+  
+
 ## 基本操作
 
 * `SET` 设置键值对
