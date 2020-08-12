@@ -96,6 +96,20 @@
 * **常用算法**
 
    `Collections`提供更多操纵集合的静态方法
+   
+* 集合操作
+
+   * 并集
+
+      ```java
+      col.addAll(set2); // Union
+      ```
+
+   * 交集
+
+      ```java
+      set1.retainAll(set2); // Intersection
+      ```
 
 ## Set
 
