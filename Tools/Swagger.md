@@ -76,13 +76,13 @@ public class SpringFoxConfig {
 
   描述类
 
-  * `tags` 类名
+  * `value` 类名
   * `description` 类详细信息
 
   > 常用`description`
 
   ```java
-  @Api(tags="测试类")
+  @Api("测试类")
   @RestController
   public class TestController {
   	//...
