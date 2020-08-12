@@ -285,6 +285,33 @@ A *stream* is a sequence of elements. Unlike a collection, it is not a data stru
     * `allMatch()`
     * `noneMatch()`
 
+### collect
+
+`collect()`方法原型
+
+```java
+<R> R collect(Supplier<R> supplier,
+              BiConsumer<R, ? super T> accumulator,
+              BiConsumer<R, R> combiner);
+```
+
+`supplier`提供容器, 流的每个元素都调用`accumulator`存入到容器中; 流可以并行计算, 即容器可能有多个, `combiner`用于两两容器之间融合.
+
+假设只有单容器, 那么上述过程相当于:
+
+```java
+R result = supplier.get();
+for (T element : this stream)
+    accumulator.accept(result, element);
+return result;
+```
+
+例子: `Collectors.toList()`的类似实现
+
+```java
+List<String> asList = stringStream.collect(ArrayList::new, ArrayList::add, ArrayList::addAll);
+```
+
 ## 平行流
 
 将流分成子流, 每个子流在单独的线程中执行所有操作, 然后再组合所有子流的结果.
