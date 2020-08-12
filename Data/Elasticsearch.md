@@ -504,7 +504,7 @@ Bool Query是由一个或多个bool子句构成的，包括:
 
 ![https://img-blog.csdnimg.cn/20190115095510379.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L2ZhbnJlbnhpYW5n,size_16,color_FFFFFF,t_70](.Elasticsearch/20190115095510379.png)
 
-* 每个bool字段由字段类查询语句组成
+* 每个bool字段由**字段类查询语句**组成
 * must、must_not、should支持数组，同时filter的查询语句，es会对其进行智能缓存，因此执行效率较高，在不需要算分的查询语句中，可以考虑使用filter替代普通的query语句;
 
 * 查询语句同时包含must和should时，可以不满足should的条件，因为must条件优先级高于should，但是如果也满足should的条件，则会提高相关性算分;
