@@ -313,6 +313,10 @@ spring boot整合了spring框架和三方库后，提供了自动配置的功能
 
 ### 属性值取出
 
+#### @ConfigurationProperties
+
+注解到Bean定义上, 该bean的属性会被填充.
+
 一个例子，获取上面的数组属性：
 
 ```java
@@ -327,6 +331,8 @@ public class Config {
 	}
 }
 ```
+
+#### @Value
 
 或者
 
@@ -361,6 +367,27 @@ private String[] stringArrayWithDefaults;
 
 @Value("${some.key:1,2,3}")//int数组
 private int[] intArrayWithDefaults;
+```
+
+#### @EnableConfigurationProperties
+
+是`@ConfigurationProperties`注解的简化形式, 不用注解在Bean定义上, 而是将Bean声明在`@EnableConfigurationProperties`的属性上. 如
+
+```java
+@Configuration
+@ConditionalOnClass(StarterService.class)
+@EnableConfigurationProperties(StarterTestProperties.class)
+public class StarterAutoConfigure {
+    @Autowired
+    private StarterTestProperties properties;
+
+    @Bean
+    @ConditionalOnMissingBean
+    @ConditionalOnProperty(prefix = "example.service", value = "enabled", havingValue = "true")
+    StarterService starterService (){
+        return new StarterService(properties.getConfig());
+    }
+}
 ```
 
 ### Profile
