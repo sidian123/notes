@@ -275,7 +275,23 @@
   relationshipDao.findAll(Sort.by(Sort.Direction.DESC,"id"));
   ```
 
+### 多数据源的包扫描
 
+* Mapper扫描
+
+  ```java
+  @EnableNeo4jRepositories(basePackages = {"com.clinical.jingyi.knowledge.repository.neo4j"})
+  ```
+
+  > 若在被注解的配置类的包下, `basePackages`可省略
+
+* Entity扫描
+
+  ```java
+  @EntityScan(basePackages = {"com.clinical.jingyi.knowledge.bean"})
+  ```
+
+  > 若在被注解的配置类的包下, `basePackages`可省略
 
 # Spring Data JPA
 
