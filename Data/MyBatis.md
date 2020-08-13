@@ -1552,6 +1552,73 @@ Mybatis XML
 
 [Springboot+Mybatis+通用Mapper多数据源实现数据同步](https://blog.csdn.net/qq904274014/article/details/86594776)
 
+下面配置适用于Mybatis和通用Mapper, 但需要注意的是, 通用Mapper用的`tk.mybatis.spring.annotation.MapperScan`, Mybatis用的`org.mybatis.spring.annotation.MapperScan`
+
+```java
+import org.apache.ibatis.session.SqlSessionFactory;
+import org.mybatis.spring.SqlSessionFactoryBean;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.boot.autoconfigure.jdbc.DataSourceBuilder;
+import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
+import org.springframework.jdbc.datasource.DataSourceTransactionManager;
+import tk.mybatis.spring.annotation.MapperScan;
+
+import javax.sql.DataSource;
+
+@Configuration
+@MapperScan(basePackages = "cn.javabb.bootdemo.mapper.local",sqlSessionFactoryRef = "localSqlSessionFactory")
+public class LocalDataSourceConfig {
+    @Bean(name = "localDataSource")
+    @ConfigurationProperties("spring.local-datasource")
+    public DataSource localDataSource(){
+        return DataSourceBuilder.create().build();
+    }
+
+    @Bean(name = "localSqlSessionFactory")
+    public SqlSessionFactory sqlSessionFactory(@Qualifier("localDataSource") DataSource dataSource) throws Exception {
+        SqlSessionFactoryBean sessionFactoryBean = new SqlSessionFactoryBean();
+        sessionFactoryBean.setDataSource(dataSource);
+        sessionFactoryBean.setMapperLocations(new PathMatchingResourcePatternResolver()
+                                              .getResources("classpath*:mapper/local/*.xml"));
+        return sessionFactoryBean.getObject();
+    }
+
+    @Bean(name = "localTransactionManager")
+    public DataSourceTransactionManager localTransactionManager(){
+        return new DataSourceTransactionManager(localDataSource());
+    }
+}
+```
+
+```properties
+spring:
+  local-datasource:
+    url: jdbc:sqlserver://77.77.77.77:1433;DatabaseName=dbName
+    username: sa
+    password: 1234
+    #使用Druid的数据源
+    type: com.alibaba.druid.pool.DruidDataSource
+    driver-class-name: com.microsoft.sqlserver.jdbc.SQLServerDriver
+    filters: stat
+    maxActive: 20
+    initialSize: 1
+    maxWait: 60000
+    minIdle: 1
+    timeBetweenEvictionRunsMillis: 60000
+    minEvictableIdleTimeMillis: 300000
+    validationQuery: select 'x'
+    testWhileIdle: true
+    testOnBorrow: false
+    testOnReturn: false
+    poolPreparedStatements: true
+    maxOpenPreparedStatements: 20
+```
+
+
+
 # 参考
 mybatis：http://www.mybatis.org/mybatis-3/index.html
 mybatis-spring：http://www.mybatis.org/spring/sample.html
