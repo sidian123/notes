@@ -1552,6 +1552,12 @@ server:
 
 > 参考[Springboot学习笔记（五）-条件化注入](https://www.cnblogs.com/yw0219/p/9062322.html)
 
+## @ComponentScan
+
+* 用于配置包扫描路径. 用`basePackages`或`basePackageClasses`属性进行包路径的配置
+* 若不指定扫描的包, 默认使用被注解类的包路径
+* 允许存在多个包扫描注解和路径, 且注解是repeatable类型的, 可多次注解同一个包.
+
 # 参考
 
 - [Building an Application with Spring Boot](<https://spring.io/guides/gs/spring-boot/>)：入门文档
