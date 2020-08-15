@@ -627,6 +627,12 @@ server {
 }
 ```
 
+若报错`SSL_ERROR_RX_RECORD_TOO_LONG`, 则`listen`上添加`ssl`, 表示开启ssl
+
+```nginx
+listen 443 ssl;
+```
+
 > 参考
 >
 > * [在Nginx/Tengine服务器上安装证书](https://help.aliyun.com/document_detail/98728.html?spm=5176.2020520154.0.0.675456a7crLH9u)
