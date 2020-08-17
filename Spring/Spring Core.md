@@ -788,7 +788,7 @@ SpEL（Spring Expression Language），即Spring表达式语言，是比JSP的EL
               class: javax.net.ssl.SSLSocketFactory
   ```
 
-  > 除了基本的地址,账户配置外, 还需要启用SSL协议的使用
+  > 除了基本的地址,账户配置外, 还需要启用SSL协议的使用. 这应该是QQ邮箱的要求, 其他的不知道.
 
 * 核心组件
 
