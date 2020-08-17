@@ -172,11 +172,23 @@
     
   * toMap
   
+    第一种方式, 需保证数组中key唯一, 否则抛出异常
+    
     ```java
     Map<Integer, Animal> map = list.stream()
         .collect(Collectors.toMap(Animal::getId, animal -> animal));
     return map;
     ```
+    
+    第二种, key可以冲突, 但需提供value合并的函数
+    
+    ```java
+    Map<String, String> phoneBook people.stream().collect(toMap(Person::getName,
+                                      Person::getAddress,
+                                      (s, a) -> s + ", " + a));
+    ```
+    
+    > 这里将冲突key的value并置起来
 
 ## 队列
 
