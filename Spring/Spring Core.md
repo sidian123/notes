@@ -778,8 +778,8 @@ SpEL（Spring Expression Language），即Spring表达式语言，是比JSP的EL
   spring:
     mail:
       host: smtp.qq.com
-      password: tiivtsqznthmbbec
-      username: sidian123@qq.com
+      password: 111111111111111
+      username: aaaaaaaaa@qq.com
       port: 465
       properties:
         mail:
