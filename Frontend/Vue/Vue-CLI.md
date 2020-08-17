@@ -351,6 +351,56 @@ eslint帮助减少隐藏错误.
 > * [@vue/cli-plugin-eslint](<https://github.com/vuejs/vue-cli/tree/dev/packages/%40vue/cli-plugin-eslint>)
 > * [How can I disable eslint correct?](https://stackoverflow.com/questions/58634424/how-can-i-disable-eslint-correct)
 
+## 模式&环境变量
+
+* 不同的模式下, 会读不同的配置文件, 文件中可以配置环境变量
+
+  ```
+  .env                # loaded in all cases
+  .env.local          # loaded in all cases, ignored by git
+  .env.[mode]         # only loaded in specified mode
+  .env.[mode].local   # only loaded in specified mode, ignored by git
+  ```
+
+  > `*.local`的文件在vue脚手架的`.gitignore`文件中默认忽略.
+
+  `env`和`env.local`所有情况下都读, 但变量优先级要比模式具体相关的文件要低.
+
+* 配置文件的一个Demo, `.env.staging`
+
+  ```
+  NODE_ENV=production
+  VUE_APP_TITLE=My App (staging)
+  ```
+
+* `NODE_ENV`一般等于模式值, 如上述的`staging`. 但一般还是会在配置文件中修改`NODE_ENV`为**特殊**的三个值, 不同值时, 会有不同的插件执行, 如
+
+  * `development` 将启动热模块更新HMR. 使用`vue-cli-service- serve`命令时默认该值
+  * `test `为单元测试进行优化. 使用`vue-cli-service test:unit`命令时默认该值
+  * `production` 为生成环境优化. 使用`vue-cli-service build`和`vue-cli-service test:e2e`时默认该值
+
+* 环境变量使用
+
+  ```
+  console.log(process.env.VUE_APP_NOT_SECRET_CODE)
+  ```
+
+  上述变量会在构建时**替换**.
+
+* 环境变量其他设置方式
+
+  在`vue.config.js`中配置
+
+  ```js
+  process.env.VUE_APP_VERSION = require('./package.json').version
+  
+  module.exports = {
+    // config
+  }
+  ```
+
+> [Modes and Environment Variables](https://cli.vuejs.)/guide/mode-and-env.html#modes
+
 # 十 其他
 
 ## Vue Devtools
