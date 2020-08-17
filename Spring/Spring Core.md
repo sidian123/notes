@@ -762,7 +762,7 @@ SpEL（Spring Expression Language），即Spring表达式语言，是比JSP的EL
 
 * 目的: 该模块主要用于屏蔽底层实现, 简化邮箱的使用.
 
-* 首先需要引入JavaMail
+* Maven依赖
 
   ```xml
   <dependency>
@@ -771,6 +771,24 @@ SpEL（Spring Expression Language），即Spring表达式语言，是比JSP的EL
       <version>1.6.2</version>
   </dependency>
   ```
+
+* 配置
+
+  ```yaml
+  spring:
+    mail:
+      host: smtp.qq.com
+      password: tiivtsqznthmbbec
+      username: sidian123@qq.com
+      port: 465
+      properties:
+        mail:
+          smtp:
+            socketFactory:
+              class: javax.net.ssl.SSLSocketFactory
+  ```
+
+  > 除了基本的地址,账户配置外, 还需要启用SSL协议的使用
 
 * 核心组件
 
