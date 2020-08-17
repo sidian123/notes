@@ -20,8 +20,11 @@
 
 * 拷贝到剪贴板
 
-  [v-clipboard](https://www.npmjs.com/package/v-clipboard)
+  [~~v-clipboard~~](https://www.npmjs.com/package/v-clipboard)
+
+  [vue-clipboard2](https://www.npmjs.com/package/vue-clipboard2)
 
 * 导出SVG到PNG
 
   [saveSvgAsPng](https://www.npmjs.com/package/save-svg-as-png)
+
