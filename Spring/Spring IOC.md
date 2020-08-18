@@ -1230,7 +1230,7 @@ public class MovieConfiguration {
     </bean>
     ```
   
-  * Java: 这个不知道
+  * Java: 这个不知道. 好像Bean名算是一种限定名?
 
 ## @Resource
 
