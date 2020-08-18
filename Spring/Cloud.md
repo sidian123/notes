@@ -348,6 +348,10 @@ public interface UserService {
 >
 > 但仅仅只用Feign, 无Hystrix时, 可以直接拷贝其他微服务controller的接口, 可以使用`@RestController`和`@RequestMapping`注解. 但存在Hystrix时, 只能使用上述方式, 见下节.
 
+-----
+
+关于方法参数, 需要使用对应注解修饰, 表示参数传递方式. 如`@RequestParam`, 否则会默认为请求体参数.
+
 # 六 Hystrix
 
 ## 介绍
