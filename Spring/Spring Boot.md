@@ -313,6 +313,8 @@ spring boot整合了spring框架和三方库后，提供了自动配置的功能
 
 ### 属性值取出
 
+> 注意, 下面的`${}`用于取出环境变量, 而类似的`#{}`, 用于执行SpEL表达式.
+
 #### @ConfigurationProperties
 
 注解到Bean定义上, 该bean的属性会被填充.
@@ -388,6 +390,14 @@ public class StarterAutoConfigure {
         return new StarterService(properties.getConfig());
     }
 }
+```
+
+#### 其他注解上
+
+如
+
+```java
+@FeignClient(name = "entityNlp", url = "${jy.entity.ner.url}")
 ```
 
 ### Profile
