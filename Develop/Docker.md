@@ -491,7 +491,22 @@ ENTRYPOINT [ "sh", "-c", "java -jar /drug-service.jar","-Djava.security.egd=file
 
 * `volume` 创建一个匿名volume
 
+* `WORKDIR` 设置`RUN`, `CMD`, `ENTRYPOINT`, `COPY`和`ADD`命令的工作目录. 好像默认`/`目录
 
+* `ENV` 设置环境变量
+
+  ```
+  ENV <key> <value>
+  ENV <key>=<value> ...
+  ```
+
+  可以在Dockerfile中使用环境变量
+
+  ```
+  ${variable_name}
+  ```
+
+  > 详细见[Environment replacement](https://docs.docker.com/engine/reference/builder/#environment-replacement)
 
 # 容器配置
 
