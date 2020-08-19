@@ -486,7 +486,7 @@ ENV JAVA_OPTS="-Xmx512m -Xms512m"
 WORKDIR /root/apps/terminology-server
 EXPOSE 8000
 RUN ln -sf /usr/share/zoneinfo/Asia/Shanghai  /etc/localtime
-ENTRYPOINT [ "sh", "-c", "java -jar /drug-service.jar","-Djava.security.egd=file:/dev/./urandom","-Dspring.profiles.active=dev","-Dswagger.doc-url=http://119.3.200.75:8009/","--spring.application.name=${SPRING_APPLICATION_NAME}"]
+ENTRYPOINT [ "sh", "-c", "java -jar /drug-service.jar","-Djava.security.egd=file:/dev/./urandom","-Dspring.profiles.active=dev","-Dswagger.doc-url=http://111.11.100.15:8009/","--spring.application.name=${SPRING_APPLICATION_NAME}"]
 ```
 
 * `volume` 创建一个匿名volume
@@ -500,12 +500,30 @@ ENTRYPOINT [ "sh", "-c", "java -jar /drug-service.jar","-Djava.security.egd=file
   ENV <key>=<value> ...
   ```
 
-  可以在Dockerfile中使用环境变量
+  环境变量可在Dockerfile的其他指令中作为一个变量使用. 变量以`$variable_name`或`${variable_name}`表示. 使用例子如下:
 
   ```
-  ${variable_name}
+  FROM busybox
+  ENV foo /bar
+WORKDIR ${foo}   # WORKDIR /bar
+  ADD . $foo       # ADD . /bar
+  COPY \$foo /quux # COPY $foo /quux
   ```
-
+  
+  支持环境变量使用的指令有:
+  
+  * ADD
+  * COPY
+  * ENV
+  * EXPOSE
+  * FROM
+  * LABEL
+  * STOPSIGNAL
+  * USER
+  * VOLUME
+  * WORKDIR
+  * ONBUILD
+  
   > 详细见[Environment replacement](https://docs.docker.com/engine/reference/builder/#environment-replacement)
 
 # 容器配置
