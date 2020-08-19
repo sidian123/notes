@@ -26,21 +26,70 @@ shell在启动时会读取配置文件，不同的shell读取的文件都不同�
 
 ### 变量
 
-声明和使用
+* 变量声明, 默认为字符串
 
-```shell
-a=2323
-echo $a
-```
+  ```shell
+  a=2323
+  ```
 
-为了消除变量在文本中的二义性, 可以`${var}`的方式使用变量, 如
+* 变量使用, 有多种形式
 
-```shell
-a=123
-echo ${a}text
-```
+  ```shell
+  a=123
+  echo ${a}text
+  ```
 
-### 变量类型
+  > 第二种形式, 可以解决二义性的问题
+
+### 数组
+
+* 声明数组
+
+  ```shell
+  allThreads=(1 2 4 8 16 32 64 128)
+  ```
+
+* 取出某个元素
+
+  ```shell
+  echo ${allThreads[1]}
+  ```
+
+  > `${allThreads}`相当于`${allThreads[0]}`
+
+* 取出所有元素
+
+  ```
+  echo ${allThreads[@]}
+  ```
+
+* 遍历所有元素
+
+  ```shell
+  for t in ${allThreads[@]}; do
+    ./pipeline --threads $t
+  done
+  ```
+
+* 其他操作
+
+  | Syntax          | Result                                    |
+  | --------------- | ----------------------------------------- |
+  | `arr=()`        | Create an empty array                     |
+  | `arr=(1 2 3)`   | Initialize array                          |
+  | `${arr[2]}`     | Retrieve third element                    |
+  | `${arr[@]}`     | Retrieve all elements                     |
+  | `${!arr[@]}`    | Retrieve array indices                    |
+  | `${#arr[@]}`    | Calculate array size                      |
+  | `arr[0]=3`      | Overwrite 1st element                     |
+  | `arr+=(4)`      | Append value(s)                           |
+  | `str=$(ls)`     | Save `ls` output as a string              |
+  | `arr=( $(ls) )` | Save `ls` output as an array of files     |
+  | `${arr[@]:s:n}` | Retrieve n elements `starting at index s` |
+
+> 参考[You don't know Bash: An introduction to Bash arrays](https://opensource.com/article/18/5/you-dont-know-bash-intro-bash-arrays)
+
+### 变量作用域
 
 * 环境变量
 
@@ -207,9 +256,11 @@ echo ${a}text
   function name [()] compound-command [redirection]
   ```
 
-  > `redirection`在函数执行后会被执行, 详细见手册
+  > `redirection`在函数执行后会被执行 , 详细见手册. 用于函数输出内容的重定向?
   >
   > `compound-command`中可使用`return <int>`
+  >
+  > `{}`类型的复合语句有副作用, `()`类型的复合语句无副作用
 
 * 使用
 
@@ -397,6 +448,63 @@ $(COMMAND)
 [root@sidian Desktop]# echo $b
 56
 ```
+
+### 参数替换
+
+* 介绍
+
+  变量在语句中使用时, 会以变量的值替换该变量. 如`a=1`, 那么`echo $a`中, `$a`会被替换为`1`
+
+* 替换执行的具体过程:
+
+  1. 首先变量不是用在`''`中的, 然后变量需为字符串, 若变量未定义, 则默认为空字符串
+
+  2. 执行**变换**. 如一个变量`${VARIABLE#TEXT}`, 替换时, 需去掉字符串前缀`TEXT`
+
+  3. 若替换是在`""`中的, 那么替换结束了
+
+  4. 否则, 安装环境变量`IFS`(默认为一个空白字符)切割字符串, 得到一组字符串
+
+  5. 执行glob操作, 即通配符匹配文件.
+
+* 例子
+
+  suppose that the variable `foo` contains `a* b* c*` and the current directory contains the files `bar`, `baz` and `paz`. Then `${foo#??}` is expanded as follows:
+
+  1. The value of the variable is the 8-character string `a* b* c*`.
+  2. `#??` means strip off the first two characters, resulting in the 6-character string ` b* c*` (with an initial space).
+  3. If the expansion is in a list context (i.e. not in double quotes or other similar context), continue.
+  4. Split the string into whitespace-delimited words, resulting in a list of two-strings: `b*` and `c*`.
+  5. The string `b*`, interpreted as a pattern, matches two files: `bar` and `baz`. The string `c*` matches no file so it is left alone. The result is a list of three strings: `bar`, `baz`, `c*`.
+
+* 常用变换
+
+  * 删除字符前缀
+
+    ```bash
+    ${parameter#word}
+    ${parameter##word}
+    ```
+
+  * 删除后缀
+
+    ```bash
+    ${parameter%word}
+    ${parameter%%word}
+    ```
+
+  * 值部分替换
+
+    ```bash
+    ${parameter/pattern/string}
+    ```
+
+    `pattern`匹配到的字符将被`string`替换
+
+> 参考
+>
+> 1. https://unix.stackexchange.com/a/109074
+> 2. man bash手册
 
 # 四 脚本
 
