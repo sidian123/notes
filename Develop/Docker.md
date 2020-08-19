@@ -240,11 +240,19 @@ docker image pull library/hello-world
 
 ### 删除镜像
 
+删除镜像
+
 ```shell
-docker image rm <容器名或容器id>
+docker image rm <镜像>
 ```
 
 > 正在运行容器的镜像是无法删除的
+
+删除镜像, 但是, 若一个镜像有多个tag, 则仅删除一个tag
+
+```shell
+docker rmi [OPTIONS] IMAGE [IMAGE...]
+```
 
 ### 构建镜像
 
