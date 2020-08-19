@@ -286,11 +286,17 @@ css处理前：
   > URL最先匹配的代理规则会被使用.
   >
   > 如, 依顺序存在规则`/api`, `/api2`, 那么`/api2`规则永远不会被使用, 应该改成`/api/`, `/api2/`
-  
-  > 参考
-  >
-  > * [devServer.proxy](https://cli.vuejs.org/config/#devserver-proxy)
-  > * [context matching](https://github.com/chimurai/http-proxy-middleware#context-matching)
+
+* 详细配置
+  * **.xfwd**: true/false, 是否添加x-forward地址. 默认true
+  * **headers**: 添加请求头不, 如`{host:'www.example.org'}`
+
+
+
+> 参考
+>
+> * [devServer.proxy](https://cli.vuejs.org/config/#devserver-proxy)
+> * [context matching](https://github.com/chimurai/http-proxy-middleware#context-matching)
 
 ## eslint
 
