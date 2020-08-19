@@ -498,36 +498,59 @@ ENTRYPOINT [ "sh", "-c", "java -jar /drug-service.jar","-Djava.security.egd=file
 
 ### ENV
 
-用于设置环境变量
+* 用于设置环境变量
 
-```
-ENV <key> <value>
-ENV <key>=<value> ...
-```
+  ```Dockerfile
+  ENV <key> <value>
+  ENV <key>=<value> ...
+  ```
 
-环境变量可在Dockerfile的其他指令中作为一个变量使用. 变量以`$variable_name`或`${variable_name}`表示. 使用例子如下:
+  若未转义, 引号`"`将被省略
 
-```
-FROM busybox
-ENV foo /bar
-WORKDIR ${foo}   # WORKDIR /bar
-ADD . $foo       # ADD . /bar
-COPY \$foo /quux # COPY $foo /quux
-```
+  环境变量会影响其他指令, 若仅作用于某个指令, 可:
 
-支持环境变量使用的指令有:
+  ```Dockerfile
+  RUN <key>=<value> <command>
+  ```
 
-* ADD
-* COPY
-* ENV
-* EXPOSE
-* FROM
-* LABEL
-* STOPSIGNAL
-* USER
-* VOLUME
-* WORKDIR
-* ONBUILD
+  实例化容器时, 可通过`docker`命令覆盖Dockerfile的环境变量, 如
+
+  ```Dockerfile
+  docker run --env <key>=<value> <IMAGE-ID>
+  ```
+
+* 使用
+
+  环境变量可在Dockerfile的其他指令中作为一个变量使用. 变量以`$variable_name`或`${variable_name}`表示. 使用例子如下:
+
+  ```Dockerfile
+  FROM busybox
+  ENV foo /bar
+  WORKDIR ${foo}   # WORKDIR /bar
+  ADD . $foo       # ADD . /bar
+  COPY \$foo /quux # COPY $foo /quux
+  ```
+
+  > `#`仅作演示, 并非注释
+
+* 查看镜像/容器环境变量
+
+  ```shell
+  docker inspect <CONTAINER-NAME> OR <CONTAINER-ID>
+  ```
+
+* 支持环境变量使用的指令有:
+  * ADD
+  * COPY
+  * ENV
+  * EXPOSE
+  * FROM
+  * LABEL
+  * STOPSIGNAL
+  * USER
+  * VOLUME
+  * WORKDIR
+  * ONBUILD
 
 > 详细见[Environment replacement](https://docs.docker.com/engine/reference/builder/#environment-replacement)
 
