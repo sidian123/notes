@@ -219,7 +219,7 @@ spring boot整合了spring框架和三方库后，提供了自动配置的功能
 * 通过系统参数(9)
 
   ```shell
-  java -jar app.jar -Dname="Spring"
+  java -Dname="Spring" -jar app.jar
   ```
 
 * 通过命令行参数(4)

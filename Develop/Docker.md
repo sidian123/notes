@@ -476,6 +476,8 @@ docker load -i ./centos.tar
 
 # Dockerfile
 
+## Demo
+
 ```dockerfile
 FROM java:8
 VOLUME /tmp
@@ -489,42 +491,45 @@ RUN ln -sf /usr/share/zoneinfo/Asia/Shanghai  /etc/localtime
 ENTRYPOINT [ "sh", "-c", "java -jar /drug-service.jar","-Djava.security.egd=file:/dev/./urandom","-Dspring.profiles.active=dev","-Dswagger.doc-url=http://111.11.100.15:8009/","--spring.application.name=${SPRING_APPLICATION_NAME}"]
 ```
 
-* `volume` 创建一个匿名volume
+## 指令详解
 
+* `volume` 创建一个匿名volume
 * `WORKDIR` 设置`RUN`, `CMD`, `ENTRYPOINT`, `COPY`和`ADD`命令的工作目录. 好像默认`/`目录
 
-* `ENV` 设置环境变量
+### ENV
 
-  ```
-  ENV <key> <value>
-  ENV <key>=<value> ...
-  ```
+用于设置环境变量
 
-  环境变量可在Dockerfile的其他指令中作为一个变量使用. 变量以`$variable_name`或`${variable_name}`表示. 使用例子如下:
+```
+ENV <key> <value>
+ENV <key>=<value> ...
+```
 
-  ```
-  FROM busybox
-  ENV foo /bar
+环境变量可在Dockerfile的其他指令中作为一个变量使用. 变量以`$variable_name`或`${variable_name}`表示. 使用例子如下:
+
+```
+FROM busybox
+ENV foo /bar
 WORKDIR ${foo}   # WORKDIR /bar
-  ADD . $foo       # ADD . /bar
-  COPY \$foo /quux # COPY $foo /quux
-  ```
-  
-  支持环境变量使用的指令有:
-  
-  * ADD
-  * COPY
-  * ENV
-  * EXPOSE
-  * FROM
-  * LABEL
-  * STOPSIGNAL
-  * USER
-  * VOLUME
-  * WORKDIR
-  * ONBUILD
-  
-  > 详细见[Environment replacement](https://docs.docker.com/engine/reference/builder/#environment-replacement)
+ADD . $foo       # ADD . /bar
+COPY \$foo /quux # COPY $foo /quux
+```
+
+支持环境变量使用的指令有:
+
+* ADD
+* COPY
+* ENV
+* EXPOSE
+* FROM
+* LABEL
+* STOPSIGNAL
+* USER
+* VOLUME
+* WORKDIR
+* ONBUILD
+
+> 详细见[Environment replacement](https://docs.docker.com/engine/reference/builder/#environment-replacement)
 
 # 容器配置
 
