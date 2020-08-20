@@ -137,7 +137,7 @@ docker run -d --name elasticsearch  -p 9200:9200 -p 9300:9300 -e "discovery.type
 
 > 上述运行单实例Elasticsearch, 生产环境需配置多个实例
 
-接着, 运行`curl localhost:9200`命令, 检查程序是否启动成功
+接着, 运行`curl localhost:9200`命令, 检查程序是否启动成功; 此外, 9300是TCP访问ES的默认端口
 
 > 若要可视化查看Elasticsearch, 可安装Kibana, 见下.
 
