@@ -479,6 +479,12 @@ docker load -i ./centos.tar
   ```
   http://localhost:5000/v2/_catalog
   ```
+  
+* 查看镜像所有tag
+
+  ```shell
+  http://localhost:5000/v2/<name>/tags/list
+  ```
 
 > 参考[registry](https://hub.docker.com/_/registry)
 
