@@ -42,9 +42,7 @@ inputstream.unread(data);
 
 * `java.nio.file`: Defines interfaces and classes for the Java virtual machine to access files, file attributes, and file systems.
 
-## File(deprecated)
-
-> `File`是`java.io`包中访问文件的类 (阻塞型IO) , 已被`java.nio.file`包中的`File`和`Files`类取代 (非阻塞IO)
+## File(弃)
 
 * 该类表示为抽象的, 独立于系统的层次化路径名, 自称为**抽象路径**`abstract pathname`.
 
@@ -75,6 +73,22 @@ inputstream.unread(data);
   * `getCanonicalPath`获取标准的绝对路径, 无`..`和`.`
 
   > `File`之间的比较`equals`是通过`getAbsolutePath`获取的绝对路径比较的, 因此两个`File`即使指向同一文件或目录, 它们的`equals`比较也不一定为`true`
+  
+* **弃用**
+
+  `File`是`java.io`包中访问文件的类 , 已被`java.nio.file`包中的`File`和`Files`类取代 
+
+  弃用理由:
+
+  - Many methods didn't throw exceptions when they failed, so it was  impossible to obtain a useful error message. For example, if a file  deletion failed, the program would receive a "delete fail" but wouldn't  know if it was because the file didn't exist, the user didn't have  permissions, or there was some other problem.
+  - The `rename` method didn't work consistently across platforms.
+  - There was no real support for symbolic links.
+  - More support for metadata was desired, such as file permissions, file owner, and other security attributes.
+  - Accessing file metadata was inefficient.
+  - Many of the `File` methods didn't scale. Requesting a  large directory listing over a server could result in a hang. Large  directories could also cause memory resource problems, resulting in a  denial of service.
+  - It was not possible to write reliable code that could recursively  walk a file tree and respond appropriately if there were circular  symbolic links.
+
+  **注意**, 尽管nio是多通道非阻塞IO, 但文件通道仍是阻塞的, 不能再Selector中注册.
 
 ## java.nio.file
 
