@@ -212,6 +212,8 @@ inputstream.unread(data);
 
 # NIO
 
+[Java NIO Tutorial](http://tutorials.jenkov.com/java-nio/index.html)
+
 * 核心组件
 
   * Channel 类似流的概念, 是数据的源或目的地
@@ -226,7 +228,6 @@ inputstream.unread(data);
 
     ![img](.Java%20IO/overview-selectors.png)
 
-* 
 
 # 参考
 
