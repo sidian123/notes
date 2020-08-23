@@ -1,4 +1,4 @@
-# 流
+# IO
 
 * `java.io`: 含有对文件, 网络流, 内存缓存进行输入输出操作的类. 
 * 流分为字节流和字符流, 字符流也就是在字节流的基础上多了个编码或节码器.
@@ -44,7 +44,7 @@ inputstream.unread(data);
 
 ## File(deprecated)
 
-> `File`是`java.io`包中访问文件的类, 已被`java.nio.file`包中的`File`和`Files`类取代
+> `File`是`java.io`包中访问文件的类 (阻塞型IO) , 已被`java.nio.file`包中的`File`和`Files`类取代 (非阻塞IO)
 
 * 该类表示为抽象的, 独立于系统的层次化路径名, 自称为**抽象路径**`abstract pathname`.
 
@@ -195,6 +195,24 @@ inputstream.unread(data);
   读到EOF, 会返回`-1` , 并且EOF仍在流中, 下次读还是一样的结果. 此外, 输入输出流都处于EOF状态并不代表Socket处于close状态, 仍需手动关闭.
 
 > 参考[oracle socket tutorial](https://docs.oracle.com/javase/tutorial/networking/sockets/index.html)
+
+# NIO
+
+* 核心组件
+
+  * Channel 类似流的概念, 是数据的源或目的地
+
+  * Buffer 数据只能从Channel流向Buffer, 或Buffer流向Channel
+
+    ![img](.Java%20IO/overview-channels-buffers1.png)
+
+  * Selector 多Channel的单线程处理器或调度器, 非阻塞
+
+    > 使用
+
+    ![img](.Java%20IO/overview-selectors.png)
+
+* 
 
 # 参考
 
