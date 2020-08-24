@@ -68,6 +68,8 @@ SSL*(Secure Socket Layer 安全套接层)* 是HTTPS下的协议加密层, 之后
 
   还有`ECDSA,ED25519`,`ECDSA`等.
 
+> 对称加密速度快, 适合大量数据加密; 非对称加密算法安全性高, 但速度较慢.
+
 ## 其他算法
 
 * 散列算法
@@ -156,7 +158,7 @@ SSL*(Secure Socket Layer 安全套接层)* 是HTTPS下的协议加密层, 之后
 
 4. 浏览器使用公钥解密数字签名，得到摘要，然后也对数据进行哈希运行产生摘要，将两者对比，判断是否来自于要访问的服务器，然后执行自己的操作。
 
-5. 两者继续通过密钥通信
+5. 两者继续通过密钥协商, 得到一个对称密钥, 用于后续数据加密传输.
 
 但是问题来了，步骤1、2中，浏览器请求服务器时，请求被hacker拦截，并模拟服务器发送自己的公钥给浏览器，于是hacker可以通过自己的私钥来骗取浏览器的信任，容易窃取到浏览器用户的信息。这就是著名的[中间人攻击][2]。
 
@@ -222,7 +224,9 @@ SSL*(Secure Socket Layer 安全套接层)* 是HTTPS下的协议加密层, 之后
   * [TLS初探（2）证书简介](https://blog.csdn.net/jjxojm/article/details/81266601)
   * [TLS 百科](https://baike.baidu.com/item/TLS/2979545?fr=aladdin)
   * [证书番外篇之Android证书](https://blog.csdn.net/jjxojm/article/details/81395573)
-
-* 进阶阅读
+* HTTP交互过程
+  * [深入浅出HTTPS的交互过程](https://www.jianshu.com/p/42e1c073c142)
+  * [https交互过程](https://www.jianshu.com/p/d45b1d9e9d13)
+* 加密进阶阅读
   * [加密算法(DES,AES,RSA,MD5,SHA1,Base64)比较和项目应用](https://www.cnblogs.com/sochishun/p/7028056.html)
 
