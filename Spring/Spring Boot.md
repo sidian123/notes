@@ -255,6 +255,8 @@ spring boot整合了spring框架和三方库后，提供了自动配置的功能
     name: Developer Setup
     ```
 
+    字符串属性值也可以加引号, 如`'001'`, `"001"`, 可以防止一些意外的解析错误.
+
   - properties:
 
     ```properties
