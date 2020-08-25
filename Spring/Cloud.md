@@ -358,7 +358,11 @@ public interface UserService {
 
   https://www.baeldung.com/spring-cloud-openfeign
 
-* 
+* 响应处理器
+
+  https://stackoverflow.com/questions/31722478/spring-cloud-feign-interceptor
+
+  > Feign没有提供真正的响应处理器, 而是通过了更底层的方式来实现的.
 
 # 六 Hystrix
 
