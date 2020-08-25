@@ -92,7 +92,7 @@ Map<String, ResultValue> results = mapper.readValue(jsonSource,
    new TypeReference<Map<String, ResultValue>>() { } );
 // why extra work? Java Type Erasure will prevent type detection otherwise
 ```
-# 四 注解
+# 四 使用
 
 > 所有注解参考[Jackson Annotations](https://github.com/FasterXML/jackson-docs/wiki/JacksonAnnotations)
 
@@ -485,6 +485,27 @@ Simple value = xmlMapper.readValue("<Simple><x>1</x><y>2</y></Simple>", Simple.c
 值得了解的xml注解：
 * `@JacksonXmlRootElement` allows specifying XML element to use for wrapping the root element (default uses 'simple name' of the value class)
 * `@JacksonXmlCData` allows specifying that the value of a property is to be serialized within a CData tag.
+
+# 踩坑
+
+## 属性名变小写了
+
+属性名在序列化后会改变, 改变规则如下:
+
+> 第一个或第一个字符是大写时, 该字符及其之后**连续**的大写字符都将转化成小写
+
+例子: 
+
+```
+pId -> pid
+Pid -> pid
+PId -> pid
+PIIIDDDDD -> piiiddddd
+ssId -> ssId
+sIDDDDD -> siddddd
+```
+
+
 
 # 参考
 * [FasterXML/jackson-databind](https://github.com/FasterXML/jackson-databind/) Json序列化的官方教程
