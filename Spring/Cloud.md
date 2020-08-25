@@ -352,6 +352,14 @@ public interface UserService {
 
 关于方法参数, 需要使用对应注解修饰, 表示参数传递方式. 如`@RequestParam`, 否则会默认为请求体参数.
 
+## 拦截器
+
+* 请求处理器
+
+  https://www.baeldung.com/spring-cloud-openfeign
+
+* 
+
 # 六 Hystrix
 
 ## 介绍
