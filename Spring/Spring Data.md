@@ -160,7 +160,7 @@
 
   方法名之后接表达式, 如字段名. 多个表达式以`or`或`and`组合. 
   
-  注意, `or`优先级低, 且没有提升优先级的功能, 除了使用自定义查询.
+  注意, `or`优先级低, 且没有提升优先级的功能, 除了使用自定义DSL.
 
 #### repository定义Demo
 
@@ -1545,7 +1545,7 @@ public interface ItemRepository extends ElasticsearchRepository<Item,Long> {
 
 ![img](.Spring%20Data/1580998-20191208151142472-2111083555.png)
 
-## 自定义方法
+## 查询方法
 
 Spring Data 的另一个强大功能，是根据方法名称自动实现功能。
  比如：你的方法名叫做：findByTitle，那么它就知道你是根据title查询，然后自动帮你完成，无需写实现类。
@@ -1619,6 +1619,21 @@ public void queryByPriceBetween(){
 ![img](.Spring%20Data/1580998-20191208151845872-2023675795.png)
 
 虽然基本查询和自定义方法已经很强大了，但是如果是复杂查询（模糊、通配符、词条查询等）就显得力不从心了。此时，我们只能使用原生查询。
+
+### nullable参数
+
+至少`4.1.0+`版(还处于开发中), 查询方法可以使用`nullable`参数来查询. 但是目前`IsNull`关键字仍不支持.
+
+使用例子:
+
+```
+void deleteByName(@Nullable String name);
+```
+
+> 参考
+>
+> * [Query for null values.](https://github.com/spring-projects/spring-data-elasticsearch/commit/dec5231a05c4bec9e8a5595384f709f25b1fc01e)
+> * [Query for null values.](https://github.com/spring-projects/spring-data-elasticsearch/pull/355)
 
 ## 高级查询
 
