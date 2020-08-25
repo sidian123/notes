@@ -666,6 +666,24 @@ $ curl 'localhost:9200/accounts/person/_search'  -d '
 * `size` 查询多少条, 默认10条
 * `from` 从哪个位置开始查询, 默认0
 
+### null查询&删除
+
+```
+POST <index>/_delete_by_query
+
+{
+    "query": {
+        "bool": {
+            "must_not": {
+                "exists": {
+                    "field": "userid"
+                }
+            }
+        }
+    }
+}
+```
+
 # 进阶
 
 * 集群 & 节点
