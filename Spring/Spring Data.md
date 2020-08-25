@@ -126,56 +126,65 @@
 
 ### 查询方法定义
 
-* 查询策略
+#### 查询策略
 
-  由`Enable${store}Repositories`注解的`queryLookupStrategy`属性配置
+由`Enable${store}Repositories`注解的`queryLookupStrategy`属性配置
 
-  * `CREATE`
+* `CREATE`
 
-    从方法名中构建
+  从方法名中构建
 
-  * `USE_DECLARED_QUERY`
+* `USE_DECLARED_QUERY`
 
-    使用查询语句, 如SQL, 通常以注解来定义. 若未找到, 则抛出异常.
+  使用查询语句, 如SQL, 通常以注解来定义. 若未找到, 则抛出异常.
 
-  * `CREATE_IF_NOT_FOUND` (默认)
+* `CREATE_IF_NOT_FOUND` (默认)
 
-    组合上述两种行为, 首先看是否有查询语句, 若无则从方法名中构建.
+  组合上述两种行为, 首先看是否有查询语句, 若无则从方法名中构建.
 
-* 查询方法名构建
+#### 查询方法名构建
 
-  * 动作指示
+* 动作指示
 
-    方法名以`find…By`, `read…By`, `query…By`, `count…By`, and `get…By` 为前缀
+  方法名以`find…By`, `read…By`, `query…By`, `count…By`, and `get…By` 为前缀. 
 
-  * 表达式
+  * 查: `find...By`, `read...By`, `query...By`, `get...By`
+  * 统计: `count...By`(统计数目), `exists...By`(是否存在)
+  * 删除: `delete...By`, `remove...By`
 
-    方法名之后接表达式, 如字段名. 多个表达式以`Or`或`And`组合.
+  > 没有更新和增加的查询方法构建.
 
-  Demo
+  > `by`及后面的表达式可以省略, 此时表示匹配所有.
 
-  ```java
-  interface PersonRepository extends Repository<Person, Long> {
+* 表达式
+
+  方法名之后接表达式, 如字段名. 多个表达式以`or`或`and`组合. 
   
-    List<Person> findByEmailAddressAndLastname(EmailAddress emailAddress, String lastname);
-  
-    // Enables the distinct flag for the query
-    List<Person> findDistinctPeopleByLastnameOrFirstname(String lastname, String firstname);
-    List<Person> findPeopleDistinctByLastnameOrFirstname(String lastname, String firstname);
-  
-    // Enabling ignoring case for an individual property
-    List<Person> findByLastnameIgnoreCase(String lastname);
-    // Enabling ignoring case for all suitable properties
-    List<Person> findByLastnameAndFirstnameAllIgnoreCase(String lastname, String firstname);
-  
-    // Enabling static ORDER BY for a query
-    List<Person> findByLastnameOrderByFirstnameAsc(String lastname);
-    List<Person> findByLastnameOrderByFirstnameDesc(String lastname);
-  }
-  ```
+  注意, `or`优先级低, 且没有提升优先级的功能, 除了使用自定义查询.
 
+#### repository定义Demo
 
-* 创建repository实例
+```java
+interface PersonRepository extends Repository<Person, Long> {
+
+  List<Person> findByEmailAddressAndLastname(EmailAddress emailAddress, String lastname);
+
+  // Enables the distinct flag for the query
+  List<Person> findDistinctPeopleByLastnameOrFirstname(String lastname, String firstname);
+  List<Person> findPeopleDistinctByLastnameOrFirstname(String lastname, String firstname);
+
+  // Enabling ignoring case for an individual property
+  List<Person> findByLastnameIgnoreCase(String lastname);
+  // Enabling ignoring case for all suitable properties
+  List<Person> findByLastnameAndFirstnameAllIgnoreCase(String lastname, String firstname);
+
+  // Enabling static ORDER BY for a query
+  List<Person> findByLastnameOrderByFirstnameAsc(String lastname);
+  List<Person> findByLastnameOrderByFirstnameDesc(String lastname);
+}
+```
+
+#### 创建repository实例
 
 ## 自定义查询
 

@@ -399,9 +399,23 @@ pkill -F pid
 
 # Query DSL
 
-## 介绍
+## Search API
 
-* ES搜索方式: URI Search 和 Query DSL. 主要以Query DSL为主, 类比SQL的Select
+* Search API用于搜索文档, 且提供了两种使用方式:
+
+  * URI Search: 搜索参数放到URI参数上.
+  * Query DSL: 搜索参数放到请求体中, 且使用Query DSL语句查询. DSL可类比SQL语句.
+
+  这里推按Query DSL方式
+
+* API调用方式
+
+  ```
+  POST /<target>/_search
+  POST /_search
+  ```
+
+  > `target`可以是具体搜索的索引, 也可以不提供.
 
 * Query DSL
 
