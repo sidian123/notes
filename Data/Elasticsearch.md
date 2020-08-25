@@ -18,7 +18,7 @@
 
   是一种倒排索引, 直接建立**词**与文档的映射关系. 定义了要索引的字段, 和分词方式.
 
-* 类型 Type
+* 类型 Type (7.x弃用)
 
   文档的类型. 类型上也可以配置使用的分词器.
 
@@ -57,7 +57,9 @@
 
   ![img](.Elasticsearch/9419034-4f8eb4926bc326de.png)
   
-  **注意**, 其实这样的类比是不合理的, 因为Indices中的文档类型最好一样, 否则会导致搜索效率降低. 不像关系数据库的表一样, 不同表间结构可以完全不同. 因此7.0将弃用Type, 8.0完全移除. 见[Removal of mapping types](https://www.elastic.co/guide/en/elasticsearch/reference/7.3/removal-of-types.html#removal-of-types)
+  除此之外, ES中的字段是全部都加了索引的, 而关系数据库大部分需要自己手动加.
+  
+  > **注意**, 其实这样的类比是不合理的, 因为Indices中的文档类型最好一样, 否则会导致搜索效率降低. 不像关系数据库的表一样, 不同表间结构可以完全不同. 因此7.0将弃用Type, 8.0完全移除. 见[Removal of mapping types](https://www.elastic.co/guide/en/elasticsearch/reference/7.3/removal-of-types.html#removal-of-types)
 
 ## 原理
 
