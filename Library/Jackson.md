@@ -135,6 +135,19 @@ Map<String, ResultValue> results = mapper.readValue(jsonSource,
       }
   }
   ```
+  
+* 方式三
+
+  ```java
+  @Data
+  class Coordinates {
+      @JsonSetter("red")
+      @JsonProperty("r")
+      private int red;
+  }
+  ```
+
+  这里用`@JsonProperty`代替了`@JsonGetter`, 因为`@JsonGetter`不能注解到字段上, 接着`@JsonSetter`在反序列化时优先级要高一些.
 
 
 ### 忽略属性
