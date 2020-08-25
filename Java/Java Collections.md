@@ -313,6 +313,8 @@ A *stream* is a sequence of elements. Unlike a collection, it is not a data stru
 
 ### collect
 
+#### 介绍
+
 `collect()`方法原型
 
 ```java
@@ -337,6 +339,10 @@ return result;
 ```java
 List<String> asList = stringStream.collect(ArrayList::new, ArrayList::add, ArrayList::addAll);
 ```
+
+#### Collectors使用
+
+
 
 ## 平行流
 
