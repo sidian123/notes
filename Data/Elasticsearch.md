@@ -401,12 +401,14 @@ pkill -F pid
 
 ## Search API
 
+> [Search API 7.9](https://www.elastic.co/guide/en/elasticsearch/reference/current/search-search.html)
+
 * Search API用于搜索文档, 且提供了两种使用方式:
 
   * URI Search: 搜索参数放到URI参数上.
   * Query DSL: 搜索参数放到请求体中, 且使用Query DSL语句查询. DSL可类比SQL语句.
 
-  这里推按Query DSL方式
+  这里推荐Query DSL的使用方式
 
 * API调用方式
 
@@ -432,27 +434,27 @@ pkill -F pid
 
     可以对一个或多个字段进行查询.
 
-* 查询URL
+* 简单Demo
 
-  Query DSL查询的URL路径以`_search`结尾, 如
+  下面的简单Deom, 查询不提供Query DSL, 表示查询全部.
 
-  查询索引的类型下的文档
+  * 查询索引的类型下的文档
 
-  ```url
-  localhost:9200/accounts/person/_search
-  ```
+    ```
+    localhost:9200/accounts/person/_search
+    ```
 
-  查询索引下的文档
+  * 查询索引下的文档
 
-  ```url
-  localhost:9200/accounts/person/_search
-  ```
+    ```
+    localhost:9200/accounts/person/_search
+    ```
 
-  查询所有索引下的文档
+  * 查询所有索引下的文档
 
-  ```url
-  localhost:9200/_search
-  ```
+    ```
+    localhost:9200/_search
+    ```
 
 ## 字段类查询
 
@@ -644,8 +646,6 @@ POST jy_description/_search
   }
 }
 ```
-
-
 
 ## 其他
 
