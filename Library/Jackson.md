@@ -289,7 +289,7 @@ public class LKClassData {
 }
 ```
 
-
+> 好像默认忽略未知属性的.
 
 ## 序列化或解析方式
 
