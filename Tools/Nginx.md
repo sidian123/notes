@@ -750,7 +750,7 @@ server{
 ```nginx
 location / {
     proxy_pass http://192.168.0.177:7000/;
-    proxy_redirect http://119.3.200.75/ http://$host:$server_port/ ;
+    proxy_redirect http://112.34.250.45/ http://$host:$server_port/ ;
 	proxy_set_header   Host $host:$server_port; 
     proxy_set_header   X-Real-IP   $remote_addr;
     proxy_set_header   X-Forwarded-For $proxy_add_x_forwarded_for;
