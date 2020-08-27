@@ -691,6 +691,26 @@ You can also use the [`qs`](https://github.com/ljharb/qs) library.
 
 > The `qs` library is preferable if you need to stringify nested objects, as the `querystring` method has known issues with that use case (https://github.com/nodejs/node-v0.x-archive/issues/1665).
 
+## 文件下载
+
+下载的关键在于设置`responseType`为`blob`, `responseType`设置axios解析响应内容的方式.
+
+```javascript
+this.$axios.get(`/corpus/admin/text/annotation?textId=${id}`,{responseType:'blob'}).then(response => {
+    // 获取文件名
+    let t = new RegExp("filename=(.*)","g").exec(response.headers['content-disposition'])[1];
+    let filename=decodeURIComponent(t)
+    // 下载
+    fileDownload(response.data,filename)
+})
+```
+
+需要按照依赖:
+
+```
+npm install --save js-file-download
+```
+
 # 参考
 
 * [axios](https://github.com/axios/axios)
