@@ -59,6 +59,22 @@ tar -zxvf TeamCity-2020.1.3.tar.gz
 
 > tomcat的`shutdown.sh`和`startup.sh`脚本仅启动或关闭server
 
+# WebHook插件
+
+teamcity本身没有提供hook功能, 需要安装插件.
+
+> [tcplugins](https://github.com/tcplugins)/**[tcWebHooks](https://github.com/tcplugins/tcWebHooks)**
+
+## 安装步骤
+
+1. [下载](https://github.com/tcplugins/tcWebHooks/releases) tcWebHooks 和 tcWebHooks-REST-API 两个插件
+2. 在Teamcity-Administration-Plugins List中上传两个插件并启动
+3. 可能会被要求重启Teamcity.
+
+## 使用
+
+找到一个项目, 配置其WebHook. 配置`_Root`可达到全局配置的目的.
+
 # 邮件通知
 
 邮件通知, 需满足几个条件:
