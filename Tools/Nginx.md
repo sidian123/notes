@@ -637,6 +637,11 @@ listen 443 ssl;
 >
 > * [在Nginx/Tengine服务器上安装证书](https://help.aliyun.com/document_detail/98728.html?spm=5176.2020520154.0.0.675456a7crLH9u)
 > * [Nginx安装SSL配置HTTPs超详细完整全过程](https://www.hack520.com/481.html)
+>
+> HTTPS进一步优化
+>
+> * [八个HTTPS和SSL优化使用心得-减少等待时间和降低Https性能损耗](https://wzfou.com/https-ssl/)
+> * [SSL Configuration Generator](https://ssl-config.mozilla.org/)
 
 ## upstream
 
