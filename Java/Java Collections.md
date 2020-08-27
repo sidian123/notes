@@ -342,9 +342,69 @@ List<String> asList = stringStream.collect(ArrayList::new, ArrayList::add, Array
 
 #### Collectors使用
 
+* 收集元素为List
 
+  ```java
+  List<Apple> filterList = appleList.stream().filter(a -> a.getName().equals("香蕉")).collect(Collectors.toList());
+  ```
 
-## 平行流
+* 分组
+
+  将相同属性的元素归为一组
+
+  ```java
+  Map<Integer, List<Apple>> groupBy = appleList.stream().collect(Collectors.groupingBy(Apple::getId));
+  ```
+
+* List To Map
+
+  第一种方式, 需保证数组中key唯一, 否则抛出异常
+
+  ```java
+  Map<Integer, Animal> map = list.stream()
+      .collect(Collectors.toMap(Animal::getId, animal -> animal));
+  return map;
+  ```
+
+  第二种, key可以冲突, 但需提供value合并的函数
+
+  ```java
+  Map<String, String> phoneBook people.stream().collect(toMap(Person::getName,
+                                    Person::getAddress,
+                                    (s, a) -> s + ", " + a));
+  ```
+
+  > 这里将冲突key的value并置起来
+
+* 最大, 最小值
+
+  ```java
+  Optional<Dish> maxDish = Dish.menu.stream().
+        collect(Collectors.maxBy(Comparator.comparing(Dish::getCalories)));
+  maxDish.ifPresent(System.out::println);
+   
+  Optional<Dish> minDish = Dish.menu.stream().
+        collect(Collectors.minBy(Comparator.comparing(Dish::getCalories)));
+  minDish.ifPresent(System.out::println);
+  ```
+
+* 去重
+
+  ```java
+  list.stream().distinct().collect(Collectors.toList());
+  ```
+
+  元素需要实现`equals`方法. 根据元素属性来过滤, 目前没啥好用的方案
+
+### reduce
+
+* 求和
+
+  ```java
+  BigDecimal totalMoney = appleList.stream().map(Apple::getMoney).reduce(BigDecimal.ZERO, BigDecimal::add);
+  ```
+
+## 平行fen流
 
 将流分成子流, 每个子流在单独的线程中执行所有操作, 然后再组合所有子流的结果.
 
