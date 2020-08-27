@@ -65,8 +65,6 @@ tar -zxvf TeamCity-2020.1.3.tar.gz
 
 teamcity本身没有提供hook功能, 需要安装插件.
 
-> [tcplugins](https://github.com/tcplugins)/**[tcWebHooks](https://github.com/tcplugins/tcWebHooks)**
-
 ## 安装步骤
 
 1. [下载](https://github.com/tcplugins/tcWebHooks/releases) tcWebHooks 和 tcWebHooks-REST-API 两个插件
@@ -90,6 +88,12 @@ teamcity本身没有提供hook功能, 需要安装插件.
   ```
   teamcity.csrf.paranoid=false
   ```
+
+## 参考
+
+* [tcplugins](https://github.com/tcplugins)/**[tcWebHooks](https://github.com/tcplugins/tcWebHooks)**
+
+* [模板变量案例](https://github.com/tcplugins/tcWebHooks/wiki/Example-Webhook-Output---Name-Value-Pairs)
 
 # 邮件通知
 
