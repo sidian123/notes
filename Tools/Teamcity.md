@@ -19,7 +19,7 @@ tar -zxvf TeamCity-2020.1.3.tar.gz
 
 * **数据目录**: 存放Configuration配置, 构建结果, 当前操作文件. 
 
-  默认`%USERPROFILE%.BuildServer`目录下. 可修改, 修改`bin/startup.sh`文件, 添加
+  默认`%USERPROFILE%.BuildServer`目录下. 可修改, 修改`bin/runAll.sh`文件, 添加
 
   ```properties
   export TEAMCITY_DATA_PATH=/data/teamcity-frontend-data
