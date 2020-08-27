@@ -1,3 +1,62 @@
+# 开始
+
+## 介绍
+
+* 用于持续化集成, 持续化部署.
+
+* Server是管理中心, Agent是真正提供CI/CD功能的组件.
+
+## 安装
+
+```bash
+curl -LO https://download.jetbrains.8686c.com/teamcity/TeamCity-2020.1.3.tar.gz
+tar -zxvf TeamCity-2020.1.3.tar.gz
+```
+
+## 配置
+
+### Server
+
+* **数据目录**: 存放Configuration配置, 构建结果, 当前操作文件. 
+
+  默认`%USERPROFILE%.BuildServer`目录下. 可修改, 修改`bin/startup.sh`文件, 添加
+
+  ```properties
+  export TEAMCITY_DATA_PATH=/data/teamcity-frontend-data
+  ```
+
+  > 修改配置文件`teamcity-startup.properties`的方式, 貌似不生效.
+
+* **数据库**: 存放构建历史, 用户信息和其他数据. 
+
+  > 数据库的连接配置将存入数据目录中
+
+* **服务端口**, 默认`8111`, 可修改`conf/server.xml`文件
+
+### Agent
+
+* 配置文件`buildAgent/conf/buildAgent.properties`
+
+* 配置Server地址
+
+  ```
+  serverUrl=http://localhost:8111/
+  ```
+
+## 操作
+
+* 启动server和agent
+
+  ```bash
+  runAll.sh start
+  ```
+
+* 关闭server和agent
+
+  ```
+  runAll.sh stop
+  ```
+
 # 邮件通知
 
 邮件通知, 需满足几个条件:
