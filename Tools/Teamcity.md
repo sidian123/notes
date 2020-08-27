@@ -57,6 +57,8 @@ tar -zxvf TeamCity-2020.1.3.tar.gz
   runAll.sh stop
   ```
 
+> tomcat的`shutdown.sh`和`startup.sh`脚本仅启动或关闭server
+
 # 邮件通知
 
 邮件通知, 需满足几个条件:
