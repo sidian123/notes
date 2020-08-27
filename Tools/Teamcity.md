@@ -27,6 +27,8 @@ tar -zxvf TeamCity-2020.1.3.tar.gz
 
   > 修改配置文件`teamcity-startup.properties`的方式, 貌似不生效.
 
+  Server初始化后, `数据目录/config/internal.properties`成为了Server的配置文件. 可在WebUI的`Administration/Global Settings-/Data directory`中修改和配置, 但要让配置生效, 还需重启TeamCity.
+
 * **数据库**: 存放构建历史, 用户信息和其他数据. 
 
   > 数据库的连接配置将存入数据目录中
@@ -75,6 +77,20 @@ teamcity本身没有提供hook功能, 需要安装插件.
 
 找到一个项目, 配置其WebHook. 配置`_Root`可达到全局配置的目的.
 
+## 踩坑
+
+* tcWebHooks发起不了请求
+
+  因为2020.1及其之后版本TeamCity仅使用CSRF token来预防CSRF. 而最新版本的tcWebHooks仅支持`Origin/Referer`头字段的token传递. 
+
+  可通过修改配置文件的方式, 让TeamCity支持`Origin/Referer`方式传递的token
+
+  `internal.properties`文件
+
+  ```
+  teamcity.csrf.paranoid=false
+  ```
+
 # 邮件通知
 
 邮件通知, 需满足几个条件:
@@ -117,7 +133,9 @@ teamcity本身没有提供hook功能, 需要安装插件.
 
 
 
+# 参考
 
+[TeamCity Documentation](https://www.jetbrains.com/help/teamcity/teamcity-documentation.html)
 
 
 
