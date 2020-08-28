@@ -1884,6 +1884,28 @@ descriptions.forEach(System.out::println);
 
 > 参考[Elasticsearch搜索异常-------org.elasticsearch.common.io.stream.NotSerializableExceptionWrapper: parse_exception](https://www.cnblogs.com/technologykai/p/10101009.html)
 
+### 大结果集分页查询
+
+* from-size查询
+
+  如`size=10&from=100`, 将从每个分片中取出110个数据, 汇集排序后, 取出101_110号的文档. 因此该方式效率不高, 排序数据越多, 效率越低. 因此Elasticsearchxi限制了查询的数量, 10000个, 超了就报错.
+
+  在Spring Data中, `Pageable`的分页查询方式就是属于这种.
+
+* scroll-scan查询
+
+  scroll方式将初始化搜搜的结果缓存成一个快照, 然后遍历. 详细见[Elasticsearch使用Scroll-Scan实现数据遍历](https://blog.csdn.net/peterwanghao/article/details/75037600)
+
+
+
+
+
+
+
+
+
+
+
 # 参考
 
 * [Spring Data Elasticsearch基本使用](https://www.cnblogs.com/ifme/p/12005026.html)
