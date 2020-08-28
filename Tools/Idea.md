@@ -406,6 +406,10 @@ Idea会自动去`node_modules`中查找eslint的包, 和当前工作目录和父
 
 ![image-20200429095759821](.Idea/image-20200429095759821.png)
 
+## UML生成
+
+https://mp.weixin.qq.com/s/g1xl0JMnEEOYNnEa0rB3fw
+
 #  其他
 
 ## 清除缓存
