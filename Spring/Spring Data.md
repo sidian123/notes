@@ -1897,22 +1897,23 @@ descriptions.forEach(System.out::println);
   scroll方式将初始化搜搜的结果缓存成一个快照, 然后遍历. 详细见[Elasticsearch使用Scroll-Scan实现数据遍历](https://blog.csdn.net/peterwanghao/article/details/75037600)
   
   ```java
-  List<Concept> findConcepts(String tag, String branch, Pageable pageable){
-      LinkedList<Concept> concepts = new LinkedList<>();
-  
+  void findConcepts(String tag, String branch,Consumer<List<Concept>> consumer){
+      // 设置查询条件
       CriteriaQuery criteriaQuery = new CriteriaQuery(Criteria
               .where("semanticTag").is(tag)
               .and("branch").is(branch)
               .and("status").is(true)
-      ).setPageable(pageable);
+      ).setPageable(PageRequest.of(0, 100)); // 该分页, 仅size有用, 设置每次取多少元素
   
-      ScrolledPage<Concept> scroll =  elasticsearchTemplate.startScroll(3000, criteriaQuery, Concept.class);
+      // 游标的方式查询
+      ScrolledPage<Concept> scroll =  elasticsearchTemplate.startScroll(1000, criteriaQuery, Concept.class);
       while (scroll.hasContent()) { ;
-          concepts.addAll(scroll.getContent());
-          scroll =  elasticsearchTemplate.continueScroll(scroll.getScrollId(), 3000, Concept.class);
+          // 消费内容
+          consumer.accept(scroll.getContent());
+          // 准备下次查询
+          scroll =  elasticsearchTemplate.continueScroll(scroll.getScrollId(), 1000, Concept.class);
       }
       elasticsearchTemplate.clearScroll(scroll.getScrollId());
-      return concepts;
   }
   ```
   
