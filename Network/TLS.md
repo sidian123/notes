@@ -23,28 +23,54 @@ TLS/SSL握手的简化流程如下
     * 对称加密算法 Enc (信息加密)
     * 信息摘要 Mac(完整性校验);
 
+    如`ECDHE-ECDSA-AES128-GCM-SHA256` (好像多了个)
+    
   * 支持的压缩算法 compression methods 列表，用于后续的信息压缩传输;
   * 随机数 random_C，用于后续的密钥的生成;
 
   * 扩展字段 extensions，支持协议与算法的相关参数以及其它辅助信息等，常见的 SNI 就属于扩展字段.
 
-* server_hello
+* server_hello 
 
-  server_hello, 服务端返回协商的信息结果，包括选择使用的协议版本 
+  * 服务端返回协商的信息结果，包括选择使用的协议版本version，选择的加密套件 cipher  suite，选择的压缩算法 compression method、随机数 random_S 等，其中随机数用于后续的密钥协商;
 
-  * version，选择的加密套件 cipher  suite，选择的压缩算法 compression method、随机数 random_S 等，其中随机数用于后续的密钥协商;
   * server_certificates, 服务器端配置对应的证书链，用于身份验证与密钥交换;
-  * server_hello_done，通知客户端 server_hello 信息发送结束;
 
-大致过程如下
+* 证书校验
+
+    • [[证书链\]](http://blog.csdn.net/hherima/article/details/52469488)的可信性 trusted certificate path，方法如前文所述;
+     • 证书是否吊销 revocation，有两类方式离线 CRL 与在线 OCSP，不同的客户端行为会不同;
+     • 有效期 expiry date，证书是否在有效时间范围;
+     • 域名 domain，核查证书域名是否与当前的访问域名匹配，匹配规则后续分析;
+
+* client_key_exchange+change_cipher_spec+encrypted_handshake_message
+
+  1. client_key_exchange，合法性验证通过之后，客户端计算产生随机数字 Pre-master，并用证书公钥加密，发送给服务器;
+
+  2. 此时客户端已经获取全部的计算协商密钥需要的信息：两个明文随机数 random_C 和 random_S 与自己计算产生的 Pre-master，计算得到协商密钥;
+
+     ```
+      enc_key=Fuc(random_C, random_S, Pre-Master)
+     ```
+
+  3. change_cipher_spec，客户端通知服务器后续的通信都采用协商的通信密钥和加密算法进行加密通信;
+
+  4. encrypted_handshake_message，结合之前所有通信参数的 hash 值与其它相关信息生成一段数据，采用协商密钥 session secret 与算法进行加密，然后发送给服务器用于数据与握手验证;
+
+* change_cipher_spec+encrypted_handshake_message
+
+  1. 服务器用私钥解密加密的 Pre-master 数据，基于之前交换的两个明文随机数 random_C 和 random_S，计算得到协商密钥:enc_key=Fuc(random_C, random_S, Pre-Master);
+  2. 计算之前所有接收信息的 hash 值，然后解密客户端发送的 encrypted_handshake_message，验证数据和密钥正确性;
+  3. change_cipher_spec, 验证通过之后，服务器同样发送 change_cipher_spec 以告知客户端后续的通信都采用协商的密钥与算法进行加密通信;
+  4. encrypted_handshake_message, 服务器也结合所有当前的通信参数信息生成一段数据并采用协商密钥 session secret 与算法加密并发送到客户端;
+
+总结一些过程:
 
 * 首先客户端与服务器端握手，其中包含有协商的**加密套件**、随机数等信息；
 * 服务器向终端下发证书，终端进行**证书**校验，判断其是否可信；
 * 如果要求双向认证，则客户端也需要向服务器提供证书，服务器根据证书进行校验，从而确认终端身份
 * 客户端与服务器端分别利用证书中的**公钥**以及服务器端保存的**私钥**进行**会话密钥**协商
 * 完成之后即可根据协商好的加密算法、摘要算法以及密钥进行数据加密传输并保证其完整性。
-
-
 
 > 参考
 >
@@ -182,8 +208,6 @@ A和B拥有配对的密钥, 那么他们间的交流是加密过的, 是可以�
   ![image-20200829154352006](.TLS/image-20200829154352006.png)
 
 ## 证书吊销
-
-
 
 ## 相关文件
 
