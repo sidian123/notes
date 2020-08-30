@@ -1312,7 +1312,31 @@ public interface CountryMapper extends Mapper<Country> {
 
 ## Mybatis-Plus
 
-略, 不想用!!!
+* 介绍
+
+  从官网截取了关键特性
+
+  * **无侵入**：只做增强不做改变，引入它不会对现有工程产生影响，如丝般顺滑
+  * **损耗小**：启动即会自动注入基本 CURD，性能基本无损耗，直接面向对象操作
+  * **支持 ActiveRecord 模式**：支持 ActiveRecord 形式调用，实体类只需继承 Model 类即可进行强大的 CRUD 操作
+
+* 依赖引入
+
+  ```xml
+  <dependency>
+      <groupId>com.baomidou</groupId>
+      <artifactId>mybatis-plus-boot-starter</artifactId>
+      <version>3.4.0</version>
+  </dependency>
+  ```
+
+  > 集成思路也是替换`MapperFactoryBean`.
+
+* 配置
+
+  基本不用配置, 详细见[使用配置](https://baomidou.com/config/#%E5%9F%BA%E6%9C%AC%E9%85%8D%E7%BD%AE)
+
+  
 
 # 实战
 ## 注意点
