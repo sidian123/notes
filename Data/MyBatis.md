@@ -1312,6 +1312,8 @@ public interface CountryMapper extends Mapper<Country> {
 
 ## Mybatis-Plus
 
+### 开始
+
 * 介绍
 
   从官网截取了关键特性
@@ -1335,6 +1337,8 @@ public interface CountryMapper extends Mapper<Country> {
 * 配置
 
   基本不用配置, 详细见[使用配置](https://baomidou.com/config/#%E5%9F%BA%E6%9C%AC%E9%85%8D%E7%BD%AE)
+
+* 注解
 
   
 
