@@ -1338,9 +1338,14 @@ public interface CountryMapper extends Mapper<Country> {
 
   基本不用配置, 详细见[使用配置](https://baomidou.com/config/#%E5%9F%BA%E6%9C%AC%E9%85%8D%E7%BD%AE)
 
-* 注解
+
+### Model声明
+
+* `@TableField`
 
   
+
+
 
 # 实战
 ## 注意点
