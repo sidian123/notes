@@ -1583,6 +1583,8 @@ Mybatis XML
 
 ## 多数据源
 
+### Mybatis Or 通用Mapper
+
 [Springboot+Mybatis+通用Mapper多数据源实现数据同步](https://blog.csdn.net/qq904274014/article/details/86594776)
 
 下面配置适用于Mybatis和通用Mapper, 但需要注意的是, 通用Mapper用的`tk.mybatis.spring.annotation.MapperScan`, Mybatis用的`org.mybatis.spring.annotation.MapperScan`
@@ -1650,7 +1652,75 @@ spring:
     maxOpenPreparedStatements: 20
 ```
 
+### Mybatis-plus
 
+将下面的`symptom`替换为自己的前缀即可. 注意, 这里直接使用了Druid的数据源, 而非像上一小节中让Spring自己查找.
+
+```java
+import com.alibaba.druid.pool.DruidDataSource;
+import com.baomidou.mybatisplus.annotation.DbType;
+import com.baomidou.mybatisplus.extension.plugins.PaginationInterceptor;
+import com.baomidou.mybatisplus.extension.plugins.pagination.optimize.JsqlParserCountOptimize;
+import com.baomidou.mybatisplus.extension.spring.MybatisSqlSessionFactoryBean;
+import org.apache.ibatis.plugin.Interceptor;
+import org.apache.ibatis.session.SqlSessionFactory;
+import org.mybatis.spring.SqlSessionTemplate;
+import org.mybatis.spring.annotation.MapperScan;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
+import org.springframework.jdbc.datasource.DataSourceTransactionManager;
+
+import javax.sql.DataSource;
+
+@Configuration
+@MapperScan(basePackages = {"com.clinical.jingyi.mapper.symptom"}, sqlSessionFactoryRef = "symptomSqlSessionFactory")
+public class SymptomDatasourceConfiguration {
+    private final static String mapperLocation = "classpath*:/mapper/symptom/*.xml";
+
+
+    @Bean(name = "symptomDataSource")
+    @ConfigurationProperties(prefix = "spring.datasource.symptom")
+    public DataSource dataSource() {
+        return new DruidDataSource();
+    }
+
+    @Bean(name = "symptomTransactionManager")
+    public DataSourceTransactionManager transactionManager(@Qualifier("symptomDataSource") DataSource dataSource) {
+        return new DataSourceTransactionManager(dataSource);
+    }
+
+    @Bean(name = "symptomSqlSessionFactory")
+    public SqlSessionFactory sqlSessionFactory(@Qualifier("symptomDataSource") DataSource dataSource) throws Exception {
+        MybatisSqlSessionFactoryBean bean = new MybatisSqlSessionFactoryBean();
+        bean.setDataSource(dataSource);
+        PathMatchingResourcePatternResolver pathMatchResolver = new PathMatchingResourcePatternResolver();
+        bean.setMapperLocations(pathMatchResolver.getResources(mapperLocation));
+        //手动设置session工厂时，需要手动添加分页插件
+        Interceptor[] plugins = new Interceptor[1];
+        plugins[0] = paginationInterceptor();
+        bean.setPlugins(plugins);
+        return bean.getObject();
+    }
+
+    @Bean
+    public PaginationInterceptor paginationInterceptor() {
+        PaginationInterceptor paginationInterceptor = new PaginationInterceptor();
+        paginationInterceptor.setLimit(300);
+        paginationInterceptor.setDialectType(DbType.MYSQL.getDb());
+        paginationInterceptor.setCountSqlParser(new JsqlParserCountOptimize(true));
+        return paginationInterceptor;
+    }
+
+    @Bean("symptomSqlSessionTemplate")
+    public SqlSessionTemplate sqlSessionTemplate(
+            @Qualifier("symptomSqlSessionFactory") SqlSessionFactory sessionFactory) {
+        return new SqlSessionTemplate(sessionFactory);
+    }
+}
+```
 
 # 参考
 mybatis：http://www.mybatis.org/mybatis-3/index.html
