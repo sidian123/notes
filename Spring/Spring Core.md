@@ -288,7 +288,7 @@ Spring提供了注解来异步执行和调度任务.
 ## 开始
 
 * 介绍	
-  * 未与Web层绑死, 可用在其他地方
+  * 未与Web层绑死, 可用在其他地方, 但主要还是用在Controller类上.
   * JSR-303 Bean Validation API  被全面支持, 由hibernate validation实现, Spring又对hibernate validation进行了二次封装.
   * 还支持hibernate自己的注解
   * 仅对Bean校验, 不支持其他方式校验
@@ -359,12 +359,10 @@ Hibernate Validator提供的校验注解：
   }
   ```
 
-* @Controller
-
-  对
+* Controller层
 
   ```java
-  @Controller
+@Controller
   public class FooController {
   
       @RequestMapping("/foo")
@@ -379,10 +377,46 @@ Hibernate Validator提供的校验注解：
       }
   }
   ```
-
   
+  1. <1> 对要校验的参数标注`@Validated`注解
+2. <2> 校验结果将存入`BindingResult`中. 若不提供该参数, 将抛出`MethodArgumentNotValidException`异常.
+  
+  此外, 多个校验参数和`BindingResult`需要相邻, 如
+  
+  ```java
+  foo(@Validated Foo foo, BindingResult fooBindingResult ，@Validated Bar bar, BindingResult barBindingResult)
+  ```
 
+### 方法参数校验
 
+```java
+@RestController
+@Validated <1>
+public class BarController {
+
+    @RequestMapping("/bar")
+    public @NotBlank <2> String bar(@Min(18) Integer age <3>) {
+        System.out.println("age : " + age);
+        return "";
+    }
+
+    @ExceptionHandler(ConstraintViolationException.class)
+    public Map handleConstraintViolationException(ConstraintViolationException cve){
+        Set<ConstraintViolation<?>> cves = cve.getConstraintViolations();<4>
+        for (ConstraintViolation<?> constraintViolation : cves) {
+            System.out.println(constraintViolation.getMessage());
+        }
+        Map map = new HashMap();
+        map.put("errorCode",500);
+        return map;
+    }
+
+}
+```
+
+1. <1> 类需要标注`@Validated`注解
+2. <2> <3> 校验方法的返回值和入参
+3. <4> 添加异常处理器. (只能这么获取校验信息)
 
 ## 参考
 
