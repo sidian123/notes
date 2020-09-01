@@ -1724,7 +1724,18 @@ public class SymptomDatasourceConfiguration {
 }
 ```
 
+```properties
+spring:
+	datasource:
+        examination:
+            url: jdbc:mysql://119.333.222.33:3306/db_examination?useUnicode=true&characterEncoding=utf-8&allowMultiQueries=true&&useSSL=false&serverTimezone=CTT
+            password: 2020
+            driver-class-name: com.mysql.cj.jdbc.Driver
+            username: root
+```
+
 # 参考
+
 mybatis：http://www.mybatis.org/mybatis-3/index.html
 mybatis-spring：http://www.mybatis.org/spring/sample.html
 java api及所有注解：http://www.mybatis.org/mybatis-3/java-api.html
