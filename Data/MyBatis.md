@@ -1330,6 +1330,16 @@ public interface CountryMapper extends Mapper<Country> {
       <artifactId>mybatis-plus-boot-starter</artifactId>
       <version>3.4.0</version>
   </dependency>
+  <dependency>
+      <groupId>com.baomidou</groupId>
+      <artifactId>mybatis-plus-annotation</artifactId>
+      <version>3.4.0</version>
+  </dependency>
+  <dependency>
+      <groupId>com.baomidou</groupId>
+      <artifactId>mybatis-plus-extension</artifactId>
+      <version>3.4.0</version>
+  </dependency>
   ```
 
   > 集成思路也是替换`MapperFactoryBean`.
