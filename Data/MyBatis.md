@@ -1652,6 +1652,8 @@ spring:
     maxOpenPreparedStatements: 20
 ```
 
+> 感觉这里properties配置还是有点问题的
+
 ### Mybatis-plus
 
 将下面的`symptom`替换为自己的前缀即可. 注意, 这里直接使用了Druid的数据源, 而非像上一小节中让Spring自己查找.
