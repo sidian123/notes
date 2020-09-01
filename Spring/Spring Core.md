@@ -285,10 +285,52 @@ Spring提供了注解来异步执行和调度任务.
 
 # Validation
 
-* 未与Web层绑死, 可用在其他地方
-*  JSR-303 Bean Validation API  被全面支持
+## 开始
 
-> 是对Bean的校验, 参数本身校验貌似未支持, 这个可以靠基本类型验证, 暂时以后再了解;
+* 介绍	
+  * 未与Web层绑死, 可用在其他地方
+  * JSR-303 Bean Validation API  被全面支持, 由hibernate validation实现, Spring又对hibernate validation进行了二次封装.
+  * 还支持hibernate自己的注解
+  * 仅对Bean校验, 不支持其他方式校验
+
+* 依赖引入
+
+  一般无需引入, 因为`starter-web`已经引入了
+
+  ```xml
+  <dependency>
+      <groupId>org.hibernate</groupId>
+      <artifactId>hibernate-validator</artifactId>
+  </dependency>
+  ```
+
+## 注解使用
+
+> 注解在`javax.validation.constraints`包下
+
+JSR提供的校验注解：         
+
+* @Null   被注释的元素必须为 null
+* @NotNull    被注释的元素必须不为 null    
+* @AssertTrue     被注释的元素必须为 true    
+* @AssertFalse    被注释的元素必须为 false    
+* @Min(value)     被注释的元素必须是一个数字，其值必须大于等于指定的最小值    
+* @Max(value)     被注释的元素必须是一个数字，其值必须小于等于指定的最大值    
+* @DecimalMin(value)  被注释的元素必须是一个数字，其值必须大于等于指定的最小值    
+* @DecimalMax(value)  被注释的元素必须是一个数字，其值必须小于等于指定的最大值    
+* @Size(max=, min=)   被注释的元素的大小必须在指定的范围内    
+* @Digits (integer, fraction)     被注释的元素必须是一个数字，其值必须在可接受的范围内    
+* @Past   被注释的元素必须是一个过去的日期    
+* @Future     被注释的元素必须是一个将来的日期    
+* @Pattern(regex=,flag=)  被注释的元素必须符合指定的正则表达式    
+
+Hibernate Validator提供的校验注解：  
+
+* @NotBlank(message =)   验证字符串非null，且长度必须大于0    
+* @Email  被注释的元素必须是电子邮箱地址    
+* @Length(min=,max=)  被注释的字符串的大小必须在指定的范围内    
+* @NotEmpty   被注释的字符串的必须非空    
+* @Range(min=,max=,message=)  被注释的元素必须在合适的范围内
 
 > 参考
 >
@@ -322,7 +364,7 @@ Spring的`util`包下, 含有各种工具类, 如
 含与Bean相关的接口与类
 
 *  [BeanUtils](https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/beans/BeanUtils.html) : Static convenience methods for JavaBeans: for instantiating beans, checking bean property types, copying bean properties, etc. 
-  * `copyProperties()`: bean间拷贝属性
+* `copyProperties()`: bean间拷贝属性
 
 > 参考[Package org.springframework.beans](https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/beans/package-summary.html)
 
