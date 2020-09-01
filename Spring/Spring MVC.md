@@ -714,6 +714,10 @@ public class ResponseFilter{
 
 * `RestControllerAdvice`表示异常处理器的结果直接渲染到消息体里
 
+-----------
+
+`@Order`定义过滤器执行顺序, 越小越先执行, 默认`Integer.MAX_VALUE`
+
 > 参考
 >
 > * [Exception Handling in Spring MVC](https://spring.io/blog/2013/11/01/exception-handling-in-spring-mvc)
