@@ -304,11 +304,11 @@ Spring提供了注解来异步执行和调度任务.
   </dependency>
   ```
 
-## 注解使用
+## 注解
 
-> 注解在`javax.validation.constraints`包下
+JSR提供的校验注解：  
 
-JSR提供的校验注解：         
+> 注解在`javax.validation.constraints`包下      
 
 * @Null   被注释的元素必须为 null
 * @NotNull    被注释的元素必须不为 null    
@@ -332,10 +332,62 @@ Hibernate Validator提供的校验注解：
 * @NotEmpty   被注释的字符串的必须非空    
 * @Range(min=,max=,message=)  被注释的元素必须在合适的范围内
 
-> 参考
->
-> * [Spring Validation](https://docs.spring.io/spring/docs/current/spring-framework-reference/core.html#validation-beanvalidation)
-> * [SpringMVC validation完成后端数据校验（较全面）](https://blog.csdn.net/m0_37589327/article/details/78648328)  : 写的还行吧
+## 使用
+
+### Bean校验
+
+* Bean字段约束声明, 使用以上注解
+
+  ```java
+  public class Foo {
+  
+      @NotBlank
+      private String name;
+  
+      @Min(18)
+      private Integer age;
+  
+      @Pattern(regexp = "^1(3|4|5|7|8)\\d{9}$",message = "手机号码格式错误")
+      @NotBlank(message = "手机号码不能为空")
+      private String phone;
+  
+      @Email(message = "邮箱格式错误")
+      private String email;
+  
+      //... getter setter
+  
+  }
+  ```
+
+* @Controller
+
+  对
+
+  ```java
+  @Controller
+  public class FooController {
+  
+      @RequestMapping("/foo")
+      public String foo(@Validated Foo foo <1>, BindingResult bindingResult <2>) {
+          if(bindingResult.hasErrors()){
+              for (FieldError fieldError : bindingResult.getFieldErrors()) {
+                  //...
+              }
+              return "fail";
+          }
+          return "success";
+      }
+  }
+  ```
+
+  
+
+
+
+## 参考
+
+* [Spring Validation](https://docs.spring.io/spring/docs/current/spring-framework-reference/core.html#validation-beanvalidation)
+* [SpringMVC validation完成后端数据校验（较全面）](https://blog.csdn.net/m0_37589327/article/details/78648328)  : 写的还行吧
 
 # Resource
 
