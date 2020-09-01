@@ -1349,12 +1349,10 @@ public interface CountryMapper extends Mapper<Country> {
     @TableField(value = "`name`")
     private String name;
     ```
-  
-    
-  
-    
 
+### 分页
 
+`Page`类
 
 # 实战
 ## 注意点
