@@ -1343,7 +1343,16 @@ public interface CountryMapper extends Mapper<Country> {
 
 * `@TableField`
 
+  * 字段名为关键字时, 注意转义, 如
   
+    ```java
+    @TableField(value = "`name`")
+    private String name;
+    ```
+  
+    
+  
+    
 
 
 
