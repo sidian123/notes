@@ -1364,6 +1364,27 @@ public interface CountryMapper extends Mapper<Country> {
 
 `Page`类
 
+### 条件构造器
+
+提供两种方式构建构造器:
+
+* 老的方式
+
+  ```java
+  QueryWrapper<MedicineCategoryRelation> queryWrapper = new QueryWrapper();
+  queryWrapper.eq("category_id", medicineCategoryRelation.getCategoryId())
+      .eq("chinese_medicine_id", medicineCategoryRelation.getChineseMedicineId());
+  List<MedicineCategoryRelation> list = tcmMedicineCategoryRelationMapper.selectList(queryWrapper);
+  ```
+
+  缺点: 1) 不是完全的链式构建 2) 方法名为字符串, 增加隐患
+
+* lambda(推荐)
+
+  ```java
+  page(page, Wrappers.<Symptom>lambdaQuery().eq(Symptom::getCategoryId, categoryId))
+  ```
+
 # 实战
 ## 注意点
 
