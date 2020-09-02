@@ -673,6 +673,16 @@ MapperFactoryBean需要注入SqlSessionFactory或SqlSessionTemplate都行，如�
 </dependency>
 ```
 
+非Spring Boot的依赖
+
+```xml
+<dependency>
+    <groupId>com.github.pagehelper</groupId>
+    <artifactId>pagehelper</artifactId>
+    <version>5.2.0</version>
+</dependency>
+```
+
 ## 配置
 
 一般无需配置, 这里给出常用配置
