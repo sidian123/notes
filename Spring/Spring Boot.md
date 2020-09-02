@@ -1420,6 +1420,30 @@ public class EmployeeRestControllerIntegrationTest {
 
 在测试用例中, `@Transactional`的方法在结束后默认会回滚. 可加上`@Rollback(false)`来阻止这种行为.
 
+### @Ignore
+
+标注`@Ignore`的测试用例不参与测试. 如
+
+```java
+@Test
+@Ignore
+public void test() {
+    ...
+}
+```
+
+### @ActiveProfiles
+
+测试类用的哪个profile配置, 如
+
+```java
+@ActiveProfiles("dev")
+@SpringBootTest
+public class DiseaseControllerTest {
+	...
+}
+```
+
 ## 参考
 
 * [Testing](https://docs.spring.io/spring-boot/docs/2.2.6.RELEASE/reference/html/spring-boot-features.html#boot-features-testing)
