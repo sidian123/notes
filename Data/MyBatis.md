@@ -1755,7 +1755,7 @@ spring:
 
 将下面的`symptom`替换为自己的前缀即可. 注意, 这里直接使用了Druid的数据源, 而非像上一小节中让Spring自己查找.
 
-> 下来配置依据, 来源于[使用配置](https://baomidou.com/config/#%E5%9F%BA%E6%9C%AC%E9%85%8D%E7%BD%AE)给出的MVC配置方式, 代码暂时还不全
+> 多数据源会导致Mybatis-Plus完全失效. 需要自己配置所有, 下来配置依据, 来源于[使用配置](https://baomidou.com/config/#%E5%9F%BA%E6%9C%AC%E9%85%8D%E7%BD%AE)给出的MVC配置方式, 代码暂时还不全
 
 ```java
 import com.baomidou.mybatisplus.annotation.DbType;
