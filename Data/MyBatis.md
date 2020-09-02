@@ -1359,6 +1359,45 @@ public interface CountryMapper extends Mapper<Country> {
 
   * ` logicDeleteValue` 逻辑删除时, 字段的值, 默认`1`
   * ` logicNotDeleteValue` 逻辑不删除时, 字段的值, 默认`0`
+  
+* 自动填充时间
+
+  只能在新增和修改操作的时候填充, 逻辑删除属于修改操作.
+
+  * 实体需声明填充类型
+
+    ```java
+    @ApiModelProperty(value = "创建时间")
+    @TableField(fill = FieldFill.INSERT)
+    private Date createTime;
+    
+    @ApiModelProperty(value = "更新时间")
+    @TableField(fill = FieldFill.INSERT_UPDATE)
+    private Date updateTime;
+    ```
+
+  * 填充处理器
+
+    ```java
+    /**
+     * 自动填充更新时间和修改时间插件
+     */
+    @Component
+    public class MyMetaObjectHandler implements MetaObjectHandler {
+        @Override
+        public void insertFill(MetaObject metaObject) {
+            this.setFieldValByName("createTime",new Date(),metaObject);
+            this.setFieldValByName("updateTime",new Date(),metaObject);
+        }
+    
+        @Override
+        public void updateFill(MetaObject metaObject) {
+            this.setFieldValByName("updateTime",new Date(),metaObject);
+        }
+    }
+    ```
+
+    
 
 
 ### Model声明
