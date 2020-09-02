@@ -1387,7 +1387,6 @@ public interface CountryMapper extends Mapper<Country> {
         @Override
         public void insertFill(MetaObject metaObject) {
             this.setFieldValByName("createTime",new Date(),metaObject);
-            this.setFieldValByName("updateTime",new Date(),metaObject);
         }
     
         @Override
@@ -1396,7 +1395,6 @@ public interface CountryMapper extends Mapper<Country> {
         }
     }
     ```
-
     
 
 
