@@ -1396,7 +1396,9 @@ public interface CountryMapper extends Mapper<Country> {
     public class MyMetaObjectHandler implements MetaObjectHandler {
         @Override
         public void insertFill(MetaObject metaObject) {
-            this.setFieldValByName("createTime",new Date(),metaObject);
+            // 同时赋值, 因为经测试, FieldFill.INSERT_UPDATE字段并不会再插入时触发该方法
+            this.setFieldValByName("tsCreate", new Date(), metaObject);
+            this.setFieldValByName("tsUpdate", new Date(), metaObject);
         }
     
         @Override
