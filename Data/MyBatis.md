@@ -1344,9 +1344,21 @@ public interface CountryMapper extends Mapper<Country> {
 
   > 集成思路也是替换`MapperFactoryBean`.
 
-* 配置
+### 配置
 
-  基本不用配置, 详细见[使用配置](https://baomidou.com/config/#%E5%9F%BA%E6%9C%AC%E9%85%8D%E7%BD%AE)
+> 基本不用配置, 详细见[使用配置](https://baomidou.com/config/#%E5%9F%BA%E6%9C%AC%E9%85%8D%E7%BD%AE)
+
+* 查, 改, 曾策略, 默认`NOT_NULL` , 如插入时判断是否为null
+
+  ```java
+  insert into table_a(<if test="columnProperty != null">column</if>) 
+  values (<if test="columnProperty != null">#{columnProperty}</if>)
+  ```
+
+* 逻辑删除
+
+  * ` logicDeleteValue` 逻辑删除时, 字段的值, 默认`1`
+  * ` logicNotDeleteValue` 逻辑不删除时, 字段的值, 默认`0`
 
 
 ### Model声明
