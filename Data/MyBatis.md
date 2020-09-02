@@ -1755,6 +1755,55 @@ spring:
 
 将下面的`symptom`替换为自己的前缀即可. 注意, 这里直接使用了Druid的数据源, 而非像上一小节中让Spring自己查找.
 
+> 下来配置依据, 来源于[使用配置](https://baomidou.com/config/#%E5%9F%BA%E6%9C%AC%E9%85%8D%E7%BD%AE)给出的MVC配置方式, 代码暂时还不全
+
+```java
+import com.baomidou.mybatisplus.annotation.DbType;
+import com.baomidou.mybatisplus.core.config.GlobalConfig;
+import com.baomidou.mybatisplus.extension.plugins.PaginationInterceptor;
+import com.baomidou.mybatisplus.extension.plugins.pagination.optimize.JsqlParserCountOptimize;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
+import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+
+/**
+ * 多数据源通用配置
+ * @author sidian
+ * @date 2020/9/2 16:09
+ */
+@Configuration
+public class CommonDatasourceConfiguration {
+    @Bean
+    @ConditionalOnMissingBean
+    @ConfigurationProperties(prefix = "mybatis-plus.global-config.db-config")
+    GlobalConfig.DbConfig dbConfig(){
+        return new GlobalConfig.DbConfig();
+    }
+
+    @Bean
+    @ConditionalOnMissingBean
+    @ConfigurationProperties(prefix = "mybatis-plus.global-config")
+    GlobalConfig globalConfig(GlobalConfig.DbConfig dbConfig){
+        GlobalConfig globalConfig = new GlobalConfig();
+        globalConfig.setDbConfig(dbConfig);
+        return globalConfig;
+    }
+
+    @Bean
+    @ConditionalOnMissingBean
+    public PaginationInterceptor paginationInterceptor() {
+        PaginationInterceptor paginationInterceptor = new PaginationInterceptor();
+        paginationInterceptor.setLimit(300);
+        paginationInterceptor.setDialectType(DbType.MYSQL.getDb());
+        paginationInterceptor.setCountSqlParser(new JsqlParserCountOptimize(true));
+        return paginationInterceptor;
+    }
+}
+```
+
+
+
 ```java
 import com.alibaba.druid.pool.DruidDataSource;
 import com.baomidou.mybatisplus.annotation.DbType;
@@ -1832,6 +1881,8 @@ spring:
             driver-class-name: com.mysql.cj.jdbc.Driver
             username: root
 ```
+
+
 
 # 参考
 
