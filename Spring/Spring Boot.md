@@ -312,6 +312,16 @@ spring boot整合了spring框架和三方库后，提供了自动配置的功能
     my.servers[0]=dev.example.com
     my.servers[1]=another.example.com
     ```
+    
+  - yaml进阶: 元素值是对象
+  
+    ```yaml
+    AAPL:
+      - shares: -75.088
+        date: 11/27/2015
+      - shares: 75.088
+        date: 11/26/2015
+    ```
 
 ### 属性值取出
 
