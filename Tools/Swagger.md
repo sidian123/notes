@@ -78,6 +78,7 @@ public class SpringFoxConfig {
 
   * `value` 类名
   * `description` 类详细信息
+  * `tags` 标签. knife4j用的这个
 
   > 常用`description`
 
