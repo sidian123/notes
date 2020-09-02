@@ -561,6 +561,12 @@ $(COMMAND)
   source script.sh
   ```
 
+# 进阶
+
+## 文本替换sed
+
+## 微脚本执行awk
+
 # 五 其他
 
 ## 成为孤儿进程
