@@ -2830,7 +2830,9 @@ for (Method m : clz.getDeclaredMethods()) {
 
 # 其他
 
-## JavaDoc注释
+## JavaDoc
+
+### 注释
 
 字段,方法,类的JavaDoc注释, 在它的声明上添加
 
@@ -2850,6 +2852,10 @@ package package_name;
 ```
 
 > 注意, 该文件内不要有其他的内容了.
+
+### 注解
+
+参考[How to Write Doc Comments for the Javadoc Tool](https://www.oracle.com/technical-resources/articles/java/javadoc-tool.html)
 
 ## 断言
 
