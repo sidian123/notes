@@ -478,9 +478,11 @@ Google提供的一个工具, 先记录下. 一般引入了Swagger的项目都引
 
 ## FileUtil
 
-* `touch()` 
+* 好像所有方法, 相对路径都是相对于classpath的, 如要相对于工作目录, 可如下所示:
 
-  默认是相对classpath路径的，可使用jdk的`new File().getCon`构建File对象, 此时相对项目路径。
+  ```java
+  new File().getCanonicalFile()
+  ```
 
 # 原生工具
 
