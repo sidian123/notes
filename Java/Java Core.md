@@ -673,3 +673,19 @@ UUID存在不同的变体( variant ), 不管哪种变体, 都有4中版本, 而J
 * `ifPresent(action)`
 
   若值存在, 则执行动作`action`
+
+## JVM关闭&回调
+
+* 关闭
+
+  ```java
+  System.exit(0);
+  ```
+
+* 回调
+
+  ```java
+  Runtime.getRuntime().addShutdownHook(new Thread(() -> System.out.println("VM要关闭了")));
+  ```
+
+  
