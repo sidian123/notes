@@ -380,9 +380,9 @@ Hibernate Validator提供的校验注解：
   
   1. <1> 对要校验的参数标注`@Validated`注解
 2. <2> 校验结果将存入`BindingResult`中. 若不提供该参数, 将抛出`MethodArgumentNotValidException`异常.
-  
+
   此外, 多个校验参数和`BindingResult`需要相邻, 如
-  
+
   ```java
   foo(@Validated Foo foo, BindingResult fooBindingResult ，@Validated Bar bar, BindingResult barBindingResult)
   ```
@@ -994,6 +994,8 @@ public static void main(String[] args) {
 > 踩坑笔记: 注意, 当配置类实现了`CommandLineRunner`, 配置类实现的其他和容器声明周期的方法将失效.
 
 ## Spring Boot 退出
+
+> 貌似只能关闭Spring Context? 有时候不能关闭JVM. 需要用到`System.exit(0)`
 
 ```java
 SpringApplication.exit(this.applicationContext,() -> 0);
