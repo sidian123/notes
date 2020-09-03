@@ -4,29 +4,32 @@
 jackson用于在java对象与JSON之间映射。jackson有三种处理JSON的处理模型：
 * **Data Binding**：在JSON与简单对象（POJO，Maps, Lists, Strings, Numbers, Booleans 和null）或更复杂一点的对象（如对象中还有其他复杂对象）之间转换。
 * **Tree Model**：在内存中，JSON被表示为树的形式，便于遍历。
-* **Streaming Model**：前面两种处理模型都是基于该模型的，使用它主要是为了获得更高的性能或更细致的控制。
+* **Streaming Model**：以流的方式读取字段或值. 前面两种处理模型都是基于该模型的，使用它主要是为了获得更高的性能或更细致的控制。
 
 这里讲述Data Binding模型。
 
 # 二 Maven配置
 ```xml
-      <dependency>
-          <groupId>com.fasterxml.jackson.core</groupId>
-          <artifactId>jackson-core</artifactId>
-          <version>2.9.7</version>
-      </dependency>
-      <dependency>
-          <groupId>com.fasterxml.jackson.core</groupId>
-          <artifactId>jackson-annotations</artifactId>
-          <version>2.9.7</version>
-      </dependency>
-      <dependency>
-          <groupId>com.fasterxml.jackson.core</groupId>
-          <artifactId>jackson-databind</artifactId>
-          <version>2.9.7</version>
-      </dependency>
+<dependency>
+    <groupId>com.fasterxml.jackson.core</groupId>
+    <artifactId>jackson-core</artifactId>
+    <version>2.9.7</version>
+</dependency>
+<dependency>
+    <groupId>com.fasterxml.jackson.core</groupId>
+    <artifactId>jackson-annotations</artifactId>
+    <version>2.9.7</version>
+</dependency>
+<dependency>
+    <groupId>com.fasterxml.jackson.core</groupId>
+    <artifactId>jackson-databind</artifactId>
+    <version>2.9.7</version>
+</dependency>
 ```
 # 三 使用
+
+## Data Binding
+
 主要使用`ObjectMapper`类，通过`readValue`方法解析JSON，可以从网络（`URL`）、文件或字符串上获得JSON，使用时需要传入对应的java类型；通过`writeValue`方法生成JSON，可以写入到字符串、文件中。
 
 JSON类型和java类型的对应关系：
@@ -43,7 +46,7 @@ JSON类型和java类型的对应关系：
 
 对于object类型的JSON，可以使用Map、pojo，或者更复杂的对象。如果复杂对象和Map混用，需要用到泛型，由于编译后类型信息丢失，我们需要`TypeReference`类保存泛型信息。
 
-## POJO与JSON
+### POJO与JSON
 假设有POJO类：
 ```java
 // Note: can use getters/setters as well; here we just use public fields directly:
@@ -73,7 +76,7 @@ byte[] jsonBytes = mapper.writeValueAsBytes(myResultObject);
 // or:
 String jsonString = mapper.writeValueAsString(myResultObject);
 ```
-## Map,List与JSON
+### Map,List与JSON
 如果JSON类型比较简单，则不用传入java泛型信息：
 ```java
 //如果JSON为数值
@@ -92,7 +95,48 @@ Map<String, ResultValue> results = mapper.readValue(jsonSource,
    new TypeReference<Map<String, ResultValue>>() { } );
 // why extra work? Java Type Erasure will prevent type detection otherwise
 ```
-# 四 使用
+## Tree Model
+
+## Streaming Model
+
+> 参考[Reading and Writing Event Streams](http://www.cowtowncoder.com/blog/archives/2009/01/entry_132.html)
+
+### 读取
+
+`JsonParser`作为一个光标, 指向读取的未知. `JsonParser.nevToken()`移动光标到下一个.
+
+例子:
+
+Json文本
+
+```json
+{
+  "id":1125687077,
+  "text":"@stroughtonsmith You need to add a \"Favourites\" tab to TC/iPhone. Like what TwitterFon did. I can't WAIT for your Twitter App!! :) Any ETA?",
+  "fromUserId":855523, 
+  "toUserId":815309,
+  "languageCode":"en"
+}
+```
+
+对应的实体
+
+```java
+@Data
+public class TwitterEntry
+{
+  long _id;  
+  String _text;
+  int _fromUserId, _toUserId;
+  String _languageCode;
+}
+```
+
+
+
+
+
+# 四 配置
 
 > 所有注解参考[Jackson Annotations](https://github.com/FasterXML/jackson-docs/wiki/JacksonAnnotations)
 

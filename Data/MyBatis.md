@@ -1762,45 +1762,49 @@ spring:
 ```java
 import com.baomidou.mybatisplus.annotation.DbType;
 import com.baomidou.mybatisplus.core.config.GlobalConfig;
+import com.baomidou.mybatisplus.core.handlers.MetaObjectHandler;
 import com.baomidou.mybatisplus.extension.plugins.PaginationInterceptor;
 import com.baomidou.mybatisplus.extension.plugins.pagination.optimize.JsqlParserCountOptimize;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
-import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 /**
- * 多数据源通用配置
  * @author sidian
  * @date 2020/9/2 16:09
  */
 @Configuration
 public class CommonDatasourceConfiguration {
-    @Bean
-    @ConditionalOnMissingBean
-    @ConfigurationProperties(prefix = "mybatis-plus.global-config.db-config")
-    GlobalConfig.DbConfig dbConfig(){
-        return new GlobalConfig.DbConfig();
-    }
-
-    @Bean
-    @ConditionalOnMissingBean
-    @ConfigurationProperties(prefix = "mybatis-plus.global-config")
-    GlobalConfig globalConfig(GlobalConfig.DbConfig dbConfig){
-        GlobalConfig globalConfig = new GlobalConfig();
-        globalConfig.setDbConfig(dbConfig);
-        return globalConfig;
-    }
 
     @Bean
     @ConditionalOnMissingBean
     public PaginationInterceptor paginationInterceptor() {
         PaginationInterceptor paginationInterceptor = new PaginationInterceptor();
-        paginationInterceptor.setLimit(300);
+        paginationInterceptor.setLimit(10000);
         paginationInterceptor.setDialectType(DbType.MYSQL.getDb());
         paginationInterceptor.setCountSqlParser(new JsqlParserCountOptimize(true));
         return paginationInterceptor;
     }
+
+    @Bean
+    @ConditionalOnMissingBean
+    public MetaObjectHandler metaObjectHandler() {
+        return new MPMetaObjectHandler();
+    }
+
+
+    GlobalConfig.DbConfig dbConfig() {
+        return new GlobalConfig.DbConfig();
+    }
+
+
+    GlobalConfig globalConfig() {
+        GlobalConfig globalConfig = new GlobalConfig();
+        globalConfig.setDbConfig(dbConfig());
+        globalConfig.setMetaObjectHandler(metaObjectHandler());
+        return globalConfig;
+    }
+
 }
 ```
 
@@ -1825,6 +1829,7 @@ public class MPMetaObjectHandler implements MetaObjectHandler {
     @Override
     public void insertFill(MetaObject metaObject) {
         this.setFieldValByName("tsCreate", new Date(), metaObject);
+        // 经测试, 插入不会触发FieldFill.INSERT_UPDATE类型字段的字段填充, 因此需要此时设置一下
         this.setFieldValByName("tsUpdate", new Date(), metaObject);
     }
 
@@ -1842,29 +1847,32 @@ public class MPMetaObjectHandler implements MetaObjectHandler {
 
 ```java
 import com.alibaba.druid.pool.DruidDataSource;
-import com.baomidou.mybatisplus.annotation.DbType;
 import com.baomidou.mybatisplus.extension.plugins.PaginationInterceptor;
-import com.baomidou.mybatisplus.extension.plugins.pagination.optimize.JsqlParserCountOptimize;
 import com.baomidou.mybatisplus.extension.spring.MybatisSqlSessionFactoryBean;
 import org.apache.ibatis.plugin.Interceptor;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.mybatis.spring.SqlSessionTemplate;
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
 import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 
+import javax.annotation.Resource;
 import javax.sql.DataSource;
 
+/**
+ * @author sidian
+ * @date 2020/9/1 12:02
+ */
 @Configuration
 @MapperScan(basePackages = {"com.clinical.jingyi.mapper.symptom"}, sqlSessionFactoryRef = "symptomSqlSessionFactory")
 public class SymptomDatasourceConfiguration {
     private final static String mapperLocation = "classpath*:/mapper/symptom/*.xml";
-
+    @Resource
+    CommonDatasourceConfiguration commonDatasourceConfiguration;
 
     @Bean(name = "symptomDataSource")
     @ConfigurationProperties(prefix = "spring.datasource.symptom")
@@ -1878,26 +1886,20 @@ public class SymptomDatasourceConfiguration {
     }
 
     @Bean(name = "symptomSqlSessionFactory")
-    public SqlSessionFactory sqlSessionFactory(@Qualifier("symptomDataSource") DataSource dataSource) throws Exception {
+    public SqlSessionFactory sqlSessionFactory(
+            @Qualifier("symptomDataSource") DataSource dataSource,
+            PaginationInterceptor paginationInterceptor
+    ) throws Exception {
         MybatisSqlSessionFactoryBean bean = new MybatisSqlSessionFactoryBean();
         bean.setDataSource(dataSource);
+        bean.setGlobalConfig(commonDatasourceConfiguration.globalConfig());
         PathMatchingResourcePatternResolver pathMatchResolver = new PathMatchingResourcePatternResolver();
         bean.setMapperLocations(pathMatchResolver.getResources(mapperLocation));
         //手动设置session工厂时，需要手动添加分页插件
         Interceptor[] plugins = new Interceptor[1];
-        plugins[0] = paginationInterceptor();
+        plugins[0] = paginationInterceptor;
         bean.setPlugins(plugins);
         return bean.getObject();
-    }
-
-    @Bean
-    @ConditionalOnMissingBean
-    public PaginationInterceptor paginationInterceptor() {
-        PaginationInterceptor paginationInterceptor = new PaginationInterceptor();
-        paginationInterceptor.setLimit(300);
-        paginationInterceptor.setDialectType(DbType.MYSQL.getDb());
-        paginationInterceptor.setCountSqlParser(new JsqlParserCountOptimize(true));
-        return paginationInterceptor;
     }
 
     @Bean("symptomSqlSessionTemplate")
@@ -1917,8 +1919,6 @@ spring:
             driver-class-name: com.mysql.cj.jdbc.Driver
             username: root
 ```
-
-
 
 # 参考
 
