@@ -103,38 +103,80 @@ Map<String, ResultValue> results = mapper.readValue(jsonSource,
 
 ### 读取
 
-`JsonParser`作为一个光标, 指向读取的未知. `JsonParser.nevToken()`移动光标到下一个.
+* 使用
+  * `JsonParser`作为一个光标, 指向正在读取的位置 (准确的说, token). 位置可以是
+    * START_OBJECT : `{`
+    * END_OBJECT: `}`
+    * START_ARRAY: `[`
+    * END_ARRAY: `]`
+    * 属性名
+    * 属性值
+  * `JsonParser.nextToken()`移动光标到下一个Token, 并同时返回该token
+  * `JsonParser.getCurrentName()`获取当前Token名, 主要用于字段名
+  * `JsonParser.getXXXValue()` 读取当前Token, 转化为XXX类型, 主要用于字段值.
 
-例子:
+* 使用例子
 
-Json文本
+  Json文本
 
-```json
-{
-  "id":1125687077,
-  "text":"@stroughtonsmith You need to add a \"Favourites\" tab to TC/iPhone. Like what TwitterFon did. I can't WAIT for your Twitter App!! :) Any ETA?",
-  "fromUserId":855523, 
-  "toUserId":815309,
-  "languageCode":"en"
-}
-```
+  ```json
+  {
+      "id":1125687077,
+      "text":"@stroughtonsmith You need to add a \"Favourites\" tab to TC/iPhone. Like what TwitterFon did. I can't WAIT for your Twitter App!! :) Any ETA?",
+      "fromUserId":855523, 
+      "toUserId":815309,
+      "languageCode":"en"
+  }
+  ```
 
-对应的实体
+  对应的实体
 
-```java
-@Data
-public class TwitterEntry
-{
-  long _id;  
-  String _text;
-  int _fromUserId, _toUserId;
-  String _languageCode;
-}
-```
+  ```java
+  @Data
+  public class TwitterEntry
+  {
+      long _id;  
+      String _text;
+      int _fromUserId, _toUserId;
+      String _languageCode;
+  }
+  ```
 
+  映射到实体的方法
 
+  ```java
+  TwitterEntry read(JsonParser jp) throws IOException
+  {
+      // Sanity check: verify that we got "Json Object":
+      if (jp.nextToken() != JsonToken.START_OBJECT) {
+          throw new IOException("Expected data to start with an Object");
+      }
+      TwitterEntry result = new TwitterEntry();
+      // Iterate over object fields:
+      while (jp.nextToken() != JsonToken.END_OBJECT) {
+          String fieldName = jp.getCurrentName();
+          // Let's move to value
+          jp.nextToken();
+          if (fieldName.equals("id")) {
+              result.setId(jp.getLongValue());
+          } else if (fieldName.equals("text")) {
+              result.setText(jp.getText());
+          } else if (fieldName.equals("fromUserId")) {
+              result.setFromUserId(jp.getIntValue());
+          } else if (fieldName.equals("toUserId")) {
+              result.setToUserId(jp.getIntValue());
+          } else if (fieldName.equals("languageCode")) {
+              result.setLanguageCode(jp.getText());
+          } else { // ignore, or signal error?
+              throw new IOException("Unrecognized field '"+fieldName+"'");
+          }
+      }
+      jp.close(); // important to close both parser and underlying File reader
+      return result;
+  }
+  ```
 
-
+### 写入
 
 # 四 配置
 
