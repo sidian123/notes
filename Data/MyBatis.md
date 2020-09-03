@@ -1804,7 +1804,41 @@ public class CommonDatasourceConfiguration {
 }
 ```
 
+```java
+import com.baomidou.mybatisplus.core.handlers.MetaObjectHandler;
+import org.apache.ibatis.reflection.MetaObject;
 
+import java.util.Date;
+
+/**
+ * mybatis plus的自动填充处理器
+ *
+ * @author sidian
+ * @date 2020/9/2 10:45
+ */
+public class MPMetaObjectHandler implements MetaObjectHandler {
+    /**
+     * 插入元对象字段填充（用于插入时对公共字段的填充）
+     *
+     * @param metaObject 元对象
+     */
+    @Override
+    public void insertFill(MetaObject metaObject) {
+        this.setFieldValByName("tsCreate", new Date(), metaObject);
+        this.setFieldValByName("tsUpdate", new Date(), metaObject);
+    }
+
+    /**
+     * 更新元对象字段填充（用于更新时对公共字段的填充）
+     *
+     * @param metaObject 元对象
+     */
+    @Override
+    public void updateFill(MetaObject metaObject) {
+        this.setFieldValByName("tsUpdate", new Date(), metaObject);
+    }
+}
+```
 
 ```java
 import com.alibaba.druid.pool.DruidDataSource;
