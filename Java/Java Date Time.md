@@ -126,6 +126,11 @@ java8之前，时间类是由`java.util.Date`, `java.util.Calendar`和`java.util
 * `Date.toInstant()` converts a Date object to an Instant.
 * `TimeZone.toZoneId()` converts a TimeZone object to a ZoneId.
 
+----
+
+* `Date`
+  * `getTime()`获取时间戳(ms)
+
 ## DateTimeFormatter
 时间类都有parse和format方法，分别用来解析字符串、生成字符串，都用到了DateTimeFormatter作为参数。该类用作时间格式器，格式化时间。有三种方法配置格式器：
 1. 使用预定义的格式器，如ISO_LOCAL_DATE。DateTimeFormatter提供了一系列的该类型实例的静态变量。
