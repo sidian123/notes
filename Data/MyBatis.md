@@ -1934,6 +1934,11 @@ spring:
             username: root
 ```
 
+## 多数据源配置踩坑
+
+* Hikari数据库的url写在`jdbc-url`属性中
+* 其他数据源, 如Druid写在`url`属性中
+
 # 参考
 
 mybatis：http://www.mybatis.org/mybatis-3/index.html
