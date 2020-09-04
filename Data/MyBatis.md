@@ -1794,7 +1794,10 @@ public class CommonDatasourceConfiguration {
 
 
     GlobalConfig.DbConfig dbConfig() {
-        return new GlobalConfig.DbConfig();
+        GlobalConfig.DbConfig dbConfig = new GlobalConfig.DbConfig();
+        dbConfig.setLogicDeleteValue("true");
+        dbConfig.setLogicNotDeleteValue("false");
+        return dbConfig;
     }
 
 
@@ -1828,9 +1831,20 @@ public class MPMetaObjectHandler implements MetaObjectHandler {
      */
     @Override
     public void insertFill(MetaObject metaObject) {
-        this.setFieldValByName("tsCreate", new Date(), metaObject);
+        setFieldValue("tsCreate", new Date(), metaObject);
         // 经测试, 插入不会触发FieldFill.INSERT_UPDATE类型字段的字段填充, 因此需要此时设置一下
-        this.setFieldValByName("tsUpdate", new Date(), metaObject);
+        setFieldValue("tsUpdate", new Date(), metaObject);
+    }
+
+    private void setFieldValue(String name, Date date, MetaObject metaObject) {
+        Class<?> setterType = metaObject.getSetterType(name);
+        if (Date.class.isAssignableFrom(setterType)) {
+            this.setFieldValByName(name, date, metaObject);
+        } else if (Long.class.isAssignableFrom(setterType)) {
+            this.setFieldValByName(name, date.getTime(), metaObject);
+        } else {
+            throw new UnsupportedOperationException(String.format("不支持%s类型字段的自动填充", setterType.getCanonicalName()));
+        }
     }
 
     /**
@@ -1840,7 +1854,7 @@ public class MPMetaObjectHandler implements MetaObjectHandler {
      */
     @Override
     public void updateFill(MetaObject metaObject) {
-        this.setFieldValByName("tsUpdate", new Date(), metaObject);
+        setFieldValue("tsUpdate", new Date(), metaObject);
     }
 }
 ```
@@ -1925,3 +1939,4 @@ spring:
 mybatis：http://www.mybatis.org/mybatis-3/index.html
 mybatis-spring：http://www.mybatis.org/spring/sample.html
 java api及所有注解：http://www.mybatis.org/mybatis-3/java-api.html
+
