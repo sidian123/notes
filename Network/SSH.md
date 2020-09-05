@@ -296,6 +296,16 @@ OpenSSH最常用的命令，登录、转发都通过该命令进行。
   ```shell
   ssh -vvv root@sidian.live
   ```
+  
+* 指定密钥
+
+  密钥默认会取`~/.ssh/id_dsa`, `~/.ssh/id_ecdsa`, `~/.ssh/id_ed25519` 和 `~/.ssh/id_rsa`. 
+
+  当然也可以指定, 其他密钥, 如
+
+  ```shell
+  ssh -i aaa.pem root@111.11.11.111
+  ```
 
 >参考：
 >
@@ -333,6 +343,14 @@ OpenSSH最常用的命令，登录、转发都通过该命令进行。
 
   ```shell
   ssh-keygen -A
+  ```
+  
+* 设置密钥格式
+
+  默认`RFC4716`格式, 可选择其他格式`PKCS8`, `PEM`, 如
+
+  ```shell
+  ssh-keygen -m PEM
   ```
 
 >参考:[SSH-KEYGEN - GENERATE A NEW SSH KEY](https://www.ssh.com/ssh/keygen/)
