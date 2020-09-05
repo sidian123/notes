@@ -284,8 +284,9 @@ src和alt必须指定，如果src指定的文件不存在时，会显示alt的�
 在html5中，只有`<iframe>`可用了。
 
 示例：
-	
-	<iframe src="https://www.baidu.com/" height="200" width="300"></iframe>
+```html
+<iframe src="https://www.baidu.com/" height="200" width="300"></iframe>
+```
 
 效果：
 <iframe src="https://www.baidu.com/" height="200" width="300"></iframe>
