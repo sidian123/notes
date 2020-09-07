@@ -623,6 +623,8 @@ java -Dname="Spring" -jar app.jar
 
 [JAVA解析各种编码密钥对（DER、PEM、openssh公钥）](https://blog.csdn.net/hzzhoushaoyu/article/details/8627952)
 
+[High Performance, Scalable, Open Source Java SSH API](https://www.jadaptive.com/en/products/java-ssh-synergy)
+
 
 # 其他
 
