@@ -1025,10 +1025,10 @@ CommonsMultipartResolver常用[属性](https://docs.spring.io/spring-framework/d
 
 ```java
 response.setContentType("application/pdf");      
-response.setHeader("Content-Disposition", "attachment; filename=\"somefile.pdf\""); 
+response.setHeader("Content-Disposition", "attachment; filename=somefile.pdf); 
 ```
 
-这里讲spring mvc的方法，在4.3小节中，`ResponseEntity可以作为返回值直接写入到消息体中，并且能够传入头字段、状态码信息。使用例子如下：`
+这里讲spring mvc的方法，在4.3小节中，`ResponseEntity`可以作为返回值直接写入到消息体中，并且能够传入头字段、状态码信息。使用例子如下：
 
 ```java
 	@RequestMapping("/download/{name:\\w+\\.\\w+}")
