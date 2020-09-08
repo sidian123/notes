@@ -767,7 +767,13 @@ location / {
   X-Forwarded-For: client, proxy1, proxy2
   ```
 
-  
+## Vue HTML5 Model
+
+```nginx
+location / {
+  try_files $uri $uri/ /index.html;
+}
+```
 
 # 其他
 
