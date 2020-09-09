@@ -385,26 +385,50 @@ private int[] intArrayWithDefaults;
 
 #### @EnableConfigurationProperties
 
-注入被`@ConfigurationProperties`注解的类, 无需`@Component`注解
-
-是`@ConfigurationProperties`注解的简化形式, 不用注解在Bean定义上, 而是将Bean声明在`@EnableConfigurationProperties`的属性上. 如
+注入被`@ConfigurationProperties`注解的类, 无需`@Component`注解, 如
 
 ```java
-@Configuration
-@ConditionalOnClass(StarterService.class)
-@EnableConfigurationProperties(StarterTestProperties.class)
-public class StarterAutoConfigure {
-    @Autowired
-    private StarterTestProperties properties;
+@ConfigurationProperties(prefix = "service.properties")
+public class HelloServiceProperties {
+    private static final String SERVICE_NAME = "test-service";
 
-    @Bean
-    @ConditionalOnMissingBean
-    @ConditionalOnProperty(prefix = "example.service", value = "enabled", havingValue = "true")
-    StarterService starterService (){
-        return new StarterService(properties.getConfig());
+    private String msg = SERVICE_NAME;
+       set/get
+}
+
+
+@Configuration
+@EnableConfigurationProperties(HelloServiceProperties.class)
+@ConditionalOnClass(HelloService.class)
+@ConditionalOnProperty(prefix = "hello", value = "enable", matchIfMissing = true)
+public class HelloServiceAutoConfiguration {
+
+}
+
+@RestController
+public class ConfigurationPropertiesController {
+
+    @Autowired
+    private HelloServiceProperties helloServiceProperties;
+
+    @RequestMapping("/getObjectProperties")
+    public Object getObjectProperties () {
+        System.out.println(helloServiceProperties.getMsg());
+        return myConfigTest.getProperties();
     }
 }
 ```
+
+配置示例
+
+```properties
+service.properties.name=my-test-name
+service.properties.ip=192.168.1.1
+service.user=kayle
+service.port=8080
+```
+
+> 参考[关与 @EnableConfigurationProperties 注解](https://www.jianshu.com/p/7f54da1cb2eb)
 
 #### 其他注解上
 
