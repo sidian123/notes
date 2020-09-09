@@ -385,6 +385,8 @@ private int[] intArrayWithDefaults;
 
 #### @EnableConfigurationProperties
 
+注入被`@ConfigurationProperties`注解的类, 无需`@Component`注解
+
 是`@ConfigurationProperties`注解的简化形式, 不用注解在Bean定义上, 而是将Bean声明在`@EnableConfigurationProperties`的属性上. 如
 
 ```java
@@ -1526,7 +1528,8 @@ server:
   
 * 注意点
 
-  spring boot启动并不会读取自动配置的依赖的配置文件.
+  * ~~spring boot启动并不会读取自动配置的依赖的配置文件.~~
+  * starter包中的包扫描`@ComponentScan`是不起作用的
 
 
 > 参考
