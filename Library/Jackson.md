@@ -13,17 +13,17 @@ jackson用于在java对象与JSON之间映射。jackson有三种处理JSON的处
 <dependency>
     <groupId>com.fasterxml.jackson.core</groupId>
     <artifactId>jackson-core</artifactId>
-    <version>2.9.7</version>
+    <version>2.11.2</version>
 </dependency>
 <dependency>
     <groupId>com.fasterxml.jackson.core</groupId>
     <artifactId>jackson-annotations</artifactId>
-    <version>2.9.7</version>
+    <version>2.11.2</version>
 </dependency>
 <dependency>
     <groupId>com.fasterxml.jackson.core</groupId>
     <artifactId>jackson-databind</artifactId>
-    <version>2.9.7</version>
+    <version>2.11.2</version>
 </dependency>
 ```
 # 三 使用

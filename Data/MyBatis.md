@@ -1358,6 +1358,10 @@ public interface CountryMapper extends Mapper<Country> {
 
 > 基本不用配置, 详细见[使用配置](https://baomidou.com/config/#%E5%9F%BA%E6%9C%AC%E9%85%8D%E7%BD%AE)
 
+* `mapperLocations`
+
+  默认`["classpath*:/mapper/**/*.xml"]`
+
 * 查, 改, 曾策略, 默认`NOT_NULL` , 如插入时判断是否为null
 
   ```java
