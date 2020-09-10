@@ -497,6 +497,8 @@ Google提供的一个工具, 先记录下. 一般引入了Swagger的项目都引
   ```java
   new File().getCanonicalFile()
   ```
+  
+  > 但项目打成Jar包, 很多操作是不能进行了.
 
 # 原生工具
 
