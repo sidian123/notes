@@ -477,6 +477,20 @@ Google提供的一个工具, 先记录下. 一般引入了Swagger的项目都引
 
 * `read()`读取所有数据
 
+* 标题
+
+  使用`ExcelReader.addHeaderAlias(header,alias)`. 注意,`header`是excel列名, 如
+
+  ```java
+  writer.addHeaderAlias("name", "姓名");
+  writer.addHeaderAlias("age", "年龄");
+  writer.addHeaderAlias("score", "分数");
+  writer.addHeaderAlias("isPass", "是否通过");
+  writer.addHeaderAlias("examDate", "考试时间");
+  ```
+
+  
+
 ## FileUtil
 
 * 好像所有方法, 相对路径都是相对于classpath的, 如要相对于工作目录, 可如下所示:
