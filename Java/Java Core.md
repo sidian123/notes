@@ -482,14 +482,13 @@ Google提供的一个工具, 先记录下. 一般引入了Swagger的项目都引
   使用`ExcelReader.addHeaderAlias(header,alias)`. 注意,`header`是excel列名, 如
 
   ```java
-  writer.addHeaderAlias("name", "姓名");
-  writer.addHeaderAlias("age", "年龄");
-  writer.addHeaderAlias("score", "分数");
-  writer.addHeaderAlias("isPass", "是否通过");
-  writer.addHeaderAlias("examDate", "考试时间");
+  writer.addHeaderAlias("姓名", "name");
+  writer.addHeaderAlias("年龄", "age");
+  writer.addHeaderAlias("分数", "score");
+  writer.addHeaderAlias("是否通过", "isPass");
+  writer.addHeaderAlias("考试时间", "examDate");
   ```
 
-  
 
 ## FileUtil
 
