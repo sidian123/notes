@@ -351,6 +351,18 @@ Replacement methods are useful methods for replacing text in an input string.
 * `public String replaceFirst(String regex, String replacement)`: Replaces the first substring of this string that matches the given regular expression with the given replacement. An invocation of this method of the form str.replaceFirst(regex, repl) yields exactly the same result as the expression Pattern.compile(regex).matcher(str).replaceFirst(repl)
 * `public String replaceAll(String regex, String replacement)`: Replaces each substring of this string that matches the given regular expression with the given replacement. An invocation of this method of the form str.replaceAll(regex, repl) yields exactly the same result as the expression Pattern.compile(regex).matcher(str).replaceAll(repl)
 
+## 获取组
+
+```java
+Matcher matcher= Pattern.compile("^.+:(.+)/(.+)\\.git$").matcher(githubAddress);
+if(matcher.find()){//找到信息
+    //返回信息
+    return new GitInfo(matcher.group(1), matcher.group(2));
+}
+```
+
+
+
 # 十一 示例
 
 在以后的学习过程中，如果遇到有意思的正则表达式，我便会记录于此。
