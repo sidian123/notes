@@ -881,7 +881,7 @@ class FillAndEmpty {
 
   * 初始化
 
-    `ThreadLocal`字段通常声明为`private static`, 然后重写它的`initialValue`方法来设置它的初始值 ( 或静态方法`withInitial()` ) . 
+    `ThreadLocal`字段通常声明为`private static`, 然后重写它的`initialValue()`方法来设置它的初始值 ( 或静态方法`withInitial()` ) . 
 
   * 存取
 
@@ -889,7 +889,7 @@ class FillAndEmpty {
 
   * 重置
 
-    `remove()`删除当前线程变量, 当下次被访问时, 会被重新初始化.
+    `remove()`删除当前线程变量, 当下次被访问时, 会被重新初始化`initialValue()`; 或者, 若之后它的值被手动设置了, 之后被访问则不会重新初始化.
 
 - 原理
 
