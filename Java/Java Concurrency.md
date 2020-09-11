@@ -875,21 +875,21 @@ class FillAndEmpty {
 
 - 介绍
 
-  `ThreadLocal`类型的字段是线程局部的, 意味着即使是类变量, 在不同的线程中也有不同的拷贝.
+  `ThreadLocal`类型的对象存储着线程局部范围的变量. 即, 线程局部变量在不同的线程中也有不同的拷贝.
 
 - 使用
 
   * 初始化
 
-    `ThreadLocal`字段通常声明为`private static`, 然后重写它的`initialValue()`方法来设置它的初始值 ( 或静态方法`withInitial()` ) . 
+    `ThreadLocal`对象通常声明为`private static`, 然后重写它的`initialValue()`方法来初始化线程局部变量的初始值 ( 或静态方法`withInitial()` ) . 
 
   * 存取
 
-    `get`, `set`方法用于设置或获得该字段的值.
+    `get`, `set`方法用于设置或获取线程局部变量.  若该变量不存在, 或已被删除, 则会在下次访问时重新初始化`initialValue()`
 
   * 重置
 
-    `remove()`删除当前线程变量, 当下次被访问时, 会被重新初始化`initialValue()`; 或者, 若之后它的值被手动设置了, 之后被访问则不会重新初始化.
+    `remove()`删除当前线程局部变量, 当下次被访问时, 会被重新初始化`initialValue()`; 或者, 若之后它的值被手动设置了, 之后被访问则不会重新初始化.
 
 - 原理
 
