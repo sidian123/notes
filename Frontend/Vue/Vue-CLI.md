@@ -405,7 +405,7 @@ eslint帮助减少隐藏错误.
   }
   ```
 
-> [Modes and Environment Variables](https://cli.vuejs.)/guide/mode-and-env.html#modes
+> [Modes and Environment Variables](https://cli.vuejs.org/guide/mode-and-env.html#modes)
 
 # 十 其他
 
