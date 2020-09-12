@@ -385,6 +385,14 @@ eslint帮助减少隐藏错误.
   * `test `为单元测试进行优化. 使用`vue-cli-service test:unit`命令时默认该值
   * `production` 为生成环境优化. 使用`vue-cli-service build`和`vue-cli-service test:e2e`时默认该值
 
+* 模式修改
+
+  上述命名的默认模式是可以修改的, 加`--mode`, 如
+
+  ```shell
+  vue-cli-service build --mode development
+  ```
+
 * 环境变量使用
 
   ```
