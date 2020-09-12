@@ -381,7 +381,7 @@ eslint帮助减少隐藏错误.
 
 * `NODE_ENV`一般等于模式值, 如上述的`staging`. 但一般还是会在配置文件中修改`NODE_ENV`为**特殊**的三个值, 不同值时, 会有不同的插件执行, 如
 
-  * `development` 将启动热模块更新HMR. 使用`vue-cli-service- serve`命令时默认该值
+  * `development` 将启动热模块更新HMR. 使用`vue-cli-service serve`命令时默认该值
   * `test `为单元测试进行优化. 使用`vue-cli-service test:unit`命令时默认该值
   * `production` 为生成环境优化. 使用`vue-cli-service build`和`vue-cli-service test:e2e`时默认该值
 
