@@ -1450,6 +1450,20 @@ public interface CountryMapper extends Mapper<Country> {
   page(page, Wrappers.<Symptom>lambdaQuery().eq(Symptom::getCategoryId, categoryId))
   ```
 
+### Service CRUD接口
+
+* 接口类需继承`IService`, 如
+
+  ```java
+  public interface SymptomService extends IService<Symptom> { }
+  ```
+
+* 实现类需继承`ServiceImpl`和实现自己的接口, 如
+
+  ```java
+  public class SymptomServiceImpl extends ServiceImpl<SymptomMapper, Symptom> implements SymptomService {}
+  ```
+
 # 实战
 ## 注意点
 
