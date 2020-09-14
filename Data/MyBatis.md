@@ -1374,6 +1374,13 @@ public interface CountryMapper extends Mapper<Country> {
   * ` logicDeleteValue` 逻辑删除时, 字段的值, 默认`1`
   * ` logicNotDeleteValue` 逻辑不删除时, 字段的值, 默认`0`
   
+  使用例子:
+  
+  ```java
+  @TableLogic
+  private Boolean deleted;
+  ```
+  
 * 自动填充时间
 
   只能在新增和修改操作的时候填充, 逻辑删除属于修改操作.
