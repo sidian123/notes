@@ -40,32 +40,34 @@
 
 # 使用
 
-* `@Data`
+## @Data
 
-  JavaBean生成
+JavaBean生成
 
-  * 自动生成`getter`,`setter`,`toString`,`hashCode`,`equals`等方法. 
+* 自动生成`getter`,`setter`,`toString`,`hashCode`,`equals`等方法. 
 
-      > 生成规则符合JavaBean规范, 注意:
-      >
-      > * 对于`boolean`类型属性, 如`foo`, 将生成`getter`方法`isFoo()`
-      > * 如果已存在同名方法, 无论参数,返回值是否一致, 都不将自动生成该方法
-      
-  * 等同于`@Getter`,`@Setter`,`@RequiredArgsConstructor` ,`@ToString`,`@EqualsAndHashCode`
+    > 生成规则符合JavaBean规范, 注意:
+    >
+    > * 对于`boolean`类型属性, 如`foo`, 将生成`getter`方法`isFoo()`
+    > * 如果已存在同名方法, 无论参数,返回值是否一致, 都不将自动生成该方法
+    
+* 等同于`@Getter`,`@Setter`,`@RequiredArgsConstructor` ,`@ToString`,`@EqualsAndHashCode`
 
-  * 防止某个属性生成Getter, Setter方法
+* 防止某个属性生成Getter, Setter方法
 
-      ```java
-      @Getter(AccessLevel.NONE)
-      @Setter(AccessLevel.NONE)
-      private int mySecret;
-      ```
-      
-  * 生成`equals`, `hashCode`方法时, 忽略某些属性
+    ```java
+    @Getter(AccessLevel.NONE)
+    @Setter(AccessLevel.NONE)
+    private int mySecret;
+    ```
+    
+* 生成`equals`, `hashCode`方法时, 忽略某些属性
 
-      ```
-      @EqualsAndHashCode.Exclude
-      ```
+    ```
+    @EqualsAndHashCode.Exclude
+    ```
+
+## 对象构造器
 
 * `@Builder`
 
@@ -88,27 +90,59 @@
   private Map<String, Table> tables = new LinkedHashMap<>();
   ```
 
+* `@SuperBuilder`
+
+  `@Builder`在继承链上使用会报错. 于是推出了新的注解`@SuperBuilder`, 除了支持`@Builder`的功能外, 还支持继承关系上使用. 如
+
+  ```java
+  @SuperBuilder
+  public class Person {
+      private Integer age;
+      private String name;
+  }
+  
+  @SuperBuilder
+  public class Ming extends Person{
+  }
+  ```
+
+  开启`@SuperBuilder(toBuilder = true)`后, 构造器可通过`toBuilder()`方法, 深度拷贝当前构造器, 如
+
+  ```java
+  Ming mingD = Ming.builder()
+        .age(11)
+        .name("小明")
+        .build();
+  Ming mingF = mingD.toBuilder().name("猪").build(); // 深拷贝
+  System.err.println(mingD.toString()); // Person(age=11,name='小明'}
+  System.err.println(mingF.toString()); // Person(age=11,name='猪'}
+  ```
+
+  同时也支持`@Builder.Default` , 略
+
+## 校验
+
 * `@NonNull`
 
   生成检查参数的代码, 为`null`时将抛出`NullPointerException`异常. 可注解到参数或字段上, 在字段上时, 则检查其`getter`方法.
 
-* `@Log`
+## @Log
 
-  日记, 通过不同的日记注解, 可以生成对应的`log`字段. 下面列举常用的注解
+日记, 通过不同的日记注解, 可以生成对应的`log`字段. 下面列举常用的注解
 
-  * `@Log4j2`生成
-  
-    ```java
-  private static final org.apache.logging.log4j.Logger log = org.apache.logging.log4j.LogManager.getLogger(LogExample.class);
-    ```
+* `@Log4j2`生成
 
-  * `@Slf4j`生成
-  
-    ```java
-  private static final org.slf4j.Logger log = org.slf4j.LoggerFactory.getLogger(LogExample.class);
-    ```
-  
-  * ...
+  ```java
+private static final org.apache.logging.log4j.Logger log = org.apache.logging.log4j.LogManager.getLogger(LogExample.class);
+  ```
+
+* `@Slf4j`生成
+
+  ```java
+private static final org.slf4j.Logger log = org.slf4j.LoggerFactory.getLogger(LogExample.class);
+  ```
+
+* ...
 
 # 例子
 
