@@ -379,7 +379,7 @@ Hibernate Validator提供的校验注解：
   ```
   
   1. <1> 对要校验的参数标注`@Validated`注解
-2. <2> 校验结果将存入`BindingResult`中. 若不提供该参数, 将抛出`MethodArgumentNotValidException`异常.
+  2. <2> 校验结果将存入`BindingResult`中. 若不提供该参数, 将抛出`MethodArgumentNotValidException`异常.
 
   此外, 多个校验参数和`BindingResult`需要相邻, 如
 
