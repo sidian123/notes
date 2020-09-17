@@ -1949,6 +1949,8 @@ public class SymptomDatasourceConfiguration {
 }
 ```
 
+> 若要配置主事务, 在`transactionManager`上添加`@Primary`即可
+
 ```properties
 spring:
 	datasource:
