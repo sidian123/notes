@@ -426,6 +426,10 @@ public void addMember(@RequestBody Member member) {
 }
 ```
 
+### @RequestHeader
+
+将头字段映射到方法参数上
+
 ### 其他
 
 还有很多重要的，但是表格中已经明确给出，所以不必详细介绍。
