@@ -1871,7 +1871,7 @@ public void testSort(){
     AggregationBuilders.reverseNested("res_negsted").path("kps ");
     ```
 
-## 踩坑指南
+## 其他&踩坑指南
 
 ### 搜索内容需要转义
 
@@ -1917,17 +1917,12 @@ descriptions.forEach(System.out::println);
   }
   ```
   
-  
 
+### ElasticsearchTemplate将被弃用原因
 
+ES8将删除`TransportClient`, 而`ElasticsearchTemplate`用到了该对象, 所以之后将被弃用.
 
-
-
-
-
-
-
-
+> 参考https://stackoverflow.com/a/55481682/12574399
 
 # 参考
 
