@@ -1635,6 +1635,10 @@ server:
 
 [Spring4-@Enable** 注解的实现原理](https://www.cnblogs.com/moxiaotao/p/10107072.html)
 
+# 踩坑
+
+## Bean注册失败
+
 # 参考
 
 - [Building an Application with Spring Boot](<https://spring.io/guides/gs/spring-boot/>)：入门文档
