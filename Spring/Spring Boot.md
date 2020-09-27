@@ -1247,7 +1247,13 @@ mybatis注册mapper接口时，也会检测同包下是否存在对应xml文件�
 
 * `@SpringBootTest`
 
-    用于帮助创建`SpringApplication`
+    用于帮助创建`SpringApplication`.
+
+    > 若无启动类, 如Stater包, 可指定其他配置类, 如
+    >
+    > ```java
+    > @SpringBootTest(classes = DictAutoConfiguration.class)
+    > ```
 
 * `@RunWith(SpringRunner.class)`
 
@@ -1638,6 +1644,14 @@ server:
 # 踩坑
 
 ## Bean注册失败
+
+需要允许Bean定义覆盖
+
+```properties
+spring.main.allow-bean-definition-overriding=true
+```
+
+> 参考[SpringBoot - BeanDefinitionOverrideException: Invalid bean definition](https://stackoverflow.com/questions/53723303/springboot-beandefinitionoverrideexception-invalid-bean-definition)
 
 # 参考
 
