@@ -1924,6 +1924,14 @@ ES8将删除`TransportClient`, 而`ElasticsearchTemplate`用到了该对象, 所
 
 > 参考https://stackoverflow.com/a/55481682/12574399
 
+## 待学
+
+[ElasticsearchTemplate的详细使用，完成多条件查询、匹配度查询等](https://blog.csdn.net/tianyaleixiaowu/article/details/77965257)
+
+[ElasticSearchRepository和ElasticSearchTemplate的使用](https://blog.csdn.net/tianyaleixiaowu/article/details/76149547)
+
+
+
 # 参考
 
 * [Spring Data Elasticsearch基本使用](https://www.cnblogs.com/ifme/p/12005026.html)
