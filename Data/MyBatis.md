@@ -677,6 +677,8 @@ MapperFactoryBean需要注入SqlSessionFactory或SqlSessionTemplate都行，如�
 
 非Spring Boot的依赖
 
+> 经测试, 这种方式不生效, 可能需要自己配置下内容
+
 ```xml
 <dependency>
     <groupId>com.github.pagehelper</groupId>
