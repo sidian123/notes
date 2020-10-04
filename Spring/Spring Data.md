@@ -1637,6 +1637,72 @@ void deleteByName(@Nullable String name);
 
 ## 高级查询
 
+### 介绍
+
+Spring Data Elasticsearch提供的`ElasticSearchRepository`和`ElasticSearchTemplate`都提供了构建Query条件的方式来查询ES. 其中`ElasticSearchTemplate`支持更底层的操作.
+
+`Query`的继承图如下:
+
+![img](.Spring%20Data/20170726163702583)
+
+### 单字符串全文查询
+
+单字符串分词后全文查询. 可缩小查询范围, 或指定字段, 或指定type, 或指定特定索引, 主要看`queryForList()`其他重载方法 可
+
+```java
+/**
+ * word分词, 并全文搜索
+ */
+@RequestMapping("/singleWord")
+public Object singleTitle(String word, @PageableDefault Pageable pageable) {
+    //使用queryStringQuery完成单字符串查询
+    return elasticsearchTemplate.queryForList(new NativeSearchQueryBuilder()
+            .withQuery(queryStringQuery(word))
+            .withPageable(pageable)
+            .build(), 
+            Post.class
+    );
+}
+```
+
+### 单字段查询
+
+* 查询字符串分词后全文匹配
+
+  ```java
+  @RequestMapping("/singleMatch")
+  public Object singleMatch(String content, Integer userId, @PageableDefault Pageable pageable) {
+      return elasticsearchTemplate.queryForList(new NativeSearchQueryBuilder()
+              .withQuery(matchQuery("content", content))
+              .withPageable(pageable)
+              .build(), 
+              Post.class
+      );
+  }
+  ```
+
+* 查询字符串不分词全文匹配
+
+  ```java
+  @RequestMapping("/singleTerm")
+  public Object singleTerm(Integer userId, @PageableDefault Pageable pageable) {
+      return elasticsearchTemplate.queryForList(new NativeSearchQueryBuilder()
+              .withQuery(termQuery("userId", userId))
+              .withPageable(pageable)
+              .build(),
+              Post.class
+      );
+  }
+  ```
+
+### 多字段查询
+
+
+
+
+
+
+
 ### 基本查询
 
 先看看基本玩法

@@ -515,10 +515,10 @@ Bool Query是由一个或多个bool子句构成的，包括:
 
 | 关键字   | 说明                                                         |
 | :------- | ------------------------------------------------------------ |
-| must     | 根据must中的条件过滤文档，返回的结果文档必须严格匹配条件，会影响相关性算分 |
-| filter   | 根据must中的条件过滤文档，返回的结果文档必须严格匹配条件，和must不同的是，filter不会影响相关性算分 |
-| should   | 根据should中的条件进行筛选，返回的结果文档应该包含should的条件，影响相关性 算分 |
-| must_not | 根据must_not中的条件过滤文档，返回的结果文档必须不包含must_not条件，会影响相关性算分 |
+| must     | 返回的文档必须满足must子句的条件，会参与计算分值             |
+| filter   | 返回的文档必须满足filter子句的条件，但不会参与计算分值       |
+| should   | 返回的文档可能满足should子句的条件，也可能不满足，有多个should时满足任何一个就可以，通过minimum_should_match设置至少满足几个. 影响相关性算分 |
+| must_not | 返回的结果文档必须不包含must_not条件                         |
 
 ![https://img-blog.csdnimg.cn/20190115095510379.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L2ZhbnJlbnhpYW5n,size_16,color_FFFFFF,t_70](.Elasticsearch/20190115095510379.png)
 
