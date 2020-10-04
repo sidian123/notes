@@ -1637,6 +1637,12 @@ void deleteByName(@Nullable String name);
 
 ## 高级查询
 
+> 参考
+>
+> * [ElasticsearchTemplate的详细使用，完成多条件查询、匹配度查询等](https://blog.csdn.net/tianyaleixiaowu/article/details/77965257)
+>
+> * [ElasticSearchRepository和ElasticSearchTemplate的使用](https://blog.csdn.net/tianyaleixiaowu/article/details/76149547)
+
 ### 介绍
 
 Spring Data Elasticsearch提供的`ElasticSearchRepository`和`ElasticSearchTemplate`都提供了构建Query条件的方式来查询ES. 其中`ElasticSearchTemplate`支持更底层的操作.
@@ -1645,29 +1651,29 @@ Spring Data Elasticsearch提供的`ElasticSearchRepository`和`ElasticSearchTemp
 
 ![img](.Spring%20Data/20170726163702583)
 
-### 单字符串全文查询
+### 字段类查询
 
-单字符串分词后全文查询. 可缩小查询范围, 或指定字段, 或指定type, 或指定特定索引, 主要看`queryForList()`其他重载方法 可
+* 查询字符串分词, 并全文查询
 
-```java
-/**
- * word分词, 并全文搜索
- */
-@RequestMapping("/singleWord")
-public Object singleTitle(String word, @PageableDefault Pageable pageable) {
-    //使用queryStringQuery完成单字符串查询
-    return elasticsearchTemplate.queryForList(new NativeSearchQueryBuilder()
-            .withQuery(queryStringQuery(word))
-            .withPageable(pageable)
-            .build(), 
-            Post.class
-    );
-}
-```
+  单字符串分词后全文查询. 可缩小查询范围, 或指定字段, 或指定type, 或指定特定索引, 主要看`queryForList()`其他重载方法 可
 
-### 单字段查询
+  ```java
+  /**
+   * word分词, 并全文搜索
+   */
+  @RequestMapping("/singleWord")
+  public Object singleTitle(String word, @PageableDefault Pageable pageable) {
+      //使用queryStringQuery完成单字符串查询
+      return elasticsearchTemplate.queryForList(new NativeSearchQueryBuilder()
+              .withQuery(queryStringQuery(word))
+              .withPageable(pageable)
+              .build(), 
+              Post.class
+      );
+  }
+  ```
 
-* 查询字符串分词后全文匹配
+  专门按字段查询的方式:
 
   ```java
   @RequestMapping("/singleMatch")
@@ -1675,6 +1681,37 @@ public Object singleTitle(String word, @PageableDefault Pageable pageable) {
       return elasticsearchTemplate.queryForList(new NativeSearchQueryBuilder()
               .withQuery(matchQuery("content", content))
               .withPageable(pageable)
+              .build(), 
+              Post.class
+      );
+  }
+  ```
+
+  查询字符串可以在多个字段中匹配
+
+  ```java
+  /**
+   * 多字段匹配
+   */
+  @RequestMapping("/multiMatch")
+  public Object singleUserId(String title, @PageableDefault(sort = "weight", direction = Sort.Direction.DESC) Pageable pageable) {
+      return elasticsearchTemplate.queryForList(new NativeSearchQueryBuilder()
+              .withQuery(multiMatchQuery(title, "title", "content"))
+              .withPageable(pageable)
+              .build(), 
+              Post.class
+      );
+  }
+  ```
+
+  查询结果是个个词匹配结果的并集, 可修改获取交集, 对上述`matchQuery`，`multiMatchQuery`，`queryStringQuery`都适用
+
+  ```java
+  @RequestMapping("/contain")
+  public Object contain(String title) {
+      return elasticsearchTemplate.queryForList(new NativeSearchQueryBuilder()
+              .withQuery(matchQuery("title", title)
+              .operator(MatchQueryBuilder.Operator.AND))
               .build(), 
               Post.class
       );
@@ -1695,132 +1732,24 @@ public Object singleTitle(String word, @PageableDefault Pageable pageable) {
   }
   ```
 
-### 多字段查询
+### 复合查询
 
+多个字段类查询语句联合在一起查询的语句, 即bool查询, 用于组合多个Query, 有四种方式: must，mustnot，filter，should
 
-
-
-
-
-
-### 基本查询
-
-先看看基本玩法
+如查询title包含“XXX”，且userId=“1”，且weight最好小于5的结果:
 
 ```java
-@Test
-public void testBaseQuery(){
-    // 词条查询
-    MatchQueryBuilder queryBuilder = QueryBuilders.matchQuery("title", "小米");
-    // 执行查询
-    Iterable<Item> items = this.itemRepository.search(queryBuilder);
-    items.forEach(System.out::println);
+@RequestMapping("/bool")
+public Object bool(String title, Integer userId, Integer weight) {
+    return elasticsearchTemplate.queryForList(new NativeSearchQueryBuilder().withQuery(boolQuery()
+            .must(termQuery("userId", userId))
+            .should(rangeQuery("weight").lt(weight))
+            .must(matchQuery("title", title)))
+            .build(), 
+            Post.class
+    );
 }
 ```
-
-QueryBuilders提供了大量的静态方法，用于生成各种不同类型的查询对象，例如：词条、模糊、通配符等QueryBuilder对象。
-
-结果：
- ![img](.Spring%20Data/1580998-20191208152945530-193467310.png)
-
-elasticsearch提供很多可用的查询方式，但是不够灵活。如果想玩过滤或者聚合查询等就很难了。
-
-### 自定义查询
-
-先来看最基本的match query：
-
-```java
-@Test
-public void testNativeQuery(){
-    // 构建查询条件
-    NativeSearchQueryBuilder queryBuilder = new NativeSearchQueryBuilder();
-    // 添加基本的分词查询
-    queryBuilder.withQuery(QueryBuilders.matchQuery("title", "小米"));
-    // 执行搜索，获取结果
-    Page<Item> items = this.itemRepository.search(queryBuilder.build());
-    // 打印总条数
-    System.out.println(items.getTotalElements());
-    // 打印总页数
-    System.out.println(items.getTotalPages());
-    items.forEach(System.out::println);
-}
-```
-
-NativeSearchQueryBuilder：Spring提供的一个查询条件构建器，帮助构建json格式的请求体
-
-`Page<item>`：默认是分页查询，因此返回的是一个分页的结果对象，包含属性：
-
-- totalElements：总条数
-- totalPages：总页数
-- Iterator：迭代器，本身实现了Iterator接口，因此可直接迭代得到当前页的数据
-- 其它属性：
-
-![img](.Spring%20Data/1580998-20191208152719617-2122634873.png)
-
-### 分页查询
-
-利用`NativeSearchQueryBuilder`可以方便的实现分页：
-
-```java
-@Test
-public void testNativeQuery2(){
-    // 构建查询条件
-    NativeSearchQueryBuilder queryBuilder = new NativeSearchQueryBuilder();
-    // 添加基本的分词查询
-    queryBuilder.withQuery(QueryBuilders.termQuery("category", "手机"));
-
-    // 初始化分页参数
-    int page = 0;
-    int size = 3;
-    // 设置分页参数
-    queryBuilder.withPageable(PageRequest.of(page, size));
-
-    // 执行搜索，获取结果
-    Page<Item> items = this.itemRepository.search(queryBuilder.build());
-    // 打印总条数
-    System.out.println(items.getTotalElements());
-    // 打印总页数
-    System.out.println(items.getTotalPages());
-    // 每页大小
-    System.out.println(items.getSize());
-    // 当前页
-    System.out.println(items.getNumber());
-    items.forEach(System.out::println);
-}
-```
-
-结果：
-
-![img](.Spring%20Data/1580998-20191208153148705-81352934.png)
-
-可以发现，**Elasticsearch中的分页是从第0页开始**。
-
-### 排序
-
-排序也通用通过`NativeSearchQueryBuilder`完成：
-
-```java
-@Test
-public void testSort(){
-    // 构建查询条件
-    NativeSearchQueryBuilder queryBuilder = new NativeSearchQueryBuilder();
-    // 添加基本的分词查询
-    queryBuilder.withQuery(QueryBuilders.termQuery("category", "手机"));
-
-    // 排序
-    queryBuilder.withSort(SortBuilders.fieldSort("price").order(SortOrder.DESC));
-
-    // 执行搜索，获取结果
-    Page<Item> items = this.itemRepository.search(queryBuilder.build());
-    // 打印总条数
-    System.out.println(items.getTotalElements());
-    items.forEach(System.out::println);
-}
-```
-
-结果：
-
-![img](.Spring%20Data/1580998-20191208153254837-1204654654.png)
 
 ## 聚合
 
@@ -1990,11 +1919,6 @@ ES8将删除`TransportClient`, 而`ElasticsearchTemplate`用到了该对象, 所
 
 > 参考https://stackoverflow.com/a/55481682/12574399
 
-## 待学
-
-[ElasticsearchTemplate的详细使用，完成多条件查询、匹配度查询等](https://blog.csdn.net/tianyaleixiaowu/article/details/77965257)
-
-[ElasticSearchRepository和ElasticSearchTemplate的使用](https://blog.csdn.net/tianyaleixiaowu/article/details/76149547)
 
 
 
