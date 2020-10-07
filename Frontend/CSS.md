@@ -1300,7 +1300,7 @@ flexbox这一章就此结束了，可以参考这篇教程，主要图多：<htt
     1. **line-based placement**：grid布局由线（line）组成，items通过`grid-column`和`grid-row`指定行列边界线位置，线内的空间就是items位置所在。line number从1开始。
     2. **grid template areas**：就是通过`grid-template-areas`为grid中一块区域（area）命名，在item中通过`grid-area`指定area 名字，那么该item就被放置在该处。
     3. **name grid lines**：也是在item中指定它的边界线来决定放置位置，但是此时指定的是线的名字，因此需要在容器中设置线名。我觉得不常用。
-    4. **auto-placement**：就是自动从左到右，从上到下放置item，一个cell一个item，如果超过，比如规定的行数，那么grid会自动补加行。
+    4. **auto-placement** (默认方式?)：就是自动从左到右，从上到下放置item，一个cell一个item，如果超过，比如规定的行数，那么grid会自动补加行。
 
 * implicit grid & explicit grid
 
