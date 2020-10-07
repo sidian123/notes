@@ -1526,16 +1526,17 @@ css
 注意，float元素之间不会发生margin坍塌，position元素也是一样，因为脱离了文档流。但position:relative元素没有脱离文档流，因为不会坍塌。
 
 ## position
-position覆盖了文档流的默认行为，多用来微调布局，常用于ui控件布局或相当于视口的绝对布局。position五种取值如下：
-1. static：所有元素都默认该值，表示元素放入文档流中正常位置。
-2. relative：元素原占据的空间保留，相对于元素原位置偏移。通过`top`,`bottom`,`left`,`right`属性指定偏移大小，下同。比如`top:30px;left:30px;`，元素在上边距离原位置30px，左边距离原位置30px。
-3. absolute：脱离文档流，位置相对于`html`或最近position父元素。（注意，如果没有指定位置信息，会停留在原位置，但依然不在文档流中）
-4. fixed：脱离文档流，位置相对于视口。
-5. sticky：相当于relative和fixed的混合体，即一般表现像relative元素，一旦元素滑动达到它的闸值（threshold point，比如top:10px，顶部达到相对于视口的10px的位置），此时表现像fixed元素。
+`position`样式覆盖了文档流的默认行为，多用来微调布局，常用于ui控件布局或相当于视口的绝对布局。`position`五种取值如下：
 
-一般脱离文档流的元素位于新一层，能够覆盖文档流的元素，而position元素越高，越不被覆盖，通过[z-index][86]属性指定。
+1. `static`：所有元素都默认该值，表示元素放入文档流中正常位置。
+2. `relative`：元素原占据的空间保留，相对于元素原位置偏移。通过`top`,`bottom`,`left`,`right`属性指定偏移大小，下同。比如`top:30px;left:30px;`，元素在上边距离原位置30px，左边距离原位置30px。
+3. `absolute`：脱离文档流，位置相对于`html`或最近`position`父元素 (除`static`元素外)。（注意，如果没有指定位置信息，会停留在原位置，但依然不在文档流中）
+4. `fixed`：脱离文档流，位置相对于视口。
+5. `sticky`：相当于`static`和`fixed`的混合体，即一般表现像`static`元素，一旦元素滑动达到它的闸值（threshold point，比如`top:10px`，顶部达到相对于视口的10px的位置），此时表现像`fixed`元素。
 
-注意：position不会像foat那样改变元素display值，但是脱离文档流的position也不会发生margin坍塌。
+一般脱离文档流的元素位于新一层，能够覆盖文档流的元素，而`position`元素越高，越不被覆盖，通过[z-index][86]属性指定。
+
+> 注意：`position`不会像`float`那样改变元素`display`值，但是脱离文档流的`position`也不会发生`margin`坍塌。
 
 [86]:https://developer.mozilla.org/en-US/docs/Web/CSS/z-index
 
