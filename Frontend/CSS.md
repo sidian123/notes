@@ -722,6 +722,14 @@ over~~ over\~\~ 字体内容还是提多的。。。
 
 * [text-overflow](https://developer.mozilla.org/en-US/docs/Web/CSS/text-overflow): 无论何种情况, 文字溢出了, 我还可以直接省略溢出的部分.
 
+  > 注意, 元素必须不能软换行, 和防止溢出, 如
+  >
+  > ```css
+  > text-overflow: ellipsis;
+  > white-space: nowrap;
+  > overflow: hidden;
+  > ```
+
 ### 其他
 上面只是列举了一部分，还有很多很多和字体、字体布局相关的属性没有列出来。如果不是搞编辑器相关工作的可以忽略。
 
