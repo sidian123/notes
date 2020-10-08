@@ -1856,6 +1856,25 @@ pointer-events: none;
 
   `width`必须有个初始化值, 如`5rem`, `100%` , 不能用`auto`. 并且元素不能为`inline`
 
+## flex-grow: 1在内容溢出时不能滚动?
+
+如下所示, 当内容溢出时, `overflow`不起作用
+
+```css
+flex-grow:1
+overflow:auto;
+```
+
+解决办法: 添加高度
+
+```css
+flex-grow:1
+overflow:auto;
+height:0px;
+```
+
+> 由于flex布局的影响, 元素最终高度不为0px
+
 # 参考
 
 [MDN教程](https://developer.mozilla.org/en-US/docs/Learn)
