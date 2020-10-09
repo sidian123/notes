@@ -90,13 +90,38 @@ deb https://dl.winehq.org/wine-builds/ubuntu/ cosmic main
 sudo apt-get update
 ```
 
+# 换源
 
+- **第一步**：使用一个Editor编辑文件，在此使用Vim进行编辑
 
+  ```shell
+  $ sudo vim /etc/apt/sources.list
+  ```
 
+- **第二步**：修改该文件，将该文件中原来的内容全部删除，添加如下内容（此处以阿里源作为示例）
 
+  ```
+  # 阿里源
+  deb http://mirrors.aliyun.com/ubuntu/ bionic main restricted universe multiverse
+  deb http://mirrors.aliyun.com/ubuntu/ bionic-security main restricted universe multiverse
+  deb http://mirrors.aliyun.com/ubuntu/ bionic-updates main restricted universe multiverse
+  deb http://mirrors.aliyun.com/ubuntu/ bionic-proposed main restricted universe multiverse
+  deb http://mirrors.aliyun.com/ubuntu/ bionic-backports main restricted universe multiverse
+  deb-src http://mirrors.aliyun.com/ubuntu/ bionic main restricted universe multiverse
+  deb-src http://mirrors.aliyun.com/ubuntu/ bionic-security main restricted universe multiverse
+  deb-src http://mirrors.aliyun.com/ubuntu/ bionic-updates main restricted universe multiverse
+  deb-src http://mirrors.aliyun.com/ubuntu/ bionic-proposed main restricted universe multiverse
+  deb-src http://mirrors.aliyun.com/ubuntu/ bionic-backports main restricted universe multiverse
+  
+  ```
 
+- 然后使用下面命令更新一下更新一下
 
+  ```shell
+  $ sudo apt update && sudo apt upgrade
+  ```
 
+> 摘抄至https://www.jianshu.com/p/97c35d569aa3
 
 
 
