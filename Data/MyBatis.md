@@ -1403,6 +1403,8 @@ public interface CountryMapper extends Mapper<Country> {
 
   * 填充处理器
 
+    > 最新填充处理器见Mybatis Plus的多数据源配置
+    
     ```java
     /**
      * 自动填充更新时间和修改时间插件
