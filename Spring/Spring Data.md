@@ -1751,6 +1751,10 @@ public Object bool(String title, Integer userId, Integer weight) {
 }
 ```
 
+### 增删改
+
+[springboot 集成Elasticsearch使用ElasticSearchTemplate进行增删改查操作(一)](https://blog.csdn.net/qq_16436555/article/details/94433043)
+
 ## 聚合
 
 聚合操作的字段不能为`text`
