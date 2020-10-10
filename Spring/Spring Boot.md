@@ -1303,6 +1303,12 @@ mybatis注册mapper接口时，也会检测同包下是否存在对应xml文件�
   </dependency>
   ```
 
+  以及
+
+  ```java
+  import static org.mockito.Mockito.*;
+  ```
+
 * 验证行为
 
   ```java
