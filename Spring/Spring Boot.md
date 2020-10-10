@@ -1292,6 +1292,17 @@ mybatis注册mapper接口时，也会检测同包下是否存在对应xml文件�
 
 用于模拟对象
 
+* 依赖引入
+
+  ```xml
+  <dependency>
+      <groupId>org.mockito</groupId>
+      <artifactId>mockito-all</artifactId>
+      <version>1.10.19</version>
+      <scope>test</scope>
+  </dependency>
+  ```
+
 * 验证行为
 
   ```java
