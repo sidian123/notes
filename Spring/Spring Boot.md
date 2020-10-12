@@ -1297,8 +1297,14 @@ mybatis注册mapper接口时，也会检测同包下是否存在对应xml文件�
   ```xml
   <dependency>
       <groupId>org.mockito</groupId>
-      <artifactId>mockito-all</artifactId>
-      <version>1.10.19</version>
+      <artifactId>mockito-core</artifactId>
+      <version>3.5.13</version>
+      <scope>test</scope>
+  </dependency>
+  <dependency>
+      <groupId>org.mockito</groupId>
+      <artifactId>mockito-inline</artifactId>
+      <version>3.5.13</version>
       <scope>test</scope>
   </dependency>
   ```
@@ -1354,7 +1360,10 @@ mybatis注册mapper接口时，也会检测同包下是否存在对应xml文件�
 
 > Spring提供的`@MockBean`很方便的mock被注解的字段.
 
-> 参考[Mockito教程](https://blog.csdn.net/xiang__liu/article/details/81147933)
+> 参考
+>
+> * [Mockito教程](https://blog.csdn.net/xiang__liu/article/details/81147933)
+> * Mockito类的Javadoc
 
 ### Spring Test
 
