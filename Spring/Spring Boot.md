@@ -1357,8 +1357,31 @@ mybatis注册mapper接口时，也会检测同包下是否存在对应xml文件�
       outputStream.close();
   }
   ```
+  
+  Mock静态方法
+  
+  ```java
+  static MockedStatic<UserUtil> userUtilMock;
+  
+  @BeforeAll
+  static void init() {
+      userUtilMock = mockStatic(UserUtil.class);
+  
+      when(UserUtil.getOssUser(true)).thenReturn(
+          OssUser.builder()
+          .institutionType(1)
+          .institutionId(17)
+          .build()
+      );
+  }
+  
+  @AfterAll
+  static void clean() {
+      userUtilMock.close();
+  }
+  ```
 
-> Spring提供的`@MockBean`很方便的mock被注解的字段.
+Spring提供的`@MockBean`很方便的mock被注解的字段.
 
 > 参考
 >
