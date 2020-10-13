@@ -222,7 +222,7 @@ Boolean()可以显示转化值为布尔值，但是很少使用，因为会自�
 
 * 创建当前时间
   
-* `new Date()`
+  * `new Date()`
   
 * 本地时区相关
   * `setDate()`, `getDate()` 
