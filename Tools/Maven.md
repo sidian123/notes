@@ -664,6 +664,29 @@ Maven默认的资源插件, 负责将**项目资源**拷贝到**输出文件的c
 
 > 参考[Maven packaging without test (skip tests)](https://stackoverflow.com/questions/7456006/maven-packaging-without-test-skip-tests)
 
+## 代码规范检查
+
+checkstyle的忽略方法: 
+
+1. `TreeWalker`下添加模块, 配置忽略代码段的注释
+
+   ```xml
+   <module name="SuppressionCommentFilter">
+       <property name="offCommentFormat" value="disable checkstyle"/>
+       <property name="onCommentFormat" value="enable checkstyle"/>
+   </module>
+   ```
+
+2. 使用
+
+   ```java
+   // disable checkstyle
+   your code...
+   // enable checkstyle
+   ```
+
+> 参考https://stackoverflow.com/a/45759279/12574399
+
 # 仓库
 
 ## 概述
