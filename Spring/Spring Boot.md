@@ -1473,11 +1473,18 @@ Spring提供的`@MockBean`很方便的mock被注解的字段.
 主要是`MockMvc`类, 模拟HTTP请求, 同时断言, 如
 
 ```java
-mvc.perform(get("/api/employees")
-            .contentType(MediaType.APPLICATION_JSON))
-    .andExpect(status().isOk())
+mvc.perform(get("/api/employees").contentType(MediaType.APPLICATION_JSON))
+    .andExpect(status().isOk()) // 断言的状态码
+    .andExpect(content().contentType(MediaType.APPLICATION_JSON)) // 断言的响应
     .andExpect(jsonPath("$", hasSize(1)))
     .andExpect(jsonPath("$[0].name", is(alex.getName())));
+```
+
+```java
+MockHttpServletResponse mockHttpServletResponse = mockMvc.perform(optionsRequest)
+    .andExpect(status().isOk())
+    .andReturn()
+    .getResponse(); // 仅得到结果
 ```
 
 ## 实战
