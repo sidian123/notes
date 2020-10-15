@@ -1198,6 +1198,7 @@ mybatis注册mapper接口时，也会检测同包下是否存在对应xml文件�
         </exclusion>
     </exclusions>
 </dependency>
+<!-- 可选的内存数据库 -->
 <dependency>
     <groupId>com.h2database</groupId>
     <artifactId>h2</artifactId>
@@ -1260,6 +1261,17 @@ mybatis注册mapper接口时，也会检测同包下是否存在对应xml文件�
     使用JUnit4时必须添加. JUnit5可不用, 因为`@XXXTest`注解包含该注解功能.
 
 > 在后端三层结构中, 若仅测试其中一层, 则无需`@SpringBootTest`注解, 因为其依赖可以被mock掉
+
+### 应用上下文
+
+启动测试后, SpringBoot会加载mock或真实的上下文. 上下文如下所示:
+
+- `MOCK`(Default) : Loads a web `ApplicationContext` and provides a mock web environment. Embedded servers are not started when using this annotation. If a web environment is not available on your classpath, this mode transparently falls back to creating a regular non-web `ApplicationContext`. It can be used in conjunction with [`@AutoConfigureMockMvc` or `@AutoConfigureWebTestClient`](https://docs.spring.io/spring-boot/docs/current/reference/html/spring-boot-features.html#boot-features-testing-spring-boot-applications-testing-with-mock-environment) for mock-based testing of your web application.
+- `RANDOM_PORT`: Loads a `WebServerApplicationContext` and provides a real web environment. Embedded servers are started and listen on a random port.
+- `DEFINED_PORT`: Loads a `WebServerApplicationContext` and provides a real web environment. Embedded servers are started and listen on a defined port (from your `application.properties`) or on the default port of `8080`.
+- `NONE`: Loads an `ApplicationContext` by using `SpringApplication` but does not provide *any* web environment (mock or otherwise).
+
+在`MOCK`或`NONE`上下文中, 加了`@Transaction`的测试用例, 在该用例结束后会回滚. 而`RANDOM_PORT`和`DEFINED_PORT`则不会, 因为它启动了一个真实的Web Server, 且与测试用例处于不同线程.
 
 ## 框架使用
 
@@ -1390,6 +1402,8 @@ Spring提供的`@MockBean`很方便的mock被注解的字段.
 
 ### Spring Test
 
+#### MockMvc
+
 主要是`MockMvc`类, 模拟HTTP请求, 同时断言, 如
 
 ```java
@@ -1399,6 +1413,10 @@ mvc.perform(get("/api/employees")
     .andExpect(jsonPath("$", hasSize(1)))
     .andExpect(jsonPath("$[0].name", is(alex.getName())));
 ```
+
+#### TestRestTemplate
+
+在集成测试环境中, TestRestTemplate
 
 ## 实战
 
