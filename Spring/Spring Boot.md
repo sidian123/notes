@@ -1502,7 +1502,39 @@ MockHttpServletResponse mockHttpServletResponse = mockMvc.perform(optionsRequest
 
 #### TestRestTemplate
 
-在集成测试环境中, TestRestTemplate
+`TestRestTemplate`对`RestTemplate`做了封装, 更适用于集成测试中. 
+
+当使用`WebEnvironment.RANDOM_PORT`或`WebEnvironment.DEFINED_PORT`模式时, `TestRestTemplate`会被充分装配, 任何没有`host`和`port`的请求, 会自动连接到内部Server上.
+
+可通过注入`RestTemplateBuilder`Bean来自定义`TestRestTemplate`
+
+使用例子:
+
+```java
+@SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
+class SampleWebClientTests {
+
+    @Autowired
+    private TestRestTemplate template;
+
+    @Test
+    void testRequest() {
+        HttpHeaders headers = this.template.getForEntity("/example", String.class).getHeaders();
+        assertThat(headers.getLocation()).hasHost("other.example.com");
+    }
+
+    @TestConfiguration(proxyBeanMethods = false)
+    static class Config {
+
+        @Bean
+        RestTemplateBuilder restTemplateBuilder() {
+            return new RestTemplateBuilder().setConnectTimeout(Duration.ofSeconds(1))
+                    .setReadTimeout(Duration.ofSeconds(1));
+        }
+
+    }
+}
+```
 
 ## 实战
 
