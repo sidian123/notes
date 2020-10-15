@@ -1267,7 +1267,9 @@ mybatis注册mapper接口时，也会检测同包下是否存在对应xml文件�
 
 ### JUnit5
 
-用于声明测试用例, 或测试用例前后执行的方法
+用于声明测试用例
+
+#### 常用注解
 
 * `@Test`: 标注方法为**测试方法**. 其中`timeout`参数指定失败时间
 
@@ -1286,6 +1288,70 @@ mybatis注册mapper接口时，也会检测同包下是否存在对应xml文件�
 * `@AfterEach`: 每个测试方法结束后**都调用**
 
   > JUnit4为`@After`
+
+#### 测试用例顺序
+
+JUnit测试用例的默认执行顺序是确定的, 但不可预测的. 
+
+JUnit5使用`@TestMethodOrder`注解控制测试用例执行的顺序, 有三种内置顺序如下所示, 也可自定义
+
+* *@Order* Annotation 注解指定优先级
+
+  值越小, 优先级越高
+
+  ```java
+  @TestMethodOrder(OrderAnnotation.class)
+  public class OrderAnnotationUnitTest {
+      @Test
+      @Order(1)    
+      public void firstTest() {}
+      @Test
+      @Order(2)    
+      public void secondTest() {}
+      @Test
+      @Order(3)    
+      public void thirdTest() {}
+  }
+  ```
+
+* *Alphanumeric* Order 按照字母表顺序
+
+  ```java
+  @TestMethodOrder(Alphanumeric.class)
+  public class AlphanumericOrderUnitTest {
+      @Test
+      public void test01(){}
+      @Test
+      public void test02(){}
+      @Test
+      public void test03(){}
+      @Test
+      public void test99_clean(){} // 最后执行, 清理数据
+  }
+  ```
+
+* Random Order 随机顺序
+
+  每次测试用例的执行都是随机的. 
+
+---------
+
+JUnit4使用`@FixMethodOrder`注解, 有三种取值
+
+* *MethodSorters.DEFAULT* 默认行为, 取方法名hashcode
+* *MethodSorters.JVM* 每次执行, 顺序都不一样. 类似JUnit5的Random Order
+* *MethodSorters.NAME_ASCENDING* 按字母表顺序. 类型JUnit5的 *Alphanumeric* Order
+
+例子:
+
+```java
+@FixMethodOrder(MethodSorters.NAME_ASCENDING)
+public class NameAscendingOrderOfExecutionTest {
+    // ...
+}
+```
+
+> 参考[The Order of Tests in JUnit](https://www.baeldung.com/junit-5-test-order)
 
 ### AssertJ
 
