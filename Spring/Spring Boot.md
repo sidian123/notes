@@ -1511,9 +1511,9 @@ MockHttpServletResponse mockHttpServletResponse = mockMvc.perform(optionsRequest
 > 等同于
 >
 > ```java
-> RestTemplate template = restTemplateBuilder
->                 .uriTemplateHandler(new LocalHostUriTemplateHandler(SpringUtil.getApplicationContext().getEnvironment()))
->                 .build();
+> RestTemplate template = new RestTemplateBuilder()
+>        .uriTemplateHandler(new LocalHostUriTemplateHandler(SpringUtil.getApplicationContext().getEnvironment()))
+>        .build()
 > ```
 >
 > 通过`LocalHostUriTemplateHandler`处理器, 能得到测试用例Web环境的URL前缀
