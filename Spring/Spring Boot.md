@@ -1502,9 +1502,21 @@ MockHttpServletResponse mockHttpServletResponse = mockMvc.perform(optionsRequest
 
 #### TestRestTemplate
 
-`TestRestTemplate`对`RestTemplate`做了封装, 更适用于集成测试中. 
+`TestRestTemplate`对`RestTemplate`做了封装, 提供了cookie, 重定向, SSL等功能, 更适用于集成测试中. 
+
+> 一般情况下, 两者都差不多
 
 当使用`WebEnvironment.RANDOM_PORT`或`WebEnvironment.DEFINED_PORT`模式时, `TestRestTemplate`会被充分装配, 任何没有`host`和`port`的请求, 会自动连接到内部Server上.
+
+> 等同于
+>
+> ```java
+> RestTemplate template = restTemplateBuilder
+>                 .uriTemplateHandler(new LocalHostUriTemplateHandler(SpringUtil.getApplicationContext().getEnvironment()))
+>                 .build();
+> ```
+>
+> 通过`LocalHostUriTemplateHandler`处理器, 能得到测试用例Web环境的URL前缀
 
 可通过注入`RestTemplateBuilder`Bean来自定义`TestRestTemplate`
 
@@ -1535,6 +1547,8 @@ class SampleWebClientTests {
     }
 }
 ```
+
+
 
 ## 实战
 
