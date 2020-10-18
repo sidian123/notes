@@ -1026,8 +1026,8 @@ test();
 
 重申一下`new`关键字的过程：
 >1. new后面的函数被当作构造函数，因此先创建一个Object对象，构造函数中 this指向该对象。
->2. 为构造函数创建prototype属性（一个Object对象）；prototype对象中创建一个constructor属性，指向该构造函数。
->3. 将构造函数的prototype属性赋值该新对象的__proto__属性上。
+>2. 每个函数都有`prototype`属性, 其中`prototype.constructor`字段指向该函数本身
+>3. 将构造函数的prototype属性赋值该新对象的`__proto__`属性上。
 >4. 执行构造函数。
 >5. 返回该对象。
 
