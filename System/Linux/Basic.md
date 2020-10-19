@@ -981,6 +981,30 @@ $ tar -xvzf archive.tar.gz
 
 创建档案时，对档案后缀没有强制规定，但是最好使用常用后缀名。比如：归档不压缩，`file.tar`；归档并用gzip压缩，`file.tar.gz`等等之类。注意到一些后缀，如`.tgz`与`.gz`相同，`.taz`与`.tar.Z`相同。
 
+# 加解密
+
+> 参考[linux下文件加密方法总结](https://www.cnblogs.com/wuchangsoft/p/11747739.html)
+
+## ZIP加解密
+
+加密
+
+```shell
+zip -e test.txt.zip test.txt
+```
+
+> 选项`-e`指定加密后的文件名; 之后会被要求输入密码两次
+
+解密
+
+```shell
+unzip test.txt.zip
+```
+
+> 之后会被要求输入密码两次
+
+> 或者使用`--password`选项, 直接指定密码
+
 # 目录结构
 
 linux的发行版都准守Filesystem Hierarchy Standard（FHS），每个目录都有自己的含义。但会FHS也有一些模糊的地方，因此不同的发行版的目录结构会有一定的不同。
