@@ -687,6 +687,45 @@ checkstyle的忽略方法:
 
 > 参考https://stackoverflow.com/a/45759279/12574399
 
+## source && javadoc
+
+```xml
+<plugin>
+    <groupId>org.apache.maven.plugins</groupId>
+    <artifactId>maven-source-plugin</artifactId>
+    <executions>
+        <execution>
+            <id>attach-sources</id>
+            <goals>
+                <goal>jar</goal>
+            </goals>
+        </execution>
+    </executions>
+</plugin>
+<plugin>
+    <groupId>org.apache.maven.plugins</groupId>
+    <artifactId>maven-javadoc-plugin</artifactId>
+    <configuration>
+        <!--    自定义标签      -->
+        <tags>
+            <tag>
+                <name>date</name>
+                <placement>a</placement>
+                <head>生成日期</head>
+            </tag>
+        </tags>
+    </configuration>
+    <executions>
+        <execution>
+            <id>attach-javadocs</id>
+            <goals>
+                <goal>jar</goal>
+            </goals>
+        </execution>
+    </executions>
+</plugin>     
+```
+
 # 仓库
 
 ## 概述
