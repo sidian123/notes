@@ -507,6 +507,8 @@ RUN ln -sf /usr/share/zoneinfo/Asia/Shanghai  /etc/localtime
 ENTRYPOINT [ "sh", "-c", "java -jar /drug-service.jar","-Djava.security.egd=file:/dev/./urandom","-Dspring.profiles.active=dev","-Dswagger.doc-url=http://111.11.100.15:8009/","--spring.application.name=${SPRING_APPLICATION_NAME}"]
 ```
 
+> `ENTRYPOINT`的命令有问题, 即系统变量都不生效, 待改.
+
 ## 指令详解
 
 * `volume` 创建一个匿名volume
