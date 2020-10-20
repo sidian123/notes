@@ -490,6 +490,8 @@ docker load -i ./centos.tar
 
 # Dockerfile
 
+> [Dockerfile reference](https://docs.docker.com/engine/reference/builder/)
+
 ## Demo
 
 ```dockerfile
