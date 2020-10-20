@@ -998,12 +998,12 @@ zip -e test.txt.zip test.txt
 解密
 
 ```shell
-unzip test.txt.zip
+unzip -j test.txt.zip
 ```
 
-> 之后会被要求输入密码两次
+> 选项`-j`创建归档路径目录; 之后会被要求输入密码两次
 
-> 或者使用`--password`选项, 直接指定密码
+> 或者使用`--password`或`-P`选项, 直接指定密码
 
 # 目录结构
 
