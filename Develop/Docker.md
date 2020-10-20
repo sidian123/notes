@@ -258,13 +258,13 @@ docker rmi [OPTIONS] IMAGE [IMAGE...]
 
 构建镜像的同时指定镜像名和版本号
 
-```
-docker build --tag bulletinboard:1.0
+```shell
+docker build --tag bulletinboard:1.0 ./
 ```
 
 从git仓库中构建
 
-```
+```shell
 $ docker build https://github.com/docker/rootfs.git#container:docker
 ```
 
