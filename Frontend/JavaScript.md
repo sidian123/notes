@@ -1017,7 +1017,7 @@ test();
 ```
 >参考：[Does JavaScript autobox?](https://stackoverflow.com/a/17216967/10248407)
 ## prototype
-每个对象都有一个**prototype object**（原型对象），被存入到对象的__proto__属性中。prototype object的所有属性和方法都会被该对象继承。而prototype object对象源自于构造函数（constructor function）的prototype属性，该属性也是一个对象，Object。prototype object中有个属性constructor，指向它的构造函数。
+每个对象都有一个**prototype object**（原型对象），被存入到对象的`__proto__`属性中。prototype object的所有属性和方法都会被该对象继承。而prototype object对象源自于构造函数（constructor function）的prototype属性，该属性也是一个对象，Object。prototype object中有个属性constructor，指向它的构造函数。
 
 对象调用属性或方法的过程，以调用方法为例：
 >1. 先查看该对象是否有该方法，有则执行该方法。
