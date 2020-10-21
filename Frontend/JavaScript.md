@@ -1552,7 +1552,9 @@ myAsyncFunction("localhost/api/get")
 
 > 也可使用`setTimeout(()=>{...},0)`来达到异步执行效果.
 
-#### 同步操作
+#### ~~同步操作~~
+
+> 以下内容好像是错误的, Promise实例化后, 会立即返回, 即异步, 无论Promise执行的内容是否异步或同步. 待改正.
 
 ```javascript
 function myPromise(){
