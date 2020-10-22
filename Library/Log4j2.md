@@ -92,6 +92,7 @@ log4j在初始化时会自动查找配置，然后配置自己。支持各种方
 >* 其中Loggers元素中的子元素Root、Logger都是在配置LoggerConfig，因此会配置有0个或多个appender。
 >* log4j 的xml语法格式不太严格，参考：[XML Syntax][2]
 
+
 上面配置了Root LoggerConfig，和输出到console的appender。可以为具体的Logger配置一个LoggerConfig，有不同的日志级别：
 ```xml
 <?xml version="1.0" encoding="UTF-8"?>
@@ -137,8 +138,6 @@ Configuration元素一些重要的属性如下：
         <Property name="filename">target/rolling1/rollingtest-$${sd:type}.log</Property
   </Properties>
   ```
-```
-  
   > 取出时无需前缀, 如`${filename}`
 
 ## 其他配置
@@ -159,13 +158,14 @@ Configuration元素一些重要的属性如下：
 
 首先引入异步日志的依赖
 
-​```xml
+```xml
 <dependency>
     <groupId>com.lmax</groupId>
     <artifactId>disruptor</artifactId>
     <version>3.3.6</version>
 </dependency>
 ```
+
 
 有两种方式实现异步日志:
 
@@ -191,6 +191,7 @@ Configuration元素一些重要的属性如下：
    </Loggers>
    
    ```
+
 
 待学习:
 
