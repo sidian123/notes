@@ -1236,6 +1236,8 @@ spring.redis.timeout=500
 
 ## 配置
 
+引入依赖后, 并且配置了`cluster-nodes`等属性, 才会注入Elasticsearch. 而Repository需要额外注解或属性来开启.
+
 * 引入依赖
 
   ```xml
@@ -1245,7 +1247,7 @@ spring.redis.timeout=500
   </dependency>
   ```
 
-* 启用Elasticsearch
+* 启用Elasticsearch Repository
 
   ```java
   @EnableElasticsearchRepositories
