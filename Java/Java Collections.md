@@ -196,11 +196,11 @@
 
 * 操纵方法: 有两种形式
 
-  | ype of Operation | Throws exception | Returns special value |
-  | ---------------- | ---------------- | --------------------- |
-  | Insert           | `add(e)`         | `offer(e)`            |
-  | Remove           | `remove()`       | `poll()`              |
-  | Examine          | `element()`      | `peek()`              |
+  | Type of Operation | Throws exception | Returns special value |
+  | ----------------- | ---------------- | --------------------- |
+  | Insert            | `add(e)`         | `offer(e)`            |
+  | Remove            | `remove()`       | `poll()`              |
+  | Examine           | `element()`      | `peek()`              |
 
   > 操作失败时的提示方式不同.
 
