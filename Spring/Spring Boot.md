@@ -1789,6 +1789,8 @@ server:
   | @ConditionalOnWebApplication    | Web应用环境下起效                                    |
   | @ConditionalOnNotWebApplication | 非Web应用环境下起效                                  |
 
+  > 踩坑笔记, 使用`@ConditionalOnBean`, 若依赖的是配置类中定义的Bean, 该注解很有可能失效.
+
 * 自定义条件注解
 
   实现`Condition`接口, 提供匹配实现; 然后使用`@Conditional`, 注解Bean上, 是否注入的条件由`Condition`接口实现类提供. 如
