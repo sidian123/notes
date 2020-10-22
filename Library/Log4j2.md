@@ -509,6 +509,13 @@ java.lang.Exception: 出现异常
         可以包含零个或多个元素，标识这个appender将会添加到这个logger。
     -->
 
+    <!-- 无profile时, 打印控制台 -->
+    <springProfile name="! (dev | test | sandbox | production)">
+        <root level="debug">
+            <appender-ref ref="CONSOLE"/>
+        </root>
+    </springProfile>
+
     <!--开发环境:打印控制台-->
     <springProfile name="dev">
         <root level="debug">
