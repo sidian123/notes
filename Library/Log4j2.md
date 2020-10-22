@@ -509,16 +509,6 @@ java.lang.Exception: 出现异常
         可以包含零个或多个元素，标识这个appender将会添加到这个logger。
     -->
 
-    <!-- 默认root, 在其他profile中, 会被下面的root覆盖 -->
-    <root level="debug">
-        <appender-ref ref="CONSOLE"/>
-        <appender-ref ref="DEBUG_FILE"/>
-        <appender-ref ref="INFO_FILE"/>
-        <appender-ref ref="WARN_FILE"/>
-        <appender-ref ref="ERROR_FILE"/>
-    </root>
-    <!--<logger name="com.example" level="debug"/>-->
-
     <!--开发环境:打印控制台-->
     <springProfile name="dev">
         <root level="debug">
