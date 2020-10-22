@@ -511,7 +511,6 @@ java.lang.Exception: 出现异常
     <!--开发环境:打印控制台-->
     <springProfile name="dev">
         <logger name="com.example" level="debug"/>
-        <logger name="com.clinical.jingyi.tcm.common" level="info"/>
     </springProfile>
     <root level="debug">
         <appender-ref ref="CONSOLE" />
