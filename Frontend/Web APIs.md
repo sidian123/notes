@@ -314,7 +314,7 @@ button.addEventListener('click',function(event){
 3. `event.eventPhase` – the current phase (capturing=1, bubbling=3).
 4. `event.stopPropagation()`：事件停止向上传播，但在当前元素内可以纵向传播给同一事件的其他处理器。
 5. `event.stopImmediatePropagation()`：停止事件横向、纵向传播。
-6. `event.defaultPrevented()`：阻止默认行为。注意，在html元素的事件处理属性中`return false`也能阻止默认行为，但是在其他地方行不通，因此不建议使用。
+6. `event.preventDefault()`：阻止默认行为。注意，在html元素的事件处理属性中`return false`也能阻止默认行为，但是在其他地方行不通，因此不建议使用。
 
 ### Event bubbling and capture
 
