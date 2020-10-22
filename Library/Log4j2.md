@@ -356,7 +356,7 @@ java.lang.Exception: 出现异常
     <property name="log.path" value="./logs" />
 
     <!-- 控制台日志, 有彩色 -->
-    <property name="CONSOLE_LOG_PATTERN" value="%yellow(%date{yyyy-MM-dd HH:mm:ss})|%highlight(%-5level)|%blue(%thread)|%cyan(%50logger{50})|%msg%n"/>
+    <property name="CONSOLE_LOG_PATTERN" value="%yellow(%date{yyyy-MM-dd HH:mm:ss})|%highlight(%-5level)|%blue(%thread)|%cyan(%-50logger{50})|%msg%n"/>
     <!-- 文件日志, 无彩色 -->
     <property name="FILE_LOG_PATTERN" value="%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{50} - %msg%n"/>
 
