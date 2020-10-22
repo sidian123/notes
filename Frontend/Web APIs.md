@@ -109,12 +109,11 @@ DOM接口大致分为两类：DOM核心接口和与html元素相关的接口。D
 * 日志
 
   * console.log() 通用日志
-* console.debug() 
-  
+  * console.debug() 
   * console.warn()
-* console.error()
-  
-* console.info()
+  * console.error()
+    
+  * console.info()
   
 * 其他
 
@@ -145,7 +144,7 @@ Window接口表示一个包含了DOM文档的窗口，在浏览器中具体表�
   * `window.outerHeight`窗体总的高度,包含工具栏,滚动条
 * 事件
   *  [resize](https://developer.mozilla.org/en-US/docs/Web/API/Window/resize_event) 窗体大小改变时触发
-*  `window.event` 当前正在处理的事件.
+  *  `window.event` 当前正在处理的事件.
   
 * 滚动
   * `Window.scrollTo()` 滚动条来自window时可用
