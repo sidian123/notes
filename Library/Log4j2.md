@@ -347,16 +347,17 @@ java.lang.Exception: 出现异常
 <!-- scan:当此属性设置为true时，配置文件如果发生改变，将会被重新加载，默认值为true -->
 <!-- scanPeriod:设置监测配置文件是否有修改的时间间隔，如果没有给出时间单位，默认单位是毫秒。当scan为true时，此属性生效。默认的时间间隔为1分钟。 -->
 <!-- debug:当此属性设置为true时，将打印出logback内部日志信息，实时查看logback运行状态。默认值为false。 -->
-<configuration  scan="true" scanPeriod="10 seconds">
+<configuration scan="true" scanPeriod="10 seconds">
 
     <!--<include resource="org/springframework/boot/logging/logback/base.xml" />-->
 
     <contextName>logback</contextName>
     <!-- name的值是变量的名称，value的值时变量定义的值。通过定义的值会被插入到logger上下文中。定义变量后，可以使“${}”来使用变量。 -->
-    <property name="log.path" value="./logs" />
+    <property name="log.path" value="./logs"/>
 
     <!-- 控制台日志, 有彩色 -->
-    <property name="CONSOLE_LOG_PATTERN" value="%yellow(%date{yyyy-MM-dd HH:mm:ss})|%highlight(%-5level)|%blue(%thread)|%cyan(%-50logger{50})|%msg%n"/>
+    <property name="CONSOLE_LOG_PATTERN"
+              value="%yellow(%date{yyyy-MM-dd HH:mm:ss})|%highlight(%-5level)|%blue(%thread)|%cyan(%-50logger{50})|%msg%n"/>
     <!-- 文件日志, 无彩色 -->
     <property name="FILE_LOG_PATTERN" value="%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{50} - %msg%n"/>
 
@@ -508,28 +509,43 @@ java.lang.Exception: 出现异常
         可以包含零个或多个元素，标识这个appender将会添加到这个logger。
     -->
 
+    <!-- 默认root, 在其他profile中, 会被下面的root覆盖 -->
+    <root level="debug">
+        <appender-ref ref="CONSOLE"/>
+        <appender-ref ref="DEBUG_FILE"/>
+        <appender-ref ref="INFO_FILE"/>
+        <appender-ref ref="WARN_FILE"/>
+        <appender-ref ref="ERROR_FILE"/>
+    </root>
+    <!--<logger name="com.example" level="debug"/>-->
+
     <!--开发环境:打印控制台-->
     <springProfile name="dev">
-        <logger name="com.example" level="debug"/>
+        <root level="debug">
+            <appender-ref ref="CONSOLE"/>
+        </root>
     </springProfile>
-    <root level="debug">
-        <appender-ref ref="CONSOLE" />
-        <appender-ref ref="DEBUG_FILE" />
-        <appender-ref ref="INFO_FILE" />
-        <appender-ref ref="WARN_FILE" />
-        <appender-ref ref="ERROR_FILE" />
-    </root>
 
-    <!--生产环境:输出到文件-->
-    <!--<springProfile name="pro">-->
-    <!--<root level="info">-->
-    <!--<appender-ref ref="CONSOLE" />-->
-    <!--<appender-ref ref="DEBUG_FILE" />-->
-    <!--<appender-ref ref="INFO_FILE" />-->
-    <!--<appender-ref ref="ERROR_FILE" />-->
-    <!--<appender-ref ref="WARN_FILE" />-->
-    <!--</root>-->
-    <!--</springProfile>-->
+    <!-- 测试环境: 打印到控制台和文件 -->
+    <springProfile name="test">
+        <root level="debug">
+            <appender-ref ref="CONSOLE"/>
+            <appender-ref ref="DEBUG_FILE"/>
+            <appender-ref ref="INFO_FILE"/>
+            <appender-ref ref="WARN_FILE"/>
+            <appender-ref ref="ERROR_FILE"/>
+        </root>
+    </springProfile>
+
+    <!--沙盘或生产环境:打印到文件-->
+    <springProfile name="sandbox | production">
+        <root level="info">
+            <appender-ref ref="DEBUG_FILE"/>
+            <appender-ref ref="INFO_FILE"/>
+            <appender-ref ref="WARN_FILE"/>
+            <appender-ref ref="ERROR_FILE"/>
+        </root>
+    </springProfile>
 
 </configuration>
 ```
