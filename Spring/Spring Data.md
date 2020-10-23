@@ -1388,7 +1388,19 @@ Spring Data通过注解来声明字段的映射属性，有下面的三个注解
 
 ### 其他
 
+#### 不能修改已有字段
+
 当保存实体时, 若字段不存在, 会自动创建. 若字段存在, 但类型不匹配, 不会去修改字段, 仅仅写入这类型不一致的值.
+
+#### 自定义时间格式
+
+```java
+@Field(type = FieldType.Date,format = DateFormat.custom, pattern = "yyyy-MM-dd HH:mm:ss")
+@JsonFormat(shape = JsonFormat.Shape.STRING,pattern = "yyyy-MM-dd HH:mm:ss",timezone = "GMP+8")
+Date time;
+```
+
+新增时, 需要将字段转化成`pattern`所指定的格式, 且`ElasticsearchTemplate`序列化对象的时候使用了`Jackson`, 因此使用`@JsonFormat`注解即可
 
 ## Dao类创建
 
