@@ -1876,6 +1876,30 @@ public Object bool(String title, Integer userId, Integer weight) {
     AggregationBuilders.reverseNested("res_negsted").path("kps ");
     ```
 
+## 索引创建
+
+### ElasticsearchTemplate创建索引
+
+```java
+elasticsearchTemplate.createIndex(TestEntity.class); // 创建索引
+elasticsearchTemplate.putMapping(TestEntity.class); // 设置映射, 或字段信息. 注意, 不能修改已有的字段信息, 可以新增.
+```
+
+```java
+@Document(indexName = "test_index14",type = "test_index3")
+public class TestEntity {
+    @Field(type = FieldType.Keyword)
+    String name;
+    @Field(type = FieldType.Date,format = DateFormat.custom, pattern = "yyyy-MM-dd HH:mm:ss")
+    @JsonFormat(shape = JsonFormat.Shape.STRING,pattern = "yyyy-MM-dd HH:mm:ss",timezone = "GMP+8")
+    Date time;
+}
+```
+
+需要在实体类上加上`@Document`注解. 注意, 加上`@Document`并不会导致Spring自动创建索引, 需要手动创建. 只有在开启并提供了`Repository`, 才会自动创建.
+
+`ElasticsearchTemplate`通过索引名来创建索引和映射的方法, 貌似有点问题. 索引动态创建索引应使用如下方式.
+
 ### 动态创建索引
 
 如日志, 每天索引名都不一样. 因为`ElasticsearchTemplate`动态创建索引时好像有bug, 因此这里使用更底层的`TransportClient`
@@ -1940,7 +1964,7 @@ descriptions.forEach(System.out::println);
 
 ### ElasticsearchTemplate将被弃用原因
 
-ES8将删除`TransportClient`, 而`ElasticsearchTemplate`用到了该对象, 所以之后将被弃用.
+ES8将删除`TransportClient`, 而`ElasticsearchTemplate`用到了该对象, 所以之后将被弃用. 推荐使用`ElasticsearchRestTemplate`, 它和`ElasticsearchTemplate`实现了同样的接口, 使用方式一样, 除了内部由http协议实现.
 
 > 参考https://stackoverflow.com/a/55481682/12574399
 
