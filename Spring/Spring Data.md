@@ -1549,9 +1549,11 @@ public interface ItemRepository extends ElasticsearchRepository<Item,Long> {
 
 ## 查询方法
 
+### 方法列表
+
 Spring Data 的另一个强大功能，是根据方法名称自动实现功能。
- 比如：你的方法名叫做：findByTitle，那么它就知道你是根据title查询，然后自动帮你完成，无需写实现类。
- 当然，方法名称要符合一定的约定：
+
+比如：你的方法名叫做：findByTitle，那么它就知道你是根据title查询，然后自动帮你完成，无需写实现类。当然，方法名称要符合一定的约定：
 
 | Keyword               | Sample                                     | Elasticsearch Query String                                   |
 | --------------------- | ------------------------------------------ | ------------------------------------------------------------ |
@@ -1637,7 +1639,9 @@ void deleteByName(@Nullable String name);
 > * [Query for null values.](https://github.com/spring-projects/spring-data-elasticsearch/commit/dec5231a05c4bec9e8a5595384f709f25b1fc01e)
 > * [Query for null values.](https://github.com/spring-projects/spring-data-elasticsearch/pull/355)
 
-## 高级查询
+## 高级操作
+
+### 高级查询
 
 > 参考
 >
@@ -1645,7 +1649,7 @@ void deleteByName(@Nullable String name);
 >
 > * [ElasticSearchRepository和ElasticSearchTemplate的使用](https://blog.csdn.net/tianyaleixiaowu/article/details/76149547)
 
-### 介绍
+#### 介绍
 
 Spring Data Elasticsearch提供的`ElasticSearchRepository`和`ElasticSearchTemplate`都提供了构建Query条件的方式来查询ES. 其中`ElasticSearchTemplate`支持更底层的操作.
 
@@ -1653,7 +1657,7 @@ Spring Data Elasticsearch提供的`ElasticSearchRepository`和`ElasticSearchTemp
 
 ![img](.Spring%20Data/20170726163702583)
 
-### 字段类查询
+#### 字段类查询
 
 * 查询字符串分词, 并全文查询
 
@@ -1734,7 +1738,7 @@ Spring Data Elasticsearch提供的`ElasticSearchRepository`和`ElasticSearchTemp
   }
   ```
 
-### 复合查询
+#### 复合查询
 
 多个字段类查询语句联合在一起查询的语句, 即bool查询, 用于组合多个Query, 有四种方式: must，mustnot，filter，should
 
@@ -1753,17 +1757,17 @@ public Object bool(String title, Integer userId, Integer weight) {
 }
 ```
 
-### 增删改
+#### 增删改
 
 [springboot 集成Elasticsearch使用ElasticSearchTemplate进行增删改查操作(一)](https://blog.csdn.net/qq_16436555/article/details/94433043)
 
-## 聚合
+### 聚合
 
 聚合操作的字段不能为`text`
 
 > 参考[Spring Data Elasticsearch 聚合查询](https://www.cnblogs.com/steakliu/p/11558110.html)
 
-### 按字段分组
+#### 按字段分组
 
 ```java
 	@Autowired
@@ -1796,7 +1800,7 @@ public Object bool(String title, Integer userId, Integer weight) {
 
 > 上述的`Item`是ES实体类, 提供索引信息.
 
-### 其他聚合方法
+#### 其他聚合方法
 
 上述`queryBuilder.addAggregation()`使用的按字段分组方法, 还有其他聚合方法:
 
@@ -1871,6 +1875,21 @@ public Object bool(String title, Integer userId, Integer weight) {
     ```
     AggregationBuilders.reverseNested("res_negsted").path("kps ");
     ```
+
+### 动态创建索引
+
+如日志, 每天索引名都不一样. 因为`ElasticsearchTemplate`动态创建索引时好像有bug, 因此这里使用更底层的`TransportClient`
+
+```java
+@Resource
+private TransportClient transportClient;
+
+...
+transportClient.prepareIndex("indexName", "indexType", null)
+                .setSource(JSONUtil.toJsonStr(entity), XContentType.JSON)
+                .get()
+...
+```
 
 ## 其他&踩坑指南
 
