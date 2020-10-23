@@ -1388,7 +1388,19 @@ Spring Data通过注解来声明字段的映射属性，有下面的三个注解
 
 ### 其他
 
+#### 不能修改已有字段
+
 当保存实体时, 若字段不存在, 会自动创建. 若字段存在, 但类型不匹配, 不会去修改字段, 仅仅写入这类型不一致的值.
+
+#### 自定义时间格式
+
+```java
+@Field(type = FieldType.Date,format = DateFormat.custom, pattern = "yyyy-MM-dd HH:mm:ss")
+@JsonFormat(shape = JsonFormat.Shape.STRING,pattern = "yyyy-MM-dd HH:mm:ss",timezone = "GMP+8")
+Date time;
+```
+
+新增时, 需要将字段转化成`pattern`所指定的格式, 且`ElasticsearchTemplate`序列化对象的时候使用了`Jackson`, 因此使用`@JsonFormat`注解即可
 
 ## Dao类创建
 
@@ -1549,9 +1561,11 @@ public interface ItemRepository extends ElasticsearchRepository<Item,Long> {
 
 ## 查询方法
 
+### 方法列表
+
 Spring Data 的另一个强大功能，是根据方法名称自动实现功能。
- 比如：你的方法名叫做：findByTitle，那么它就知道你是根据title查询，然后自动帮你完成，无需写实现类。
- 当然，方法名称要符合一定的约定：
+
+比如：你的方法名叫做：findByTitle，那么它就知道你是根据title查询，然后自动帮你完成，无需写实现类。当然，方法名称要符合一定的约定：
 
 | Keyword               | Sample                                     | Elasticsearch Query String                                   |
 | --------------------- | ------------------------------------------ | ------------------------------------------------------------ |
@@ -1637,7 +1651,9 @@ void deleteByName(@Nullable String name);
 > * [Query for null values.](https://github.com/spring-projects/spring-data-elasticsearch/commit/dec5231a05c4bec9e8a5595384f709f25b1fc01e)
 > * [Query for null values.](https://github.com/spring-projects/spring-data-elasticsearch/pull/355)
 
-## 高级查询
+## 高级操作
+
+### 高级查询
 
 > 参考
 >
@@ -1645,7 +1661,7 @@ void deleteByName(@Nullable String name);
 >
 > * [ElasticSearchRepository和ElasticSearchTemplate的使用](https://blog.csdn.net/tianyaleixiaowu/article/details/76149547)
 
-### 介绍
+#### 介绍
 
 Spring Data Elasticsearch提供的`ElasticSearchRepository`和`ElasticSearchTemplate`都提供了构建Query条件的方式来查询ES. 其中`ElasticSearchTemplate`支持更底层的操作.
 
@@ -1653,7 +1669,7 @@ Spring Data Elasticsearch提供的`ElasticSearchRepository`和`ElasticSearchTemp
 
 ![img](.Spring%20Data/20170726163702583)
 
-### 字段类查询
+#### 字段类查询
 
 * 查询字符串分词, 并全文查询
 
@@ -1734,7 +1750,7 @@ Spring Data Elasticsearch提供的`ElasticSearchRepository`和`ElasticSearchTemp
   }
   ```
 
-### 复合查询
+#### 复合查询
 
 多个字段类查询语句联合在一起查询的语句, 即bool查询, 用于组合多个Query, 有四种方式: must，mustnot，filter，should
 
@@ -1753,17 +1769,17 @@ public Object bool(String title, Integer userId, Integer weight) {
 }
 ```
 
-### 增删改
+#### 增删改
 
 [springboot 集成Elasticsearch使用ElasticSearchTemplate进行增删改查操作(一)](https://blog.csdn.net/qq_16436555/article/details/94433043)
 
-## 聚合
+### 聚合
 
 聚合操作的字段不能为`text`
 
 > 参考[Spring Data Elasticsearch 聚合查询](https://www.cnblogs.com/steakliu/p/11558110.html)
 
-### 按字段分组
+#### 按字段分组
 
 ```java
 	@Autowired
@@ -1796,7 +1812,7 @@ public Object bool(String title, Integer userId, Integer weight) {
 
 > 上述的`Item`是ES实体类, 提供索引信息.
 
-### 其他聚合方法
+#### 其他聚合方法
 
 上述`queryBuilder.addAggregation()`使用的按字段分组方法, 还有其他聚合方法:
 
@@ -1872,6 +1888,45 @@ public Object bool(String title, Integer userId, Integer weight) {
     AggregationBuilders.reverseNested("res_negsted").path("kps ");
     ```
 
+## 索引创建
+
+### ElasticsearchTemplate创建索引
+
+```java
+elasticsearchTemplate.createIndex(TestEntity.class); // 创建索引
+elasticsearchTemplate.putMapping(TestEntity.class); // 设置映射, 或字段信息. 注意, 不能修改已有的字段信息, 可以新增.
+```
+
+```java
+@Document(indexName = "test_index14",type = "test_index3")
+public class TestEntity {
+    @Field(type = FieldType.Keyword)
+    String name;
+    @Field(type = FieldType.Date,format = DateFormat.custom, pattern = "yyyy-MM-dd HH:mm:ss")
+    @JsonFormat(shape = JsonFormat.Shape.STRING,pattern = "yyyy-MM-dd HH:mm:ss",timezone = "GMP+8")
+    Date time;
+}
+```
+
+需要在实体类上加上`@Document`注解. 注意, 加上`@Document`并不会导致Spring自动创建索引, 需要手动创建. 只有在开启并提供了`Repository`, 才会自动创建.
+
+`ElasticsearchTemplate`通过索引名来创建索引和映射的方法, 貌似有点问题. 索引动态创建索引应使用如下方式.
+
+### 动态创建索引
+
+如日志, 每天索引名都不一样. 因为`ElasticsearchTemplate`动态创建索引时好像有bug, 因此这里使用更底层的`TransportClient`
+
+```java
+@Resource
+private TransportClient transportClient;
+
+...
+transportClient.prepareIndex("indexName", "indexType", null)
+                .setSource(JSONUtil.toJsonStr(entity), XContentType.JSON)
+                .get()
+...
+```
+
 ## 其他&踩坑指南
 
 ### 搜索内容需要转义
@@ -1921,7 +1976,7 @@ descriptions.forEach(System.out::println);
 
 ### ElasticsearchTemplate将被弃用原因
 
-ES8将删除`TransportClient`, 而`ElasticsearchTemplate`用到了该对象, 所以之后将被弃用.
+ES8将删除`TransportClient`, 而`ElasticsearchTemplate`用到了该对象, 所以之后将被弃用. 推荐使用`ElasticsearchRestTemplate`, 它和`ElasticsearchTemplate`实现了同样的接口, 使用方式一样, 除了内部由http协议实现.
 
 > 参考https://stackoverflow.com/a/55481682/12574399
 
