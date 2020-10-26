@@ -1300,6 +1300,10 @@ mybatis注册mapper接口时，也会检测同包下是否存在对应xml文件�
 * `@AfterEach`: 每个测试方法结束后**都调用**
 
   > JUnit4为`@After`
+  
+* `@Disabled` 忽略测试用例
+
+  > JUnit4为`@Ignore`
 
 #### 测试用例顺序
 
