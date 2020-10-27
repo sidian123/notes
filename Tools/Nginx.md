@@ -642,6 +642,7 @@ listen 443 ssl;
 >
 > * [八个HTTPS和SSL优化使用心得-减少等待时间和降低Https性能损耗](https://wzfou.com/https-ssl/)
 > * [SSL Configuration Generator](https://ssl-config.mozilla.org/)
+> * [linux安装nginx、增强配置ssl、http2](https://blog.csdn.net/long2010110/article/details/82351206)
 
 ## upstream
 
