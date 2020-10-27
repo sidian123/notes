@@ -24,6 +24,8 @@
   ![img](.Vue/flow.png)
   
 * Vue在构建的过程中会将template编译成底层的render函数, 同时运行时不提供动态编译的功能, 以防xss攻击.
+
+
 # 二 指令(directive)
 vue指令以`v-`开始，用于渲染DOM或绑定数据，定义在元素或组件上。
 * `{{message}}`：绑定vue实例数据`data`到文本上。（非指令，占位符）
@@ -511,11 +513,11 @@ html的class和style都是属性，因此可以使用`v-bind`来绑定vue属性�
 ### v-for与对象
 * 基本形式：
 	```html
-	  <li v-for="value in object">
-	    {{ value }}
+	  <li v-for="key in object">
+	    {{ object[key] }}
 	  </li>
 	```
-	会遍历object的所有可遍历属性，value表示对象的属性。
+	会遍历`object`的所有可遍历属性，`key`表示对象的属性名。
 * 取出属性名：
 	```html
 	<div v-for="(value, key) in object">
