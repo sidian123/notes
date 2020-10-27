@@ -581,7 +581,14 @@ ssId -> ssId
 sIDDDDD -> siddddd
 ```
 
+## 解决BigDecimal精度丢失问题
 
+```java
+objectMapper.setNodeFactory(JsonNodeFactory.withExactBigDecimals(true));
+objectMapper.configure(DeserializationFeature.USE_BIG_DECIMAL_FOR_FLOATS, true);
+```
+
+> 参考[Deserializing BigDecimal using JsonNode loses precision](https://github.com/FasterXML/jackson-databind/issues/2087#issuecomment-593670525)
 
 # 参考
 * [FasterXML/jackson-databind](https://github.com/FasterXML/jackson-databind/) Json序列化的官方教程
