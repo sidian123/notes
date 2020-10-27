@@ -1223,7 +1223,7 @@ spring.redis.timeout=500
 * [Accessing Data with Neo4j](https://spring.io/guides/gs/accessing-data-neo4j/) 一个了解Neo4j的Demo案例
 * [Spring Data Neo4j Reference Documentation](https://docs.spring.io/spring-data/neo4j/docs/5.3.1.RELEASE/reference/html/#reference)
 
-
+* [Spring Data Neo4j 使用](https://www.jianshu.com/p/2b7cfb002bd9)
 
 # Spring Data Elasticsearch
 
