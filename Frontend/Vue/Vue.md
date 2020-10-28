@@ -845,21 +845,20 @@ Vue.component('base-checkbox', {
     </slot>
   </span>
   ```
-```
   
-> 这里绑定了`user`属性, 将被移入到`slotProps`中.
-  
-组件使用中, 获取`slotProps`对象
-  
+  > 这里绑定了`user`属性, 将被移入到`slotProps`中.
+
+  组件使用中, 获取`slotProps`对象
+
   ```html
   <current-user>
     <template v-slot:default="slotProps">
       {{ slotProps.user.firstName }}
     </template>
   </current-user>
-```
+  ```
 
-当只有一个slot元素时，可缩写成：
+  当只有一个slot元素时，可缩写成：
 
   ```html
   <current-user v-slot:default="slotProps">
@@ -867,7 +866,7 @@ Vue.component('base-checkbox', {
   </current-user>
   ```
 
-省略掉default
+  省略掉default
 
   ```html
   <current-user v-slot="slotProps">
@@ -875,7 +874,7 @@ Vue.component('base-checkbox', {
   </current-user>
   ```
 
-通过E5的解构语法, 获取单个属性
+  通过E5的解构语法, 获取单个属性
 
   ```html
   <current-user v-slot="{ user }">
