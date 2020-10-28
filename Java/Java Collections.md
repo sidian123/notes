@@ -189,6 +189,17 @@
     ```
     
     > 这里将冲突key的value并置起来
+    
+  * List to Tree
+  
+    ```java
+    list.stream()
+        .filter(categoryNode -> categoryNode.getParentId() != -1)
+        .forEach(category -> map.get(category.getParentId()).getChildren().add(category));
+    return list.stream()
+        	   .filter(categoryNode -> categoryNode.getParentId().equals(-1))
+               .collect(Collectors.toList());
+    ```
 
 ## 队列
 
