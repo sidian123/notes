@@ -193,13 +193,16 @@
   * List to Tree
   
     ```java
-    list.stream()
-        .filter(categoryNode -> categoryNode.getParentId() != -1)
-        .forEach(category -> map.get(category.getParentId()).getChildren().add(category));
-    return list.stream()
-        	   .filter(categoryNode -> categoryNode.getParentId().equals(-1))
+    Map<Integer,Entity> map=list.stream().collect(Collectors.toMap(Entity::getId,Function.identity()));
+    map.values.stream()
+        .filter(entity -> entity.getParentId() != -1)
+        .forEach(entity -> map.get(entity.getParentId()).getChildren().add(entity));
+    return map.values.stream()
+        	   .filter(entity -> entity.getParentId().equals(-1))
                .collect(Collectors.toList());
     ```
+    
+    > 其中, 假设`parentId`为`-1`时为根节点.
 
 ## 队列
 
