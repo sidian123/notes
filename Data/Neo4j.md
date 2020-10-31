@@ -175,3 +175,35 @@ docker run \
 
 * [Neo4j Documentation](https://neo4j.com/docs/)
 * [Neo4j Tutorial](https://www.tutorialspoint.com/neo4j/index.htm)
+
+# -----学习二------
+
+# Introduction
+
+* Cypher由一个链式从句组成, 一个从句的临时结果作为下一个从句的输入
+
+* 常用查询命令
+  - `MATCH`: The graph pattern to match. This is the most common way to get data from the graph.
+  - `WHERE`: Not a clause in its own right, but rather part of `MATCH`, `OPTIONAL MATCH` and `WITH`. Adds constraints to a pattern, or filters the intermediate result passing through `WITH`.
+  - `RETURN`: What to return.
+* 常用更新命令
+  * `CREATE` (and `DELETE`): Create (and delete) nodes and relationships.
+  * `SET` (and `REMOVE`): Set values to properties and add labels on nodes using `SET` and use `REMOVE` to remove them.
+  * `MERGE`: Match existing or create new nodes and patterns. This is especially useful together with unique constraints.
+
+* 基本概念
+
+  * **DBMS** Neo4j数据库的管理系统, 可包含多个数据库
+  * **Database** 数据库, 客户端会话连接的对象. 可包含多个图谱, 但初始情况下仅含一个图谱.
+  * **Graph** 图谱, 图谱查询更新语句操作的对象. 一个数据库中存在多个图谱时, 查询语句可指定图谱, 或使用默认图谱. 
+
+  初始情况下, 一个DBMS中含有两个数据库:
+
+  * `system` 系统数据库, 含有配置信息. 仅管理员命令可操作该数据库.
+  * `neo4j` 默认数据库, 含有一个默认图谱.
+
+  > 开源版本Neo4j只能含有以上两个数据库, 不支持更多的数据库了.
+
+  
+
+  
