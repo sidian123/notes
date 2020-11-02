@@ -155,7 +155,7 @@ const router = new VueRouter({
     
     下面的`id`匹配任何URL片段, 如`/user/foo`, `/user/bar`都将路由到`User`组件上.
     
-```javascript
+	```javascript
     const User = {
       template: '<div>User {{ $route.params.id }}</div>'
     }
@@ -166,7 +166,7 @@ const router = new VueRouter({
         { path: '/user/:id', component: User }
       ]
     })
-```
+	```
 
     `$route.params`可以取出动态片段的内容, 并展示为一个对象, 如`{id:'foo'}`
 
