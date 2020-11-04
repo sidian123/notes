@@ -186,6 +186,7 @@ docker run \
   - `MATCH`: The graph pattern to match. This is the most common way to get data from the graph.
   - `WHERE`: Not a clause in its own right, but rather part of `MATCH`, `OPTIONAL MATCH` and `WITH`. Adds constraints to a pattern, or filters the intermediate result passing through `WITH`.
   - `RETURN`: What to return.
+  
 * 常用更新命令
   * `CREATE` (and `DELETE`): Create (and delete) nodes and relationships.
   * `SET` (and `REMOVE`): Set values to properties and add labels on nodes using `SET` and use `REMOVE` to remove them.
@@ -203,6 +204,11 @@ docker run \
   * `neo4j` 默认数据库, 含有一个默认图谱.
 
   > 开源版本Neo4j只能含有以上两个数据库, 不支持更多的数据库了.
+
+* 事物
+
+  * 所有语句都运行在事物中, 默认一条语句一个事物. 可手动开启事物, 让多个语句处于同一个事物中, 并提交.
+  * 事物是数据库级别的, 即开启事物锁定整个数据库. 同时还有一些限制, 略.
 
   
 
