@@ -1017,6 +1017,21 @@ Spring提供的使用方式有:
 
 * ` OxmSerializer ` 序列化对象为XML格式
 
+自定义序列化器Demo:
+
+```java
+@Bean
+public RedisTemplate<String, ?> redisTemplate(RedisConnectionFactory factory) {
+    RedisTemplate<String, ?> redisTemplate = new RedisTemplate<>();
+    redisTemplate.setKeySerializer(new StringRedisSerializer());
+    redisTemplate.setValueSerializer(new Jackson2JsonRedisSerializer<>(Object.class));
+    redisTemplate.setHashKeySerializer(new StringRedisSerializer());
+    redisTemplate.setHashValueSerializer(new Jackson2JsonRedisSerializer<>(Object.class));
+    redisTemplate.setConnectionFactory(factory);
+    return redisTemplate;
+}
+```
+
 ## 缓存注解
 
 Spring Data Redis主要通过实现` cache `和` RedisCacheManager `接口, 来提供Spring缓存抽象层的实现.
