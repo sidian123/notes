@@ -999,7 +999,7 @@ Spring提供的使用方式有:
 
 为何数据需要序列化? 
 
-尽管Redis的值有数据类型之分, 但Redis数据类型仅规定了**元素间**在内存中是如何分布的, 但是**元素本身**在Redis的内存中就是一个**`byte`数组**. Java的对象如何转化为Redis的`byte`数据交给了使用者, 这个过程就是序列化.
+尽管Redis的值有数据类型之分, 但Redis数据类型仅规定了**元素间**在内存中是如何分布的, 但是**元素本身**在Redis的内存中就是一个**`byte`数组**. Java的对象与Redis的`type`数组之间的映射过程就是序列化/反序列化过程. 
 
 序列化包括键和值的序列化. Spring Data Redis提供了多种序列化器, 如下所示:
 
@@ -1012,6 +1012,9 @@ Spring提供的使用方式有:
   > `StringRedisTemplate`默认使用这个
 
 * ` Jackson2JsonRedisSerializer `或` GenericJackson2JsonRedisSerializer ` 使用Jackson和`utf-8`序列化对象为JSON格式
+
+  > 将数据转化为JSON字符串, 再使用`utf-8`将字符串转化为`byte`数组.
+
 * ` OxmSerializer ` 序列化对象为XML格式
 
 ## 缓存注解
