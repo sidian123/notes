@@ -132,6 +132,10 @@
 
 * `flushall`删除所有数据库中的key
 
+* `select` 切换使用的数据库
+
+  > Redis默认有16个数据库, 可通过`select`切换. 连接redis时, 默认使用的`0`号数据库
+
 * `auth`认证
 
 * `config set|get`获取或设置配置
