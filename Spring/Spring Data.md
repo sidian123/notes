@@ -1073,6 +1073,43 @@ public void useCallback() {
 
 > 通过`Connection`可直接获取底层的客户端, 如Jedis
 
+## 案例
+
+### 实现scan
+
+```java
+    /**
+     * 扫描键
+     *
+     * @param pattern  匹配模式
+     * @param consumer 处理器
+     */
+    public void scan(String pattern, Consumer<byte[]> consumer) {
+        redisTemplate.execute((RedisConnection connection) -> {
+            Cursor<byte[]> scan = connection.scan(ScanOptions.scanOptions()
+                    .match(pattern)
+                    .count(400)
+                    .build());
+            while (scan.hasNext()) {
+                consumer.accept(scan.next());
+            }
+            try {
+                scan.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            return null;
+        });
+    }
+```
+
+> 注意点:
+>
+> 1. 需要关闭`Cursor`, 否则存在连接不被释放
+> 2. `hasNext()`检查到单次获取的集合遍历完后, 会再次调用`scan()`方法的.
+
+> 参考[Spring RedisTemplate实现scan操作，毕竟keys不安全](https://www.jianshu.com/p/4c842c41ba41)
+
 ## 踩坑
 
 ### 设置键值后, redis-cli中不能取出
