@@ -999,7 +999,7 @@ Spring提供的使用方式有:
 
 为何数据需要序列化? 
 
-尽管Redis的值有数据类型之分, 但Redis数据类型仅规定了**元素间**在内存中是如何分布的, 但是**元素本身**在Redis的内存中就是一个**`byte`数组**. Java的对象如何转化为Redis的`byte`数据交给了使用者, 这个过程就是序列化.
+尽管Redis的值有数据类型之分, 但Redis数据类型仅规定了**元素间**在内存中是如何分布的, 但是**元素本身**在Redis的内存中就是一个**`byte`数组**. Java的对象与Redis的`type`数组之间的映射过程就是序列化/反序列化过程. 
 
 序列化包括键和值的序列化. Spring Data Redis提供了多种序列化器, 如下所示:
 
@@ -1012,7 +1012,25 @@ Spring提供的使用方式有:
   > `StringRedisTemplate`默认使用这个
 
 * ` Jackson2JsonRedisSerializer `或` GenericJackson2JsonRedisSerializer ` 使用Jackson和`utf-8`序列化对象为JSON格式
+
+  > 将数据转化为JSON字符串, 再使用`utf-8`将字符串转化为`byte`数组.
+
 * ` OxmSerializer ` 序列化对象为XML格式
+
+自定义序列化器Demo:
+
+```java
+@Bean
+public RedisTemplate<String, ?> redisTemplate(RedisConnectionFactory factory) {
+    RedisTemplate<String, ?> redisTemplate = new RedisTemplate<>();
+    redisTemplate.setKeySerializer(new StringRedisSerializer());
+    redisTemplate.setValueSerializer(new Jackson2JsonRedisSerializer<>(Object.class));
+    redisTemplate.setHashKeySerializer(new StringRedisSerializer());
+    redisTemplate.setHashValueSerializer(new Jackson2JsonRedisSerializer<>(Object.class));
+    redisTemplate.setConnectionFactory(factory);
+    return redisTemplate;
+}
+```
 
 ## 缓存注解
 
@@ -1069,6 +1087,43 @@ public void useCallback() {
 ```
 
 > 通过`Connection`可直接获取底层的客户端, 如Jedis
+
+## 案例
+
+### 实现scan
+
+```java
+    /**
+     * 扫描键
+     *
+     * @param pattern  匹配模式
+     * @param consumer 处理器
+     */
+    public void scan(String pattern, Consumer<byte[]> consumer) {
+        redisTemplate.execute((RedisConnection connection) -> {
+            Cursor<byte[]> scan = connection.scan(ScanOptions.scanOptions()
+                    .match(pattern)
+                    .count(400)
+                    .build());
+            while (scan.hasNext()) {
+                consumer.accept(scan.next());
+            }
+            try {
+                scan.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            return null;
+        });
+    }
+```
+
+> 注意点:
+>
+> 1. 需要关闭`Cursor`, 否则存在连接不被释放
+> 2. `hasNext()`检查到单次获取的集合遍历完后, 会再次调用`scan()`方法的.
+
+> 参考[Spring RedisTemplate实现scan操作，毕竟keys不安全](https://www.jianshu.com/p/4c842c41ba41)
 
 ## 踩坑
 
