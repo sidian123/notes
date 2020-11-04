@@ -180,12 +180,15 @@ docker run \
 
 # Introduction
 
-* Cypher由一个链式从句组成, 一个从句的临时结果作为下一个从句的输入
+* 语法组成
+  * Cypher由一个链式从句组成, 一个从句的临时结果作为下一个从句的输入. 
+  * 从句可存在子从句, 如`where`可作为很多命令的子从句; `skip`,`limit`和`order by`可作为`return`的子从句.
 
 * 常用查询命令
   - `MATCH`: The graph pattern to match. This is the most common way to get data from the graph.
   - `WHERE`: Not a clause in its own right, but rather part of `MATCH`, `OPTIONAL MATCH` and `WITH`. Adds constraints to a pattern, or filters the intermediate result passing through `WITH`.
   - `RETURN`: What to return.
+
 * 常用更新命令
   * `CREATE` (and `DELETE`): Create (and delete) nodes and relationships.
   * `SET` (and `REMOVE`): Set values to properties and add labels on nodes using `SET` and use `REMOVE` to remove them.
@@ -204,7 +207,12 @@ docker run \
 
   > 开源版本Neo4j只能含有以上两个数据库, 不支持更多的数据库了.
 
-  
+* 执行顺序
+
+  * 多个**查询**从句组合, 是同时进行的. 但使用`with`时, `with`前的查询语句先执行, 再执行`with`及之后的语句.
+  * 更新语句, 它可分为查询和更新两部分, 先执行查询, 后更新.
+
+* 
 
 
 # 疑问点
