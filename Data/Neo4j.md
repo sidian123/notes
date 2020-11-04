@@ -217,7 +217,67 @@ docker run \
   * 所有语句都运行在事物中, 默认一条语句一个事物. 可手动开启事物, 让多个语句处于同一个事物中, 并提交.
   * 事物是数据库级别的, 即开启事物锁定整个数据库. 同时还有一些限制, 略.
 
+* 查询时, 关系唯一性
+
+  一次查询从句中, 已遍历过的关系不会再遍历
+
+  Demo, 一个图如下
+
+  ![image-20201104234516451](.Neo4j/image-20201104234516451.png)
+
+  执行语句
+
+  ```cypher
+  MATCH (user:User { name: 'Adam' })-[r1:FRIEND]-()-[r2:FRIEND]-(friend_of_a_friend)
+  RETURN friend_of_a_friend.name AS fofName
+  ```
+
+  ```
+  +---------+
+  | fofName |
+  +---------+
+  | "David" |
+  +---------+
+  1 row
+  ```
+
+  由于Adam-Pernilla这条关系不会再走, 所以只有David一个结果. 可通过两条`match`从句打破这个限制, 如
+
+  ```cypher
+  MATCH (user:User { name: 'Adam' })-[r1:FRIEND]-(friend)
+  MATCH (friend)-[r2:FRIEND]-(friend_of_a_friend)
+  RETURN friend_of_a_friend.name AS fofName
+  ```
+
+  ```
+  +---------+
+  | fofName |
+  +---------+
+  | "David" |
+  | "Adam"  |
+  +---------+
+  2 rows
+  ```
+
+# Syntax
+
+
 
 # 疑问点
 
 * with 的作用
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
