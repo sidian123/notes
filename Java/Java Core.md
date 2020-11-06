@@ -495,7 +495,7 @@ Google提供的一个工具, 先记录下. 一般引入了Swagger的项目都引
 * 好像所有方法, 相对路径都是相对于classpath的, 如要相对于工作目录, 可如下所示:
 
   ```java
-  new File().getCanonicalFile()
+  new File("").getCanonicalFile()
   ```
   
   > 但项目打成Jar包, 很多操作是不能进行了.
