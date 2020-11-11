@@ -573,6 +573,14 @@ LIMIT [offset,] row_count;
   ```
 
   ![image-20191115125035531](.MySQL/image-20191115125035531.png)
+  
+* SQL Mode配置, 避免出现`ONLY_FULL_GROUP_BY`的问题
+
+  `my.cnf`
+
+  ```
+  sql_mode =STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION
+  ```
 
 # 五 权限控制
 
@@ -800,6 +808,12 @@ jdbc:mysql://localhost:3306/database_name?useSSL=false&serverTimezone=GMT%2B8&al
 > ```
 > jdbc:mysql://localhost:3306/database_name?serverTimezone=GMT%2B8
 > ```
+
+> 参考:
+>
+> * [Connection URL Syntax](https://dev.mysql.com/doc/connector-j/8.0/en/connector-j-reference-jdbc-url-format.html)
+>
+> * [Configuration Properties](https://dev.mysql.com/doc/connector-j/8.0/en/connector-j-reference-configuration-properties.html)
 
 # 坑
 
