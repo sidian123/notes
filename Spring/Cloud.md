@@ -731,42 +731,47 @@ public class IpFilter extends ZuulFilter {
   </dependency>
   ```
 
-* 规则
+## 资源定义
 
-  * 流量控制
+## 规则
 
-    * QPS流量控制
+### 流量控制
 
-      * 介绍
+* QPS流量控制
 
-        当 QPS 超过某个阈值的时候，则采取措施进行流量控制
+  * 介绍
 
-      * 流控效果
+    当 QPS 超过某个阈值的时候，则采取措施进行流量控制
 
-        * 直接拒绝(默认) (`RuleConstant.CONTROL_BEHAVIOR_DEFAULT`)
+  * 流控效果
 
-          当QPS超过阈值后, 新的请求被拒绝, 将抛出`FlowException`异常
+    * 直接拒绝(默认) (`RuleConstant.CONTROL_BEHAVIOR_DEFAULT`)
 
-          > 当进行压测, 知道系统处理上限后, 可设置该效果, 防止系统奔溃
+      当QPS超过阈值后, 新的请求被拒绝, 将抛出`FlowException`异常
 
-        * Warm Up (`RuleConstant.CONTROL_BEHAVIOR_WARM_UP`)
+      > 当进行压测, 知道系统处理上限后, 可设置该效果, 防止系统奔溃
 
-          冷启动, QPS可缓慢增加, 若流量突增, 则将在一个预热时间内, QPS将逐渐增加到阈值(超过QPS的会被拒绝). 
+    * Warm Up (`RuleConstant.CONTROL_BEHAVIOR_WARM_UP`)
 
-          > 用于启动需要额外开销的场景，例如建立数据库连接等。
+      冷启动, QPS可缓慢增加, 若流量突增, 则将在一个预热时间内, QPS将逐渐增加到阈值(超过QPS的会被拒绝). 
 
-        * 匀速排队 (`RuleConstant.CONTROL_BEHAVIOR_RATE_LIMITER`)
+      > 用于启动需要额外开销的场景，例如建立数据库连接等。
 
-          以固定间隔时间让请求通过, 若当前请求与上个通过了的请求间隔大于预设值, 则通过; 否则, 排队等待处理. 若请求等待的时间大于最长排队等待时间, 则拒绝.
+    * 匀速排队 (`RuleConstant.CONTROL_BEHAVIOR_RATE_LIMITER`)
 
-    * 并发线程数控制柜
+      以固定间隔时间让请求通过, 若当前请求与上个通过了的请求间隔大于预设值, 则通过; 否则, 排队等待处理. 若请求等待的时间大于最长排队等待时间, 则拒绝.
 
-  * 熔断降级规则
+* 并发线程数控制
 
-* 参考
+* 基于调用关系的流量控制
 
-  * [spring-cloud-alibaba的wiki](https://github.com/alibaba/spring-cloud-alibaba/wiki/Sentinel)
-  * [主流框架的适配](https://github.com/alibaba/Sentinel/wiki/%E4%B8%BB%E6%B5%81%E6%A1%86%E6%9E%B6%E7%9A%84%E9%80%82%E9%85%8D)
+### 熔断降级
+
+## 参考
+
+* [如何使用](https://github.com/alibaba/Sentinel/wiki/%E5%A6%82%E4%BD%95%E4%BD%BF%E7%94%A8)
+
+* [spring-cloud-alibaba的wiki](https://github.com/alibaba/spring-cloud-alibaba/wiki/Sentinel)
 
 # 杂乱的学习笔记(非重点)
 
