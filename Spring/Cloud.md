@@ -722,7 +722,51 @@ public class IpFilter extends ZuulFilter {
 
 # Sentinel
 
+* 依赖引入
 
+  ```xml
+  <dependency>
+      <groupId>com.alibaba.cloud</groupId>
+      <artifactId>spring-cloud-starter-alibaba-sentinel</artifactId>
+  </dependency>
+  ```
+
+* 规则
+
+  * 流量控制
+
+    * QPS流量控制
+
+      * 介绍
+
+        当 QPS 超过某个阈值的时候，则采取措施进行流量控制
+
+      * 流控效果
+
+        * 直接拒绝(默认) (`RuleConstant.CONTROL_BEHAVIOR_DEFAULT`)
+
+          当QPS超过阈值后, 新的请求被拒绝, 将抛出`FlowException`异常
+
+          > 当进行压测, 知道系统处理上限后, 可设置该效果, 防止系统奔溃
+
+        * Warm Up (`RuleConstant.CONTROL_BEHAVIOR_WARM_UP`)
+
+          冷启动, QPS可缓慢增加, 若流量突增, 则将在一个预热时间内, QPS将逐渐增加到阈值(超过QPS的会被拒绝). 
+
+          > 用于启动需要额外开销的场景，例如建立数据库连接等。
+
+        * 匀速排队 (`RuleConstant.CONTROL_BEHAVIOR_RATE_LIMITER`)
+
+          以固定间隔时间让请求通过, 若当前请求与上个通过了的请求间隔大于预设值, 则通过; 否则, 排队等待处理. 若请求等待的时间大于最长排队等待时间, 则拒绝.
+
+    * 并发线程数控制柜
+
+  * 熔断降级规则
+
+* 参考
+
+  * [spring-cloud-alibaba的wiki](https://github.com/alibaba/spring-cloud-alibaba/wiki/Sentinel)
+  * [主流框架的适配](https://github.com/alibaba/Sentinel/wiki/%E4%B8%BB%E6%B5%81%E6%A1%86%E6%9E%B6%E7%9A%84%E9%80%82%E9%85%8D)
 
 # 杂乱的学习笔记(非重点)
 
