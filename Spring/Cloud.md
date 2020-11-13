@@ -35,18 +35,6 @@
 
  除了Spring Cloud, 还有Motan(新浪), gRPC(google), Thrift(facebook), Dubbo(阿里)/DubboX(当当网). Spring Cloud和Dubbo提供的微服务功能比较全. 最初Dubbo比较火, 但由于它停止维护长达5年, 导致现在Spring Cloud用的比较多.
 
-## 限流,熔断,降级
-
-- **服务限流** ：当系统资源不够，不足以应对大量请求，对系统按照预设的规则进行流量限制或功能限制
-- **服务熔断**：当调用目标服务的请求和调用大量超时或失败，服务调用方为避免造成长时间的阻塞造成影响其他服务，后续对该服务接口的调用不再经过进行请求，直接执行本地的默认方法
-- **服务降级**：为了保证核心业务在大量请求下能正常运行，根据实际业务情况及流量，对部分服务降低优先级，有策略的不处理或用简单的方式处理
-
-服务降级的实现可以基于人工开关降级（秒杀、电商大促等）和自动检测（超时、失败次数、故障），熔断可以理解为一种服务故障降级处理
-
-> 为什么需要限流降级
->
-> 系统承载的访问量是有限的，如果不做流量控制，会导致系统资源占满，服务超时，从而所有用户无法使用，通过服务限流控制请求的量，服务降级省掉非核心业务对系统资源的占用，最大化利用系统资源，尽可能服务更多用户
-
 # 二 Spring Cloud介绍
 
 ## 介绍
@@ -386,9 +374,23 @@ public interface UserService {
 
   > Feign没有提供真正的响应处理器, 而是通过了更底层的方式来实现的.
 
-# 六 Hystrix
+# 六 限流,熔断,降级
 
-## 介绍
+## 概念
+
+- **服务限流** ：当系统资源不够，不足以应对大量请求，对系统按照预设的规则进行流量限制或功能限制
+- **服务熔断**：当调用目标服务的请求和调用大量超时或失败，服务调用方为避免造成长时间的阻塞造成影响其他服务，后续对该服务接口的调用不再经过进行请求，直接执行本地的默认方法
+- **服务降级**：为了保证核心业务在大量请求下能正常运行，根据实际业务情况及流量，对部分服务降低优先级，有策略的不处理或用简单的方式处理
+
+服务降级的实现可以基于人工开关降级（秒杀、电商大促等）和自动检测（超时、失败次数、故障），熔断可以理解为一种服务故障降级处理
+
+> 为什么需要限流降级
+>
+> 系统承载的访问量是有限的，如果不做流量控制，会导致系统资源占满，服务超时，从而所有用户无法使用，通过服务限流控制请求的量，服务降级省掉非核心业务对系统资源的占用，最大化利用系统资源，尽可能服务更多用户
+
+## Hystrix
+
+### 介绍
 
 当被调用的微服务出现某种问题或直接停止时, 一般会导致调用者超时或抛出异常, 造成该生态系统不够稳定. 
 
@@ -402,7 +404,7 @@ Hystrix就是用来解决这个问题, 当一个服务出现问题时, 会将执
 
 因为Hystrix在Feign中使用起来极其方便, 因此这里只介绍Feign下的Hystrix使用.
 
-## 引入
+### 引入
 
 加入依赖
 
@@ -421,7 +423,7 @@ feign:
     enabled: true
 ```
 
-## 使用
+### 使用
 
 延续第五章的话题, `@FeignClient`的`fallback`属性指定微服务调用异常时执行的类, 如
 
@@ -468,7 +470,7 @@ public class Fallback implements UserService {
 
 之后Feign接口的哪个方法异常了, 就执行实现类`Fallback`对应的方法.
 
-## 注意点
+### 注意点
 
 之前说了, Feign与Hystrix搭配使用时有几个坑要注意.
 
@@ -479,6 +481,84 @@ public class Fallback implements UserService {
 第二, 使用`@FeignClient`的`path`属性来代替`@RequestMapping`, 也会造成上述问题.
 
 > 为啥会这样? 不知道...
+
+## Sentinel
+
+* 依赖引入
+
+  ```xml
+  <dependency>
+      <groupId>com.alibaba.cloud</groupId>
+      <artifactId>spring-cloud-starter-alibaba-sentinel</artifactId>
+  </dependency>
+  ```
+
+### 资源定义
+
+### 规则
+
+#### 流量控制
+
+* QPS流量控制
+
+  * 介绍
+
+    当 QPS 超过某个阈值的时候，则采取措施进行流量控制
+
+  * 流控效果
+
+    * 直接拒绝(默认) (`RuleConstant.CONTROL_BEHAVIOR_DEFAULT`)
+
+      当QPS超过阈值后, 新的请求被拒绝, 将抛出`FlowException`异常
+
+      > 当进行压测, 知道系统处理上限后, 可设置该效果, 防止系统奔溃
+
+    * Warm Up (`RuleConstant.CONTROL_BEHAVIOR_WARM_UP`)
+
+      冷启动, QPS可缓慢增加, 若流量突增, 则将在一个预热时间内, QPS将逐渐增加到阈值(超过QPS的会被拒绝). 
+
+      > 用于启动需要额外开销的场景，例如建立数据库连接等。
+
+    * 匀速排队 (`RuleConstant.CONTROL_BEHAVIOR_RATE_LIMITER`)
+
+      以固定间隔时间让请求通过, 若当前请求与上个通过了的请求间隔大于预设值, 则通过; 否则, 排队等待处理. 若请求等待的时间大于最长排队等待时间, 则拒绝.
+
+* 并发线程数控制
+
+* 基于调用关系的流量控制
+
+#### 熔断降级
+
+熔断策略
+
+* 慢调用比例 (`SLOW_REQUEST_RATIO`)
+
+  在一段时间内(`statIntervalMs`), 若请求数量大于熔断最小触发数(`minRequestAmount`), 且慢调用 (响应时间大于允许范围)比例大于阈值, 则熔断.
+
+* 异常比列 (`ERROR_RATIO`)
+
+  在一段时间内(`statIntervalMs`), 若请求数量大于熔断最小触发数(`minRequestAmount`), 且异常 (执行异常)比例大于阈值, 则熔断.
+
+* 异常数 (`ERROR_COUNT`)
+
+  在一段时间内(`statIntervalMs`), 若请求数量大于熔断最小触发数(`minRequestAmount`), 且异常数大于阈值, 则熔断.
+
+#### 系统自适应限流
+
+* 从整体维度对应用入口流量进行控制，结合应用的 Load、CPU 使用率、总体平均 RT、入口 QPS 和并发线程数等几个维度的监控指标，通过自适应的流控策略, 让系统的入口流量和系统的负载达到一个平衡，让系统尽可能跑在最大吞吐量的同时保证系统整体的稳定性。
+
+* 仅入口流量有效(`EntryType.IN`), 如 Web 服务或 Dubbo 服务端接收的请求
+* 监控指标不作为阈值, 而是作为自适应保护因子.
+
+### 使用
+
+
+
+### 参考
+
+* [如何使用](https://github.com/alibaba/Sentinel/wiki/%E5%A6%82%E4%BD%95%E4%BD%BF%E7%94%A8)
+
+* [spring-cloud-alibaba的wiki](https://github.com/alibaba/spring-cloud-alibaba/wiki/Sentinel)
 
 # 七 Zuul
 
@@ -729,84 +809,6 @@ public class IpFilter extends ZuulFilter {
 
 * [zuul学习四：zuul 过滤器详解](https://www.jianshu.com/p/ff863d532767)
 * [Router and Filter: Zuul](https://cloud.spring.io/spring-cloud-static/spring-cloud-netflix/2.2.2.RELEASE/reference/html/#router-and-filter-zuul)
-
-# Sentinel
-
-* 依赖引入
-
-  ```xml
-  <dependency>
-      <groupId>com.alibaba.cloud</groupId>
-      <artifactId>spring-cloud-starter-alibaba-sentinel</artifactId>
-  </dependency>
-  ```
-
-## 资源定义
-
-## 规则
-
-### 流量控制
-
-* QPS流量控制
-
-  * 介绍
-
-    当 QPS 超过某个阈值的时候，则采取措施进行流量控制
-
-  * 流控效果
-
-    * 直接拒绝(默认) (`RuleConstant.CONTROL_BEHAVIOR_DEFAULT`)
-
-      当QPS超过阈值后, 新的请求被拒绝, 将抛出`FlowException`异常
-
-      > 当进行压测, 知道系统处理上限后, 可设置该效果, 防止系统奔溃
-
-    * Warm Up (`RuleConstant.CONTROL_BEHAVIOR_WARM_UP`)
-
-      冷启动, QPS可缓慢增加, 若流量突增, 则将在一个预热时间内, QPS将逐渐增加到阈值(超过QPS的会被拒绝). 
-
-      > 用于启动需要额外开销的场景，例如建立数据库连接等。
-
-    * 匀速排队 (`RuleConstant.CONTROL_BEHAVIOR_RATE_LIMITER`)
-
-      以固定间隔时间让请求通过, 若当前请求与上个通过了的请求间隔大于预设值, 则通过; 否则, 排队等待处理. 若请求等待的时间大于最长排队等待时间, 则拒绝.
-
-* 并发线程数控制
-
-* 基于调用关系的流量控制
-
-### 熔断降级
-
-熔断策略
-
-* 慢调用比例 (`SLOW_REQUEST_RATIO`)
-
-  在一段时间内(`statIntervalMs`), 若请求数量大于熔断最小触发数(`minRequestAmount`), 且慢调用 (响应时间大于允许范围)比例大于阈值, 则熔断.
-
-* 异常比列 (`ERROR_RATIO`)
-
-  在一段时间内(`statIntervalMs`), 若请求数量大于熔断最小触发数(`minRequestAmount`), 且异常 (执行异常)比例大于阈值, 则熔断.
-
-* 异常数 (`ERROR_COUNT`)
-
-  在一段时间内(`statIntervalMs`), 若请求数量大于熔断最小触发数(`minRequestAmount`), 且异常数大于阈值, 则熔断.
-
-### 系统自适应限流
-
-* 从整体维度对应用入口流量进行控制，结合应用的 Load、CPU 使用率、总体平均 RT、入口 QPS 和并发线程数等几个维度的监控指标，通过自适应的流控策略, 让系统的入口流量和系统的负载达到一个平衡，让系统尽可能跑在最大吞吐量的同时保证系统整体的稳定性。
-
-* 仅入口流量有效(`EntryType.IN`), 如 Web 服务或 Dubbo 服务端接收的请求
-* 监控指标不作为阈值, 而是作为自适应保护因子.
-
-## 使用
-
-
-
-## 参考
-
-* [如何使用](https://github.com/alibaba/Sentinel/wiki/%E5%A6%82%E4%BD%95%E4%BD%BF%E7%94%A8)
-
-* [spring-cloud-alibaba的wiki](https://github.com/alibaba/spring-cloud-alibaba/wiki/Sentinel)
 
 # 杂乱的学习笔记(非重点)
 
