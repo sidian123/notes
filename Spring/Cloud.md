@@ -98,6 +98,16 @@ Spring Cloud使用Rest API作为微服务之间调用的接口, 可以使用`Res
 
 内容暂且学习到这里, 还有什么Spring Cloud Config外置配置文件等什么的, 以后待学.
 
+## 基础
+
+* [Bootstrap Application Context](https://cloud.spring.io/spring-cloud-commons/reference/html/#the-bootstrap-application-context)
+
+  Spring Cloud中有两个上下文, bootstrap context是main context的parent context, 负责加载外部配置. 如Spring Config, Nacos Config, 就是这个过程的实现.
+
+  bootstrap context对应的配置为`bootstrap.yml`或`bootstrap.properties`, 主要用于配置外部配置服务的地址. 
+
+  两个上下文都共享`Environment`, 但bootstrap阶段加载的属性优先级要高于main context.
+
 # 三 Eureka
 
 ## 介绍
