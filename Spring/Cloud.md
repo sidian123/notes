@@ -88,6 +88,8 @@ Spring Cloud使用Rest API作为微服务之间调用的接口, 可以使用`Res
 
 ## 基础
 
+* 引入和Cloud相关的组件, 都会引入`spring-cloud-starter`包.
+
 * [Bootstrap Application Context](https://cloud.spring.io/spring-cloud-commons/reference/html/#the-bootstrap-application-context)
 
   Spring Cloud中有两个上下文, bootstrap context是main context的parent context, 负责加载外部配置. 如Spring Config, Nacos Config, 就是这个过程的实现.
