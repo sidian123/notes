@@ -409,13 +409,28 @@ docker container ls --all
 docker container rm 容器名或容器id
 ```
 
-## 容器To镜像
+### 提交容器为镜像
 
 通过如下命令将容器保存为镜像
 
 ```
 docker commit 容器名 镜像名
 ```
+
+### 文件系统相关
+
+* 导出容器文件系统为tar
+
+  ```docker
+  docker container export -o <file> <container_name>
+  ```
+
+* 文件拷贝--容器<=>本地文件系统
+
+  ```docker
+  docker cp <container_name>:<src_path> <dest_path>
+  docker cp <src_path> <container_name>:<dest_path>
+  ```
 
 ## 镜像备份与迁移
 
