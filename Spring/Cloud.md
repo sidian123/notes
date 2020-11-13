@@ -767,6 +767,31 @@ public class IpFilter extends ZuulFilter {
 
 ### 熔断降级
 
+熔断策略
+
+* 慢调用比例 (`SLOW_REQUEST_RATIO`)
+
+  在一段时间内(`statIntervalMs`), 若请求数量大于熔断最小触发数(`minRequestAmount`), 且慢调用 (响应时间大于允许范围)比例大于阈值, 则熔断.
+
+* 异常比列 (`ERROR_RATIO`)
+
+  在一段时间内(`statIntervalMs`), 若请求数量大于熔断最小触发数(`minRequestAmount`), 且异常 (执行异常)比例大于阈值, 则熔断.
+
+* 异常数 (`ERROR_COUNT`)
+
+  在一段时间内(`statIntervalMs`), 若请求数量大于熔断最小触发数(`minRequestAmount`), 且异常数大于阈值, 则熔断.
+
+### 系统自适应限流
+
+* 从整体维度对应用入口流量进行控制，结合应用的 Load、CPU 使用率、总体平均 RT、入口 QPS 和并发线程数等几个维度的监控指标，通过自适应的流控策略, 让系统的入口流量和系统的负载达到一个平衡，让系统尽可能跑在最大吞吐量的同时保证系统整体的稳定性。
+
+* 仅入口流量有效(`EntryType.IN`), 如 Web 服务或 Dubbo 服务端接收的请求
+* 监控指标不作为阈值, 而是作为自适应保护因子.
+
+## 使用
+
+
+
 ## 参考
 
 * [如何使用](https://github.com/alibaba/Sentinel/wiki/%E5%A6%82%E4%BD%95%E4%BD%BF%E7%94%A8)
