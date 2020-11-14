@@ -321,9 +321,9 @@ Nacos同时提供了服务注册,发现与配置中心的功能.
 * 配置
 
   ```properties
-  server.port=8081
   # 服务名
   spring.application.name=nacos-provider
+  # nacos地址
   spring.cloud.nacos.discovery.server-addr=127.0.0.1:8848
   ```
 
@@ -341,7 +341,35 @@ Nacos同时提供了服务注册,发现与配置中心的功能.
 
 ### Nacos Config
 
+* 依赖引入
 
+  ```xml
+  <dependency>
+      <groupId>com.alibaba.cloud</groupId>
+      <artifactId>spring-cloud-starter-alibaba-nacos-config</artifactId>
+  </dependency>
+  ```
+
+* 配置
+
+  `bootstrap.properties`
+
+  ```properties
+  spring.application.name=nacos-config
+  spring.cloud.nacos.config.server-addr=127.0.0.1:8848
+  # 文件类型, 默认properties
+  # spring.cloud.nacos.config.file-extension=yaml
+  ```
+
+  > 上述配置必须写入`bootstrap.properties`中.
+
+* 配置文件加载
+
+  配置文件由`DataId`,`Group`,`namespace`确定. 一般我们填`DataId`即可, 其他的默认.
+
+  应用启动后会加载`DataId`为`${spring.application.name}. ${file-extension:properties}`的配置; 
+
+  若使用了profile, 则还会加载`${spring.application.name}-${profile}. ${file-extension:properties}`
 
 ### 参考
 
