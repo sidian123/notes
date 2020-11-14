@@ -431,6 +431,12 @@ docker commit 容器名 镜像名
   docker cp <container_name>:<src_path> <dest_path>
   docker cp <src_path> <container_name>:<dest_path>
   ```
+  
+* 打印容器内文件,目录的改变
+
+  ```shell
+  docker container diff CONTAINER
+  ```
 
 ## 镜像备份与迁移
 
