@@ -326,6 +326,12 @@ Nacos同时提供了服务注册,发现与配置中心的功能.
   spring.cloud.nacos.discovery.server-addr=127.0.0.1:8848
   ```
 
+* 启动发现客户端
+
+  ```java
+  @EnableDiscoveryClient
+  ```
+
   
 
 ### Nacos Config
