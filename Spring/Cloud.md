@@ -98,9 +98,11 @@ Spring Cloud使用Rest API作为微服务之间调用的接口, 可以使用`Res
 
   两个上下文都共享`Environment`, 但bootstrap阶段加载的属性优先级要高于main context.
 
-# 三 Eureka
+# 服务注册,发现,配置
 
-## 介绍
+## Eureka
+
+### 介绍
 
 ![Eureka High level Architecture](.Cloud/eureka_architecture.png)
 
@@ -119,14 +121,14 @@ client获取到注册信息后, 会**缓存**起来, 默认每隔30秒会重新�
 
 如果一段时间内, 大量已注册的client已不正常的方式结束(无心跳), 那么server会进入**自我保护模式**, 这些client的信息被保护起来, 并不被删除. 
 
-## 配置
+### 配置
 
 Eureka配置分为两类:
 
 * [eureka.instance.*](https://github.com/spring-cloud/spring-cloud-netflix/blob/master/spring-cloud-netflix-eureka-client/src/main/java/org/springframework/cloud/netflix/eureka/EurekaInstanceConfigBean.java)和注册相关的配置
 * [eureka.client.*](https://github.com/spring-cloud/spring-cloud-netflix/blob/master/spring-cloud-netflix-eureka-client/src/main/java/org/springframework/cloud/netflix/eureka/EurekaClientConfigBean.java)和获取(查询)注册信息相关的配置
 
-### Server端
+#### Server端
 
 * 引入Eureka服务:
 
@@ -224,7 +226,7 @@ Eureka配置分为两类:
 
     `hostname`一般只在server之间使用, client指向server时可用ip指向server. 可以通过编辑本地`/etc/hosts`文件提供给server域名. 也可以设置`preferIpAddress`为`true`, 此时, 不同提供server`hostname`属性, 会自动从系统中获取第一个非环路ip地址.
 
-### Client端
+#### Client端
 
 * 引入: 只需添加依赖即可
 
@@ -279,6 +281,65 @@ Eureka配置分为两类:
 
   > 除此之外, 还有Feign, 它也是访问Rest API的客户端, 比`RestTemplate`更为方便, 但有限制, 详细见下.
 
+## Nacos
+
+Nacos同时提供了服务注册,发现与配置中心的功能.
+
+### 安装
+
+* 从 [最新稳定版本](https://github.com/alibaba/nacos/releases) 下载zip包
+
+* 启动
+
+  ```shell
+  cd nacos/bin
+  sh startup.sh -m standalone # linux
+  # cmd startup.cmd -m standalone # windows
+  ```
+
+* 打开控制台
+
+  ```
+  http://localhost:8848/nacos/index.html
+  ```
+
+* 关于数据库
+
+  默认使用内存数据库, 关闭时, 会持久化数据到本地.
+
+### Nacos Discovery
+
+* 依赖引入
+
+  ```xml
+  <dependency>
+      <groupId>com.alibaba.cloud</groupId>
+      <artifactId>spring-cloud-starter-alibaba-nacos-discovery</artifactId>
+  </dependency>
+  ```
+
+* 配置
+
+  ```properties
+  server.port=8081
+  spring.application.name=nacos-provider
+  spring.cloud.nacos.discovery.server-addr=127.0.0.1:8848
+  ```
+
+  
+
+### Nacos Config
+
+
+
+### 参考
+
+* [Nacos官网](https://nacos.io/zh-cn/index.html)
+
+  
+
+
+
 # 四 Ribbon
 
 集群后, 需要一个负载均衡器将访问请求平摊在每个服务上, 达到高可用的目的. 
@@ -299,7 +360,17 @@ Ribbon属于客户端负载均衡器, 默认与Eureka集成在一起, 因此存�
 </dependency>
 ```
 
-使用: 一般都是`RestTemplate`通过服务名访问, ribbon会从查询eureka获取的所有服务注册信息, 然后以负载均衡的方式选择一个微服务并访问. 默认算法采用轮询. 具体使用见第三章.
+使用: 一般都是`RestTemplate`通过服务名访问, ribbon会从查询eureka获取的所有服务注册信息, 然后以负载均衡的方式选择一个微服务并访问. 默认算法采用轮询. 
+
+`RestTemplate`需要手动注入
+
+```java
+@LoadBalanced
+@Bean
+RestTemplate restTemplate() {
+    return new RestTemplate();
+}
+```
 
 > 也可以使用Feign, Feign也默认Ribbon作为负载均衡器.
 
