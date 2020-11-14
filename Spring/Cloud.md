@@ -322,6 +322,7 @@ Nacos同时提供了服务注册,发现与配置中心的功能.
 
   ```properties
   server.port=8081
+  # 服务名
   spring.application.name=nacos-provider
   spring.cloud.nacos.discovery.server-addr=127.0.0.1:8848
   ```
@@ -332,7 +333,11 @@ Nacos同时提供了服务注册,发现与配置中心的功能.
   @EnableDiscoveryClient
   ```
 
-  
+* 使用
+
+  * 支持Feign用服务名调用.
+  * 以Ribbon为负载均衡器
+  * `RestTemplate`注入时, 需加上`@LoadBalanced`注解才能用服务名.
 
 ### Nacos Config
 
