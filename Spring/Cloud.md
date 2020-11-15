@@ -604,7 +604,135 @@ public class Fallback implements UserService {
 
 ## Sentinel
 
-* 依赖引入
+### 开始
+
+#### 介绍
+
+Sentinel 是面向分布式服务架构的流量控制组件，主要以流量为切入点，从限流、流量整形、熔断降级、系统负载保护、热点防护等多个维度来帮助开发者保障微服务的稳定性。
+
+#### 概念
+
+* 资源
+
+  可以是 Java 应用程序中的任何内容，例如，由应用程序提供的服务，或由应用程序调用的其它应用提供的服务，甚至可以是一段代码。
+
+* 规则
+
+  围绕资源的实时状态设定的规则，可以包括流量控制规则、熔断降级规则以及系统保护规则。所有规则可以动态实时调整。
+
+* 服务限流
+
+  当系统资源不够，不足以应对大量请求，对系统按照预设的规则进行流量限制或功能限制
+
+* 服务降级
+
+  为了保证核心业务在大量请求下能正常运行，根据实际业务情况及流量，对部分服务降低优先级，有策略的不处理或用简单的方式处理
+
+* 服务熔断
+
+  当调用目标服务的请求和调用大量超时或失败，服务调用方为避免造成长时间的阻塞造成影响其他服务，后续对该服务接口的调用不再经过进行请求，直接执行本地的默认方法
+
+> 服务降级的实现可以基于人工开关降级（秒杀、电商大促等）和自动检测（超时、失败次数、故障），熔断可以理解为一种服务故障降级处理
+
+> 为什么需要限流降级
+>
+> 系统承载的访问量是有限的，如果不做流量控制，会导致系统资源占满，服务超时，从而所有用户无法使用，通过服务限流控制请求的量，服务降级省掉非核心业务对系统资源的占用，最大化利用系统资源，尽可能服务更多用户
+
+### 功能
+
+#### 流量控制
+
+- QPS流量控制
+
+  - 介绍
+
+    当 QPS 超过某个阈值的时候，则采取措施进行流量控制
+
+  - 流控效果
+
+    - 直接拒绝(默认) (`RuleConstant.CONTROL_BEHAVIOR_DEFAULT`)
+
+      当QPS超过阈值后, 新的请求被拒绝, 将抛出`FlowException`异常
+
+      > 当进行压测, 知道系统处理上限后, 可设置该效果, 防止系统奔溃
+
+    - Warm Up (`RuleConstant.CONTROL_BEHAVIOR_WARM_UP`)
+
+      冷启动, QPS可缓慢增加, 若流量突增, 则将在一个预热时间内, QPS将逐渐增加到阈值(超过QPS的会被拒绝).
+
+      > 用于启动需要额外开销的场景，例如建立数据库连接等。
+
+    - 匀速排队 (`RuleConstant.CONTROL_BEHAVIOR_RATE_LIMITER`)
+
+      以固定间隔时间让请求通过, 若当前请求与上个通过了的请求间隔大于预设值, 则通过; 否则, 排队等待处理. 若请求等待的时间大于最长排队等待时间, 则拒绝.
+
+- 并发线程数控制
+
+  当访问某个资源的并发数超过某个阈值的时候, 采取错失进行流量控制. 流控效果同上.
+
+- 基于调用关系的流量控制
+
+#### 熔断降级
+
+熔断策略
+
+- 慢调用比例 (`SLOW_REQUEST_RATIO`)
+
+  在一段时间内(`statIntervalMs`), 若请求数量大于熔断最小触发数(`minRequestAmount`), 且慢调用 (响应时间大于允许范围)比例大于阈值, 则熔断.
+
+- 异常比列 (`ERROR_RATIO`)
+
+  在一段时间内(`statIntervalMs`), 若请求数量大于熔断最小触发数(`minRequestAmount`), 且异常 (执行异常)比例大于阈值, 则熔断.
+
+- 异常数 (`ERROR_COUNT`)
+
+  在一段时间内(`statIntervalMs`), 若请求数量大于熔断最小触发数(`minRequestAmount`), 且异常数大于阈值, 则熔断.
+
+#### 系统自适应限流
+
+#### 实时监控
+
+控制台提供的功能
+
+![image-20201115185853208](.Cloud/image-20201115185853208.png)
+
+
+
+### 使用
+
+#### 控制台
+
+* 从 [release 页面](https://github.com/alibaba/Sentinel/releases) 下载最新Jar
+
+* 启动
+
+  ```shell
+  java -Dserver.port=8849 -jar sentinel-dashboard.jar
+  ```
+
+  `server.port`指定控制台端口
+
+  > [wiki](https://github.com/alibaba/Sentinel/wiki/)上的其他参数, 如`csp.sentinel.dashboard.server`, 是为了将自己注册到控制台中, 不是必须的.
+
+* 鉴权
+
+  默认账号密码为`sentinel/sentinel` 可同过如下参数修改
+
+  ```
+  sentinel.dashboard.auth.username=sentinel
+  Dsentinel.dashboard.auth.password=123456
+  ```
+
+* [控制台集成版](https://github.com/CHENZHENNAME/sentinel-dashboard-nacos)
+
+  允许在dashboard上修改, 持久化到Nacos中. 比原版的Dashboard多了两个参数:
+
+  * `nacos.serverAddr` Nacos地址
+  * `nacos.namespace` Nacos名字空间, 一般不填.
+
+#### 客户端引入
+
+* 依赖
 
   ```xml
   <dependency>
@@ -613,66 +741,74 @@ public class Fallback implements UserService {
   </dependency>
   ```
 
-### 资源定义
+* 配置
 
-### 规则
+  ```properties
+  # sentinel的http server与dashboad交互的端口
+  # spring.cloud.sentinel.transport.port=8719
+  # dashboard地址
+  spring.cloud.sentinel.transport.dashboard=localhost:8849
+  ```
 
-#### 流量控制
+  `transport.port`定义了sentinel的http server与dashboard交互的地址, 当dashboard更新了规则后, 会通过该端口, 推送到sentinel中.
 
-* QPS流量控制
+* 资源声明
 
-  * 介绍
+  资源声明有多种方式, 这里使用最方便的注解定义方式`@SentinelResource`, 常用参数如下:
 
-    当 QPS 超过某个阈值的时候，则采取措施进行流量控制
+  * `value` 资源名称, 必填
+  * `blockHandler` 资源请求被阻塞时执行的处理器.
 
-  * 流控效果
+  ```java
+  @RestController
+  public class TestController {
+      @GetMapping(value = "/hello")
+      @SentinelResource("hello")
+      public String hello() {
+          return "Hello Sentinel";
+      }
+  }
+  ```
 
-    * 直接拒绝(默认) (`RuleConstant.CONTROL_BEHAVIOR_DEFAULT`)
+* 规则定义
 
-      当QPS超过阈值后, 新的请求被拒绝, 将抛出`FlowException`异常
+  不建议直接硬编码. 建议通过控制台实时查看并设置规则
 
-      > 当进行压测, 知道系统处理上限后, 可设置该效果, 防止系统奔溃
+#### 规则持久化&自定义数据源
 
-    * Warm Up (`RuleConstant.CONTROL_BEHAVIOR_WARM_UP`)
+当控制台或服务器重启后, 在控制台设置的规则将消失, 因为规则都存在内存中
 
-      冷启动, QPS可缓慢增加, 若流量突增, 则将在一个预热时间内, QPS将逐渐增加到阈值(超过QPS的会被拒绝). 
+一般情况下的规则推送:
 
-      > 用于启动需要额外开销的场景，例如建立数据库连接等。
+![image-20201115201304963](.Cloud/image-20201115201304963.png)
 
-    * 匀速排队 (`RuleConstant.CONTROL_BEHAVIOR_RATE_LIMITER`)
+接下来将配置成: Dashboard推动到配置中心, 配置中心更新到应用, 如下所示
 
-      以固定间隔时间让请求通过, 若当前请求与上个通过了的请求间隔大于预设值, 则通过; 否则, 排队等待处理. 若请求等待的时间大于最长排队等待时间, 则拒绝.
+![image-20201115201519969](.Cloud/image-20201115201519969.png)
 
-* 并发线程数控制
+客户端需要添加Nacos数据源的配置
 
-* 基于调用关系的流量控制
+```properties
+spring.cloud.sentinel.datasource.ds.nacos.server-addr=${nacos.address}
+spring.cloud.sentinel.datasource.ds.nacos.dataId=${spring.application.name}-flow-rules
+spring.cloud.sentinel.datasource.ds.nacos.groupId=SENTINEL_GROUP
+# 数据格式, JSON
+spring.cloud.sentinel.datasource.ds.nacos.data-type=json
+# 规则类型, 如流控规则
+spring.cloud.sentinel.datasource.ds.nacos.rule-type=flow
+```
 
-#### 熔断降级
+Dashboard未提供持久化到Nacos的功能, 需要自己定制, 但github上已有改好的[控制台集成版](https://github.com/CHENZHENNAME/sentinel-dashboard-nacos) , 启动时要告知nacos地址, 如
 
-熔断策略
+```shell
+java -Dserver.port=8849 -Dnacos.serverAddr=localhost:8848 -jar sentinel-dashboard.jar
+```
 
-* 慢调用比例 (`SLOW_REQUEST_RATIO`)
+### 小结
 
-  在一段时间内(`statIntervalMs`), 若请求数量大于熔断最小触发数(`minRequestAmount`), 且慢调用 (响应时间大于允许范围)比例大于阈值, 则熔断.
+流量防护功能十分强大, 支持多种方式限流, 能够保护应用被突发的流量冲垮. 且支持控制台实时监控, 和可视化定义规则.
 
-* 异常比列 (`ERROR_RATIO`)
-
-  在一段时间内(`statIntervalMs`), 若请求数量大于熔断最小触发数(`minRequestAmount`), 且异常 (执行异常)比例大于阈值, 则熔断.
-
-* 异常数 (`ERROR_COUNT`)
-
-  在一段时间内(`statIntervalMs`), 若请求数量大于熔断最小触发数(`minRequestAmount`), 且异常数大于阈值, 则熔断.
-
-#### 系统自适应限流
-
-* 从整体维度对应用入口流量进行控制，结合应用的 Load、CPU 使用率、总体平均 RT、入口 QPS 和并发线程数等几个维度的监控指标，通过自适应的流控策略, 让系统的入口流量和系统的负载达到一个平衡，让系统尽可能跑在最大吞吐量的同时保证系统整体的稳定性。
-
-* 仅入口流量有效(`EntryType.IN`), 如 Web 服务或 Dubbo 服务端接收的请求
-* 监控指标不作为阈值, 而是作为自适应保护因子.
-
-### 使用
-
-
+但Sentinel客户端与Dashboard的交互依赖与Sentinel自己启动的Http Server, 需要额外占用一个端口. 这对运维来说, 带来了不便. 
 
 ### 参考
 
