@@ -370,6 +370,14 @@ Nacos同时提供了服务注册,发现与配置中心的功能.
   应用启动后会加载`DataId`为`${spring.application.name}. ${file-extension:properties}`的配置; 
 
   若使用了profile, 则还会加载`${spring.application.name}-${profile}. ${file-extension:properties}`
+  
+* 配置刷新
+
+  当Nacos上的配置更新后, 会刷新到对应的客户端中. 
+
+  若要刷新依赖该配置的Bean的属性值, 需要加上注解`@RefreshScope`
+
+  > 至于Bean刷新后, 怎么通知Bean, 尚无好的方法.
 
 ### 参考
 
