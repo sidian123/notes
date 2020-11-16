@@ -546,7 +546,7 @@ ENTRYPOINT [ "sh", "-c", "java -jar /drug-service.jar","-Djava.security.egd=file
 
 ## 指令详解
 
-* `volume` 创建一个匿名volume
+* `volume` 创建一个匿名volume, 参数为容器中的挂载目录
 * `WORKDIR` 设置`RUN`, `CMD`, `ENTRYPOINT`, `COPY`和`ADD`命令的工作目录. 好像默认`/`目录
 
 ### ENV
