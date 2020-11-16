@@ -14,6 +14,9 @@ k8s集群由一个主节点和多个工作节点组成
 ![img](.kubernetes/6534887-ad58ca339c403a4b.png)
 
 * 主节点
+  
+  **The Master is responsible for managing the cluster.** The master coordinates all activities in your cluster, such as scheduling applications, maintaining applications' desired state, scaling applications, and rolling out new updates.
+  
   - **Kube-apiserver** 
   
     Exposes the API. 命令行工具`kubectl`也与之交互
@@ -36,6 +39,8 @@ k8s集群由一个主节点和多个工作节点组成
   
 * 工作节点
 
+  which is an agent for managing the node and communicating with the Kubernetes master.
+
   * **Kubelet**
 
     Agent that ensures containers in a pod are running.
@@ -45,7 +50,7 @@ k8s集群由一个主节点和多个工作节点组成
     Keeps network rules and perform forwarding. Service的映射功能就是kube-proxy提供的.
 
   * **Container runtime** 
-
+  
     Runs containers.
 
 ## k8s对象
