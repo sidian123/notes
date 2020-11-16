@@ -454,7 +454,7 @@ docker save -o 保存的文件名 镜像名
 docker load -i ./centos.tar
 ```
 
-## 资源查看
+## 资源管理
 
 * 容器资源使用
 
@@ -478,6 +478,20 @@ docker load -i ./centos.tar
   ```
   
   * `--follow , -f` 持续输出日志
+  
+* 查看Docker磁盘占用. 
+
+  如镜像, 容器, Volume, 缓存占用
+
+  ```shell
+  docker system df
+  ```
+
+* 清空无用数据
+
+  ```shell
+  docker system prune
+  ```
 
 # 自建Hub
 
@@ -806,25 +820,27 @@ Docker提供了多种持久化数据的方式, 如Volumes, Bind mounts等
 
 ## 挂载类型
 
-都是将外部存储挂载到容器内的某个目录上, 即使挂载类型不同, 但在容器看来, 使用上并无区别, 参考Linux的挂载.
+不同挂载类型都是将外部存储挂载到容器内的某个目录上.即使挂载类型不同, 但在容器内的进程看来, 使用上并无区别, 参考Linux的挂载.
 
 * Volume
 
-  Volume由Docker**创建**和**管理**. Volume被存储在Docker主机的某个目录上. 即使容器被删除, Volume也不会消失. 
+  * Volume由Docker**创建**和**管理**. Volume被存储在Docker主机的某个目录上(如`/var/lib/docker/volumes`). 即使容器被删除, Volume也不会消失. 
 
-  Volume可以同时挂载到多个容器上共享数据.
+  * Volume可以同时挂载到**多个**容器上共享数据.
 
-  Volume可以显式创建`docker volume create`, 也可以在创建容器时自动创建 (需要对应选项).
+  * Volume可以显式创建`docker volume create`, 也可以在创建容器时自动创建 (需要对应选项).
 
-  Volume被创建时可指定名字, 若未指定(匿名), Docker将给与该Volume一个唯一的名字
+  * Volume被创建时可指定名字, 若未指定(**匿名**), Docker将给与该Volume一个唯一的名字.
 
-  Volume支持`volume drivers`的使用, 可达到将数据存储到远程主机或远端的目的.
+  * Volume支持`volume drivers`的使用, 可达到将数据存储到远程主机或远端的目的.
+  * 当挂载一个**空volume**到容器的目录中, 且该目录有数据时, 这些数据将传播(拷贝)到volume中. 挂载**非空Volume**时, 若容器中有数据, 则会被隐藏掉. (即数据未消失, 但暂时访问不到)
 
 * Bind Mount
 
-  Bind Mount就是将主机的某个目录挂载到容器的某个目录上. 
+  * Bind Mount就是将主机的某个目录挂载到容器的某个目录上. 
 
-  指定目录时, 必须使用完整的路径名; 主机上被挂载的目录也可不必存在, 在需要的时候会自动创建.
+  * 指定目录时, 必须使用完整的路径名; 主机上被挂载的目录也可不必存在, 在需要的时候会自动创建.
+  * 当挂载容器的目录中, 且该目录有数据时, 这些数据将被隐藏掉. (即数据未消失, 但暂时访问不到)
 
 * tmpfs mount
 
@@ -849,7 +865,11 @@ Docker提供了多种持久化数据的方式, 如Volumes, Bind mounts等
 
 ### volume
 
+#### 创建
+
 * 参数使用
+
+  > 创建容器时, 同时创建Volume与映射所使用的参数
 
   * `-v`或`--volume`
 
@@ -896,6 +916,27 @@ Docker提供了多种持久化数据的方式, 如Volumes, Bind mounts等
     -v myvol2:/app \
     nginx:latest
   ```
+  
+* 使用只读volume
+
+  ```shell
+  $ docker run -d \
+    --name=nginxtest \
+    --mount source=nginx-vol,destination=/usr/share/nginx/html,readonly \
+    nginx:latest
+  ```
+
+  或
+
+  ```shell
+  $ docker run -d \
+    --name=nginxtest \
+    -v nginx-vol:/usr/share/nginx/html:ro \
+    nginx:latest
+  ```
+
+
+#### 查看
 
 
 * 查看所有volume
@@ -922,50 +963,30 @@ Docker提供了多种持久化数据的方式, 如Volumes, Bind mounts等
   ]
   ```
 
-* 删除Volume
+#### 删除
 
-  
-  * 删除有名的volume
-  
-      ```shell
-      $ docker volume rm my-vol
-      ```
-      
-  * 自动删除匿名Volume
-  
-      使用`--rm`, 容器被删除后, 也将删除匿名volume
-  
-      ```shell
-      $ docker run --rm -v /foo -v awesome:/bar busybox top
-      ```
-  
-      > 容器被删除后, 挂载到`/foo`的volume也将被删除, 而`awesome`不会
-  
-  * 删除所有未被使用的volume
-  
-      ```shell
-      $ docker volume prune
-      ```
-  
-* 使用只读volume
 
-  ```shell
-  $ docker run -d \
-    --name=nginxtest \
-    --mount source=nginx-vol,destination=/usr/share/nginx/html,readonly \
-    nginx:latest
-  ```
+* 删除有名的volume
 
-  或
+    ```shell
+    $ docker volume rm my-vol
+    ```
+    
+* 自动删除匿名Volume
 
-  ```shell
-  $ docker run -d \
-    --name=nginxtest \
-    -v nginx-vol:/usr/share/nginx/html:ro \
-    nginx:latest
-  ```
+    使用`--rm`, 容器被删除后, 也将删除匿名volume
 
-  
+    ```shell
+    $ docker run --rm -v /foo -v awesome:/bar busybox top
+    ```
+
+    > 容器被删除后, 挂载到`/foo`的volume也将被删除, 而`awesome`不会
+
+* 删除所有未被使用的volume
+
+    ```shell
+    $ docker volume prune
+    ```
 
 ### bind mount
 
