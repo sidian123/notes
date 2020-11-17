@@ -1689,6 +1689,19 @@ public class DiseaseControllerTest {
 }
 ```
 
+## 踩坑笔记
+
+### Junit4的SpringBoot执行失败
+
+可改成如下代码:
+
+```java
+@RunWith(SpringRunner.class)
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT, classes = JyTcmOamServiceApplication.class)
+```
+
+如果测试用例失败, 可尝试添加`classes`属性.
+
 ## 参考
 
 * [Testing](https://docs.spring.io/spring-boot/docs/2.2.6.RELEASE/reference/html/spring-boot-features.html#boot-features-testing)
