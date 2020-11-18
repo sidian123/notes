@@ -1147,6 +1147,12 @@ linux是一个多用户的系统，有用户、组的概念。不同的用户、
 
 修改密码
 
+```shell
+passwd # 修改当前账户密码
+sudo passwd root # 修改root账户密码
+sudo passwd -l root # 让账户密码处于过期状态
+```
+
 ### chsh
 
 修改shell
