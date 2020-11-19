@@ -72,8 +72,11 @@ k8s集群由一个主节点和多个工作节点组成
 
 ### Deployment
 
-* 管理Pods的创建和扩展, 即管理Pod实例个数.
-* Pod健康检查和重启
+* 可类比为应用的部署脚本, 含部署配置信息. 但Deployment提供了应用维护机制, 应用失败后会重启.
+
+* 含Pods配置的信息, 如Pod实例个数. K8s将依据该信息, 动态调整Pod.
+
+* k8s提供一个自愈机制, 根据Deployment配置, 对Pod进行健康检查和失败重启
 
 ### Service
 
@@ -133,6 +136,8 @@ k8s集群由一个主节点和多个工作节点组成
   ```shell
   minikube start
   ```
+
+> [minikube](https://minikube.sigs.k8s.io/docs/start/)
 
 
 # 使用
