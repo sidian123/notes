@@ -53,6 +53,10 @@ k8s集群由一个主节点和多个工作节点组成
   
     Runs containers.
 
+一个K8s集群, 最少要满足3个节点 (1个主节点+2个工作节点). 
+
+> Minikube只需一个节点, 只是个玩具...
+
 ## k8s对象
 
 仅列出常用的
@@ -116,9 +120,44 @@ k8s集群由一个主节点和多个工作节点组成
 
 ## Minikube
 
-是Kubernetes的轻量级实现, 即在主机上创建一个虚拟机, 仅部署含一个节点的k8s集群.
+是Kubernetes的轻量级实现. 启动Minikube时, 会在主机上创建一个虚拟机, 仅部署含一个节点的k8s集群.
+
+* 查看版本
+
+  ```shell
+  minikube version
+  ```
+
+* 启动k8s集群
+
+  ```shell
+  minikube start
+  ```
+
 
 # 使用
+
+* 查看kubectl版本
+
+  ```shell
+  kubectl version
+  ```
+
+* 查看集群信息
+
+  ```shell
+  kubectl cluster-info
+  ```
+
+* 查看集群所有节点
+
+  ```shell
+  kubectl get nodes
+  ```
+
+
+
+
 
 # 参考
 
