@@ -569,6 +569,14 @@ sed是一个流文本编辑器, 以行为单位, 可进行替换, 删除, 新增
 
 ## 微脚本执行awk
 
+```shell
+docker images|grep none|awk '{print $3}'|xargs docker rmi # 打印第3个?
+```
+
+## xargs
+
+输入流作为命令参数
+
 ## yes
 
 不停的输出一**行**字符串, 默认`y`.
