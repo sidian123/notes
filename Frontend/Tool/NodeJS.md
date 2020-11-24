@@ -108,6 +108,12 @@ package安装有全局安装(`npm install --global`)和局部安装（默认）�
 
 >之所以可以直接执行Node.js脚本，是因为在linux环境中，解析型脚本在首部添加了`#!/usr/bin/env Interpreter`，它会在执行时使用指定解析器。
 
+## 全局变量
+
+在`module`一节中提到的变量, `exports, require, module, __filename, __dirname` 都是Node环境下全局变量的属性.
+
+> 参考: [Global objects | Node.js v15.2.1 Documentation](https://nodejs.org/api/globals.html)
+
 # 三 NPM使用
 
 npm (nodejs package manager) 包管理工具
