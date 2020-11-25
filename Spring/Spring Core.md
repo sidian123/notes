@@ -322,14 +322,14 @@ JSR提供的校验注解：
 * @Digits (integer, fraction)     被注释的元素必须是一个数字，其值必须在可接受的范围内    
 * @Past   被注释的元素必须是一个过去的日期    
 * @Future     被注释的元素必须是一个将来的日期    
-* @Pattern(regex=,flag=)  被注释的元素必须符合指定的正则表达式    
+* @Pattern(regex=,flag=)  被注释的元素必须符合指定的正则表达式 
+* @NotBlank(message =)   验证字符串非null，且长度必须大于0
+* @NotEmpty   被注释的字符串, 数组, 集合和Map必须非空 
 
 Hibernate Validator提供的校验注解：  
 
-* @NotBlank(message =)   验证字符串非null，且长度必须大于0    
 * @Email  被注释的元素必须是电子邮箱地址    
 * @Length(min=,max=)  被注释的字符串的大小必须在指定的范围内    
-* @NotEmpty   被注释的字符串, 数组, 集合和Map必须非空    
 * @Range(min=,max=,message=)  被注释的元素必须在合适的范围内
 
 ## 使用
