@@ -2,12 +2,6 @@
 
 * 一个实现SSHv2协议的纯Java库
 
-* vs. [JSCH](http://www.jcraft.com/jsch/)
-
-  无使用文档, API设计混乱, 仅给出了几个[Demo](http://www.jcraft.com/jsch/examples/)使用, 不推荐使用.
-
-  > 倒是第三方提供了文档, 见[A documented version of JSch](http://epaul.github.io/jsch-documentation/)
-
 * Maven依赖
 
   ```xml
@@ -18,8 +12,9 @@
   </dependency>
   ```
 
-
 # JSch
+
+* 一个功能比较丰富的SSH库.
 
 * Maven依赖
 
@@ -31,15 +26,16 @@
   </dependency>
   ```
 
-  
+* [Demo](http://www.jcraft.com/jsch/examples/)
 
+* 第三方文档
 
-
-
+  [A documented version of JSch](http://epaul.github.io/jsch-documentation/)
 
 # 参考
 
 - [SSHJ](https://github.com/hierynomus/sshj)
+- [JSCH](http://www.jcraft.com/jsch/)
 - [Jsch Javadoc](http://epaul.github.io/jsch-documentation/javadoc/)
 
 * [所有SSH协议实现的对比](https://ssh-comparison.quendi.de/comparison/cipher.html)
