@@ -418,6 +418,12 @@ public class BarController {
 2. <2> <3> 校验方法的返回值和入参
 3. <4> 添加异常处理器. (只能这么获取校验信息)
 
+### 分组
+
+使用校验注解时, 可以设置`groups`, 当使用`@Validated`注解时, 可以指定要校验的分组.
+
+略
+
 ## 参考
 
 * [Spring Validation](https://docs.spring.io/spring/docs/current/spring-framework-reference/core.html#validation-beanvalidation)
