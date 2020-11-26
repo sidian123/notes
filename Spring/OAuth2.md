@@ -85,6 +85,10 @@
 
 不同的授权方式，有不同的请求响应参数，大致参数见：[OAuth 2.0 Requests and Responses](<http://tutorials.jenkov.com/oauth2/request-response.html>)
 
+# 框架-JustAuth
+
+[关于 (justauth.wiki)](https://justauth.wiki/#/README)
+
 # 参考
 
 - [OAuth 2.0 tutorial](<http://tutorials.jenkov.com/oauth2/implicit-request-response.html>)
