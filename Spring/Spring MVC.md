@@ -1023,49 +1023,59 @@ CommonsMultipartResolver常用[属性](https://docs.spring.io/spring-framework/d
 
 ## 文件下载
 
-文件的下载主要由Content-Disposition头字段控制，该字段会让浏览器将消息体保存在文件中，需要指定文件名。还需要指定文件MIME类型，一般设置为application/octet-stream。
+* 原理
 
-可以直接使用servlet的最原始的方法，比如：
+  文件的下载主要由Content-Disposition头字段控制，该字段会让浏览器将消息体保存在文件中，需要指定文件名。还需要指定文件MIME类型，一般设置为application/octet-stream。
 
-```java
-response.setContentType("application/pdf");      
-response.setHeader("Content-Disposition", "attachment; filename=somefile.pdf); 
-```
+* 简单demo
 
-这里讲spring mvc的方法，在4.3小节中，`ResponseEntity`可以作为返回值直接写入到消息体中，并且能够传入头字段、状态码信息。使用例子如下：
+  可以直接使用servlet的最原始的方法，比如：
 
-```java
-	@RequestMapping("/download/{name:\\w+\\.\\w+}")
-	public ResponseEntity<byte[]> fileDownload(HttpServletRequest request,@PathVariable String name){
-		String filename=request.getServletContext().getRealPath("/css/"+name);
-		File file =new File(filename);
-		if(!file.exists()) {
-			return new ResponseEntity<byte[]>(HttpStatus.NOT_FOUND);
-		}
-		HttpHeaders headers=new HttpHeaders();
-		headers.setContentDispositionFormData("attachment", name);
-		headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);
-		try {
-			return new ResponseEntity<byte[]>(Files.readAllBytes(file.toPath()),headers,HttpStatus.OK);
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-			return new ResponseEntity<byte[]>(HttpStatus.INTERNAL_SERVER_ERROR);
-		}
-	}
-```
+  ```java
+  response.setContentType("application/pdf");      
+  response.setHeader("Content-Disposition", "attachment; filename=somefile.pdf); 
+  ```
 
-http协议头部中只能存在ascii字符，Content-Disposition中文件名含有其他编码方式的字符，会显示乱码。因此使用之前需要对文件名进行url编码（url encoding，见[html4.2小节](https://blog.csdn.net/jdbdh/article/details/83932406#42url_473)），如下所示：
+* 完整例子
 
-```java
-headers.setContentDispositionFormData("attachment", URLEncoder.encode(name,"utf-8"));
-```
+  这里讲spring mvc的方法，在4.3小节中，`ResponseEntity`可以作为返回值直接写入到消息体中，并且能够传入头字段、状态码信息。使用例子如下：
 
-一般文件下载最好允许被缓存：
+  ```java
+  @RequestMapping("/download/{name:\\w+\\.\\w+}")
+  public ResponseEntity<byte[]> fileDownload(HttpServletRequest request,@PathVariable String name){
+      String filename=request.getServletContext().getRealPath("/css/"+name);
+      File file =new File(filename);
+      if(!file.exists()) {
+          return new ResponseEntity<byte[]>(HttpStatus.NOT_FOUND);
+      }
+      HttpHeaders headers=new HttpHeaders();
+      headers.setContentDisposition("attachment", String.format("attachment;filename=%s", URLEncoder.encode(name, CharsetUtil.UTF_8)));
+      headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);
+      try {
+          return new ResponseEntity<byte[]>(Files.readAllBytes(file.toPath()),headers,HttpStatus.OK);
+      } catch (IOException e) {
+          // TODO Auto-generated catch block
+          e.printStackTrace();
+          return new ResponseEntity<byte[]>(HttpStatus.INTERNAL_SERVER_ERROR);
+      }
+  }
+  ```
 
-```java
-headers.setCacheControl(CacheControl.maxAge(30, TimeUnit.DAYS));//设置缓存时间
-```
+* 编码
+
+  http协议头部中只能存在ascii字符，Content-Disposition中文件名含有其他编码方式的字符，会显示乱码。因此使用之前需要对文件名进行url编码（url encoding，见[html4.2小节](https://blog.csdn.net/jdbdh/article/details/83932406#42url_473)），如下所示：
+
+  ```java
+  headers.setContentDisposition("attachment", String.format("attachment;filename=%s", URLEncoder.encode(name, CharsetUtil.UTF_8)));
+  ```
+
+* 缓存
+
+  一般静态文件下载最好允许被缓存：
+
+  ```java
+  headers.setCacheControl(CacheControl.maxAge(30, TimeUnit.DAYS));//设置缓存时间
+  ```
 
 # 参考
 * 《Java EE 互联网轻量级框架整合开发 --SSM框架和Redis实现》 杨开振
