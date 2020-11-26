@@ -1006,3 +1006,5 @@ PUT my_index/_doc/1
 
 * [elasticsearch教程--中文分词器作用和使用](https://blog.csdn.net/an88411980/article/details/83747230)
 * [Elasticsearch全文检索入门这一篇就够了](https://zhuanlan.zhihu.com/p/94181307)
+
+* [图解ElasticSearch 搜索原理 (qq.com)](https://mp.weixin.qq.com/s/r0G_4bNcN_RCRIAE-HQkGA)
