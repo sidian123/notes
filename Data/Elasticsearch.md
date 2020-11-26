@@ -994,17 +994,15 @@ PUT my_index/_doc/1
 # 参考
 
 * [Elasticsearch Reference](https://www.elastic.co/guide/en/elasticsearch/reference/current/index.html)
-
 * [Elastic Stack and Product Documentation](https://www.elastic.co/guide/index.html) 官方文档
-
 * [全文搜索引擎 Elasticsearch 入门教程 阮一峰](http://www.ruanyifeng.com/blog/2017/08/elasticsearch.html)
 * [Elasticsearch简介与实战](https://www.jianshu.com/p/d48c32423789)
-
 * [Query DSL](https://www.elastic.co/guide/en/elasticsearch/reference/current/query-dsl.html) 全文搜索语言
 * [Elasticsearch(10) --- 内置分词器、中文分词器](https://www.cnblogs.com/qdhxhz/p/11585639.html)
 * [ElasticSearch中文分词](https://www.jianshu.com/p/bb89ad7a7f7d)
-
 * [elasticsearch教程--中文分词器作用和使用](https://blog.csdn.net/an88411980/article/details/83747230)
 * [Elasticsearch全文检索入门这一篇就够了](https://zhuanlan.zhihu.com/p/94181307)
+
+# 待学习
 
 * [图解ElasticSearch 搜索原理 (qq.com)](https://mp.weixin.qq.com/s/r0G_4bNcN_RCRIAE-HQkGA)
