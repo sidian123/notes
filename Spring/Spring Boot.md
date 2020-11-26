@@ -932,7 +932,7 @@ public class MyConfiguration {
 
 看不懂。。。。
 
-- `spring.resources.static-locations`属性定义静态内容位置
+- `spring.web.resources.static-locations` 定义静态资源的位置
 - `spring.mvc.static-path-pattern`：静态资源匹配模式。静态内容位置中匹配成功的才作为静态资源
 - 只有静态内容位置的根目录才能使用欢迎页面。
 - 当`DispatcherServlet`未能处理http请求时，会交给tomcat容器的默认servlet处理
