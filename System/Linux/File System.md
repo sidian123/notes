@@ -231,12 +231,10 @@ UUID=592dcfd1-58da-4769-9ea8-5f412a896980 none swap sw 0 0
 
 为了禁止使用置换空间，使用`swapoff`，具体方法请查询man手册。
 
-> 若要在不禁用虚拟内存的情况下扩充虚拟内存
->
-> 思路: 创建新的文件, swapon命令会将虚拟内存迁移到新的文件中
+> 新增虚拟内存, 即多挂载一个文件
 >
 > ```shell
-> fallocate -l 16G swapfile
+>fallocate -l 16G swapfile
 > mkswap swapfile
 > swapon swapfile
 > ```
