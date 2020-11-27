@@ -225,6 +225,14 @@ UUID=592dcfd1-58da-4769-9ea8-5f412a896980 none swap sw 0 0
 
 `ls -i`同时打印inode number；stat打印文件的相关属性。
 
+### fallocate
+
+创建一个指定大小的文件
+
+```shell
+fallocate -l 8G swapfile
+```
+
 # 参考
 
 * [File Systems](https://download.csdn.net/download/jdbdh/11006201)
