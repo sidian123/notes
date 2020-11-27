@@ -171,21 +171,75 @@ UUID=592dcfd1-58da-4769-9ea8-5f412a896980 none swap sw 0 0
 2. 将置换标志写入到分区：`mkswap device`
 3. 手动注册到内核中：`swapon device`
 
-或者自启时自动注册，在`/etc/fstab`中添加一行：
+> 上述重启配置会消失
 
-```unknow
-/dev/sda5 none swap sw 0 0
-```
+4. 持久化配置
+
+   自启时自动注册，在`/etc/fstab`中添加一行：
+
+   ```
+   /dev/sda5 none swap sw 0 0
+   ```
+
+   > 第一项是分区文件名
 
 ### 文件作为swap space
 
 与上面同理：
 
-1. 创建文件：`dd if=/dev/zero of=swap_file bs=1024k count=num_mb`
-2. 写入置换标志：`mkswap swap_file`
-3. 注册：`swapon swap_file`
+1. 创建文件
+
+   ```shell
+   dd if=/dev/zero of=swap_file bs=1024k count=num_mb
+   ```
+
+   或
+
+   ```shell
+   fallocate -l 8G swap_file
+   ```
+
+2. 写入置换标志
+
+   ```shell
+   mkswap swap_file
+   ```
+
+3. 注册
+
+   ```shell
+   swapon swap_file
+   ```
+
+4. 查看已注册的虚拟内存
+
+   ```shell
+   swapon --show
+   ```
+
+> 上述配置重启后会小时
+
+5. 持久化配置
+
+   自启时自动注册，在`/etc/fstab`中添加一行：
+
+   ```
+   path/to/swapfile none swap sw 0 0
+   ```
+
+   > 第一项是swap文件名
 
 为了禁止使用置换空间，使用`swapoff`，具体方法请查询man手册。
+
+> 若要在不禁用虚拟内存的情况下扩充虚拟内存
+>
+> 思路: 创建新的文件, swapon命令会将虚拟内存迁移到新的文件中
+>
+> ```shell
+> fallocate -l 16G swapfile
+> mkswap swapfile
+> swapon swapfile
+> ```
 
 ## 其他命令
 
