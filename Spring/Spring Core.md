@@ -1039,6 +1039,8 @@ SpringUtil.closeApplication();
 ## 允许使用AWT,界面
 
 ```java
+SpringApplication springApplication = new SpringApplication(ClientApplication.class);
 springApplication.setHeadless(false);//允许使用awt,即界面
+springApplication.run(args);
 ```
 
