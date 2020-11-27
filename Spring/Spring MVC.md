@@ -428,7 +428,7 @@ public void addMember(@RequestBody Member member) {
 
 ### @RequestHeader
 
-将头字段映射到方法参数上
+将头字段映射到方法参数上. 在Feign中, 好像还能定义写入到头字段的参数?
 
 ### 其他
 
