@@ -779,3 +779,13 @@ jetbrains
 ## 投屏到手机
 
 [spacedesk拓展屏幕玩法                 ](https://www.xysycx.cn/articles/2020/04/09/1586373439617.html)
+
+## Edge
+
+* Alt+Tab不切换标签页
+
+  ![image-20201127201249994](.Windows/image-20201127201249994.png)
+
+* Url Copy纯文本
+
+  ![image-20201127201332191](.Windows/image-20201127201332191.png)
