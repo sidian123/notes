@@ -1036,3 +1036,9 @@ SpringUtil.closeApplication();
 
 > 参考[Shutdown a Spring Boot Application](https://www.baeldung.com/spring-boot-shutdown)
 
+## 允许使用AWT,界面
+
+```java
+springApplication.setHeadless(false);//允许使用awt,即界面
+```
+
