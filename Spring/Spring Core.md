@@ -1044,3 +1044,11 @@ springApplication.setHeadless(false);//允许使用awt,即界面
 springApplication.run(args);
 ```
 
+或者
+
+```java
+static {
+    System.setProperty("java.awt.headless","false");
+}
+```
+
