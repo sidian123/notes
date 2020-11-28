@@ -75,7 +75,6 @@
 端点就是OAuth2协议对一些URL起的名字。
 
 - **Authorization Endpoint**：授权服务器给用户授权客户应用的页面的url
-
 - **Redirection Endpoint**：用户授权后重定向的url
 - **Token Endpoint**：客户应用被授权后，获取token的url
 
@@ -84,6 +83,36 @@
 介绍授权过程的大致参数，具体使用得看它的实现。
 
 不同的授权方式，有不同的请求响应参数，大致参数见：[OAuth 2.0 Requests and Responses](<http://tutorials.jenkov.com/oauth2/request-response.html>)
+
+# 实战-Gitee OAuth
+
+下面来分析下Gitee的授权码模式
+
+1. 引导用户到第三方认证页面
+
+   ```
+   https://gitee.com/oauth/authorize?client_id={client_id}&redirect_uri={redirect_uri}&response_type=code
+   ```
+
+   * `client_id` 客户应用id
+   * `redirect_uri` 认证成功的回调地址(或重定向地址), 该地址会做校验, 必须在Gitee应用中配置
+   * `response_type` 响应模式, 这里`code`为授权码模式
+   * `state` 整个授权过程中传递的会话参数
+   * `scope` 客户端应用要请求的权限访问, 如`user_info`, 仅可获取用户信息
+
+2. 授权成功, 认证页面重定向到`redirect_uri`页面上, 并附带认证凭证`code`参数, 以及会话参数`state`
+
+3. 通过code, 获取token
+
+   ```
+   https://gitee.com/oauth/token?grant_type=authorization_code&code={code}&client_id={client_id}&redirect_uri={redirect_uri}&client_secret={client_secret}
+   ```
+
+   * `grant_type` 授权模式
+   * `code` 认证凭证
+   * `client_id` 客户应用id
+   * `client_secret` 客户应用密钥, 最好放入到请求体中
+   * `redirect_uri` 获取凭证时用到的, 应该仅做校验.
 
 # 框架-JustAuth
 
