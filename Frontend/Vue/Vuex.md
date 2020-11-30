@@ -415,11 +415,10 @@ store.state.b // -> `moduleB`'s state
 
 ... 略...
 
+# todo
 
-
-
-
-
+* [vuex-module-decorators](https://championswimmer.in/vuex-module-decorators/) 通过装饰器的方式使用Vuex
+* Vuex Module完善
 
 
 
