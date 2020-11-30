@@ -1995,39 +1995,61 @@ descriptions.forEach(System.out::println);
 
 > 参考[Elasticsearch搜索异常-------org.elasticsearch.common.io.stream.NotSerializableExceptionWrapper: parse_exception](https://www.cnblogs.com/technologykai/p/10101009.html)
 
-### 大结果集分页查询
+### 大结果集查询
 
-* from-size查询
+* 目的
 
-  如`size=10&from=100`, 将从每个分片中取出110个数据, 汇集排序后, 取出101_110号的文档. 因此该方式效率不高, 排序数据越多, 效率越低. 因此Elasticsearchxi限制了查询的数量, 10000个, 超了就报错.
+  查询大量结果集
 
-  在Spring Data中, `Pageable`的分页查询方式就是属于这种.
+* from-size方式
 
-* scroll-scan查询
+  * 介绍
 
-  scroll方式将初始化搜搜的结果缓存成一个快照, 然后遍历. 详细见[Elasticsearch使用Scroll-Scan实现数据遍历](https://blog.csdn.net/peterwanghao/article/details/75037600)
-  
-  ```java
-  void findConcepts(String tag, String branch,Consumer<List<Concept>> consumer){
-      // 设置查询条件
-      CriteriaQuery criteriaQuery = new CriteriaQuery(Criteria
-              .where("semanticTag").is(tag)
-              .and("branch").is(branch)
-              .and("status").is(true)
-      ).setPageable(PageRequest.of(0, 100)); // 该分页, 仅size有用, 设置每次取多少元素
-  
-      // 游标的方式查询
-      ScrolledPage<Concept> scroll =  elasticsearchTemplate.startScroll(1000, criteriaQuery, Concept.class);
-      while (scroll.hasContent()) { ;
-          // 消费内容
-          consumer.accept(scroll.getContent());
-          // 准备下次查询
-          scroll =  elasticsearchTemplate.continueScroll(scroll.getScrollId(), 1000, Concept.class);
-      }
-      elasticsearchTemplate.clearScroll(scroll.getScrollId());
-  }
-  ```
-  
+    指定开始位置`from`和一次取出大小`size`. 如`size=10&from=100`, Elasticsearch将从每个分片中取出110个数据, 汇集排序后, 取出101_110号的文档. 
+
+  * 缺点
+
+    每次都需要读取`[0,from+size)`的结果集, 因为要排序, 然后最终取`[from,from+size)`. 因此该方式效率不高, 排序数据越多, 效率越低. 
+
+    同时Elasticsearchxi限制了查询的数量, 10000个, 超了就报错.
+
+  > 在Spring Data中, `Pageable`的分页查询方式就是属于这种.
+
+* scroll-scan方式
+
+  * 介绍
+
+    以滚动的方式, 每次取一部分数据.
+
+  * 过程
+
+    开启scroll, 每次查询部分结果缓存起来共使用, 并返回`scroll_id`, 下次通过`scroll_id`继续查询后续部分的数据, 直到无数据了.
+
+    ```java
+    void findConcepts(String tag, String branch,Consumer<List<Concept>> consumer){
+        // 设置查询条件
+        CriteriaQuery criteriaQuery = new CriteriaQuery(Criteria
+                .where("semanticTag").is(tag)
+                .and("branch").is(branch)
+                .and("status").is(true)
+        ).setPageable(PageRequest.of(0, 100)); // 该分页, 仅size有用, 设置每次取多少元素
+    
+        // 游标的方式查询
+        ScrolledPage<Concept> scroll =  elasticsearchTemplate.startScroll(1000, criteriaQuery, Concept.class); // 1000指会话保存1s,在这1s内, scrold_id有效
+        while (scroll.hasContent()) { ;
+            // 消费内容
+            consumer.accept(scroll.getContent());
+            // 准备下次查询
+            scroll =  elasticsearchTemplate.continueScroll(scroll.getScrollId(), 1000, Concept.class);
+        }
+        elasticsearchTemplate.clearScroll(scroll.getScrollId());
+    }
+    ```
+
+  > 详细见
+  >
+  > * [Elasticsearch使用Scroll-Scan实现数据遍历](https://blog.csdn.net/peterwanghao/article/details/75037600)
+  > * [elasticsearch 深入 —— Scroll滚动查询](https://blog.csdn.net/ctwy291314/article/details/82751898)
 
 ### ElasticsearchTemplate将被弃用原因
 

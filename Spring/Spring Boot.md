@@ -1775,7 +1775,12 @@ server:
 * 注意点
 
   * ~~spring boot启动并不会读取自动配置的依赖的配置文件.~~
-  * starter包中的包扫描`@ComponentScan`是不起作用的
+  
+  * ~~starter包中的包扫描`@ComponentScan`是不起作用的~~
+  
+  * Starter中的`@ComponentScan`注解, 只能扫描普通Bean, 配置Bean扫描后会不起作用
+  
+    ![image-20201130130611975](.Spring%20Boot/image-20201130130611975.png)
 
 
 > 参考
