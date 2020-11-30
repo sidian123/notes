@@ -576,9 +576,9 @@ sudo apt-get install rabbitmq-server
 
   * [rabbitmq-tutorials](https://github.com/rabbitmq/rabbitmq-tutorials)
 
+# TODO
 
-
-
+* [springboot + rabbitmq 用了消息确认机制，感觉掉坑里了](https://mp.weixin.qq.com/s/me1bfFwzQDAn7EDOgoR65g?utm_source=wechat_session&utm_medium=social&utm_oi=701921590731870208) 学习下下
 
 
 
