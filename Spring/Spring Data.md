@@ -2035,12 +2035,12 @@ descriptions.forEach(System.out::println);
         ).setPageable(PageRequest.of(0, 100)); // 该分页, 仅size有用, 设置每次取多少元素
     
         // 游标的方式查询
-        ScrolledPage<Concept> scroll =  elasticsearchTemplate.startScroll(1000, criteriaQuery, Concept.class); // 1000指会话保存1s,在这1s内, scrold_id有效
+        ScrolledPage<Concept> scroll =  elasticsearchTemplate.startScroll(8000, criteriaQuery, Concept.class); // 8000指会话保存8s,在这8s内, scrold_id有效
         while (scroll.hasContent()) { ;
             // 消费内容
             consumer.accept(scroll.getContent());
             // 准备下次查询
-            scroll =  elasticsearchTemplate.continueScroll(scroll.getScrollId(), 1000, Concept.class);
+            scroll =  elasticsearchTemplate.continueScroll(scroll.getScrollId(), 8000, Concept.class);
         }
         elasticsearchTemplate.clearScroll(scroll.getScrollId());
     }
