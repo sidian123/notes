@@ -874,6 +874,8 @@ chmod [OPTION]... MODE[,MODE]... FILE...
 chmod [OPTION]... OCTAL-MODE FILE...
 ```
 
+* `-R` 递归改变文件mode
+
 可以通过符号表示或八进制数修改权限：
 
 * **symbolic mode**(符号模式)
