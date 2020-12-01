@@ -203,6 +203,8 @@ WantedBy=multi-user.target
 
 # Service
 
+> 好像`systemd`不支持`service`
+
 `service`命令用于运行`System V init`脚本, 用于服务管理.  systemd提供了新的服务配置方式, 但也兼容`System V int`脚本. 这里简单记录下
 
 * 启动服务
