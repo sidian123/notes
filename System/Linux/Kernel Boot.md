@@ -201,6 +201,75 @@ WantedBy=multi-user.target
 >* `-r`:重启主机。类似命令`reboot`
 >* `-c`:取消定时的关机。
 
+# Service
+
+`service`命令用于运行`System V init`脚本, 用于服务管理.  systemd提供了新的服务配置方式, 但也兼容`System V int`脚本. 这里简单记录下
+
+* 启动服务
+
+  ```shell
+  service sshd start
+  ```
+
+* 关闭服务
+
+  ```shell
+  service sshd stop
+  ```
+
+* 重启服务
+
+  ```shell
+  service sshd restart
+  ```
+
+* 服务状态
+
+  ```shell
+  service sshd status
+  ```
+
+* 自定义service脚本模板
+
+  ```bash
+  #!/bin/bash
+  
+  start(){
+  }
+  
+  stop(){
+  }
+  
+  reload(){
+  }
+  
+  status(){
+  }
+  
+  case "$1" in
+          start)
+                  start 
+                  ;;
+          stop)
+                  stop 
+                  ;;
+          restart)
+                  stop
+                  start
+                  ;;
+          reload)
+                  reload
+  		;;
+          status)
+                  status
+                  ;;
+          *)
+                  echo $"Usage: $0 {start|stop|restart|reload|status}" 
+  esac
+  ```
+
+> 参考[Service command](https://bash.cyberciti.biz/guide/Service_command)
+
 # 参考
 
 * man手册
