@@ -492,6 +492,8 @@ docker load -i ./centos.tar
   ```shell
   docker system prune
   ```
+  
+  * `-a` 删除所有无用镜像 (不仅仅dangling(无名)的镜像)
 
 # 自建Hub
 
