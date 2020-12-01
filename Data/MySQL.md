@@ -97,11 +97,15 @@
      sudo bin/mysqld --initialize --user=mysql
      ```
      
+     > 若控制台未打印, 则可查看`data/`下的`mysql.err`文件
+     
    * `-initialize-insecure`: root账户无密码
 
      ```bash
      bin/mysqld --initialize-insecure --user=mysql
      ```
+
+   > 可更改数据目录, 如`--datadir=/data/mysql`
 
    > 注意!!!
    >
