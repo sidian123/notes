@@ -196,6 +196,48 @@
 > * [Installing and Upgrading MySQL](<https://dev.mysql.com/doc/refman/8.0/en/installing.html>) : 简述安装的大致步骤
 > * [Postinstallation Setup and Testing](<https://dev.mysql.com/doc/refman/8.0/en/postinstallation.html>) : 初始化设置
 
+-------------
+
+一个供参考的配置文件
+
+```conf
+[mysqld]
+bind-address=0.0.0.0
+port=3306
+user=mysql
+basedir=/usr/local/mysql
+datadir=/data/mysql
+socket=/tmp/mysql.sock
+log-error=/data/mysql/mysql.err
+pid-file=/data/mysql/mysql.pid
+# Disabling symbolic-links is recommended to prevent assorted security risks
+symbolic-links=0
+#character config
+character_set_server=utf8mb4
+explicit_defaults_for_timestamp=true
+wait_timeout=31536000
+interactive_timeout=31536000
+net_read_timeout=6000
+net_write_timeout=6000
+max_connections=1000
+# Settings user and group are ignored when systemd is used.
+# If you need to run mysqld under a different user or group,
+# customize your systemd unit file for mariadb according to the
+# instructions in http://fedoraproject.org/wiki/Systemd
+
+# 设置SQL模式
+sql_mode =STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION
+
+[mysqld_safe]
+#log-error=/var/log/mariadb/mariadb.log
+#pid-file=/var/run/mariadb/mariadb.pid
+
+#
+# include all files from the config directory
+#
+!includedir /etc/my.cnf.d
+```
+
 # 三 基础
 
 * `mysql`是一个连接mysql服务端的客户程序, 提供命令行界面.
