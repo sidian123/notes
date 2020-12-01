@@ -191,6 +191,12 @@
     sudo systemctl start mysqld.service # 现在启动mysqld
     ```
     
+    > 或(Sys V方式)
+    >
+    > ```shell
+    > service mysql start
+    > ```
+    
     大功告成!
     
     
