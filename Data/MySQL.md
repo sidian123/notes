@@ -663,6 +663,18 @@ LIMIT [offset,] row_count;
   CREATE USER 'user_name'@'host_name' IDENTIFIED BY 'your_password';
   ```
 
+* 修改密码
+
+    ```shell
+    ALTER USER 'root'@'localhost' IDENTIFIED BY '要修改的密码';
+    ```
+
+* 修改用户host
+
+    ```shell
+    update user set host = "%" where user='root';
+    ```
+
 * 角色: 略
 
 * 授权: 这里直接给出授权一个数据库所有权限的例子
@@ -671,9 +683,11 @@ LIMIT [offset,] row_count;
   GRANT ALL ON db_name.* TO 'user_name'@'host_name';
   ```
 
-  然后让服务器重新加载权限表
+* **刷新**(重要!!!!!!)
 
-  ```mysql
+  修改权限或账号后, 请让服务器重新加载权限表
+
+  ```shell
   FLUSH PRIVILEGES;
   ```
 
