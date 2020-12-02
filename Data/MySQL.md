@@ -788,10 +788,34 @@ LIMIT [offset,] row_count;
 
 * `enum`, `set`略
 
+# 命令
+
+## mysql
+
+* `-u` 用户名
+* `-p` 密码, 可空着, 之后会提示填. 或写在命令行上, 但与`-p`之间不能有空格
+* `-P` Server端口
+* `-h` Server地址
+
+## 备份与恢复
+
+* 备份所有数据库
+
+  ```shell
+  mysqldump -u root -p --all-databases > all-databases.sql
+  ```
+
+* 恢复
+
+  ```shell
+  mysql -u root -p < all-databases.sql
+  ```
+
+> 参考: [MySQL Backup and Restore Commands for Database Administration](https://www.tecmint.com/mysql-backup-and-restore-commands-for-database-administration/)
+
 # 其他
 
 * 对于大文件，经常访问的可以存入数据库，数据库有对应字段，应该是优化过了的，为大字段单独存一张表应该没必要。但是不经常访问，或则实在太大了，则放入文件中。
-
 * utf8 vs. utf8mb4 : UTF-8是一种可变长编码方式, 字符可由1到4个字节编码. 但在MySQL中的UTF-8实际上最多只存3个字节, 实际上是utf8mb3, 仅涵盖BMP编码集; 而utf8mb4能够存四字节编码的字符.
 * 导入导出方法: [`LOAD DATA`](https://dev.mysql.com/doc/refman/8.0/en/load-data.html) and [`SELECT ... INTO OUTFILE`](https://dev.mysql.com/doc/refman/8.0/en/select-into.html) , 受[secure_file_priv](<https://dev.mysql.com/doc/refman/8.0/en/server-system-variables.html#sysvar_secure_file_priv>)变量影响
 
