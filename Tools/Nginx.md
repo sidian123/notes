@@ -97,6 +97,8 @@
 
   * `nginx -s reopen`重开日记文件
 
+    > 作用见 [nginx reload和reopen](https://blog.csdn.net/u010433704/article/details/99817375)
+
   * `ps aux|grep nginx`查看所有nginx进程
 
 * 文件
