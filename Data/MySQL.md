@@ -666,6 +666,7 @@ LIMIT [offset,] row_count;
 * 修改密码
 
     ```shell
+    use mysql;
     ALTER USER 'root'@'localhost' IDENTIFIED BY '要修改的密码';
     ```
 
