@@ -810,6 +810,8 @@ LIMIT [offset,] row_count;
   ```shell
   mysql -u root -p < all-databases.sql
   ```
+  
+  > 实际上就是执行备份的sql
 
 > 参考: [MySQL Backup and Restore Commands for Database Administration](https://www.tecmint.com/mysql-backup-and-restore-commands-for-database-administration/)
 
