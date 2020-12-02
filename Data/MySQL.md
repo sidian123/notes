@@ -802,8 +802,10 @@ LIMIT [offset,] row_count;
 * 备份所有数据库
 
   ```shell
-  mysqldump -u root -p --all-databases > all-databases.sql
+  mysqldump -u root -p --ignore-table=mysql.innodb_index_stats --ignore-table=mysql.innodb_table_stats --all-databases > all-databases.sql
   ```
+
+  > `innodb_index_stats`和`innodb_table_stats`表在恢复时会报错, 所以备份时需要导出
 
 * 恢复
 
