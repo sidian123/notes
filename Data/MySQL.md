@@ -672,6 +672,8 @@ LIMIT [offset,] row_count;
 
 * 修改用户host
 
+    > 仅Mysql 8可用, Mysql5.7可考虑创建新账号, 如`root@%`
+
     ```shell
     update user set host = "%" where user='root';
     ```
