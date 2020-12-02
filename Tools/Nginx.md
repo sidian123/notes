@@ -685,6 +685,53 @@ listen 443 ssl;
 > * [Module ngx_http_upstream_module](http://nginx.org/en/docs/http/ngx_http_upstream_module.html)
 > * [What does upstream mean in nginx?](https://stackoverflow.com/questions/5877929/what-does-upstream-mean-in-nginx)
 
+## stream
+
+TCP, UDP代理配置在`stream`指令中. `stream`指令与`http`指令同级
+
+一个Demo
+
+```nginx
+stream {
+    upstream backend {
+        hash $remote_addr consistent;
+
+        server backend1.example.com:12345 weight=5;
+        server 127.0.0.1:12345            max_fails=3 fail_timeout=30s;
+        server unix:/tmp/backend3;
+    }
+
+    upstream dns {
+       server 192.168.0.1:53535;
+       server dns.example.com:53;
+    }
+
+    # 代理tcp
+    server {
+        listen 12345;
+        proxy_connect_timeout 1s;
+        proxy_timeout 3s;
+        proxy_pass backend;
+    }
+	
+    # 代理udp, 需要有udp和reuseport参数
+    server {
+        listen 127.0.0.1:53 udp reuseport;
+        proxy_timeout 20s;
+        proxy_pass dns;
+    }
+    # 代理linux socket
+    server {
+        listen [::1]:12345;
+        proxy_pass unix:/tmp/stream.socket;
+    }
+}
+```
+
+> 好像必须要有`upstream`哦
+
+> 参考[http://nginx.org/en/docs/stream/ngx_stream_core_module.html]
+
 ## gzip压缩
 
 * `gzip`
