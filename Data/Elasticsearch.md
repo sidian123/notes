@@ -603,50 +603,31 @@ Bool Query是由一个或多个bool子句构成的，包括:
   * `size` 返回个数, 默认返回的比较少
   * `min_doc_count` 组的最小个数, 默认1
 
-例子: 
+* 嵌套查询
 
-```
-POST jy_description/_search
-{
+  达到多个字段聚合的作用
+
+  ```
+  {
     "size": 0,
     "aggs": {
-        "duplicateNames": {
+      "duplicateNames": {
+        "terms": {
+          "field": "conceptId1",
+          "min_doc_count": 2
+        },
+        "aggs": {
+          "name": {
             "terms": {
-                "field": "term",
-                "min_doc_count": 2
-            }
-        }
-    }
-}
-```
-
-* 定义了一个聚合`duplicateNames` 
-*  `term`是字段名
-* `size`表示查询所有
-* `min_doc_count` 表示聚合的组必须有2个元素以上, 即重复
-
-嵌套查询, 达到多个字段聚合的作用
-
-```
-{
-  "size": 0,
-  "aggs": {
-    "duplicateNames": {
-      "terms": {
-        "field": "conceptId1",
-        "min_doc_count": 2
-      },
-      "aggs": {
-        "name": {
-          "terms": {
-            "field": "conceptId2",
-            "min_doc_count": 2
-          },
-          "aggs": {
-            "name2": {
-              "terms": {
-                "field": "branch",
-                "min_doc_count": 2
+              "field": "conceptId2",
+              "min_doc_count": 2
+            },
+            "aggs": {
+              "name2": {
+                "terms": {
+                  "field": "branch",
+                  "min_doc_count": 2
+                }
               }
             }
           }
@@ -654,8 +635,9 @@ POST jy_description/_search
       }
     }
   }
-}
-```
+  ```
+
+> 参考[Terms Aggregation](https://www.elastic.co/guide/en/elasticsearch/reference/6.8/search-aggregations-bucket-terms-aggregation.html)
 
 ## 其他
 
