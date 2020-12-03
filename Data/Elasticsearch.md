@@ -579,21 +579,29 @@ Bool Query是由一个或多个bool子句构成的，包括:
 
 > [Terms Aggregation](https://www.elastic.co/guide/en/elasticsearch/reference/6.8/search-aggregations-bucket-terms-aggregation.html)
 
-根据字段值聚合
+* 介绍
 
-```
-GET /_search
-{
-    "aggs" : {
-        "genres" : {
-            "terms" : { "field" : "genre" } 
-        }
-    }
-}
-```
+  根据字段值聚合
 
-* `field`为聚合字段, 可聚合的字段不适合为`text`类型的.
-* `genres`是该聚合名, 可随意更改
+* 简单Demo
+
+  ```
+  GET /_search
+  {
+      "aggs" : {
+          "genres" : {
+              "terms" : { "field" : "genre" } 
+              // "size": 100  // 返回100个
+              // "min_doc_count": 2 // 组个数必须大于等于2个
+          }
+      }
+  }
+  ```
+
+  * `field`为聚合字段, 可聚合的字段不适合为`text`类型的.
+  * `genres`是该聚合名, 可随意更改
+  * `size` 返回个数, 默认返回的比较少
+  * `min_doc_count` 组的最小个数, 默认1
 
 例子: 
 
