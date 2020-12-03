@@ -36,4 +36,30 @@
     npm i --save lodash
     ```
   
-    
+* [Dom to Image](https://www.npmjs.com/package/dom-to-image)
+
+  * 依赖
+
+    ```shell
+    npm i dom-to-image
+    npm install file-saver
+    ```
+
+  * demo
+
+    ```javascript
+    domtoimage.toBlob(document.getElementById('my-node'))
+        .then(function (blob) {
+            window.saveAs(blob, 'my-node.png');
+        });
+    ```
+
+    > 如果内容可滚动, 则转化显示的部分
+
+  * demo2 转化内容包括scroll内容
+
+    ```javascript
+    domtoimage.toPng(node, { width: node.scrollWidth, height: node.scrollHeight })
+    ```
+
+    > 参考 https://github.com/tsayen/dom-to-image/issues/183#issuecomment-468606593
