@@ -789,7 +789,7 @@ html5后引入了web storage（本地储存），比cookies更好用。本地存
 
     > 因此, 要滚动元素内容时, 可让父元素的`scroll Top`等于滚动到的元素的`offsetTop`值.
 
-  * `getBoundingClientRect().top`元素上方`border`边缘距离视窗上方边缘的距离.
+* `getBoundingClientRect().top`元素上方`border`边缘距离视窗上方边缘的距离.
 
   * ...
 
