@@ -478,6 +478,7 @@ docker load -i ./centos.tar
   ```
   
   * `--follow , -f` 持续输出日志
+  * `--tail`  查看尾部几行日志
   
 * 查看Docker磁盘占用. 
 
