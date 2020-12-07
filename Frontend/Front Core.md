@@ -63,3 +63,8 @@
     ```
 
     > 参考 https://github.com/tsayen/dom-to-image/issues/183#issuecomment-468606593
+
+* SVG
+
+  [Snap.svg](http://snapsvg.io/)
+
