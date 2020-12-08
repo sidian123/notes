@@ -542,7 +542,7 @@ random[2][2];
 
     1. for...in：用于遍历对象所有可遍历**属性**。
         ```javascript
-        for (let property in object) {
+        for (let key in object) {
           // do something with object property
         }
         ```
