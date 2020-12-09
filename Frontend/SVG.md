@@ -1,3 +1,5 @@
+[SVG Tutorial MDN](https://developer.mozilla.org/en-US/docs/Web/SVG/Tutorial)
+
 # 元素
 
 ## svg
@@ -116,5 +118,7 @@ svg元素上有`transform`属性, 语法与css的相近, 但确实不同.
 在flex布局中, svg会溢出, 请在有`flex-grow`属性的地方加上`overflow:hidden`
 
 # 资料
+
+* [SVG Tutorial MDN](https://developer.mozilla.org/en-US/docs/Web/SVG/Tutorial)
 
 * [SVG Tutorial](http://tutorials.jenkov.com/svg/index.html)
