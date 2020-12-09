@@ -32,6 +32,173 @@
       * `meet`(默认) 以保留视图比例的方式放大视图, 直到一边碰到边界. 未填充的部分继续延长视图边界, 直到填充完整.
       * `slice` 以保留视图比例的方式方法视图, 直到视图全部填充元素. 超出的部分被截掉.
 
+## rect
+
+* 介绍
+
+  长方形
+
+* 例子
+
+  ```xml
+  <rect x="10" y="10" width="30" height="30"/>
+  <rect x="60" y="10" rx="10" ry="10" width="30" height="30"/>
+  ```
+
+* 属性
+
+  * `x`
+
+    The x position of the top left corner of the rectangle.
+
+  * `y`
+
+    The y position of the top left corner of the rectangle.
+
+  * `width`
+
+    The width of the rectangle
+
+  * `height`
+
+    The height of the rectangle
+
+  * `rx`
+
+    The x radius of the corners of the rectangle
+
+  * `ry`
+
+    The y radius of the corners of the rectangle
+
+## circle
+
+* 介绍
+
+  圆
+
+* 例子
+
+  ```xml
+  <circle cx="25" cy="75" r="20"/>
+  ```
+
+* 属性
+
+  * `r`
+
+    The radius of the circle.
+
+  * `cx`
+
+    The x position of the center of the circle.
+
+  * `cy`
+
+    The y position of the center of the circle.
+
+## ellipse
+
+* 介绍
+
+  椭圆
+
+* 例子
+
+  ```xml
+  <ellipse cx="75" cy="75" rx="20" ry="5"/>
+  ```
+
+* 属性
+
+  * `rx`
+
+    The x radius of the ellipse.
+
+  * `ry`
+
+    The y radius of the ellipse.
+
+  * `cx`
+
+    The x position of the center of the ellipse.
+
+  * `cy`
+
+    The y position of the center of the ellipse.
+
+## line
+
+* 介绍
+
+  线
+
+* 例子
+
+  ```xml
+  <line x1="10" x2="50" y1="110" y2="150"/>
+  ```
+
+* 属性
+
+  * `x1`
+
+    The x position of point 1.
+
+  * `y1`
+
+    The y position of point 1.
+
+  * `x2`
+
+    The x position of point 2.
+
+  * `y2`
+
+    The y position of point 2.
+
+## polyline
+
+* 介绍
+
+  多段连续的线
+
+* 例子
+
+  ```xml
+  <polyline points="60, 110 65, 120 70, 115 75, 130 80, 125 85, 140 90, 135 95, 150 100, 145"/>
+  ```
+
+* 属性
+
+  * `points`
+
+    A list of points. Each number must be separated by a space, comma, EOL, or a line feed character. Each point must contain two numbers: an x coordinate and a y coordinate. So, the list `(0,0)`, `(1,1)`, and `(2,2)` would be written as `0, 0 1, 1 2, 2`.
+
+## polygon
+
+* 介绍
+
+  类似`polyline`, 但`polygon`首尾点会相连
+
+## path
+
+* 介绍
+
+  路径, 最一般化的形状, 任何图形(包括上述)都可以通过`path`来绘制
+
+* 例子
+
+  ```xml
+  <path d="M20,230 Q40,205 50,230 T90,230" fill="none" stroke="blue" stroke-width="5"/>
+  ```
+
+* 属性
+
+  略
+
+
+
 ## text
 
 * 当`text`元素存在`tspan`元素时, `text`的`x`, `y`将失效.
