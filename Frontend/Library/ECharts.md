@@ -47,6 +47,19 @@ echarts.init(document.getElementById('main')) // 挂载元素
 
   X轴的项
 
+  ```javascript
+  xAxis: {
+        type: "category", // x轴类型
+        data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'], // x周数据
+        axisLabel: { // 不忽略部分标签, 且标签斜着放
+          interval: 0,
+          rotate: 30 
+        }
+  }
+  ```
+
+  
+
 * `yAxis`
 
   Y轴的项
