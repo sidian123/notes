@@ -17,6 +17,10 @@ echarts.init(document.getElementById('main')) // 挂载元素
 
 ## 配置
 
+> 入门见[ECharts 基础概念概览](https://echarts.apache.org/zh/tutorial.html#ECharts%20%E5%9F%BA%E7%A1%80%E6%A6%82%E5%BF%B5%E6%A6%82%E8%A7%88)
+
+![image-20201210132911227](.ECharts/image-20201210132911227.png)
+
 * `titile`
 
   标题
@@ -37,7 +41,7 @@ echarts.init(document.getElementById('main')) // 挂载元素
 
 * `legend`
 
-  图例组件，如柱状图类型
+  图例组件，~~如柱状图类型~~
 
 * `xAxis`
 
