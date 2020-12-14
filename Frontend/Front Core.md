@@ -18,6 +18,19 @@
 
   [date-format](https://www.npmjs.com/package/date-format)
 
+  ```javascript
+    /**
+     * 日期格式化
+     * @param date 时间戳
+     * @returns {string} yyyy-MM-dd hh:mm:ss类型的日期格式
+     */
+    dateFormat(date){
+      return date==null || date === 0 ? '' : dateFormat('yyyy-MM-dd hh:mm:ss', new Date(date))
+    }
+  ```
+
+  
+
 * 拷贝到剪贴板
 
   [~~v-clipboard~~](https://www.npmjs.com/package/v-clipboard)
