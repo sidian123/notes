@@ -31,7 +31,7 @@ tar -zxvf TeamCity-2020.1.3.tar.gz
 
 * **数据库**: 存放构建历史, 用户信息和其他数据. 
 
-  > 数据库的连接配置将存入数据目录中
+  数据库的连接配置将存入数据目录中, 如`<数据目录>/config/database.properties`
 
 * **服务端口**, 默认`8111`, 可修改`conf/server.xml`文件
 
