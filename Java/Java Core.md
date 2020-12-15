@@ -644,6 +644,36 @@ java -Dname="Spring" -jar app.jar
 
 [How to Read PEM File to Get Public and Private Keys](https://www.baeldung.com/java-read-pem-file-keys)
 
+# 图片
+
+* JDK提供的`BufferedImage`: 提供最底层的操作
+
+  参考教程[BufferedImage类、Image类、Graphics类](https://blog.csdn.net/jiachunchun/article/details/89670721)
+
+* 图片处理库Thumbnails: 提供缩放, 旋转, 裁剪等功能更
+
+  参考教程[java处理图片类库 Thumbnails 学习](https://blog.csdn.net/qq_30336433/article/details/81298154)
+
+* 使用Demo: 将两张图片合并成一张
+
+  ```java
+  // 缩放-宽度一致
+  BufferedImage image1 = Thumbnails.of(FileUtil.getInputStream("image1.jpeg"))
+      .width(100)
+      .asBufferedImage();
+  BufferedImage image2 = Thumbnails.of(FileUtil.getInputStream("aaa.jpg"))
+      .width(100)
+      .asBufferedImage();
+  // 拼接
+  BufferedImage target = new BufferedImage(image1.getWidth(), image1.getHeight() + image2.getHeight(), BufferedImage.TYPE_4BYTE_ABGR);
+  Graphics graphics = target.getGraphics();
+  graphics.drawImage(image1,0,0,null);
+  graphics.drawImage(image2,0,image1.getHeight(),null);
+  graphics.dispose();
+  // 写出
+  ImageIO.write(target,"PNG",new File("merge.png"));
+  ```
+
 
 # 其他
 
