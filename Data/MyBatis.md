@@ -675,9 +675,19 @@ MapperFactoryBean需要注入SqlSessionFactory或SqlSessionTemplate都行，如�
 </dependency>
 ```
 
-非Spring Boot的依赖
+若报错, 找不到某某某方法, 是因为`pagehelper`包太老了, 和其他包冲突(如Mybatis-Plus), 需要引入新的包, 如
 
-> 经测试, 这种方式不生效, 可能需要自己配置下内容
+```xml
+<dependency>
+    <groupId>com.github.pagehelper</groupId>
+    <artifactId>pagehelper</artifactId>
+    <version>5.1.10</version>
+</dependency>
+```
+
+---------------------------
+
+非Spring Boot的依赖
 
 ```xml
 <dependency>
@@ -686,6 +696,8 @@ MapperFactoryBean需要注入SqlSessionFactory或SqlSessionTemplate都行，如�
     <version>5.2.0</version>
 </dependency>
 ```
+
+> 经测试, 这种方式不生效, 可能需要自己配置下内容
 
 ## 配置
 
