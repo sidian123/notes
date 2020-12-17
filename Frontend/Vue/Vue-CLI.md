@@ -210,25 +210,45 @@ css处理前：
 
 ### 样式穿透
 
-有时候, 需要在scope样式中, 作用于第三方组件, 即样式穿透到第三方组件.
+在scoped中穿透样式
 
-* 在含scope的sass/scss中, 用`::v-deep`
+* 在sass/scss中使用`::v-deep`
 
   ```scss
-  ::v-deep .child-class {
-      background-color: #000;
+  .a {
+      ::v-deep .b{
+          height: 1rem;
+      }
   }
   ```
 
-* 除此之外, 如css, 可使用`>>>`
+* 在less中使用`/deep/`
+
+  ```less
+  .a {
+      /deep/ .b{
+          height: 1rem;
+      }
+  }
+  ```
+  
+* 在stylus中使用`>>>`
+
+  ```stylus
+  .a {
+      >>> .b{
+          height: 1rem;
+      }
+  }
+  ```
+
+* 编译成
 
   ```css
-  >>> .child-class {
-      background-color: #000;
+  .a[data-v-f3f3eg9] .b { 
+  	height: 1rem;
   }
   ```
-
-> 至于`/deep` 是被弃用的
 
 ### 参考
 
