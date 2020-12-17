@@ -202,9 +202,17 @@ apt install docker
   myregistryhost:5000/fedora/httpd:version1.0
   ```
 
-  * 第一个部分是私有仓库地址, 若不发布镜像, 则可省略, 镜像存在于本地Daemon中.
-  * 最后一部分是tag, 表示镜像版本号, 若省略, 则默认`latest`
-  * 中间是镜像名, `/`前的是组名, 可省略. 如官方Hub的`library`是默认的组, 可省略
+  * 仓库地址
+
+    第一个部分`myregistryhost:5000`, 是私有仓库地址. 若不发布镜像, 则可省略, 镜像存在于本地Host中.
+
+  * 标签
+
+    最后一部分`version1.0` , 是tag表示镜像版本号, 若省略, 则默认`latest`
+
+  * 镜像名
+
+    中间的`/fedora/httpd`是镜像名. 官方Hub中, 最多只有一个`/`,  `/`前的是组名, 可省略. 私有仓库可有多个`/`, 如`a/b/c`
 
   > 参考[A quick introduction to Docker tags](https://www.freecodecamp.org/news/an-introduction-to-docker-tags-9b5395636c2a/)
 
