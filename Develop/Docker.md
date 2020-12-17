@@ -212,7 +212,7 @@ apt install docker
 
   * 镜像名
 
-    中间的`/fedora/httpd`是镜像名. 官方Hub中, 最多只有一个`/`,  `/`前的是组名, 可省略. 私有仓库可有多个`/`, 如`a/b/c`
+    中间的`/fedora/httpd`是镜像名. 官方Hub中, 最多只有一个`/`,  `/`前的是组名, 可省略, 此时默认为`library`. 私有仓库可有多个`/`, 如`a/b/c`
 
   > 参考[A quick introduction to Docker tags](https://www.freecodecamp.org/news/an-introduction-to-docker-tags-9b5395636c2a/)
 
