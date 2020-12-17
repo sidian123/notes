@@ -786,6 +786,8 @@ nginx默认有超时时间, 可修改
     proxy_read_timeout 600;
     proxy_connect_timeout 600;
     proxy_ignore_client_abort on;
+> 参考[Module ngx_http_proxy_module](http://nginx.org/en/docs/http/ngx_http_proxy_module.html)
+
 ## 访问日志
 
 ```nginx
