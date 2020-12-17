@@ -179,24 +179,12 @@ apt install docker
 ## 基础知识
 
 * `docker`命令在Client发起, 但在Docker Daemon中执行. 一般的, 每个Host都配套有Client和Daemon
-
-* `docker build`构建时, 会在本地Daemon中构建, 并产生一个唯一ID, 如`0e5574283393`, 也可在构建的同时加上名字或tag (`--tag`) . 之后也可以为镜像添加别名`docker tag`. 
-
-  > 构建的镜像只有提交并打上标签才会被保存下来, 如
-  >
-  > ```
-  > docker tag 0e5574283393 fedora/httpd:version1.0
-  > ```
-  >
-  > 或
-  >
-  > ```
-  > docker tag 0e5574283393 fedora/httpd:version1.0
-  > ```
-
 * 有私有Hub的别名, 配合`docker push`, 能将镜像发布到私有仓库中
+* docker很多命令的功能是重复的. 如`docker image push` <==>`docker push`
 
-* 命令规则:
+### 标签&摘要
+
+* 标签命名规则
 
   ```
   myregistryhost:5000/fedora/httpd:version1.0
@@ -216,7 +204,17 @@ apt install docker
 
   > 参考[A quick introduction to Docker tags](https://www.freecodecamp.org/news/an-introduction-to-docker-tags-9b5395636c2a/)
 
-* docker很多命令的功能是重复的. 如`docker image push` <=>`docker push`
+* 摘要
+
+  镜像的唯一标签, 是镜像配置和layers的SHA256哈希值.
+
+* 对比
+
+  * 标签并不能唯一标识镜像
+
+  * 镜像的标签名被占用后, 只能通过摘要访问. 
+
+    如`docker pull node:6.8.0`版本后, 官方又已相同的标签名发布bug修复版, 之后再次下拉的镜像与之前的不同了, 且只能通过摘要访问
 
 ## 镜像操作
 
