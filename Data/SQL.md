@@ -1,8 +1,22 @@
 # SQL
 
+> 参考[SQL Docs in Microsoft](https://docs.microsoft.com/en-us/sql/t-sql/language-elements/language-elements-transact-sql?view=sql-server-ver15)
+
 * `default`约束
 
   仅新增时, 该字段无值, 则使用默认值
+  
+* `BETWEEN`
+
+  ```sql
+  test_expression [ NOT ] BETWEEN begin_expression AND end_expression
+  ```
+
+  左右闭区间
+
+  
+
+  
 
 # 事务
 
