@@ -1489,6 +1489,22 @@ public interface CountryMapper extends Mapper<Country> {
   public class SymptomServiceImpl extends ServiceImpl<SymptomMapper, Symptom> implements SymptomService {}
   ```
 
+### 自定义SQL
+
+```java
+IPage<ReservationDo> getList(Page<Reservation> page, @Param(Constants.WRAPPER) Wrapper<Reservation> wrapper);
+```
+
+```xml
+<select id="getList" resultMap="BaseResultMap2">
+    select tr.*,td.department_id
+    from tbl_reservation tr
+    left join tbl_doctor td on tr.doctor_id=td.id
+    left join tbl_patient tp on tr.patient_number=tp.patient_number
+    ${ew.customSqlSegment} and tr.deleted=0 and td.deleted=0 and tp.deleted=0
+</select>
+```
+
 # 实战
 ## 注意点
 
