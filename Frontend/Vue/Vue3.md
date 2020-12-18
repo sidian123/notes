@@ -1,3 +1,5 @@
+https://zhuanlan.zhihu.com/p/337871096
+
 # 介绍
 
 Vue3 ( 即[vue-next](https://github.com/vuejs/vue-next) ) 当前还处于预览版, 但很多提案[rfcs](https://github.com/vuejs/rfcs)已经出来了. 
