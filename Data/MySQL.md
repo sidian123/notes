@@ -795,6 +795,8 @@ LIMIT [offset,] row_count;
 
 > 参考 [Reference](https://dev.mysql.com/doc/refman/8.0/en/sql-function-reference.html)
 
+## 时间
+
 *  [`FROM_UNIXTIME()`](https://dev.mysql.com/doc/refman/8.0/en/date-and-time-functions.html#function_from-unixtime) 转化时间戳 (单位s) 为Date
 
   ```sql
@@ -808,7 +810,10 @@ LIMIT [offset,] row_count;
   SELECT UNIX_TIMESTAMP('2005-03-27 03:00:00');
   ```
 
-  
+
+## 组
+
+* [`GROUP_CONCAT(*`expr`*)`](https://dev.mysql.com/doc/refman/8.0/en/aggregate-functions.html#function_group-concat) 合并组的元素
 
 # 命令
 
