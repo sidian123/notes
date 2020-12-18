@@ -791,6 +791,23 @@ LIMIT [offset,] row_count;
 
 * `enum`, `set`略
 
+# 函数
+
+*  [`FROM_UNIXTIME()`](https://dev.mysql.com/doc/refman/8.0/en/date-and-time-functions.html#function_from-unixtime) 转化时间戳 (单位s) 为Date
+
+  ```sql
+  SELECT FROM_UNIXTIME(1447430881);
+          -> '2015-11-13 10:08:01'
+  ```
+
+* [`UNIX_TIMESTAMP()`](https://dev.mysql.com/doc/refman/8.0/en/date-and-time-functions.html#function_unix-timestamp) 转化Date为时间戳 (单位s)
+
+  ```sql
+  SELECT UNIX_TIMESTAMP('2005-03-27 03:00:00');
+  ```
+
+  
+
 # 命令
 
 ## mysql
