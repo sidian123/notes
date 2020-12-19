@@ -318,6 +318,8 @@ docker run [option] <镜像名> [向启动容器中传入的命令]
 
 * `-e` 为容器设置环境变量
 
+* `-u` 运行容器的用户身份
+
   --------------------
 
 * `-v <主机目录>|<容器内目录>` 目录映射, 该选项可存在多个
@@ -551,6 +553,8 @@ ENTRYPOINT [ "sh", "-c", "java -jar /drug-service.jar","-Djava.security.egd=file
 
 ## 指令详解
 
+> 指令大小写不敏感
+
 * `volume` 创建一个匿名volume, 参数为容器中的挂载目录
 
 * `WORKDIR` 设置`RUN`, `CMD`, `ENTRYPOINT`, `COPY`和`ADD`命令的工作目录. 好像默认`/`目录
@@ -558,6 +562,8 @@ ENTRYPOINT [ "sh", "-c", "java -jar /drug-service.jar","-Djava.security.egd=file
 * `EXPOSE` 设置暴露的端口, 只有docker运行容器时添加了`-P`选项才生效.
 
   > 参考https://stackoverflow.com/a/30126645
+  
+* `USER` 设置容器运行, 或`RUN`, `CMD`, `ENTRYPOINT`指令执行时使用的用户身份
 
 ### ENV
 
