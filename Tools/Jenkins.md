@@ -32,3 +32,8 @@
 
      中文填入`zh_CN` , 英文填入`en_US` , 同时勾选Ignore browser preference and force this language to all users
 
+* 不同分支同一Jenkinsfile配置方案
+
+  [End-to-End Multibranch Pipeline Project Creation](https://www.jenkins.io/doc/tutorials/build-a-multibranch-pipeline-project/)
+
+  思路: 条件筛选`when`
