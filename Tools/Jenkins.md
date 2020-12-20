@@ -1,7 +1,3 @@
-* Docker安装
-  * https://www.jenkins.io/doc/book/installing/docker/
-  * https://github.com/jenkinsci/docker/blob/master/README.md
-
 * 使用页面403问题
 
   * 问题根源
@@ -37,3 +33,48 @@
   [End-to-End Multibranch Pipeline Project Creation](https://www.jenkins.io/doc/tutorials/build-a-multibranch-pipeline-project/)
 
   思路: 条件筛选`when`
+
+# 安装
+
+1. 创建Dockerfile
+
+   ```dockerfile
+   FROM jenkins/jenkins:2.263.1-lts-slim
+   USER root
+   RUN apt-get update && apt-get install -y apt-transport-https \
+          ca-certificates curl gnupg2 \
+          software-properties-common
+   RUN curl -fsSL https://download.docker.com/linux/debian/gpg | apt-key add -
+   RUN apt-key fingerprint 0EBFCD88
+   RUN add-apt-repository \
+          "deb [arch=amd64] https://download.docker.com/linux/debian \
+          $(lsb_release -cs) stable"
+   RUN apt-get update && apt-get install -y docker-ce-cli
+   USER jenkins
+   RUN jenkins-plugin-cli --plugins blueocean:1.24.3
+   ```
+
+   该镜像中引入了docker cli, docker engine的客户端.
+
+2. 构建成镜像
+
+   ```shell
+   docker build -t myjenkins-blueocean:1.1 .
+   ```
+
+3. 运行容器
+
+   ```shell
+   docker run --name jenkins-blueocean \
+     --detach \
+     --env DOCKER_HOST=tcp://sh.sidian.live:2376 \
+     --publish 8082:8080 --publish 50000:50000 \
+     myjenkins-blueocean:1.1
+   ```
+
+   需要修改`DOCKER_HOST`, 指向docker engine
+
+> 参考
+>
+> * https://www.jenkins.io/doc/book/installing/docker/
+> * https://github.com/jenkinsci/docker/blob/master/README.md
