@@ -832,7 +832,7 @@ LIMIT [offset,] row_count;
   mysqldump -u root -p --ignore-table=mysql.innodb_index_stats --ignore-table=mysql.innodb_table_stats --all-databases > all-databases.sql
   ```
 
-  > `innodb_index_stats`和`innodb_table_stats`表在恢复时会报错, 所以备份时需要导出
+  > `innodb_index_stats`和`innodb_table_stats`表在恢复时会报错, 所以备份时需要忽略
 
 * 恢复
 
