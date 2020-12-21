@@ -1761,6 +1761,12 @@ server:
 
 # 进阶
 
+[Creating Your Own Auto-configuration](https://docs.spring.io/spring-boot/docs/current-SNAPSHOT/reference/htmlsingle/#boot-features-developing-auto-configuration)
+
+Bean注入顺序(猜测):
+
+普通Bean(`@Component`)  --> 其他配置类(`@Configuration`)中的Bean --> Start包的配置Bean
+
 ## 自动配置
 
 * 原理
@@ -1859,6 +1865,8 @@ server:
 * 用于配置包扫描路径. 用`basePackages`或`basePackageClasses`属性进行包路径的配置
 * 若不指定扫描的包, 默认使用被注解类的包路径
 * 允许存在多个包扫描注解和路径, 且注解是repeatable类型的, 可多次注解同一个包.
+
+* **starter包中不允许使用包扫描, 但允许使用@Import**
 
 ## Enable注解实现
 
