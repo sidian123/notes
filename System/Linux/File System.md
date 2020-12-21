@@ -241,6 +241,10 @@ UUID=592dcfd1-58da-4769-9ea8-5f412a896980 none swap sw 0 0
 
 ## 其他命令
 
+### 查看磁盘, 分区, 文件系统
+
+https://unix.stackexchange.com/questions/157154/how-to-list-disks-partitions-and-filesystems-in-linux
+
 ### sync
 
 对disk的读写是异步的，写文件时不会立刻刷新到disk中，但可以使用sync手动刷新缓存。
