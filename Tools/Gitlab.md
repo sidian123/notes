@@ -47,3 +47,25 @@ sudo gitlab-backup restore BACKUP=11493107454_2018_04_25_10.6.4-ce
   > GitLab 12.1及之前, 应该用`gitlab-rake gitlab:backup:restore`命令
 
 > 参考[Back up and restore GitLab](https://docs.gitlab.com/ee/raketasks/backup_restore.html)
+
+# 命令
+
+* 查看状态
+
+  ```shell
+  gitlab-ctl status
+  ```
+
+* 启动
+
+  ```shell
+  gitlab-ctl start
+  ```
+
+* 停止
+
+  ```shell
+  gitlab-ctl stop
+  ```
+
+  
