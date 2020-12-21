@@ -567,6 +567,8 @@ $(COMMAND)
 
 sed是一个流文本编辑器, 以行为单位, 可进行替换, 删除, 新增, 选取等操作.
 
+>  [shell脚本--sed的用法](https://blog.csdn.net/wdz306ling/article/details/80087889)
+
 ## 微脚本执行awk
 
 ```shell
