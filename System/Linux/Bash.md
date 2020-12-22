@@ -778,3 +778,4 @@ export ALL_PROXY=socks5://127.0.0.1:1080
 
 * https://www.tutorialspoint.com/unix/index.htm
 * https://www.tutorialkart.com/bash-shell-scripting/bash-variable/ ( 感觉这个比较好 )
+* [Bash Guide for Beginners](https://tldp.org/LDP/Bash-Beginners-Guide/html/index.html)
