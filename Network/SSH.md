@@ -293,6 +293,17 @@ OpenSSH最常用的命令，登录、转发都通过该命令进行。
   ssh root@129.4.100.22 ls -lh # 这里在远程主机上运行了命令: ls -lh
   ```
 
+  执行多行命令
+
+  ```shell
+  ssh user@host << EOF
+    ls some_folder; 
+    ./someaction.sh 'some params'
+    pwd
+    ./some_other_action 'other params'
+  EOF
+  ```
+
 * 调试
 
   `-v` 进入详细模式, 将打印调试信息. 可以使用多个`-v`选项, 调试信息将更详细, 最多3个, 如
@@ -310,6 +321,10 @@ OpenSSH最常用的命令，登录、转发都通过该命令进行。
   ```shell
   ssh -i aaa.pem root@111.11.11.111
   ```
+  
+* 其他
+
+  * 端口 `-p`
 
 >参考：
 >
@@ -389,6 +404,8 @@ scp [[user@]host1:]file1 ... [[user@]host2:]file2
 #文件目的不填,则放入root用户的家目录下
 scp file root@wx.sidian123.top:
 ```
+
+* 端口 `-P`
 
 ### sftp
 
