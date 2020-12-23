@@ -1265,6 +1265,10 @@ Fri Mar 15 22:00:54 CDT 2019
 
 >如果不知道时区名字，可以参考`/usr/share/zoneinfo`目录或执行`tzselect`命令
 
+## 时间同步
+
+ntp
+
 # 计划任务
 
 >计划任务有望被init进程（如systemd）取代，但目前远没有那么强大。
