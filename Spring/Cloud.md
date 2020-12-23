@@ -446,6 +446,8 @@ Feign是一个**声明式**的Rest API的客户端, 支持Spring MVC的注解, �
 
 ## 使用
 
+### API声明
+
 只需写Rest API对应的接口+注解, 然后在接口上加上`@FeignClient`, 如
 
 ```java
@@ -480,7 +482,19 @@ public interface UserService {
 
 -----
 
-关于方法参数, 需要使用对应注解修饰, 表示参数传递方式. 如`@RequestParam`, 否则会默认为请求体参数.
+### 方法参数
+
+ 需要使用对应注解修饰, 表示参数传递方式. 如`@RequestParam`, 否则会默认为请求体参数.
+
+### 头字段
+
+```java
+HttpResponse<List<TcmTermVO>> getTermList(
+    @RequestParam(name = "term") String term,
+	@RequestHeader("appId") String appId,
+    @RequestHeader("appKey") String appKey
+);
+```
 
 ## 拦截器
 
