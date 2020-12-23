@@ -1269,6 +1269,8 @@ Fri Mar 15 22:00:54 CDT 2019
 
 ntp
 
+[第十五章、时间服务器： NTP 服务器](http://linux.vbird.org/linux_server/0440ntp.php)
+
 # 计划任务
 
 >计划任务有望被init进程（如systemd）取代，但目前远没有那么强大。
