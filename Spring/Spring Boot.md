@@ -1763,7 +1763,7 @@ server:
 
 [Creating Your Own Auto-configuration](https://docs.spring.io/spring-boot/docs/current-SNAPSHOT/reference/htmlsingle/#boot-features-developing-auto-configuration)
 
-Bean注入到容器的顺序(猜测):
+Bean被扫描定义的顺序(猜测):
 
 普通Bean(`@Component`)  --> 其他配置类(`@Configuration`)中的Bean --> Start包的配置Bean
 
