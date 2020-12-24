@@ -396,11 +396,9 @@ java.lang.Exception: 出现异常
             <!--日志文件保留天数-->
             <maxHistory>15</maxHistory>
         </rollingPolicy>
-        <!-- 此日志文件只记录debug级别的 -->
-        <filter class="ch.qos.logback.classic.filter.LevelFilter">
-            <level>debug</level>
-            <onMatch>ACCEPT</onMatch>
-            <onMismatch>DENY</onMismatch>
+        <!-- 日志文件记录debug+级别的 -->
+        <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+            <level>DEBUG</level>
         </filter>
     </appender>
 
@@ -423,11 +421,9 @@ java.lang.Exception: 出现异常
             <!--日志文件保留天数-->
             <maxHistory>15</maxHistory>
         </rollingPolicy>
-        <!-- 此日志文件只记录info级别的 -->
-        <filter class="ch.qos.logback.classic.filter.LevelFilter">
-            <level>info</level>
-            <onMatch>ACCEPT</onMatch>
-            <onMismatch>DENY</onMismatch>
+        <!-- 日志文件记录info+级别的 -->
+        <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+            <level>INFO</level>
         </filter>
     </appender>
 
@@ -449,11 +445,9 @@ java.lang.Exception: 出现异常
             <!--日志文件保留天数-->
             <maxHistory>15</maxHistory>
         </rollingPolicy>
-        <!-- 此日志文件只记录warn级别的 -->
-        <filter class="ch.qos.logback.classic.filter.LevelFilter">
-            <level>warn</level>
-            <onMatch>ACCEPT</onMatch>
-            <onMismatch>DENY</onMismatch>
+        <!-- 日志文件记录warn+级别的 -->
+        <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+            <level>WARN</level>
         </filter>
     </appender>
 
@@ -476,11 +470,9 @@ java.lang.Exception: 出现异常
             <!--日志文件保留天数-->
             <maxHistory>15</maxHistory>
         </rollingPolicy>
-        <!-- 此日志文件只记录ERROR级别的 -->
-        <filter class="ch.qos.logback.classic.filter.LevelFilter">
+        <!-- 日志文件记录ERROR+级别的 -->
+        <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
             <level>ERROR</level>
-            <onMatch>ACCEPT</onMatch>
-            <onMismatch>DENY</onMismatch>
         </filter>
     </appender>
 
