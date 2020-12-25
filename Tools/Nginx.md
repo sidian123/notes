@@ -402,6 +402,8 @@ server {
 
 ## Location
 
+### intro
+
 * 介绍
 
   映射请求到具体的资源上.
@@ -413,6 +415,8 @@ server {
   Default:	—
   Context:	server, location
   ```
+
+### 匹配
 
 * 匹配模式
 
@@ -464,47 +468,67 @@ server {
 
   > 注意, 前缀匹配过程中,  `=`和`^~`(需满足条件: 前缀最长) 无后缀匹配过程
 
-* 资源映射
+### 资源映射
 
-  * `root`
-  
-    `root`确定URL路径和**系统路径**的映射关系, 文件的真实路径=系统路径+URL路径.
-  
-      ```nginx
-    server {
-        location /images/ {
-            root /data;
-        }
+#### 静态资源
+
+建立URL路径与文件系统的映射关系
+
+* `root`
+
+  文件的真实路径=系统路径+URL路径.
+
+    ```nginx
+  server {
+      location /images/ {
+          root /data;
+      }
 }
-      ```
-    
-      > 如请求路径`/images/example.png`, 访问的文件路径则为`/data/images/example.png`
-    
-  * `proxy_pass`
+    ```
+  
+    > 如请求路径`/images/example.png`, 访问的文件路径则为`/data/images/example.png`
+  
+* `alias`
 
-    `proxy_pass`确定URL路径和**代理Server**的关系, 文件的真实路径=代理URL+去掉匹配前缀的URL路径
-  
-    ```nginx
-    server{
-     	location /app/ {
-        	proxy_pass      http://192.168.154.102;
-    	}   
-    }
-    ```
-  
-    > `test.com/app/xxxxx` =>  `http://192.168.154.102/xxxxx`
-  
-    ```nginx
-    server{
-     	location /app/ {
-            proxy_pass      http://192.168.154.102/maped_dir/;
-        }   
-    }
-    ```
-  
-    > `test.com/app/xxxxx` =>  `http://192.168.154.102/maped_dir/xxxxx`
-  
-    > 详细参考[Nginx proxy_pass: examples for how does nginx proxy_pass map the request](https://www.liaohuqiu.net/posts/nginx-proxy-pass/)
+  文件的真实路径=系统路径+去掉匹配前缀的URL路径
+
+  ```nginx
+  server {
+      location /images/ {
+          root /data;
+      }
+  }
+  ```
+
+  > 如请求路径`/images/example.png`, 访问的文件路径则为`/data/example.png`
+
+#### 反向代理
+
+* `proxy_pass`
+
+  `proxy_pass`确定URL路径和**代理Server**的关系, 文件的真实路径=代理URL+去掉匹配前缀的URL路径
+
+  ```nginx
+  server{
+   	location /app/ {
+      	proxy_pass      http://192.168.154.102;
+  	}   
+  }
+  ```
+
+  > `test.com/app/xxxxx` =>  `http://192.168.154.102/xxxxx`
+
+  ```nginx
+  server{
+   	location /app/ {
+          proxy_pass      http://192.168.154.102/maped_dir/;
+      }   
+  }
+  ```
+
+  > `test.com/app/xxxxx` =>  `http://192.168.154.102/maped_dir/xxxxx`
+
+  > 详细参考[Nginx proxy_pass: examples for how does nginx proxy_pass map the request](https://www.liaohuqiu.net/posts/nginx-proxy-pass/)
 
 ## 其他
 
