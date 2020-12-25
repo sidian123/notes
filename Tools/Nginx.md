@@ -911,6 +911,51 @@ proxy_set_header X-Real-IP $remote_addr;
 proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
 ```
 
+## Demo
+
+```nginx
+upstream tcm-cdss {
+    server api_host:3001;
+}
+
+server {
+        listen 443 ssl;
+        server_name your_domain;
+
+        ssl_certificate /usr/local/nginx/conf/cert/doamin.host.com_chain.crt;
+        ssl_certificate_key /usr/local/nginx/conf/cert/domain.host.com_key.key;
+        ssl_session_timeout 5m;
+        ssl_ciphers HIGH:!aNULL:!MD5;
+        ssl_protocols TLSv1 TLSv1.1 TLSv1.2;
+        ssl_prefer_server_ciphers on;
+
+        location /tcm-cdss/ {
+             proxy_pass http://tcm-cdss/tcm-cdss/;
+             proxy_set_header   Host $host:$server_port;
+             proxy_set_header   X-Real-IP   $remote_addr;
+             proxy_set_header   X-Forwarded-For $proxy_add_x_forwarded_for;
+       }
+
+        location /dict/ {
+             proxy_pass http://tcm-cdss/dict/;
+             proxy_set_header   Host $host:$server_port;
+             proxy_set_header   X-Real-IP   $remote_addr;
+             proxy_set_header   X-Forwarded-For $proxy_add_x_forwarded_for;
+
+        }
+
+        location / {
+                root /data/web/doctor-ui/;
+                try_files $uri $uri/ /index.html;
+        }
+}
+server {
+        listen 80;
+        server_name your_domain;
+        return 301 https://$server_name$request_uri;
+}
+```
+
 
 
 # 参考
