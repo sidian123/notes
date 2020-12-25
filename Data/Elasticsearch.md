@@ -838,6 +838,23 @@ path.repo: ["/usr/local/backups/es_backup"]
 
 type可指定导出的部分, 默认导出数据
 
+我的迁移脚本
+
+```bash
+indexes=( jy_concept jy_concept2 jy_description jy_description2 jy_relationship jy_relationship2 )
+for index in ${indexes[@]} ; do
+    echo "迁移索引: ${index}"
+    ./node_modules/elasticdump/bin/elasticdump \
+        --input=http://111.111.111.111:9400/${index} \
+        --output=http://elastic:123456@111.111.111.111:9500/${index} \
+        --type=mapping
+    ./node_modules/elasticdump/bin/elasticdump \
+        --input=http://111.111.111.111:9400/${index} \
+        --output=http://elastic:123456@111.111.111.111:9500/${index} \
+        --type=data
+done
+```
+
 # 其他
 
 ## 字段类型
