@@ -828,6 +828,16 @@ path.repo: ["/usr/local/backups/es_backup"]
 
 [Elasticsearch集群配置](https://www.jianshu.com/p/15d6241e7844)
 
+## 索引迁移
+
+[elasticsearch-dump](https://github.com/elasticsearch-dump/elasticsearch-dump)
+
+关于文中提到的type, 一个索引含有很多不同维度的信息, 如
+
+![image-20201225235814589](.Elasticsearch/image-20201225235814589.png)
+
+type可指定导出的部分, 默认导出数据
+
 # 其他
 
 ## 字段类型
