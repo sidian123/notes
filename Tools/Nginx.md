@@ -807,9 +807,26 @@ gzip_vary on;
 
 nginx默认有超时时间, 可修改
 
-    proxy_read_timeout 600;
-    proxy_connect_timeout 600;
-    proxy_ignore_client_abort on;
+* `proxy_read_timeout` 
+
+  从代理服务上读取响应的时间, 默认60s.
+
+  注意, The timeout is set only between two successive read operations, not for the transmission of the whole response
+
+* `proxy_send_timeout`
+
+  将请求发给代理服务的时间, 默认60s.
+
+  注意, The timeout is set only between two successive write operations, not for the transmission of the whole request.
+
+* `proxy_connect_timeout`
+
+  与代理服务建立连接的等待时间. 默认60s, 最大不超过75s.
+
+* `proxy_ignore_client_abort`
+
+  貌似和超时时间无关.
+
 > 参考[Module ngx_http_proxy_module](http://nginx.org/en/docs/http/ngx_http_proxy_module.html)
 
 ## 访问日志
