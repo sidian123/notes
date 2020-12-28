@@ -90,6 +90,10 @@
    ./redis-server /path/to/redis.conf
    ```
 
+## Redis客户端
+
+[AnotherRedisDesktopManager](https://github.com/qishibo/AnotherRedisDesktopManager)
+
 # 命令
 
 ## 连接Server
