@@ -530,8 +530,9 @@ docker load -i ./centos.tar
 
 > 参考
 >
-> * [registry](https://hub.docker.com/_/registry)
-> * [Docker Registry](https://docs.docker.com/registry/)
+> * [registry](https://hub.docker.com/_/registry) docker hub介绍
+> * [Docker Registry](https://docs.docker.com/registry/) docker 产品介绍
+> * [Docker Registry UI](Docker Registry UI) Registry的客户端
 
 # Dockerfile
 
