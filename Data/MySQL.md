@@ -834,6 +834,16 @@ LIMIT [offset,] row_count;
 
   > `innodb_index_stats`和`innodb_table_stats`表在恢复时会报错, 所以备份时需要忽略
 
+* 迁移数据
+
+  ```shell
+  mysqlpump -u root -p  --exclude-databases=information_schema,mysql,performance_schema,sys  --all-databases --add-drop-database --add-drop-table > all-databases.sql
+  ```
+
+  > 一般迁移, 仅迁移数据的吧, 就不备份系统数据库了.
+
+  > 与mysqldump相比, mysqlpump是更强大的工具
+
 * 恢复
 
   ```shell
