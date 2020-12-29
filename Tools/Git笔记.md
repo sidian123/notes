@@ -462,6 +462,7 @@ tag分两种:
 - `git tag`以字符顺序显示所有标签名
 - `git tag -l 'v1.8.5*'`显示匹配成功的标签名, 可以使用它通配符.
 - `git show <tagname>`显示某个标签详细信息
+- `git tag --points-at HEAD` 显示当前Commit的标签, 无则为空
 
 ### 添加标签
 
