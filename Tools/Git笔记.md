@@ -674,6 +674,22 @@ Git for Windows版除了有git命令, 还附带了终端Git Bash ( 或者叫MinT
 
 > 推荐使用Cmder ,终端更好用, 还自带Git for Windows.
 
+## 版本回退
+
+1. 重置当前分支及Head到之前的提交
+
+   ```shell
+   git reset --hard <tag/branch/commit id>
+   ```
+
+   > 加了`--hard`后, 会同时重置工作区
+
+2. 强制推送
+
+   ```shell
+   git push -f
+   ```
+
 ## 问题
 
 ### git status乱码
