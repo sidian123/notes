@@ -322,6 +322,12 @@ OpenSSH最常用的命令，登录、转发都通过该命令进行。
   ssh -i aaa.pem root@111.11.11.111
   ```
   
+* 连接, 不警告
+
+  ```shell
+  ssh -q -o "StrictHostKeyChecking no" user@host
+  ```
+
 * 其他
 
   * 端口 `-p`
