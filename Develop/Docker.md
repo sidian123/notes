@@ -531,7 +531,7 @@ docker load -i ./centos.tar
 > 参考
 >
 > * [registry](https://hub.docker.com/_/registry)
-> * 
+> * [Docker Registry](https://docs.docker.com/registry/)
 
 # Dockerfile
 
