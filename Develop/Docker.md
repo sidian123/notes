@@ -528,7 +528,10 @@ docker load -i ./centos.tar
   http://localhost:5000/v2/<name>/tags/list
   ```
 
-> 参考[registry](https://hub.docker.com/_/registry)
+> 参考
+>
+> * [registry](https://hub.docker.com/_/registry)
+> * 
 
 # Dockerfile
 
