@@ -2885,6 +2885,22 @@ package package_name;
 
     断言使用更为简单, 但携带的信息比较少, 因此断言是给开发者用的. 若要将代码封装为库, 提供给其他人使用, 则应抛出运行时异常比较好.
 
+## 工作目录 & Jar位置
+
+* 工作目录
+
+  `java`命令执行的位置为工作目录, 与jar位置无关
+
+  ```java
+  Paths.get("").toAbsolutePath()
+  ```
+
+* Jar位置
+
+  ```java
+  MainClass.class.getProtectionDomain().getCodeSource().getLocation().getPath()
+  ```
+
 # 参考
 
 * [Java Tutorial Oracle.com](https://docs.oracle.com/javase/tutorial/index.html)
