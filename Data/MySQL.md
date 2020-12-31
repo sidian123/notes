@@ -993,6 +993,13 @@ max_connections=1000
 LimitNOFILE = 65535
 ```
 
+## sql_mode
+
+```
+# 设置SQL模式
+sql_mode =STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION
+```
+
 # 待学
 
 * 全文索引
