@@ -123,13 +123,21 @@ sudo apt-get update
 
 > 摘抄至https://www.jianshu.com/p/97c35d569aa3
 
+# RPM
 
+常用选项
 
+> －ivh：安装显示安装进度--install--verbose--hash
+> －Uvh：升级软件包--Update；
+> －qpl：列出RPM软件包内的文件信息[Query Package list]；
+> －qpi：列出RPM软件包的描述信息[Query Package install package(s)]；
+>
+> －qa:  查询linux系统中安装的所有软件；
+> －qf：查找指定文件属于哪个RPM软件包[Query File]；
+> －Va：校验所有的RPM软件包，查找丢失的文件[View Lost]；
+> －e：删除包
 
-
-
-
-
+> 参考[RPM 使用详解](https://blog.csdn.net/du_minchao/article/details/51671674)
 
 
 
