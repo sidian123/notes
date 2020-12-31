@@ -1,5 +1,23 @@
 # 备份与恢复
 
+* 备份限制
+
+  只能恢复同版本和类型的GitLab
+
+* 前提条件
+
+  确保装有`rsync`命令
+
+* 备份命名
+
+  ```
+  <Timestamp>_<datetime>-<gitVersion>_gitlab_backup.tar
+  ```
+
+  如`1493107454_2018_04_25_10.6.4-ce_gitlab_backup.tar`
+
+---------
+
 * 备份
 
   1. 修改配置文件
