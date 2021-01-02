@@ -84,3 +84,7 @@
 * JSX
 
   [JSX详解](https://www.jianshu.com/p/3345e94baec0)
+
+* Vue生态
+
+  [awesome-vue](https://github.com/vuejs/awesome-vue)
