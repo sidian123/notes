@@ -40,14 +40,6 @@
 * 导出SVG到PNG
 
   [saveSvgAsPng](https://www.npmjs.com/package/save-svg-as-png)
-
-* 工具类 - [lodash](https://lodash.com/)
-
-  * 安装
-
-    ```shell
-    npm i --save lodash
-    ```
   
 * [Dom to Image](https://www.npmjs.com/package/dom-to-image)
 
@@ -88,3 +80,28 @@
 * Vue生态
 
   [awesome-vue](https://github.com/vuejs/awesome-vue)
+
+# lodash
+
+> [lodash](https://lodash.com/)
+
+* 安装
+
+  ```shell
+  npm i --save lodash
+  ```
+
+* 深拷贝
+
+  ```js
+  _.cloneDeep(value)
+  ```
+
+* 浅拷贝
+
+  ```js
+  _.clone(value)
+  ```
+
+  
+
