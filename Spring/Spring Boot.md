@@ -1689,6 +1689,12 @@ public class DiseaseControllerTest {
 }
 ```
 
+### 属性覆盖
+
+```java
+@SpringBootTest(properties = { "example.firstProperty=annotation" })
+```
+
 ## 踩坑笔记
 
 ### Junit4的SpringBoot执行失败
