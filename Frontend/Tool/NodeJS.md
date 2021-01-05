@@ -461,6 +461,9 @@ nvm (nodejs version manager) 用于管理多版本nodejs的工具
 > 参考 https://github.com/nodejs/node-gyp/issues/629 
 
 # 参考
+
+* [Node Api](https://nodejs.org/dist/latest-v10.x/docs/api/) Node文档
+
 * [Getting started with Node.js modules: require, exports, imports and beyond](https://adrianmejia.com/blog/2016/08/12/getting-started-with-node-js-modules-require-exports-imports-npm-and-beyond/)
 * [A Beginner’s Guide to npm — the Node Package Manager](https://www.sitepoint.com/beginners-guide-node-package-manager/)
 * [Node.js wiki](https://en.wikipedia.org/wiki/Node.js)
