@@ -16,7 +16,15 @@
 
 * 时间格式化
 
-  [date-format](https://www.npmjs.com/package/date-format)
+  > [date-format](https://www.npmjs.com/package/date-format)
+
+  安装
+
+  ```shell
+  npm install date-format
+  ```
+
+  使用
 
   ```javascript
     /**
@@ -28,8 +36,6 @@
       return date==null || date === 0 ? '' : dateFormat('yyyy-MM-dd hh:mm:ss', new Date(date))
     }
   ```
-
-  
 
 * 拷贝到剪贴板
 
