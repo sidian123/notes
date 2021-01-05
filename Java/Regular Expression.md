@@ -500,6 +500,14 @@ No match found.
 
 至于名词意思, 见`fundamental/Compile` 2.4小节
 
+## 常用正则
+
+* 匹配中文字符
+
+  `[\u4e00-\u9fa5]`
+
+  
+
 # 参考
 
 * 通俗易懂，可以先读这个：http://tutorials.jenkov.com/java-regex/matcher.html#reset-method
