@@ -499,6 +499,16 @@ random[2][2];
   * [Symbol 阮一峰](http://es6.ruanyifeng.com/#docs/symbol)
   * [Symbols TypeScript](http://www.typescriptlang.org/docs/handbook/symbols.html)
 
+### RegExp
+
+* 执行匹配 
+
+  [exec()](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/RegExp/exec)
+
+* 测试是否匹配
+
+  [test()](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/RegExp/test)
+
 ## 操作符
 完整操作符内容可以参考：[Expressions and operators][3]
 
@@ -547,6 +557,8 @@ random[2][2];
         }
         ```
 
+        > 遍历属性的顺序依赖于内部实现
+        
     2. for...of：用于遍历array的值。
         ```javascript
         for (let value of array) {
