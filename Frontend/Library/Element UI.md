@@ -56,6 +56,19 @@ Vue.use(ElementUI);
 
   > 一般设置`multiple`允许多选；设置`default-first-option`允许回车选择第一个
 
+使用Demo
+
+```vue
+<el-select v-model="symptomDialog.item.name"
+           filterable remote reserve-keyword allow-create default-first-option
+           :remote-method="symptomDialog.fields.symptom.remoteMethod.bind(symptomDialog.fields.symptom)"
+           :loading="symptomDialog.fields.symptom.loading">
+    <el-option v-for="(option,index) in symptomDialog.fields.symptom.options"
+               :key="index" :label="option.term" :value="option.term">
+    </el-option>
+</el-select>
+```
+
 ## Upload
 
 文件上传控件，需放入子元素，才能触发文件选择。通过`list-type`属性，可设置已上传文件的列表样式。如果不满意，可自行禁止列表`show-file-list`，然后自定义子元素。详细见文档的例子User avatar upload。
