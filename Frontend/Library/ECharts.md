@@ -127,6 +127,49 @@ echarts.init(document.getElementById('main')) // 挂载元素
     </html>
 ```
 
+```javascript
+{
+        title:{
+          text:'实体语义标签数量统计',
+          left: 'center'
+        },
+        tooltip:{
+          trigger:'axis'
+        },
+        xAxis: {
+          type: 'category',
+          data: this.tcmStatistic.entityTagMap.map(item=>item.semanticName),
+          axisLabel: {
+            interval: 0,
+            rotate: 30
+          }
+        },
+        yAxis: {
+          type: 'value'
+        },
+        dataZoom: [
+          {
+            type: 'slider',
+            show: true,
+            xAxisIndex: [0],
+            start: 1,
+            end: 35
+          },
+          {
+            type: 'inside',
+            xAxisIndex: [0],
+            start: 1,
+            end: 35
+          },
+        ],
+        series: [{
+          data: this.tcmStatistic.entityTagMap.map(item=>item.total),
+          type: 'bar',
+          barMaxWidth: 40
+        }]
+}
+```
+
 # 进阶
 
 ## 基本概念
