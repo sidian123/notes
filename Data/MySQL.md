@@ -269,11 +269,17 @@ sql_mode =STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY
   ```
 
 * 在mysql中退出
-* 
+
   ```mysql
-	quit
-	# 或
-	exit
+  quit
+  # 或
+  exit
+  ```
+
+* 连接的时候同时指定密码
+
+  ```
+  mysql -u root -p123456
   ```
 
 ## 查询常识
