@@ -128,15 +128,7 @@ sudo gitlab-backup restore BACKUP=11493107454_2018_04_25_10.6.4-ce
 
 ## 配置
 
-为runner配置环境, 如Java, Maven.
-
-1. 修改`/etc/profile`  , 设置环境变量
-
-2. 重启runner
-
-   ```
-   gitlab-runner restart
-   ```
+为runner配置环境, 如Java, Maven. 修改`/etc/profile`  , 设置环境变量即可
 
 
 ## .gitlab-ci.yml
