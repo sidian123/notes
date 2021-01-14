@@ -87,3 +87,44 @@ sudo gitlab-backup restore BACKUP=11493107454_2018_04_25_10.6.4-ce
   ```
 
   
+
+# Gitlab CI/CD
+
+* Gitlab-Runner安装 (选择linux安装方式)
+
+  [Install GitLab Runner](https://docs.gitlab.com/runner/install/)
+
+* 将Runner注册到Gitlab中
+
+  ```
+  gitlab-runner register
+  ```
+
+  > 配置url和token即可, tag不要配置了.
+
+* 命令`gitlab-runner`
+
+  * 启动
+
+    ```
+    gitlab-runner start
+    ```
+
+  * 停止
+
+    ```
+    gitlab-runner stop
+    ```
+
+  * 重启
+
+    ```
+    gitlab-runner restart
+    ```
+
+    
+
+
+
+
+
