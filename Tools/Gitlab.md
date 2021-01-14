@@ -104,7 +104,7 @@ sudo gitlab-backup restore BACKUP=11493107454_2018_04_25_10.6.4-ce
   gitlab-runner register
   ```
 
-  > 配置url和token即可(管理员可在管理员区域查看), tag不要配置了. 
+  > 配置url和token即可(管理员可在管理员区域查看), tag不要配置了. executor用shell
 
 * 命令`gitlab-runner`
 
@@ -125,6 +125,18 @@ sudo gitlab-backup restore BACKUP=11493107454_2018_04_25_10.6.4-ce
     ```
     gitlab-runner restart
     ```
+
+## 配置
+
+为runner配置环境, 如Java, Maven.
+
+1. 修改`/etc/profile`  , 设置环境变量
+
+2. 重启runner
+
+   ```
+   gitlab-runner restart
+   ```
 
 
 ## .gitlab-ci.yml
