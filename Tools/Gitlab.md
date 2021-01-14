@@ -90,7 +90,11 @@ sudo gitlab-backup restore BACKUP=11493107454_2018_04_25_10.6.4-ce
 
 # Gitlab CI/CD
 
-* Gitlab-Runner安装 (选择linux安装方式)
+## runner安装
+
+> 参考[gitlab ci/cd 简单流程介绍](https://www.jianshu.com/p/43a2b50a5b3d)
+
+* 选择linux安装方式
 
   [Install GitLab Runner](https://docs.gitlab.com/runner/install/)
 
@@ -100,7 +104,7 @@ sudo gitlab-backup restore BACKUP=11493107454_2018_04_25_10.6.4-ce
   gitlab-runner register
   ```
 
-  > 配置url和token即可, tag不要配置了.
+  > 配置url和token即可(管理员可在管理员区域查看), tag不要配置了. 
 
 * 命令`gitlab-runner`
 
@@ -122,7 +126,64 @@ sudo gitlab-backup restore BACKUP=11493107454_2018_04_25_10.6.4-ce
     gitlab-runner restart
     ```
 
-    
+
+## .gitlab-ci.yml
+
+> 参考
+>
+> * [gitlab-ci.yml 配置Gitlab pipeline以达到持续集成的方法](https://www.jianshu.com/p/b69304279c5f)
+> * [The .gitlab-ci.yml file](https://docs.gitlab.com/ee/ci/yaml/gitlab_ci_yaml.html)
+
+* `stage` 当前阶段. 可选: build|test|deploy
+* `script` 脚本
+* `only` 作用分支
+
+Demo
+
+```yml
+ stages:
+  - clear_dir
+  - git_clone
+  - build
+  - deploy  
+clear_dir:
+    stage: clear_dir
+    script:
+      - cd /home/gitlab-runner/
+      - rm -rf ./h5
+    only:
+      - master
+    tags:
+      - shell
+git_clone:
+    stage: git_clone
+    script:
+      - cd /home/gitlab-runner/
+      - git clone git@192.168.1.97:xiaojian/h5.git
+    only:
+      - master
+    tags:
+      - shell
+build:
+    stage: build
+    script:
+      - cd /home/gitlab-runner/h5
+      - cnpm install
+    only:
+      - master
+    tags:
+      - shell
+deploy:
+    stage: deploy
+    script:
+      - echo "发布中...."
+    only:
+      - master
+    tags:
+      - shell
+```
+
+
 
 
 
