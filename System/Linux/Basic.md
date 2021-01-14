@@ -1159,6 +1159,10 @@ sudo passwd -l root # 让账户密码处于过期状态
 
 修改shell
 
+### whoami
+
+查看当前用户
+
 # top
 
 top能够动态显示系统总的cpu、内存使用状态和各个进程的资源使用情况。
