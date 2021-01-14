@@ -128,7 +128,20 @@ sudo gitlab-backup restore BACKUP=11493107454_2018_04_25_10.6.4-ce
 
 ## 配置
 
-为runner配置环境, 如Java, Maven. 修改`/etc/profile`  , 设置环境变量即可
+* 配置环境变量
+
+  修改`/etc/profile`  , 设置环境变量即可
+
+* 以root用户运行
+
+  ```
+  sudo gitlab-runner uninstall
+  gitlab-runner install --working-directory /home/gitlab-runner --user root
+  gitlab-runner restart
+  ps aux|grep gitlab-runner
+  ```
+
+  > 如果成功, 可以看到参数`--user=root`
 
 
 ## .gitlab-ci.yml
