@@ -35,6 +35,8 @@ tar -zxvf TeamCity-2020.1.3.tar.gz
 
 * **服务端口**, 默认`8111`, 可修改`conf/server.xml`文件
 
+  > 若要在同一个主机上部署多台Teamcity, 还需改关闭Tomcat的端口(在`Server`元素上配置).
+
 ### Agent
 
 * 配置文件`buildAgent/conf/buildAgent.properties`
