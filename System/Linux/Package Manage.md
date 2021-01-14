@@ -139,7 +139,32 @@ sudo apt-get update
 
 > 参考[RPM 使用详解](https://blog.csdn.net/du_minchao/article/details/51671674)
 
+# dpkg
 
+```
+安装deb软件包 dpkg -i xxx.deb
+
+删除软件包 dpkg -r xxx.deb
+ 
+连同配置文件一起删除 dpkg -r --purge xxx.deb
+ 
+查看软件包信息 dpkg -info xxx.deb
+ 
+查看文件拷贝详情 dpkg -L xxx.deb
+ 
+查看系统中已安装软件包信息 dpkg -l
+ 
+重新配置软件包 dpkg-reconfigure xx
+ 
+sudo dpkg -p package_name卸载软件包及其配置文件，但无法解决依赖关系！
+ 
+sudo aptitude purge pkgname卸载软件包及其配置文件与依赖关系包！ 
+ 
+清除所有已删除包的残馀配置文件
+dpkg -l |grep ^rc|awk '{print $2}' |sudo xargs dpkg -P
+ 
+如果报如下错误，证明你的系统中没有残留配置文件了，无须担心。
+```
 
 
 
