@@ -1006,6 +1006,36 @@ LimitNOFILE = 65535
 sql_mode =STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION
 ```
 
+## Row size too large (> 8126)
+
+> 参考[mysql错误：Row size too large (> 8126).](https://blog.csdn.net/huangbaokang/article/details/90746719)
+
+1. 修改`my.cnf`
+
+   ```
+   innodb_file_per_table
+   innodb_file_format = Barracuda
+   ```
+
+   > 然后重启
+
+2. 修改表属性
+
+   ```
+   ALTER TABLE $TABLE
+   ENGINE=InnoDB
+   ROW_FORMAT=COMPRESSED 
+   KEY_BLOCK_SIZE=8;
+   ```
+
+在Navicat中传输数据时, 修改出现错误的表:
+
+![image-20210115195802725](.MySQL/image-20210115195802725.png)
+
+传输窗口中勾选下列选项
+
+![image-20210115195847101](.MySQL/image-20210115195847101.png)
+
 # 待学
 
 * 全文索引
