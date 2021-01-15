@@ -527,6 +527,18 @@ docker load -i ./centos.tar
   ```shell
   http://localhost:5000/v2/<name>/tags/list
   ```
+  
+* 踩坑
+
+  新版本Docker与Registry用HTTP2进行交互, 若要用HTTP交互, 修改配置文件`/etc/docker/daemon.json`
+
+  ```json
+  {
+      "insecure-registries": ["registry的IP地址:端口号"]
+  }
+  ```
+
+  > [Http: server gave HTTP response to HTTPS client 解决方法](https://blog.csdn.net/liyin6847/article/details/90599612)
 
 > 参考
 >
