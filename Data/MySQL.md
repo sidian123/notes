@@ -850,6 +850,12 @@ LIMIT [offset,] row_count;
 
   > 与mysqldump相比, mysqlpump是更强大的工具
 
+* 指定数据库备份
+
+  ```shell
+  mysqlpump -u root -p --include-databases=db_tcm_symptom,db_tcm_disease,db_tcm_syndrome --add-drop-database --add-drop-table > all-databases.sql
+  ```
+
 * 恢复
 
   ```shell
@@ -857,6 +863,14 @@ LIMIT [offset,] row_count;
   ```
   
   > 实际上就是执行备份的sql
+  
+* 远程恢复
+
+  ```shell
+  mysql -h host -u root -p < all-databases.sql
+  ```
+
+  > `-P`指定端口
 
 > 参考: [MySQL Backup and Restore Commands for Database Administration](https://www.tecmint.com/mysql-backup-and-restore-commands-for-database-administration/)
 
