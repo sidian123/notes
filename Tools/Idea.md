@@ -234,13 +234,14 @@ Maven项目中, IDEA会用Maven来构建项目, 但不会完全交由Maven构建
   > 如`Ctrl+LMouse`跳转到方法声明处, `Ctrl+Alt+<--`跳回去.
 
 
-## 搜索
+## 搜索&替换
 
 * `Shift->Shift` 搜索文件, Symbol, 类, 动作等.
-
+* `Ctrl+F` 搜索
 * `Ctrl+Shift+F`: 全局搜索代码
+* `Ctrl+R` 替换
+* `Ctrl+Shift+R` 全局替换
 
----------
 ## 窗口
 
 *  `Esc`:move the focus to the editor.
@@ -406,6 +407,10 @@ Idea会自动去`node_modules`中查找eslint的包, 和当前工作目录和父
 
 ![image-20200429095759821](.Idea/image-20200429095759821.png)
 
+## UML生成
+
+https://mp.weixin.qq.com/s/g1xl0JMnEEOYNnEa0rB3fw
+
 #  其他
 
 ## 清除缓存
@@ -523,6 +528,12 @@ java -Dvmarg=111 -jar app.jar 123 234
 `-Dvmarg`是VM参数, `123 234`是程序参数.
 
 > 参考[What's the difference between program arguments and VM arguments?](https://stackoverflow.com/questions/5751851/whats-the-difference-between-program-arguments-and-vm-arguments)
+
+## 全局搜索Ctrl+Shift+F不可用
+
+我的情况是被系统自带的输入法占用了, 关了即可
+
+![image-20200630164630467](.Idea/image-20200630164630467.png)
 
 # 参考
 

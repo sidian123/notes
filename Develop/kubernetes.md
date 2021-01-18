@@ -14,6 +14,9 @@ k8s集群由一个主节点和多个工作节点组成
 ![img](.kubernetes/6534887-ad58ca339c403a4b.png)
 
 * 主节点
+  
+  **The Master is responsible for managing the cluster.** The master coordinates all activities in your cluster, such as scheduling applications, maintaining applications' desired state, scaling applications, and rolling out new updates.
+  
   - **Kube-apiserver** 
   
     Exposes the API. 命令行工具`kubectl`也与之交互
@@ -36,6 +39,8 @@ k8s集群由一个主节点和多个工作节点组成
   
 * 工作节点
 
+  which is an agent for managing the node and communicating with the Kubernetes master.
+
   * **Kubelet**
 
     Agent that ensures containers in a pod are running.
@@ -45,8 +50,12 @@ k8s集群由一个主节点和多个工作节点组成
     Keeps network rules and perform forwarding. Service的映射功能就是kube-proxy提供的.
 
   * **Container runtime** 
-
+  
     Runs containers.
+
+一个K8s集群, 最少要满足3个节点 (1个主节点+2个工作节点). 
+
+> Minikube只需一个节点, 只是个玩具...
 
 ## k8s对象
 
@@ -63,8 +72,11 @@ k8s集群由一个主节点和多个工作节点组成
 
 ### Deployment
 
-* 管理Pods的创建和扩展, 即管理Pod实例个数.
-* Pod健康检查和重启
+* 可类比为应用的部署脚本, 含部署配置信息. 但Deployment提供了应用维护机制, 应用失败后会重启.
+
+* 含Pods配置的信息, 如Pod实例个数. K8s将依据该信息, 动态调整Pod.
+
+* k8s提供一个自愈机制, 根据Deployment配置, 对Pod进行健康检查和失败重启
 
 ### Service
 
@@ -109,7 +121,48 @@ k8s集群由一个主节点和多个工作节点组成
 
 提供在一个集群中划分多个虚拟k8s集群的功能, 用于满足不同环境不同用户使用的隔离需求. 
 
+## Minikube
+
+是Kubernetes的轻量级实现. 启动Minikube时, 会在主机上创建一个虚拟机, 仅部署含一个节点的k8s集群.
+
+* 查看版本
+
+  ```shell
+  minikube version
+  ```
+
+* 启动k8s集群
+
+  ```shell
+  minikube start
+  ```
+
+> [minikube](https://minikube.sigs.k8s.io/docs/start/)
+
+
 # 使用
+
+* 查看kubectl版本
+
+  ```shell
+  kubectl version
+  ```
+
+* 查看集群信息
+
+  ```shell
+  kubectl cluster-info
+  ```
+
+* 查看集群所有节点
+
+  ```shell
+  kubectl get nodes
+  ```
+
+
+
+
 
 # 参考
 

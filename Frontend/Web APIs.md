@@ -106,18 +106,25 @@ DOM接口大致分为两类：DOM核心接口和与html元素相关的接口。D
 
 ----------
 
+* 日志
+
+  * console.log() 通用日志
+  * console.debug() 
+  * console.warn()
+  * console.error()
+    
+  * console.info()
+  
 * 其他
 
   * window.content
 
   * window.onload
 
-  * console.log()
-
   * `Element.scrollTo()` 滚动元素内容, 如平滑滚动
 
     ```javascript
-    element.scrollTo({
+  element.scrollTo({
       top: 100,
       left: 100,
       behavior: 'smooth'
@@ -137,7 +144,7 @@ Window接口表示一个包含了DOM文档的窗口，在浏览器中具体表�
   * `window.outerHeight`窗体总的高度,包含工具栏,滚动条
 * 事件
   *  [resize](https://developer.mozilla.org/en-US/docs/Web/API/Window/resize_event) 窗体大小改变时触发
-*  `window.event` 当前正在处理的事件.
+  *  `window.event` 当前正在处理的事件.
   
 * 滚动
   * `Window.scrollTo()` 滚动条来自window时可用
@@ -307,7 +314,7 @@ button.addEventListener('click',function(event){
 3. `event.eventPhase` – the current phase (capturing=1, bubbling=3).
 4. `event.stopPropagation()`：事件停止向上传播，但在当前元素内可以纵向传播给同一事件的其他处理器。
 5. `event.stopImmediatePropagation()`：停止事件横向、纵向传播。
-6. `event.defaultPrevented()`：阻止默认行为。注意，在html元素的事件处理属性中`return false`也能阻止默认行为，但是在其他地方行不通，因此不建议使用。
+6. `event.preventDefault()`：阻止默认行为。注意，在html元素的事件处理属性中`return false`也能阻止默认行为，但是在其他地方行不通，因此不建议使用。
 
 ### Event bubbling and capture
 
@@ -722,6 +729,20 @@ html5后引入了web storage（本地储存），比cookies更好用。本地存
 
   见[How to get a file or blob from an object URL?](https://stackoverflow.com/questions/11876175/how-to-get-a-file-or-blob-from-an-object-url)
 
+## 表单
+
+* 添加字段
+
+  * `FormData.append()`
+
+    添加字段值, 若值已存在, 则添加到值的集合中.
+
+  * `FormData.set()`
+
+    添加字段值, 若值已存在, 覆盖.
+
+> [FormData](https://developer.mozilla.org/en-US/docs/Web/API/FormData)
+
 # 其他
 
 ## 元素大小与位置
@@ -736,13 +757,13 @@ html5后引入了web storage（本地储存），比cookies更好用。本地存
 
 * 元素自身模型大小
 
-  * `getComputedStyle().height`元素内容的高
+  * `window.getComputedStyle().height`元素内容的高
 
-  * `getComputedStyle().paddingTop`元素的padding高
+  * `window.getComputedStyle().paddingTop`元素的padding高
 
-  * `getComputedStyle().borderTopWidth`或`clientTop`元素的border高
+  * `window.getComputedStyle().borderTopWidth`或`clientTop`元素的border高
 
-  * `getComputedStyle().marginTop`元素的边距高
+  * `window.getComputedStyle().marginTop`元素的边距高
 
     -------
 
@@ -768,7 +789,7 @@ html5后引入了web storage（本地储存），比cookies更好用。本地存
 
     > 因此, 要滚动元素内容时, 可让父元素的`scroll Top`等于滚动到的元素的`offsetTop`值.
 
-  * `getBoundingClientRect().top`元素上方`border`边缘距离视窗上方边缘的距离.
+* `getBoundingClientRect().top`元素上方`border`边缘距离视窗上方边缘的距离.
 
   * ...
 
@@ -797,7 +818,7 @@ html5后引入了web storage（本地储存），比cookies更好用。本地存
 
 * `offsetY`离元素padding边缘的距离
 * `layerY`离元素border边缘的距离
-* `clienty`离视窗边缘的距离
+* `clientY`离视窗边缘的距离
 * `pageY`离整个页面的距离
 * `window.pageYOffset`视窗离页面的距离
 

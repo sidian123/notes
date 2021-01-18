@@ -284,11 +284,14 @@ src和alt必须指定，如果src指定的文件不存在时，会显示alt的�
 在html5中，只有`<iframe>`可用了。
 
 示例：
-	
-	<iframe src="https://www.baidu.com/" height="200" width="300"></iframe>
+```html
+<iframe src="https://www.baidu.com/" height="200" width="300"></iframe>
+```
 
 效果：
+
 <iframe src="https://www.baidu.com/" height="200" width="300"></iframe>
+
 要注意的是，链接`<a>`的target属性可以指定要打开链接的的iframe名字。iframe名字通过name给定。
 
 ## forms and input

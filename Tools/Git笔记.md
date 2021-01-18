@@ -462,6 +462,7 @@ tag分两种:
 - `git tag`以字符顺序显示所有标签名
 - `git tag -l 'v1.8.5*'`显示匹配成功的标签名, 可以使用它通配符.
 - `git show <tagname>`显示某个标签详细信息
+- `git tag --points-at HEAD` 显示当前Commit的标签, 无则为空
 
 ### 添加标签
 
@@ -672,6 +673,22 @@ Git for Windows版除了有git命令, 还附带了终端Git Bash ( 或者叫MinT
 > 如果使用Windows默认终端, 需要自己去配置Unicode字符编码.
 
 > 推荐使用Cmder ,终端更好用, 还自带Git for Windows.
+
+## 版本回退
+
+1. 重置当前分支及Head到之前的提交
+
+   ```shell
+   git reset --hard <tag/branch/commit id>
+   ```
+
+   > 加了`--hard`后, 会同时重置工作区
+
+2. 强制推送
+
+   ```shell
+   git push -f
+   ```
 
 ## 问题
 

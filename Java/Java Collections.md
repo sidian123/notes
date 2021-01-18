@@ -96,6 +96,20 @@
 * **常用算法**
 
    `Collections`提供更多操纵集合的静态方法
+   
+* 集合操作
+
+   * 并集
+
+      ```java
+      col.addAll(set2); // Union
+      ```
+
+   * 交集
+
+      ```java
+      set1.retainAll(set2); // Intersection
+      ```
 
 ## Set
 
@@ -149,6 +163,46 @@
     ```
 
     > 类型信息由参数提供, 且若元素能在参数的数组中存的下, 则存入并返回该参数; 否则新建一个对象.
+    
+  * `List<Integer>` to `int[]`
+  
+    ```java
+    int[] array = list.stream().mapToInt(i->i).toArray();
+    ```
+    
+  * toMap
+  
+    第一种方式, 需保证数组中key唯一, 否则抛出异常
+    
+    ```java
+    Map<Integer, Animal> map = list.stream()
+        .collect(Collectors.toMap(Animal::getId, animal -> animal));
+    return map;
+    ```
+    
+    第二种, key可以冲突, 但需提供value合并的函数
+    
+    ```java
+    Map<String, String> phoneBook people.stream().collect(toMap(Person::getName,
+                                      Person::getAddress,
+                                      (s, a) -> s + ", " + a));
+    ```
+    
+    > 这里将冲突key的value并置起来
+    
+  * List to Tree
+  
+    ```java
+    Map<Integer,Entity> map=list.stream().collect(Collectors.toMap(Entity::getId,Function.identity()));
+    map.values.stream()
+        .filter(entity -> entity.getParentId() != -1)
+        .forEach(entity -> map.get(entity.getParentId()).getChildren().add(entity));
+    return map.values.stream()
+        	   .filter(entity -> entity.getParentId().equals(-1))
+               .collect(Collectors.toList());
+    ```
+    
+    > 其中, 假设`parentId`为`-1`时为根节点.
 
 ## 队列
 
@@ -156,11 +210,11 @@
 
 * 操纵方法: 有两种形式
 
-  | ype of Operation | Throws exception | Returns special value |
-  | ---------------- | ---------------- | --------------------- |
-  | Insert           | `add(e)`         | `offer(e)`            |
-  | Remove           | `remove()`       | `poll()`              |
-  | Examine          | `element()`      | `peek()`              |
+  | Type of Operation | Throws exception | Returns special value |
+  | ----------------- | ---------------- | --------------------- |
+  | Insert            | `add(e)`         | `offer(e)`            |
+  | Remove            | `remove()`       | `poll()`              |
+  | Examine           | `element()`      | `peek()`              |
 
   > 操作失败时的提示方式不同.
 
@@ -271,7 +325,100 @@ A *stream* is a sequence of elements. Unlike a collection, it is not a data stru
     * `allMatch()`
     * `noneMatch()`
 
-## 平行流
+### collect
+
+#### 介绍
+
+`collect()`方法原型
+
+```java
+<R> R collect(Supplier<R> supplier,
+              BiConsumer<R, ? super T> accumulator,
+              BiConsumer<R, R> combiner);
+```
+
+`supplier`提供容器, 流的每个元素都调用`accumulator`存入到容器中; 流可以并行计算, 即容器可能有多个, `combiner`用于两两容器之间融合.
+
+假设只有单容器, 那么上述过程相当于:
+
+```java
+R result = supplier.get();
+for (T element : this stream)
+    accumulator.accept(result, element);
+return result;
+```
+
+例子: `Collectors.toList()`的类似实现
+
+```java
+List<String> asList = stringStream.collect(ArrayList::new, ArrayList::add, ArrayList::addAll);
+```
+
+#### Collectors使用
+
+* 收集元素为List
+
+  ```java
+  List<Apple> filterList = appleList.stream().filter(a -> a.getName().equals("香蕉")).collect(Collectors.toList());
+  ```
+
+* 分组
+
+  将相同属性的元素归为一组
+
+  ```java
+  Map<Integer, List<Apple>> groupBy = appleList.stream().collect(Collectors.groupingBy(Apple::getId));
+  ```
+
+* List To Map
+
+  第一种方式, 需保证数组中key唯一, 否则抛出异常
+
+  ```java
+  Map<Integer, Animal> map = list.stream()
+      .collect(Collectors.toMap(Animal::getId, animal -> animal));
+  return map;
+  ```
+
+  第二种, key可以冲突, 但需提供value合并的函数
+
+  ```java
+  Map<String, String> phoneBook people.stream().collect(toMap(Person::getName,
+                                    Person::getAddress,
+                                    (s, a) -> s + ", " + a));
+  ```
+
+  > 这里将冲突key的value并置起来
+
+* 最大, 最小值
+
+  ```java
+  Optional<Dish> maxDish = Dish.menu.stream().
+        collect(Collectors.maxBy(Comparator.comparing(Dish::getCalories)));
+  maxDish.ifPresent(System.out::println);
+   
+  Optional<Dish> minDish = Dish.menu.stream().
+        collect(Collectors.minBy(Comparator.comparing(Dish::getCalories)));
+  minDish.ifPresent(System.out::println);
+  ```
+
+* 去重
+
+  ```java
+  list.stream().distinct().collect(Collectors.toList());
+  ```
+
+  元素需要实现`equals`方法. 根据元素属性来过滤, 目前没啥好用的方案
+
+### reduce
+
+* 求和
+
+  ```java
+  BigDecimal totalMoney = appleList.stream().map(Apple::getMoney).reduce(BigDecimal.ZERO, BigDecimal::add);
+  ```
+
+## 平行fen流
 
 将流分成子流, 每个子流在单独的线程中执行所有操作, 然后再组合所有子流的结果.
 

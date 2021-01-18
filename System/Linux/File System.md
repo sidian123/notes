@@ -171,23 +171,79 @@ UUID=592dcfd1-58da-4769-9ea8-5f412a896980 none swap sw 0 0
 2. 将置换标志写入到分区：`mkswap device`
 3. 手动注册到内核中：`swapon device`
 
-或者自启时自动注册，在`/etc/fstab`中添加一行：
+> 上述重启配置会消失
 
-```unknow
-/dev/sda5 none swap sw 0 0
-```
+4. 持久化配置
+
+   自启时自动注册，在`/etc/fstab`中添加一行：
+
+   ```
+   /dev/sda5 none swap sw 0 0
+   ```
+
+   > 第一项是分区文件名
 
 ### 文件作为swap space
 
 与上面同理：
 
-1. 创建文件：`dd if=/dev/zero of=swap_file bs=1024k count=num_mb`
-2. 写入置换标志：`mkswap swap_file`
-3. 注册：`swapon swap_file`
+1. 创建文件
+
+   ```shell
+   dd if=/dev/zero of=swap_file bs=1024k count=num_mb
+   ```
+
+   或
+
+   ```shell
+   fallocate -l 8G swap_file
+   ```
+
+2. 写入置换标志
+
+   ```shell
+   mkswap swap_file
+   ```
+
+3. 注册
+
+   ```shell
+   swapon swap_file
+   ```
+
+4. 查看已注册的虚拟内存
+
+   ```shell
+   swapon --show
+   ```
+
+> 上述配置重启后会小时
+
+5. 持久化配置
+
+   自启时自动注册，在`/etc/fstab`中添加一行：
+
+   ```
+   path/to/swapfile none swap sw 0 0
+   ```
+
+   > 第一项是swap文件名
 
 为了禁止使用置换空间，使用`swapoff`，具体方法请查询man手册。
 
+> 新增虚拟内存, 即多挂载一个文件
+>
+> ```shell
+>fallocate -l 16G swapfile
+> mkswap swapfile
+> swapon swapfile
+> ```
+
 ## 其他命令
+
+### 查看磁盘, 分区, 文件系统
+
+https://unix.stackexchange.com/questions/157154/how-to-list-disks-partitions-and-filesystems-in-linux
 
 ### sync
 
@@ -199,19 +255,27 @@ UUID=592dcfd1-58da-4769-9ea8-5f412a896980 none swap sw 0 0
 
 ### du
 
-默认打印当前目录及其所有子目录总大小, 单位KB
+* 介绍
 
->```shell
->du [FILE]...
->```
->
->FILE默认指向当前目录，如果指定文件，则仅打印该文件大小
->
->* `-a`:同时也打印目录内的文件的大小
->
->* `-s`:仅打印FILE的总大小
->
-> > 例子: `du -s *` 将打印当前目录中所有文件和文件夹大小（不打印文件夹中的内容）
+  默认打印当前目录及其所有子目录总大小, 单位KB
+
+* 使用
+
+  ```shell
+  du [FILE]...
+  ```
+
+  FILE默认指向当前目录，如果指定文件，则仅打印该文件大小
+
+  * `-a`:同时也打印目录内的文件的大小
+  * `-s`:仅打印FILE的总大小
+
+* 例子
+
+  ```shell
+  # 将打印当前目录中所有文件和文件夹大小（不打印文件夹中的内容）
+  du -sh *
+  ```
 
 ### fsck
 
@@ -224,6 +288,14 @@ UUID=592dcfd1-58da-4769-9ea8-5f412a896980 none swap sw 0 0
 ### ls -i 和 stat
 
 `ls -i`同时打印inode number；stat打印文件的相关属性。
+
+### fallocate
+
+创建一个指定大小的文件
+
+```shell
+fallocate -l 8G swapfile
+```
 
 # 参考
 

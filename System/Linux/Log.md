@@ -94,6 +94,10 @@ void vsyslog(int priority, const char *format, va_list ap);
   LOG_DEBUG      debug-level message
   ```
 
+# 日志查看
+
+[What are Linux Logs? How to View Them, Most Important Directories, and More](https://stackify.com/linux-logs/#:~:text=Linux%20logs%20can%20be%20viewed,everything%20but%20auth%2Drelated%20messages.)
+
 # 参考
 
 [What is the difference between syslog, rsyslog and syslog-ng?](https://serverfault.com/questions/692309/what-is-the-difference-between-syslog-rsyslog-and-syslog-ng)

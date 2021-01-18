@@ -90,23 +90,81 @@ deb https://dl.winehq.org/wine-builds/ubuntu/ cosmic main
 sudo apt-get update
 ```
 
+# 换源
 
+- **第一步**：使用一个Editor编辑文件，在此使用Vim进行编辑
 
+  ```shell
+  $ sudo vim /etc/apt/sources.list
+  ```
 
+- **第二步**：修改该文件，将该文件中原来的内容全部删除，添加如下内容（此处以阿里源作为示例）
 
+  ```
+  # 阿里源
+  deb http://mirrors.aliyun.com/ubuntu/ bionic main restricted universe multiverse
+  deb http://mirrors.aliyun.com/ubuntu/ bionic-security main restricted universe multiverse
+  deb http://mirrors.aliyun.com/ubuntu/ bionic-updates main restricted universe multiverse
+  deb http://mirrors.aliyun.com/ubuntu/ bionic-proposed main restricted universe multiverse
+  deb http://mirrors.aliyun.com/ubuntu/ bionic-backports main restricted universe multiverse
+  deb-src http://mirrors.aliyun.com/ubuntu/ bionic main restricted universe multiverse
+  deb-src http://mirrors.aliyun.com/ubuntu/ bionic-security main restricted universe multiverse
+  deb-src http://mirrors.aliyun.com/ubuntu/ bionic-updates main restricted universe multiverse
+  deb-src http://mirrors.aliyun.com/ubuntu/ bionic-proposed main restricted universe multiverse
+  deb-src http://mirrors.aliyun.com/ubuntu/ bionic-backports main restricted universe multiverse
+  
+  ```
 
+- 然后使用下面命令更新一下更新一下
 
+  ```shell
+  $ sudo apt update && sudo apt upgrade
+  ```
 
+> 摘抄至https://www.jianshu.com/p/97c35d569aa3
 
+# RPM
 
+常用选项
 
+> －ivh：安装显示安装进度--install--verbose--hash
+> －Uvh：升级软件包--Update；
+> －qpl：列出RPM软件包内的文件信息[Query Package list]；
+> －qpi：列出RPM软件包的描述信息[Query Package install package(s)]；
+>
+> －qa:  查询linux系统中安装的所有软件；
+> －qf：查找指定文件属于哪个RPM软件包[Query File]；
+> －Va：校验所有的RPM软件包，查找丢失的文件[View Lost]；
+> －e：删除包
 
+> 参考[RPM 使用详解](https://blog.csdn.net/du_minchao/article/details/51671674)
 
+# dpkg
 
+```
+安装deb软件包 dpkg -i xxx.deb
 
-
-
-
+删除软件包 dpkg -r xxx.deb
+ 
+连同配置文件一起删除 dpkg -r --purge xxx.deb
+ 
+查看软件包信息 dpkg -info xxx.deb
+ 
+查看文件拷贝详情 dpkg -L xxx.deb
+ 
+查看系统中已安装软件包信息 dpkg -l
+ 
+重新配置软件包 dpkg-reconfigure xx
+ 
+sudo dpkg -p package_name卸载软件包及其配置文件，但无法解决依赖关系！
+ 
+sudo aptitude purge pkgname卸载软件包及其配置文件与依赖关系包！ 
+ 
+清除所有已删除包的残馀配置文件
+dpkg -l |grep ^rc|awk '{print $2}' |sudo xargs dpkg -P
+ 
+如果报如下错误，证明你的系统中没有残留配置文件了，无须担心。
+```
 
 
 

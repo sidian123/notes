@@ -97,11 +97,15 @@
      sudo bin/mysqld --initialize --user=mysql
      ```
      
+     > 若控制台未打印, 则可查看`data/`下的`mysql.err`文件
+     
    * `-initialize-insecure`: root账户无密码
 
      ```bash
      bin/mysqld --initialize-insecure --user=mysql
      ```
+
+   > 可更改数据目录, 如`--datadir=/data/mysql`
 
    > 注意!!!
    >
@@ -187,6 +191,12 @@
     sudo systemctl start mysqld.service # 现在启动mysqld
     ```
     
+    > 或(Sys V方式)
+    >
+    > ```shell
+    > service mysql start
+    > ```
+    
     大功告成!
     
     
@@ -195,6 +205,48 @@
 >
 > * [Installing and Upgrading MySQL](<https://dev.mysql.com/doc/refman/8.0/en/installing.html>) : 简述安装的大致步骤
 > * [Postinstallation Setup and Testing](<https://dev.mysql.com/doc/refman/8.0/en/postinstallation.html>) : 初始化设置
+
+-------------
+
+一个供参考的配置文件
+
+```conf
+[mysqld]
+bind-address=0.0.0.0
+port=3306
+user=mysql
+basedir=/usr/local/mysql
+datadir=/data/mysql
+socket=/tmp/mysql.sock
+log-error=/data/mysql/mysql.err
+pid-file=/data/mysql/mysql.pid
+# Disabling symbolic-links is recommended to prevent assorted security risks
+symbolic-links=0
+#character config
+character_set_server=utf8mb4
+explicit_defaults_for_timestamp=true
+wait_timeout=31536000
+interactive_timeout=31536000
+net_read_timeout=6000
+net_write_timeout=6000
+max_connections=1000
+# Settings user and group are ignored when systemd is used.
+# If you need to run mysqld under a different user or group,
+# customize your systemd unit file for mariadb according to the
+# instructions in http://fedoraproject.org/wiki/Systemd
+
+# 设置SQL模式
+sql_mode =STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION
+
+[mysqld_safe]
+#log-error=/var/log/mariadb/mariadb.log
+#pid-file=/var/run/mariadb/mariadb.pid
+
+#
+# include all files from the config directory
+#
+!includedir /etc/my.cnf.d
+```
 
 # 三 基础
 
@@ -217,11 +269,17 @@
   ```
 
 * 在mysql中退出
-* 
+
   ```mysql
-	quit
-	# 或
-	exit
+  quit
+  # 或
+  exit
+  ```
+
+* 连接的时候同时指定密码
+
+  ```
+  mysql -u root -p123456
   ```
 
 ## 查询常识
@@ -573,6 +631,14 @@ LIMIT [offset,] row_count;
   ```
 
   ![image-20191115125035531](.MySQL/image-20191115125035531.png)
+  
+* SQL Mode配置, 避免出现`ONLY_FULL_GROUP_BY`的问题
+
+  `my.cnf`
+
+  ```
+  sql_mode =STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION
+  ```
 
 # 五 权限控制
 
@@ -603,6 +669,21 @@ LIMIT [offset,] row_count;
   CREATE USER 'user_name'@'host_name' IDENTIFIED BY 'your_password';
   ```
 
+* 修改密码
+
+    ```shell
+    use mysql;
+    ALTER USER 'root'@'localhost' IDENTIFIED BY '要修改的密码';
+    ```
+
+* 修改用户host
+
+    > 仅Mysql 8可用, Mysql5.7可考虑创建新账号, 如`root@%`
+
+    ```shell
+    update user set host = "%" where user='root';
+    ```
+
 * 角色: 略
 
 * 授权: 这里直接给出授权一个数据库所有权限的例子
@@ -611,9 +692,11 @@ LIMIT [offset,] row_count;
   GRANT ALL ON db_name.* TO 'user_name'@'host_name';
   ```
 
-  然后让服务器重新加载权限表
+* **刷新**(重要!!!!!!)
 
-  ```mysql
+  修改权限或账号后, 请让服务器重新加载权限表
+
+  ```shell
   FLUSH PRIVILEGES;
   ```
 
@@ -695,7 +778,7 @@ LIMIT [offset,] row_count;
   | `char(M)`或`character(M)` | 定长字符串. `M`范围0到255个, 默认1                           |
   | `varchar(M)`              | 可变长字符串. **字节**大小不能超过2^16^-1, <br />通过一个2字节前缀记录长度.<br />一个例子, 假设每个utf-8字符占3字节, 则`M`最大值为21833. |
   | `tinytext`                | 可变长字符串, 字节大小不超过2^8^-1, 1字节前缀记录长度        |
-  | `text(M)`                 | 可变长字符串, 字节大小不超过2^16^-1, 2字节前缀记录长度<br />和`varchar(M)`一模一样??!! |
+  | `text(M)`                 | 可变长字符串, 字节大小不超过2^16^-1, 2字节前缀记录长度<br />与`varchar(M)`类似, 但`M`是可选的, 且退化为定长字符串 |
   | `mediumtext`              | 可变长字符串, 字节代销不超过2^24^-1, 3字节前缀               |
   | `longtext`                | 可变, 不超过2^32^-1, 4字节前缀                               |
 
@@ -714,10 +797,72 @@ LIMIT [offset,] row_count;
 
 * `enum`, `set`略
 
+# 函数
+
+> 参考 [Reference](https://dev.mysql.com/doc/refman/8.0/en/sql-function-reference.html)
+
+## 时间
+
+*  [`FROM_UNIXTIME()`](https://dev.mysql.com/doc/refman/8.0/en/date-and-time-functions.html#function_from-unixtime) 转化时间戳 (单位s) 为Date
+
+  ```sql
+  SELECT FROM_UNIXTIME(1447430881);
+          -> '2015-11-13 10:08:01'
+  ```
+
+* [`UNIX_TIMESTAMP()`](https://dev.mysql.com/doc/refman/8.0/en/date-and-time-functions.html#function_unix-timestamp) 转化Date为时间戳 (单位s)
+
+  ```sql
+  SELECT UNIX_TIMESTAMP('2005-03-27 03:00:00');
+  ```
+
+
+## 组
+
+* [`GROUP_CONCAT(*`expr`*)`](https://dev.mysql.com/doc/refman/8.0/en/aggregate-functions.html#function_group-concat) 合并组的元素
+
+# 命令
+
+## mysql
+
+* `-u` 用户名
+* `-p` 密码, 可空着, 之后会提示填. 或写在命令行上, 但与`-p`之间不能有空格
+* `-P` Server端口
+* `-h` Server地址
+
+## 备份与恢复
+
+* 备份所有数据库
+
+  ```shell
+  mysqldump -u root -p --ignore-table=mysql.innodb_index_stats --ignore-table=mysql.innodb_table_stats --all-databases > all-databases.sql
+  ```
+
+  > `innodb_index_stats`和`innodb_table_stats`表在恢复时会报错, 所以备份时需要忽略
+
+* 迁移数据
+
+  ```shell
+  mysqlpump -u root -p  --exclude-databases=information_schema,mysql,performance_schema,sys  --all-databases --add-drop-database --add-drop-table > all-databases.sql
+  ```
+
+  > 一般迁移, 仅迁移数据的吧, 就不备份系统数据库了.
+
+  > 与mysqldump相比, mysqlpump是更强大的工具
+
+* 恢复
+
+  ```shell
+  mysql -u root -p < all-databases.sql
+  ```
+  
+  > 实际上就是执行备份的sql
+
+> 参考: [MySQL Backup and Restore Commands for Database Administration](https://www.tecmint.com/mysql-backup-and-restore-commands-for-database-administration/)
+
 # 其他
 
 * 对于大文件，经常访问的可以存入数据库，数据库有对应字段，应该是优化过了的，为大字段单独存一张表应该没必要。但是不经常访问，或则实在太大了，则放入文件中。
-
 * utf8 vs. utf8mb4 : UTF-8是一种可变长编码方式, 字符可由1到4个字节编码. 但在MySQL中的UTF-8实际上最多只存3个字节, 实际上是utf8mb3, 仅涵盖BMP编码集; 而utf8mb4能够存四字节编码的字符.
 * 导入导出方法: [`LOAD DATA`](https://dev.mysql.com/doc/refman/8.0/en/load-data.html) and [`SELECT ... INTO OUTFILE`](https://dev.mysql.com/doc/refman/8.0/en/select-into.html) , 受[secure_file_priv](<https://dev.mysql.com/doc/refman/8.0/en/server-system-variables.html#sysvar_secure_file_priv>)变量影响
 
@@ -725,7 +870,7 @@ LIMIT [offset,] row_count;
 
 MySQL变量分为系统变量和会话变量. 
 
-系统变量操作:
+### 系统变量
 
 * 查看所有系统变量
 
@@ -747,7 +892,7 @@ MySQL变量分为系统变量和会话变量.
   mysql> SELECT @@GLOBAL.time_zone;
   ```
 
-会话变量操作:
+### 会话变量
 
 * 查看所有会话变量: ??? 不会
 
@@ -765,14 +910,22 @@ MySQL变量分为系统变量和会话变量.
   SELECT @@SESSION.time_zone;
   ```
 
-> 其他的以后补充了
+### 其他
+
+* 模糊查询
+
+  ```shell
+  show variables like '%Aborted%';
+  ```
+
+  
 
 ## 连接参数
 
 在编程语言中, 连接MySQL server需要提供URL, 常用URL如
 
 ```url
-jdbc:mysql://localhost:3306/database_name?useSSL=false&serverTimezone=GMT%2B8&allowPublicKeyRetrieval=true&createDatabaseIfNotExist=true
+jdbc:mysql://localhost:3306/database_name?useSSL=false&serverTimezone=GMT%2B8&allowPublicKeyRetrieval=true&createDatabaseIfNotExist=true&charset=utf8
 ```
 
 * `useSSL`是否使用安全套接字
@@ -785,11 +938,19 @@ jdbc:mysql://localhost:3306/database_name?useSSL=false&serverTimezone=GMT%2B8&al
 
 * `createDatabaseIfNotExist` 若数据库不存在, 则自动创建
 
+* `charset`设置字符编码
+
 > <span style="color:red">注意</span>, 如果出现链接错误, 可能是`useSSL`造成的, 其他选项可以不用, 仅设置时区也行.
 >
 > ```
 > jdbc:mysql://localhost:3306/database_name?serverTimezone=GMT%2B8
 > ```
+
+> 参考:
+>
+> * [Connection URL Syntax](https://dev.mysql.com/doc/connector-j/8.0/en/connector-j-reference-jdbc-url-format.html)
+>
+> * [Configuration Properties](https://dev.mysql.com/doc/connector-j/8.0/en/connector-j-reference-configuration-properties.html)
 
 # 坑
 
@@ -837,6 +998,43 @@ max_connections=1000
 [Service]
 LimitNOFILE = 65535
 ```
+
+## sql_mode
+
+```
+# 设置SQL模式
+sql_mode =STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION
+```
+
+## Row size too large (> 8126)
+
+> 参考[mysql错误：Row size too large (> 8126).](https://blog.csdn.net/huangbaokang/article/details/90746719)
+
+1. 修改`my.cnf`
+
+   ```
+   innodb_file_per_table
+   innodb_file_format = Barracuda
+   ```
+
+   > 然后重启
+
+2. 修改表属性
+
+   ```
+   ALTER TABLE $TABLE
+   ENGINE=InnoDB
+   ROW_FORMAT=COMPRESSED 
+   KEY_BLOCK_SIZE=8;
+   ```
+
+在Navicat中传输数据时, 修改出现错误的表:
+
+![image-20210115195802725](.MySQL/image-20210115195802725.png)
+
+传输窗口中勾选下列选项
+
+![image-20210115195847101](.MySQL/image-20210115195847101.png)
 
 # 待学
 

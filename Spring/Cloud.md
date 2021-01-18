@@ -86,9 +86,23 @@ Spring Cloud使用Rest API作为微服务之间调用的接口, 可以使用`Res
 
 内容暂且学习到这里, 还有什么Spring Cloud Config外置配置文件等什么的, 以后待学.
 
-# 三 Eureka
+## 基础
 
-## 介绍
+* 引入和Cloud相关的组件, 都会引入`spring-cloud-starter`包.
+
+* [Bootstrap Application Context](https://cloud.spring.io/spring-cloud-commons/reference/html/#the-bootstrap-application-context)
+
+  Spring Cloud中有两个上下文, bootstrap context是main context的parent context, 负责加载外部配置. 如Spring Config, Nacos Config, 就是这个过程的实现.
+
+  bootstrap context对应的配置为`bootstrap.yml`或`bootstrap.properties`, 主要用于配置外部配置服务的地址. 
+
+  两个上下文都共享`Environment`, 但bootstrap阶段加载的属性优先级要高于main context.
+
+# 服务注册,发现,配置
+
+## Eureka
+
+### 介绍
 
 ![Eureka High level Architecture](.Cloud/eureka_architecture.png)
 
@@ -107,14 +121,14 @@ client获取到注册信息后, 会**缓存**起来, 默认每隔30秒会重新�
 
 如果一段时间内, 大量已注册的client已不正常的方式结束(无心跳), 那么server会进入**自我保护模式**, 这些client的信息被保护起来, 并不被删除. 
 
-## 配置
+### 配置
 
 Eureka配置分为两类:
 
 * [eureka.instance.*](https://github.com/spring-cloud/spring-cloud-netflix/blob/master/spring-cloud-netflix-eureka-client/src/main/java/org/springframework/cloud/netflix/eureka/EurekaInstanceConfigBean.java)和注册相关的配置
 * [eureka.client.*](https://github.com/spring-cloud/spring-cloud-netflix/blob/master/spring-cloud-netflix-eureka-client/src/main/java/org/springframework/cloud/netflix/eureka/EurekaClientConfigBean.java)和获取(查询)注册信息相关的配置
 
-### Server端
+#### Server端
 
 * 引入Eureka服务:
 
@@ -212,7 +226,7 @@ Eureka配置分为两类:
 
     `hostname`一般只在server之间使用, client指向server时可用ip指向server. 可以通过编辑本地`/etc/hosts`文件提供给server域名. 也可以设置`preferIpAddress`为`true`, 此时, 不同提供server`hostname`属性, 会自动从系统中获取第一个非环路ip地址.
 
-### Client端
+#### Client端
 
 * 引入: 只需添加依赖即可
 
@@ -267,6 +281,112 @@ Eureka配置分为两类:
 
   > 除此之外, 还有Feign, 它也是访问Rest API的客户端, 比`RestTemplate`更为方便, 但有限制, 详细见下.
 
+## Nacos
+
+Nacos同时提供了服务注册,发现与配置中心的功能.
+
+### 安装
+
+* 从 [最新稳定版本](https://github.com/alibaba/nacos/releases) 下载zip包
+
+* 启动
+
+  ```shell
+  cd nacos/bin
+  sh startup.sh -m standalone # linux
+  # cmd startup.cmd -m standalone # windows
+  ```
+
+* 打开控制台
+
+  ```
+  http://localhost:8848/nacos/index.html
+  ```
+
+* 关于数据库
+
+  默认使用内存数据库, 关闭时, 会持久化数据到本地.
+
+### Nacos Discovery
+
+* 依赖引入
+
+  ```xml
+  <dependency>
+      <groupId>com.alibaba.cloud</groupId>
+      <artifactId>spring-cloud-starter-alibaba-nacos-discovery</artifactId>
+  </dependency>
+  ```
+
+* 配置
+
+  ```properties
+  # 服务名
+  spring.application.name=nacos-provider
+  # nacos地址
+  spring.cloud.nacos.discovery.server-addr=127.0.0.1:8848
+  ```
+
+* 启动发现客户端
+
+  ```java
+  @EnableDiscoveryClient
+  ```
+
+* 使用
+
+  * 支持Feign用服务名调用.
+  * 以Ribbon为负载均衡器
+  * `RestTemplate`注入时, 需加上`@LoadBalanced`注解才能用服务名.
+
+### Nacos Config
+
+* 依赖引入
+
+  ```xml
+  <dependency>
+      <groupId>com.alibaba.cloud</groupId>
+      <artifactId>spring-cloud-starter-alibaba-nacos-config</artifactId>
+  </dependency>
+  ```
+
+* 配置
+
+  `bootstrap.properties`
+
+  ```properties
+  spring.application.name=nacos-config
+  spring.cloud.nacos.config.server-addr=127.0.0.1:8848
+  # 文件类型, 默认properties
+  # spring.cloud.nacos.config.file-extension=yaml
+  ```
+
+  > 上述配置必须写入`bootstrap.properties`中.
+
+* 配置文件加载
+
+  配置文件由`DataId`,`Group`,`namespace`确定. 一般我们填`DataId`即可, 其他的默认.
+
+  应用启动后会加载`DataId`为`${spring.application.name}. ${file-extension:properties}`的配置; 
+
+  若使用了profile, 则还会加载`${spring.application.name}-${profile}. ${file-extension:properties}`
+  
+* 配置刷新
+
+  当Nacos上的配置更新后, 会刷新到对应的客户端中. 
+
+  若要刷新依赖该配置的Bean的属性值, 需要加上注解`@RefreshScope`
+
+  > 至于Bean刷新后, 怎么通知Bean, 尚无好的方法.
+
+### 参考
+
+* [Nacos官网](https://nacos.io/zh-cn/index.html)
+
+  
+
+
+
 # 四 Ribbon
 
 集群后, 需要一个负载均衡器将访问请求平摊在每个服务上, 达到高可用的目的. 
@@ -287,7 +407,17 @@ Ribbon属于客户端负载均衡器, 默认与Eureka集成在一起, 因此存�
 </dependency>
 ```
 
-使用: 一般都是`RestTemplate`通过服务名访问, ribbon会从查询eureka获取的所有服务注册信息, 然后以负载均衡的方式选择一个微服务并访问. 默认算法采用轮询. 具体使用见第三章.
+使用: 一般都是`RestTemplate`通过服务名访问, ribbon会从查询eureka获取的所有服务注册信息, 然后以负载均衡的方式选择一个微服务并访问. 默认算法采用轮询. 
+
+`RestTemplate`需要手动注入
+
+```java
+@LoadBalanced
+@Bean
+RestTemplate restTemplate() {
+    return new RestTemplate();
+}
+```
 
 > 也可以使用Feign, Feign也默认Ribbon作为负载均衡器.
 
@@ -308,12 +438,20 @@ Feign是一个**声明式**的Rest API的客户端, 支持Spring MVC的注解, �
 </dependency>
 ```
 
+启用Feign
+
+```java
+@EnableFeignClients
+```
+
 ## 使用
+
+### API声明
 
 只需写Rest API对应的接口+注解, 然后在接口上加上`@FeignClient`, 如
 
 ```java
-@FeignClient(value = "service-client",fallback = Fallback.class,path = "/user")
+@FeignClient(name = "service-client",fallback = Fallback.class,path = "/user")
 @ResponseBody
 public interface UserService {
     @GetMapping("/")
@@ -329,15 +467,64 @@ public interface UserService {
 
 然后注入该bean并使用即可.
 
+* `name` 服务名
+* `path` 微服务的上下文
+
+* `url` 不存在服务发现时, 服务的具体url前缀, 如`http://localhost:8080/user`
+
+  > `path`与`url`在不同情况下, 仅设置一个即可. 
+
 > `path="/user"`相当于`@RequestMapping("/user")`
 >
 > `fallback`属性是配置Hystrix的, 见下节
 >
 > 但仅仅只用Feign, 无Hystrix时, 可以直接拷贝其他微服务controller的接口, 可以使用`@RestController`和`@RequestMapping`注解. 但存在Hystrix时, 只能使用上述方式, 见下节.
 
-# 六 Hystrix
+-----
 
-## 介绍
+### 方法参数
+
+ 需要使用对应注解修饰, 表示参数传递方式. 如`@RequestParam`, 否则会默认为请求体参数.
+
+### 头字段
+
+```java
+HttpResponse<List<TcmTermVO>> getTermList(
+    @RequestParam(name = "term") String term,
+	@RequestHeader("appId") String appId,
+    @RequestHeader("appKey") String appKey
+);
+```
+
+## 拦截器
+
+* 请求处理器
+
+  https://www.baeldung.com/spring-cloud-openfeign
+
+* 响应处理器
+
+  https://stackoverflow.com/questions/31722478/spring-cloud-feign-interceptor
+
+  > Feign没有提供真正的响应处理器, 而是通过了更底层的方式来实现的.
+
+# 六 限流,熔断,降级
+
+## 概念
+
+- **服务限流** ：当系统资源不够，不足以应对大量请求，对系统按照预设的规则进行流量限制或功能限制
+- **服务熔断**：当调用目标服务的请求和调用大量超时或失败，服务调用方为避免造成长时间的阻塞造成影响其他服务，后续对该服务接口的调用不再经过进行请求，直接执行本地的默认方法
+- **服务降级**：为了保证核心业务在大量请求下能正常运行，根据实际业务情况及流量，对部分服务降低优先级，有策略的不处理或用简单的方式处理
+
+服务降级的实现可以基于人工开关降级（秒杀、电商大促等）和自动检测（超时、失败次数、故障），熔断可以理解为一种服务故障降级处理
+
+> 为什么需要限流降级
+>
+> 系统承载的访问量是有限的，如果不做流量控制，会导致系统资源占满，服务超时，从而所有用户无法使用，通过服务限流控制请求的量，服务降级省掉非核心业务对系统资源的占用，最大化利用系统资源，尽可能服务更多用户
+
+## Hystrix
+
+### 介绍
 
 当被调用的微服务出现某种问题或直接停止时, 一般会导致调用者超时或抛出异常, 造成该生态系统不够稳定. 
 
@@ -351,7 +538,7 @@ Hystrix就是用来解决这个问题, 当一个服务出现问题时, 会将执
 
 因为Hystrix在Feign中使用起来极其方便, 因此这里只介绍Feign下的Hystrix使用.
 
-## 引入
+### 引入
 
 加入依赖
 
@@ -370,7 +557,7 @@ feign:
     enabled: true
 ```
 
-## 使用
+### 使用
 
 延续第五章的话题, `@FeignClient`的`fallback`属性指定微服务调用异常时执行的类, 如
 
@@ -417,7 +604,7 @@ public class Fallback implements UserService {
 
 之后Feign接口的哪个方法异常了, 就执行实现类`Fallback`对应的方法.
 
-## 注意点
+### 注意点
 
 之前说了, Feign与Hystrix搭配使用时有几个坑要注意.
 
@@ -428,6 +615,220 @@ public class Fallback implements UserService {
 第二, 使用`@FeignClient`的`path`属性来代替`@RequestMapping`, 也会造成上述问题.
 
 > 为啥会这样? 不知道...
+
+## Sentinel
+
+### 开始
+
+#### 介绍
+
+Sentinel 是面向分布式服务架构的流量控制组件，主要以流量为切入点，从限流、流量整形、熔断降级、系统负载保护、热点防护等多个维度来帮助开发者保障微服务的稳定性。
+
+#### 概念
+
+* 资源
+
+  可以是 Java 应用程序中的任何内容，例如，由应用程序提供的服务，或由应用程序调用的其它应用提供的服务，甚至可以是一段代码。
+
+* 规则
+
+  围绕资源的实时状态设定的规则，可以包括流量控制规则、熔断降级规则以及系统保护规则。所有规则可以动态实时调整。
+
+* 服务限流
+
+  当系统资源不够，不足以应对大量请求，对系统按照预设的规则进行流量限制或功能限制
+
+* 服务降级
+
+  为了保证核心业务在大量请求下能正常运行，根据实际业务情况及流量，对部分服务降低优先级，有策略的不处理或用简单的方式处理
+
+* 服务熔断
+
+  当调用目标服务的请求和调用大量超时或失败，服务调用方为避免造成长时间的阻塞造成影响其他服务，后续对该服务接口的调用不再经过进行请求，直接执行本地的默认方法
+
+> 服务降级的实现可以基于人工开关降级（秒杀、电商大促等）和自动检测（超时、失败次数、故障），熔断可以理解为一种服务故障降级处理
+
+> 为什么需要限流降级
+>
+> 系统承载的访问量是有限的，如果不做流量控制，会导致系统资源占满，服务超时，从而所有用户无法使用，通过服务限流控制请求的量，服务降级省掉非核心业务对系统资源的占用，最大化利用系统资源，尽可能服务更多用户
+
+### 功能
+
+#### 流量控制
+
+- QPS流量控制
+
+  - 介绍
+
+    当 QPS 超过某个阈值的时候，则采取措施进行流量控制
+
+  - 流控效果
+
+    - 直接拒绝(默认) (`RuleConstant.CONTROL_BEHAVIOR_DEFAULT`)
+
+      当QPS超过阈值后, 新的请求被拒绝, 将抛出`FlowException`异常
+
+      > 当进行压测, 知道系统处理上限后, 可设置该效果, 防止系统奔溃
+
+    - Warm Up (`RuleConstant.CONTROL_BEHAVIOR_WARM_UP`)
+
+      冷启动, QPS可缓慢增加, 若流量突增, 则将在一个预热时间内, QPS将逐渐增加到阈值(超过QPS的会被拒绝).
+
+      > 用于启动需要额外开销的场景，例如建立数据库连接等。
+
+    - 匀速排队 (`RuleConstant.CONTROL_BEHAVIOR_RATE_LIMITER`)
+
+      以固定间隔时间让请求通过, 若当前请求与上个通过了的请求间隔大于预设值, 则通过; 否则, 排队等待处理. 若请求等待的时间大于最长排队等待时间, 则拒绝.
+
+- 并发线程数控制
+
+  当访问某个资源的并发数超过某个阈值的时候, 采取错失进行流量控制. 流控效果同上.
+
+- 基于调用关系的流量控制
+
+#### 熔断降级
+
+熔断策略
+
+- 慢调用比例 (`SLOW_REQUEST_RATIO`)
+
+  在一段时间内(`statIntervalMs`), 若请求数量大于熔断最小触发数(`minRequestAmount`), 且慢调用 (响应时间大于允许范围)比例大于阈值, 则熔断.
+
+- 异常比列 (`ERROR_RATIO`)
+
+  在一段时间内(`statIntervalMs`), 若请求数量大于熔断最小触发数(`minRequestAmount`), 且异常 (执行异常)比例大于阈值, 则熔断.
+
+- 异常数 (`ERROR_COUNT`)
+
+  在一段时间内(`statIntervalMs`), 若请求数量大于熔断最小触发数(`minRequestAmount`), 且异常数大于阈值, 则熔断.
+
+#### 系统自适应限流
+
+#### 实时监控
+
+控制台提供的功能
+
+![image-20201115185853208](.Cloud/image-20201115185853208.png)
+
+
+
+### 使用
+
+#### 控制台
+
+* 从 [release 页面](https://github.com/alibaba/Sentinel/releases) 下载最新Jar
+
+* 启动
+
+  ```shell
+  java -Dserver.port=8849 -jar sentinel-dashboard.jar
+  ```
+
+  `server.port`指定控制台端口
+
+  > [wiki](https://github.com/alibaba/Sentinel/wiki/)上的其他参数, 如`csp.sentinel.dashboard.server`, 是为了将自己注册到控制台中, 不是必须的.
+
+* 鉴权
+
+  默认账号密码为`sentinel/sentinel` 可同过如下参数修改
+
+  ```
+  sentinel.dashboard.auth.username=sentinel
+  Dsentinel.dashboard.auth.password=123456
+  ```
+
+* [控制台集成版](https://github.com/CHENZHENNAME/sentinel-dashboard-nacos)
+
+  允许在dashboard上修改, 持久化到Nacos中. 比原版的Dashboard多了两个参数:
+
+  * `nacos.serverAddr` Nacos地址
+  * `nacos.namespace` Nacos名字空间, 一般不填.
+
+#### 客户端引入
+
+* 依赖
+
+  ```xml
+  <dependency>
+      <groupId>com.alibaba.cloud</groupId>
+      <artifactId>spring-cloud-starter-alibaba-sentinel</artifactId>
+  </dependency>
+  ```
+
+* 配置
+
+  ```properties
+  # sentinel的http server与dashboad交互的端口
+  # spring.cloud.sentinel.transport.port=8719
+  # dashboard地址
+  spring.cloud.sentinel.transport.dashboard=localhost:8849
+  ```
+
+  `transport.port`定义了sentinel的http server与dashboard交互的地址, 当dashboard更新了规则后, 会通过该端口, 推送到sentinel中.
+
+* 资源声明
+
+  资源声明有多种方式, 这里使用最方便的注解定义方式`@SentinelResource`, 常用参数如下:
+
+  * `value` 资源名称, 必填
+  * `blockHandler` 资源请求被阻塞时执行的处理器.
+
+  ```java
+  @RestController
+  public class TestController {
+      @GetMapping(value = "/hello")
+      @SentinelResource("hello")
+      public String hello() {
+          return "Hello Sentinel";
+      }
+  }
+  ```
+
+* 规则定义
+
+  不建议直接硬编码. 建议通过控制台实时查看并设置规则
+
+#### 规则持久化&自定义数据源
+
+当控制台或服务器重启后, 在控制台设置的规则将消失, 因为规则都存在内存中
+
+一般情况下的规则推送:
+
+![image-20201115201304963](.Cloud/image-20201115201304963.png)
+
+接下来将配置成: Dashboard推动到配置中心, 配置中心更新到应用, 如下所示
+
+![image-20201115201519969](.Cloud/image-20201115201519969.png)
+
+客户端需要添加Nacos数据源的配置
+
+```properties
+spring.cloud.sentinel.datasource.ds.nacos.server-addr=${nacos.address}
+spring.cloud.sentinel.datasource.ds.nacos.dataId=${spring.application.name}-flow-rules
+spring.cloud.sentinel.datasource.ds.nacos.groupId=SENTINEL_GROUP
+# 数据格式, JSON
+spring.cloud.sentinel.datasource.ds.nacos.data-type=json
+# 规则类型, 如流控规则
+spring.cloud.sentinel.datasource.ds.nacos.rule-type=flow
+```
+
+Dashboard未提供持久化到Nacos的功能, 需要自己定制, 但github上已有改好的[控制台集成版](https://github.com/CHENZHENNAME/sentinel-dashboard-nacos) , 启动时要告知nacos地址, 如
+
+```shell
+java -Dserver.port=8849 -Dnacos.serverAddr=localhost:8848 -jar sentinel-dashboard.jar
+```
+
+### 小结
+
+流量防护功能十分强大, 支持多种方式限流, 能够保护应用被突发的流量冲垮. 且支持控制台实时监控, 和可视化定义规则.
+
+但Sentinel客户端与Dashboard的交互依赖与Sentinel自己启动的Http Server, 需要额外占用一个端口. 这对运维来说, 带来了不便. 
+
+### 参考
+
+* [如何使用](https://github.com/alibaba/Sentinel/wiki/%E5%A6%82%E4%BD%95%E4%BD%BF%E7%94%A8)
+
+* [spring-cloud-alibaba的wiki](https://github.com/alibaba/spring-cloud-alibaba/wiki/Sentinel)
 
 # 七 Zuul
 
@@ -677,7 +1078,6 @@ public class IpFilter extends ZuulFilter {
 ## 参考
 
 * [zuul学习四：zuul 过滤器详解](https://www.jianshu.com/p/ff863d532767)
-
 * [Router and Filter: Zuul](https://cloud.spring.io/spring-cloud-static/spring-cloud-netflix/2.2.2.RELEASE/reference/html/#router-and-filter-zuul)
 
 # 杂乱的学习笔记(非重点)

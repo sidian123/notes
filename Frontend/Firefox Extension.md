@@ -150,11 +150,35 @@
   * 使用API前, 需在`manifest.json`中声明权限
   * 以`browser`为名字空间, 同时也支持`chrome`作为名字空间; 支持异步回调, 支持promises
 
-* API 列表
+* `windows`
 
-  ...
+  与浏览器窗口交互, 可以打开, 关闭, 修改窗口
 
-> 参考[JavaScript APIs](https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/API)
+  * [`windows.getCurrent()`](https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/API/windows/getCurrent)
+
+    获取当前窗口
+
+  * [`windows.update()`](https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/API/windows/update)
+
+    更新窗口属性
+
+* 参考
+
+  [JavaScript APIs](https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/API)
+
+# 其他
+
+## 发布时上传失败
+
+报错
+
+```
+manifest.json was not found
+```
+
+解决方案: 选中所有项目文件, 然后打包成`zip`文件. 不是把项目的根目录打包成`zip`文件
+
+> 参考[Missing manifest.json when uploading Firefox Add-on to AMO](https://stackoverflow.com/questions/41005258/missing-manifest-json-when-uploading-firefox-add-on-to-amo)
 
 # 参考
 

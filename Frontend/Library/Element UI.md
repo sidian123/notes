@@ -56,6 +56,19 @@ Vue.use(ElementUI);
 
   > 一般设置`multiple`允许多选；设置`default-first-option`允许回车选择第一个
 
+使用Demo
+
+```vue
+<el-select v-model="symptomDialog.item.name"
+           filterable remote reserve-keyword allow-create default-first-option
+           :remote-method="symptomDialog.fields.symptom.remoteMethod.bind(symptomDialog.fields.symptom)"
+           :loading="symptomDialog.fields.symptom.loading">
+    <el-option v-for="(option,index) in symptomDialog.fields.symptom.options"
+               :key="index" :label="option.term" :value="option.term">
+    </el-option>
+</el-select>
+```
+
 ## Upload
 
 文件上传控件，需放入子元素，才能触发文件选择。通过`list-type`属性，可设置已上传文件的列表样式。如果不满意，可自行禁止列表`show-file-list`，然后自定义子元素。详细见文档的例子User avatar upload。
@@ -267,6 +280,39 @@ rules : {
   }
   ```
 
+  下面给出Element UI中的使用
+
+  ```javascript
+  ...
+  
+  var validatePass2 = (rule, value, callback) => {
+      if (value === '') {
+          callback(new Error('请再次输入密码'));
+      } else if (value !== this.ruleForm.pass) {
+          callback(new Error('两次输入密码不一致!'));
+      } else {
+          callback();
+      }
+  };
+  
+  ...
+  rules: {
+      pass: [
+          { validator: validatePass, trigger: 'blur' }
+      ],
+      checkPass: [
+          { validator: validatePass2, trigger: 'blur' }
+      ],
+      age: [
+         { validator: checkAge, trigger: 'blur' }
+      ]
+  }
+  
+  ...
+  ```
+
+  > 注意, `callback`必须调用, 否则会抛出异常.
+
 * **触发器**
 
   什么时候校验的触发器声明.
@@ -335,3 +381,26 @@ Element会为`Vue.prototype`添加了全局方法`$notify`, 通过该方法, 并
 
 > 其中`placement`值形式为`方向[-对齐位置]`; 方向可选`top`、`left`、`right`、`bottom`; 对齐位置可选`start`, `end`
 
+## v-loading
+
+显示元素加载状态, 指令值为`true`时, 进入加载状态
+
+# 踩坑
+
+## Form中Input回车自动刷新
+
+`el-form`中仅存在一个`el-input`的情况下, 会触发原生的`submit`事件, 阻止即可, 如
+
+```html
+<el-form
+   ref='tableForm'
+   :model='tableForm'
+   @submit.native.prevent
+   >
+   <el-form-item prop='search'>
+     <el-input  ref="searchInput" placeholder='请输入姓名' v-model='tableForm.midValue'></el-input>
+   </el-form-item>
+</el-form>
+```
+
+> 参考[element-ui 阻止 表单输入框搜索后自动刷新页面](https://blog.csdn.net/FutureLilian/article/details/88025043)

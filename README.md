@@ -41,11 +41,18 @@
 - [x] Cordova深入学习
 - [x] [Keys, certificates, and keystores](https://developer.android.com/studio/publish/app-signing.html#certificates-keystores) 了解
 - [x] 研究下代理
-- [ ] ECharts
+- [x] ECharts
 - [x] Express/Koa2
-- [ ] ~~研究[A.CTable](https://gitee.com/sunchenbin/mybatis-enhance)框架~~
-- [ ] 深入Spring Data JPA
+- [ ] ~~研究[A.CTable](https://gitee.com/sunchenbin/mybatis-enhance)框架~~ ~~打算自己写一个~~
+- [x] 深入Spring Data JPA
+- [ ] ~~ddlauto开发~~
 - [ ] github仓库克隆, API方式
+- [ ] ~~微信小程序~~
+- [x] elasticsearch
+- [x] Vue动画
+- [x] JavaScript Decorator
+- [ ] elasticsearch query dsl
+- [ ] gitlab + teamcity + nginx + nexus + dockerhub
 
 # 人生规划
 

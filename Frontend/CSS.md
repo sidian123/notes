@@ -722,6 +722,14 @@ over~~ over\~\~ 字体内容还是提多的。。。
 
 * [text-overflow](https://developer.mozilla.org/en-US/docs/Web/CSS/text-overflow): 无论何种情况, 文字溢出了, 我还可以直接省略溢出的部分.
 
+  > 注意, 元素必须不能软换行, 和防止溢出, 如
+  >
+  > ```css
+  > text-overflow: ellipsis;
+  > white-space: nowrap;
+  > overflow: hidden;
+  > ```
+
 ### 其他
 上面只是列举了一部分，还有很多很多和字体、字体布局相关的属性没有列出来。如果不是搞编辑器相关工作的可以忽略。
 
@@ -1300,7 +1308,7 @@ flexbox这一章就此结束了，可以参考这篇教程，主要图多：<htt
     1. **line-based placement**：grid布局由线（line）组成，items通过`grid-column`和`grid-row`指定行列边界线位置，线内的空间就是items位置所在。line number从1开始。
     2. **grid template areas**：就是通过`grid-template-areas`为grid中一块区域（area）命名，在item中通过`grid-area`指定area 名字，那么该item就被放置在该处。
     3. **name grid lines**：也是在item中指定它的边界线来决定放置位置，但是此时指定的是线的名字，因此需要在容器中设置线名。我觉得不常用。
-    4. **auto-placement**：就是自动从左到右，从上到下放置item，一个cell一个item，如果超过，比如规定的行数，那么grid会自动补加行。
+    4. **auto-placement** (默认方式?)：就是自动从左到右，从上到下放置item，一个cell一个item，如果超过，比如规定的行数，那么grid会自动补加行。
 
 * implicit grid & explicit grid
 
@@ -1526,16 +1534,17 @@ css
 注意，float元素之间不会发生margin坍塌，position元素也是一样，因为脱离了文档流。但position:relative元素没有脱离文档流，因为不会坍塌。
 
 ## position
-position覆盖了文档流的默认行为，多用来微调布局，常用于ui控件布局或相当于视口的绝对布局。position五种取值如下：
-1. static：所有元素都默认该值，表示元素放入文档流中正常位置。
-2. relative：元素原占据的空间保留，相对于元素原位置偏移。通过`top`,`bottom`,`left`,`right`属性指定偏移大小，下同。比如`top:30px;left:30px;`，元素在上边距离原位置30px，左边距离原位置30px。
-3. absolute：脱离文档流，位置相对于`html`或最近position父元素。（注意，如果没有指定位置信息，会停留在原位置，但依然不在文档流中）
-4. fixed：脱离文档流，位置相对于视口。
-5. sticky：相当于relative和fixed的混合体，即一般表现像relative元素，一旦元素滑动达到它的闸值（threshold point，比如top:10px，顶部达到相对于视口的10px的位置），此时表现像fixed元素。
+`position`样式覆盖了文档流的默认行为，多用来微调布局，常用于ui控件布局或相当于视口的绝对布局。`position`五种取值如下：
 
-一般脱离文档流的元素位于新一层，能够覆盖文档流的元素，而position元素越高，越不被覆盖，通过[z-index][86]属性指定。
+1. `static`：所有元素都默认该值，表示元素放入文档流中正常位置。
+2. `relative`：元素原占据的空间保留，相对于元素原位置偏移。通过`top`,`bottom`,`left`,`right`属性指定偏移大小，下同。比如`top:30px;left:30px;`，元素在上边距离原位置30px，左边距离原位置30px。
+3. `absolute`：脱离文档流，位置相对于`html`或最近`position`父元素 (除`static`元素外)。（注意，如果没有指定位置信息，会停留在原位置，但依然不在文档流中）
+4. `fixed`：脱离文档流，位置相对于视口。
+5. `sticky`：相当于`static`和`fixed`的混合体，即一般表现像`static`元素，一旦元素滑动达到它的闸值（threshold point，比如`top:10px`，顶部达到相对于视口的10px的位置），此时表现像`fixed`元素。
 
-注意：position不会像foat那样改变元素display值，但是脱离文档流的position也不会发生margin坍塌。
+一般脱离文档流的元素位于新一层，能够覆盖文档流的元素，而`position`元素越高，越不被覆盖，通过[z-index][86]属性指定。
+
+> 注意：`position`不会像`float`那样改变元素`display`值，但是脱离文档流的`position`也不会发生`margin`坍塌。
 
 [86]:https://developer.mozilla.org/en-US/docs/Web/CSS/z-index
 
@@ -1826,6 +1835,53 @@ body {
 ```css
 user-select: none;
 ```
+
+## 不作为事件触发的对象
+
+```css
+pointer-events: none;
+```
+
+## 子元素滚动, 但阻止父元素滚动
+
+* 场景
+
+  自己实现的svg有视图缩放的功能, 但缩放的同时会导致父元素上下滚动
+
+* 解决
+
+  当鼠标位于svg元素上时, 设置父元素的的`overflow`为`hidden`
+
+> [Disable scroll only by JS](https://stackoverflow.com/questions/52997598/disable-scroll-only-by-js)
+
+## transition失效??
+
+* `left`失效
+
+  首先设置元素`position`为`relative`或`absolute`等，然后初始化，如`left=0;`
+
+* `width`失效
+
+  `width`必须有个初始化值, 如`5rem`, `100%` , 不能用`auto`. 并且元素不能为`inline`
+
+## flex-grow: 1在内容溢出时不能滚动?
+
+如下所示, 当内容溢出时, `overflow`不起作用
+
+```css
+flex-grow:1
+overflow:auto;
+```
+
+解决办法: 添加高度
+
+```css
+flex-grow:1
+overflow:auto;
+height:0px;
+```
+
+> 由于flex布局的影响, 元素最终高度不为0px
 
 # 参考
 

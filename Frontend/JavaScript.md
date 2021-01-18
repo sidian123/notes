@@ -222,7 +222,7 @@ Boolean()可以显示转化值为布尔值，但是很少使用，因为会自�
 
 * 创建当前时间
   
-* `new Date()`
+  * `new Date()`
   
 * 本地时区相关
   * `setDate()`, `getDate()` 
@@ -318,8 +318,31 @@ random[2][2];
 * Reduce
 
   对集合中的每个元素执行Reduce操作, 最终得到一个值
+  
+* 去重
+
+  ![image-20200701120518532](.JavaScript/image-20200701120518532.png)
+
+  
 
 > 参考[Array](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array)
+
+### Set
+
+* 介绍
+
+  一组唯一值的集合.
+
+* 方法
+
+  * `new Set()` 新建对象
+  * `size` 元素个数
+  * `add()` 添加值
+  * `clear()` 清空所有值
+  * `delete()` 删除值
+  * `has()` 是否有该值
+
+> 参考[Set](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Set)
 
 ### Null&Undefined
 
@@ -476,6 +499,16 @@ random[2][2];
   * [Symbol 阮一峰](http://es6.ruanyifeng.com/#docs/symbol)
   * [Symbols TypeScript](http://www.typescriptlang.org/docs/handbook/symbols.html)
 
+### RegExp
+
+* 执行匹配 
+
+  [exec()](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/RegExp/exec)
+
+* 测试是否匹配
+
+  [test()](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/RegExp/test)
+
 ## 操作符
 完整操作符内容可以参考：[Expressions and operators][3]
 
@@ -519,11 +552,13 @@ random[2][2];
 
     1. for...in：用于遍历对象所有可遍历**属性**。
         ```javascript
-        for (let property in object) {
+        for (let key in object) {
           // do something with object property
         }
         ```
 
+        > 遍历属性的顺序依赖于内部实现
+        
     2. for...of：用于遍历array的值。
         ```javascript
         for (let value of array) {
@@ -843,7 +878,7 @@ function add(x, y) {
 
 1. 函数可以接收0到多个参数，如果调用时没有传入参数，那么参数默认为undefined
 2. 如果函数定义时没有参数列表，但是调用时传入了参数，可以通过[arguments][6]对象访问这些对象。
-3. return用来返回值并结束函数，可以直接`return;`不返回值但结束函数。如果函数没有返回值时，函数默认返回undefined。
+3. return用来返回值并结束函数. 直接`return` 则不返回值但结束函数。如果函数没有返回值时，函数默认返回undefined。
 4. 函数的定义会引入函数作用域。
 
 ###  声明
@@ -994,7 +1029,7 @@ test();
 ```
 >参考：[Does JavaScript autobox?](https://stackoverflow.com/a/17216967/10248407)
 ## prototype
-每个对象都有一个**prototype object**（原型对象），被存入到对象的__proto__属性中。prototype object的所有属性和方法都会被该对象继承。而prototype object对象源自于构造函数（constructor function）的prototype属性，该属性也是一个对象，Object。prototype object中有个属性constructor，指向它的构造函数。
+每个对象都有一个**prototype object**（原型对象），被存入到对象的`__proto__`属性中。prototype object的所有属性和方法都会被该对象继承。而prototype object对象源自于构造函数（constructor function）的prototype属性，该属性也是一个对象，Object。prototype object中有个属性constructor，指向它的构造函数。
 
 对象调用属性或方法的过程，以调用方法为例：
 >1. 先查看该对象是否有该方法，有则执行该方法。
@@ -1003,8 +1038,8 @@ test();
 
 重申一下`new`关键字的过程：
 >1. new后面的函数被当作构造函数，因此先创建一个Object对象，构造函数中 this指向该对象。
->2. 为构造函数创建prototype属性（一个Object对象）；prototype对象中创建一个constructor属性，指向该构造函数。
->3. 将构造函数的prototype属性赋值该新对象的__proto__属性上。
+>2. 每个函数都有`prototype`属性, 其中`prototype.constructor`字段指向该函数本身
+>3. 将构造函数的prototype属性赋值该新对象的`__proto__`属性上。
 >4. 执行构造函数。
 >5. 返回该对象。
 
@@ -1118,6 +1153,17 @@ Teacher.prototype....=function(...)...
   **继承的结果**：子类实例对象获得子类和父类的实例属性，子类与父类的原型方法构成原型链，存入实例对象的prototype对象中（即`__proto__`），然后子类的可以覆盖父类的。与2.8.3小节实现并无啥子差别。
 
   >因为继承也是语法糖，也可以通过一定手段继承传统的构造函数，略！
+  
+* 匿名类
+
+  ```javascript
+  new class{
+      a=23;b=23;
+      constructor(){
+          console.log(this.a)
+      }
+  }
+  ```
 
 例子：
 
@@ -1491,7 +1537,7 @@ console.log(bb);
 
 ### 介绍
 
-promise表示一个操作 ( 同步或异步 ) 成功或失败的结果，不知直接获取到操作的结果. 需要为promise附上成功或失败的回调函数
+promise表示一个操作 ( 同步或异步 ) 成功或失败的结果，不能直接获取到操作的结果, 需要为promise附上成功或失败的回调函数
 
 成功后将回调`.then(callback)`参数中的回调函数, 失败则回调`.catch(callback)`参数中的回调函数.
 
@@ -1529,7 +1575,9 @@ myAsyncFunction("localhost/api/get")
 
 > 也可使用`setTimeout(()=>{...},0)`来达到异步执行效果.
 
-#### 同步操作
+#### ~~同步操作~~
+
+> 以下内容好像是错误的, Promise实例化后, 会立即返回, 即异步, 无论Promise执行的内容是否异步或同步. 待改正.
 
 ```javascript
 function myPromise(){
@@ -1760,6 +1808,183 @@ f().catch(alert); // TypeError: failed to fetch // (*)
 ```
 
 > 参考: [Async/await](https://JavaScript.info/async-await)
+
+## 装饰器
+
+### 介绍
+
+为类或类的成员提供额外的功能. 即有两类装饰器, 类成员装饰器, 类装饰器.
+
+> 用法有点像Java的注解, 但有本地的区别. Java注解用于提供元数据, 而JavaScript的装饰器仅提供额外功能 (装配器模式)
+
+### 原理
+
+见一个例子, 解释装饰器的原理
+
+```javascript
+// 业务方法
+function doSomething(name) {
+  console.log('Hello, ' + name);
+}
+// 业务方法的装配器
+function loggingDecorator(wrapped) {
+  return function() {
+    console.log('Starting');
+    const result = wrapped.apply(this, arguments);
+    console.log('Finished');
+    return result;
+  }
+}
+// 调用装配器方法
+const wrapped = loggingDecorator(doSomething);
+```
+
+如上所示, 装饰器就是在被装饰的元素上添加一定逻辑. **在JavaScript中, 程序启动后, 会立即将元素(有装饰器标注)替换成装饰器.**
+
+### 类成员装饰器
+
+类成员装饰器就是让装饰器替换成员
+
+* 简单形式(装饰器无参数)
+
+  ```javascript
+  function readonly(target, name, descriptor) {
+    descriptor.writable = false;
+    return descriptor;
+  }
+  ```
+
+  函数本身就是装饰器, 需要返回描述符, 用于覆盖成员.
+
+  其中
+
+  * `target` 成员所属的类
+  * `name` 成员名
+  * `descriptor` 成员描述符. 之后会传入到`Object.defineProperty`中覆盖被装饰的成员.
+
+  使用如下
+
+  ```javascript
+  class Example {
+    a() {}
+    @readonly
+    b() {}
+  }
+  
+  const e = new Example();
+  e.a = 1;
+  e.b = 2;
+  // TypeError: Cannot assign to read only property 'b' of object '#<Example>'
+  ```
+
+  > 这里的`@readonly`无参数
+
+* 复杂形式(装饰器有参数)
+
+  ```javascript
+  function log(name) {
+    return function decorator(t, n, descriptor) {
+      const original = descriptor.value;
+      if (typeof original === 'function') {
+        descriptor.value = function(...args) {
+          console.log(`Arguments for ${name}: ${args}`);
+          try {
+            const result = original.apply(this, args);
+            console.log(`Result from ${name}: ${result}`);
+            return result;
+          } catch (e) {
+            console.log(`Error from ${name}: ${e}`);
+            throw e;
+          }
+        }
+      }
+      return descriptor;
+    };
+  }
+  
+  ```
+
+  `log`函数返回的函数为装饰器, 函数的参数为装饰器的参数(使用时提供). 注意, 装饰器仍要返回描述符.
+
+  使用
+
+  ```javascript
+  class Example {
+    @log('some tag')
+    sum(a, b) {
+      return a + b;
+    }
+  }
+  
+  const e = new Example();
+  e.sum(1, 2);
+  // Arguments for some tag: 1,2
+  // Result from some tag: 3
+  ```
+
+### 类装饰器
+
+类装饰器就是让装饰器替换类的构造函数
+
+* 简单形式(无参数)
+
+  ```javascript
+  function log(Class) {
+    return (...args) => {
+      console.log(args);
+      return new Class(...args);
+    };
+  }
+  ```
+
+  `log`返回的方法为装饰器, `log`的参数为类, 装饰器的参数为构造函数的参数, 装饰器需要返回对象.
+
+  使用
+
+  ```javascript
+  @log
+  class Example {
+    constructor(name, age) {
+    }
+  }
+  
+  const e = new Example('Graham', 34);
+  // [ 'Graham', 34 ]
+  console.log(e);
+  // Example {}
+  ```
+
+* 复杂形式(有参数)
+
+  ```javascript
+  function log(name) {
+    return function decorator(Class) {
+      return (...args) => {
+        console.log(`Arguments for ${name}: args`);
+        return new Class(...args);
+      };
+    }
+  }
+  
+  @log('Demo')
+  class Example {
+    constructor(name, age) {}
+  }
+  
+  const e = new Example('Graham', 34);
+  // Arguments for Demo: args
+  console.log(e);
+  // Example {}
+  ```
+
+  与上述类型, 除了又多包裹了一层函数, 用于提供装饰器的参数.
+
+### 参考
+
+* [What is a Decorator?](https://www.sitepoint.com/javascript-decorators-what-they-are/)
+* [Core Decorators](https://www.npmjs.com/package/core-decorators) 提供一些常用装饰器.
+* [@babel/plugin-proposal-decorators](https://babeljs.io/docs/en/next/babel-plugin-proposal-decorators.html) Vue目前使用的装饰器支持包.
+* [babel-plugin-transform-decorators-legacy](https://github.com/loganfsmyth/babel-plugin-transform-decorators-legacy) 另一种装饰器支持包.
 
 # 八 其他
 ## 一些概念

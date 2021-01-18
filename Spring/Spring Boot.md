@@ -164,11 +164,11 @@ spring boot整合了spring框架和三方库后，提供了自动配置的功能
 
   > 同名属性覆盖顺序参考：[Externalized Configuration](<https://docs.spring.io/spring-boot/docs/2.0.5.RELEASE/reference/htmlsingle/#boot-features-external-config>)
 
-- 获取`Environment`中属性值的两种方式：
+- 获取`Environment`中属性值的方式：
 
   - `@Value`：将属性绑定到类的字段上，配合SpEL表达式使用。
   - `@ConfigurationProperties`：将一组属性绑定到类上。
-  - 这两个玩意，复杂的呀~~皮！
+  - 直接注入`Environment`
 
 - 一般使用配置文件`application.properties`,`application.yml`
 
@@ -214,19 +214,33 @@ spring boot整合了spring框架和三方库后，提供了自动配置的功能
 16. [`@PropertySource`](https://docs.spring.io/spring/docs/5.0.9.RELEASE/javadoc-api/org/springframework/context/annotation/PropertySource.html) annotations on your `@Configuration` classes.
 17. Default properties (specified by setting `SpringApplication.setDefaultProperties`).
 
-> 例子
->
-> * 通过系统参数(9)
->
->     ```shell
->     java -jar app.jar -Dname="Spring"
->     ```
->
-> * 通过命令行参数(4)
->
->     ```shell
->     java -jar app.jar --name="Spring"
->     ```
+### 简单配置
+
+* 通过系统参数(9)
+
+  ```shell
+  java -Dname="Spring" -jar app.jar
+  ```
+
+* 通过命令行参数(4)
+
+  ```shell
+  java -jar app.jar --name="Spring"
+  ```
+
+* 环境变量
+
+  ```
+  SPRING_PROFILES_ACTIVE=dev
+  ```
+
+  命名规则:
+
+  * `.`替换为`_`
+  * 删除所有`-`
+  * 字符大写
+
+  > 参考[Binding from Environment Variables](https://docs.spring.io/spring-boot/docs/current/reference/html/spring-boot-features.html#boot-features-external-config-relaxed-binding-from-environment-variables)
 
 ### YAML与properties
 
@@ -240,6 +254,8 @@ spring boot整合了spring框架和三方库后，提供了自动配置的功能
     url: http://dev.example.com
     name: Developer Setup
     ```
+
+    字符串属性值也可以加引号, 如`'001'`, `"001"`, 可以防止一些意外的解析错误.
 
   - properties:
 
@@ -296,8 +312,24 @@ spring boot整合了spring框架和三方库后，提供了自动配置的功能
     my.servers[0]=dev.example.com
     my.servers[1]=another.example.com
     ```
+    
+  - yaml进阶: 元素值是对象
+  
+    ```yaml
+    AAPL:
+      - shares: -75.088
+        date: 11/27/2015
+      - shares: 75.088
+        date: 11/26/2015
+    ```
 
 ### 属性值取出
+
+> 注意, 下面的`${}`用于取出环境变量, 而类似的`#{}`, 用于执行SpEL表达式.
+
+#### @ConfigurationProperties
+
+注解到Bean定义上, 该bean的属性会被填充.
 
 一个例子，获取上面的数组属性：
 
@@ -313,6 +345,8 @@ public class Config {
 	}
 }
 ```
+
+#### @Value
 
 或者
 
@@ -347,6 +381,61 @@ private String[] stringArrayWithDefaults;
 
 @Value("${some.key:1,2,3}")//int数组
 private int[] intArrayWithDefaults;
+```
+
+#### @EnableConfigurationProperties
+
+注入被`@ConfigurationProperties`注解的类, 无需`@Component`注解, 如
+
+```java
+@ConfigurationProperties(prefix = "service.properties")
+public class HelloServiceProperties {
+    private static final String SERVICE_NAME = "test-service";
+
+    private String msg = SERVICE_NAME;
+       set/get
+}
+
+
+@Configuration
+@EnableConfigurationProperties(HelloServiceProperties.class)
+@ConditionalOnClass(HelloService.class)
+@ConditionalOnProperty(prefix = "hello", value = "enable", matchIfMissing = true)
+public class HelloServiceAutoConfiguration {
+
+}
+
+@RestController
+public class ConfigurationPropertiesController {
+
+    @Autowired
+    private HelloServiceProperties helloServiceProperties;
+
+    @RequestMapping("/getObjectProperties")
+    public Object getObjectProperties () {
+        System.out.println(helloServiceProperties.getMsg());
+        return myConfigTest.getProperties();
+    }
+}
+```
+
+配置示例
+
+```properties
+service.properties.name=my-test-name
+service.properties.ip=192.168.1.1
+service.user=kayle
+service.port=8080
+```
+
+> 参考[关与 @EnableConfigurationProperties 注解](https://www.jianshu.com/p/7f54da1cb2eb)
+
+#### 其他注解上
+
+如
+
+```java
+@FeignClient(name = "entityNlp", url = "${jy.entity.ner.url}")
 ```
 
 ### Profile
@@ -770,6 +859,42 @@ public class ClientApplication {
 * 若想提供与映射相关的组件, 需注入` WebMvcRegistrationsAdapter `
 * 若想完全控制Spring MVC的配置, 需提供` @EnableWebMvc `注解的`@ Configuration `配置类.
 
+Demo
+
+```java
+@Bean
+public WebMvcConfigurer corsConfigurer() {
+    return new WebMvcConfigurer() {
+        /**
+        * 跨域配置
+        */
+        @Override
+        public void addCorsMappings(CorsRegistry registry) {
+            registry.addMapping("/**")
+                .allowCredentials(true);
+        }
+        
+        /**
+        * 注册拦截器
+        */
+        @Override
+        public void addInterceptors(InterceptorRegistry registry) {
+            registry.addInterceptor(myHandlerInterceptor);
+        }
+
+        /**
+        * 注册异常处理器
+        */
+        @Override
+        public void extendHandlerExceptionResolvers(List<HandlerExceptionResolver> resolvers) {//扩展异常处理功能, 而不是替换
+            resolvers.add(myExceptionHandlerResolver);
+        }
+    };
+}
+```
+
+
+
 ## HttpMessageConverters
 
 `HttpMessageConverter` 用于转化HTTP请求或响应。默认对象会被转化为JSON或XML（如果存在Jackson xml），至于什么时候转化为什么类型，见[spring mvc-Content Types](https://blog.csdn.net/jdbdh/article/details/83512464#6.2%20Content%20Types)。字符编码默认使用`UTF-8`
@@ -807,7 +932,7 @@ public class MyConfiguration {
 
 看不懂。。。。
 
-- `spring.resources.static-locations`属性定义静态内容位置
+- `spring.web.resources.static-locations` 定义静态资源的位置
 - `spring.mvc.static-path-pattern`：静态资源匹配模式。静态内容位置中匹配成功的才作为静态资源
 - 只有静态内容位置的根目录才能使用欢迎页面。
 - 当`DispatcherServlet`未能处理http请求时，会交给tomcat容器的默认servlet处理
@@ -903,6 +1028,10 @@ spring:
 ```
 
 ### H2
+
+* 介绍
+
+  内存数据库, 即数据保放在内存中供直接操作的数据库
 
 * 引入H2依赖
 
@@ -1025,7 +1154,7 @@ public interface UserDao {
 
 mybatis与spring boot整合后，也可以在spring boot的配置文件中配置mybatis。部分属性如下：
 
-- `mapper-locations`：xml Mapper的位置, 如`classpath:mapper/**/*.xml`
+- `mapper-locations`：xml Mapper的位置, 如`classpath:mapperxml/**/*.xml`
 
 - `type-aliases-package`：类型匿名所在位置
 - `configuration`：传给`Configuration`Bean的属性配置，见 [MyBatis reference page](http://www.mybatis.org/mybatis-3/configuration.html#settings)
@@ -1041,6 +1170,7 @@ spring:
     
 mybatis:
   type-aliases-package: com.example.demo2.entity
+  mapper-locations: classpath:mapperxml/**/*.xml
 ```
 
 mybatis注册mapper接口时，也会检测同包下是否存在对应xml文件，如果需要，还需配置maven，见[maven之允许src目录下xml文件输出到target目录](<https://blog.csdn.net/jdbdh/article/details/89068289>)
@@ -1068,6 +1198,7 @@ mybatis注册mapper接口时，也会检测同包下是否存在对应xml文件�
         </exclusion>
     </exclusions>
 </dependency>
+<!-- 可选的内存数据库 -->
 <dependency>
     <groupId>com.h2database</groupId>
     <artifactId>h2</artifactId>
@@ -1117,7 +1248,13 @@ mybatis注册mapper接口时，也会检测同包下是否存在对应xml文件�
 
 * `@SpringBootTest`
 
-    用于帮助创建`SpringApplication`
+    用于帮助创建`SpringApplication`.
+
+    > 若无启动类, 如Stater包, 可指定其他配置类, 如
+    >
+    > ```java
+    > @SpringBootTest(classes = DictAutoConfiguration.class)
+    > ```
 
 * `@RunWith(SpringRunner.class)`
 
@@ -1125,19 +1262,112 @@ mybatis注册mapper接口时，也会检测同包下是否存在对应xml文件�
 
 > 在后端三层结构中, 若仅测试其中一层, 则无需`@SpringBootTest`注解, 因为其依赖可以被mock掉
 
+### 应用上下文
+
+启动测试后, SpringBoot会加载mock或真实的上下文. 上下文如下所示:
+
+- `MOCK`(Default) : Loads a web `ApplicationContext` and provides a mock web environment. Embedded servers are not started when using this annotation. If a web environment is not available on your classpath, this mode transparently falls back to creating a regular non-web `ApplicationContext`. It can be used in conjunction with [`@AutoConfigureMockMvc` or `@AutoConfigureWebTestClient`](https://docs.spring.io/spring-boot/docs/current/reference/html/spring-boot-features.html#boot-features-testing-spring-boot-applications-testing-with-mock-environment) for mock-based testing of your web application.
+- `RANDOM_PORT`: Loads a `WebServerApplicationContext` and provides a real web environment. Embedded servers are started and listen on a random port.
+- `DEFINED_PORT`: Loads a `WebServerApplicationContext` and provides a real web environment. Embedded servers are started and listen on a defined port (from your `application.properties`) or on the default port of `8080`.
+- `NONE`: Loads an `ApplicationContext` by using `SpringApplication` but does not provide *any* web environment (mock or otherwise).
+
+在`MOCK`或`NONE`上下文中, 加了`@Transaction`的测试用例, 在该用例结束后会回滚. 而`RANDOM_PORT`和`DEFINED_PORT`则不会, 因为它启动了一个真实的Web Server, 且与测试用例处于不同线程.
+
 ## 框架使用
 
 > 下面讲的, 未涵盖所有, 还需看*实战*小节
 
 ### JUnit5
 
-用于声明测试用例, 或测试用例前后执行的方法
+用于声明测试用例
+
+#### 常用注解
 
 * `@Test`: 标注方法为**测试方法**. 其中`timeout`参数指定失败时间
-* `@BeforeClass`: 所有测试方法开始前调用, 且**仅一次**
-* `@Before`: 每个测试方法前**都调用**
-* `@AfterClass`: 所有测试方法结束后调用, 且**仅一次**
-* `@After`: 每个测试方法结束后**都调用**
+
+* `@BeforeAll`: 所有测试方法开始前调用, 且**仅一次**
+
+  > JUnit4为`@BeforeClass`
+
+* `@BeforeEach`: 每个测试方法前**都调用**
+
+  > JUnit4为`@Before`
+
+* `@AfterAll`: 所有测试方法结束后调用, 且**仅一次**
+
+  > JUnit4为`@AfterClass`
+
+* `@AfterEach`: 每个测试方法结束后**都调用**
+
+  > JUnit4为`@After`
+  
+* `@Disabled` 忽略测试用例
+
+  > JUnit4为`@Ignore`
+
+#### 测试用例顺序
+
+JUnit测试用例的默认执行顺序是确定的, 但不可预测的. 
+
+JUnit5使用`@TestMethodOrder`注解控制测试用例执行的顺序, 有三种内置顺序如下所示, 也可自定义
+
+* *@Order* Annotation 注解指定优先级
+
+  值越小, 优先级越高
+
+  ```java
+  @TestMethodOrder(OrderAnnotation.class)
+  public class OrderAnnotationUnitTest {
+      @Test
+      @Order(1)    
+      public void firstTest() {}
+      @Test
+      @Order(2)    
+      public void secondTest() {}
+      @Test
+      @Order(3)    
+      public void thirdTest() {}
+  }
+  ```
+
+* *Alphanumeric* Order 按照字母表顺序
+
+  ```java
+  @TestMethodOrder(Alphanumeric.class)
+  public class AlphanumericOrderUnitTest {
+      @Test
+      public void test01(){}
+      @Test
+      public void test02(){}
+      @Test
+      public void test03(){}
+      @Test
+      public void test99_clean(){} // 最后执行, 清理数据
+  }
+  ```
+
+* Random Order 随机顺序
+
+  每次测试用例的执行都是随机的. 
+
+---------
+
+JUnit4使用`@FixMethodOrder`注解, 有三种取值
+
+* *MethodSorters.DEFAULT* 默认行为, 取方法名hashcode
+* *MethodSorters.JVM* 每次执行, 顺序都不一样. 类似JUnit5的Random Order
+* *MethodSorters.NAME_ASCENDING* 按字母表顺序. 类型JUnit5的 *Alphanumeric* Order
+
+例子:
+
+```java
+@FixMethodOrder(MethodSorters.NAME_ASCENDING)
+public class NameAscendingOrderOfExecutionTest {
+    // ...
+}
+```
+
+> 参考[The Order of Tests in JUnit](https://www.baeldung.com/junit-5-test-order)
 
 ### AssertJ
 
@@ -1155,6 +1385,29 @@ mybatis注册mapper接口时，也会检测同包下是否存在对应xml文件�
 ### Mockito
 
 用于模拟对象
+
+* 依赖引入
+
+  ```xml
+  <dependency>
+      <groupId>org.mockito</groupId>
+      <artifactId>mockito-core</artifactId>
+      <version>3.5.13</version>
+      <scope>test</scope>
+  </dependency>
+  <dependency>
+      <groupId>org.mockito</groupId>
+      <artifactId>mockito-inline</artifactId>
+      <version>3.5.13</version>
+      <scope>test</scope>
+  </dependency>
+  ```
+
+  以及
+
+  ```java
+  import static org.mockito.Mockito.*;
+  ```
 
 * 验证行为
 
@@ -1198,22 +1451,108 @@ mybatis注册mapper接口时，也会检测同包下是否存在对应xml文件�
       outputStream.close();
   }
   ```
+  
+  Mock静态方法
+  
+  ```java
+  static MockedStatic<UserUtil> userUtilMock;
+  
+  @BeforeEach
+  static void init() {
+      userUtilMock = mockStatic(UserUtil.class);
+  
+      when(UserUtil.getOssUser(true)).thenReturn(
+          OssUser.builder()
+          .institutionType(1)
+          .institutionId(17)
+          .build()
+      );
+  }
+  
+  @AfterEach
+  static void clean() {
+      userUtilMock.close();
+  }
+  ```
+  
+  > `mockStatic()`最好不用配合`@BeforeAll`, `@AfterAll`一起使用, 会影响到其他类的测试用例.
 
-> Spring提供的`@MockBean`很方便的mock被注解的字段.
+Spring提供的`@MockBean`很方便的mock被注解的字段.
 
-> 参考[Mockito教程](https://blog.csdn.net/xiang__liu/article/details/81147933)
+> 参考
+>
+> * [Mockito教程](https://blog.csdn.net/xiang__liu/article/details/81147933)
+> * Mockito类的Javadoc
 
 ### Spring Test
+
+#### MockMvc
 
 主要是`MockMvc`类, 模拟HTTP请求, 同时断言, 如
 
 ```java
-mvc.perform(get("/api/employees")
-            .contentType(MediaType.APPLICATION_JSON))
-    .andExpect(status().isOk())
+mvc.perform(get("/api/employees").contentType(MediaType.APPLICATION_JSON))
+    .andExpect(status().isOk()) // 断言的状态码
+    .andExpect(content().contentType(MediaType.APPLICATION_JSON)) // 断言的响应
     .andExpect(jsonPath("$", hasSize(1)))
     .andExpect(jsonPath("$[0].name", is(alex.getName())));
 ```
+```java
+MockHttpServletResponse mockHttpServletResponse = mockMvc.perform(optionsRequest)
+    .andExpect(status().isOk())
+    .andReturn()
+    .getResponse(); // 仅得到结果
+```
+
+#### TestRestTemplate
+
+`TestRestTemplate`对`RestTemplate`做了封装, 提供了cookie, 重定向, SSL等功能, 更适用于集成测试中. 
+
+> 一般情况下, 两者都差不多
+
+当使用`WebEnvironment.RANDOM_PORT`或`WebEnvironment.DEFINED_PORT`模式时, `TestRestTemplate`会被充分装配, 任何没有`host`和`port`的请求, 会自动连接到内部Server上.
+
+> 等同于
+>
+> ```java
+> RestTemplate template = new RestTemplateBuilder()
+>        .uriTemplateHandler(new LocalHostUriTemplateHandler(SpringUtil.getApplicationContext().getEnvironment()))
+>        .build()
+> ```
+>
+> 通过`LocalHostUriTemplateHandler`处理器, 能得到测试用例Web环境的URL前缀
+
+可通过注入`RestTemplateBuilder`Bean来自定义`TestRestTemplate`
+
+使用例子:
+
+```java
+@SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
+class SampleWebClientTests {
+
+    @Autowired
+    private TestRestTemplate template;
+
+    @Test
+    void testRequest() {
+        HttpHeaders headers = this.template.getForEntity("/example", String.class).getHeaders();
+        assertThat(headers.getLocation()).hasHost("other.example.com");
+    }
+
+    @TestConfiguration(proxyBeanMethods = false)
+    static class Config {
+
+        @Bean
+        RestTemplateBuilder restTemplateBuilder() {
+            return new RestTemplateBuilder().setConnectTimeout(Duration.ofSeconds(1))
+                    .setReadTimeout(Duration.ofSeconds(1));
+        }
+
+    }
+}
+```
+
+
 
 ## 实战
 
@@ -1320,6 +1659,55 @@ public class EmployeeRestControllerIntegrationTest {
 }
 ```
 
+## 其他
+
+### 事务回滚
+
+在测试用例中, `@Transactional`的方法在结束后默认会回滚. 可加上`@Rollback(false)`来阻止这种行为.
+
+### @Ignore
+
+标注`@Ignore`的测试用例不参与测试. 如
+
+```java
+@Test
+@Ignore
+public void test() {
+    ...
+}
+```
+
+### @ActiveProfiles
+
+测试类用的哪个profile配置, 如
+
+```java
+@ActiveProfiles("dev")
+@SpringBootTest
+public class DiseaseControllerTest {
+	...
+}
+```
+
+### 属性覆盖
+
+```java
+@SpringBootTest(properties = { "example.firstProperty=annotation" })
+```
+
+## 踩坑笔记
+
+### Junit4的SpringBoot执行失败
+
+可改成如下代码:
+
+```java
+@RunWith(SpringRunner.class)
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT, classes = JyTcmOamServiceApplication.class)
+```
+
+如果测试用例失败, 可尝试添加`classes`属性.
+
 ## 参考
 
 * [Testing](https://docs.spring.io/spring-boot/docs/2.2.6.RELEASE/reference/html/spring-boot-features.html#boot-features-testing)
@@ -1379,16 +1767,33 @@ server:
 
 # 进阶
 
+[Creating Your Own Auto-configuration](https://docs.spring.io/spring-boot/docs/current-SNAPSHOT/reference/htmlsingle/#boot-features-developing-auto-configuration)
+
+Bean被扫描定义的顺序(猜测):
+
+普通Bean(`@Component`)  --> 其他配置类(`@Configuration`)中的Bean --> Start包的配置Bean
+
 ## 自动配置
 
 * 原理
 
-  扫描每个依赖的`classpath:META-INF/spring.factories`文件, 找到`org.springframework.boot.autoconfigure.EnableAutoConfiguration`属性, 自动配置的类通过该属性指定.
+  扫描每个依赖的`classpath:META-INF/spring.factories`文件, 找到`org.springframework.boot.autoconfigure.EnableAutoConfiguration`属性, 自动配置的类通过该属性指定. 多个配置类以`,`隔开
 
 * 使用
 
   1. 在自己依赖的`META-INF/spring.factories`文件中添加上述属性, 指定该依赖的自动配置类
   2. 通过condition注解, 根据条件判断是否注入相应的Bean
+  
+* 注意点
+
+  * ~~spring boot启动并不会读取自动配置的依赖的配置文件.~~
+  
+  * ~~starter包中的包扫描`@ComponentScan`是不起作用的~~
+  
+  * Starter中的`@ComponentScan`注解, 只能扫描普通Bean, 配置Bean扫描后会不起作用
+  
+    ![image-20201130130611975](.Spring%20Boot/image-20201130130611975.png)
+
 
 > 参考
 >
@@ -1405,9 +1810,20 @@ server:
 
   Spring Boot提供了很多条件注解, 见`spring-boot-autoconfigure`包. 下面列出常用的
 
-  * `@ConditionalOnBean` 当容器中存在指定的Bean时, 注入该Bean
-  * `@ConditionalOnMissingBean` 当容器中不存在指定的Bean时, 注入该Bean
-  * `@ConditionalOnProperty` 根据配置判断是否注入Bean
+  | @ConditionalOnClass             | classpath中存在该类时起效                            |
+  | ------------------------------- | ---------------------------------------------------- |
+  | @ConditionalOnMissingClass      | classpath中不存在该类时起效                          |
+  | @ConditionalOnBean              | DI容器中存在该类型Bean时起效                         |
+  | @ConditionalOnMissingBean       | DI容器中不存在该类型Bean时起效                       |
+  | @ConditionalOnSingleCandidate   | DI容器中该类型Bean只有一个或@Primary的只有一个时起效 |
+  | @ConditionalOnExpression        | SpEL表达式结果为true时                               |
+  | @ConditionalOnProperty          | 参数设置或者值一致时起效                             |
+  | @ConditionalOnResource          | 指定的文件存在时起效                                 |
+  | @ConditionalOnJndi              | 指定的Java版本存在时起效                             |
+  | @ConditionalOnWebApplication    | Web应用环境下起效                                    |
+  | @ConditionalOnNotWebApplication | 非Web应用环境下起效                                  |
+
+  > 踩坑笔记, 使用`@ConditionalOnBean`, 若依赖的是配置类中定义的Bean, 该注解很有可能失效.
 
 * 自定义条件注解
 
@@ -1449,6 +1865,30 @@ server:
   > 若`spring.profiles.active=local`, 则匹配成功, 将成功注入`HelloService `Bean
 
 > 参考[Springboot学习笔记（五）-条件化注入](https://www.cnblogs.com/yw0219/p/9062322.html)
+
+## @ComponentScan
+
+* 用于配置包扫描路径. 用`basePackages`或`basePackageClasses`属性进行包路径的配置
+* 若不指定扫描的包, 默认使用被注解类的包路径
+* 允许存在多个包扫描注解和路径, 且注解是repeatable类型的, 可多次注解同一个包.
+
+* **starter包中不允许使用包扫描, 但允许使用@Import**
+
+## Enable注解实现
+
+[Spring4-@Enable** 注解的实现原理](https://www.cnblogs.com/moxiaotao/p/10107072.html)
+
+# 踩坑
+
+## Bean注册失败
+
+需要允许Bean定义覆盖
+
+```properties
+spring.main.allow-bean-definition-overriding=true
+```
+
+> 参考[SpringBoot - BeanDefinitionOverrideException: Invalid bean definition](https://stackoverflow.com/questions/53723303/springboot-beandefinitionoverrideexception-invalid-bean-definition)
 
 # 参考
 

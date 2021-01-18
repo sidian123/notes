@@ -1,6 +1,8 @@
 [TOC]
 
-# 一 介绍
+# 一 Start
+
+## 概述
 
 构建一个项目通常由多个任务组成, 如下载依赖,放入classpath下,编译源码,运行测试,打包,部署等. 而maven则是一个自动化这些任务的工具.
 
@@ -69,6 +71,38 @@ maven项目的配置由**pom**文件提供, pom文件中所有元素清单如下
   <profiles>...</profiles>
 </project>
 ```
+
+## 安装与配置
+
+1. 首先安装了JDK, 并且设置环境变量`JAVA_HOME`
+
+   ```shell
+   export JAVA_HOME=/home/sidian/Software/jdk-11.0.3
+   ```
+
+2. 官网上下载最新版Maven并解压
+
+3. 将Maven的`bin`目录添加到环境变量中.
+
+4. 运行`mvn --version`进行测试
+
+----------
+
+将远程仓库配置为阿里Maven仓库, 可以提高下载速度. 在配置文件的`mirrors`元素中添加`mirror`元素：
+
+```xml
+<mirror>
+    <id>aliyunmaven</id>
+    <mirrorOf>*</mirrorOf>
+    <name>阿里云公共仓库</name>
+    <url>https://maven.aliyun.com/repository/public</url>
+</mirror>
+```
+
+> 参考
+>
+> * [阿里仓库使用指南](https://help.aliyun.com/document_detail/102512.html?spm=a2c40.aliyun_maven_repo.0.0.361830542K9g7c)
+> * [所有仓库](https://maven.aliyun.com/mvn/view)
 
 # 二 基础
 
@@ -458,6 +492,8 @@ project ...>
 
 这种方法还是和继承有区别的, `import`方法仅"继承"`dependencyManagement`元素.
 
+> 父POM的依赖管理, 优先级要高于import的POM依赖管理.
+
 ## 有效依赖版本
 
 当依赖在多个地方声明版本时, 到低使用哪个版本呢? 下面给出答案, 优先级由高到低:
@@ -628,39 +664,568 @@ Maven默认的资源插件, 负责将**项目资源**拷贝到**输出文件的c
 
 > 参考[Maven packaging without test (skip tests)](https://stackoverflow.com/questions/7456006/maven-packaging-without-test-skip-tests)
 
-# 六 其他
+## 代码规范检查
 
-## 安装与配置
+checkstyle的忽略方法: 
 
-1. 首先安装了JDK, 并且设置环境变量`JAVA_HOME`
+1. `TreeWalker`下添加模块, 配置忽略代码段的注释
 
-   ```shell
-   export JAVA_HOME=/home/sidian/Software/jdk-11.0.3
+   ```xml
+   <module name="SuppressionCommentFilter">
+       <property name="offCommentFormat" value="disable checkstyle"/>
+       <property name="onCommentFormat" value="enable checkstyle"/>
+   </module>
    ```
 
-2. 官网上下载最新版Maven并解压
+2. 使用
 
-3. 将Maven的`bin`目录添加到环境变量中.
+   ```java
+   // disable checkstyle
+   your code...
+   // enable checkstyle
+   ```
 
-4. 运行`mvn --version`进行测试
+> 参考https://stackoverflow.com/a/45759279/12574399
 
-----------
-
-将远程仓库配置为阿里Maven仓库, 可以提高下载速度. 在配置文件的`mirrors`元素中添加`mirror`元素：
+## source && javadoc
 
 ```xml
-<mirror>
-    <id>aliyunmaven</id>
-    <mirrorOf>*</mirrorOf>
-    <name>阿里云公共仓库</name>
-    <url>https://maven.aliyun.com/repository/public</url>
-</mirror>
+<plugin>
+    <groupId>org.apache.maven.plugins</groupId>
+    <artifactId>maven-source-plugin</artifactId>
+    <executions>
+        <execution>
+            <id>attach-sources</id>
+            <goals>
+                <goal>jar</goal>
+            </goals>
+        </execution>
+    </executions>
+</plugin>
+<plugin>
+    <groupId>org.apache.maven.plugins</groupId>
+    <artifactId>maven-javadoc-plugin</artifactId>
+    <configuration>
+        <!--    自定义标签      -->
+        <tags>
+            <tag>
+                <name>date</name>
+                <placement>a</placement>
+                <head>生成日期</head>
+            </tag>
+        </tags>
+    </configuration>
+    <executions>
+        <execution>
+            <id>attach-javadocs</id>
+            <goals>
+                <goal>jar</goal>
+            </goals>
+        </execution>
+    </executions>
+</plugin>     
 ```
 
-> 参考
->
-> * [阿里仓库使用指南](https://help.aliyun.com/document_detail/102512.html?spm=a2c40.aliyun_maven_repo.0.0.361830542K9g7c)
-> * [所有仓库](https://maven.aliyun.com/mvn/view)
+# 仓库
+
+## 概述
+
+### Jar搜索顺序
+
+* 查找**本地仓库**
+* 若未找到, 所有**所有**的**远程仓库**. 若未找到将报错
+* 找到后, 下载到本地仓库, 之后可被本地项目使用了.
+
+### 本地仓库
+
+本地仓库默认在`$HOME/.m2/repository`下, 路径可被修改,  有两种方式:
+
+1. 修改`$HOME/.m2/settings.xml`文件
+
+   ```xml
+   <settings>  
+     ...   
+     <localRepository>D:/java/repository</localRepository>  
+     ...   
+   </settings>  
+   ```
+
+2. 运行mvn时指定
+
+   ```shell
+   mvn clean install -Dmaven.repo.local=/home/juven/myrepo/
+   ```
+
+### 远程仓库
+
+每个Maven都有个父POM文件, 里面配置了一个**中央仓库**, 指向`http://repo1.maven.org/maven2` , 如下所示
+
+```xml
+<repositories>  
+  <repository>  
+    <id>central</id>  
+    <name>Maven Repository Switchboard</name>  
+    <layout>default</layout>  
+    <url>http://repo1.maven.org/maven2</url>  
+    <snapshots>  
+      <enabled>false</enabled>  
+    </snapshots>  
+  </repository>  
+</repositories>
+```
+
+> **镜像**呢? 镜像只是远程仓库的一种使用方法.
+
+### Nexus
+
+* 介绍
+
+  nexus是**仓库管理**服务, 除了Maven仓库外, 还支持其他仓库, 如npm, docker的.
+
+* 仓库类型
+
+  * Proxy Repository
+
+    proxy仓库是一个代理仓库, 不提供包部署服务, 仅提供包下载服务. 下载后, 包会被缓存起来.
+
+  * Hosted Repository
+
+    hosted仓库提供包部署, 管理, 和下载的服务.
+
+  * Grouping Repository
+
+    仓库的仓库. 能将多个proxy和hosted仓库以单个URL暴露出来.
+
+* 仓库使用
+
+  * 三种参数类型都可以提供包下载服务. 但一般使用Grouping仓库统一聚合服务接口, 即提供内部包的访问, 又能提供公共仓库中包的访问
+  * 部署包, 必须指定具体的hosted仓库来部署了.
+
+### Release vs. Snapshot
+
+仓库可以只存release包, 或只存`snapshot`包, 或都存. 无论如何, 不同的包需要放入正确的位置.
+
+那怎么区分包的类型呢? 一般`SNAPSHOT`作为包名后缀, 表示snapshot包; 以`RELEASE`为包名后缀, 或无后缀, 为release包.
+
+## Nexus安装
+
+* 简单运行
+
+  ```
+  $ docker run -d -p 8081:8081 --name nexus sonatype/nexus3
+  ```
+
+* 关闭
+
+  ```
+  docker stop --time=120 <CONTAINER_NAME>
+  ```
+
+  > 给与足够的时间让nexus关闭数据库.
+
+* 测试是否运行正常
+
+  ```
+  $ curl http://localhost:8081/
+  ```
+
+  > 账号`admin`, 初始密码在容器的`/nexus-data`目录下.
+
+* 数据持久化
+
+  容器中, 数据存在于`/nexus-data` , 有两种方式:
+
+  * 卷组
+
+    ```shell
+    $ docker volume create --name nexus-data
+    $ docker run -d -p 8081:8081 --name nexus -v nexus-data:/nexus-data sonatype/nexus3
+    ```
+
+  * 挂载
+
+    ```shell
+    $ mkdir /some/dir/nexus-data && chown -R 200 /some/dir/nexus-data
+    $ docker run -d -p 8081:8081 --name nexus -v /some/dir/nexus-data:/nexus-data sonatype/nexus3
+    ```
+
+    第一步是创建目录以及修改拥有者, 因为容器运行时, nexus会以UID为200的身份运行.
+
+## Nexus配置
+
+Nexus已经预提供了两个hosted仓库, 一个proxy仓库, 一个group仓库.
+
+![image-20200809233317052](.Maven/image-20200809233317052.png)
+
+这里主要介绍配置要点
+
+### proxy仓库
+
+* `Maven 2->Version policy`
+
+  仓库存储包的类型, 如`Release`(只存release包), `Snapshot`(只存snapshot包) 或`Mixed`(都存)
+
+* `Maven 2->Layout policy`
+
+  仓库中包的存放结构, 默认`Strict`即可
+
+* `Proxy->Remote storage`
+
+  被代理的仓库, 如中央仓库 `https://repo1.maven.org/maven2/` . 一般我们会使用maven仓库地址: `https://maven.aliyun.com/repository/public`.
+
+* `Proxy->Maximum component age`
+
+  缓存包的过期时间, 过期后, 若有请求, 会重新去被代理仓库中取. release仓库应该为`-1`, 即不检查.
+
+* `HTTP`
+
+  若被代理的仓库, 需要认证时填写的凭证. 略
+
+### hosted仓库
+
+* `Maven 2->Version policy`
+
+  仓库存储包的类型, 同上
+
+* `Hosted->Deployment policy`
+
+  包部署类型
+
+  * `Allow redeploy`
+
+    允许重新部署
+
+  * `Disable redeploy`
+
+    不允许重新部署
+
+  * `Read-only`
+
+    不允许部署, 仅允许读
+
+  一般release不允许重新部署, snapshot允许.
+
+### group仓库
+
+* `Group->Member repositories`
+
+  group仓库含有的仓库, 第一个仓库优先级最高, 即包搜索从第一个开始搜索的.
+
+### 认证
+
+* 访问Nexus中的包是需要认证的, 但一般我们会开启`Anonymous Access`, 此时我们可以
+
+  * 读每个仓库的包
+  * 访问Nexus的web页面, 但不能访问管理员页面.
+
+  开启Anonymous Access, 说明我们不用登录就有了游客的权限而已. 
+
+* 若要部署包, 游客权限远远不够, 需要其他权限. 我们可以直接在Maven项目中配置管理员权限. 或者新建用户, 赋予与管理员一样的角色.
+
+  ![image-20200810000300822](.Maven/image-20200810000300822.png)
+
+## Maven配置
+
+### 预备知识
+
+* `repository` 
+
+  POM中的元素, 用于配置远程仓库的. 可以配置多个远程仓库.
+
+  > 注意, 配置后, 会覆盖掉默认的中央仓库
+
+* `mirror` 
+
+  settings.xml中的元素, 用于配置镜像的. 而镜像本身, 根据通配符匹配远程仓库, 并修改匹配到的仓库的URL. 如
+
+  ```xml
+    <mirrors>
+          <!--国内阿里云提供的镜像，非常不错-->
+      <mirror>
+          <!--This sends everything else to /public -->
+          <id>aliyun_nexus</id>
+          <!--对所有仓库使用该镜像,除了一个名为maven_nexus_201的仓库除外-->
+          <!--这个名为maven_nexus_201的仓库可以在javamaven项目中配置一个repository-->
+          <mirrorOf>*,!maven_nexus_201</mirrorOf> 
+          <url>http://maven.aliyun.com/nexus/content/groups/public/</url>
+      </mirror>
+    </mirrors>
+  ```
+
+  该镜像替换掉了所有远程仓库的url, 除了`maven_nexus_201`, 该仓库用于获取局域网内的私有包.
+
+  > 匹配模式详细使用见[maven的setting配置文件中mirror和repository的区别](https://www.jianshu.com/p/274c363ffd7c)
+
+* 一般不再POM中声明远程仓库, 而在settings.xml中配置, 两者语法不同, 但`profile`元素内允许配置POM文件的元素.
+
+### 复杂配置
+
+settings.xml中
+
+```xml
+<settings>
+  <mirrors>
+    <!-- 镜像, 修改所有远程仓库的URL, 到maven-public仓库(group类型) -->
+    <mirror>
+      <id>nexus</id>
+      <name>本地Nexus仓库哦</name>
+      <mirrorOf>*</mirrorOf>
+      <url>http://localhost:8081/repository/maven-public/</url>
+    </mirror>
+  </mirrors>
+  <profiles>
+    <profile>
+      <!-- 该profile的id -->
+      <id>nexus</id>
+	  <!-- 远程仓管库 -->
+      <repositories>
+        <repository>
+          <id>central</id>
+          <url>http://central</url>
+          <releases><enabled>true</enabled></releases>
+          <snapshots><enabled>true</enabled></snapshots>
+        </repository>
+      </repositories>
+     <!-- 远程插件库(与远程仓库没区别) -->
+     <pluginRepositories>
+        <pluginRepository>
+          <id>central</id>
+          <url>http://central</url>
+          <releases><enabled>true</enabled></releases>
+          <snapshots><enabled>true</enabled></snapshots>
+        </pluginRepository>
+      </pluginRepositories>
+    </profile>
+  </profiles>
+  <activeProfiles>
+    <!-- 激活nexus配置, 让所有maven项目都生效 -->
+    <activeProfile>nexus</activeProfile>
+  </activeProfiles>
+</settings>
+```
+
+你可能会有如下疑点
+
+* 远程仓库的`id`, `url`随意配的? 
+
+  是的, 因为最终远程的仓库的url会被镜像nexus替换.
+
+* 那为何还要配置远程仓库, 好像不需要?
+
+  需要, 配置是为了配置远程仓库的类型信息, 如`release`元素为`true`时, 表示该远程仓库是release类型的, 可以下载或部署release包; `snapshot`同理.
+
+  因为url最终指向的是group仓库, 它两者都可下载或部署. 
+
+* 好像远程仓库真的都不用配置....
+
+  不对, `releases`和`snapshots`元素还有其他子元素, 控制不同远程仓库具体行为. 如`updatePolicy`元素控制本地仓库刷新本地缓存的方式. 应该默认缓存不刷新的吧.
+
+### 简单配置(推荐)
+
+settings.xml中
+
+```xml
+<mirrors>
+    <!-- 镜像, 修改所有远程仓库的URL, 到maven-public仓库(group类型) -->
+    <mirror>
+        <id>nexus</id>
+        <name>本地Nexus仓库哦</name>
+        <mirrorOf>*</mirrorOf>
+        <url>http://localhost:8081/repository/maven-public/</url>
+    </mirror>
+</mirrors>
+```
+
+直接配置指向group仓库的地址即可, 然后效果与上述配置一样. 但是父POM文件中, 明明是不允许的下载snapshot包的. 想不通就不想啦, 只要知道结果即可 ! .....
+
+### 部署配置
+
+若要部署Jar包, 游客身份(Anonymous Access)便不再适用啦. 需要配置更高权限的身份, 如管理员.
+
+settings.xml中, 声明release仓库和snapshot仓库的身份凭证
+
+```xml
+<servers>
+    <server>
+        <id>releases</id>
+        <username>admin</username>
+        <password>123456</password>
+    </server>
+    <server>
+        <id>Snapshots</id>
+        <username>admin</username>
+        <password>123456</password>
+    </server>
+</servers>
+```
+
+> `id`随意, 只要与接下里的配置一致即可.
+
+maven项目的pom.xml文件中, 声明release仓库和snapshot仓库的url.
+
+```xml
+<distributionManagement>
+    <repository>
+        <id>releases</id>
+        <url>http://localhost:8081/repository/maven-releases/</url>
+    </repository>
+    <snapshotRepository>
+        <id>Snapshots</id>
+        <url>http://localhost:8081/repository/maven-snapshots/</url>
+    </snapshotRepository>
+</distributionManagement>
+```
+
+> 其中, `id`必须与上述对应.
+
+然后`mvn deploy`后, 会根据不同的包名, 部署到不同的仓库中. 
+
+> **注意**, 这里必须是hosted类型的仓库, 因为其他类型仓库, 不具有部署包的功能.
+
+可以将`distributionManagement`写入settings.xml文件中吗? 理论上可以, 但我还没试过.
+
+## 其他
+
+### 刷新索引
+
+在Nexus的管理页面中, 有这功能.
+
+## 参考
+
+* [sonatype documentation](https://help.sonatype.com/docs) nexus 官方文档
+* [Repository Management](https://help.sonatype.com/repomanager3/repository-management) 讲述nexus仓库管理的概念, 和配置选项含义
+* [Maven Repositories](https://help.sonatype.com/repomanager3/formats/maven-repositories) Maven仓库的具体使用
+* [Maven中的库（repository）详解](https://www.cnblogs.com/winner-0715/p/7493387.html)
+* [maven的setting配置文件中mirror和repository的区别](https://www.jianshu.com/p/274c363ffd7c)
+* [Nexus安装和使用](https://www.cnblogs.com/grimm/p/11404862.html)
+
+# 其他
+
+## 父POM配置
+
+每个maven项目都是继承父POM的, 如下所示:
+
+```xml
+<project>
+  <modelVersion>4.0.0</modelVersion>
+  <name>Maven Default Project</name>
+  
+  <repositories>
+    <repository>
+      <id>central</id>
+      <name>Maven Repository Switchboard</name>
+      <layout>default</layout>
+      <url>http://repo1.maven.org/maven2</url>
+      <snapshots>
+        <enabled>false</enabled>
+      </snapshots>
+    </repository>
+  </repositories>
+  
+  <pluginRepositories>
+    <pluginRepository>
+      <id>central</id>
+      <name>Maven Plugin Repository</name>
+      <url>http://repo1.maven.org/maven2</url>
+      <layout>default</layout>
+      <snapshots>
+        <enabled>false</enabled>
+      </snapshots>
+      <releases>
+        <updatePolicy>never</updatePolicy>
+      </releases>
+    </pluginRepository>
+  </pluginRepositories>
+  
+  <build>
+    <directory>target</directory>
+    <outputDirectory>target/classes</outputDirectory>
+    <finalName>${artifactId}-${version}</finalName>
+    <testOutputDirectory>target/test-classes</testOutputDirectory>
+    <sourceDirectory>src/main/java</sourceDirectory>
+    <scriptSourceDirectory>src/main/scripts</scriptSourceDirectory>
+    <testSourceDirectory>src/test/java</testSourceDirectory>
+    <resources>
+      <resource>
+        <directory>src/main/resources</directory>
+      </resource>
+    </resources>
+    <testResources>
+      <testResource>
+        <directory>src/test/resources</directory>
+      </testResource>
+    </testResources>
+  </build>
+  
+  <reporting>
+    <outputDirectory>target/site</outputDirectory>
+  </reporting>
+  
+  <profiles>
+    <profile>
+      <id>release-profile</id>
+  
+      <activation>
+        <property>
+          <name>performRelease</name>
+        </property>
+      </activation>
+  
+      <build>
+        <plugins>
+          <plugin>
+            <inherited>true</inherited>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-source-plugin</artifactId>
+  
+            <executions>
+              <execution>
+                <id>attach-sources</id>
+                <goals>
+                  <goal>jar</goal>
+                </goals>
+              </execution>
+            </executions>
+          </plugin>
+          <plugin>
+            <inherited>true</inherited>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-javadoc-plugin</artifactId>
+  
+            <executions>
+              <execution>
+                <id>attach-javadocs</id>
+                <goals>
+                  <goal>jar</goal>
+                </goals>
+              </execution>
+            </executions>
+          </plugin>
+          <plugin>
+            <inherited>true</inherited>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-deploy-plugin</artifactId>
+  
+            <configuration>
+              <updateReleaseInfo>true</updateReleaseInfo>
+            </configuration>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
+  </profiles>
+  
+</project>
+```
+
+需要注意的是:
+
+- Default repo is maven repository.
+- Default execution goal is ‘jar’.
+- Default source code location is `src/main/java`.
+- Default test code location is `src/test/java`.
+
+> 参考[Maven – POM File](https://howtodoinjava.com/maven/maven-pom-files/)
 
 ## 简单使用
 

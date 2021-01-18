@@ -540,7 +540,7 @@ Win->计算机管理->计划任务
 
 * 窗口大小调整：win+方向键
 
-* 窗口方向：win+ctrl+方向键
+* 桌面切换：win+ctrl+方向键
 
 * 切换应用：alt+tab（反方向加shift）
 
@@ -776,3 +776,16 @@ jetbrains
 
 * [Windows下非常好用的包管理器scoop介绍](https://blog.csdn.net/u011054333/article/details/105237122)
 
+## 投屏到手机
+
+[spacedesk拓展屏幕玩法                 ](https://www.xysycx.cn/articles/2020/04/09/1586373439617.html)
+
+## Edge
+
+* Alt+Tab不切换标签页
+
+  ![image-20201127201249994](.Windows/image-20201127201249994.png)
+
+* Url Copy纯文本
+
+  ![image-20201127201332191](.Windows/image-20201127201332191.png)

@@ -145,6 +145,20 @@ systemd也是有参数的，不过systemd是内核执行的，因此可以在GRU
 * `systemd.unit=`：设置启动的unit，默认default.target。
 * ...：没了？？。。是的，你没看错。
 
+### Demo
+
+```
+[Unit]
+Description=ngrok
+After=network.target
+
+[Service]
+ExecStart=/myweb/ngrok/bin/ngrokd -tlsKey=/myweb/ngrok/server.key -tlsCrt=/myweb/ngrok/server.crt -domain="weixin.yangjiace.xyz" -httpAddr=":80" -httpsAddr=":443"
+
+[Install]
+WantedBy=multi-user.target
+```
+
 ## systemctl
 
 用于控制systemd系统和服务的管理器。命令如下：
@@ -186,6 +200,77 @@ systemd也是有参数的，不过systemd是内核执行的，因此可以在GRU
 >* `-P`:关闭主机。类似命令`poweroff`
 >* `-r`:重启主机。类似命令`reboot`
 >* `-c`:取消定时的关机。
+
+# Service
+
+> 好像`systemd`不支持`service`
+
+`service`命令用于运行`System V init`脚本, 用于服务管理.  systemd提供了新的服务配置方式, 但也兼容`System V int`脚本. 这里简单记录下
+
+* 启动服务
+
+  ```shell
+  service sshd start
+  ```
+
+* 关闭服务
+
+  ```shell
+  service sshd stop
+  ```
+
+* 重启服务
+
+  ```shell
+  service sshd restart
+  ```
+
+* 服务状态
+
+  ```shell
+  service sshd status
+  ```
+
+* 自定义service脚本模板
+
+  ```bash
+  #!/bin/bash
+  
+  start(){
+  }
+  
+  stop(){
+  }
+  
+  reload(){
+  }
+  
+  status(){
+  }
+  
+  case "$1" in
+          start)
+                  start 
+                  ;;
+          stop)
+                  stop 
+                  ;;
+          restart)
+                  stop
+                  start
+                  ;;
+          reload)
+                  reload
+  		;;
+          status)
+                  status
+                  ;;
+          *)
+                  echo $"Usage: $0 {start|stop|restart|reload|status}" 
+  esac
+  ```
+
+> 参考[Service command](https://bash.cyberciti.biz/guide/Service_command)
 
 # 参考
 

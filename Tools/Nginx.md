@@ -10,7 +10,8 @@
   * API网关
   * 邮件代理!
   * HTTP缓存
-
+* TCP, UDP代理
+  
 * 历史
 
   * 2004年由[Igor Sysoev](https://en.wikipedia.org/wiki/Igor_Sysoev)创建
@@ -95,6 +96,8 @@
     > 加载原理: 主线程解析配置, 成功则通知老工作线程做扫尾工作, 并开启新工作进程. 否则仍使用老配置
 
   * `nginx -s reopen`重开日记文件
+
+    > 作用见 [nginx reload和reopen](https://blog.csdn.net/u010433704/article/details/99817375)
 
   * `ps aux|grep nginx`查看所有nginx进程
 
@@ -399,6 +402,8 @@ server {
 
 ## Location
 
+### intro
+
 * 介绍
 
   映射请求到具体的资源上.
@@ -410,6 +415,8 @@ server {
   Default:	—
   Context:	server, location
   ```
+
+### 匹配
 
 * 匹配模式
 
@@ -461,47 +468,67 @@ server {
 
   > 注意, 前缀匹配过程中,  `=`和`^~`(需满足条件: 前缀最长) 无后缀匹配过程
 
-* 资源映射
+### 资源映射
 
-  * `root`
-  
-    `root`确定URL路径和**系统路径**的映射关系, 文件的真实路径=系统路径+URL路径.
-  
-      ```nginx
-    server {
-        location /images/ {
-            root /data;
-        }
+#### 静态资源
+
+建立URL路径与文件系统的映射关系
+
+* `root`
+
+  文件的真实路径=系统路径+URL路径.
+
+    ```nginx
+  server {
+      location /images/ {
+          root /data;
+      }
 }
-      ```
-    
-      > 如请求路径`/images/example.png`, 访问的文件路径则为`/data/images/example.png`
-    
-  * `proxy_pass`
+    ```
+  
+    > 如请求路径`/images/example.png`, 访问的文件路径则为`/data/images/example.png`
+  
+* `alias`
 
-    `proxy_pass`确定URL路径和**代理Server**的关系, 文件的真实路径=代理URL+去掉匹配前缀的URL路径
-  
-    ```nginx
-    server{
-     	location /app/ {
-        	proxy_pass      http://192.168.154.102;
-    	}   
-    }
-    ```
-  
-    > `test.com/app/xxxxx` =>  `http://192.168.154.102/xxxxx`
-  
-    ```nginx
-    server{
-     	location /app/ {
-            proxy_pass      http://192.168.154.102/maped_dir/;
-        }   
-    }
-    ```
-  
-    > `test.com/app/xxxxx` =>  `http://192.168.154.102/maped_dir/xxxxx`
-  
-    > 详细参考[Nginx proxy_pass: examples for how does nginx proxy_pass map the request](https://www.liaohuqiu.net/posts/nginx-proxy-pass/)
+  文件的真实路径=系统路径+去掉匹配前缀的URL路径
+
+  ```nginx
+  server {
+      location /images/ {
+          root /data;
+      }
+  }
+  ```
+
+  > 如请求路径`/images/example.png`, 访问的文件路径则为`/data/example.png`
+
+#### 反向代理
+
+* `proxy_pass`
+
+  `proxy_pass`确定URL路径和**代理Server**的关系, 文件的真实路径=代理URL+去掉匹配前缀的URL路径
+
+  ```nginx
+  server{
+   	location /app/ {
+      	proxy_pass      http://192.168.154.102;
+  	}   
+  }
+  ```
+
+  > `test.com/app/xxxxx` =>  `http://192.168.154.102/xxxxx`
+
+  ```nginx
+  server{
+   	location /app/ {
+          proxy_pass      http://192.168.154.102/maped_dir/;
+      }   
+  }
+  ```
+
+  > `test.com/app/xxxxx` =>  `http://192.168.154.102/maped_dir/xxxxx`
+
+  > 详细参考[Nginx proxy_pass: examples for how does nginx proxy_pass map the request](https://www.liaohuqiu.net/posts/nginx-proxy-pass/)
 
 ## 其他
 
@@ -554,7 +581,7 @@ server {
 
 * `proxy_set_header`
 
-  该指令可修改或新增头部字段.
+  该指令可修改或新增头部字段. 
 
   如, 代理默认不转发`host`头部, 现在让Niginx转发
 
@@ -563,6 +590,20 @@ server {
     ```
   
   > 这种方式有弊端, 若请求未存在`host`字段, 也不会被转发.
+  >
+  > `$XXX`变量详细请见 [其他/变量]
+  
+* Demo
+
+  代理时经常重写的头字段
+
+  ```nginx
+  proxy_set_header   Host                 $host:$server_port;
+  proxy_set_header   X-Real-IP            $remote_addr;
+  proxy_set_header   X-Forwarded-For      $proxy_add_x_forwarded_for;
+  proxy_set_header   X-Forwarded-Proto    $scheme;
+  ```
+
 
 > 参考
 >
@@ -613,10 +654,22 @@ server {
 }
 ```
 
+若报错`SSL_ERROR_RX_RECORD_TOO_LONG`, 则`listen`上添加`ssl`, 表示开启ssl
+
+```nginx
+listen 443 ssl;
+```
+
 > 参考
 >
 > * [在Nginx/Tengine服务器上安装证书](https://help.aliyun.com/document_detail/98728.html?spm=5176.2020520154.0.0.675456a7crLH9u)
 > * [Nginx安装SSL配置HTTPs超详细完整全过程](https://www.hack520.com/481.html)
+>
+> HTTPS进一步优化
+>
+> * [八个HTTPS和SSL优化使用心得-减少等待时间和降低Https性能损耗](https://wzfou.com/https-ssl/)
+> * [SSL Configuration Generator](https://ssl-config.mozilla.org/)
+> * [linux安装nginx、增强配置ssl、http2](https://blog.csdn.net/long2010110/article/details/82351206)
 
 ## upstream
 
@@ -657,6 +710,53 @@ server {
 >
 > * [Module ngx_http_upstream_module](http://nginx.org/en/docs/http/ngx_http_upstream_module.html)
 > * [What does upstream mean in nginx?](https://stackoverflow.com/questions/5877929/what-does-upstream-mean-in-nginx)
+
+## stream
+
+TCP, UDP代理配置在`stream`指令中. `stream`指令与`http`指令同级
+
+一个Demo
+
+```nginx
+stream {
+    upstream backend {
+        hash $remote_addr consistent;
+
+        server backend1.example.com:12345 weight=5;
+        server 127.0.0.1:12345            max_fails=3 fail_timeout=30s;
+        server unix:/tmp/backend3;
+    }
+
+    upstream dns {
+       server 192.168.0.1:53535;
+       server dns.example.com:53;
+    }
+
+    # 代理tcp
+    server {
+        listen 12345;
+        proxy_connect_timeout 1s;
+        proxy_timeout 3s;
+        proxy_pass backend;
+    }
+	
+    # 代理udp, 需要有udp和reuseport参数
+    server {
+        listen 127.0.0.1:53 udp reuseport;
+        proxy_timeout 20s;
+        proxy_pass dns;
+    }
+    # 代理linux socket
+    server {
+        listen [::1]:12345;
+        proxy_pass unix:/tmp/stream.socket;
+    }
+}
+```
+
+> 好像必须要有`upstream`哦
+
+> 参考[http://nginx.org/en/docs/stream/ngx_stream_core_module.html]
 
 ## gzip压缩
 
@@ -703,6 +803,72 @@ gzip_comp_level 2; # 提高压缩率
 gzip_vary on;
 ```
 
+## 超时时间
+
+nginx默认有超时时间, 可修改
+
+* `proxy_read_timeout` 
+
+  从代理服务上读取响应的时间, 默认60s.
+
+  注意, The timeout is set only between two successive read operations, not for the transmission of the whole response
+
+* `proxy_send_timeout`
+
+  将请求发给代理服务的时间, 默认60s.
+
+  注意, The timeout is set only between two successive write operations, not for the transmission of the whole request.
+
+* `proxy_connect_timeout`
+
+  与代理服务建立连接的等待时间. 默认60s, 最大不超过75s.
+
+* `proxy_ignore_client_abort`
+
+  貌似和超时时间无关.
+
+> 参考[Module ngx_http_proxy_module](http://nginx.org/en/docs/http/ngx_http_proxy_module.html)
+
+## 访问日志
+
+```nginx
+server{
+    ...
+        
+    access_log /data/log/nginx/logs/gitlab.access.log;
+}
+```
+
+## 代理服务的常用配置
+
+```nginx
+location / {
+    proxy_pass http://192.168.0.177:7000/;
+    proxy_redirect http://112.34.250.45/ http://$host:$server_port/ ;
+	proxy_set_header   Host $host:$server_port; 
+    proxy_set_header   X-Real-IP   $remote_addr;
+    proxy_set_header   X-Forwarded-For $proxy_add_x_forwarded_for;
+}
+```
+
+其中, 
+
+* `proxy_redirect `修改响应的重定向地址, 保证正确的指向nginx
+
+* `X-Forwarded-For` 是一个 HTTP 扩展头部，用来表示 HTTP 请求端真实 IP , 格式:
+
+  ```
+  X-Forwarded-For: client, proxy1, proxy2
+  ```
+
+## Vue HTML5 Model
+
+```nginx
+location / {
+  try_files $uri $uri/ /index.html;
+}
+```
+
 # 其他
 
 ## 变量
@@ -720,6 +886,11 @@ nginx中可以定义变量, 也提供了代表请求头字段的变量.
   代表URL上的host. 与`$http_host`相比, 无port
 
   > `$http_host` vs. `$host` , 见[What's the difference of $host and $http_host in Nginx](https://stackoverflow.com/questions/15414810/whats-the-difference-of-host-and-http-host-in-nginx)
+  
+* 端口
+
+  * `$proxy_port` 被代理服务器的端口, 即`proxy_pass`上指定的端口
+  * `$server_port` server监听的端口
 
 > 见[Embedded Variables](https://nginx.org/en/docs/http/ngx_http_core_module.html?&_ga=2.36392416.114713352.1578467350-2037701528.1578467350#variables)
 
@@ -740,7 +911,7 @@ nginx中可以定义变量, 也提供了代表请求头字段的变量.
 
 > 参考:[Nginx出现403 forbidden](https://blog.csdn.net/qq_35843543/article/details/81561240)
 
-## 常用配置
+## 常用配置(弃)
 
 location或server中常用配置
 
@@ -749,13 +920,60 @@ proxy_http_version 1.1;
 #静态站点访问策略一般一个页面会有多个jpg,css,js等,开启会话保持
 proxy_set_header Connection "Keep-Alive"; 
 #nginx参数，使用客户端的Host
-proxy_set_header Host $host; 
+proxy_set_header Host $host:$server_port; 
 #L7负载常用配置，由于waf反向代理，X-Real-IP需要在F5进行开启
 proxy_set_header X-Real-IP $remote_addr;
 #X-Forwarded-For 是一个 HTTP 扩展头部，用来表示 HTTP 请求端真实 IP
 #格式X-Forwarded-For: client, proxy1, proxy2
 proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
 ```
+
+## Demo
+
+```nginx
+upstream tcm-cdss {
+    server api_host:3001;
+}
+
+server {
+        listen 443 ssl;
+        server_name your_domain;
+
+        ssl_certificate /usr/local/nginx/conf/cert/doamin.host.com_chain.crt;
+        ssl_certificate_key /usr/local/nginx/conf/cert/domain.host.com_key.key;
+        ssl_session_timeout 5m;
+        ssl_ciphers HIGH:!aNULL:!MD5;
+        ssl_protocols TLSv1 TLSv1.1 TLSv1.2;
+        ssl_prefer_server_ciphers on;
+
+        location /tcm-cdss/ {
+             proxy_pass http://tcm-cdss/tcm-cdss/;
+             proxy_set_header   Host $host:$server_port;
+             proxy_set_header   X-Real-IP   $remote_addr;
+             proxy_set_header   X-Forwarded-For $proxy_add_x_forwarded_for;
+       }
+
+        location /dict/ {
+             proxy_pass http://tcm-cdss/dict/;
+             proxy_set_header   Host $host:$server_port;
+             proxy_set_header   X-Real-IP   $remote_addr;
+             proxy_set_header   X-Forwarded-For $proxy_add_x_forwarded_for;
+
+        }
+
+        location / {
+                root /data/web/doctor-ui/;
+                try_files $uri $uri/ /index.html;
+        }
+}
+server {
+        listen 80;
+        server_name your_domain;
+        return 301 https://$server_name$request_uri;
+}
+```
+
+
 
 # 参考
 

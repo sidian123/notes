@@ -155,7 +155,7 @@ const router = new VueRouter({
     
     下面的`id`匹配任何URL片段, 如`/user/foo`, `/user/bar`都将路由到`User`组件上.
     
-```javascript
+	```javascript
     const User = {
       template: '<div>User {{ $route.params.id }}</div>'
     }
@@ -166,7 +166,7 @@ const router = new VueRouter({
         { path: '/user/:id', component: User }
       ]
     })
-```
+	```
 
     `$route.params`可以取出动态片段的内容, 并展示为一个对象, 如`{id:'foo'}`
 
@@ -353,6 +353,21 @@ const router = new VueRouter({
     { path: '/foo', component: ()=>import('./Foo.vue') }
   ]
 })
+```
+
+# 其他
+
+## Demo
+
+```javascript
+{
+    path: 'drug-ingredient-category',
+    name: 'DrugIngredientCategory',
+    meta: {
+    title: '药物成分分类'
+    },
+    component: () => import('../views/DrugManage/DrugIngredientCategory/DrugIngredientCategory')
+}
 ```
 
 # 参考

@@ -132,7 +132,7 @@ vue cli项目中，会同时安装可执行文件`vue-cli-service`，它是用�
 
   * `/`：绝对路径，如`/image/foo.png`，不做处理。
   
-  * `.`：相对路径，会被解析成模块请求，最终转化为根绝对路径
+  * `./` 或 `../`：相对路径，会被解析成模块请求，最终转化为根绝对路径
 
   * `@`：指向`<projectRoot>/src`，会被解析成模块请求，最终转化为根绝对路径。
   
@@ -165,7 +165,12 @@ vue cli项目中，会同时安装可执行文件`vue-cli-service`，它是用�
 
 
 ## Scoped css
+
+### 介绍
+
 当`style`元素加上`scoped`属性时，组件的css只会作用到该组件的单个实例上。它是通过**后css处理器**实现的。
+
+### 原理
 
 css处理前：
 ```html
@@ -197,12 +202,59 @@ css处理前：
 
 因此父组件想影响有`scoped`的子组件的样式时，需要设法加重选择器的重要性，比如`!important`
 
-注意：
+### 注意点
+
 * 组件的不同的实例的css样式都不重复，会导致解析速度下降。
 * 对于动态生产的组件不会起作用，因为scoped是在打包时作用的。
 * 编写容器组件（包括含`<slot>`的组件）时，容器组件的根class不要与子组件的根class同名，因为子组件的根class仍会拥有容器组件的唯一标识属性，导致子组件样式被覆盖。因此，最好容器组件的class唯一或选择器唯一。
 
->参考：[Scoped CSS](https://vue-loader.vuejs.org/guide/scoped-css.html#mixing-local-and-global-styles)
+### 样式穿透
+
+在scoped中穿透样式
+
+* 在sass/scss中使用`::v-deep`
+
+  ```scss
+  .a {
+      ::v-deep .b{
+          height: 1rem;
+      }
+  }
+  ```
+
+* 在less中使用`/deep/`
+
+  ```less
+  .a {
+      /deep/ .b{
+          height: 1rem;
+      }
+  }
+  ```
+  
+* 在stylus中使用`>>>`
+
+  ```stylus
+  .a {
+      >>> .b{
+          height: 1rem;
+      }
+  }
+  ```
+
+* 编译成
+
+  ```css
+  .a[data-v-f3f3eg9] .b { 
+  	height: 1rem;
+  }
+  ```
+
+### 参考
+
+* [Scoped CSS](https://vue-loader.vuejs.org/guide/scoped-css.html#mixing-local-and-global-styles)
+* [How do I use /deep/ or >>> in Vue.js?](https://stackoverflow.com/questions/48032006/how-do-i-use-deep-or-in-vue-js)
+
 # 九 vue配置
 
 * 配置文件`vue.config.js`
@@ -228,16 +280,16 @@ css处理前：
         port:8000,
         //配置代理
         proxy:{
-          //拦截的url
-          '/api/':{
+          //拦截的url, 匹配前缀,支持正则
+          '/api':{
             //转发到目标服务器的url
-            target:"http://localhost:8080/",
+            target:"http://localhost:8080",
             //是否代理websockets,可选
             ws:true,
             //是否修改Host头部，可选
-            changeOrgin:true,
+            changeOrigin:true,
             //修改请求路径,支持正则
-            pathRewrite:{'/api/':''},
+            pathRewrite:{'/api':''},
             //是否忽略掉Https证书问题
             //secure: false
           }
@@ -254,11 +306,17 @@ css处理前：
   > URL最先匹配的代理规则会被使用.
   >
   > 如, 依顺序存在规则`/api`, `/api2`, 那么`/api2`规则永远不会被使用, 应该改成`/api/`, `/api2/`
-  
-  > 参考
-  >
-  > * [devServer.proxy](https://cli.vuejs.org/config/#devserver-proxy)
-  > * [context matching](https://github.com/chimurai/http-proxy-middleware#context-matching)
+
+* 详细配置
+  * **.xfwd**: true/false, 是否添加x-forward地址. 默认true
+  * **headers**: 添加请求头不, 如`{host:'www.example.org'}`
+
+
+
+> 参考
+>
+> * [devServer.proxy](https://cli.vuejs.org/config/#devserver-proxy)
+> * [context matching](https://github.com/chimurai/http-proxy-middleware#context-matching)
 
 ## eslint
 
@@ -272,15 +330,18 @@ eslint帮助减少隐藏错误.
     javascript code // eslint-disable-line
     ```
     
-2. 禁止整个文件的eslint校验
+2. 禁止多行的eslint校验
+
+    * `eslint-disable` 禁止该行下面的eslint校验
+    * `eslint-enable` 启动该行下面的eslint校验
+
+    例子:
 
     ```javascript
     /* eslint-disable */
     your code
-    /* eslint-disable */
+    /* eslint-enable */
     ```
-
-    > 好像文件尾也不用添加注释
 
 3. 禁用eslint, 有多种方案
 
@@ -315,6 +376,64 @@ eslint帮助减少隐藏错误.
 >
 > * [@vue/cli-plugin-eslint](<https://github.com/vuejs/vue-cli/tree/dev/packages/%40vue/cli-plugin-eslint>)
 > * [How can I disable eslint correct?](https://stackoverflow.com/questions/58634424/how-can-i-disable-eslint-correct)
+
+## 模式&环境变量
+
+* 不同的模式下, 会读不同的配置文件, 文件中可以配置环境变量
+
+  ```
+  .env                # loaded in all cases
+  .env.local          # loaded in all cases, ignored by git
+  .env.[mode]         # only loaded in specified mode
+  .env.[mode].local   # only loaded in specified mode, ignored by git
+  ```
+
+  > `*.local`的文件在vue脚手架的`.gitignore`文件中默认忽略.
+
+  `env`和`env.local`所有情况下都读, 但变量优先级要比模式具体相关的文件要低.
+
+* 配置文件的一个Demo, `.env.staging`
+
+  ```
+  NODE_ENV=production
+  VUE_APP_TITLE=My App (staging)
+  ```
+
+* `NODE_ENV`一般等于模式值, 如上述的`staging`. 但一般还是会在配置文件中修改`NODE_ENV`为**特殊**的三个值, 不同值时, 会有不同的插件执行, 如
+
+  * `development` 将启动热模块更新HMR. 使用`vue-cli-service serve`命令时默认该值
+  * `test `为单元测试进行优化. 使用`vue-cli-service test:unit`命令时默认该值
+  * `production` 为生成环境优化. 使用`vue-cli-service build`和`vue-cli-service test:e2e`时默认该值
+
+* 模式修改
+
+  上述命名的默认模式是可以修改的, 加`--mode`, 如
+
+  ```shell
+  vue-cli-service build --mode development
+  ```
+
+* 环境变量使用
+
+  ```
+  console.log(process.env.VUE_APP_NOT_SECRET_CODE)
+  ```
+
+  上述变量会在构建时**替换**.
+
+* 环境变量其他设置方式
+
+  在`vue.config.js`中配置
+
+  ```js
+  process.env.VUE_APP_VERSION = require('./package.json').version
+  
+  module.exports = {
+    // config
+  }
+  ```
+
+> [Modes and Environment Variables](https://cli.vuejs.org/guide/mode-and-env.html#modes)
 
 # 十 其他
 

@@ -326,7 +326,7 @@ pwd（print working directory）打印当前工作目录。
 >grep [OPTIONS] PATTERN [FILE...]
 >
 >* `-i`：忽略大小写
->* `-v`：Invert the sense of matching, to select non-matching lines.
+>* `-v`：Invert the sense of matching, to select non-matching lines. 反向匹配
 >* `-E`(`egrep`)：使用扩展正规表达式
 
 看了`man grep`后，发现**基本正则**（grep）和**扩展正则**（egrep）基本没什么区别，但grep更符合我的预期。所有语言的正则语法都差不多，可参考：[正则表达式--java][2]
@@ -367,6 +367,8 @@ pwd（print working directory）打印当前工作目录。
     > 实时监控功能还是没有`tail`强, 如文件内容被清空时`less`不能检测到
 
   * `R`: 丢弃缓存, 重绘屏幕.
+  
+  * `-N` 打印行号
 
 ## head and tail
 
@@ -493,10 +495,14 @@ passwd用来改变密码。需要输入旧密码和新密码两次。通过调�
 
 ## date
 
-打印或设置日期。这里不展开
+打印或设置日期。
 
->$ date
->Wed Dec 19 18:19:46 CST 2018
+```shell
+$ date
+Wed Dec 19 18:19:46 CST 2018
+```
+
+> 这里不展开, 详细见下方*时间*
 
 ## groups
 
@@ -868,6 +874,8 @@ chmod [OPTION]... MODE[,MODE]... FILE...
 chmod [OPTION]... OCTAL-MODE FILE...
 ```
 
+* `-R` 递归改变文件mode
+
 可以通过符号表示或八进制数修改权限：
 
 * **symbolic mode**(符号模式)
@@ -951,15 +959,20 @@ tar主要是让多个文件或压缩包归为一个档案。除此之外它还�
 >* `-x`：提取档案内容
 >* `-t`：列出档案所有文件
 >* `-r`：添加文件到档案后
->  常用选项：
+>
+>常用选项：
+>
 >* `-v`：详细列出所有操作步骤
 >* `-f`：档案名，后面必须接档案名
 >* `-z`：使用压缩工具gzip
 >* `-j`：使用压缩工具bzip2
 >* `-J`：使用压缩工具xz
->  其他选项：
+>
+>其他选项：
+>
 >* `--skip-old-files`：提取文件时不覆盖以存在文件。**默认覆盖**。
 >* `-p`：提取文件时，保留它的文件权限。root用户默认此选项。
+>* `-C`: 解压文件存放路径, 前提路径已存在
 
 一些例子：
 
@@ -969,6 +982,30 @@ $ tar -xvzf archive.tar.gz
 ```
 
 创建档案时，对档案后缀没有强制规定，但是最好使用常用后缀名。比如：归档不压缩，`file.tar`；归档并用gzip压缩，`file.tar.gz`等等之类。注意到一些后缀，如`.tgz`与`.gz`相同，`.taz`与`.tar.Z`相同。
+
+# 加解密
+
+> 参考[linux下文件加密方法总结](https://www.cnblogs.com/wuchangsoft/p/11747739.html)
+
+## ZIP加解密
+
+加密
+
+```shell
+zip -e test.txt.zip test.txt
+```
+
+> 选项`-e`指定加密后的文件名; 之后会被要求输入密码两次
+
+解密
+
+```shell
+unzip -j test.txt.zip
+```
+
+> 选项`-j`创建归档路径目录; 之后会被要求输入密码两次
+
+> 或者使用`--password`或`-P`选项, 直接指定密码
 
 # 目录结构
 
@@ -1112,9 +1149,19 @@ linux是一个多用户的系统，有用户、组的概念。不同的用户、
 
 修改密码
 
+```shell
+passwd # 修改当前账户密码
+sudo passwd root # 修改root账户密码
+sudo passwd -l root # 让账户密码处于过期状态
+```
+
 ### chsh
 
 修改shell
+
+### whoami
+
+查看当前用户
 
 # top
 
@@ -1177,7 +1224,7 @@ top能够动态显示系统总的cpu、内存使用状态和各个进程的资�
 
 * `h`：**最常用！！！内容必看**
 * `L`，`&`：L查找进程，&搜索下一个
-* `<`，`>`：切换排序字段
+* `F` 添加, 删除, 排序, 移动列
 * **导航**：方向键都可以用，如up,down,left,right,home,end
 * `k`：与kill命令一致，给出PID和信号（可数字或信号名）。停止进程建议term，后kill。
 * `d`或`s`：设置刷新间隔，默认3秒
@@ -1197,9 +1244,10 @@ top能够动态显示系统总的cpu、内存使用状态和各个进程的资�
 
 查看或设置系统时钟
 
->`date` 查看本时区当前时钟
->`date -s "2018-11-2 22:30"` 设置系统时钟，但重启后失效
->`date -u` 显示UTC时区的时钟
+* `date` 查看本时区当前时钟
+* `date -s "2018-11-2 22:30"` 设置系统时钟，但重启后失效
+* `date -u` 显示UTC时区的时钟
+* `date +"%Y-%m-%d"` 输出年月日, 如`2021-01-13`
 
 ## hwclock
 
@@ -1221,6 +1269,12 @@ Fri Mar 15 22:00:54 CDT 2019
 ```
 
 >如果不知道时区名字，可以参考`/usr/share/zoneinfo`目录或执行`tzselect`命令
+
+## 时间同步
+
+ntp
+
+[第十五章、时间服务器： NTP 服务器](http://linux.vbird.org/linux_server/0440ntp.php)
 
 # 计划任务
 
@@ -1264,7 +1318,7 @@ cron是一个守护进程，用于在规定时间点上执行任务（job）。�
   00 21 * * * root rm /home/bob/trash/*
   ```
 
-  表示每天21点清空bob用户的垃圾。
+  表示每天~~21~~ 22 点清空bob用户的垃圾。
 
 > 参考：
 >

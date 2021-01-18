@@ -630,6 +630,10 @@ public class UsageTracking {
 
 不写了, 见[ Determining Argument Names ](https://docs.spring.io/spring-framework/docs/current/spring-framework-reference/core.html#aop-ataspectj-advice-params-names)
 
+## 解决循环引用
+
+注入的对象使用懒注入`@Lazy`
+
 # 参考
 
 * [Aspect Oriented Programming with Spring](https://docs.spring.io/spring-framework/docs/current/spring-framework-reference/core.html#aop)

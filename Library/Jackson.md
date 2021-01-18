@@ -4,29 +4,32 @@
 jackson用于在java对象与JSON之间映射。jackson有三种处理JSON的处理模型：
 * **Data Binding**：在JSON与简单对象（POJO，Maps, Lists, Strings, Numbers, Booleans 和null）或更复杂一点的对象（如对象中还有其他复杂对象）之间转换。
 * **Tree Model**：在内存中，JSON被表示为树的形式，便于遍历。
-* **Streaming Model**：前面两种处理模型都是基于该模型的，使用它主要是为了获得更高的性能或更细致的控制。
+* **Streaming Model**：以流的方式读取字段或值. 前面两种处理模型都是基于该模型的，使用它主要是为了获得更高的性能或更细致的控制。
 
 这里讲述Data Binding模型。
 
 # 二 Maven配置
 ```xml
-      <dependency>
-          <groupId>com.fasterxml.jackson.core</groupId>
-          <artifactId>jackson-core</artifactId>
-          <version>2.9.7</version>
-      </dependency>
-      <dependency>
-          <groupId>com.fasterxml.jackson.core</groupId>
-          <artifactId>jackson-annotations</artifactId>
-          <version>2.9.7</version>
-      </dependency>
-      <dependency>
-          <groupId>com.fasterxml.jackson.core</groupId>
-          <artifactId>jackson-databind</artifactId>
-          <version>2.9.7</version>
-      </dependency>
+<dependency>
+    <groupId>com.fasterxml.jackson.core</groupId>
+    <artifactId>jackson-core</artifactId>
+    <version>2.11.2</version>
+</dependency>
+<dependency>
+    <groupId>com.fasterxml.jackson.core</groupId>
+    <artifactId>jackson-annotations</artifactId>
+    <version>2.11.2</version>
+</dependency>
+<dependency>
+    <groupId>com.fasterxml.jackson.core</groupId>
+    <artifactId>jackson-databind</artifactId>
+    <version>2.11.2</version>
+</dependency>
 ```
 # 三 使用
+
+## Data Binding
+
 主要使用`ObjectMapper`类，通过`readValue`方法解析JSON，可以从网络（`URL`）、文件或字符串上获得JSON，使用时需要传入对应的java类型；通过`writeValue`方法生成JSON，可以写入到字符串、文件中。
 
 JSON类型和java类型的对应关系：
@@ -43,7 +46,7 @@ JSON类型和java类型的对应关系：
 
 对于object类型的JSON，可以使用Map、pojo，或者更复杂的对象。如果复杂对象和Map混用，需要用到泛型，由于编译后类型信息丢失，我们需要`TypeReference`类保存泛型信息。
 
-## POJO与JSON
+### POJO与JSON
 假设有POJO类：
 ```java
 // Note: can use getters/setters as well; here we just use public fields directly:
@@ -73,7 +76,7 @@ byte[] jsonBytes = mapper.writeValueAsBytes(myResultObject);
 // or:
 String jsonString = mapper.writeValueAsString(myResultObject);
 ```
-## Map,List与JSON
+### Map,List与JSON
 如果JSON类型比较简单，则不用传入java泛型信息：
 ```java
 //如果JSON为数值
@@ -92,11 +95,96 @@ Map<String, ResultValue> results = mapper.readValue(jsonSource,
    new TypeReference<Map<String, ResultValue>>() { } );
 // why extra work? Java Type Erasure will prevent type detection otherwise
 ```
-# 四 注解
+## Tree Model
+
+## Streaming Model
+
+> 参考[Reading and Writing Event Streams](http://www.cowtowncoder.com/blog/archives/2009/01/entry_132.html)
+
+### 读取
+
+* 使用
+  * `JsonParser`作为一个光标, 指向正在读取的位置 (准确的说, token). 位置可以是
+    * START_OBJECT : `{`
+    * END_OBJECT: `}`
+    * START_ARRAY: `[`
+    * END_ARRAY: `]`
+    * 属性名
+    * 属性值
+  * `JsonParser.nextToken()`移动光标到下一个Token, 并同时返回该token
+  * `JsonParser.getCurrentName()`获取当前Token名, 主要用于字段名
+  * `JsonParser.getXXXValue()` 读取当前Token, 转化为XXX类型, 主要用于字段值.
+
+* 使用例子
+
+  Json文本
+
+  ```json
+  {
+      "id":1125687077,
+      "text":"@stroughtonsmith You need to add a \"Favourites\" tab to TC/iPhone. Like what TwitterFon did. I can't WAIT for your Twitter App!! :) Any ETA?",
+      "fromUserId":855523, 
+      "toUserId":815309,
+      "languageCode":"en"
+  }
+  ```
+
+  对应的实体
+
+  ```java
+  @Data
+  public class TwitterEntry
+  {
+      long _id;  
+      String _text;
+      int _fromUserId, _toUserId;
+      String _languageCode;
+  }
+  ```
+
+  映射到实体的方法
+
+  ```java
+  TwitterEntry read(JsonParser jp) throws IOException
+  {
+      // Sanity check: verify that we got "Json Object":
+      if (jp.nextToken() != JsonToken.START_OBJECT) {
+          throw new IOException("Expected data to start with an Object");
+      }
+      TwitterEntry result = new TwitterEntry();
+      // Iterate over object fields:
+      while (jp.nextToken() != JsonToken.END_OBJECT) {
+          String fieldName = jp.getCurrentName();
+          // Let's move to value
+          jp.nextToken();
+          if (fieldName.equals("id")) {
+              result.setId(jp.getLongValue());
+          } else if (fieldName.equals("text")) {
+              result.setText(jp.getText());
+          } else if (fieldName.equals("fromUserId")) {
+              result.setFromUserId(jp.getIntValue());
+          } else if (fieldName.equals("toUserId")) {
+              result.setToUserId(jp.getIntValue());
+          } else if (fieldName.equals("languageCode")) {
+              result.setLanguageCode(jp.getText());
+          } else { // ignore, or signal error?
+              throw new IOException("Unrecognized field '"+fieldName+"'");
+          }
+      }
+      jp.close(); // important to close both parser and underlying File reader
+      return result;
+  }
+  ```
+
+### 写入
+
+# 四 配置
 
 > 所有注解参考[Jackson Annotations](https://github.com/FasterXML/jackson-docs/wiki/JacksonAnnotations)
 
-## 更改属性名
+## 序列化相关
+
+### 更改属性名
 
 * 方式一
 
@@ -110,7 +198,7 @@ Map<String, ResultValue> results = mapper.readValue(jsonSource,
       /****setter and getter****/
     ...
   }
-    ```
+  ```
   
 * 方式二
 
@@ -133,9 +221,14 @@ Map<String, ResultValue> results = mapper.readValue(jsonSource,
       }
   }
   ```
-## 忽略属性
+  
+  > `@JsonGetter`只能注解
+  
 
-### 默认规则
+
+### 忽略属性
+
+#### 默认规则
 
 即`DEFAULT_VIEW_INCLUSION`, 表示没有被显式注解的属性都将参与到序列化与解析的过程中.
 
@@ -148,7 +241,7 @@ Jackson可识别的属性:
 
 可以显示声明属性, 如上面的`@JsonProperty`不传参数; 可显式忽略属性, 如下面的`@JsonIgnore`
 
-### 静态忽略
+#### 静态忽略
 
 即使用时, 将序列化的属性已经固定死了, 用于微调默认行为. 常用的注解如下:
 
@@ -173,7 +266,7 @@ class Student{
 	...
 }
 ```
-### 动态忽略-view
+#### 动态忽略-view
 
 `@JsonView`可定义好不同的视图, 有不同的序列化和解析规则. 使用时可指定不同的view, 即可实现动态解析.
 
@@ -261,6 +354,28 @@ public class ItemController {
 >
 > - https://github.com/FasterXML/jackson-databind/
 > - http://www.cowtowncoder.com/blog/archives/2011/02/entry_443.html
+
+## 反序列化相关
+
+### 忽略未知属性
+
+类上添加`@JsonIgnoreProperties(ignoreUnknown = true)`, 如
+
+```java
+@JsonIgnoreProperties(ignoreUnknown = true)
+public class LKClassData {
+
+    public String description;
+    public String primaryKey;
+
+    @Override
+    public String toString() {
+        return description;
+    }
+}
+```
+
+> 好像默认忽略未知属性的.
 
 ## 序列化或解析方式
 
@@ -446,6 +561,34 @@ Simple value = xmlMapper.readValue("<Simple><x>1</x><y>2</y></Simple>", Simple.c
 值得了解的xml注解：
 * `@JacksonXmlRootElement` allows specifying XML element to use for wrapping the root element (default uses 'simple name' of the value class)
 * `@JacksonXmlCData` allows specifying that the value of a property is to be serialized within a CData tag.
+
+# 踩坑
+
+## 属性名变小写了
+
+属性名在序列化后会改变, 改变规则如下:
+
+> 第一个或第一个字符是大写时, 该字符及其之后**连续**的大写字符都将转化成小写
+
+例子: 
+
+```
+pId -> pid
+Pid -> pid
+PId -> pid
+PIIIDDDDD -> piiiddddd
+ssId -> ssId
+sIDDDDD -> siddddd
+```
+
+## 解决BigDecimal精度丢失问题
+
+```java
+objectMapper.setNodeFactory(JsonNodeFactory.withExactBigDecimals(true));
+objectMapper.configure(DeserializationFeature.USE_BIG_DECIMAL_FOR_FLOATS, true);
+```
+
+> 参考[Deserializing BigDecimal using JsonNode loses precision](https://github.com/FasterXML/jackson-databind/issues/2087#issuecomment-593670525)
 
 # 参考
 * [FasterXML/jackson-databind](https://github.com/FasterXML/jackson-databind/) Json序列化的官方教程

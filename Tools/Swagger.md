@@ -76,13 +76,14 @@ public class SpringFoxConfig {
 
   描述类
 
-  * `tags` 类名
+  * `value` 类名
   * `description` 类详细信息
+  * `tags` 标签. knife4j用的这个
 
   > 常用`description`
 
   ```java
-  @Api(tags="测试类")
+  @Api("测试类")
   @RestController
   public class TestController {
   	//...
@@ -127,6 +128,31 @@ public class SpringFoxConfig {
   > `@ApiParam`仅含语义, 并无约束, 所以常常配置`@RequestParam`注解使用, 达到描述与其功能一致性
   
   请最好配合`@RequestParam`使用, 否则参数将被当作请求体参数!!!
+  
+* 另一种请求参数描述方式
+
+  ```java
+  @ApiOperation(value = "分页获取数据列表", notes = "分页获取数据列表", produces = "application/json")
+  @ApiImplicitParams({
+      @ApiImplicitParam(name = "tid", value = "Token Id", dataType = "String", required = true, paramType = "header"),
+      @ApiImplicitParam(name = "name", paramType = "name", dataType = "String"),
+      @ApiImplicitParam(name = "type", paramType = "数据类型,1-指南,2-普通文本", dataType = "int"),
+      @ApiImplicitParam(name = "pageNum", paramType = "query", dataType = "int", defaultValue = "1"),
+      @ApiImplicitParam(name = "pageSize", paramType = "query", dataType = "int", defaultValue = "10"),
+  })
+  @RequestMapping(value = "/data", method = RequestMethod.GET)
+  public HttpResponseTemp<ItemsPageEntity<DataResultEntity>> getDataListByPage(
+      @RequestParam(value = "name", required = false) String name,
+      @RequestParam(value = "type", required = false) Integer type,
+      @RequestParam(value = "pageNum", required = false, defaultValue = "1") int pageNum,
+      @RequestParam(value = "pageSize", required = false, defaultValue = "10") int pageSize) {
+      ControllerHelper.validatePageSize(pageNum, pageSize);
+      ItemsPageEntity<DataResultEntity> itemsPageEntity = dataService.getDataList(name, type, pageNum, pageSize);
+      return HttpResponseTemp.success(itemsPageEntity);
+  }
+  ```
+
+  
 
 ## Model相关
 
@@ -147,6 +173,106 @@ public class SpringFoxConfig {
   * `required` 是否必填
   * `example` 为该字段的值举个例子
   * `hidden` 不显示该字段
+
+# 其他
+
+## knife4j
+
+[knife4j](https://gitee.com/xiaoym/knife4j) 也是一种Swagger文档的呈现形式, 界面内容更充实, 美观. 推荐使用
+
+文档地址: `/doc.html`
+
+* `pom.xml`
+
+  ```xml
+  <dependency>
+      <groupId>com.github.xiaoymin</groupId>
+      <artifactId>knife4j-spring-boot-starter</artifactId>
+      <version>2.0.7</version>
+  </dependency>
+  ```
+  
+* 配置
+
+  ```properties
+  ## 开启Swagger的Basic认证功能,默认是false
+  knife4j.basic.enable=true
+  ## Basic认证用户名
+  knife4j.basic.username=admin
+  ## Basic认证密码
+  knife4j.basic.password=123456
+  
+  #swagger page url
+  swagger.doc-url=http://localhost:8013/
+  #是否激活 swagger true or false
+  swagger.is.enable=true
+  ```
+
+* 使用示例
+
+  ```java
+  @Configuration
+  @EnableKnife4j
+  @EnableSwagger2
+  public class SwaggerConfiguration {
+      @Value("${swagger.doc-url:http://localhost:8200}")
+      private String swaggerPageUrl;
+      @Value("${swagger.is.enable:true}")
+      private boolean swaggerIsEnable;
+  
+      @Bean(value = "1.知识构建服务")
+      public Docket kaAdminApi() {
+          return new Docket(DocumentationType.SWAGGER_2)
+                  .enable(swaggerIsEnable)
+                  .apiInfo(apiInfo())
+                  .groupName("1.知识构建服务")
+                  .select()
+                  .apis(RequestHandlerSelectors.basePackage("com.ka.rest"))
+                  .paths(PathSelectors.any())
+                  .build();
+      }
+  
+      @Bean(value = "2.Admin API")
+      public Docket adminDocket() {
+  
+          return new Docket(DocumentationType.SWAGGER_2)
+                  .enable(swaggerIsEnable)
+                  .apiInfo(apiInfo())
+                  .groupName("2.admin api")
+                  .select()
+                  .apis(RequestHandlerSelectors.basePackage("com.core.rest"))
+                  .paths(PathSelectors.any())
+                  .build();
+  
+      }
+  
+      @Bean(value = "3.schema展示服务")
+      public Docket schemaApi() {
+          return new Docket(DocumentationType.SWAGGER_2)
+                  .enable(swaggerIsEnable)
+                  .apiInfo(apiInfo())
+                  .groupName("3.schema展示服务")
+                  .select()
+                  .apis(RequestHandlerSelectors.basePackage("com.schema.rest"))
+                  .paths(PathSelectors.any())
+                  .build();
+      }
+  
+      private ApiInfo apiInfo() {
+  
+          Contact contact = new Contact("医疗信息技术(杭州)有限公司", "", "1234@qq.com");
+  
+          return new ApiInfoBuilder()
+                  .title("服务服务接口文档")
+                  .description("服务服务接口文档")
+                  .termsOfServiceUrl(swaggerPageUrl)
+                  .contact(contact)
+                  .version("1.0")
+                  .build();
+  
+      }
+  }
+  ```
 
 # 参考
 

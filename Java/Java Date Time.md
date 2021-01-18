@@ -73,16 +73,36 @@ machine time本身是以现在到epoch之间的时间为度量的，epoch本身�
 ## 方法
 时间类的方法名都统一命名且有规律，如下是通用的方法名或前缀：
 * `of` - static factory method
+
 * `parse` - static factory method focussed on parsing
+
 * `get` - gets the value of something
-is - checks if something is true
+  is - checks if something is true
+
 * `with` - the immutable equivalent of a setter
+
 * `plus` - adds an amount to an object
+
 * `minus` - subtracts an amount from an object
+
 * `to` - converts this object to another type
+
 * `at` - combines this object with another, such as date.atTime(time)
+
 * `parse` - Parses the input string to produce an instance of the target class.
+
+  ```java
+  String oldstring = "2011-01-18 00:00:00.0";
+  LocalDateTime datetime = LocalDateTime.parse(oldstring, DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.S"));
+  ```
+
 * `format` - Uses the specified formatter to format the values in the temporal object to produce a string.
+
+  ```java
+  String newstring = datetime.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+  System.out.println(newstring); // 2011-01-18
+  ```
+
 * `now` - Obtains the current time from the system clock in the default time-zone
 
 >注意点
@@ -105,6 +125,11 @@ java8之前，时间类是由`java.util.Date`, `java.util.Calendar`和`java.util
 * `Date.from(Instant)` creates a Date object from an Instant.
 * `Date.toInstant()` converts a Date object to an Instant.
 * `TimeZone.toZoneId()` converts a TimeZone object to a ZoneId.
+
+----
+
+* `Date`
+  * `getTime()`获取时间戳(ms)
 
 ## DateTimeFormatter
 时间类都有parse和format方法，分别用来解析字符串、生成字符串，都用到了DateTimeFormatter作为参数。该类用作时间格式器，格式化时间。有三种方法配置格式器：

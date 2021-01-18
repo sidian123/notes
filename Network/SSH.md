@@ -39,7 +39,7 @@ ssh客户端第一次登录到ssh服务器上时，服务器会发送host key中
 
 因此客户端会发出警告，其中的fingerprint就是公钥进行[md5][3]运算后产生的摘要，因为公钥太长了。如果你确认该公钥来自要连接的服务器，那么直接输入yes确认连接。接下来就是验证密码了，并且之后的连接都是在秘钥加密下进行的，安全得到保障。
 
-服务器的公钥被客户端接收后，它会被保存在`$HOME/.ssh/known_hosts`文件之中，下次再次连接到ssh服务器时，会认出公钥已经保存在本地，从而逃过警告，直接提示输入密码。
+服务器的公钥被客户端接收后，它会被保存在客户端的`$HOME/.ssh/known_hosts`文件之中，下次再次连接到ssh服务器时，会认出公钥已经保存在本地，从而逃过警告，直接提示输入密码。
 
 ## 秘钥认证
 开局一句疑问：密码认证不是用到了秘钥了吗？接下来详细分析。
@@ -289,6 +289,21 @@ OpenSSH最常用的命令，登录、转发都通过该命令进行。
 
 * 远程运行命令
 
+  ```shell
+  ssh root@129.4.100.22 ls -lh # 这里在远程主机上运行了命令: ls -lh
+  ```
+
+  执行多行命令
+
+  ```shell
+  ssh user@host << EOF
+    ls some_folder; 
+    ./someaction.sh 'some params'
+    pwd
+    ./some_other_action 'other params'
+  EOF
+  ```
+
 * 调试
 
   `-v` 进入详细模式, 将打印调试信息. 可以使用多个`-v`选项, 调试信息将更详细, 最多3个, 如
@@ -296,6 +311,26 @@ OpenSSH最常用的命令，登录、转发都通过该命令进行。
   ```shell
   ssh -vvv root@sidian.live
   ```
+  
+* 指定密钥
+
+  密钥默认会取`~/.ssh/id_dsa`, `~/.ssh/id_ecdsa`, `~/.ssh/id_ed25519` 和 `~/.ssh/id_rsa`. 
+
+  当然也可以指定, 其他密钥, 如
+
+  ```shell
+  ssh -i aaa.pem root@111.11.11.111
+  ```
+  
+* 连接, 不警告
+
+  ```shell
+  ssh -q -o "StrictHostKeyChecking no" user@host
+  ```
+
+* 其他
+
+  * 端口 `-p`
 
 >参考：
 >
@@ -305,13 +340,23 @@ OpenSSH最常用的命令，登录、转发都通过该命令进行。
 ## ssh-keygen
 用于产生秘钥对.
 
-例子:
+使用例子:
 
 * 产生默认的RSA密钥
 
   ```shell
   ssh-keygen
   ```
+
+* 密钥位置
+
+  在生成密钥时, 会询问使用者文件位置, 或者直接指定, 如
+
+  ```shell
+  ssh-keygen -f ./aaa
+  ```
+
+  > 密钥放在当前目录下, 文件名用`aaa`
 
 * 产生ECDSA密钥
 
@@ -323,6 +368,14 @@ OpenSSH最常用的命令，登录、转发都通过该命令进行。
 
   ```shell
   ssh-keygen -A
+  ```
+  
+* 设置密钥格式
+
+  默认`RFC4716`格式, 可选择其他格式`PKCS8`, `PEM`, 如
+
+  ```shell
+  ssh-keygen -m PEM
   ```
 
 >参考:[SSH-KEYGEN - GENERATE A NEW SSH KEY](https://www.ssh.com/ssh/keygen/)
@@ -357,6 +410,8 @@ scp [[user@]host1:]file1 ... [[user@]host2:]file2
 #文件目的不填,则放入root用户的家目录下
 scp file root@wx.sidian123.top:
 ```
+
+* 端口 `-P`
 
 ### sftp
 
@@ -520,7 +575,7 @@ XShell传输文件的一种方法如下：[xshell如何传输文件](https://jin
 >
 >   可能处于外网的服务端会得到NAT更多的"关爱"吧...
 
-#### 解决方案
+#### 解决方案一
 
 * 服务端
 
@@ -568,6 +623,16 @@ XShell传输文件的一种方法如下：[xshell如何传输文件](https://jin
   > 	ClientAliveCountMax 86400
   > ```
 
+#### 解决方案二
+
+上述使用修改配置的方式解决, 这里在连接服务器的时候设置:
+
+```bash
+ssh -D 1050 -N -o ExitOnForwardFailure=yes -o TCPKeepAlive=no -o ServerAliveInterval=30 root@hk.sidian.live
+```
+
+> 无关参数请忽略
+
 # 其他
 
 ## 问题查找
@@ -583,6 +648,15 @@ XShell传输文件的一种方法如下：[xshell如何传输文件](https://jin
 SSHFS ( SSH Filesystem) 是一个文件系统客户端, 只需服务器存在SSH Server, 即可挂载远程服务器的目录到本地主机上, 由SFTP实现.
 
 > 使用方案百度即可, 很简单.
+
+## 密钥共享
+
+* 原理
+  * 密钥的产生与服务器无关, 只与加密方式或密钥密码有关.
+  * 服务器和客户端通信时, 只需验证私钥和公钥是否匹配.
+* 步骤
+  * 公钥添加到服务器`authorized_keys`文件中
+  * 私钥可以共享给其他主机用.
 
 ## 连接断开的原因
 
@@ -645,10 +719,6 @@ SSHFS ( SSH Filesystem) 是一个文件系统客户端, 只需服务器存在SSH
 chown $USER ~/.ssh/config
 chmod 644 ~/.ssh/config
 ```
-
-### 密钥不能共享
-
-公钥中含有生成该密钥的PC的host信息, 只能该PC使用
 
 ### 服务端丢失host key
 

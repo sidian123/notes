@@ -14,7 +14,9 @@
 
   * `SimpleAsyncTaskExecutor`
 
-    简单的为每个任务开启一个线程. 有并发上限, 达到上线时将阻塞调用者线程, 直到有线程结束.
+    简单的为每个任务开启一个线程. 支持设置并发上限, 达到上线时将阻塞调用者线程, 直到有线程结束. 默认并发无上限
+
+    > 注意, 该执行器不会复用线程
 
   * `ThreadPoolTaskExecutor`
 
@@ -73,7 +75,7 @@ Spring提供了注解来异步执行和调度任务.
   默认使用的Bean, 以优先级降低的方式列出
 
     1. 若存在实现了`AsyncConfigurer`的Bean, 则使用该Bean提供的执行器.
-    2. 若容器中唯一存在`TaskExecutor`, 则使用该Bean
+    2. 若容器中唯一存在`TaskExecutor`类型的Bean, 则使用该Bean
     3. 否则使用Bean名为`taskExecutor`的Bean
     4. 否则`SimpleAsyncTaskExecutor`将被使用
   
@@ -95,7 +97,7 @@ Spring提供了注解来异步执行和调度任务.
           executor.setThreadNamePrefix("MyExecutor-");
           //线程数达到最大数量时,在调用者自己的线程中执行
           executor.setRejectedExecutionHandler(new ThreadPoolExecutor.CallerRunsPolicy());
-          //当关闭时,等待所有任务完成才关闭,而不是中断
+          //当关闭时,等待正在处理任务的线程完成, 而不是中断线程. 且队列清空
           executor.setWaitForTasksToCompleteOnShutdown(true);
           //初始化
           executor.initialize();
@@ -115,7 +117,7 @@ Spring提供了注解来异步执行和调度任务.
 
 * `@EnableScheduling`使能任务调度
 
-* `SchedulingConfigurer`用于配置
+* `SchedulingConfigurer`用于配置使用的调度器
 
 * 例子:
 
@@ -214,7 +216,7 @@ Spring提供了注解来异步执行和调度任务.
   }	
   ```
   
-  > 除此之外, 还有`org.springframework.util.concurrent.ListenableFuture`和`java.util.concurrent.CompletableFuture`
+  > 除此之外, 返回类型还可以是`org.springframework.util.concurrent.ListenableFuture`和`java.util.concurrent.CompletableFuture`
 
   指定使用的执行器, 而不是`AsyncConfigurer`配置的默认执行器
 
@@ -240,6 +242,12 @@ Spring提供了注解来异步执行和调度任务.
       }
   }
   ```
+
+* 等待所有任务完成
+
+  方法需返回`CompletableFuture`, 接着调用静态方法`CompletableFuture.allOf(...).join()`
+
+  > 参考[Waiting on a list of Future](https://stackoverflow.com/questions/19348248/waiting-on-a-list-of-future)
 
 * 注意点
 
@@ -277,15 +285,149 @@ Spring提供了注解来异步执行和调度任务.
 
 # Validation
 
-* 未与Web层绑死, 可用在其他地方
-*  JSR-303 Bean Validation API  被全面支持
+## 开始
 
-> 是对Bean的校验, 参数本身校验貌似未支持, 这个可以靠基本类型验证, 暂时以后再了解;
+* 介绍	
+  * 未与Web层绑死, 可用在其他地方, 但主要还是用在Controller类上.
+  * JSR-303 Bean Validation API  被全面支持, 由hibernate validation实现, Spring又对hibernate validation进行了二次封装.
+  * 还支持hibernate自己的注解
+  * 仅对Bean校验, 不支持其他方式校验
 
-> 参考
->
-> * [Spring Validation](https://docs.spring.io/spring/docs/current/spring-framework-reference/core.html#validation-beanvalidation)
-> * [SpringMVC validation完成后端数据校验（较全面）](https://blog.csdn.net/m0_37589327/article/details/78648328)  : 写的还行吧
+* 依赖引入
+
+  一般无需引入, 因为`starter-web`已经引入了
+
+  ```xml
+  <dependency>
+      <groupId>org.hibernate</groupId>
+      <artifactId>hibernate-validator</artifactId>
+  </dependency>
+  ```
+
+## 注解
+
+JSR提供的校验注解：  
+
+> 注解在`javax.validation.constraints`包下      
+
+* @Null   被注释的元素必须为 null
+* @NotNull    被注释的元素必须不为 null    
+* @AssertTrue     被注释的元素必须为 true    
+* @AssertFalse    被注释的元素必须为 false    
+* @Min(value)     被注释的元素必须是一个数字，其值必须大于等于指定的最小值    
+* @Max(value)     被注释的元素必须是一个数字，其值必须小于等于指定的最大值    
+* @DecimalMin(value)  被注释的元素必须是一个数字，其值必须大于等于指定的最小值    
+* @DecimalMax(value)  被注释的元素必须是一个数字，其值必须小于等于指定的最大值    
+* @Size(max=, min=)   被注释的元素的大小必须在指定的范围内    
+* @Digits (integer, fraction)     被注释的元素必须是一个数字，其值必须在可接受的范围内    
+* @Past   被注释的元素必须是一个过去的日期    
+* @Future     被注释的元素必须是一个将来的日期    
+* @Pattern(regex=,flag=)  被注释的元素必须符合指定的正则表达式 
+* @NotBlank(message =)   验证字符串非null，且长度必须大于0
+* @NotEmpty   被注释的字符串, 数组, 集合和Map必须非空 
+
+Hibernate Validator提供的校验注解：  
+
+* @Email  被注释的元素必须是电子邮箱地址    
+* @Length(min=,max=)  被注释的字符串的大小必须在指定的范围内    
+* @Range(min=,max=,message=)  被注释的元素必须在合适的范围内
+
+## 使用
+
+### Bean校验
+
+* Bean字段约束声明, 使用以上注解
+
+  ```java
+  public class Foo {
+  
+      @NotBlank
+      private String name;
+  
+      @Min(18)
+      private Integer age;
+  
+      @Pattern(regexp = "^1(3|4|5|7|8)\\d{9}$",message = "手机号码格式错误")
+      @NotBlank(message = "手机号码不能为空")
+      private String phone;
+  
+      @Email(message = "邮箱格式错误")
+      private String email;
+  
+      //... getter setter
+  
+  }
+  ```
+
+* Controller层
+
+  ```java
+@Controller
+  public class FooController {
+  
+      @RequestMapping("/foo")
+      public String foo(@Validated Foo foo <1>, BindingResult bindingResult <2>) {
+          if(bindingResult.hasErrors()){
+              for (FieldError fieldError : bindingResult.getFieldErrors()) {
+                  //...
+              }
+              return "fail";
+          }
+          return "success";
+      }
+  }
+  ```
+  
+  1. <1> 对要校验的参数标注`@Validated`注解
+  2. <2> 校验结果将存入`BindingResult`中. 若不提供该参数, 将抛出`MethodArgumentNotValidException`异常.
+
+  此外, 多个校验参数和`BindingResult`需要相邻, 如
+
+  ```java
+  foo(@Validated Foo foo, BindingResult fooBindingResult ，@Validated Bar bar, BindingResult barBindingResult)
+  ```
+
+### 方法参数校验
+
+```java
+@RestController
+@Validated <1>
+public class BarController {
+
+    @RequestMapping("/bar")
+    public @NotBlank <2> String bar(@Min(18) Integer age <3>) {
+        System.out.println("age : " + age);
+        return "";
+    }
+
+    @ExceptionHandler(ConstraintViolationException.class)
+    public Map handleConstraintViolationException(ConstraintViolationException cve){
+        Set<ConstraintViolation<?>> cves = cve.getConstraintViolations();<4>
+        for (ConstraintViolation<?> constraintViolation : cves) {
+            System.out.println(constraintViolation.getMessage());
+        }
+        Map map = new HashMap();
+        map.put("errorCode",500);
+        return map;
+    }
+
+}
+```
+
+1. <1> 类需要标注`@Validated`注解
+2. <2> <3> 校验方法的返回值和入参
+3. <4> 添加异常处理器. (只能这么获取校验信息)
+
+### 分组
+
+使用校验注解时, 可以设置`groups`, 当使用`@Validated`注解时, 可以指定要校验的分组.
+
+略
+
+## 参考
+
+* [Spring Validation](https://docs.spring.io/spring/docs/current/spring-framework-reference/core.html#validation-beanvalidation)
+* [SpringMVC validation完成后端数据校验（较全面）](https://blog.csdn.net/m0_37589327/article/details/78648328)  : 写的还行吧
 
 # Resource
 
@@ -314,7 +456,7 @@ Spring的`util`包下, 含有各种工具类, 如
 含与Bean相关的接口与类
 
 *  [BeanUtils](https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/beans/BeanUtils.html) : Static convenience methods for JavaBeans: for instantiating beans, checking bean property types, copying bean properties, etc. 
-  * `copyProperties()`: bean间拷贝属性
+* `copyProperties()`: bean间拷贝属性
 
 > 参考[Package org.springframework.beans](https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/beans/package-summary.html)
 
@@ -754,7 +896,7 @@ SpEL（Spring Expression Language），即Spring表达式语言，是比JSP的EL
 
 * 目的: 该模块主要用于屏蔽底层实现, 简化邮箱的使用.
 
-* 首先需要引入JavaMail
+* Maven依赖
 
   ```xml
   <dependency>
@@ -763,6 +905,24 @@ SpEL（Spring Expression Language），即Spring表达式语言，是比JSP的EL
       <version>1.6.2</version>
   </dependency>
   ```
+
+* 配置
+
+  ```yaml
+  spring:
+    mail:
+      host: smtp.qq.com
+      password: 111111111111111
+      username: aaaaaaaaa@qq.com
+      port: 465
+      properties:
+        mail:
+          smtp:
+            socketFactory:
+              class: javax.net.ssl.SSLSocketFactory
+  ```
+
+  > 除了基本的地址,账户配置外, 还需要启用SSL协议的使用. 这应该是QQ邮箱的要求, 其他的不知道.
 
 * 核心组件
 
@@ -836,4 +996,59 @@ public static void main(String[] args) {
 * 当容器初始化完毕后, 执行该接口的方法, 用于处理命令行参数
 * 仅在`SpringApplication`初始化的容器中使用
 * `ApplicationArguments`与`CommandLineRunner`类似, 但提供了更便捷的方式获取命令行参数
+
+> 踩坑笔记: 注意, 当配置类实现了`CommandLineRunner`, 配置类实现的其他和容器声明周期的方法将失效.
+
+## Spring Boot 退出
+
+> 貌似只能关闭Spring Context? 有时候不能关闭JVM. 需要用到`System.exit(0)`
+
+```java
+SpringApplication.exit(this.applicationContext,() -> 0);
+```
+
+更为优化的方式, 如下:
+
+```java
+@Component
+public class SpringUtil implements ApplicationContextAware {
+    static ApplicationContext applicationContext;
+
+    @Override
+    public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
+        SpringUtil.applicationContext=applicationContext;
+    }
+
+    public static void closeApplication(int exit){
+        SpringApplication.exit(applicationContext, () -> exit);
+    }
+    public static void closeApplication(){
+        closeApplication(0);
+    }
+}
+```
+
+然后使用
+
+```java
+SpringUtil.closeApplication();
+```
+
+> 参考[Shutdown a Spring Boot Application](https://www.baeldung.com/spring-boot-shutdown)
+
+## 允许使用AWT,界面
+
+```java
+SpringApplication springApplication = new SpringApplication(ClientApplication.class);
+springApplication.setHeadless(false);//允许使用awt,即界面
+springApplication.run(args);
+```
+
+或者
+
+```java
+static {
+    System.setProperty("java.awt.headless","false");
+}
+```
 

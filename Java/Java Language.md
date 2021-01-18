@@ -292,6 +292,7 @@ char capitalC = 'C';
 byte b = 100;
 short s = 10000;
 int i = 100000;
+long l= 1000L;
 int[] myIntArray = {1, 2, 3};
 String[] myStringArray = {"a", "b", "c"};
 ```
@@ -708,13 +709,18 @@ public class BedAndBreakfast {
 
     // initialize to 10
     public static int capacity = 10;
+    
+    // 使用方法
+    public static int aaa=staticMethod();
 
     // initialize to false
     private boolean full = false;
 }
 ```
 
-但是初始化语句不止一行时, 该如何? 这里用到了初始化块
+但是初始化语句不止一行时, 该如何? 这里用到了初始化块.
+
+> 注意, 初始化块不能用于接口中, 但接口的字段可用静态方法初始化.
 
 ##### 静态初始化块
 
@@ -1326,7 +1332,7 @@ public class Day extends Enum<Day>{
 
 从上面可以看出，编译器会自动给枚举类型添加一个函数`values()`，它返回所有的枚举值，用于遍历枚举值。
 
-又因为继承自`Enum`，因为可以通过该类的`name`和`ordinary`方法获得枚举值的名字和定义顺序。
+又因为继承自`Enum`，因为可以通过该类的`name`和`ordinary`方法获得枚举值的名字和定义顺序。`toString()`打印的就是`name`属性.
 
 > 因此, 判断枚举值之间是否相等, 可直接使用`==`
 
@@ -1853,7 +1859,7 @@ public @interface Schedules {
  %[flags][width][.precision]conversion
 ```
 
-* `flags`:控制参数显示的标识符
+* `flags`: 设置参数输出格式, 即排版
 * `width`: 输出数字的最小个数. 浮点数中指整数和小数部分, 不包括小数点.
 * `.presision`: 浮点数中小数部分精度, 貌似默认6位
 * `conversion`: 参数如何被格式化, 取决于该参数的类型
@@ -1884,6 +1890,7 @@ public @interface Schedules {
 
 * `-`左对齐
 * `+`总是包含符号
+* `0`空白字符以`0`填充
 
 例子见[ormatting Numeric Print Output](https://docs.oracle.com/javase/tutorial/java/data/numberformat.html)
 
@@ -2346,6 +2353,8 @@ public class App
 }
 ```
 
+> 当括号中存在多个资源时, 以`;`分隔
+
 需要在`try`的括号中**声明资源**，资源对应的类需要实现`java.lang.AutoCloseable`接口。
 
 关于执行顺序, 当try语句执行完或抛出异常时会立刻关闭资源，如果`close`方法抛出异常，则该异常会被**抑制**。然后才执行`catch`块语句。
@@ -2528,6 +2537,10 @@ Class aClass=Class.forName("packageName.ClassName");
 ```
 App app=App.class.newInstance();
 ```
+
+> 其他资料:
+>
+> [What is the difference between canonical name, simple name and class name in Java Class?](https://stackoverflow.com/questions/15202997/what-is-the-difference-between-canonical-name-simple-name-and-class-name-in-jav)
 
 #### 反射构造函数
 
@@ -2817,7 +2830,9 @@ for (Method m : clz.getDeclaredMethods()) {
 
 # 其他
 
-## JavaDoc注释
+## JavaDoc
+
+### 注释
 
 字段,方法,类的JavaDoc注释, 在它的声明上添加
 
@@ -2838,18 +2853,53 @@ package package_name;
 
 > 注意, 该文件内不要有其他的内容了.
 
+### 注解
+
+参考[How to Write Doc Comments for the Javadoc Tool](https://www.oracle.com/technical-resources/articles/java/javadoc-tool.html)
+
 ## 断言
 
-断言某个条件必须满足, 否则抛出运行时异常, 如
+* 介绍
 
-```java
-assert classLoader != null;
-File[] files = directory.listFiles();
-```
+  断言某个条件必须满足, 否则抛出运行时异常`AssertionError`. 此时, 通常表示代码有bug.
 
-若不满足, 通常表示代码有bug.
+* 使用
 
-与运行时异常相比, 断言是给开发者用的, 运行时异常是给库的使用者捕获用的. 侧重点不同.
+    `assert`关键字后接条件表达式
+    
+    ```java
+    assert classLoader != null;
+    File[] files = directory.listFiles();
+    ```
+    
+    提供抛出异常时携带的字符串
+    
+    ```java
+    public void setup() {
+        Connection conn = getConnection();
+        assert conn != null : "Connection is null";
+    }
+    ```
+    
+* 适用范围
+
+    断言使用更为简单, 但携带的信息比较少, 因此断言是给开发者用的. 若要将代码封装为库, 提供给其他人使用, 则应抛出运行时异常比较好.
+
+## 工作目录 & Jar位置
+
+* 工作目录
+
+  `java`命令执行的位置为工作目录, 与jar位置无关
+
+  ```java
+  Paths.get("").toAbsolutePath()
+  ```
+
+* Jar位置
+
+  ```java
+  MainClass.class.getProtectionDomain().getCodeSource().getLocation().getPath()
+  ```
 
 # 参考
 

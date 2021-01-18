@@ -24,6 +24,8 @@
   ![img](.Vue/flow.png)
   
 * Vue在构建的过程中会将template编译成底层的render函数, 同时运行时不提供动态编译的功能, 以防xss攻击.
+
+
 # 二 指令(directive)
 vue指令以`v-`开始，用于渲染DOM或绑定数据，定义在元素或组件上。
 * `{{message}}`：绑定vue实例数据`data`到文本上。（非指令，占位符）
@@ -272,8 +274,10 @@ modifiers是指令的特殊后缀，以`.`表示，指示指令绑定的一些�
 
 > 响应式属性指`data`,`computed`,`props`中的属性
 
-* **computed**：`computed`中的属性是响应式属性进过计算后得到的属性。
+* **computed**
   
+    `computed`中的属性是响应式属性进过计算后得到的属性。
+    
     * `computed`中属性是一个`get`方法，也可以额外设置`set`方法。
     * `computed`中属性会放入vue实例中。
     * 一个例子：
@@ -311,10 +315,14 @@ modifiers是指令的特殊后缀，以`.`表示，指示指令绑定的一些�
     // ...
     ```
     
-* **方法**：模板中也可以执行方法，达到和computed属性同样的效果。但computed属性会根据它用到的依赖缓存起来，只有依赖改变时才重新计算。而方法在每一次re-render发生时会执行。
+* **方法**
 
-* `watch`：监听vue实例属性，改变时调用回调函数。`data`中一些属性的改变是基于其他属性的，可在`watch`中配置，如：
+    模板中也可以执行方法，达到和computed属性同样的效果。但computed属性会根据它用到的依赖缓存起来，只有依赖改变时才重新计算。而方法在每一次re-render发生时会执行。
+
+* `watch`
   
+    监听vue实例属性，改变时调用回调函数。`data`中一些属性的改变是基于其他属性的，可在`watch`中配置，如：
+    
     ```javascript
     var vm = new Vue({
       el: '#demo',
@@ -333,7 +341,27 @@ modifiers是指令的特殊后缀，以`.`表示，指示指令绑定的一些�
       }
     })
     ```
-    上面配置了firstName和lastName改变时如何影响fullName改变。
+    > 上面配置了firstName和lastName改变时如何影响fullName改变。
+    
+    初始化时也调用一次
+    
+    ```javascript
+    // the callback will be called immediately after the start of the observation
+    d: {
+        handler: 'someMethod',
+        immediate: true
+    },
+    ```
+    
+    深度监听, 对象内部属性改变时也触发函数调用
+    
+    ```javascript
+    // the callback will be called whenever any of the watched object properties change regardless of their nested depth
+    c: {
+        handler: function (val, oldVal) { /* ... */ },
+        deep: true
+    },
+    ```
 
 ## props
 
@@ -485,11 +513,11 @@ html的class和style都是属性，因此可以使用`v-bind`来绑定vue属性�
 ### v-for与对象
 * 基本形式：
 	```html
-	  <li v-for="value in object">
-	    {{ value }}
+	  <li v-for="key in object">
+	    {{ object[key] }}
 	  </li>
 	```
-	会遍历object的所有可遍历属性，value表示对象的属性。
+	会遍历`object`的所有可遍历属性，`key`表示对象的属性名。
 * 取出属性名：
 	```html
 	<div v-for="(value, key) in object">
@@ -517,7 +545,10 @@ html的class和style都是属性，因此可以使用`v-bind`来绑定vue属性�
 </div>
 ```
 
+> https://www.jianshu.com/p/0044532e4a93
+
 ### 数组中元素改变探测
+
 >对下面的话，做个总结：简而言之，vue检测不到`data`中数组属性中元素的修改，需要其他手段。对于对象也是同样的道理
 
 我们知道，选项对象的`data`中的属性会被添加到响应式系统，这些属性的改变会造成视图的重新渲染。但如果`data`中存在**数组属性**，对**数组元素**的修改(如, 增删)不会造成数据本身引用地址的改变（参考c++引用），因此vue不能通过数组属性检查数组元素是否改变。检测方法如下：
@@ -698,131 +729,166 @@ Vue.component('base-checkbox', {
 <base-checkbox v-model="lovingVue"></base-checkbox>
 ```
 
-## slots
+## slot
 
-> 理解下述语句时, 请区分组件元素和组件模板
+### 基本介绍
 
-* 基本介绍
+* 当组件中含有内容时，可通过`slot`元素获取。如：
 
-    html中，组件中含有内容时，组件可通过`<slot>`获取。如：
+  组件使用中, 传入内容
+
     ```html
-    <alert-box>
+  <alert-box>
       Something bad happened.
-    </alert-box>
+  </alert-box>
     ```
+  
+  组件的定义中, 以`slot`元素获取内容
+  
     ```javascript
-    Vue.component('alert-box', {
+  Vue.component('alert-box', {
       template: `
-        <div class="demo-alert-box">
+          <div class="demo-alert-box">
           <strong>Error!</strong>
           <slot></slot>
-        </div>
+          </div>
       `
-    })
+  })
     ```
 
-* 在HTML中, **组件元素**有内容时, 可在**组件模板**中使用`<slot>`元素接收. 若无, 则默认忽略它. 
+* 若组件定义中, 未声明`slot`元素, 将忽略使用中传递过来的内容; 组件定义中的`slot`元素可有默认内容, 使用过程中可覆盖.
 
-* **组件元素**中的文本插值的变量作用域仍位于父组件
+* 组件使用中的文本插值的变量作用域仍位于父组件
 
-* 模板中`<slot>`元素中可有默认内容，组件元素中可覆盖这些内容。
+### 多插槽
 
-* 当有多个`<slot>`元素时，使用元素的`name`属性来区分，允许其中一个`<slot>`无`name`值，则默认`default`；那么**组件元素**的内容中需要使用`<template>`围绕部分内容，`v-slot`指令指定对应`slot`元素。如：
-	**模板**
-	
-	```html
-	<div class="container">
-	  <header>
-	    <slot name="header"></slot>
-	  </header>
-	  <main>
-	  	<!--默认名default-->
-	    <slot></slot>
-	  </main>
-	  <footer>
-	    <slot name="footer"></slot>
-	  </footer>
-	</div>
-	```
-	**父组件模板**
-	```html
-	<base-layout>
-	  <template v-slot:header>
-	    <h1>Here might be a page title</h1>
-	  </template>
-	
-	  <template v-slot:default>
-	    <p>A paragraph for the main content.</p>
-	    <p>And another one.</p>
-	  </template>
-	
-	  <template v-slot:footer>
-	    <p>Here's some contact info</p>
-	  </template>
-	</base-layout>
-	```
-	同样允许无`<template>`元素围绕的部分存在，对应default slot
-	```html
-	<base-layout>
-	  <template v-slot:header>
-	    <h1>Here might be a page title</h1>
-	  </template>
-	
-	  <p>A paragraph for the main content.</p>
-	  <p>And another one.</p>
-	
-	  <template v-slot:footer>
-	    <p>Here's some contact info</p>
-	  </template>
-	</base-layout>
-	```
-	
-* ~~`<slot>`元素中的属性会被绑定到一个对象中，组件元素中`v-slot`可以获取该对象，实现了父组件中的组件元素使用组件内的数据。如：~~
-	
-	所有绑定到`<slot>`元素的属性上的对象, 都会被存入一个对象中(如下面的`slotProps`), 在父组件的模板中可以通过`v-slot`指令取出, 实现了子组件通过`slot`元素为父组件提供数据. 例子如下:
-	
-	**模板**
-	
-	```html
-	<!-- 有一个user属性 -->
-	<span>
-	  <slot v-bind:user="user">
-	    {{ user.lastName }}
-	  </slot>
-	</span>
-	```
-	**父组件模板中**
-	```html
-	<current-user>
-	  <template v-slot:default="slotProps">
-	    {{ slotProps.user.firstName }}
-	  </template>
-	</current-user>
-	```
-	当只有一个slot元素时，可缩写成：
-	```html
-	<current-user v-slot:default="slotProps">
-	  {{ slotProps.user.firstName }}
-	</current-user>
-	```
-	也可省略default
-	```html
-	<current-user v-slot="slotProps">
-	  {{ slotProps.user.firstName }}
-	</current-user>
-	```
-	上面传入的slotProps对象含有slot元素的属性值，可以使用es5的解构语法获得单个属性：
-	```html
-	<current-user v-slot="{ user }">
-	  {{ user.firstName }}
-	</current-user>
-	```
-	
+* 介绍
+
+  组件定义中, 可存在多个`slot`元素, 以`name`属性区分.
+
+  > 其中, 可存在一个无`name`属性的`slot`, 默认其`name`为`default`
+
+  组件使用中, 传入的内容以`template`元素包裹, `v-slot`指定组件对应的`slot`元素
+
+  > `v-slot`指令需给出`slot`名. 其中, 对应`default slot`时, 无需给出. 甚至内容可不用`template`元素包裹
+
+* Demo
+
+  组件定义(`base-layout`)中, 提供多个`slot`
+
+    ```html
+  <div class="container">
+      <header>
+          <slot name="header"></slot>
+      </header>
+      <main>
+          <!--默认名default-->
+          <slot></slot>
+      </main>
+      <footer>
+          <slot name="footer"></slot>
+      </footer>
+  </div>
+    ```
+  > 其中, 有个默认`slot`, 无需`name`
+
+  组件使用中, `v-slot`指定组件对应`slot`元素
+
+    ```html
+  <base-layout>
+      <template v-slot:header>
+          <h1>Here might be a page title</h1>
+      </template>
+  
+      <!-- 相当于v-slot:default -->
+      <template v-slot>
+          <p>A paragraph for the main content.</p>
+          <p>And another one.</p>
+      </template>
+  
+      <template v-slot:footer>
+          <p>Here's some contact info</p>
+      </template>
+  </base-layout>
+    ```
+  默认内容也可不用`template`元素包裹
+
+  ```html
+  <base-layout>
+    <template v-slot:header>
+      <h1>Here might be a page title</h1>
+    </template>
+  
+    <p>A paragraph for the main content.</p>
+    <p>And another one.</p>
+  
+    <template v-slot:footer>
+      <p>Here's some contact info</p>
+    </template>
+  </base-layout>
+  ```
+  
+### 数据传递
+
+* 介绍
+
+  上面例子都是, 使用者可将内容通过`template`元素传给组件, 组件也可以将数据通过`slot`元素传给使用者.
+
+  组件可将数据绑定到`slot`元素的属性上, `slot`会将之收集成`slotProps`; 使用者可通过`v-slot`指令取出`slotProps`对象.
+
+* Demo
+
+  组件定义中, 绑定数据到`slot`的属性上.
+
+  ```html
+  <span>
+    <slot v-bind:user="user">
+      <!-- 默认内容的属性作用域应该是本组件 -->
+      {{ user.lastName }}
+    </slot>
+  </span>
+  ```
+  
+  > 这里绑定了`user`属性, 将被移入到`slotProps`中.
+
+  组件使用中, 获取`slotProps`对象
+
+  ```html
+  <current-user>
+    <template v-slot:default="slotProps">
+      {{ slotProps.user.firstName }}
+    </template>
+  </current-user>
+  ```
+
+  当只有一个slot元素时，可缩写成：
+
+  ```html
+  <current-user v-slot:default="slotProps">
+    {{ slotProps.user.firstName }}
+  </current-user>
+  ```
+
+  省略掉default
+
+  ```html
+  <current-user v-slot="slotProps">
+    {{ slotProps.user.firstName }}
+  </current-user>
+  ```
+
+  通过E5的解构语法, 获取单个属性
+
+  ```html
+  <current-user v-slot="{ user }">
+    {{ user.firstName }}
+  </current-user>
+  ```
+
+### 其他
+
 * `v-slot`的参数可以是动态的，如`v-slot:[dynamicSlotName]`
-
 * `v-slot:`的缩写为`#`，使用时后面必须存在参数。
-
-
 
 ## 动态组件
 
@@ -1219,11 +1285,297 @@ var vm = new Vue({
   }
   ```
 
+## 函数组件
+
+* 介绍
+
+  函数组件是无状态的 (即无响应式数据) 和无实例化的 (即无`this`上下文), 因此也无生命周期和方法. 
+
+  是一种随外部变化而变化的轻量级组件.
+
+* 上下文
+
+  函数组件没有实例化后的`this`上下文, 但有其他的上下文, 获取函数组件的信息.
+
+  上下文常用的属性如下
+
+  * `props` 函数组件的属性. (用到的属性无需注册, Vue会自我检测)
+  * `parent` 函数组件的父组件
+
+  不常用的如下
+
+  * `children`: An array of the VNode children
+
+  * `slots`: A function returning a slots object
+
+  * `scopedSlots`: (2.6.0+) An object that exposes passed-in scoped slots. Also exposes normal slots as functions.
+  * `data`: The entire [data object](https://vuejs.org/v2/guide/render-function.html#The-Data-Object-In-Depth), passed to the component as the 2nd argument of `createElement`
+  * `listeners`: (2.3.0+) An object containing parent-registered event listeners. This is an alias to `data.on`
+
+  * `injections`: (2.3.0+) if using the [`inject`](https://vuejs.org/v2/api/#provide-inject) option, this will contain resolved injections.
+
+* Demo
+
+  函数组件`List.vue`
+
+  ```vue
+  <template functional>
+    <div class="list">
+      <div>{{props.text}}</div>
+      <div>{{JSON.stringify(data)}}</div>
+      <button @click="parent.hello">sss</button>
+    </div>
+  </template>
+  
+  <style scoped>
+    .list{
+      color:red
+    }
+  </style>
+  ```
+
+  > `script`无需写了
+
+  `App.vue`中使用
+
+  ```vue
+  <template>
+    <div id="app">
+      <list :text="text"></list>
+    </div>
+  </template>
+  
+  <script>
+    import List from './components/List'
+    export default {
+      name: "App",
+      components:{List},
+      data(){
+        return{
+          text:'sss'
+        }
+      },
+      methods:{
+        hello(){
+          console.log('hello world')
+        }
+      }
+  };
+  </script>
+  ```
+
+> 参考
+>
+> * [Functional Components Vue.js](https://vuejs.org/v2/guide/render-function.html#Functional-Components)
+> * [10个Vue开发技巧](https://mp.weixin.qq.com/s?__biz=MzU2NTc4NjM5OQ==&mid=2247483973&idx=1&sn=a45bb930e3d566355199599fe1454fa4&chksm=fcb72035cbc0a92307097d3f5e3f06a396b18c2c64b3966a8680e71d29138beabad29d299ab0&mpshare=1&scene=23&srcid=&sharer_sharetime=1592144740303&sharer_shareid=e22f24a31ebc3c050a04c9a4e7f37053#rd)
+> * [Vue.js functional components: What, Why, and When?](https://stegosource.com/vue-js-functional-components-what-why-and-when/)
+> * [Functional Components in Vue Loader](https://vue-loader.vuejs.org/guide/functional.html)
+
+# 过渡&动画
+
+## 过度类
+
+`transition`在元素不同时期会作用于不同的css类.
+
+自定义过度类时, 需将下面的`v`前缀替换.
+
+* 元素插入时
+  * `v-enter` 元素插入前添加, 下一帧删除
+
+  * `v-enter-active` 作用于整个过渡时期. 元素插入前添加, 过渡结束后删除.
+
+  * `v-enter-to` 元素插入后添加, 过渡结束后删除
+
+    > 与`v-enter`被删除为同一时期
+
+  ![image-20200702161013937](.Vue/image-20200702161013937.png)
+
+* 元素删除时
+
+  * `v-leave` 过渡效果触发时立即添加
+
+  * `v-leave-active` 作用于整个过渡时期. 过渡效果触发时立即添加, 过渡结束时删除.
+
+  * `v-leave-to` 过渡效果触发后的下一帧添加, 过渡结束后删除.
+
+    > 添加时与`v-leave`被删除为同一时期.
+
+  ![image-20200702161113244](.Vue/image-20200702161113244.png)
+
+> Vue自己每调用一次`nextTick`, 算一帧.
+
+## 单元素/组件过渡
+
+过渡/动画效果, 仅作用于单个元素或组件.
+
+### transition组件
+
+* 介绍
+
+  提供对元素或组件**插入**或**删除**的**过渡**或**动画**效果.
+
+  仅在如下环境下的元素或组件生效:
+
+  * 条件渲染`v-if`
+
+  * 条件显示`v-show`
+
+  * 动态组件`is` ?
+
+    > 应该不能用于`v-for`
+
+  * Component root nodes ???
+
+  该组件不会被渲染出HTML元素.
+
+* 使用
+
+  `transition`组件的`name`字段设置过度类的前缀, 上述的`v-`是默认前缀. 该组件会自动查找对应的类.
+
+  如, `<transition name="my-transition">` 此时`v-enter`将为`my-transition-enter`
+
+### 实战之过渡
+
+```html
+<div id="example-1">
+  <button @click="show = !show">
+    Toggle render
+  </button>
+  <transition name="slide-fade">
+    <p v-if="show">hello</p>
+  </transition>
+</div>
+```
+
+```javascript
+new Vue({
+  el: '#example-1',
+  data: {
+    show: true
+  }
+})
+```
+
+```css
+.slide-fade-enter-active {
+  transition: all .3s ease;
+}
+.slide-fade-leave-active {
+  transition: all .8s cubic-bezier(1.0, 0.5, 0.8, 1.0);
+}
+.slide-fade-enter, .slide-fade-leave-to
+/* .slide-fade-leave-active below version 2.1.8 */ {
+  transform: translateX(10px);
+  opacity: 0;
+}
+```
+
+### 实战之动画
+
+```html
+<div id="example-2">
+  <button @click="show = !show">Toggle show</button>
+  <transition name="bounce">
+    <p v-if="show">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris facilisis enim libero, at lacinia diam fermentum id. Pellentesque habitant morbi tristique senectus et netus.</p>
+  </transition>
+</div>
+```
+
+```javascript
+new Vue({
+  el: '#example-2',
+  data: {
+    show: true
+  }
+})
+```
+
+```css
+.bounce-enter-active {
+  animation: bounce-in .5s;
+}
+.bounce-leave-active {
+  animation: bounce-in .5s reverse;
+}
+@keyframes bounce-in {
+  0% {
+    transform: scale(0);
+  }
+  50% {
+    transform: scale(1.5);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+```
+
+## 列表过渡
+
+### transition-group组件
+
+* 介绍
+
+  为一组元素或组件作用过渡或动画效果
+
+* 注意点
+  * 在`v-for`的环境下使用
+  * 该组件会渲染出HTML元素, 默认`span`, 可由`tag`属性修改
+  * 每个元素必须提供唯一的`key`属性
+  * 过渡类作用于槽内的元素, 而非该组件本身.
+
+### Entering/Leaving过渡
+
+见[List Entering/Leaving Transitions](https://vuejs.org/v2/guide/transitions.html#List-Entering-Leaving-Transitions)
+
+### Move过渡
+
+`transition-group`还支持过度类`v-move`, 当元素位置改变时作用.
+
+demo:
+
+```html
+<div id="flip-list-demo" class="demo">
+  <button v-on:click="shuffle">Shuffle</button>
+  <transition-group name="flip-list" tag="ul">
+    <li v-for="item in items" v-bind:key="item">
+      {{ item }}
+    </li>
+  </transition-group>
+</div>
+```
+
+```javascript
+new Vue({
+  el: '#flip-list-demo',
+  data: {
+    items: [1,2,3,4,5,6,7,8,9]
+  },
+  methods: {
+    shuffle: function () {
+      this.items = _.shuffle(this.items)
+    }
+  }
+})
+```
+
+```css
+.flip-list-move {
+  transition: transform 1s;
+}
+```
+
 # 其他
+
 ## 获取元素
 * `$root`：访问组件的根实例
+
 * `$parent`：访问子组件的父组件
+
 * `$refs`：子元素或子组件上添加`ref`属性，指定引用id，可通过`$refs`来获取该DOM元素或组件实例。
+
+  > 有个坑, 动态绑定`ref`值时, `$refs`获取的是数组. 见https://segmentfault.com/q/1010000016268895
+
 * 	`$el`：组件的根DOM元素
 
 ## 动态Vue实例与销毁
@@ -1283,11 +1635,10 @@ var vm = new Vue({
     messages, // set locale messages
   })
   
-  
   // 注入到Vue中
   new Vue({ i18n }).$mount('#app')
   ```
-
+  
 * 使用
 
   通过`vm.$t()`方法使用
@@ -1304,7 +1655,7 @@ var vm = new Vue({
 
 ## Wrapper组件
 
-若要增强组件功能, 但又不影响使用, 可以将被包装组件的属性和事件暴露出来, 如
+若要增强组件功能, 但又不影响使用, 可以将Wrapper组件的属性和事件全部绑定到子组件中, 如
 
 ```html
 <div class="my-cascader">
@@ -1420,7 +1771,13 @@ Vue3采用Composition API的方式组织代码, 以解决以下问题:
 
 ## 组件变量失效
 
-因为我的变量以`_`开头的, 然后失效了, 具体为什么这样不可行., 不清楚.
+变量不能以`_`和`$`为前缀, 否则将不被代理
+
+```
+Property "_this" must be accessed with "$data._this" because properties starting with "$" or "_" are not proxied in the Vue instance to prevent conflicts with Vue internals.
+```
+
+
 
 # 参考
 
@@ -1431,3 +1788,6 @@ Vue3采用Composition API的方式组织代码, 以解决以下问题:
   * [React.js与Vue.js：流行框架的比较](https://baijiahao.baidu.com/s?id=1608099200125495014&wfr=spider&for=pc)
 
   * [Vue中数据响应式原理---对象的变化侦测](https://blog.csdn.net/Riona_cheng/article/details/102882160)
+
+* 待学
+  * [10个Vue开发技巧](https://mp.weixin.qq.com/s?__biz=MzU2NTc4NjM5OQ==&mid=2247483973&idx=1&sn=a45bb930e3d566355199599fe1454fa4&chksm=fcb72035cbc0a92307097d3f5e3f06a396b18c2c64b3966a8680e71d29138beabad29d299ab0&mpshare=1&scene=23&srcid=&sharer_sharetime=1592144740303&sharer_shareid=e22f24a31ebc3c050a04c9a4e7f37053#rd)

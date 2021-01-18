@@ -108,6 +108,12 @@ package安装有全局安装(`npm install --global`)和局部安装（默认）�
 
 >之所以可以直接执行Node.js脚本，是因为在linux环境中，解析型脚本在首部添加了`#!/usr/bin/env Interpreter`，它会在执行时使用指定解析器。
 
+## 全局变量
+
+在`module`一节中提到的变量, `exports, require, module, __filename, __dirname` 都是Node环境下全局变量的属性.
+
+> 参考: [Global objects | Node.js v15.2.1 Documentation](https://nodejs.org/api/globals.html)
+
 # 三 NPM使用
 
 npm (nodejs package manager) 包管理工具
@@ -455,6 +461,9 @@ nvm (nodejs version manager) 用于管理多版本nodejs的工具
 > 参考 https://github.com/nodejs/node-gyp/issues/629 
 
 # 参考
+
+* [Node Api](https://nodejs.org/dist/latest-v10.x/docs/api/) Node文档
+
 * [Getting started with Node.js modules: require, exports, imports and beyond](https://adrianmejia.com/blog/2016/08/12/getting-started-with-node-js-modules-require-exports-imports-npm-and-beyond/)
 * [A Beginner’s Guide to npm — the Node Package Manager](https://www.sitepoint.com/beginners-guide-node-package-manager/)
 * [Node.js wiki](https://en.wikipedia.org/wiki/Node.js)

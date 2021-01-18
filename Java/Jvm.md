@@ -223,8 +223,12 @@ G1的工作过程如下：
 ## 类加载器
 
 * [类加载器](https://blog.csdn.net/jdbdh/article/details/82593573)
-
 * [类加载过程](https://blog.csdn.net/jdbdh/article/details/82622473)
+
+## Jvm参数
+
+* `-Xms` 初始堆大小, 如`-Xms256m`
+* `-Xmx` 最大堆大小, 如`-Xmx512m`
 
 # 参考
 

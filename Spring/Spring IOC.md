@@ -896,7 +896,45 @@ public final class Boot {
 
 ## Aware接口
 
-还有什么Aware接口，继承后可以通过接口方法获得一些对象，比如容器本身啥的。
+继承了`XXXAware`接口的Bean, 在注入到容器时, 会通过接口方法注入对应的对象到Bean中. 如继承`ApplicationContextAware`可获得`ApplicationContext`实例
+
+## 应用事件
+
+Spring容器启动过程中会触发一些事件. 有两种方式可以捕获事件.
+
+1. 泛型方式
+
+   继承的接口, 传入什么泛型参数, 那么监听的就是什么事件.
+
+   ```java
+   @Component
+   public class MyListener 
+           implements ApplicationListener<ContextRefreshedEvent> {
+     
+       public void onApplicationEvent(ContextRefreshedEvent event) {
+           ...
+       }
+   }
+   ```
+
+2. 注解驱动
+
+   通过方法参数指定监听的事件
+
+   ```java
+   @Component
+   public class MyListener {
+     
+       @EventListener
+       public void handleContextRefresh(ContextRefreshedEvent event) {
+           ...
+       }
+   }
+   ```
+
+好像可以自定义事件? 略
+
+> 参考[Better application events in Spring Framework 4.2](https://spring.io/blog/2015/02/11/better-application-events-in-spring-framework-4-2)
 
 ## 参考
 
@@ -1192,7 +1230,7 @@ public class MovieConfiguration {
     </bean>
     ```
   
-  * Java: 这个不知道
+  * Java: 这个不知道. 好像Bean名算是一种限定名?
 
 ## @Resource
 
@@ -1210,8 +1248,6 @@ public class SimpleMovieLister {
 }
 ```
 
-
-
 默认使用属性名movieFinder：
 
 ```java
@@ -1226,7 +1262,29 @@ public class SimpleMovieLister {
 }
 ```
 
+---------------
 
+> 更新, 来自[Spring注解@Resource和@Autowired区别对比](https://www.cnblogs.com/think-in-java/p/5474740.html)
+
+`@Resource`装配顺序
+
+1. 如果同时指定了name和type，则从Spring上下文中找到唯一匹配的bean进行装配，找不到则抛出异常。
+
+2. 如果指定了name，则从上下文中查找名称（id）匹配的bean进行装配，找不到则抛出异常。
+
+3. 如果指定了type，则从上下文中找到类似匹配的唯一bean进行装配，找不到或是找到多个，都会抛出异常。
+
+4. 如果既没有指定name，又没有指定type，则自动按照byName方式进行装配；如果没有匹配，则回退为一个原始类型进行匹配，如果匹配则自动装配。
+
+@Resource的作用相当于@Autowired，只不过@Autowired仅按照byType自动注入。
+
+## Lazy
+
+* 配合注入注解(如`@Autowired`)使用时, 属性仅在被调用时才正在的被注入对象中.
+
+* 注入到Bean定义上时, 仅在Bean真正被其他Bean用到时才注入容器
+
+  
 
 # [十 classpath扫描和component管理](https://docs.spring.io/spring-framework/docs/current/spring-framework-reference/core.html#beans-classpath-scanning)
 

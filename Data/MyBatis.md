@@ -310,6 +310,8 @@ mybatis中含有两级缓存，局部缓存一直被开启，一个局部缓存�
 ```
 默认情况下，insert、update、delete会刷新局部和二级缓存。
 
+> Spring中, 需加事物, 缓存才生效
+
 ## ${}
 mybatis使用`#{}`作为sql语句的占位符，而`${}`用于字符串拼接，因此使用`${}`时可能会导致sql注入攻击的问题。
 
@@ -587,7 +589,7 @@ mybatis的事务管理器和数据源配置全都交给了spring配置，因此m
 还可以配置其他的属性，几乎消除了对mybatis配置文件的使用。
 
 ## SqlSession
-mybatis中`SqlSession`的实现类是`DefaultSession`，它含有一个事务管理器，事务管理器含有一个数据源。`DefaultSession`每次执行sql语句时，会向事务管理器申请一个`Connection`，而事务管理器会检查`SqlSession`是否已经打开了一个连接并返回，如果没有则想数据源申请一个新的连接。`DefaultSession`的事务操作、连接申请和关闭都是通过事务管理器实现的。
+mybatis中`SqlSession`的实现类是`DefaultSession`，它含有一个事务管理器，事务管理器含有一个数据源。`DefaultSession`每次执行sql语句时，会向事务管理器申请一个`Connection`，而事务管理器会检查`SqlSession`是否已经打开了一个连接并返回，如果没有则向数据源申请一个新的连接。`DefaultSession`的事务操作、连接申请和关闭都是通过事务管理器实现的。
 
 但在spring，提供的事务管理功能更为的强大，但`DefaultSession`不能参与spring的事务管理功能，并且是线程不安全的。因此，mybatis-spring实现了新的`SqlSession`实现类：`SqlSessionTemplate`。该类将事务管理、连接的获取和关闭都交给了spring的事务管理器处理，能够使用上spring的强大事务功能，比如 `@Transactional`注解和 AOP风格的配置都支持。因此不要去手动关闭、提交和回滚`SqlSessionTemplate`，这样会抛出异常。
 
@@ -672,6 +674,30 @@ MapperFactoryBean需要注入SqlSessionFactory或SqlSessionTemplate都行，如�
     <version>1.2.13</version>
 </dependency>
 ```
+
+若报错, 找不到某某某方法, 是因为`pagehelper`包太老了, 和其他包冲突(如Mybatis-Plus), 需要引入新的包, 如
+
+```xml
+<dependency>
+    <groupId>com.github.pagehelper</groupId>
+    <artifactId>pagehelper</artifactId>
+    <version>5.1.10</version>
+</dependency>
+```
+
+---------------------------
+
+非Spring Boot的依赖
+
+```xml
+<dependency>
+    <groupId>com.github.pagehelper</groupId>
+    <artifactId>pagehelper</artifactId>
+    <version>5.2.0</version>
+</dependency>
+```
+
+> 经测试, 这种方式不生效, 可能需要自己配置下内容
 
 ## 配置
 
@@ -1312,7 +1338,172 @@ public interface CountryMapper extends Mapper<Country> {
 
 ## Mybatis-Plus
 
-略, 不想用!!!
+### 开始
+
+* 介绍
+
+  从官网截取了关键特性
+
+  * **无侵入**：只做增强不做改变，引入它不会对现有工程产生影响，如丝般顺滑
+  * **损耗小**：启动即会自动注入基本 CURD，性能基本无损耗，直接面向对象操作
+  * **支持 ActiveRecord 模式**：支持 ActiveRecord 形式调用，实体类只需继承 Model 类即可进行强大的 CRUD 操作
+
+* 依赖引入
+
+  ```xml
+  <dependency>
+      <groupId>com.baomidou</groupId>
+      <artifactId>mybatis-plus-boot-starter</artifactId>
+      <version>3.4.0</version>
+  </dependency>
+  <dependency>
+      <groupId>com.baomidou</groupId>
+      <artifactId>mybatis-plus-annotation</artifactId>
+      <version>3.4.0</version>
+  </dependency>
+  <dependency>
+      <groupId>com.baomidou</groupId>
+      <artifactId>mybatis-plus-extension</artifactId>
+      <version>3.4.0</version>
+  </dependency>
+  ```
+
+  > 集成思路也是替换`MapperFactoryBean`.
+
+### 配置
+
+> 基本不用配置, 详细见[使用配置](https://baomidou.com/config/#%E5%9F%BA%E6%9C%AC%E9%85%8D%E7%BD%AE)
+
+* `mapperLocations`
+
+  默认`["classpath*:/mapper/**/*.xml"]`
+
+* 查, 改, 曾策略, 默认`NOT_NULL` , 如插入时判断是否为null
+
+  ```java
+  insert into table_a(<if test="columnProperty != null">column</if>) 
+  values (<if test="columnProperty != null">#{columnProperty}</if>)
+  ```
+
+* 逻辑删除
+
+  * ` logicDeleteValue` 逻辑删除时, 字段的值, 默认`1`
+  * ` logicNotDeleteValue` 逻辑不删除时, 字段的值, 默认`0`
+  
+  使用例子:
+  
+  ```java
+  @TableLogic
+  private Boolean deleted;
+  ```
+  
+* 自动填充时间
+
+  只能在新增和修改操作的时候填充, 逻辑删除属于修改操作.
+
+  * 实体需声明填充类型
+
+    ```java
+    @ApiModelProperty(value = "创建时间")
+    @TableField(fill = FieldFill.INSERT)
+    private Date createTime;
+    
+    @ApiModelProperty(value = "更新时间")
+    @TableField(fill = FieldFill.INSERT_UPDATE)
+    private Date updateTime;
+    ```
+
+  * 填充处理器
+
+    > 最新填充处理器见Mybatis Plus的多数据源配置
+    
+    ```java
+    /**
+     * 自动填充更新时间和修改时间插件
+     */
+    @Component
+    public class MyMetaObjectHandler implements MetaObjectHandler {
+        @Override
+        public void insertFill(MetaObject metaObject) {
+            // 同时赋值, 因为经测试, FieldFill.INSERT_UPDATE字段并不会再插入时触发该方法
+            this.setFieldValByName("tsCreate", new Date(), metaObject);
+            this.setFieldValByName("tsUpdate", new Date(), metaObject);
+        }
+    
+        @Override
+        public void updateFill(MetaObject metaObject) {
+            this.setFieldValByName("updateTime",new Date(),metaObject);
+        }
+    }
+    ```
+    
+
+
+### Model声明
+
+* `@TableField`
+
+  * 字段名为关键字时, 注意转义, 如
+  
+    ```java
+    @TableField(value = "`name`")
+    private String name;
+    ```
+
+### 分页
+
+`Page`类
+
+### 条件构造器
+
+提供两种方式构建构造器:
+
+* 老的方式
+
+  ```java
+  QueryWrapper<MedicineCategoryRelation> queryWrapper = new QueryWrapper();
+  queryWrapper.eq("category_id", medicineCategoryRelation.getCategoryId())
+      .eq("chinese_medicine_id", medicineCategoryRelation.getChineseMedicineId());
+  List<MedicineCategoryRelation> list = tcmMedicineCategoryRelationMapper.selectList(queryWrapper);
+  ```
+
+  缺点: 1) 不是完全的链式构建 2) 方法名为字符串, 增加隐患
+
+* lambda(推荐)
+
+  ```java
+  page(page, Wrappers.<Symptom>lambdaQuery().eq(Symptom::getCategoryId, categoryId))
+  ```
+
+### Service CRUD接口
+
+* 接口类需继承`IService`, 如
+
+  ```java
+  public interface SymptomService extends IService<Symptom> { }
+  ```
+
+* 实现类需继承`ServiceImpl`和实现自己的接口, 如
+
+  ```java
+  public class SymptomServiceImpl extends ServiceImpl<SymptomMapper, Symptom> implements SymptomService {}
+  ```
+
+### 自定义SQL
+
+```java
+IPage<ReservationDo> getList(Page<Reservation> page, @Param(Constants.WRAPPER) Wrapper<Reservation> wrapper);
+```
+
+```xml
+<select id="getList" resultMap="BaseResultMap2">
+    select tr.*,td.department_id
+    from tbl_reservation tr
+    left join tbl_doctor td on tr.doctor_id=td.id
+    left join tbl_patient tp on tr.patient_number=tp.patient_number
+    ${ew.customSqlSegment} and tr.deleted=0 and td.deleted=0 and tp.deleted=0
+</select>
+```
 
 # 实战
 ## 注意点
@@ -1548,7 +1739,270 @@ Mybatis XML
 
 > 以上是我的猜测啊, 哈哈....
 
+## 多数据源
+
+### Mybatis Or 通用Mapper
+
+[Springboot+Mybatis+通用Mapper多数据源实现数据同步](https://blog.csdn.net/qq904274014/article/details/86594776)
+
+下面配置适用于Mybatis和通用Mapper, 但需要注意的是, 通用Mapper用的`tk.mybatis.spring.annotation.MapperScan`, Mybatis用的`org.mybatis.spring.annotation.MapperScan`
+
+```java
+import org.apache.ibatis.session.SqlSessionFactory;
+import org.mybatis.spring.SqlSessionFactoryBean;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.boot.autoconfigure.jdbc.DataSourceBuilder;
+import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
+import org.springframework.jdbc.datasource.DataSourceTransactionManager;
+import tk.mybatis.spring.annotation.MapperScan;
+
+import javax.sql.DataSource;
+
+@Configuration
+@MapperScan(basePackages = "cn.javabb.bootdemo.mapper.local",sqlSessionFactoryRef = "localSqlSessionFactory")
+public class LocalDataSourceConfig {
+    @Bean(name = "localDataSource")
+    @ConfigurationProperties("spring.local-datasource")
+    public DataSource localDataSource(){
+        return DataSourceBuilder.create().build();
+    }
+
+    @Bean(name = "localSqlSessionFactory")
+    public SqlSessionFactory sqlSessionFactory(@Qualifier("localDataSource") DataSource dataSource) throws Exception {
+        SqlSessionFactoryBean sessionFactoryBean = new SqlSessionFactoryBean();
+        sessionFactoryBean.setDataSource(dataSource);
+        sessionFactoryBean.setMapperLocations(new PathMatchingResourcePatternResolver()
+                                              .getResources("classpath*:mapper/local/*.xml"));
+        return sessionFactoryBean.getObject();
+    }
+
+    @Bean(name = "localTransactionManager")
+    public DataSourceTransactionManager localTransactionManager(){
+        return new DataSourceTransactionManager(localDataSource());
+    }
+}
+```
+
+```properties
+spring:
+  local-datasource:
+    url: jdbc:sqlserver://77.77.77.77:1433;DatabaseName=dbName
+    username: sa
+    password: 1234
+    #使用Druid的数据源
+    type: com.alibaba.druid.pool.DruidDataSource
+    driver-class-name: com.microsoft.sqlserver.jdbc.SQLServerDriver
+    filters: stat
+    maxActive: 20
+    initialSize: 1
+    maxWait: 60000
+    minIdle: 1
+    timeBetweenEvictionRunsMillis: 60000
+    minEvictableIdleTimeMillis: 300000
+    validationQuery: select 'x'
+    testWhileIdle: true
+    testOnBorrow: false
+    testOnReturn: false
+    poolPreparedStatements: true
+    maxOpenPreparedStatements: 20
+```
+
+> 感觉这里properties配置还是有点问题的
+
+### Mybatis-plus
+
+将下面的`symptom`替换为自己的前缀即可. 注意, 这里直接使用了Druid的数据源, 而非像上一小节中让Spring自己查找.
+
+> 多数据源会导致**Mybatis-Plus自动配置完全失效**. 需要自己配置所有, 下来配置依据, 来源于[使用配置](https://baomidou.com/config/#%E5%9F%BA%E6%9C%AC%E9%85%8D%E7%BD%AE)给出的MVC配置方式, 代码暂时还不全
+
+```java
+import com.baomidou.mybatisplus.annotation.DbType;
+import com.baomidou.mybatisplus.core.config.GlobalConfig;
+import com.baomidou.mybatisplus.core.handlers.MetaObjectHandler;
+import com.baomidou.mybatisplus.extension.plugins.PaginationInterceptor;
+import com.baomidou.mybatisplus.extension.plugins.pagination.optimize.JsqlParserCountOptimize;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+
+/**
+ * @author sidian
+ * @date 2020/9/2 16:09
+ */
+@Configuration
+public class CommonDatasourceConfiguration {
+
+    @Bean
+    @ConditionalOnMissingBean
+    public PaginationInterceptor paginationInterceptor() {
+        PaginationInterceptor paginationInterceptor = new PaginationInterceptor();
+        paginationInterceptor.setLimit(10000);
+        paginationInterceptor.setDialectType(DbType.MYSQL.getDb());
+        paginationInterceptor.setCountSqlParser(new JsqlParserCountOptimize(true));
+        return paginationInterceptor;
+    }
+
+    @Bean
+    @ConditionalOnMissingBean
+    public MetaObjectHandler metaObjectHandler() {
+        return new MPMetaObjectHandler();
+    }
+
+
+    GlobalConfig.DbConfig dbConfig() {
+        GlobalConfig.DbConfig dbConfig = new GlobalConfig.DbConfig();
+        dbConfig.setLogicDeleteValue("true");
+        dbConfig.setLogicNotDeleteValue("false");
+        return dbConfig;
+    }
+
+
+    GlobalConfig globalConfig() {
+        GlobalConfig globalConfig = new GlobalConfig();
+        globalConfig.setDbConfig(dbConfig());
+        globalConfig.setMetaObjectHandler(metaObjectHandler());
+        return globalConfig;
+    }
+
+}
+```
+
+```java
+import com.baomidou.mybatisplus.core.handlers.MetaObjectHandler;
+import org.apache.ibatis.reflection.MetaObject;
+
+import java.util.Date;
+
+/**
+ * mybatis plus的自动填充处理器
+ *
+ * @author sidian
+ * @date 2020/9/2 10:45
+ */
+public class MPMetaObjectHandler implements MetaObjectHandler {
+    /**
+     * 插入元对象字段填充（用于插入时对公共字段的填充）
+     *
+     * @param metaObject 元对象
+     */
+    @Override
+    public void insertFill(MetaObject metaObject) {
+        setFieldValue("tsCreate", new Date(), metaObject);
+        // 经测试, 插入不会触发FieldFill.INSERT_UPDATE类型字段的字段填充, 因此需要此时设置一下
+        setFieldValue("tsUpdate", new Date(), metaObject);
+    }
+
+    private void setFieldValue(String name, Date date, MetaObject metaObject) {
+        Class<?> setterType = metaObject.getSetterType(name);
+        if (Date.class.isAssignableFrom(setterType)) {
+            this.setFieldValByName(name, date, metaObject);
+        } else if (Long.class.isAssignableFrom(setterType)) {
+            this.setFieldValByName(name, date.getTime(), metaObject);
+        } else {
+            throw new UnsupportedOperationException(String.format("不支持%s类型字段的自动填充", setterType.getCanonicalName()));
+        }
+    }
+
+    /**
+     * 更新元对象字段填充（用于更新时对公共字段的填充）
+     *
+     * @param metaObject 元对象
+     */
+    @Override
+    public void updateFill(MetaObject metaObject) {
+        setFieldValue("tsUpdate", new Date(), metaObject);
+    }
+}
+```
+
+```java
+import com.alibaba.druid.pool.DruidDataSource;
+import com.baomidou.mybatisplus.extension.plugins.PaginationInterceptor;
+import com.baomidou.mybatisplus.extension.spring.MybatisSqlSessionFactoryBean;
+import org.apache.ibatis.plugin.Interceptor;
+import org.apache.ibatis.session.SqlSessionFactory;
+import org.mybatis.spring.SqlSessionTemplate;
+import org.mybatis.spring.annotation.MapperScan;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
+import org.springframework.jdbc.datasource.DataSourceTransactionManager;
+
+import javax.annotation.Resource;
+import javax.sql.DataSource;
+
+/**
+ * @author sidian
+ * @date 2020/9/1 12:02
+ */
+@Configuration
+@MapperScan(basePackages = {"com.clinical.jingyi.mapper.symptom"}, sqlSessionFactoryRef = "symptomSqlSessionFactory")
+public class SymptomDatasourceConfiguration {
+    private final static String mapperLocation = "classpath*:/mapper/symptom/*.xml";
+    @Resource
+    CommonDatasourceConfiguration commonDatasourceConfiguration;
+
+    @Bean(name = "symptomDataSource")
+    @ConfigurationProperties(prefix = "spring.datasource.symptom")
+    public DataSource dataSource() {
+        return new DruidDataSource();
+    }
+
+    @Bean(name = "symptomTransactionManager")
+    public DataSourceTransactionManager transactionManager(@Qualifier("symptomDataSource") DataSource dataSource) {
+        return new DataSourceTransactionManager(dataSource);
+    }
+
+    @Bean(name = "symptomSqlSessionFactory")
+    public SqlSessionFactory sqlSessionFactory(
+            @Qualifier("symptomDataSource") DataSource dataSource,
+            PaginationInterceptor paginationInterceptor
+    ) throws Exception {
+        MybatisSqlSessionFactoryBean bean = new MybatisSqlSessionFactoryBean();
+        bean.setDataSource(dataSource);
+        bean.setGlobalConfig(commonDatasourceConfiguration.globalConfig());
+        PathMatchingResourcePatternResolver pathMatchResolver = new PathMatchingResourcePatternResolver();
+        bean.setMapperLocations(pathMatchResolver.getResources(mapperLocation));
+        //手动设置session工厂时，需要手动添加分页插件
+        Interceptor[] plugins = new Interceptor[1];
+        plugins[0] = paginationInterceptor;
+        bean.setPlugins(plugins);
+        return bean.getObject();
+    }
+
+    @Bean("symptomSqlSessionTemplate")
+    public SqlSessionTemplate sqlSessionTemplate(
+            @Qualifier("symptomSqlSessionFactory") SqlSessionFactory sessionFactory) {
+        return new SqlSessionTemplate(sessionFactory);
+    }
+}
+```
+
+> 若要配置主事务, 在`transactionManager`上添加`@Primary`即可
+
+```properties
+spring:
+	datasource:
+        examination:
+            url: jdbc:mysql://119.333.222.33:3306/db_examination?useUnicode=true&characterEncoding=utf-8&allowMultiQueries=true&&useSSL=false&serverTimezone=CTT
+            password: 2020
+            driver-class-name: com.mysql.cj.jdbc.Driver
+            username: root
+```
+
+## 多数据源配置踩坑
+
+* Hikari数据库的url写在`jdbc-url`属性中
+* 其他数据源, 如Druid写在`url`属性中
+
 # 参考
+
 mybatis：http://www.mybatis.org/mybatis-3/index.html
 mybatis-spring：http://www.mybatis.org/spring/sample.html
 java api及所有注解：http://www.mybatis.org/mybatis-3/java-api.html
+

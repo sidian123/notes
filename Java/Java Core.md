@@ -138,10 +138,16 @@
   * `ExecuteResultHandler`
 
     用于处理进程结束的结果. 该参数存在时`execute()`**异步**执行, 否则**同步**执行.
-    
-    > 一般使用实现类`DefaultExecuteResultHandler`, 覆盖父类方法时, 最好调用下其父方法.
-    >
-    > 注意, 被看门狗杀死时, 并不会触发该处理器执行.
+
+    * 异步执行
+
+      命令正常结束, 会调用`DefaultExecuteResultHandler.onProcessComplete()`方法; 异常结束, 会调用`DefaultExecuteResultHandler.onProcessFailed()`方法
+
+      > 注意, 1) 覆盖父类方法时, 最好调用下其父方法. 2) 被看门狗杀死时, 并不会触发该处理器执行.
+
+    * 同步执行
+
+      正常结束后, 会返回状态码, 否则抛出异常
 
 * 工作目录和环境变量
   
@@ -383,6 +389,117 @@ Google提供的一个工具, 先记录下. 一般引入了Swagger的项目都引
 > * [Javadoc](https://guava.dev/releases/snapshot-jre/api/docs/)
 > * [wiki](https://github.com/google/guava/wiki)
 
+# Hutool (神器)
+
+> [Hutool Doc](https://hutool.cn/docs/#/)
+
+## ArrayUtil
+
+* 包装类数组 --> 基本类型数组 `unWrap()`
+
+## Excel
+
+### start
+
+* 需要额外引入依赖
+
+  ```xml
+  <dependency>
+      <groupId>org.apache.poi</groupId>
+      <artifactId>poi-ooxml</artifactId>
+      <version>4.1.2</version>
+  </dependency>
+  ```
+
+* `ExcelUtil`
+
+  提供便利方法, 获取`ExcelReader`和`ExcelWriter`
+  
+* sheet操作
+
+  * `setSheet()` 设置当前操作sheet
+  * `ExcelWriter.renameSheet()` 重命名当前sheet
+
+### ExcelWriter
+
+* 基本操作
+
+  * `merge()` 合并单元格
+  * `write()` 写入数据(二维)
+  * `writeRow()` 写入一行
+  * `flush()` 刷新到流中
+  * `close()` 关闭资源, 也会将数据写入到流中.
+
+  > 仅在调用`flush()`或`close()`后, 数据才真正的写入到了流.
+
+* 操作行
+
+  默认位于第0行.
+
+  * `getCurrentRow()` 获取当前操作行
+  * `passCurrentRow()` 跳过当前行
+  * `passRows()` 跳过指定行数
+
+* 标题
+
+  * 输出方式
+
+    * 方式一
+
+      `writeRow()` 写出数据的同时写出标题. 不同数据类型, 获取标题方式不同, 如`List`的第一行被当作标题, `Map`的key作为标题, Bean的字段名作为标题
+
+    * 方式二
+
+      `merge()` 合并单元格后填充标题
+
+    * 方式三
+
+      直接写入标题.
+
+  * 自定义Bean的key别名 & 写入顺序
+
+    ```java
+    //自定义标题别名
+    writer.addHeaderAlias("name", "姓名");
+    writer.addHeaderAlias("age", "年龄");
+    writer.addHeaderAlias("score", "分数");
+    writer.addHeaderAlias("isPass", "是否通过");
+    writer.addHeaderAlias("examDate", "考试时间");
+    ```
+
+    若仅保证顺序, 不修改标题名
+
+    ```java
+    writer.addHeaderAlias("age", "age")
+    ```
+
+### ExcelReader
+
+* `read()`读取所有数据
+
+* 标题
+
+  使用`ExcelReader.addHeaderAlias(header,alias)`. 注意,`header`是excel列名, 如
+
+  ```java
+  writer.addHeaderAlias("姓名", "name");
+  writer.addHeaderAlias("年龄", "age");
+  writer.addHeaderAlias("分数", "score");
+  writer.addHeaderAlias("是否通过", "isPass");
+  writer.addHeaderAlias("考试时间", "examDate");
+  ```
+
+
+## FileUtil
+
+* 好像所有方法, 相对路径都是相对于classpath的, 如要相对于工作目录, 可如下所示:
+
+  ```java
+  new File("").getCanonicalFile()
+  ```
+  
+  > 但项目打成Jar包, 很多操作是不能进行了.
+
 # 原生工具
 
 ## 进程相关
@@ -507,15 +624,56 @@ java -Dname="Spring" -jar app.jar
 > 在Spring boot应用中, 默认不支持AWT的使用, 即托盘功能不可用, 需修改启动配置, 如
 >
 > ```java
->         SpringApplication springApplication = new SpringApplication(ClientApplication.class);
->         springApplication.setHeadless(false);//允许使用awt,即界面
->         springApplication.run(args);
+>    SpringApplication springApplication = new SpringApplication(ClientApplication.class);
+>    springApplication.setHeadless(false);//允许使用awt,即界面
+>    springApplication.run(args);
 > ```
 
 > 参考
 >
 > * [How to Use the System Tray](https://docs.oracle.com/javase/tutorial/uiswing/misc/systemtray.html)
 > * [Java SystemTray类（系统托盘）和TrayIcon类（托盘图标）](https://blog.csdn.net/qq_36761831/article/details/81516535)
+
+# Security
+
+[JAVA解析各种编码密钥对（DER、PEM、openssh公钥）](https://blog.csdn.net/hzzhoushaoyu/article/details/8627952)
+
+[High Performance, Scalable, Open Source Java SSH API](https://www.jadaptive.com/en/products/java-ssh-synergy)
+
+[Java SSH and the new OpenSSH Private Key Format](https://www.jadaptive.com/java-ssh-and-the-new-openssh-private-key-format/)
+
+[How to Read PEM File to Get Public and Private Keys](https://www.baeldung.com/java-read-pem-file-keys)
+
+# 图片
+
+* JDK提供的`BufferedImage`: 提供最底层的操作
+
+  参考教程[BufferedImage类、Image类、Graphics类](https://blog.csdn.net/jiachunchun/article/details/89670721)
+
+* 图片处理库Thumbnails: 提供缩放, 旋转, 裁剪等功能更
+
+  参考教程[java处理图片类库 Thumbnails 学习](https://blog.csdn.net/qq_30336433/article/details/81298154)
+
+* 使用Demo: 将两张图片合并成一张
+
+  ```java
+  // 缩放-宽度一致
+  BufferedImage image1 = Thumbnails.of(FileUtil.getInputStream("image1.jpeg"))
+      .width(100)
+      .asBufferedImage();
+  BufferedImage image2 = Thumbnails.of(FileUtil.getInputStream("aaa.jpg"))
+      .width(100)
+      .asBufferedImage();
+  // 拼接
+  BufferedImage target = new BufferedImage(image1.getWidth(), image1.getHeight() + image2.getHeight(), BufferedImage.TYPE_4BYTE_ABGR);
+  Graphics graphics = target.getGraphics();
+  graphics.drawImage(image1,0,0,null);
+  graphics.drawImage(image2,0,image1.getHeight(),null);
+  graphics.dispose();
+  // 写出
+  ImageIO.write(target,"PNG",new File("merge.png"));
+  ```
+
 
 # 其他
 
@@ -560,3 +718,32 @@ UUID存在不同的变体( variant ), 不管哪种变体, 都有4中版本, 而J
 * `suspend=n` JVM启动后不暂停, 之后Idea可随时连接上
 * `suspend=y` JVM启动后暂停, Idea远程连接后才继续执行下去.
 
+## Optional
+
+值的容器, 常用在方法的返回值上. 常用方法如下
+
+* `isPresent()` 若值存在, 则`true`
+
+* `orElse(other)`
+
+  若值不为空`null`, 则返回; 否则返回默认值`other`
+
+* `ifPresent(action)`
+
+  若值存在, 则执行动作`action`
+
+## JVM关闭&回调
+
+* 关闭
+
+  ```java
+  System.exit(0);
+  ```
+
+* 回调
+
+  ```java
+  Runtime.getRuntime().addShutdownHook(new Thread(() -> System.out.println("VM要关闭了")));
+  ```
+
+  
