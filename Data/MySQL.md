@@ -850,6 +850,12 @@ LIMIT [offset,] row_count;
 
   > 与mysqldump相比, mysqlpump是更强大的工具
 
+* 备份指定库
+
+  ```shell
+  mysqlpump -u root -p --include-databases=db_test,db_user --add-drop-database --add-drop-table > all-databases.sql
+  ```
+
 * 恢复
 
   ```shell
