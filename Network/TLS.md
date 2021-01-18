@@ -291,7 +291,7 @@ A和B拥有配对的密钥, 那么他们间的交流是加密过的, 是可以�
 
 ## 免费证书
 
-[FreeSSL.org](https://freessl.org/)
+https://freessl.cn/
 
 免费的Dv SSL证书, 仅验证域名管理权, 需要为域名设置Txt记录, 记录认证信息, 从而达到域名所有权校验的目的.
 
