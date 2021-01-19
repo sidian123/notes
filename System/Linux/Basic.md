@@ -321,17 +321,56 @@ pwd（print working directory）打印当前工作目录。
 
 ## grep
 
+### 基本使用
+
 打印在文件或者输入流中**含有**被正则表达式匹配内容的**行**。
 
->grep [OPTIONS] PATTERN [FILE...]
->
->* `-i`：忽略大小写
->* `-v`：Invert the sense of matching, to select non-matching lines. 反向匹配
->* `-E`(`egrep`)：使用扩展正规表达式
+```
+grep [OPTIONS] PATTERN [FILE...]
+```
+
+* `-i`：忽略大小写
+* `-v`：Invert the sense of matching, to select non-matching lines. 反向匹配
+* `-E`(`egrep`)：使用扩展正规表达式
 
 看了`man grep`后，发现**基本正则**（grep）和**扩展正则**（egrep）基本没什么区别，但grep更符合我的预期。所有语言的正则语法都差不多，可参考：[正则表达式--java][2]
 
 [2]:https://blog.csdn.net/jdbdh/article/details/82702285
+
+### 文件查找
+
+搜索指定目录下所有文件的内容, 并打印文件与内容位置.
+
+```
+grep -rnw '/path/to/somewhere/' -e 'pattern'
+```
+
+- `-r` or `-R` is recursive,
+- `-n` is line number, and
+- `-w` stands for match the whole word.
+- `-l` (lower-case L) can be added to just give the file name of matching files.
+
+Along with these, `--exclude`, `--include`, `--exclude-dir` flags could be used for efficient searching:
+
+- This will only search through those files which have .c or .h extensions:
+
+  ```
+  grep --include=\*.{c,h} -rnw '/path/to/somewhere/' -e "pattern"
+  ```
+
+- This will exclude searching all the files ending with .o extension:
+
+  ```
+  grep --exclude=\*.o -rnw '/path/to/somewhere/' -e "pattern"
+  ```
+
+- For directories it's possible to exclude one or more directories using the `--exclude-dir` parameter. For example, this will exclude the dirs dir1/, dir2/ and all of them matching *.dst/:
+
+  ```
+  grep --exclude-dir={dir1,dir2,*.dst} -rnw '/path/to/somewhere/' -e "pattern"
+  ```
+
+This works very well for me, to achieve almost the same purpose like yours.
 
 ## less
 

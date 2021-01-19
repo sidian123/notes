@@ -1898,9 +1898,17 @@ public class MPMetaObjectHandler implements MetaObjectHandler {
     private void setFieldValue(String name, Date date, MetaObject metaObject) {
         Class<?> setterType = metaObject.getSetterType(name);
         if (Date.class.isAssignableFrom(setterType)) {
-            this.setFieldValByName(name, date, metaObject);
+            if (Objects.nonNull(date) && metaObject.hasSetter(name)) {
+                if (null == this.getFieldValByName(name, metaObject)) {
+                    this.setFieldValByName(name, date, metaObject);
+                }
+            }
         } else if (Long.class.isAssignableFrom(setterType)) {
-            this.setFieldValByName(name, date.getTime(), metaObject);
+            if (Objects.nonNull(date) && metaObject.hasSetter(name)) {
+                if (null == this.getFieldValByName(name, metaObject)) {
+                    this.setFieldValByName(name, date.getTime(), metaObject);
+                }
+            }
         } else {
             throw new UnsupportedOperationException(String.format("不支持%s类型字段的自动填充", setterType.getCanonicalName()));
         }
