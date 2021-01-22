@@ -763,6 +763,25 @@ public class TransactionFilter implements Filter {
 * `@WebFilter`用于配置匹配的URL, 默认`/*`, 即匹配所有URL. `urlPatterns`等价于Servlet的`<url-pattern/>`元素, 目前只知道支持通配符`*`
 * `@Order`定义过滤器执行顺序, 越小越先执行, 默认`Integer.MAX_VALUE`
 
+-----------------
+
+过滤器的第二种配置方式:
+
+```java
+@Bean
+public FilterRegistrationBean<XssAndSqlFilter> xssFilterRegistrationBean() {
+    FilterRegistrationBean<XssAndSqlFilter> filterRegistrationBean = new FilterRegistrationBean<>();
+    filterRegistrationBean.setFilter(new XssAndSqlFilter());
+    filterRegistrationBean.setOrder(1);
+    filterRegistrationBean.addUrlPatterns("/*");
+    Map<String, String> initParameters = Maps.newHashMap();
+    initParameters.put("excludes", "/favicon.ico,/img/*,/js/*,/css/*,/dict/**");
+    initParameters.put("isIncludeRichText", "true");
+    filterRegistrationBean.setInitParameters(initParameters);
+    return filterRegistrationBean;
+}
+```
+
 ## Content Types
 
 > [Content Types](https://docs.spring.io/spring/docs/current/spring-framework-reference/web.html#mvc-config-content-negotiation)
