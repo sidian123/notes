@@ -303,6 +303,16 @@ Spring提供了注解来异步执行和调度任务.
       <artifactId>hibernate-validator</artifactId>
   </dependency>
   ```
+  
+  新的`starter-web`包不默认引入了, 需手动:
+  
+  ```xml
+  <dependency>
+      <groupId>org.hibernate.validator</groupId>
+      <artifactId>hibernate-validator</artifactId>
+      <version>6.1.6.Final</version>
+  </dependency>
+  ```
 
 ## 注解
 
