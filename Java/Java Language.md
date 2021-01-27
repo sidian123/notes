@@ -295,6 +295,10 @@ int i = 100000;
 long l= 1000L;
 int[] myIntArray = {1, 2, 3};
 String[] myStringArray = {"a", "b", "c"};
+// 二进制表示
+byte aByte = (byte)0b00100001; // An 8-bit 'byte' value:
+short aShort = (short)0b1010000101000101; // A 16-bit 'short' value:
+int aInt = 0b00111;
 ```
 
 > `String[] myStringArray = new String[]{"a", "b", "c"};`应该不算字面值吧.
