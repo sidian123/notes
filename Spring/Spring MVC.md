@@ -1096,6 +1096,18 @@ CommonsMultipartResolver常用[属性](https://docs.spring.io/spring-framework/d
   headers.setCacheControl(CacheControl.maxAge(30, TimeUnit.DAYS));//设置缓存时间
   ```
 
+## 获取所有HandlerMapping
+
+```java
+@Resource
+RequestMappingHandlerMapping handlerMapping;
+    
+@Test
+void contextLoads() {
+    Map<RequestMappingInfo, HandlerMethod> handlerMethods = handlerMapping.getHandlerMethods();
+}
+```
+
 # 参考
 * 《Java EE 互联网轻量级框架整合开发 --SSM框架和Redis实现》 杨开振
 * 《Java EE 企业级应用开发教程》黑马程序员
