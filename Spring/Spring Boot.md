@@ -346,6 +346,16 @@ public class Config {
 }
 ```
 
+> 当额外添加`spring-boot-configuration-processor`依赖并编译时, 会产生属性使用的元数据. 有属性元数据的starter包可以给使用者良好的提示.
+>
+> ```xml
+> <dependency>
+>     <groupId>org.springframework.boot</groupId>
+>     <artifactId>spring-boot-configuration-processor</artifactId>
+>     <optional>true</optional>
+> </dependency>
+> ```
+
 #### @Value
 
 或者

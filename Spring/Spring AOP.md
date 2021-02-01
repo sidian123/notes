@@ -624,6 +624,25 @@ public class UsageTracking {
 >
 > 不知道可不可以插入无接口的类, 未测试.
 
+## Demo
+
+* 切被注解标注的方法, 切被注解标注的类的所有公有方法.
+
+  ```java
+  @Aspect
+  public class RoleAspect {
+  
+      @Around("@annotation(role) || (@within(role) && execution(public * *(..)))")
+      public Object around(ProceedingJoinPoint pjp, Role role) throws Throwable {
+          // 提取角色限制
+          List<Integer> roles = extractRoles(pjp, role);
+          // 鉴权
+          MyAssert.isTrue(authorize(roles, TokenHolder.getToken()), CODE_401.toStatus());
+          return pjp.proceed();
+      }
+  }
+  ```
+
 # 四 其他
 
 ## 关于参数名获取

@@ -73,6 +73,8 @@ Vue.use(ElementUI);
 
 文件上传控件，需放入子元素，才能触发文件选择。通过`list-type`属性，可设置已上传文件的列表样式。如果不满意，可自行禁止列表`show-file-list`，然后自定义子元素。详细见文档的例子User avatar upload。
 
+### 使用
+
 - 常用属性
 
   - action（必须）：请求url
@@ -119,6 +121,21 @@ Vue.use(ElementUI);
   - tip：提示内容
 
 - 方法：比如`submit`，手动上传时使用；等等；
+
+### Demo
+
+```vue
+<el-upload class="desc-image"
+           v-if="symptomDialog.item.descriptionType===2"
+           :show-file-list="false"
+           action=""
+           :multiple="false"
+           :auto-upload="false"
+           :on-change="uploadFile"
+           >
+    <img class="image" :src="symptomDialog.item.description" alt="描述图片">
+</el-upload>
+```
 
 ## Form
 
