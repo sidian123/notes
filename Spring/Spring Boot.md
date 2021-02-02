@@ -474,6 +474,10 @@ service.port=8080
 
 例子如`mybatis.mapper-locations: classpath:mapperxml/**/*.xml`
 
+#### 环境值
+
+之前说了, 所有不同来源的配置最终会注入到`Environment`中. 同时, 我们也可在配置文件中取出先注入的值, 如用户家目录: `${user.home}`
+
 # 四 Logging
 
 Spring Boot对[Java Util Logging](https://docs.oracle.com/javase/8/docs/api//java/util/logging/package-summary.html)、[Log4J2](https://logging.apache.org/log4j/2.x/) 和 [Logback](http://logback.qos.ch/)提供了**支持与默认配置**. 当在classpath下发现日记jar包时，会**自动配置**这些jar包，并且对于Spring Boot支持的日记系统，都可以通过[应用属性](<https://docs.spring.io/spring-boot/docs/current/reference/html/common-application-properties.html>)进行配置，**即logging属性是独立于日记系统的**。

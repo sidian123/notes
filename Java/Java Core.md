@@ -489,16 +489,23 @@ Google提供的一个工具, 先记录下. 一般引入了Swagger的项目都引
   writer.addHeaderAlias("考试时间", "examDate");
   ```
 
-
 ## FileUtil
 
-* 好像所有方法, 相对路径都是相对于classpath的, 如要相对于工作目录, 可如下所示:
+* 首先, 一个相对路径地址, 对于接收字符串形式路径的工具方法, 是相对于classpath的; 对于接收`File`路径的工具方法, 是相对于工作目录的
+
+  实例如下:
 
   ```java
-  new File("").getCanonicalFile()
+  System.out.println(FileUtil.file("").getCanonicalFile().toString());
+  System.out.println(FileUtil.file(new File("")).getCanonicalFile().toString());
   ```
-  
-  > 但项目打成Jar包, 很多操作是不能进行了.
+
+  结果
+
+  ```
+  C:\Users\admin\IdeaProjects\sidian-platform\core-lib\target\test-classes
+  C:\Users\admin\IdeaProjects\sidian-platform\core-lib
+  ```
 
 # 原生工具
 
