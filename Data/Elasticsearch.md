@@ -975,6 +975,16 @@ PUT my_index/_doc/1
   
   > 注意, 还需要将elasticsearch和kibana加入到同一自定义bridge网络中, 否则容器间无法通信. (见[docker网络知识](https://sidian.live/article/?id=268#head-15-0-0-0-0-0))
   
+* 配置
+
+  配置es地址和认证凭证(如果有x-pack认证的话)
+
+  ```
+  elasticsearch.hosts: [ "http://117.33.122.222:9500" ]
+  elasticsearch.username: "elastic" 
+  elasticsearch.password: "123456"
+  ```
+
 * 基本使用
 
   * Index Patterns (*Management/Kibana/Index Patterns*)
