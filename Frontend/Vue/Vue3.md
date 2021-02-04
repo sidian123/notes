@@ -2,8 +2,6 @@
 
 ## 安装
 
-使用或更新Vue CLI到v4.5及以上版本.
-
 ```shell
 npm install -g @vue/cli
 ```

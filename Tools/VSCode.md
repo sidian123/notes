@@ -43,6 +43,8 @@
 
   正则中, 通过`$num`来反向引用.
 
+> 参考[VS Code常用快捷键总结](https://www.cnblogs.com/schut/p/10461840.html)
+
 # 搜索
 
 * 正则中反向引用: `$num`
