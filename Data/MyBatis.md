@@ -1385,6 +1385,14 @@ public interface CountryMapper extends Mapper<Country> {
   values (<if test="columnProperty != null">#{columnProperty}</if>)
   ```
 
+  * 全局配置
+
+    配置文件中设置, 略
+
+  * 局部配置
+
+    在`@TableField`上配置
+
 * 逻辑删除
 
   * ` logicDeleteValue` 逻辑删除时, 字段的值, 默认`1`
@@ -1437,18 +1445,34 @@ public interface CountryMapper extends Mapper<Country> {
     }
     ```
     
+  
+* 分页配置
+
+  ```java
+  @Bean
+  public PaginationInterceptor paginationInterceptor() {
+      PaginationInterceptor paginationInterceptor = new PaginationInterceptor();
+      // 设置请求的页面大于最大页后操作， true调回到首页，false 继续请求  默认false
+      // paginationInterceptor.setOverflow(false);
+      // 设置最大单页限制数量，默认 500 条，-1 不受限制
+      // paginationInterceptor.setLimit(500);
+      // 开启 count 的 join 优化,只针对部分 left join
+      paginationInterceptor.setCountSqlParser(new JsqlParserCountOptimize(true));
+      return paginationInterceptor;
+  }
+  ```
 
 
 ### Model声明
 
 * `@TableField`
 
-  * 字段名为关键字时, 注意转义, 如
-  
-    ```java
-    @TableField(value = "`name`")
-    private String name;
-    ```
+  字段名为关键字时, 注意转义, 如
+
+  ```java
+  @TableField(value = "`name`")
+  private String name;
+  ```
 
 ### 分页
 
