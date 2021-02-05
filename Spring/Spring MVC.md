@@ -1052,7 +1052,7 @@ CommonsMultipartResolver常用[属性](https://docs.spring.io/spring-framework/d
 
   ```java
   response.setContentType("application/pdf");      
-  response.setHeader("Content-Disposition", "attachment; filename=somefile.pdf); 
+  response.setHeader("Content-Disposition", "attachment; filename=somefile.pdf"); 
   ```
 
 * 完整例子
