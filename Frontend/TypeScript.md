@@ -187,6 +187,35 @@ let list: any[] = [1, true, "free"];
 list[1] = 100;
 ```
 
+### unkown
+
+声明类型时, 表示类型展示不知道.
+
+可以任意赋值, 但类型仍为`unknown`
+
+```typescript
+let notSure: unknown = 4;
+notSure = "maybe a string instead";
+notSure = false; // notSure还是unknown类型
+```
+
+可通过类型检查或值比较后, 将类型确定下来
+
+```typescript
+declare const maybe: unknown;
+const aNumber: number = maybe; // 错误, 不能直接确定内容
+
+if (maybe === true) { // 值比较, 可确定是布尔值
+  const aBoolean: boolean = maybe; // 正确
+  const aString: string = maybe; // 错误, 类型不对
+}
+
+if (typeof maybe === "string") { // 类型检查, 是字符串
+  const aString: string = maybe; // 正确
+  const aBoolean: boolean = maybe; // 错误, 类型不对
+}
+```
+
 ### void
 
 用于函数, 表示无返回值
