@@ -44,11 +44,41 @@ npm install -g @vue/cli
 
 # Reactivity
 
+## 原理
+
+```javascript
+const dinner = {
+  meal: 'tacos'
+}
+
+const handler = {
+  get(target, prop, receiver) {
+    track(target, prop)
+    const value = Reflect.get(...arguments)
+    if (isObject(value)) {
+      return reactive(value)
+    } else {
+      return value
+    }
+  }
+  set(target, key, value, receiver) {
+    trigger(target, key)
+    return Reflect.set(...arguments)
+  }
+}
+
+const proxy = new Proxy(dinner, handler)
+console.log(proxy.meal)
+
+// tacos
+```
+
+1. 响应式对象由代理实现
+
+2. `get()`方法记录依赖, `set()`方法出发更新
+
+3. 组件首次渲染时, 会访问涉及的所有响应式对象, 出发`get()`的记录依赖树.
+
+4. `computed`对象无需指定依赖, 无副作用的`watch`需要指定监听的响应式对象, 原因见3.
 
 
-
-
-# 参考
-
-* [Vue3 Composition-API](https://mp.weixin.qq.com/s/mCZK_KYZFmhZtlscHyMLiw)
-* https://zhuanlan.zhihu.com/p/337871096
