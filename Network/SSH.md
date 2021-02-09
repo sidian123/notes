@@ -304,6 +304,30 @@ OpenSSH最常用的命令，登录、转发都通过该命令进行。
   EOF
   ```
 
+  > 原理, 输入流重定向
+
+  执行多个命令, 且允许参数替换
+
+  ```bash
+  # 服务器中运行命令. 注意, 传入的参数需要双引号括起来
+  function runInServer() {
+      ssh -p 222 root@hk.sidian.live "$*" &
+  }
+  
+  runInServer "
+    # 若进程已运行, 则杀死
+    pid=\$($(getPid $appName))
+    if [[ -n \${pid} ]] ; then
+      kill -9 \${pid}
+    fi
+    # 运行
+    cd sidian-platform/
+    nohup java -Xmx512m -Xms256m -Dserver.port=${serverPort} -jar ${appName} 2>&1 > log.txt &
+  "
+  ```
+
+  > 原理是`""`允许替换, 传给ssh的是替换后的字符串. 其中函数`runInServer`中的`&`解决命令不会结束的问题.
+
 * 调试
 
   `-v` 进入详细模式, 将打印调试信息. 可以使用多个`-v`选项, 调试信息将更详细, 最多3个, 如
@@ -412,6 +436,7 @@ scp file root@wx.sidian123.top:
 ```
 
 * 端口 `-P`
+* 递归拷贝 `-r` 拷贝目录时需加上
 
 ### sftp
 

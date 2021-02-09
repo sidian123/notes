@@ -350,10 +350,6 @@ myFavoriteNumber = 7;
 
 > TypeScript于JSX一起使用时, 仅As语法可用.
 
-
-
-## Type assertions
-
 # 三 函数
 
 ## 介绍
@@ -1301,11 +1297,102 @@ function loggingIdentity<T extends Lengthwise>(arg: T): T {
 
   > 否则该Package无类型声明.
 
-  
-
-
-
 ## 配置
+
+`tsc`命令运行时, 可以指定配置选项, 如
+
+```bash
+tsc --strict index.ts
+```
+
+或者, 配置可写入到`tsconfig.json`中
+
+```json
+{
+  "compilerOptions": {
+    "strict": true,
+}
+```
+
+常见配置
+
+* `strict` 是否开启各种严格模式, 如下所示:
+
+  * `noImplicitAny`
+  * `noImplicitThis`
+  * `alwaysStrict`
+  * `strictBindCallApply`
+  * `strictNullChecks`
+  * `strictFunctionTypes` 
+  * `strictPropertyInitialization`
+  
+  > 我一般会禁用`noImplicitAny`
+
+> 参考
+>
+> * [tsc CLI Options](https://www.typescriptlang.org/docs/handbook/compiler-options.html)
+> * [Intro to the TSConfig Reference](https://www.typescriptlang.org/tsconfig)
+
+## 错误忽略
+
+* 单行忽略
+
+  ```
+  // @ts-ignore
+  ```
+
+* 忽略全文
+
+  ```
+  // @ts-nocheck
+  ```
+
+* 取消忽略全文
+
+  ```
+  // @ts-check
+  ```
+
+## Idea文件模板配置
+
+```vue
+<template>
+  #[[$END$]]#
+</template>
+
+<script lang="ts">
+import {defineComponent} from "vue";
+export default defineComponent ({
+  name: "${NAME}"
+})
+</script>
+
+<style lang="scss" scoped>
+
+</style>
+```
+
+# 踩坑
+
+## 找不到模块的声明文件
+
+报错
+
+```
+Vue typeScript： Could not find a declaration file for module '***'. '***' implicitly has an 'any'...
+```
+
+解决, tsconfig.json文件中在compilerOptions 中添加 `"noImplicitAny": false`
+
+```json
+{
+  "compilerOptions": {
+    "noImplicitAny": false,
+    ...
+    ...
+  }
+}
+```
 
 # 参考
 

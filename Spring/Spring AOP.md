@@ -188,6 +188,8 @@ execution(<修饰符>? <返回类型> <类型全限定名>?<方法名>(<参数�
 
 * 对于修饰符, Proxy代理模式, 只能代理`public`方法, 即使编写表达式未指定. <span style="color:red">注意好了!下面例子中不在强调</span>
 
+  > 好像, 还可以代理`protect`, 包私有方法
+
 * 返回值中, `*`表示任意类型
 
 * 方法名中, 可使用通配符`*`
@@ -626,22 +628,29 @@ public class UsageTracking {
 
 ## Demo
 
-* 切被注解标注的方法, 切被注解标注的类的所有公有方法.
+```java
+/**
+ * 注解到非私有方法上
+ */
+@Around("@annotation(role)")
+public Object aroundMethod(ProceedingJoinPoint pjp, Role role) throws Throwable {
+    return doAround(pjp, role);
+}
 
-  ```java
-  @Aspect
-  public class RoleAspect {
-  
-      @Around("@annotation(role) || (@within(role) && execution(public * *(..)))")
-      public Object around(ProceedingJoinPoint pjp, Role role) throws Throwable {
-          // 提取角色限制
-          List<Integer> roles = extractRoles(pjp, role);
-          // 鉴权
-          MyAssert.isTrue(authorize(roles, TokenHolder.getToken()), CODE_401.toStatus());
-          return pjp.proceed();
-      }
-  }
-  ```
+/**
+ * 注解到类的非私有方法上
+ */
+@Around("@within(role))")
+public Object aroundClass(ProceedingJoinPoint pjp, Role role) throws Throwable {
+    return doAround(pjp, role);
+}
+
+private Object doAround(ProceedingJoinPoint pjp, Role role) throws Throwable {
+    // 鉴权
+    Assert.isTrue(authorize(role.value(), TokenHolder.getToken()), CODE_401.toStatus());
+    return pjp.proceed();
+}
+```
 
 # 四 其他
 

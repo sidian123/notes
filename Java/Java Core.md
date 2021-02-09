@@ -507,6 +507,11 @@ Google提供的一个工具, 先记录下. 一般引入了Swagger的项目都引
   C:\Users\admin\IdeaProjects\sidian-platform\core-lib
   ```
 
+## 验证码
+
+* 数字型 `RandomUtil`
+* 图片型 `CaptchaUtil`
+
 # 原生工具
 
 ## 进程相关

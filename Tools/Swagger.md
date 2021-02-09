@@ -194,18 +194,19 @@ public class SpringFoxConfig {
   
 * 配置
 
-  ```properties
-  ## 开启Swagger的Basic认证功能,默认是false
-  knife4j.basic.enable=true
-  ## Basic认证用户名
-  knife4j.basic.username=admin
-  ## Basic认证密码
-  knife4j.basic.password=123456
-  
-  #swagger page url
-  swagger.doc-url=http://localhost:8013/
-  #是否激活 swagger true or false
-  swagger.is.enable=true
+  ```yaml
+  knife4j:
+    # 是否启用knife4j
+    open: true
+    # 开启增强功能
+    enable: true
+    # 认证
+    basic:
+      enable: true
+      # Basic认证用户名
+      username: test
+      # Basic认证密码
+      password: 123456
   ```
 
 * 使用示例
@@ -213,63 +214,45 @@ public class SpringFoxConfig {
   ```java
   @Configuration
   @EnableKnife4j
-  @EnableSwagger2
-  public class SwaggerConfiguration {
-      @Value("${swagger.doc-url:http://localhost:8200}")
-      private String swaggerPageUrl;
-      @Value("${swagger.is.enable:true}")
-      private boolean swaggerIsEnable;
+  @EnableSwagger2WebMvc
+  public class Knife4jConfiguration {
   
-      @Bean(value = "1.知识构建服务")
-      public Docket kaAdminApi() {
+      @Value("${knife4j.open:true}")
+      private boolean openSwagger;
+  
+      @Bean
+      public Docket apiDocket() {
+          return build("平台服务",PlatformServerApplication.class.getPackage().getName());
+      }
+  
+      /**
+       * 构建Docket对象
+       * @param groupName 分组名
+       * @param packageName 扫描的包名
+       * @return docket对象
+       */
+      private Docket build(String groupName, String packageName){
           return new Docket(DocumentationType.SWAGGER_2)
-                  .enable(swaggerIsEnable)
+                  .enable(openSwagger)
                   .apiInfo(apiInfo())
-                  .groupName("1.知识构建服务")
+                  .groupName(groupName)
                   .select()
-                  .apis(RequestHandlerSelectors.basePackage("com.ka.rest"))
+                  .apis(RequestHandlerSelectors.basePackage(packageName))
                   .paths(PathSelectors.any())
                   .build();
       }
   
-      @Bean(value = "2.Admin API")
-      public Docket adminDocket() {
-  
-          return new Docket(DocumentationType.SWAGGER_2)
-                  .enable(swaggerIsEnable)
-                  .apiInfo(apiInfo())
-                  .groupName("2.admin api")
-                  .select()
-                  .apis(RequestHandlerSelectors.basePackage("com.core.rest"))
-                  .paths(PathSelectors.any())
-                  .build();
-  
-      }
-  
-      @Bean(value = "3.schema展示服务")
-      public Docket schemaApi() {
-          return new Docket(DocumentationType.SWAGGER_2)
-                  .enable(swaggerIsEnable)
-                  .apiInfo(apiInfo())
-                  .groupName("3.schema展示服务")
-                  .select()
-                  .apis(RequestHandlerSelectors.basePackage("com.schema.rest"))
-                  .paths(PathSelectors.any())
-                  .build();
-      }
-  
+      /**
+       * 文档信息
+       */
       private ApiInfo apiInfo() {
-  
-          Contact contact = new Contact("医疗信息技术(杭州)有限公司", "", "1234@qq.com");
-  
           return new ApiInfoBuilder()
-                  .title("服务服务接口文档")
-                  .description("服务服务接口文档")
-                  .termsOfServiceUrl(swaggerPageUrl)
-                  .contact(contact)
-                  .version("1.0")
+                  .title("甸哥哥平台服务")
+                  .description("信甸哥, 得永生")
+  //                .termsOfServiceUrl("http://www.xx.com/")
+  //                .contact("sidian123@qq.com")
+  //                .version("1.0")
                   .build();
-  
       }
   }
   ```

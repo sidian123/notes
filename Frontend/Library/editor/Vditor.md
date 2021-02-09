@@ -135,3 +135,11 @@ import VditorPreview from 'vditor/dist/method.min'
 # 参考
 
 > 参考[一款浏览器端的 Markdown 编辑器](https://hacpai.com/article/1549638745630)
+
+# ------------
+
+* 功能
+  * 分屏预览
+  * 所见所得
+  * 即时渲染 (类似Typora)
+
