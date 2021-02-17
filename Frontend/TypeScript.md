@@ -1318,15 +1318,15 @@ tsc --strict index.ts
 
 * `strict` 是否开启各种严格模式, 如下所示:
 
-  * `noImplicitAny`
+  * `noImplicitAny` 所有导入的ts模块都必须有声明
   * `noImplicitThis`
   * `alwaysStrict`
   * `strictBindCallApply`
-  * `strictNullChecks`
+  * `strictNullChecks` null的严格检查
   * `strictFunctionTypes` 
   * `strictPropertyInitialization`
   
-  > 我一般会禁用`noImplicitAny`
+  > 我一般会禁用`noImplicitAny`,`strictNullChecks`
 
 > 参考
 >
@@ -1370,28 +1370,6 @@ export default defineComponent ({
 <style lang="scss" scoped>
 
 </style>
-```
-
-# 踩坑
-
-## 找不到模块的声明文件
-
-报错
-
-```
-Vue typeScript： Could not find a declaration file for module '***'. '***' implicitly has an 'any'...
-```
-
-解决, tsconfig.json文件中在compilerOptions 中添加 `"noImplicitAny": false`
-
-```json
-{
-  "compilerOptions": {
-    "noImplicitAny": false,
-    ...
-    ...
-  }
-}
 ```
 
 # 参考
