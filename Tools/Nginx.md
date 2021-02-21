@@ -825,7 +825,17 @@ nginx默认有超时时间, 可修改
 
 * `proxy_ignore_client_abort`
 
-  貌似和超时时间无关.
+  是否关闭与代理服务器的连接, 当客户端未得到响应但关闭了连接时. 默认`on`, 即同时关闭与代理服务器的连接
+
+我的配置
+
+```nginx
+proxy_read_timeout 600;
+proxy_connect_timeout 600;
+proxy_ignore_client_abort on;
+```
+
+> 等个10分钟...
 
 > 参考[Module ngx_http_proxy_module](http://nginx.org/en/docs/http/ngx_http_proxy_module.html)
 
