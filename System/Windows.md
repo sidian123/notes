@@ -789,3 +789,7 @@ jetbrains
 * Url Copy纯文本
 
   ![image-20201127201332191](.Windows/image-20201127201332191.png)
+
+## 查看快捷键占用
+
+Windows Hotkey Explore

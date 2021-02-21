@@ -36,11 +36,57 @@ npm install -g @vue/cli
 ## Template Syntax
 
 * 用于绑定组件实例的属性到DOM上
-* 
 
+# 组件
 
+## 属性继承
 
+* 绑定到组件上的属性和事件处理器, 若未在组件选项`props`,`emit`上声明, 且组件只有一个根节点时, 将会绑定到组件根节点上
 
+* 可阻止该行为, 然后手动绑定到组件其他元素上
+
+  ```javascript
+  app.component('date-picker', {
+    inheritAttrs: false,
+    template: `
+      <div class="date-picker">
+        <input type="datetime" v-bind="$attrs" />
+      </div>
+    `
+  })
+  ```
+
+* 多根节点组件中, 无该行为, 但绑定未声明属性或事件处理器到组件上时, 会警告, 除非显示绑定
+
+  ```html
+  <custom-layout id="custom-layout" @click="changeValue"></custom-layout>
+  ```
+
+  ```javascript
+  // This will raise a warning
+  app.component('custom-layout', {
+    template: `
+      <header>...</header>
+      <main>...</main>
+      <footer>...</footer>
+    `
+  })
+  
+  // No warnings, $attrs are passed to <main> element
+  app.component('custom-layout', {
+    template: `
+      <header>...</header>
+      <main v-bind="$attrs">...</main>
+      <footer>...</footer>
+    `
+  })
+  ```
+
+> 踩坑点:
+>
+> 如, 点击组件, 除了原生click事件外, 还会出现组件自身提供的click事件(如果有的话), 也就是触发了两次不同的click事件. 因此组件自身事件最好还是在`emits`选项中声明
+
+> 参考[Non-Prop Attributes](https://v3.vuejs.org/guide/component-attrs.html)
 
 # Reactivity
 
@@ -79,6 +125,63 @@ console.log(proxy.meal)
 4. `computed`对象无需指定依赖, 无副作用的`watch`需要指定监听的响应式对象, 原因见3.
 5. 代理只对对象有用, 所以vue3提出了`ref`的概念, 用于基本类型变量.
 
+## Ref Unwrapping
+
+`ref`自动解包装的情况如下:
+
+1. 在template中使用
+
+   ```vue
+   <template>
+     <div>
+       <span>{{ count }}</span>
+       <button @click="count ++">Increment count</button>
+       <button @click="nested.count.value ++">Nested Increment count</button>
+     </div>
+   </template>
+   
+   <script>
+     import { ref } from 'vue'
+     export default {
+       setup() {
+         const count = ref(0)
+         return {
+           count,
+   
+           nested: {
+             count
+           }
+         }
+       }
+     }
+   </script>
+   ```
+
+   > 嵌套在普通对象中的`ref`不能自动解包装
+
+2. 赋值给`reactive`对象的属性
+
+   ```js
+   const count = ref(0)
+   const state = reactive({
+     count
+   })
+   ```
+
+   对`reactive`数组, 或原生集合 (如`Map`) 赋值时, 不能自动解包装
+
+   ```js
+   const books = reactive([ref('Vue 3 Guide')])
+   // need .value here
+   console.log(books[0].value)
+   
+   const map = reactive(new Map([['count', ref(0)]]))
+   // need .value here
+   console.log(map.get('count').value)
+   ```
+
+> 参考[Ref Unwrapping](https://v3.vuejs.org/guide/reactivity-fundamentals.html#ref-unwrapping)
+
 # 过渡 & 动画
 
 * 原理
@@ -103,6 +206,8 @@ console.log(proxy.meal)
   * [transition-group](https://v3.cn.vuejs.org/api/built-in-components.html#transition-group)
 
 # Vue Router
+
+## Composition API
 
 * 获取`route`, `router`
 
@@ -161,7 +266,98 @@ console.log(proxy.meal)
   }
   ```
 
+## 路由拦截器(守卫)
+
+有三种拦截方式
+
+* 全局拦截
+
+  ```js
+  const router = createRouter({ ... })
   
+  router.beforeEach((to, from) => {
+    // ...
+    // explicitly return false to cancel the navigation
+    return false
+  })
+  ```
+
+  * 参数
+
+    * `to` 目标路由信息
+    * `from` 源路由信息
+
+  * 结果
+
+    * 返回`false`, 抛出异常, 将取消路由
+    * 返回`router.push()`的参数, 可重定向到其他页面.
+    * 返回`true`, `undefined`, 将放行
+
+  * vue2的使用方式支持
+
+    vue2一般提供第三个参数`next()`支持路由, 如
+
+    ```js
+    router.beforeEach((to, from, next) => {
+      if (to.name !== 'Login' && !isAuthenticated) next({ name: 'Login' })
+      else next()
+    })
+    ```
+
+    > 最好不要调用两次`next()`
+
+* 每个路由拦截
+
+* 组件中拦截
+
+> 参考[Navigation Guards](https://next.router.vuejs.org/guide/advanced/navigation-guards.html)
+
+# Typescript
+
+## props类型
+
+`props`类型声明如下, 需传入一个构造函数
+
+![1_y0Z-UfcDhsIj-zPJODiAKA](.Vue3/1_y0Z-UfcDhsIj-zPJODiAKA.png)
+
+方式一
+
+```js
+props: {
+  testProp: Object as PropType<{ test: boolean }>
+}
+```
+
+> 需要从`vue`中导入`PropType`
+
+方式二
+
+```js
+props: {
+  testProp: Object as () => { test: boolean }
+} 
+```
+
+## ref 组件类型
+
+声明组件类型
+
+```js
+import Vue from "vue";
+
+export interface RefInterface extends Vue {
+  pingMe(): void;
+}
+```
+
+使用时给定类型
+
+```js
+mounted() {
+    const child = this.$refs.child as RefInterface;
+    child.pingMe();
+}
+```
 
 # 其他
 

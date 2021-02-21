@@ -14,29 +14,6 @@
 
   > 案例：[vuejs 和 element 搭建的一个后台管理界面](https://www.cnblogs.com/taylorchen/p/6083099.html)
 
-* 时间格式化
-
-  > [date-format](https://www.npmjs.com/package/date-format)
-
-  安装
-
-  ```shell
-  npm install date-format
-  ```
-
-  使用
-
-  ```javascript
-    /**
-     * 日期格式化
-     * @param date 时间戳
-     * @returns {string} yyyy-MM-dd hh:mm:ss类型的日期格式
-     */
-    dateFormat(date){
-      return date==null || date === 0 ? '' : dateFormat('yyyy-MM-dd hh:mm:ss', new Date(date))
-    }
-  ```
-
 * 拷贝到剪贴板
 
   [~~v-clipboard~~](https://www.npmjs.com/package/v-clipboard)
@@ -109,5 +86,57 @@
   _.clone(value)
   ```
 
-  
+* 防抖函数
+
+  ```
+  _.debounce(func, [wait=0], [options={}])
+  ```
+
+  * `debounce`返回一个防抖函数, 函数原型与`func`一致.
+  * 多次调用防抖函数, `func`被执行当且仅当最后一次调用防抖函数与上次调用防抖函数的时间超过了`wait`
+  * `func`默认在`wait`结束后执行, 也即`options.trailing=true`; 可设置`options.leading=true`, 让`func`在`wait`开始前执行
+  * 防抖函数可能会一直处于等待状态, `options.maxWait`可设置`func`被执行的最大等待时间.
+
+  > 要理解上述内容, 需要区分**防抖函数**与`func`
+
+# 时间
+
+## date-format
+
+> [date-format](https://www.npmjs.com/package/date-format)
+
+安装
+
+```shell
+npm install date-format
+```
+
+使用
+
+```javascript
+  /**
+   * 日期格式化
+   * @param date 时间戳
+   * @returns {string} yyyy-MM-dd hh:mm:ss类型的日期格式
+   */
+  dateFormat(date){
+    return date==null || date === 0 ? '' : dateFormat('yyyy-MM-dd hh:mm:ss', new Date(date))
+  }
+```
+
+## Moment
+
+> [Moment.js](http://momentjs.cn/)
+
+安装
+
+```bash
+npm install moment --save
+```
+
+使用
+
+```js
+moment().format("YYYY-MM-DD HH:mm:SS");
+```
 
